@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+ <PropertyGroup>
+  <NuGetExe>$(SolutionDir).nuget\nuget.exe</NuGetExe>
+  <CurrentOutDir>$(OutDir.TrimEnd("\"))</CurrentOutDir>
+ </PropertyGroup>
+
+ <Target Name="BeforeBuild" Condition="Exists('$(SolutionDir)NuGet')">
+
+  <ItemGroup>
+   <OldNuPkgFile Include="$(SolutionDir)NuGet\$(TargetName)*.nupkg" />
+  </ItemGroup>
+
+  <!-- delete any existing *.nupkg files -->
+  <Delete Files="@(OldNuPkgFile)" ContinueOnError="true" />
+
+ </Target>
+
+ <Target Name="AfterBuild">
+<Message Text="CurrentOutDir=$(CurrentOutDir)" Importance="high" />
+  <!-- create output folder as necessary -->
+  <MakeDir Condition="!Exists('$(SolutionDir)NuGet')" Directories="$(SolutionDir)NuGet" />
+
+  <!-- create packages -->
+  <Exec Command="&quot;$(NuGetExe)&quot; pack &quot;$(ProjectPath)&quot; -Properties &quot;Bin=$(CurrentOutDir)&quot; -OutputDirectory &quot;$(SolutionDir)NuGet&quot; -NoPackageAnalysis -NonInteractive -Verbosity quiet" />
+
+ </Target>
+
+</Project>

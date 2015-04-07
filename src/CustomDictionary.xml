@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+ <Words>
+  <Recognized>
+   <Word>Commonsense</Word>
+   <Word>Multi</Word>
+   <Word>Multiselect</Word>
+   <Word>Multivalue</Word>
+   <Word>Savepoint</Word>
+   <Word>Validatable</Word>
+   <Word>validators</Word>
+   <Word>Covariance</Word>
+   <Word>Contravariance</Word>
+   <Word>Sparkline</Word>
+   <Word>Materializer</Word>
+   <Word>Dte</Word>
+   <Word>PlugIn</Word>
+   <Word>Subfeature</Word>
+   <Word>Flyout</Word>
+  </Recognized>
+  <DiscreteExceptions>
+   <Term>Commonsense</Term>
+   <Term>Multivalue</Term>
+   <Term>Multiselect</Term>
+   <Term>Savepoint</Term>
+   <Term>Sparkline</Term>
+   <Term>Dte</Term>
+   <Term>PlugIn</Term>
+   <Term>Subfeature</Term>
+   <Term>Flyout</Term>
+  </DiscreteExceptions>
+ </Words>
+ <Acronyms>
+  <CasingExceptions>
+   <Acronym>Dte</Acronym>
+  </CasingExceptions>
+ </Acronyms>
+</Dictionary>

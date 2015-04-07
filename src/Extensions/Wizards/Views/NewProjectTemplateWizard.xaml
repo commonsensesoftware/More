@@ -1,0 +1,78 @@
+﻿<Window
+ x:Class="More.VisualStudio.Views.NewProjectTemplateWizard"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+ xmlns:a="using:More.Windows.Interactivity"
+ xmlns:b="using:More.Windows.Interactivity"
+ Title="{Binding Title}" Height="275" Width="325" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+ <Window.Resources>
+  <ResourceDictionary>
+   <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="../Themes/Theme.xaml" />
+   </ResourceDictionary.MergedDictionaries>
+   <DataTemplate x:Key="Step1">
+    <Grid>
+     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+     </Grid.RowDefinitions>
+     <TextBlock Text="Select the options to enable for the new project:" FontWeight="Bold" />
+     <CheckBox Content="Show tips in generated files" IsChecked="{Binding ShowTips}" Grid.Row="1" ToolTip="Indicates whether tips are shown in the generated code files" />
+    </Grid>
+   </DataTemplate>
+   <DataTemplate x:Key="Step2">
+    <Grid>
+     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+     </Grid.RowDefinitions>
+     <TextBlock Text="Select the user interactions to enable:" FontWeight="Bold" />
+     <ListBox Style="{StaticResource CheckBoxList}" ItemsSource="{Binding InteractionOptions}" Grid.Row="1" />
+    </Grid>
+   </DataTemplate>
+   <DataTemplate x:Key="Step3">
+    <Grid>
+     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+     </Grid.RowDefinitions>
+     <TextBlock Text="Select the application contracts to enable:" FontWeight="Bold" />
+     <ListBox Style="{StaticResource CheckBoxList}" ItemsSource="{Binding ApplicationContractOptions}" Grid.Row="1" />
+    </Grid>
+   </DataTemplate>
+   <Style x:Key="WizardContent" TargetType="ContentPresenter">
+    <Setter Property="ContentTemplate" Value="{StaticResource Step1}" />
+    <Style.Triggers>
+     <DataTrigger Binding="{Binding CurrentStep}" Value="0">
+      <Setter Property="ContentTemplate" Value="{StaticResource Step1}" />
+     </DataTrigger>
+     <DataTrigger Binding="{Binding CurrentStep}" Value="1">
+      <Setter Property="ContentTemplate" Value="{StaticResource Step2}" />
+     </DataTrigger>
+     <DataTrigger Binding="{Binding CurrentStep}" Value="2">
+      <Setter Property="ContentTemplate" Value="{StaticResource Step3}" />
+     </DataTrigger>
+    </Style.Triggers>
+   </Style>
+  </ResourceDictionary>
+ </Window.Resources>
+ <i:Interaction.Behaviors>
+  <b:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
+ </i:Interaction.Behaviors>
+ <i:Interaction.Triggers>
+  <a:KeyPressTrigger>
+   <a:KeyPressTrigger.Actions>
+    <i:InvokeCommandAction Command="{Binding DialogCommands[1]}" />
+   </a:KeyPressTrigger.Actions>
+  </a:KeyPressTrigger>
+ </i:Interaction.Triggers>
+ <Grid Margin="10">
+  <Grid.RowDefinitions>
+   <RowDefinition Height="*" />
+   <RowDefinition Height="Auto" />
+  </Grid.RowDefinitions>
+  <ContentPresenter Style="{StaticResource WizardContent}" Content="{Binding}" Validation.ErrorTemplate="{x:Null}" />
+  <ItemsControl Style="{StaticResource DialogCommands}" ItemsSource="{Binding DialogCommands}" Grid.Row="1" />
+ </Grid>
+</Window>

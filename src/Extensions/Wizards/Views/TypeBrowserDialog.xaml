@@ -1,0 +1,45 @@
+﻿<Window
+ x:Class="More.VisualStudio.Views.TypeBrowserDialog"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+ xmlns:b="using:More.Windows.Interactivity"
+ xmlns:wf="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation"
+ xmlns:v="clr-namespace:More.VisualStudio.Views"
+ Title="{Binding Title}" WindowStartupLocation="CenterOwner"
+ Height="200" MinHeight="200" MaxHeight="250"
+ Width="350" MinWidth="250" MaxWidth="400">
+ <Window.Resources>
+  <ResourceDictionary>
+   <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="../Themes/Theme.xaml" />
+   </ResourceDictionary.MergedDictionaries>
+   <v:SpecificationToFunctionConverter x:Key="SpecToFuncConverter" />
+   <v:EditingContextConverter x:Key="ContextConverter" />
+  </ResourceDictionary>
+ </Window.Resources>
+ <i:Interaction.Behaviors>
+  <b:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
+ </i:Interaction.Behaviors>
+ <Grid Margin="10">
+  <Grid.ColumnDefinitions>
+   <ColumnDefinition Width="Auto" />
+   <ColumnDefinition Width="*" />
+  </Grid.ColumnDefinitions>
+  <Grid.RowDefinitions>
+   <RowDefinition Height="Auto" />
+   <RowDefinition Height="Auto" />
+   <RowDefinition Height="*" />
+  </Grid.RowDefinitions>
+  <TextBlock Text="Type:" FontWeight="Bold" />
+  <wf:TypePresenter x:Name="TypePresenter"
+   Grid.Column="1"
+   Margin="10,0,0,0"
+   AllowNull="False"
+   Type="{Binding SelectedType, Mode=TwoWay}"
+   Context="{Binding Converter={StaticResource ContextConverter}}"
+   Filter="{Binding TypeFilter, Converter={StaticResource SpecToFuncConverter}}" />
+  <CheckBox IsChecked="{Binding FilterByConvention}" Content="Filter view models by convention" IsThreeState="False" Margin="10,10,0,0" Grid.Row="1" Grid.Column="1" />
+  <ItemsControl Style="{StaticResource DialogCommands}" ItemsSource="{Binding DialogCommands}" Grid.Row="2" Grid.ColumnSpan="2" />
+ </Grid>
+</Window>

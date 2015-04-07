@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{116FCD14-4C55-418B-B925-7B1600B2B667}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>More</RootNamespace>
+    <AssemblyName>More.Windows</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\More.Windows.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\More.Windows.xml</DocumentationFile>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>True</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
+    <CodeContractsRuntimeCheckingLevel>ReleaseRequires</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\More.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Interactivity" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\More.snk">
+      <Link>More.snk</Link>
+    </None>
+    <Compile Include="Windows.Interactivity\SavedFileAdapter.cs" />
+    <Compile Include="Windows.Interactivity\WindowAction.CommandMediator.cs" />
+    <None Include="windows.nuspec" />
+    <Resource Include="Windows.Media.Effects\GrayscaleEffect.ps" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="System.ComponentModel\ICollectionViewExtensions.cs" />
+    <Compile Include="ComponentModel\IRepositoryExtensions.cs" />
+    <Compile Include="System.ComponentModel\SortDescriptionExtensions.cs" />
+    <Compile Include="ComponentModel\SortPropertyComparerT.cs" />
+    <Compile Include="Composition\DialogViewT.cs" />
+    <Compile Include="Composition\IDialogViewExtensions.cs" />
+    <Compile Include="Composition\ShellViewBase.cs" />
+    <Compile Include="Composition\ShellViewT.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Microsoft.Win32\CommonDialogFilter.cs" />
+    <Compile Include="Microsoft.Win32\ControlState.cs" />
+    <Compile Include="Microsoft.Win32\FileDialogAddPlace.cs" />
+    <Compile Include="Microsoft.Win32\FileDialogOptions.cs" />
+    <Compile Include="Microsoft.Win32\FileOpenDialog.cs" />
+    <Compile Include="Microsoft.Win32\FolderBrowserDialog.cs" />
+    <Compile Include="Microsoft.Win32\IFileDialog.cs" />
+    <Compile Include="Microsoft.Win32\IFileDialogCustomize.cs" />
+    <Compile Include="Microsoft.Win32\IFileDialogEvents.cs" />
+    <Compile Include="Microsoft.Win32\IFileOpenDialog.cs" />
+    <Compile Include="Microsoft.Win32\IModalWindow.cs" />
+    <Compile Include="Microsoft.Win32\IShellItem.cs" />
+    <Compile Include="Microsoft.Win32\IShellItemArray.cs" />
+    <Compile Include="Microsoft.Win32\NativeMethods.cs" />
+    <Compile Include="Microsoft.Win32\OverwriteResponse.cs" />
+    <Compile Include="Microsoft.Win32\PropertyKey.cs" />
+    <Compile Include="Microsoft.Win32\ShareViolationResponse.cs" />
+    <Compile Include="Microsoft.Win32\ShellItemArrayAttributeFlags.cs" />
+    <Compile Include="Microsoft.Win32\ShellItemDisplayName.cs" />
+    <Compile Include="ReflectHelper.cs" />
+    <Compile Include="System.Windows\TypeExtensions.cs" />
+    <Compile Include="Windows.Controls\Automation.Peers\DialogAutomationPeerT.cs" />
+    <Compile Include="Windows.Controls\Automation.Peers\MessageDialogAutomationPeer.cs" />
+    <Compile Include="Windows.Controls\Automation.Peers\TextInputDialogAutomationPeer.cs" />
+    <Compile Include="Windows.Controls\ColumnsMediator.cs" />
+    <Compile Include="Windows.Controls\DataGridColumnExtensions.cs" />
+    <Compile Include="Windows.Controls\DataGridDecorator.cs" />
+    <Compile Include="Windows.Controls\IDataGridBoundColumn.cs" />
+    <Compile Include="Windows.Controls\InputDialogT.cs" />
+    <Compile Include="Windows.Controls\IOptionalDataGridColumn.cs" />
+    <Compile Include="Windows.Controls\MessageDialog.cs" />
+    <Compile Include="Windows.Controls\OptionalDataGridCheckBoxColumn.cs" />
+    <Compile Include="Windows.Controls\OptionalDataGridTemplateColumn.cs" />
+    <Compile Include="Windows.Controls\OptionalDataGridTextColumn.cs" />
+    <Compile Include="Windows.Controls\TrendRule.cs" />
+    <Compile Include="System.Windows.Data\BindingExtensions.cs" />
+    <Compile Include="Windows.Data\ColumnBuildOrders.cs" />
+    <Compile Include="Windows.Data\DataGridColumnAttribute.cs" />
+    <Compile Include="Windows.Data\DataGridColumnBuilderT.cs" />
+    <Compile Include="Windows.Data\DataGridElementStyleAttribute.cs" />
+    <Compile Include="Windows.Data\DataGridSelectionModeConverter.cs" />
+    <Compile Include="Windows.Data\DataGridTemplateColumnAttribute.cs" />
+    <Compile Include="Windows.Data\EnumerationConverter.cs" />
+    <Compile Include="Windows.Data\IDataGridColumnBuilderExtensions.cs" />
+    <Compile Include="Windows.Data\IDataGridColumnBuilder.cs" />
+    <Compile Include="Windows.Data\IDataGridColumnBuilderContract.cs" />
+    <Compile Include="Windows.Data\IFrozenItemCollectionViewContract.cs" />
+    <Compile Include="Windows.Data\PagingArguments.cs" />
+    <Compile Include="Windows.Data\ValueConversionStep.cs" />
+    <Compile Include="Windows.Data\ValueConverterAttribute.cs" />
+    <Compile Include="Windows.Data\ValueConverterBaseAttribute.cs" />
+    <Compile Include="Windows.Data\VirtualCollectionViewT.cs" />
+    <Compile Include="Windows.Input\MessageBoxCommandT.cs" />
+    <Compile Include="Windows.Interactivity\InvokeMethodAction.cs" />
+    <Compile Include="Windows.Interactivity\MessageBoxAction.cs" />
+    <Compile Include="Windows.Interactivity\MessageDialogAction.cs" />
+    <Compile Include="Windows.Interactivity\PrintAction.cs" />
+    <Compile Include="Windows.Interactivity\SetPropertyAction.cs" />
+    <Compile Include="Windows.Interactivity\TextInputAction.cs" />
+    <Compile Include="Windows.Media.Effects\GrayscaleEffect.cs" />
+    <Compile Include="Windows.Media\MediaContentT.cs" />
+    <Compile Include="Windows.Media\MediaContentTExtensions.cs" />
+    <Compile Include="Windows.Media\XamlContentT.cs" />
+    <Compile Include="Windows.Controls\SelectedItemsMediator.cs" />
+    <Compile Include="Windows.Controls\TextInputDialog.cs" />
+    <Compile Include="Windows.Controls\TrendIndicator.cs" />
+    <Compile Include="Windows.Interactivity\OpenFileAction.cs" />
+    <Compile Include="Windows.Interactivity\PasswordBindingBehavior.cs" />
+    <Compile Include="Windows.Interactivity\SaveFileAction.cs" />
+    <Compile Include="Windows.Interactivity\SelectFolderAction.cs" />
+    <Compile Include="Windows.Interactivity\TriggerT.cs" />
+    <Compile Include="Windows.Interactivity\WindowAction.cs" />
+    <Compile Include="Windows.Interactivity\WindowCloseBehavior.cs" />
+    <Compile Include="System.Windows\NativeMethods.cs" />
+    <Compile Include="System.Windows\WindowExtensions.cs" />
+    <Compile Include="ThemeInfo.cs" />
+    <Compile Include="XamlNamespaces.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\CoreEx.Desktop\CoreEx.Desktop.csproj">
+      <Project>{abff6d49-1c8f-4da5-86ed-07033105981b}</Project>
+      <Name>CoreEx.Desktop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="..\Windows.Shared\Windows.Shared.projitems" Label="Shared" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\nuget.pack.targets" />
+  <Import Project="..\..\fileversion.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

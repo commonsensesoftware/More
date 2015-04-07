@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5dcf739c-ca14-4d47-99d8-2896f8fd700c</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>More</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Composition\IApplicationState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Composition\IApplicationStateContract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\IO\BasicPropertiesAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\IO\IStorageItemExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\IO\StorageFileAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\IO\StorageFolderAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Data\IDataPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Data\IDataPackagePropertySet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Data\IDataPackagePropertySetView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Data\IDataPackageView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Data\IDataRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Data\IDataRequestContract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Data\IShareOperation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Input\ISearchRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Input\ISearchRequestContract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Input\ISearchSuggestionsRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\Windows.Input\ISearchSuggestionsRequestContract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel.Design\IServiceContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel.Design\ITypeResolutionService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel.Design\ServiceCreatorCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel\ISupportInitialize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel\ISupportInitializeNotification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Globalization\GregorianCalendar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\ICloneable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\IO\WindowsRuntimeStorageExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Security.Principal\GenericIdentity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Security.Principal\GenericPrincipal.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,480 @@
+﻿namespace More.ComponentModel
+{
+    using global::System;
+    using global::System.Collections.Generic;    
+    using global::System.Collections.ObjectModel;
+    using global::System.Collections.Specialized;
+    using global::System.Diagnostics;
+    using global::System.Diagnostics.CodeAnalysis;
+    using global::System.Diagnostics.Contracts;
+    using global::System.Globalization;
+    using global::System.IO;
+    using global::System.Linq;
+    using global::System.Reflection;
+    using global::System.Runtime.InteropServices;
+    using global::System.Security.Principal;
+    using global::System.Text;
+    using global::System.Windows.Input;
+
+    /// <summary>
+    /// Represents the base implementation for a activity.
+    /// </summary>
+    [ContractClass( typeof( ActivityContract ) )]
+    [DebuggerDisplay( "IsCompleted = {IsCompleted}, Name = {Name}" )]
+    public abstract class Activity : ObservableObject, IActivity
+    {
+        private sealed class ActivityMetadata
+        {
+            internal readonly Guid Id;
+            internal string Name;
+            internal string Description;
+
+            internal ActivityMetadata( Guid id, string name, string description )
+            {
+                Contract.Requires( !string.IsNullOrEmpty( name ) );
+                Contract.Requires( description != null );
+                this.Id = id;
+                this.Name = name;
+                this.Description = description;
+            }
+        }
+
+        private readonly Lazy<ActivityMetadata> metadata;
+        private readonly ObservableCollection<IActivity> dependencies = new ObservableCollection<IActivity>();
+        private Guid? instanceId;
+        private bool completed;
+        private DateTime? expiration;
+        private IServiceProvider currentServiceProvider = ServiceProvider.Current;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Activity"/> class.
+        /// </summary>
+        protected Activity()
+        {
+            this.metadata = new Lazy<ActivityMetadata>( this.GetMetadata );
+            this.dependencies.CollectionChanged += this.OnDependenciesChanged;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the activity is ready to execute.
+        /// </summary>
+        /// <value>True if the activity is ready to execute; otherwise, false.</value>
+        protected bool IsReady
+        {
+            get
+            {
+                return this.Dependencies.All( t => t.IsCompleted );
+            }
+        }
+
+        private ActivityMetadata Metadata
+        {
+            get
+            {
+                Contract.Ensures( Contract.Result<ActivityMetadata>() != null );
+                return this.metadata.Value;
+            }
+        }
+
+        private ActivityMetadata GetMetadata()
+        {
+            Contract.Ensures( Contract.Result<ActivityMetadata>() != null );
+
+            var type = this.GetType();
+            var typeInfo = type.GetTypeInfo();
+            var descriptor = typeInfo.GetCustomAttributes( false ).OfType<IActivityDescriptor>().FirstOrDefault();
+
+            if ( descriptor != null )
+                return new ActivityMetadata( new Guid( descriptor.Id ), descriptor.Name, descriptor.Description );
+
+            var guid = typeInfo.GetCustomAttributes<GuidAttribute>( false ).FirstOrDefault();
+            var id = guid == null || string.IsNullOrEmpty( guid.Value ) ? Guid.NewGuid() : new Guid( guid.Value );
+            var name = type.Name;
+
+            // derive name from type name, which is probably in the form of {name}Activity
+            // also account of the name being just "Activity"
+            if ( name.Length > 8 && name.EndsWith( "Activity", StringComparison.Ordinal ) )
+                name = name.Substring( 0, name.Length - 8 );
+
+            return new ActivityMetadata( id, name, string.Empty );
+        }
+
+        private static string FormatException( Exception ex )
+        {
+            Contract.Requires( ex != null, "ex" );
+            Contract.Ensures( Contract.Result<string>() != null );
+
+            string message = null;
+            var stackTrace = ex.StackTrace;
+
+            using ( var writer = new StringWriter( new StringBuilder( 1024 ), CultureInfo.InvariantCulture ) )
+            {
+                writer.WriteLine( "Exception:" );
+                writer.WriteLine( ex.Message );
+
+                while ( ( ex = ex.InnerException ) != null )
+                {
+                    writer.WriteLine( "\nInner Exception:" );
+                    writer.WriteLine( ex.Message );
+                }
+
+                writer.WriteLine( "\nStack Trace:" );
+                writer.WriteLine( stackTrace );
+                writer.Flush();
+
+                message = writer.ToString();
+            }
+
+            return message;
+        }
+
+        /// <summary>
+        /// Logs a message with the specified format and format arguments.
+        /// </summary>
+        /// <param name="format">The format of the message to log.</param>
+        /// <param name="args">An array of type <see cref="Object"/> containing the formatting arguments.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "args", Justification = "Consistency; same name as parameter in String.Format." )]
+        protected void Log( string format, object[] args )
+        {
+            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            this.Log( format.FormatDefault( args ) );
+        }
+
+        /// <summary>
+        /// Logs the specified message.
+        /// </summary>
+        /// <param name="message">The message to log.</param>
+        protected virtual void Log( string message )
+        {
+            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
+        }
+
+        /// <summary>
+        /// Occurs when the activity encounters an error.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used when the exception occurred.</param>
+        /// <param name="exception">The <see cref="Exception"/> for the error that occurred.</param>
+        protected virtual void OnUnhandledException( IServiceProvider serviceProvider, Exception exception )
+        {
+            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+
+            var ex = exception;
+
+            while ( ex is System.Reflection.TargetInvocationException && ex.InnerException != null )
+                ex = ex.InnerException;
+
+            this.Log( FormatException( ex ) );
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Completed"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="ActivityCompletedEventArgs"/> event data.</param>
+        protected virtual void OnCompleted( ActivityCompletedEventArgs e )
+        {
+            Contract.Requires<ArgumentNullException>( e != null, "e" );
+
+            var handler = this.Completed;
+
+            if ( handler != null )
+                handler( this, e );
+        }
+
+        /// <summary>
+        /// Raises the <see cref="CanExecuteChanged"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/> event data.</param>
+        protected virtual void OnCanExecuteChanged( EventArgs e )
+        {
+            Contract.Requires<ArgumentNullException>( e != null, "e" );
+
+            var handler = this.CanExecuteChanged;
+
+            if ( handler != null )
+                handler( this, e );
+        }
+
+        /// <summary>
+        /// Occurs when the activity is executed.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> associated with the activity.</param>
+        protected abstract void OnExecute( IServiceProvider serviceProvider );
+
+        private void OnActivityCompleted( object sender, ActivityCompletedEventArgs e )
+        {
+            if ( this.CanExecute( e.ServiceProvider ) )
+                this.Execute( e.ServiceProvider );
+        }
+
+        private void OnDependenciesChanged( object sender, NotifyCollectionChangedEventArgs e )
+        {
+            Contract.Requires( sender != null, "sender" );
+            Contract.Requires( e != null, "e" );
+
+            switch ( e.Action )
+            {
+                case NotifyCollectionChangedAction.Add:
+                    {
+                        if ( e.NewItems == null )
+                            break;
+
+                        foreach ( var activity in e.NewItems.OfType<IActivity>() )
+                            activity.Completed += this.OnActivityCompleted;
+
+                        break;
+                    }
+                case NotifyCollectionChangedAction.Remove:
+                    {
+                        if ( e.OldItems == null )
+                            break;
+
+                        foreach ( var activity in e.OldItems.OfType<IActivity>() )
+                            activity.Completed -= this.OnActivityCompleted;
+
+                        break;
+                    }
+                case NotifyCollectionChangedAction.Replace:
+                    {
+                        if ( e.OldItems != null )
+                        {
+                            foreach ( var oldItem in e.OldItems.OfType<IActivity>() )
+                                oldItem.Completed -= this.OnActivityCompleted;
+                        }
+
+                        if ( e.NewItems != null )
+                        {
+                            foreach ( var newItem in e.NewItems.OfType<IActivity>() )
+                            {
+                                newItem.Completed -= this.OnActivityCompleted;
+                                newItem.Completed += this.OnActivityCompleted;
+                            }
+                        }
+
+                        break;
+                    }
+            }
+
+            this.OnCanExecuteChanged( EventArgs.Empty );
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the current instance equals the specified object.
+        /// </summary>
+        /// <param name="obj">The <see cref="Object"/> to evaluate.</param>
+        /// <returns>True if the current instance equals the specified object; otherwise, false.</returns>
+        public override bool Equals( object obj )
+        {
+            return this.Equals( obj as IActivity );
+        }
+
+        /// <summary>
+        /// Returns a hash code for the current instance.
+        /// </summary>
+        /// <returns>A hash code.</returns>
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode() + ( this.InstanceId == null ? 0 : this.InstanceId.GetHashCode() );
+        }
+
+        /// <summary>
+        /// Gets the activity identifier.
+        /// </summary>
+        /// <value>A <see cref="Guid"/> structure.</value>
+        public virtual Guid Id
+        {
+            get
+            {
+                return this.Metadata.Id;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the activity instance identifier.
+        /// </summary>
+        /// <value>A <see cref="Nullable{T}">nullable</see> <see cref="Guid"/> structure.</value>
+        /// <remarks>The instance identifier controlled by the activity management system.</remarks>
+        public Guid? InstanceId
+        {
+            get
+            {
+                return this.instanceId;
+            }
+            set
+            {
+                this.SetProperty( ref this.instanceId, value );
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the activity has completed.
+        /// </summary>
+        /// <value>True if the activity has completed; otherwise, false.</value>
+        public bool IsCompleted
+        {
+            get
+            {
+                return this.completed;
+            }
+            protected set
+            {
+                if ( !this.SetProperty( ref this.completed, value ) )
+                    return;
+
+                if ( value )
+                    this.OnCompleted( new ActivityCompletedEventArgs( this.currentServiceProvider ) );
+
+                this.OnCanExecuteChanged( EventArgs.Empty );
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the activity.
+        /// </summary>
+        /// <value>The activity name.</value>
+        public virtual string Name
+        {
+            get
+            {
+                return this.Metadata.Name;
+            }
+            set
+            {
+                this.SetProperty( ref this.Metadata.Name, value );
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the activity description.
+        /// </summary>
+        /// <value>The activity description.</value>
+        public virtual string Description
+        {
+            get
+            {
+                return this.Metadata.Description;
+            }
+            set
+            {
+                this.SetProperty( ref this.Metadata.Description, value );
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the expiration date and time of the activity.
+        /// </summary>
+        /// <value>A <see cref="Nullable{T}"/> object.  A state of null indicates the
+        /// activity does not expire.</value>
+        public DateTime? Expiration
+        {
+            get
+            {
+                return this.expiration;
+            }
+            set
+            {
+                this.SetProperty( ref this.expiration, value );
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of dependent tasks for the current activity.
+        /// </summary>
+        /// <value>An <see cref="ICollection{T}"/> object.</value>
+        /// <remarks>The current activity will not execute until all dependencies have completed.</remarks>
+        public ICollection<IActivity> Dependencies
+        {
+            get
+            {
+                return this.dependencies;
+            }
+        }
+
+        /// <summary>
+        /// Loads the activity state from the specified state bag.
+        /// </summary>
+        /// <param name="stateBag">The <see cref="IDictionary{TKey,TValue}"/> containing the state information.</param>
+        public virtual void LoadState( IDictionary<string, string> stateBag )
+        {
+        }
+
+        /// <summary>
+        /// Saves the activity state to the specified state bag.
+        /// </summary>
+        /// <param name="stateBag">The <see cref="IDictionary{TKey,TValue}"/> containing the state information.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract" )]
+        public virtual void SaveState( IDictionary<string, string> stateBag )
+        {
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the activity can execute.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> associated with the activity.</param>
+        /// <returns>True if the activity can execute; otherwise, false.</returns>
+        /// <remarks>The default implementation returns true if all <see cref="P:Dependencies"/> are completed; otherwise, false.</remarks>
+        [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "serviceProvider", Justification = "False positive" )]
+        public virtual bool CanExecute( IServiceProvider serviceProvider )
+        {
+            return this.IsReady;
+        }
+
+        /// <summary>
+        /// Executes the activity.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> associated with the activity.</param>
+        /// <remarks>If the activity has already completed or is not ready to execute, this method has no effect.  The activity must be
+        /// reset before it can be re-executed.</remarks>
+        [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "serviceProvider", Justification = "False positive" )]
+        public void Execute( IServiceProvider serviceProvider )
+        {
+            // capture the current service provider so that it can be forwarded in the Completed event
+            this.currentServiceProvider = serviceProvider;
+            this.OnExecute( serviceProvider );
+        }
+
+        /// <summary>
+        /// Occurs when the activity has completed.
+        /// </summary>
+        public event EventHandler<ActivityCompletedEventArgs> Completed;
+
+        /// <summary>
+        /// Returns a value indicating whether the current instance equals the specified object.
+        /// </summary>
+        /// <param name="other">The <see cref="IActivity"/> to evaluate.</param>
+        /// <returns>True if the current instance equals the specified object; otherwise, false.</returns>
+        public virtual bool Equals( IActivity other )
+        {
+            if ( other == null )
+                return false;
+            else if ( !this.GetType().Equals( other.GetType() ) ) // must be the same type of activity
+                return false;
+
+            return this.GetHashCode().Equals( other.GetHashCode() );
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the activity can execute.
+        /// </summary>
+        /// <param name="parameter">A parameter <see cref="Object"/> pass to the command.</param>
+        /// <returns>True if the activity can execute; otherwise, false.</returns>
+        bool ICommand.CanExecute( object parameter )
+        {
+            return this.CanExecute( (IServiceProvider) parameter );
+        }
+
+        /// <summary>
+        /// Executes the activity.
+        /// </summary>
+        /// <param name="parameter">A parameter <see cref="Object"/> pass to the command.</param>
+        void ICommand.Execute( object parameter )
+        {
+            this.Execute( (IServiceProvider) parameter );
+        }
+
+        /// <summary>
+        /// Occurs when the ability for the activity to execute has changed.
+        /// </summary>
+        public event EventHandler CanExecuteChanged;
+    }
+}

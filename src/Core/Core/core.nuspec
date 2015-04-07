@@ -1,0 +1,28 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+ <!-- TEMP: due to a bug in nuget.exe 2.8.x, metadata cannot be extracted from a pcl. this will be fixed in 3.0 -->
+ <metadata>
+  <id>More</id>
+  <version>1.0.0.0</version>
+  <authors>Chris Martinez</authors>
+  <owners>Commonsense Software</owners>
+  <title>More Framework</title>
+  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <description>The core library for the "More" framework.</description>
+  <summary>Provides "More" patterns and practices to the Microsoft Base Class Library (BCL).</summary>
+  <releaseNotes></releaseNotes>
+  <language>en-US</language>
+  <!--<projectUrl></projectUrl>-->
+  <!--<iconUrl></iconUrl>-->
+  <tags>More Patterns Practices</tags>
+  <copyright>Commonsense Software</copyright>
+  <references>
+   <reference file="$id$.dll" />
+  </references>
+  <dependencies>
+  </dependencies>
+ </metadata>
+ <files>
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net451+win81+wpa81\CodeContracts" />
+ </files>
+</package>

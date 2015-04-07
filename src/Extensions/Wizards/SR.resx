@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BackCaption" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="CancelCaption" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DefaultTypeSelectionTitle" xml:space="preserve">
+    <value>Select a Type</value>
+  </data>
+  <data name="EditableObjectDesc" xml:space="preserve">
+    <value>The view model provides property change notification, validation support, and implements IEditableObject with editing transaction support.</value>
+  </data>
+  <data name="ExistingViewModelTitle" xml:space="preserve">
+    <value>Select an Existing View Model</value>
+  </data>
+  <data name="ExistingViewModelUnspecified" xml:space="preserve">
+    <value>An existing view model must be selected.</value>
+  </data>
+  <data name="FinishCaption" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="ImplementIDialogViewT" xml:space="preserve">
+    <value>Implement IDialogView&lt;T&gt;</value>
+  </data>
+  <data name="ImplementIDialogViewTDesc" xml:space="preserve">
+    <value>The view supports dialog semantics and allows its view model to be attached at runtime.</value>
+  </data>
+  <data name="ImplementIViewT" xml:space="preserve">
+    <value>Implement IView&lt;T&gt;</value>
+  </data>
+  <data name="ImplementIViewTDesc" xml:space="preserve">
+    <value>The view exposes a view model.</value>
+  </data>
+  <data name="ImplementIViewTT" xml:space="preserve">
+    <value>Implement IView&lt;T, T&gt;</value>
+  </data>
+  <data name="ImplementIViewTTDesc" xml:space="preserve">
+    <value>The view allows its view model to be attached at runtime.</value>
+  </data>
+  <data name="InteractionDesc" xml:space="preserve">
+    <value>The view model provides property change notification and provides a basic implementation for user interaction. This option is typically used when your view model is supplied to an interaction which shows another view such as a window.</value>
+  </data>
+  <data name="InvalidObjectForValidation" xml:space="preserve">
+    <value>An object of type '{0}' must be specified for validation.</value>
+  </data>
+  <data name="ItemTemplateWizardTitle" xml:space="preserve">
+    <value>Item Template Wizard</value>
+  </data>
+  <data name="NextCaption" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="NoActiveProject" xml:space="preserve">
+    <value>No active project was found in the solution.</value>
+  </data>
+  <data name="ObservableObjectDesc" xml:space="preserve">
+    <value>The view model implements the basic functionality of INotifyPropertyChanged.</value>
+  </data>
+  <data name="OKCaption" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="PageOnly" xml:space="preserve">
+    <value>Page Only</value>
+  </data>
+  <data name="PageOnlyDesc" xml:space="preserve">
+    <value>The view is a Page, which implements no additional interfaces.</value>
+  </data>
+  <data name="UserControlOnly" xml:space="preserve">
+    <value>User Control Only</value>
+  </data>
+  <data name="UserControlOnlyDesc" xml:space="preserve">
+    <value>The view is a UserControl, which implements no additional interfaces.</value>
+  </data>
+  <data name="ValidatableObjectDesc" xml:space="preserve">
+    <value>The view model provides property change notification and supports validation using data annotations when properties change.</value>
+  </data>
+  <data name="ViewItemTemplateWizardTitle" xml:space="preserve">
+    <value>View Item Template Wizard</value>
+  </data>
+  <data name="ViewModelItemTemplateWizardTitle" xml:space="preserve">
+    <value>View Model Item Template Wizard</value>
+  </data>
+  <data name="ViewModelNameNonUnique" xml:space="preserve">
+    <value>A view model with the name '{0}' already exists.</value>
+  </data>
+  <data name="ViewModelNameUnspecified" xml:space="preserve">
+    <value>A name must be specified for the new view model.</value>
+  </data>
+  <data name="WindowOnly" xml:space="preserve">
+    <value>Window Only</value>
+  </data>
+  <data name="WindowOnlyDesc" xml:space="preserve">
+    <value>The view is a Window, which implements no additional interfaces.</value>
+  </data>
+  <data name="AppSearchOption" xml:space="preserve">
+    <value>Search Activation</value>
+  </data>
+  <data name="AppShareOption" xml:space="preserve">
+    <value>Share Activation</value>
+  </data>
+  <data name="OpenFileOption" xml:space="preserve">
+    <value>Open Files</value>
+  </data>
+  <data name="SaveFileOption" xml:space="preserve">
+    <value>Save Files</value>
+  </data>
+  <data name="SearchOption" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SelectFolderOption" xml:space="preserve">
+    <value>Select Folders</value>
+  </data>
+  <data name="SettingsOption" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ShareOption" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="ViewAppSearchOptionDesc" xml:space="preserve">
+    <value>The view support activation via the search contract.</value>
+  </data>
+  <data name="ViewAppShareOptionDesc" xml:space="preserve">
+    <value>The view supports activation via the share contract.</value>
+  </data>
+  <data name="ViewModelAppSearchOptionDesc" xml:space="preserve">
+    <value>The view model support activation via the search contract.</value>
+  </data>
+  <data name="ViewModelAppShareOptionDesc" xml:space="preserve">
+    <value>The view model supports activation via the share contract.</value>
+  </data>
+  <data name="ViewModelOpenFileOptionDesc" xml:space="preserve">
+    <value>The view model supports file open user interactions.</value>
+  </data>
+  <data name="ViewModelSaveFileOptionDesc" xml:space="preserve">
+    <value>The view model supports file save user interactions.</value>
+  </data>
+  <data name="ViewModelSearchOptionDesc" xml:space="preserve">
+    <value>The view model supports the search contract.</value>
+  </data>
+  <data name="ViewModelSelectFolderOptionDesc" xml:space="preserve">
+    <value>The view model supports folder selection user interactions.</value>
+  </data>
+  <data name="ViewModelSettingsOptionDesc" xml:space="preserve">
+    <value>The view model supports the settings contract.</value>
+  </data>
+  <data name="ViewModelShareOptionDesc" xml:space="preserve">
+    <value>The view model supports the share contract.</value>
+  </data>
+  <data name="ViewOpenFileOptionDesc" xml:space="preserve">
+    <value>The view supports file open user interactions.</value>
+  </data>
+  <data name="ViewSaveFileOptionDesc" xml:space="preserve">
+    <value>The view supports file save user interactions.</value>
+  </data>
+  <data name="ViewSearchOptionDesc" xml:space="preserve">
+    <value>The view supports the search contract.</value>
+  </data>
+  <data name="ViewSelectFolderOptionDesc" xml:space="preserve">
+    <value>The view supports folder selection user interactions.</value>
+  </data>
+  <data name="ViewSettingsOptionDesc" xml:space="preserve">
+    <value>The view supports the settings contract.</value>
+  </data>
+  <data name="ViewShareOptionDesc" xml:space="preserve">
+    <value>The view supports the share contract.</value>
+  </data>
+  <data name="ProjectTemplateWizardTitle" xml:space="preserve">
+    <value>Project Template Wizard</value>
+  </data>
+  <data name="AddTemplateSubItem" xml:space="preserve">
+    <value>Adding item '{0}' to '{1}'.</value>
+  </data>
+  <data name="SettingsFlyoutOnly" xml:space="preserve">
+    <value>SettingsFlyout Only</value>
+  </data>
+  <data name="SettingsFlyoutOnlyDesc" xml:space="preserve">
+    <value>The view is a SettingsFlyout, which implements no additional interfaces.</value>
+  </data>
+  <data name="DbContextItemTemplateWizardTitle" xml:space="preserve">
+    <value>DbContext Template Wizard</value>
+  </data>
+  <data name="ImplementIReadOnlyRepositoryT" xml:space="preserve">
+    <value>Implement IReadOnlyRepository&lt;T&gt;</value>
+  </data>
+  <data name="ImplementIReadOnlyRepositoryTDesc" xml:space="preserve">
+    <value>The DbContext supports read-only query semantics.</value>
+  </data>
+  <data name="ImplementIRepositoryT" xml:space="preserve">
+    <value>Implement IRepository&lt;T&gt;</value>
+  </data>
+  <data name="ImplementIRepositoryTDesc" xml:space="preserve">
+    <value>The DbContext supports read-write query semantics.</value>
+  </data>
+  <data name="ImplementIUnitOfWorkT" xml:space="preserve">
+    <value>Implement IUnitOfWork&lt;T&gt;</value>
+  </data>
+  <data name="ImplementIUnitOfWorkTDesc" xml:space="preserve">
+    <value>The DbContext supports write-only semantics.</value>
+  </data>
+  <data name="EF6" xml:space="preserve">
+    <value>Entity Framework 6</value>
+  </data>
+  <data name="EF7" xml:space="preserve">
+    <value>Entity Framework 7</value>
+  </data>
+  <data name="ExistingModelTitle" xml:space="preserve">
+    <value>Select an Existing Model</value>
+  </data>
+  <data name="EvaluatingPackages" xml:space="preserve">
+    <value>Evaluating required packages...</value>
+  </data>
+  <data name="PackageInstallStatus" xml:space="preserve">
+    <value>Adding {0}.{1} to project...</value>
+  </data>
+  <data name="DataConnectionDisplayName" xml:space="preserve">
+    <value>{0} (Settings)</value>
+  </data>
+  <data name="AddDataConnectionTitle" xml:space="preserve">
+    <value>Add Data Connection</value>
+  </data>
+  <data name="AddTemplateItem" xml:space="preserve">
+    <value>Adding item '{0}'.</value>
+  </data>
+  <data name="ConnectionStringNameNonUnique" xml:space="preserve">
+    <value>A connection string with the name '{0}' already exists.</value>
+  </data>
+  <data name="ConnectionStringNameUnspecified" xml:space="preserve">
+    <value>A name must be specified for the new connection string.</value>
+  </data>
+  <data name="NewConnectionCaption" xml:space="preserve">
+    <value>New Connection...</value>
+  </data>
+  <data name="DefaultSaveToConfigurationCaption" xml:space="preserve">
+    <value>Save connection string settings in *.config as:</value>
+  </data>
+  <data name="SaveToConfigurationCaption" xml:space="preserve">
+    <value>Save connection string settings in {0} as:</value>
+  </data>
+  <data name="OneItemRequired" xml:space="preserve">
+    <value>At least one item must be enabled.</value>
+  </data>
+  <data name="StatusInitializing" xml:space="preserve">
+    <value>Initializing...</value>
+  </data>
+</root>

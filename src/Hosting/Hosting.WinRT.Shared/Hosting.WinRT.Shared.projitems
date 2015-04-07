@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>75d2e396-dbcd-4ad4-988b-2b5438e9c71b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>More</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ComposedApplication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\FrameHostT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\Host.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\NavigationSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\PageSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\PartSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ShowShellViewT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\UserControlSpecification.cs" />
+  </ItemGroup>
+</Project>

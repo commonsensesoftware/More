@@ -1,0 +1,39 @@
+<#@ output extension=".vstemplate" #>
+<#@ include file="..\..\..\versions.t4" #><?xml version="1.0" encoding="utf-8" ?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+ <TemplateData>
+  <DefaultName>Window.xaml</DefaultName>
+  <Name>Window Shell View (More)</Name>
+  <Icon Package="{b3bae735-386c-4030-8329-ef48eeda4036}" ID="4593" />
+  <Description>A Windows Presentation Foundation window which represents a shell-type view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.WPF.CSharp.WindowShell</TemplateID>
+  <TemplateGroupID>WPF</TemplateGroupID>
+  <ProjectType>CSharp</ProjectType>
+  <SortOrder>10</SortOrder>
+  <ShowByDefault>true</ShowByDefault>
+  <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+  <!-- note: this template is only meant to be used with a project template wizard -->
+  <Hidden>true</Hidden>
+ </TemplateData>
+ <TemplateContent>
+  <References />
+  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">Window1.xaml</ProjectItem>
+  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">Window1.xaml.cs</ProjectItem>
+  <CustomParameters>
+   <CustomParameter Name="_topLevelViewModelTemplateName" Value="More\Windows Desktop\1033\WindowViewModel.zip|FrameworkVersion=4.5" />
+   <CustomParameter Name="_topLevel" Value="true" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="$showTips$" Value="true" />
+   <CustomParameter Name="$enableOpenFile$" Value="false" />
+   <CustomParameter Name="$enableSaveFile$" Value="false" />
+   <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$viewmodel$" Value="MainViewModel" />
+   <CustomParameter Name="$viewmodelnamespace$" Value="" />
+  </CustomParameters>
+ </TemplateContent>
+ <WizardExtension>
+  <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
+  <FullClassName>More.VisualStudio.Templates.ViewTemplateWizard</FullClassName>
+ </WizardExtension>
+</VSTemplate>

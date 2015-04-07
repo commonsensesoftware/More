@@ -1,0 +1,55 @@
+<#@ output extension=".vstemplate" #>
+<#@ include file="..\..\..\versions.t4" #><?xml version="1.0" encoding="utf-8" ?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+ <TemplateData>
+  <DefaultName>Page.xaml</DefaultName>
+  <Name>Blank Page View (More)</Name>
+  <Icon Package="{BB89AFCA-43DA-45C1-907D-9D61DD11F28D}" ID="4007" />
+  <Description>A blank page which represents a view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.WinRT.CSharp.BlankPage</TemplateID>
+  <TemplateGroupID>WinRT-Managed-Win81</TemplateGroupID>
+  <ProjectType>CSharp</ProjectType>
+  <PreviewImage>BlankPage.png</PreviewImage>
+  <TargetPlatformName>Windows</TargetPlatformName>
+  <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
+  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+ </TemplateData>
+ <TemplateContent>
+  <References />
+  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">BlankPage.xaml</ProjectItem>
+  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" ReplaceParameters="true">BlankPage.xaml.cs</ProjectItem>
+  <CustomParameters>
+   <CustomParameter Name="_views" Value="PageOnly,ImplementIViewT,ImplementIViewTT" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Windows\1033\PageViewModel.zip" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
+   <CustomParameter Name="$showTips$" Value="true" />
+   <CustomParameter Name="$enableOpenFile$" Value="false" />
+   <CustomParameter Name="$enableSaveFile$" Value="false" />
+   <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableSettings$" Value="false" />
+   <CustomParameter Name="$enableSharing$" Value="false" />
+   <CustomParameter Name="$enableSearch$" Value="false" />
+   <CustomParameter Name="$enableAppSharing$" Value="false" />
+   <CustomParameter Name="$enableAppSearch$" Value="false" />
+   <CustomParameter Name="$interfaceoption$" Value="2" />
+   <CustomParameter Name="$hasviewmodel$" Value="true" />
+   <CustomParameter Name="$viewmodel$" Value="" />
+   <CustomParameter Name="$viewmodelnamespace$" Value="" />
+  </CustomParameters>
+ </TemplateContent>
+ <WizardExtension>
+  <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+  <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+ </WizardExtension>
+ <WizardData>
+  <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
+   <package id="More" version="<#=GetPackageVersion("More")#>" />
+   <package id="More.Windows" version="<#=GetPackageVersion("More.Windows")#>" />
+  </packages>
+ </WizardData>
+ <WizardExtension>
+  <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
+  <FullClassName>More.VisualStudio.Templates.ViewTemplateWizard</FullClassName>
+ </WizardExtension>
+</VSTemplate>

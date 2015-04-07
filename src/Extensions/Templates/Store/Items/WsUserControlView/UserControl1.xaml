@@ -1,0 +1,35 @@
+﻿<UserControl
+ x:Class="$rootnamespace$.$safeitemname$"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"$if$ ($hasviewmodel$ == true)
+ xmlns:vm="using:$viewmodelnamespace$"$endif$
+ xmlns:i="using:Microsoft.Xaml.Interactivity"
+ xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+ xmlns:a="using:More.Windows.Interactivity"
+ xmlns:b="using:More.Windows.Interactivity"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"$if$ ($hasviewmodel$ == true) d:DataContext="{d:DesignInstance Type=vm:$viewmodel$}"$endif$>$if$ ($hasviewmodel$ == true)
+ <i:Interaction.Behaviors>
+  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
+   <a:MessageDialogAction />
+  </b:InteractionRequestBehavior>$if$ ($enableOpenFile$ == true )
+  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
+   <a:OpenFileAction />
+  </b:InteractionRequestBehavior>$endif$$if$ ($enableSaveFile$ == true )
+  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[SaveFile]}">
+   <a:SaveFileAction />
+  </b:InteractionRequestBehavior>$endif$$if$ ($enableSelectFolder$ == true )
+  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[SelectFolder]}">
+   <a:SelectFolderAction />
+  </b:InteractionRequestBehavior>$endif$$if$ ($enableSettings$ == true)
+  <b:SettingsContractBehavior ShowRequest="{Binding InteractionRequests[Settings]}" />$endif$$if$ ($enableSharing$ == true)
+  <b:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />$endif$$if$ ($enableSearch$ == true)
+  <b:SearchContractBehavior SearchCommand="{Binding Commands[Search]}"
+                            SearchSuggestionsCommand="{Binding Commands[ProvideSuggestions]}"
+                            SuggestionChosenCommand="{Binding Commands[SuggestionChosen]}" />$endif$$if$ ($hasviewmodel$ == true)
+ </i:Interaction.Behaviors>$endif$
+ <Grid>
+
+ </Grid>
+</UserControl>

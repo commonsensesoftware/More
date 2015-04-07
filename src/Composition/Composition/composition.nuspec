@@ -1,0 +1,31 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+ <metadata>
+  <id>$id$</id>
+  <version>$version$</version>
+  <authors>Chris Martinez</authors>
+  <owners>$author$</owners>
+  <frameworkAssemblies />
+  <title>More Composition Framework</title>
+  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <description>$description$</description>
+  <summary>Provides "More" patterns and practices for composition to the Microsoft Base Class Library (BCL).</summary>
+  <releaseNotes></releaseNotes>
+  <language>en-US</language>
+  <!--<projectUrl></projectUrl>-->
+  <!--<iconUrl></iconUrl>-->
+  <tags>More Patterns Practices Composition MEF</tags>
+  <copyright>$author$</copyright>
+  <references>
+   <reference file="$id$.dll" />
+  </references>
+  <dependencies>
+   <dependency id="Microsoft.Composition" version="1.0.30" />
+  </dependencies>
+ </metadata>
+ <files>
+  <file src="bin\$configuration$\$id$.dll" target="lib\portable-net45+win+wpa81+wp80" />
+  <file src="bin\$configuration$\$id$.xml" target="lib\portable-net45+win+wpa81+wp80" />
+  <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net45+win+wpa81+wp80\CodeContracts" />
+ </files>
+</package>

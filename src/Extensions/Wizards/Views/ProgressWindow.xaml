@@ -1,0 +1,33 @@
+﻿<Window x:Class="More.VisualStudio.Views.ProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="135" Width="470"
+        AllowsTransparency="False"
+        BorderThickness="0"
+        ResizeMode="NoResize"
+        Focusable="False"
+        ShowInTaskbar="False"
+        WindowStyle="None">
+ <Window.Resources>
+  <ResourceDictionary>
+   <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="../Themes/Theme.xaml" />
+   </ResourceDictionary.MergedDictionaries>
+  </ResourceDictionary>
+ </Window.Resources>
+ <Border BorderThickness="1"
+         Background="{x:Static SystemColors.WindowBrush}"
+         BorderBrush="{x:Static SystemColors.WindowFrameBrush}">
+  <Grid>
+   <Grid.RowDefinitions>
+    <RowDefinition Height="34" />
+    <RowDefinition Height="*" />
+    <RowDefinition Height="Auto" />
+   </Grid.RowDefinitions>
+   <Rectangle Fill="{x:Static SystemColors.ControlBrush}" />
+   <TextBlock Text="Microsoft Visual Studio" FontSize="16" Margin="12,8,12,0" />
+   <TextBlock Grid.Row="1" x:Name="Status" Text="[Placeholder]" Margin="12,18,12,10" VerticalAlignment="Top" />
+   <ProgressBar Grid.Row="2" Height="15" IsIndeterminate="True" VerticalAlignment="Bottom" Margin="12,0,12,18" />
+  </Grid>
+ </Border>
+</Window>

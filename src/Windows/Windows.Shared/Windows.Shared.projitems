@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>7bac15c3-94f3-4630-a109-56e6872d6e8f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>More</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DeferManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IDeferrable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ItemsControlContentManagerT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PanelContentManagerT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\ShellViewBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\UserControlViewT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionMessage.Designer.cs">
+      <DependentUpon>ExceptionMessage.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReflectHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SR.Designer.cs">
+      <DependentUpon>SR.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Util.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Controls\GridItemsControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Controls\ItemsControlExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Controls\TextInputDialog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Controls\TrendIndicator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Controls\TrendRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\BooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ConditionalBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ConditionalBrushRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ConditionalColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ConditionalColorRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\DenominationConvertBackRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\DenominationConvertRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\EnumerableConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\EnumerationConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\EqualToRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\FormatConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\FrozenItemCollectionT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\FrozenItemPosition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\GreaterThanRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\IFormattableValueConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\IFrozenItemCollectionView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\IsNullConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\LessThanRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\NumberConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\NumberStyleRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\NumericDenominationConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\NumericOperatorRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\NumericRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\PageChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\PagingArguments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\SparklineCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\UriConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ValueConversionSequence.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ValueConversionStep.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ValueConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\ValueConverterBaseAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\VisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\DelayedCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\ICommandExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\DependencyPropertyExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\InvokeMethodAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\KeyPressTrigger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\MethodParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\PropertyDescriptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\SetPropertyAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Media\MediaContentContractT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Media\MediaContentT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Media\XmlContent.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ExceptionMessage.resx">
+      <LastGenOutput>ExceptionMessage.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SR.resx">
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Windows.Data\IValueConverter.xml" />
+  </ItemGroup>
+</Project>

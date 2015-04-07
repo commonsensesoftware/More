@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+ <Target Name="BeforeBuild">
+  
+  <PropertyGroup>
+   <VersionPattern>AssemblyVersion(?:Attribute)?\(\s*"(\d+\.\d+)(?:\.\d+){1,2}"\s*\)</VersionPattern>
+   <!-- local project assembly info -->
+   <AssemblyInfoCode Condition=" Exists('$(ProjectDir)Properties\AssemblyInfo.cs') ">$([System.IO.File]::ReadAllText(`$(ProjectDir)Properties\AssemblyInfo.cs`))</AssemblyInfoCode>
+   <!-- shared project assembly info for multi-targeting -->
+   <AssemblyInfoCode Condition=" Exists('$(ProjectDir)..\AssemblyInfo.cs') ">$([System.IO.File]::ReadAllText(`$(ProjectDir)..\AssemblyInfo.cs`))</AssemblyInfoCode>
+   <MajorAndMinorVersion Condition=" '$(AssemblyInfoCode)' != '' and '$([System.Text.RegularExpressions.Regex]::IsMatch($(AssemblyInfoCode),$(VersionPattern)))' == 'True' ">$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfoCode),$(VersionPattern)).Groups[1].Value)</MajorAndMinorVersion>
+   <!-- assembly info for all projects -->
+   <SharedAssemblyInfoCode Condition=" '$(MajorAndMinorVersion)' == '' ">$([System.IO.File]::ReadAllText(`$(ProjectDir)..\..\SharedAssemblyInfo.cs`))</SharedAssemblyInfoCode>
+   <MajorAndMinorVersion Condition=" '$(MajorAndMinorVersion)' == '' and '$(SharedAssemblyInfoCode)' != '' and '$([System.Text.RegularExpressions.Regex]::IsMatch($(SharedAssemblyInfoCode),$(VersionPattern)))' == 'True' ">$([System.Text.RegularExpressions.Regex]::Match($(SharedAssemblyInfoCode),$(VersionPattern)).Groups[1].Value)</MajorAndMinorVersion>
+   <MajorAndMinorVersion Condition=" '$(MajorAndMinorVersion)' == '' ">1.0</MajorAndMinorVersion>
+   <DaylightSavingTime>$([System.DateTime]::Now.IsDaylightSavingTime())</DaylightSavingTime>
+   <FileBuildNumber>$([System.DateTime]::Today.Subtract($([System.DateTime]::Parse("1/1/2000"))).ToString("%d"))</FileBuildNumber>
+   <FileBuildRevision Condition=" '$(DaylightSavingTime)'=='True' " >$([System.Convert]::ToInt32($([MSBuild]::Divide($([System.DateTime]::Now.TimeOfDay.Subtract($([System.TimeSpan]::FromHours(1.0))).TotalSeconds),2))))</FileBuildRevision>
+   <FileBuildRevision Condition=" '$(DaylightSavingTime)'=='False' " >$([System.Convert]::ToInt32($([MSBuild]::Divide($([System.DateTime]::Now.TimeOfDay.TotalSeconds),2))))</FileBuildRevision>
+   <!-- this is the same form as 1.0.* -->
+   <FileVersion>$(MajorAndMinorVersion).$(FileBuildNumber).$(FileBuildRevision)</FileVersion>
+   <AssemblyFileVersionAttribute>[assembly: System.Reflection.AssemblyFileVersion( "$(FileVersion)" )]</AssemblyFileVersionAttribute>
+  </PropertyGroup>
+  
+  <!-- dynamcially create FileVersionInfo.cs file -->
+  <WriteLinesToFile File="Properties\FileVersionInfo.cs" Lines="$(AssemblyFileVersionAttribute)" Overwrite="true" />
+  
+  <!-- dynamically add the generated file to the list of compiled items -->
+  <ItemGroup>
+   <Compile Include="Properties\FileVersionInfo.cs" />
+  </ItemGroup>
+  
+ </Target>
+</Project>

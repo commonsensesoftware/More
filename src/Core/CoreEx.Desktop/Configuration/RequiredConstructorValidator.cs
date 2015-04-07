@@ -1,0 +1,129 @@
+﻿namespace More.Configuration
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+
+    /// <summary>
+    /// A <see cref="ConfigurationValidatorBase"/> that confirms the supplied type contains a public constructor
+    /// that matches the indicated signature. It optionally allows signatures that subclass the supplied parameter
+    /// <see cref="Type">types</see>.
+    /// </summary>
+    /// <remarks>This validator only supports validation of <see cref="Type">type</see> instances.</remarks>
+    public class RequiredConstructorValidator : ConfigurationValidatorBase
+    {
+        private readonly IList<Type> parameters;
+        private readonly bool allowContravariance;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequiredConstructorValidator"/> class.
+        /// </summary>
+        /// <remarks>This constructor does not allow subclassing of parameters types.</remarks>
+        /// <param name="parameters">The <see cref="IEnumerable{T}">sequence</see> of parameters, in positional order, that are required.</param>
+        public RequiredConstructorValidator( IEnumerable<Type> parameters )
+            : this( false, parameters )
+        {
+            Contract.Requires<ArgumentNullException>( parameters != null, "parameters" );
+            Contract.Requires( Contract.ForAll( parameters, item => item != null ), "parameters[]" );
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequiredConstructorValidator"/> class.
+        /// </summary>
+        /// <param name="allowContravariance">Indicates if exact match of the parameter types or subclassing of types is allowed.</param>
+        /// <param name="parameters">The <see cref="IEnumerable{T}">sequence</see> of parameters, in positional order, that are required.</param>
+        public RequiredConstructorValidator( bool allowContravariance, IEnumerable<Type> parameters )
+        {
+            Contract.Requires<ArgumentNullException>( parameters != null, "parameters" );
+            Contract.Requires( Contract.ForAll( parameters, item => item != null ), "parameters[]" );
+
+            this.allowContravariance = allowContravariance;
+            this.parameters = parameters.ToList().AsReadOnly();
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether <see cref="Type.IsAssignableFrom">subclassed</see> types are allowed
+        /// or if the constructor must exactly match the exact type.
+        /// </summary>
+        /// <value>True if constructors may subclass parameter types ; otherwise false.</value>
+        public bool AllowContravariance
+        {
+            get
+            {
+                return this.allowContravariance;
+            }
+        }
+
+        /// <summary>
+        /// Gets the list of parameter <see cref="Type">types</see> the required constructor must use.
+        /// </summary>
+        /// <value>The list of parameter <see cref="Type">types</see> the required constructor must use.</value>
+        public IList<Type> Parameters
+        {
+            get
+            {
+                Contract.Ensures( Contract.Result<IList<Type>>() != null );
+                Contract.Ensures( Contract.ForAll( Contract.Result<IList<Type>>(), item => item != null ) );
+                Contract.Ensures( Contract.Result<IList<Type>>().IsReadOnly );
+                return this.parameters;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the value of an object is valid. 
+        /// </summary>
+        /// <param name="value">The object value.</param>
+        public override void Validate( object value )
+        {
+            var typeToValidate = value as Type;
+
+            if ( typeToValidate == null )
+                throw new ArgumentException( SR.InvalidArgType.FormatDefault( typeof( Type ) ), "value" );
+
+            if ( this.AllowContravariance )
+            {
+                var constructors = from ctor in typeToValidate.GetConstructors()
+                                   let args = ctor.GetParameters()
+                                   where args.Length == this.Parameters.Count
+                                   let argTypes = args.Select( a => a.ParameterType )
+                                   where this.IsMatch( argTypes )
+                                   select ctor;
+
+                if ( constructors.Any() )
+                    return;
+            }
+            else
+            {
+                var constructor = typeToValidate.GetConstructor( this.Parameters.ToArray() );
+
+                if ( constructor != null )
+                    return;
+            }
+
+            var parameterNames = string.Join( ",", this.Parameters.Select( item => item.FullName ).ToArray() );
+            var message = SR.RequiredConstructorMissing.FormatInvariant( typeToValidate.FullName, parameterNames );
+            throw new ConfigurationErrorsException( message );
+        }
+
+        private bool IsMatch( IEnumerable<Type> availableParameters )
+        {
+            Contract.Requires( availableParameters != null );
+            Contract.Requires( availableParameters.Count() == this.Parameters.Count );
+
+            var unmatched = availableParameters.Where( ( t, i ) => !t.IsAssignableFrom( this.Parameters[i] ) ).Any();
+            return !unmatched;
+        }
+
+        /// <summary>
+        /// Determines whether an object can be validated based on type.
+        /// </summary>
+        /// <param name="type">The object type.</param>
+        /// <returns>True if the type parameter value matches the expected type; otherwise, false.</returns>
+        public override bool CanValidate( Type type )
+        {
+            return type == typeof( Type );
+        }
+    }
+}

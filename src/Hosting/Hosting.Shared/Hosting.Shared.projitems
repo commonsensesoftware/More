@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>4c20fcb1-70cf-4962-848b-f0f779b1666a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>More</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ActivityAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\Host.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\InterfaceSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostAssemblySpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostExportDescriptorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfigurationContract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ActivityConfigurationT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionMessage.Designer.cs">
+      <DependentUpon>ExceptionMessage.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SR.Designer.cs">
+      <DependentUpon>SR.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ExceptionMessage.resx">
+      <LastGenOutput>ExceptionMessage.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SR.resx">
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

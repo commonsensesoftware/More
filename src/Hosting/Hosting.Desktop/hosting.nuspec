@@ -1,0 +1,48 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+ <metadata>
+  <id>$id$</id>
+  <version>$version$</version>
+  <authors>Chris Martinez</authors>
+  <owners>$author$</owners>
+  <frameworkAssemblies>
+   <frameworkAssembly assemblyName="PresentationCore" targetFramework="net451" />
+   <frameworkAssembly assemblyName="PresentationFramework" targetFramework="net451" />
+   <frameworkAssembly assemblyName="System.Configuration" targetFramework="net451" />
+   <frameworkAssembly assemblyName="System.Core" targetFramework="net451" />
+   <frameworkAssembly assemblyName="System.Xaml" targetFramework="net415" />
+   <frameworkAssembly assemblyName="System.Xml" targetFramework="net451" />
+   <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="net451" />
+   <frameworkAssembly assemblyName="WindowsBase" targetFramework="net451" />
+  </frameworkAssemblies>
+  <title>More Windows Hosting Framework</title>
+  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <description>$description$</description>
+  <summary>Provides "More" patterns and practices for hosting user interfaces to the Microsoft Base Class Library (BCL).</summary>
+  <releaseNotes></releaseNotes>
+  <language>en-US</language>
+  <!--<projectUrl></projectUrl>-->
+  <!--<iconUrl></iconUrl>-->
+  <tags>More Patterns Practices Windows Hosting User Interface UI Store Phone MVVM</tags>
+  <copyright>$author$</copyright>
+  <references>
+   <reference file="$id$.dll" />
+  </references>
+  <dependencies>
+   <dependency id="More" version="$version$" />
+   <dependency id="More.Windows" version="$version$" />
+   <dependency id="More.Composition" version="$version$" />
+  </dependencies>
+ </metadata>
+ <files>
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net451\CodeContracts" />
+
+  <file src="..\Hosting.Store\$bin$\$id$.dll" target="lib\win81" />
+  <file src="..\Hosting.Store\$bin$\$id$.xml" target="lib\win81" />
+  <file src="..\Hosting.Store\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
+
+  <file src="..\Hosting.Phone\$bin$\$id$.dll" target="lib\portable-wp81+wpa81" />
+  <file src="..\Hosting.Phone\$bin$\$id$.xml" target="lib\portable-wp81+wpa81" />
+  <file src="..\Hosting.Phone\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
+ </files>
+</package>

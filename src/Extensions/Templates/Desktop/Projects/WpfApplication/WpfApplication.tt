@@ -1,0 +1,64 @@
+﻿<#@ output extension=".vstemplate" #>
+<#@ include file="..\..\..\versions.t4" #><?xml version="1.0" encoding="utf-8" ?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+ <TemplateData>
+  <DefaultName>WpfApplication</DefaultName>
+  <Name>WPF Application (More)</Name>
+  <Description Package="{b3bae735-386c-4030-8329-ef48eeda4036}" ID="4651" />
+  <Icon Package="{b3bae735-386c-4030-8329-ef48eeda4036}" ID="4602" />
+  <TemplateID>More.WPF.CSharp.WPFApplication</TemplateID>
+  <TemplateGroupID>WPF</TemplateGroupID>
+  <ProjectType>CSharp</ProjectType>
+  <SortOrder>10</SortOrder>
+  <ProvideDefaultName>true</ProvideDefaultName>
+  <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+  <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+  <CreateInPlace>false</CreateInPlace>
+  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+ </TemplateData>
+ <TemplateContent>
+  <References />
+  <Project File="WpfApp.csproj" ReplaceParameters="true">
+   <ProjectItem OpenInEditor="false" ReplaceParameters="true">App.config</ProjectItem>
+   <ProjectItem OpenInEditor="false" ReplaceParameters="true">App.xaml</ProjectItem>
+   <ProjectItem OpenInEditor="false" ReplaceParameters="true" SubType="Code">App.xaml.cs</ProjectItem>
+   <ProjectItem OpenInEditor="false" ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
+   <Folder Name="Properties" TargetFolderName="Properties">
+    <ProjectItem OpenInEditor="false" ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+    <ProjectItem OpenInEditor="false" ReplaceParameters="false" TargetFileName="Resources.resx">Resources.resx</ProjectItem>
+    <ProjectItem OpenInEditor="false" ReplaceParameters="true" TargetFileName="Resources.Designer.cs">Resources.Designer.cs</ProjectItem>
+    <ProjectItem OpenInEditor="false" ReplaceParameters="false" TargetFileName="Settings.settings">Settings.settings</ProjectItem>
+    <ProjectItem OpenInEditor="false" ReplaceParameters="true" TargetFileName="Settings.Designer.cs">Settings.Designer.cs</ProjectItem>
+   </Folder>
+  </Project>
+  <CustomParameters>
+   <CustomParameter Name="_view" Value="MainWindow" />
+   <CustomParameter Name="_viewTemplate" Value="More\Windows Desktop\1033\WindowShellView.zip|FrameworkVersion=4.5" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="$showTips$" Value="true" />
+   <CustomParameter Name="$enableOpenFile$" Value="false" />
+   <CustomParameter Name="$enableSaveFile$" Value="false" />
+   <CustomParameter Name="$enableSelectFolder$" Value="false" />
+  </CustomParameters>
+ </TemplateContent>
+ <WizardExtension>
+  <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+  <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+ </WizardExtension>
+ <WizardData>
+  <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
+   <package id="Microsoft.Composition" version="1.0.30" />
+   <package id="More" version="<#=GetPackageVersion("More")#>" />
+   <package id="More.Extensions" version="<#=GetPackageVersion("More.Extensions")#>" />
+   <package id="More.Composition" version="<#=GetPackageVersion("More.Composition")#>" />
+   <package id="More.Windows" version="<#=GetPackageVersion("More.Windows")#>" />
+   <package id="More.Windows.Hosting" version="<#=GetPackageVersion("More.Windows.Hosting")#>" />
+  </packages>
+ </WizardData>
+ <WizardExtension>
+  <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
+  <FullClassName>More.VisualStudio.Templates.DefaultProjectTemplateWizard</FullClassName>
+ </WizardExtension>
+</VSTemplate>
+ 

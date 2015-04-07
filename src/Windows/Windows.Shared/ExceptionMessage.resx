@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AmbiguousResourceException" xml:space="preserve">
+    <value>The resource name '{0}' is ambiguous.  The assembly '{1}' contains {2} matching resources.  Specify a more qualified resource name to provide uniqueness.</value>
+  </data>
+  <data name="AmbiguousTypeName" xml:space="preserve">
+    <value>The type name '{0}' is ambiguous.</value>
+  </data>
+  <data name="AppLifetimeObjectNotRegistered" xml:space="preserve">
+    <value>The application service '{0}' has not been added to the ApplicationLifetimeObjects collection.</value>
+  </data>
+  <data name="AssemblyNotFound" xml:space="preserve">
+    <value>An assembly with the name '{0}' could not be found.</value>
+  </data>
+  <data name="AttachedSetterBindingUnset" xml:space="preserve">
+    <value>The Binding property must be set.</value>
+  </data>
+  <data name="AttachedSetterCannotBeNested" xml:space="preserve">
+    <value>The attached setter cannot contain nested values.</value>
+  </data>
+  <data name="AttachedSetterInvalidProperty" xml:space="preserve">
+    <value>Unable to bind the attached property Setter to {0}.{1}.</value>
+  </data>
+  <data name="AttachedSetterPropertyUnset" xml:space="preserve">
+    <value>The Property property must be set to a non-empty value.</value>
+  </data>
+  <data name="AttributePropertyUnset" xml:space="preserve">
+    <value>The '{0}' property has not been set.</value>
+  </data>
+  <data name="CannotConvertEnumValue" xml:space="preserve">
+    <value>Unable to convert the string '{0}' to an enumeration of type '{1}'.</value>
+  </data>
+  <data name="CannotCreateConfigSection" xml:space="preserve">
+    <value>Unable to create a the configuration section '{0}' using type '{1}'.</value>
+  </data>
+  <data name="CannotHostBehaviorCollectionMultipleTimesExceptionMessage" xml:space="preserve">
+    <value>Cannot set the same BehaviorCollection on multiple objects.</value>
+  </data>
+  <data name="CannotHostBehaviorMultipleTimesExceptionMessage" xml:space="preserve">
+    <value>An instance of a Behavior cannot be attached to more than one object at a time.</value>
+  </data>
+  <data name="ChangeTypeMismatch" xml:space="preserve">
+    <value>A value of type {0} cannot be changed because it is incompatible with type {1} defined by property {2}.</value>
+  </data>
+  <data name="ConfigDownloadError" xml:space="preserve">
+    <value>Unable to download client configuration file from '{0}'.</value>
+  </data>
+  <data name="ConfigurationParseException" xml:space="preserve">
+    <value>An error occurred parsing the configuration file.</value>
+  </data>
+  <data name="ConfigurationValueParseException" xml:space="preserve">
+    <value>An error occurred parsing the value for attribute '{0}' on element '{1}'.</value>
+  </data>
+  <data name="ContinuationCannotBeStaticMethod" xml:space="preserve">
+    <value>An operation cannot be continued with a static method.</value>
+  </data>
+  <data name="ConvertBackUnsupported" xml:space="preserve">
+    <value>The ConvertBack method is not supported by the converter.</value>
+  </data>
+  <data name="DeserializeGetEnumerator" xml:space="preserve">
+    <value>Only a single enumeration is supported by this IEnumerable.</value>
+  </data>
+  <data name="DuplicateAppSettingKey" xml:space="preserve">
+    <value>The key '{0}' cannot be specified more than once.</value>
+  </data>
+  <data name="DuplicateConfigSection" xml:space="preserve">
+    <value>The configuration section '{0}' cannot be defined more than once.</value>
+  </data>
+  <data name="EmptyPackage" xml:space="preserve">
+    <value>The package does not contain any files.</value>
+  </data>
+  <data name="EntitySetNameResolutionFailed" xml:space="preserve">
+    <value>The entity set name for type {0} could not be resolved.</value>
+  </data>
+  <data name="EnumConverterException" xml:space="preserve">
+    <value>Invalid format. The format must be 'G' or 'D'.</value>
+  </data>
+  <data name="EnumConverterParameterExpected" xml:space="preserve">
+    <value>A converter parameter corresponding to a valid enumeration value must be specified in the current usage context.</value>
+  </data>
+  <data name="EnumConverterParameterInvalid" xml:space="preserve">
+    <value>The specified converter parameter '{1}' is not a valid enumeration value for {0}.</value>
+  </data>
+  <data name="EventTriggerBaseInvalidEventExceptionMessage" xml:space="preserve">
+    <value>The event "{0}" on type "{1}" has an incompatible signature. Make sure the event is public and satisfies the EventHandler delegate.</value>
+  </data>
+  <data name="EventTriggerCannotFindEventNameExceptionMessage" xml:space="preserve">
+    <value>Cannot find an event named "{0}" on type "{1}".</value>
+  </data>
+  <data name="ExpressionMustReferToPropertyOfDeclaredType" xml:space="preserve">
+    <value>The expression '{0}' must refer to a property declared by type {1}.</value>
+  </data>
+  <data name="ExpresssionMustReferToProperty" xml:space="preserve">
+    <value>The expression '{0}' must refer to a property.</value>
+  </data>
+  <data name="FailedToResolveServiceForTask" xml:space="preserve">
+    <value>The task '{0}' with identifier '{1}' requires the service '{2}', but that service failed to resolve from the supplied service provider.</value>
+  </data>
+  <data name="InvalidCast" xml:space="preserve">
+    <value>Cannot convert type '{0}' to type '{1}'.</value>
+  </data>
+  <data name="InvalidCatalogStateChange" xml:space="preserve">
+    <value>The catalog is trying to transition to an invalid state.  This occurs when you call DownloadAsync more than once or CancelAsync is called at an incorrect time.</value>
+  </data>
+  <data name="InvalidControlVisualState" xml:space="preserve">
+    <value>'{0}' is not a valid visual state for the {0} control.</value>
+  </data>
+  <data name="InvalidConverterParameter" xml:space="preserve">
+    <value>The converter parameter must be of type '{0}' or a value that is convertible to type '{0}'.</value>
+  </data>
+  <data name="InvalidPackage" xml:space="preserve">
+    <value>The package is invalid.</value>
+  </data>
+  <data name="InvalidPropertyName" xml:space="preserve">
+    <value>SortDescription's property name '{0}' is invalid.</value>
+  </data>
+  <data name="InvalidRootConfigElement" xml:space="preserve">
+    <value>The element '{0}' was not expected.  The root configuration element must be 'configuration'.</value>
+  </data>
+  <data name="InvalidTypeException" xml:space="preserve">
+    <value>The specified object must be of type '{0}'.</value>
+  </data>
+  <data name="InvalidValueConverterType" xml:space="preserve">
+    <value>The type '{0}' must be public, non-abstract, and implement the '{1}' interface.</value>
+  </data>
+  <data name="MissingConfigAttribute" xml:space="preserve">
+    <value>The attribute '{0}' must be specified.</value>
+  </data>
+  <data name="MissingConfigSection" xml:space="preserve">
+    <value>The element '{0}' does not have a corresponding configuration section.</value>
+  </data>
+  <data name="MissingDependencyProperty" xml:space="preserve">
+    <value>Type {0} does not have a DependencyProperty named '{0}'.</value>
+  </data>
+  <data name="MissingMemberException" xml:space="preserve">
+    <value>The type {0} does not have a member '{1}'.</value>
+  </data>
+  <data name="MissingResourceException" xml:space="preserve">
+    <value>The resource '{0}' does not exist.</value>
+  </data>
+  <data name="MutipleFilePackage" xml:space="preserve">
+    <value>The package contains multiple files, but only one file was expected.</value>
+  </data>
+  <data name="NoConvertBackRule" xml:space="preserve">
+    <value>A ConvertBack rule could not be found for the value '{0}'.</value>
+  </data>
+  <data name="NumericFormatMustBeUsedToConvertEnumToNumber" xml:space="preserve">
+    <value>The UseNumericFormat property must be set to true in order to convert to type {0}.</value>
+  </data>
+  <data name="ReadOnlyCollection" xml:space="preserve">
+    <value>The collection is read-only.</value>
+  </data>
+  <data name="RetargetedTypeConstraintViolatedExceptionMessage" xml:space="preserve">
+    <value>An object of type "{0}" cannot have a {3} property of type "{1}". Instances of type "{0}" can have only a {3} property of type "{2}".</value>
+  </data>
+  <data name="StartServiceHasNotBeenCalled" xml:space="preserve">
+    <value>The service has not been started. The StartService method must be called before the application service context is available.</value>
+  </data>
+  <data name="TooManyConfigSections" xml:space="preserve">
+    <value>The '{0}' configuration section cannot be defined multiple times.</value>
+  </data>
+  <data name="TypeConstraintViolatedExceptionMessage" xml:space="preserve">
+    <value>Cannot attach type "{0}" to type "{1}". Instances of type "{0}" can only be attached to objects of type "{2}".</value>
+  </data>
+  <data name="UnassignableType" xml:space="preserve">
+    <value>The specified item must be assignable from type '{0}'.</value>
+  </data>
+  <data name="UnexpectedConfigSectionParseError" xml:space="preserve">
+    <value>An unexpected exception occurred while deserializing the configuration section '{0}'.  See the inner exception for more information.</value>
+  </data>
+  <data name="UnknownConfigAttribute" xml:space="preserve">
+    <value>The configuration attribute '{0}' on element '{1}' is not supported.</value>
+  </data>
+  <data name="UnknownConfigElement" xml:space="preserve">
+    <value>The configuration element '{0}' is not supported.</value>
+  </data>
+  <data name="UnsupportedConversionType" xml:space="preserve">
+    <value>The target conversion type '{0}' is not supported by the converter.</value>
+  </data>
+  <data name="UnsupportedValueType" xml:space="preserve">
+    <value>Values of type '{0}' are not supported by the converter.</value>
+  </data>
+  <data name="WrongConfigurationElement" xml:space="preserve">
+    <value>The element '{0}' was supplied, but the element '{1}' was expected.</value>
+    <comment>Wrong element provided for Silverlight configurations</comment>
+  </data>
+  <data name="WrongIAsyncResult" xml:space="preserve">
+    <value>IAsyncResult object did not come from the corresponding async method on this type.</value>
+  </data>
+  <data name="WrongThread" xml:space="preserve">
+    <value>Wrong thread.</value>
+  </data>
+</root>
