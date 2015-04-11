@@ -3,3 +3,11 @@
 ################################################################################
 
 *.suo
+FileVersionInfo.cs
+bin/
+obj/
+FakesAssemblies/
+/src/packages
+/src/NuGet
+/src/Extensions/Templates/**/*.vstemplate
+

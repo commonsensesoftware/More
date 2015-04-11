@@ -2,14 +2,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
  <PropertyGroup>
-  <NuGetExe>$(SolutionDir).nuget\nuget.exe</NuGetExe>
+  <NuGetExe>$(MSBuildThisFileDirectory)packages\NuGet.CommandLine.2.8.5\tools\nuget.exe</NuGetExe>
+  <PackageOutDir>$(MSBuildThisFileDirectory)NuGet</PackageOutDir>
   <CurrentOutDir>$(OutDir.TrimEnd("\"))</CurrentOutDir>
  </PropertyGroup>
 
- <Target Name="BeforeBuild" Condition="Exists('$(SolutionDir)NuGet')">
+ <Target Name="BeforeBuild" Condition="Exists('$(PackageOutDir)')">
 
   <ItemGroup>
-   <OldNuPkgFile Include="$(SolutionDir)NuGet\$(TargetName)*.nupkg" />
+   <OldNuPkgFile Include="$(PackageOutDir)\$(TargetName)*.nupkg" />
   </ItemGroup>
 
   <!-- delete any existing *.nupkg files -->
@@ -20,10 +21,10 @@
  <Target Name="AfterBuild">
 <Message Text="CurrentOutDir=$(CurrentOutDir)" Importance="high" />
   <!-- create output folder as necessary -->
-  <MakeDir Condition="!Exists('$(SolutionDir)NuGet')" Directories="$(SolutionDir)NuGet" />
+  <MakeDir Condition="!Exists('$(PackageOutDir)')" Directories="$(PackageOutDir)" />
 
   <!-- create packages -->
-  <Exec Command="&quot;$(NuGetExe)&quot; pack &quot;$(ProjectPath)&quot; -Properties &quot;Bin=$(CurrentOutDir)&quot; -OutputDirectory &quot;$(SolutionDir)NuGet&quot; -NoPackageAnalysis -NonInteractive -Verbosity quiet" />
+  <Exec Command="&quot;$(NuGetExe)&quot; pack &quot;$(ProjectPath)&quot; -Properties &quot;Bin=$(CurrentOutDir)&quot; -OutputDirectory &quot;$(PackageOutDir)&quot; -NoPackageAnalysis -NonInteractive -Verbosity quiet" />
 
  </Target>
 

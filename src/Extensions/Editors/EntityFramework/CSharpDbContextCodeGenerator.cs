@@ -122,7 +122,7 @@
 
             foreach ( var modifier in @class.Modifiers )
             {
-                var kind = modifier.CSharpKind();
+                var kind = modifier.Kind();
 
                 switch ( kind )
                 {
