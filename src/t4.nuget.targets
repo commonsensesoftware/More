@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+ <UsingTask TaskName="ResolvePackageReference" AssemblyFile="Build\bin\More.Build.Tasks.dll" />
+ 
+ <!-- example of how to use the task -->
+ <!--<Target Name="Test">
+  <ResolvePackageReference SourceProjectPath="$(MSBuildThisFileDirectory)Core\Core\Core.csproj">
+   <Output PropertyName="PackageVersion" TaskParameter="SemanticVersion" />
+  </ResolvePackageReference>
+  <Message Text="PackageVersion = '$(PackageVersion)'" Importance="high" />
+ </Target>-->
+
+</Project>

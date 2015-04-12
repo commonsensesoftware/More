@@ -128,17 +128,30 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Composition\Composition\Composition.csproj">
+      <Project>{4c62c756-3d31-4012-aa79-711dbbd55b9a}</Project>
+      <Name>Composition</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\CoreEx.Desktop\CoreEx.Desktop.csproj">
       <Project>{abff6d49-1c8f-4da5-86ed-07033105981b}</Project>
       <Name>CoreEx.Desktop</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
       <Name>Core</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Hosting\Hosting.Desktop\Hosting.Desktop.csproj">
+      <Project>{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}</Project>
+      <Name>Hosting.Desktop</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\..\Windows\Windows.Desktop\Windows.Desktop.csproj">
       <Project>{116fcd14-4c55-418b-b925-7b1600b2b667}</Project>
       <Name>Windows.Desktop</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\Editors\Editors.csproj">
       <Project>{4a4b2737-1171-4378-a02a-f977f049ce82}</Project>

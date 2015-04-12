@@ -1,5 +1,7 @@
+<#@ template language="c#" hostspecific="true" #>
 <#@ output extension=".vstemplate" #>
-<#@ include file="..\..\..\versions.t4" #><?xml version="1.0" encoding="utf-8" ?>
+<#@ parameter type="System.String" name="CoreVersion" #>
+<#@ parameter type="System.String" name="WindowsVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
   <DefaultName>Page.xaml</DefaultName>
@@ -44,8 +46,8 @@
  </WizardExtension>
  <WizardData>
   <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
-   <package id="More" version="<#=GetPackageVersion("More")#>" />
-   <package id="More.Windows" version="<#=GetPackageVersion("More.Windows")#>" />
+   <package id="More" version="<#= CoreVersion #>" />
+   <package id="More.Windows" version="<#= WindowsVersion #>" />
   </packages>
  </WizardData>
  <WizardExtension>

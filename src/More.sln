@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		More.snk = More.snk
 		nuget.pack.targets = nuget.pack.targets
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
-		Solution.t4 = Solution.t4
+		t4.nuget.targets = t4.nuget.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composition", "Composition\Composition\Composition.csproj", "{4C62C756-3D31-4012-AA79-711DBBD55B9A}"
@@ -43,6 +43,10 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CoreEx.WinRT.Shared", "Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.shproj", "{5DCF739C-CA14-4D47-99D8-2896F8FD700C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreEx.Desktop", "Core\CoreEx.Desktop\CoreEx.Desktop.csproj", "{ABFF6D49-1C8F-4DA5-86ED-07033105981B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{05F3A2A4-A860-43B3-9BF5-984E326474AD} = {05F3A2A4-A860-43B3-9BF5-984E326474AD}
+		{F2A140C5-8779-47D5-9C44-DCF136193727} = {F2A140C5-8779-47D5-9C44-DCF136193727}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreEx.Phone", "Core\CoreEx.Phone\CoreEx.Phone.csproj", "{05F3A2A4-A860-43B3-9BF5-984E326474AD}"
 EndProject
@@ -62,6 +66,10 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Windows.WinRT.Shared", "Windows\Windows.WinRT.Shared\Windows.WinRT.Shared.shproj", "{B8E8A033-154F-4866-82F6-A28ADCF460D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Desktop", "Windows\Windows.Desktop\Windows.Desktop.csproj", "{116FCD14-4C55-418B-B925-7B1600B2B667}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F99D0F2D-5DAA-4040-A2EA-4AA7CBF90043} = {F99D0F2D-5DAA-4040-A2EA-4AA7CBF90043}
+		{BFC50995-6E56-4BDF-B4DF-41BE95C2CF56} = {BFC50995-6E56-4BDF-B4DF-41BE95C2CF56}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Phone", "Windows\Windows.Phone\Windows.Phone.csproj", "{F99D0F2D-5DAA-4040-A2EA-4AA7CBF90043}"
 EndProject
@@ -76,6 +84,10 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Hosting.NetFx.Shared", "Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.shproj", "{71F53D96-49E0-48B8-B959-BE14D6EA2FDF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Desktop", "Hosting\Hosting.Desktop\Hosting.Desktop.csproj", "{DD854ECF-0CB7-4D60-A9A1-EE67913B50DB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F6D310CE-339C-4B5A-98CE-5D4B28BF7013} = {F6D310CE-339C-4B5A-98CE-5D4B28BF7013}
+		{18A0EFD5-519B-44AB-A84F-80E667B756A9} = {18A0EFD5-519B-44AB-A84F-80E667B756A9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Phone", "Hosting\Hosting.Phone\Hosting.Phone.csproj", "{F6D310CE-339C-4B5A-98CE-5D4B28BF7013}"
 EndProject
@@ -84,9 +96,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Web", "Hosting\Hosting.Web\Hosting.Web.csproj", "{3C56D5DC-4806-42BB-A777-7D0BFE36A57E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{4E2A3B5D-8D0E-4873-96E0-B6299631039A}"
-	ProjectSection(SolutionItems) = preProject
-		Extensions\Templates\Versions.t4 = Extensions\Templates\Versions.t4
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editors", "Extensions\Editors\Editors.csproj", "{4A4B2737-1171-4378-A02A-F977F049CE82}"
 EndProject
@@ -161,6 +170,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{55EA84
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D1E261E9-81BB-4447-B94D-796FE9E46F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTasks", "Build\CustomTasks\CustomTasks.csproj", "{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin", "bin", "{CA19159A-9E56-4140-B33D-74F715BCB457}"
+	ProjectSection(SolutionItems) = preProject
+		Build\bin\Microsoft.CodeAnalysis.CSharp.Desktop.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.Desktop.dll
+		Build\bin\Microsoft.CodeAnalysis.CSharp.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.dll
+		Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.Desktop.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.Desktop.dll
+		Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+		Build\bin\Microsoft.CodeAnalysis.Desktop.dll = Build\bin\Microsoft.CodeAnalysis.Desktop.dll
+		Build\bin\Microsoft.CodeAnalysis.dll = Build\bin\Microsoft.CodeAnalysis.dll
+		Build\bin\Microsoft.CodeAnalysis.Workspaces.Desktop.dll = Build\bin\Microsoft.CodeAnalysis.Workspaces.Desktop.dll
+		Build\bin\Microsoft.CodeAnalysis.Workspaces.dll = Build\bin\Microsoft.CodeAnalysis.Workspaces.dll
+		Build\bin\More.Build.Tasks.dll = Build\bin\More.Build.Tasks.dll
+		Build\bin\System.Collections.Immutable.dll = Build\bin\System.Collections.Immutable.dll
+		Build\bin\System.Composition.AttributedModel.dll = Build\bin\System.Composition.AttributedModel.dll
+		Build\bin\System.Composition.Convention.dll = Build\bin\System.Composition.Convention.dll
+		Build\bin\System.Composition.Hosting.dll = Build\bin\System.Composition.Hosting.dll
+		Build\bin\System.Composition.Runtime.dll = Build\bin\System.Composition.Runtime.dll
+		Build\bin\System.Composition.TypedParts.dll = Build\bin\System.Composition.TypedParts.dll
+		Build\bin\System.Reflection.Metadata.dll = Build\bin\System.Reflection.Metadata.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{75d2e396-dbcd-4ad4-988b-2b5438e9c71b}*SharedItemsImports = 13
@@ -171,10 +204,10 @@ Global
 		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
-		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
-		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{abff6d49-1c8f-4da5-86ed-07033105981b}*SharedItemsImports = 4
+		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{abff6d49-1c8f-4da5-86ed-07033105981b}*SharedItemsImports = 4
+		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{abff6d49-1c8f-4da5-86ed-07033105981b}*SharedItemsImports = 4
 		Windows\Windows.Shared\Windows.Shared.projitems*{7bac15c3-94f3-4630-a109-56e6872d6e8f}*SharedItemsImports = 13
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{5dcf739c-ca14-4d47-99d8-2896f8fd700c}*SharedItemsImports = 13
 		Hosting\Hosting.Shared\Hosting.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
@@ -624,6 +657,14 @@ Global
 		{4DAC9CAF-5504-4C51-8D80-7003D6429BDA}.Release|x64.ActiveCfg = Release|Any CPU
 		{4DAC9CAF-5504-4C51-8D80-7003D6429BDA}.Release|x86.ActiveCfg = Release|x86
 		{4DAC9CAF-5504-4C51-8D80-7003D6429BDA}.Release|x86.Build.0 = Release|x86
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Release|x64.ActiveCfg = Release|Any CPU
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -687,5 +728,7 @@ Global
 		{5FDA94E9-3EED-4FF1-92DD-5F8DAF20D9F4} = {E8115C6F-A17B-4551-9D61-7274E6D6CF84}
 		{9776E03C-DA9A-49C9-A8BE-7542DA645896} = {0C95B5A6-04B7-41A2-BC68-446E0381C663}
 		{4DAC9CAF-5504-4C51-8D80-7003D6429BDA} = {F9D50036-2BE6-49F9-915E-0DB2A7A02076}
+		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0} = {D1E261E9-81BB-4447-B94D-796FE9E46F2F}
+		{CA19159A-9E56-4140-B33D-74F715BCB457} = {D1E261E9-81BB-4447-B94D-796FE9E46F2F}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,10 @@
-﻿<#@ output extension=".vstemplate" #>
-<#@ include file="..\..\..\versions.t4" #><?xml version="1.0" encoding="utf-8" ?>
+﻿<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".vstemplate" #>
+<#@ parameter type="System.String" name="CoreVersion" #>
+<#@ parameter type="System.String" name="CoreExVersion" #>
+<#@ parameter type="System.String" name="CompositionVersion" #>
+<#@ parameter type="System.String" name="WindowsVersion" #>
+<#@ parameter type="System.String" name="HostingVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
  <TemplateData>
   <Name>Blank App (More)</Name>
@@ -60,11 +65,11 @@
  <WizardData>
   <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
    <package id="Microsoft.Composition" version="1.0.30" />
-   <package id="More" version="<#=GetPackageVersion("More")#>" />
-   <package id="More.Extensions" version="<#=GetPackageVersion("More.Extensions")#>" />
-   <package id="More.Composition" version="<#=GetPackageVersion("More.Composition")#>" />
-   <package id="More.Windows" version="<#=GetPackageVersion("More.Windows")#>" />
-   <package id="More.Windows.Hosting" version="<#=GetPackageVersion("More.Windows.Hosting")#>" />
+   <package id="More" version="<#= CoreVersion #>" />
+   <package id="More.Extensions" version="<#= CoreExVersion #>" />
+   <package id="More.Composition" version="<#= CompositionVersion #>" />
+   <package id="More.Windows" version="<#= WindowsVersion #>" />
+   <package id="More.Windows.Hosting" version="<#= HostingVersion #>" />
   </packages>
  </WizardData>
  <WizardExtension>

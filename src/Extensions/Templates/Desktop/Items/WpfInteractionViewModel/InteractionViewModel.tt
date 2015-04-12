@@ -1,5 +1,6 @@
-﻿<#@ output extension=".vstemplate" #>
-<#@ include file="..\..\..\versions.t4" #><?xml version="1.0" encoding="utf-8" ?>
+﻿<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".vstemplate" #>
+<#@ parameter type="System.String" name="CoreVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
   <DefaultName>ViewModel.cs</DefaultName>
@@ -39,7 +40,7 @@
  </WizardExtension>
  <WizardData>
   <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
-   <package id="More" version="<#=GetPackageVersion("More")#>" />
+   <package id="More" version="<#= CoreVersion #>" />
   </packages>
  </WizardData>
  <WizardExtension>

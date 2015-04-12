@@ -1,5 +1,7 @@
-﻿<#@ output extension=".vstemplate" #>
-<#@ include file="..\..\..\versions.t4" #><?xml version="1.0" encoding="utf-8" ?>
+﻿<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".vstemplate" #>
+<#@ parameter type="System.String" name="CoreVersion" #>
+<#@ parameter type="System.String" name="CompositionVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
  <TemplateData>
   <DefaultName>DbContext.cs</DefaultName>
@@ -32,7 +34,7 @@
    <CustomParameter Name="$providerName$" Value="" />
    <!-- this set of packages is not used by directly by the nuget services, but is instead used by the custom wizard
        to add the packages dynamically based on selected options. the package ids are not necessarily mapped to nuget. -->
-   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.9cf80999-8721-4ef3-8154-fe1a5c7609ab'&gt;&lt;package id='EF6' version='6.1.2' /&gt;&lt;package id='Microsoft.Composition' version='1.0.30' /&gt;&lt;package id='More.Composition' version='<#=GetPackageVersion("More.Composition")#>' /&gt;&lt;/packages&gt;" />
+   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.9cf80999-8721-4ef3-8154-fe1a5c7609ab'&gt;&lt;package id='EF6' version='6.1.2' /&gt;&lt;package id='Microsoft.Composition' version='1.0.30' /&gt;&lt;package id='More.Composition' version='<#= CompositionVersion #>' /&gt;&lt;/packages&gt;" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>
@@ -41,7 +43,7 @@
  </WizardExtension>
  <WizardData>
   <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
-   <package id="More" version="<#=GetPackageVersion("More")#>" />
+   <package id="More" version="<#= CoreVersion #>" />
   </packages>
  </WizardData>
  <WizardExtension>
