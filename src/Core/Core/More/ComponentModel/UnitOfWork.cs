@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents a unit of work factory.
@@ -102,7 +102,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
+                Arg.NotNull( value, "value" );
                 provider = value;
             }
         }
@@ -110,6 +110,7 @@
         private static IUnitOfWorkFactory GetFactory<TItem>() where TItem : class
         {
             Contract.Ensures( Contract.Result<IUnitOfWorkFactory>() != null );
+
             var type = typeof( TItem );
             IUnitOfWorkFactory factory = null;
 
@@ -159,7 +160,8 @@
         /// <param name="unitOfWork">The current <see cref="IUnitOfWork{T}">unit of work</see>.</param>
         public static void SetCurrent<TItem>( IUnitOfWork<TItem> unitOfWork ) where TItem : class
         {
-            Contract.Requires<ArgumentNullException>( unitOfWork != null, "unitOfWork" );
+            Arg.NotNull( unitOfWork, "unitOfWork" );
+
             var factory = GetFactory<TItem>();
             factory.SetCurrent( unitOfWork );
         }
@@ -172,6 +174,7 @@
         public static IUnitOfWork<TItem> NewCurrent<TItem>() where TItem : class
         {
             Contract.Ensures( Contract.Result<IUnitOfWork<TItem>>() != null );
+
             var factory = GetFactory<TItem>();
             var unitOfWork = factory.Create<TItem>();
 

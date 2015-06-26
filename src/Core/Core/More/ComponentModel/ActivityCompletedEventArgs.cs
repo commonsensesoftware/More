@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents the event data for a completed <see cref="IActivity">activity</see>.
@@ -16,7 +16,7 @@
         /// <param name="serviceProvider">The <see cref="IServiceProvider">service provider</see> associated with the completed activity.</param>
         public ActivityCompletedEventArgs( IServiceProvider serviceProvider )
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
             this.serviceProvider = serviceProvider;
         }
 

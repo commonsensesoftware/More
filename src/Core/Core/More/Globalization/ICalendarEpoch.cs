@@ -1,7 +1,7 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior to describe the epoch of a calendar.

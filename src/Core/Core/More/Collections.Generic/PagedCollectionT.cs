@@ -1,10 +1,10 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a read-only collection of paged items.
@@ -22,7 +22,7 @@
         protected PagedCollection( IEnumerable<T> sequence )
             : this( new ObservableCollection<T>( sequence ) )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>
@@ -33,7 +33,7 @@
         protected PagedCollection( ObservableCollection<T> collection )
             : this( collection, collection.Count )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
+            Arg.NotNull( collection, "collection" );
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
         public PagedCollection( IEnumerable<T> sequence, long totalCount )
             : this( new ObservableCollection<T>( sequence ), totalCount )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>
@@ -56,8 +56,8 @@
         public PagedCollection( ObservableCollection<T> collection, long totalCount )
             : base( collection )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<ArgumentOutOfRangeException>( totalCount >= collection.Count, "totalCount" );
+            Arg.NotNull( collection, "collection" );
+            Arg.GreaterThanOrEqualTo( totalCount, collection.Count, "totalCount" );
             this.totalCount = totalCount;
         }
 
@@ -74,7 +74,7 @@
             }
             protected set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0L, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0L, "value" );
                 this.totalCount = value;
             }
         }

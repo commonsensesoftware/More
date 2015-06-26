@@ -26,7 +26,7 @@
         /// <remarks>The default command will not execute if it is undefined or <see cref="M:ICommand.CanExecute">cannot be executed</see>.</remarks>
         public static bool ExecuteDefaultCommand( this Interaction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, "interaction" );
             return ExecuteCommand( interaction.DefaultCommand );
         }
 
@@ -38,7 +38,7 @@
         /// <remarks>The cancel command will not execute if it is undefined or <see cref="M:ICommand.CanExecute">cannot be executed</see>.</remarks>
         public static bool ExecuteCancelCommand( this Interaction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, "interaction" );
             return ExecuteCommand( interaction.CancelCommand );
         }
     }

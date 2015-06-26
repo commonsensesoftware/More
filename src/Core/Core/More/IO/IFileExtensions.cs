@@ -17,8 +17,8 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the  <see cref="IFile">file</see> that represents the copy.</returns>
         public static Task<IFile> CopyAsync( this IFile file, IFolder destinationFolder )
         {
-            Contract.Requires<ArgumentNullException>( file != null, "file" );
-            Contract.Requires<ArgumentNullException>( destinationFolder != null, "destinationFolder" );
+            Arg.NotNull( file, "file" );
+            Arg.NotNull( destinationFolder, "destinationFolder" );
             Contract.Ensures( Contract.Result<Task<IFile>>() != null );
             return file.CopyAsync( destinationFolder, file.Name );
         }
@@ -31,8 +31,8 @@
         /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
         public static Task MoveAsync( this IFile file, IFolder destinationFolder )
         {
-            Contract.Requires<ArgumentNullException>( file != null, "file" );
-            Contract.Requires<ArgumentNullException>( destinationFolder != null, "destinationFolder" );
+            Arg.NotNull( file, "file" );
+            Arg.NotNull( destinationFolder, "destinationFolder" );
             Contract.Ensures( Contract.Result<Task>() != null );
             return file.MoveAsync( destinationFolder, file.Name );
         }

@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a container for the results of a validation request.
     /// </summary>
+     [ContractClass( typeof( IValidationResultContract ) )]
     public interface IValidationResult
     {
         /// <summary>

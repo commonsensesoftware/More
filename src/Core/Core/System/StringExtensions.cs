@@ -1,11 +1,11 @@
 ﻿namespace System
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.Text;
-    using global::System.Text.RegularExpressions;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// Provides extension methods for the <see cref="String"/> class.
@@ -38,8 +38,8 @@
         [Pure]
         public static bool IsMatch( this string value, string pattern )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             return Regex.IsMatch( value, pattern, RegexOptions.None );
         }
 
@@ -54,8 +54,8 @@
         [Pure]
         public static bool IsMatch( this string value, string pattern, RegexOptions options )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             return Regex.IsMatch( value, pattern, options );
         }
 
@@ -68,8 +68,8 @@
         [Pure]
         public static Match Match( this string value, string pattern )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             Contract.Ensures( Contract.Result<Match>() != null );
             return Regex.Match( value, pattern, RegexOptions.None );
         }
@@ -85,8 +85,8 @@
         [Pure]
         public static Match Match( this string value, string pattern, RegexOptions options )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             Contract.Ensures( Contract.Result<Match>() != null );
             return Regex.Match( value, pattern, options );
         }
@@ -100,8 +100,8 @@
         [Pure]
         public static MatchCollection Matches( this string value, string pattern )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             Contract.Ensures( Contract.Result<MatchCollection>() != null );
             return Regex.Matches( value, pattern, RegexOptions.None );
         }
@@ -117,8 +117,8 @@
         [Pure]
         public static MatchCollection Matches( this string value, string pattern, RegexOptions options )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             Contract.Ensures( Contract.Result<MatchCollection>() != null );
             return Regex.Matches( value, pattern, options );
         }
@@ -132,8 +132,8 @@
         [Pure]
         public static string[] Split( this string value, string pattern )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             Contract.Ensures( Contract.Result<string[]>() != null );
             return Regex.Split( value, pattern, RegexOptions.None );
         }
@@ -149,8 +149,8 @@
         [Pure]
         public static string[] Split( this string value, string pattern, RegexOptions options )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
             Contract.Ensures( Contract.Result<string[]>() != null );
             return Regex.Split( value, pattern, options );
         }
@@ -167,9 +167,9 @@
         [Pure]
         public static string Replace( this string value, string pattern, string replacement )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
-            Contract.Requires<ArgumentNullException>( replacement != null, "replacement" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( replacement, "replacement" );
             Contract.Ensures( Contract.Result<string>() != null );
             return Regex.Replace( value, pattern, replacement, RegexOptions.None );
         }
@@ -187,9 +187,9 @@
         [Pure]
         public static string Replace( this string value, string pattern, string replacement, RegexOptions options )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( pattern ), "pattern" );
-            Contract.Requires<ArgumentNullException>( replacement != null, "replacement" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( replacement, "replacement" );
             Contract.Ensures( Contract.Result<string>() != null );
             return Regex.Replace( value, pattern, replacement, options );
         }
@@ -241,7 +241,7 @@
         [Pure]
         public static string FormatInvariant( this string format, params object[] args )
         {
-            Contract.Requires<ArgumentNullException>( format != null, "format" );
+            Arg.NotNull( format, "format" );
             Contract.Ensures( Contract.Result<string>() != null );
             return string.Format( CultureInfo.InvariantCulture, format, args );
         }
@@ -256,7 +256,7 @@
         [Pure]
         public static string FormatDefault( this string format, params object[] args )
         {
-            Contract.Requires<ArgumentNullException>( format != null, "format" );
+            Arg.NotNull( format, "format" );
             Contract.Ensures( Contract.Result<string>() != null );
             return string.Format( CultureInfo.CurrentCulture, format, args );
         }
@@ -270,10 +270,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static string Left( this string value, int length )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentOutOfRangeException>( length <= value.Length, "length" );
+            Arg.NotNull( value, "value" );
             Contract.Ensures( Contract.Result<string>() != null );
             Contract.Ensures( Contract.Result<string>().Length == length );
+            Arg.LessThanOrEqualTo( length, value.Length, "length" );
 
             return value.Length == length ? value : value.Substring( 0, length );
         }
@@ -287,10 +287,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static string Right( this string value, int length )
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentOutOfRangeException>( length <= value.Length, "length" );
+            Arg.NotNull( value, "value" );
             Contract.Ensures( Contract.Result<string>() != null );
             Contract.Ensures( Contract.Result<string>().Length == length );
+            Arg.LessThanOrEqualTo( length, value.Length, "length" );
 
             return value.Length == length ? value : value.Substring( value.Length - length, length );
         }

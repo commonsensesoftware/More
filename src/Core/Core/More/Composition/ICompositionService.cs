@@ -1,6 +1,6 @@
 ﻿namespace More.Composition
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Provides methods to compose an existing object instance.

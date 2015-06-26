@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents an asynchronous, named command<seealso cref="NamedCommand{T}"/>.
@@ -14,7 +14,7 @@
         private string id;
         private string name;
         private string desc = string.Empty;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AsyncNamedCommand{T}"/> class.
         /// </summary>
@@ -23,11 +23,11 @@
         public AsyncNamedCommand( string name, Func<T, Task> executeAsyncMethod )
             : this( null, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
-         /// <summary>
+        /// <summary>
         /// Initializes a new instance of the <see cref="AsyncNamedCommand{T}"/> class.
         /// </summary>
         /// <param name="id">The command identifier.</param>
@@ -36,8 +36,8 @@
         public AsyncNamedCommand( string id, string name, Func<T, Task> executeAsyncMethod )
             : this( id, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -49,9 +49,9 @@
         public AsyncNamedCommand( string name, Func<T, Task> executeAsyncMethod, Func<T, bool> canExecuteMethod )
             : this( null, name, executeAsyncMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -64,9 +64,9 @@
         public AsyncNamedCommand( string id, string name, Func<T, Task> executeAsyncMethod, Func<T, bool> canExecuteMethod )
             : base( executeAsyncMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.id = id;
             this.name = name;
@@ -80,10 +80,12 @@
         {
             get
             {
+                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
                 return this.name;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.name, value );
             }
         }
@@ -96,10 +98,12 @@
         {
             get
             {
+                Contract.Ensures( this.desc != null );
                 return this.desc;
             }
             set
             {
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.desc, value );
             }
         }
@@ -113,13 +117,12 @@
         {
             get
             {
-                if ( string.IsNullOrEmpty( this.id ) )
-                    return this.Name;
-
-                return this.id;
+                Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
+                return string.IsNullOrEmpty( this.id ) ? this.Name : this.id;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.id, value );
             }
         }

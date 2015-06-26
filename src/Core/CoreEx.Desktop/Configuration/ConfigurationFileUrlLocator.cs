@@ -9,7 +9,7 @@
     /// <summary>
     /// Represents a configuration file based service Uniform Resource Locator (URL) locator.
     /// </summary>
-    public class ConfigurationFileUrlLocator : IConfigurationSettingLocator<Uri>
+    public class ConfigurationFileUrlLocator : ISettingLocator<Uri>
     {
         private readonly ConcurrentDictionary<string, Uri> urls = new ConcurrentDictionary<string, Uri>();
 
@@ -24,8 +24,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationFileUrlLocator"/> class.
         /// </summary>
-        /// <param name="nextLocator">The next <see cref="IConfigurationSettingLocator{T}">locator</see> in the chain.</param>
-        public ConfigurationFileUrlLocator( IConfigurationSettingLocator<Uri> nextLocator )
+        /// <param name="nextLocator">The next <see cref="ISettingLocator{T}">locator</see> in the chain.</param>
+        public ConfigurationFileUrlLocator( ISettingLocator<Uri> nextLocator )
         {
             this.DefaultEnvironment = DeploymentEnvironment.Unspecified;
             this.NextLocator = nextLocator;
@@ -66,8 +66,8 @@
         /// <summary>
         /// Gets or sets the next locator for the current instance.
         /// </summary>
-        /// <value>An <see cref="IConfigurationSettingLocator{T}"/> object.</value>
-        public IConfigurationSettingLocator<Uri> NextLocator
+        /// <value>An <see cref="ISettingLocator{T}"/> object.</value>
+        public ISettingLocator<Uri> NextLocator
         {
             get;
             protected set;
@@ -88,10 +88,10 @@
         /// Locates a URL with the specified key.
         /// </summary>
         /// <param name="key">The key for the URL to locate.</param>
-        /// <returns>A <see cref="Task{T}">task</see> containing the <see cref="Uri">URL</see> or null if no match is found.</returns>
-        public Task<Uri> LocateAsync( string key )
+        /// <returns>The <see cref="Uri">URL</see> or <c>null</c> if no match is found.</returns>
+        public Uri Locate( string key )
         {
-            return this.LocateAsync( key, DeploymentEnvironment.Unspecified );
+            return this.Locate( key, DeploymentEnvironment.Unspecified );
         }
 
         /// <summary>
@@ -99,19 +99,15 @@
         /// </summary>
         /// <param name="key">The key for the URL to locate.</param>
         /// <param name="environment">One of the <see cref="DeploymentEnvironment"/> values.</param>
-        /// <returns>A <see cref="Task{T}">task</see> containing the <see cref="Uri">URL</see> or null if no match is found.</returns>
-        public virtual Task<Uri> LocateAsync( string key, DeploymentEnvironment environment )
+        /// <returns>The <see cref="Uri">URL</see> or <c>null</c> if no match is found.</returns>
+        public virtual Uri Locate( string key, DeploymentEnvironment environment )
         {
             var url = this.LocateUrl( key );
 
             if ( url != null || this.NextLocator == null )
-            {
-                var source = new TaskCompletionSource<Uri>();
-                source.SetResult( url );
-                return source.Task;
-            }
+                return url;
 
-            return this.NextLocator.LocateAsync( key, environment );
+            return this.NextLocator.Locate( key, environment );
         }
     }
 }

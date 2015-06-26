@@ -1,11 +1,11 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a comparer that adapts to the behavior of another comparer.
@@ -14,8 +14,8 @@
     /// <typeparam name="TValue">The <see cref="Type">type</see> of value to compare.</typeparam>
     /// <example>This example demonstrates a comparer that compares Person objects by last name.
     /// <code lang="C#"><![CDATA[
-    /// using global::System;
-    /// using global::System.Collections.Generic;
+    /// using System;
+    /// using System.Collections.Generic;
     /// 
     /// var people = new List<Person>();
     /// people.Add( new Person(){ FirstName = "Bob", LastName = "Smith" };
@@ -39,7 +39,7 @@
         public ComparerAdapter( Func<TItem, TValue> selector )
             : this( Comparer<TValue>.Default, selector, EqualityComparer<TValue>.Default.GetHashCode )
         {
-            Contract.Requires<ArgumentNullException>( selector != null, "selector" );
+            Arg.NotNull( selector, "selector" );
         }
 
         /// <summary>
@@ -51,8 +51,8 @@
         public ComparerAdapter( IComparer<TValue> comparer, Func<TItem, TValue> selector )
             : this( comparer, selector, EqualityComparer<TValue>.Default.GetHashCode )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
-            Contract.Requires<ArgumentNullException>( selector != null, "selector" );
+            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( selector, "selector" );
         }
 
         /// <summary>
@@ -63,9 +63,9 @@
         /// <param name="getHashCode">The <see cref="Func{T1,TResult}"/> used to get the hash code for a compared value.</param>
         public ComparerAdapter( IComparer<TValue> comparer, Func<TItem, TValue> selector, Func<TValue, int> getHashCode )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
-            Contract.Requires<ArgumentNullException>( selector != null, "selector" );
-            Contract.Requires<ArgumentNullException>( getHashCode != null, "getHashCode" );
+            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( selector, "selector" );
+            Arg.NotNull( getHashCode, "getHashCode" );
             this.comparer = new DynamicComparer<TItem>( ( x, y ) => comparer.Compare( selector( x ), selector( y ) ), o => getHashCode( selector( o ) ) );
         }
 
@@ -104,7 +104,7 @@
         /// negative one if <paramref name="x"/> is less than <paramref name="y"/>.</returns>
         public int Compare( TItem x, TItem y )
         {
-            if ( typeof( TItem ).GetTypeInfo().IsValueType )
+            if ( default( TItem ) != null )
                 return this.Comparer.Compare( x, y );
 
             if ( x == null )
@@ -123,7 +123,7 @@
         /// <returns>True if the two objects are equal; otherwise, false.</returns>
         public virtual bool Equals( TItem x, TItem y )
         {
-            if ( typeof( TItem ).GetTypeInfo().IsValueType )
+            if ( default( TItem ) != null )
                 return this.EqualityComparer.Equals( x, y );
 
             if ( x == null )

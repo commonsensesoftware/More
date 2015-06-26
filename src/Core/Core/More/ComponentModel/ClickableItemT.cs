@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
     using More.Windows.Input;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents a clickable item.
@@ -24,7 +24,7 @@
         public ClickableItem( T value, ICommand clickCommand )
             : this( value, clickCommand, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( clickCommand != null, "clickCommand" );
+            Arg.NotNull( clickCommand, "clickCommand" );
         }
 
         /// <summary>
@@ -35,8 +35,8 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare values.</param>
         public ClickableItem( T value, ICommand clickCommand, IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( clickCommand != null, "clickCommand" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( clickCommand, "clickCommand" );
+            Arg.NotNull( comparer, "comparer" );
 
             this.Click = new CommandInterceptor<object>( p => this.OnClicked( EventArgs.Empty ), clickCommand );
             this.Value = value;
@@ -62,7 +62,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnClicked( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Clicked;
 

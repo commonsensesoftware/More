@@ -1,10 +1,10 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Defines the behavior of a calendar provider.

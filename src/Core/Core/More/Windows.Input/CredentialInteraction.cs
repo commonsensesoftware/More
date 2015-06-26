@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents an interaction request to capture credentials from a user.
@@ -30,7 +30,7 @@
         public CredentialInteraction( string title )
             : base( title )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, "title" );
         }
 
         /// <summary>

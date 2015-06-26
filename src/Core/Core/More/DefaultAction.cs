@@ -1,7 +1,7 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Provides empty or "no operation" methods that can be used to satisfy the Null Object pattern for method callbacks

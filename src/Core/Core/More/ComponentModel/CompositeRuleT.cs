@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Represents a collection of symmetric <see cref="IRule{TInput,TOutput}">rules</see> that can be used
@@ -28,7 +28,7 @@
         public CompositeRule( IEnumerable<IRule<T, T>> rules )
             : base( rules )
         {
-            Contract.Requires<ArgumentNullException>( rules != null, "rules" );
+            Arg.NotNull( rules, "rules" );
         }
 
         /// <summary>

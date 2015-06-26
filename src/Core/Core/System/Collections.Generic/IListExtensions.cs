@@ -1,14 +1,14 @@
 ﻿namespace System.Collections.Generic
 {
     using More.Collections.Generic;
-    using global::System;
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Reflection;
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IList{T}"/> interface.
@@ -24,14 +24,14 @@
             internal ReadOnlyObservableList( IList<T> list )
                 : base( list )
             {
-                Contract.Requires( list != null, "list" );
+                Contract.Requires( list != null );
                 ( (INotifyCollectionChanged) this.Items ).CollectionChanged += ( s, e ) => this.OnCollectionChanged( e );
                 ( (INotifyPropertyChanged) this.Items ).PropertyChanged += ( s, e ) => this.OnPropertyChanged( e );
             }
 
             private void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
             {
-                Contract.Requires( e != null, "e" );
+                Contract.Requires( e != null );
 
                 var handler = this.CollectionChanged;
 
@@ -41,7 +41,7 @@
 
             private void OnPropertyChanged( PropertyChangedEventArgs e )
             {
-                Contract.Requires( e != null, "e" );
+                Contract.Requires( e != null );
 
                 var handler = this.PropertyChanged;
 
@@ -81,7 +81,7 @@
         [Pure]
         public static IList<TTo> AsVariant<TFrom, TTo>( this IList<TFrom> list ) where TFrom : TTo
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
+            Arg.NotNull( list, "list" );
             Contract.Ensures( Contract.Result<IList<TTo>>() != null );
 
             // if the source and target types are equal, no adapter is required
@@ -96,29 +96,27 @@
         }
 
         /// <summary>
-        /// Returns a read-only <see cref="IList{T}"/> copy of the extended list.
+        /// Returns a read-only copy of the specified list.
         /// </summary>
         /// <typeparam name="TItem">The <see cref="Type">type</see> of item in the list.</typeparam>
-        /// <param name="list">The <see cref="IList{T}"/> to make read-only.</param>
-        /// <returns>A read-only <see cref="IList{T}"/> object.</returns>
+        /// <param name="list">The <see cref="IList{T}">list</see> to make read-only.</param>
+        /// <returns>A <see cref="IReadOnlyList{T}">read-only list</see>.</returns>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
-        public static IList<TItem> AsReadOnly<TItem>( this IList<TItem> list )
+        public static IReadOnlyList<TItem> AsReadOnly<TItem>( this IList<TItem> list )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Ensures( Contract.Result<IList<TItem>>() != null );
-            Contract.Ensures( Contract.Result<IList<TItem>>().IsReadOnly );
+            Arg.NotNull( list, "list" );
+            Contract.Ensures( Contract.Result<IReadOnlyList<TItem>>() != null );
+
+            var readOnlyList = list as IReadOnlyList<TItem>;
 
             // if the list is already read-only, there's no work to do
-            if ( list.IsReadOnly )
-                return list;
+            if ( readOnlyList != null )
+                return readOnlyList;
 
-            var type = list.GetType();
-            var typeInfo = type.GetTypeInfo();
-            var observable = typeof( INotifyPropertyChanged ).GetTypeInfo().IsAssignableFrom( typeInfo ) &&
-                             typeof( INotifyCollectionChanged ).GetTypeInfo().IsAssignableFrom( typeInfo );
+            var observable = ( list is INotifyPropertyChanged ) && ( list is INotifyCollectionChanged );
 
-            // NOTE: if the extended list supports notifications, return an observable implementation
+            // note: if the extended list supports notifications, return an observable implementation
             return observable ? new ReadOnlyObservableList<TItem>( list ) : new ReadOnlyCollection<TItem>( list );
         }
 
@@ -132,7 +130,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static IList<TItem> Sort<TItem>( this IList<TItem> list )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
+            Arg.NotNull( list, "list" );
             Contract.Ensures( Contract.Result<IList<TItem>>() != null );
             return Sort( list, 0, list.Count, Comparer<TItem>.Default );
         }
@@ -149,8 +147,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public static IList<TItem> Sort<TItem>( this IList<TItem> list, IComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( comparer, "comparer" );
             Contract.Ensures( Contract.Result<IList<TItem>>() != null );
             return Sort( list, 0, list.Count, comparer );
         }
@@ -167,8 +165,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public static IList<TItem> Sort<TItem>( this IList<TItem> list, Comparison<TItem> comparison )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentNullException>( comparison != null, "comparison" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( comparison, "comparison" );
             Contract.Ensures( Contract.Result<IList<TItem>>() != null );
             return Sort( list, 0, list.Count, new DynamicComparer<TItem>( ( x, y ) => comparison( x, y ) ) );
         }
@@ -187,14 +185,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3", Justification = "Validated by code contract." )]
         public static IList<TItem> Sort<TItem>( this IList<TItem> list, int index, int count, IComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index < list.Count, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( count >= 0, "count" );
-            Contract.Requires<ArgumentOutOfRangeException>( count <= ( list.Count - index ), "count" );
-            Contract.Requires<ArgumentOutOfRangeException>( index + ( count - 1 ) >= 0, "index" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( comparer, "comparer" );
             Contract.Ensures( Contract.Result<IList<TItem>>() != null );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThan( index, list.Count, "index" );
+            Arg.GreaterThanOrEqualTo( count, 0, "count" );
+            Arg.LessThanOrEqualTo( count, list.Count - index, "count" );
+            Arg.GreaterThanOrEqualTo( index + ( count - 1 ), 0, "index" );
 
             if ( list.Count == 0 )
                 return list;
@@ -219,7 +217,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int BinarySearch<TItem>( this IList<TItem> list, TItem item )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
+            Arg.NotNull( list, "list" );
             return BinarySearch( list, 0, list.Count, item, Comparer<TItem>.Default );
         }
 
@@ -242,8 +240,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static int BinarySearch<TItem>( this IList<TItem> list, TItem item, IComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( comparer, "comparer" );
             return BinarySearch( list, 0, list.Count, item, comparer );
         }
 
@@ -265,8 +263,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static int BinarySearch<TItem>( this IList<TItem> list, TItem item, Comparison<TItem> comparison )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentNullException>( comparison != null, "comparison" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( comparison, "comparison" );
             return BinarySearch( list, 0, list.Count, item, new DynamicComparer<TItem>( ( x, y ) => comparison( x, y ) ) );
         }
 
@@ -291,13 +289,13 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4", Justification = "Validated by code contract." )]
         public static int BinarySearch<TItem>( this IList<TItem> list, int index, int count, TItem item, IComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index < list.Count, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( count >= 0, "count" );
-            Contract.Requires<ArgumentOutOfRangeException>( count <= ( list.Count - index ), "count" );
-            Contract.Requires<ArgumentOutOfRangeException>( index + ( count - 1 ) >= 0, "index" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( comparer, "comparer" );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThan( index, list.Count, "index" );
+            Arg.GreaterThanOrEqualTo( count, 0, "count" );
+            Arg.LessThanOrEqualTo( count, list.Count - index, "count" );
+            Arg.GreaterThanOrEqualTo( index + ( count - 1 ), 0, "index" );
 
             if ( list.Count == 0 )
                 return -1;
@@ -311,8 +309,6 @@
         private static IList<TItem> InsertRange<TItem>( this IList<TItem> list, IEnumerable<TItem> sequence, int index, int? count )
         {
             Contract.Requires( list != null );
-            Contract.Requires( !list.IsReadOnly );
-            Contract.Requires( !( list is Array ) );
             Contract.Requires( sequence != null );
             Contract.Requires( index >= 0 );
             Contract.Requires( index <= list.Count );
@@ -325,15 +321,15 @@
             var source = sequence.ToArray();
             var requestedCount = count ?? source.Length;
 
-                foreach ( var item in source )
-                {
-                    // we need to increment the index or the items will all be inserted at the
-                    // same position, which will reverse the order of the inserted sequence
-                    list.Insert( index++, item );
+            foreach ( var item in source )
+            {
+                // we need to increment the index or the items will all be inserted at the
+                // same position, which will reverse the order of the inserted sequence
+                list.Insert( index++, item );
 
-                    if ( ++itemCount == requestedCount )
-                        break;
-                }
+                if ( ++itemCount == requestedCount )
+                    break;
+            }
 
             return list;
         }
@@ -350,13 +346,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static IList<TItem> InsertRange<TItem>( this IList<TItem> list, IEnumerable<TItem> sequence, int index )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentException>( !list.IsReadOnly, "list" );
-            Contract.Requires<ArgumentException>( !( list is Array ), "list" );
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index <= list.Count, "index" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<IList<TItem>>() != null );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThanOrEqualTo( index, list.Count, "index" );
             return list.InsertRange( sequence, index, null );
         }
 
@@ -373,15 +367,13 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static IList<TItem> InsertRange<TItem>( this IList<TItem> list, IEnumerable<TItem> sequence, int index, int count )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
-            Contract.Requires<ArgumentException>( !list.IsReadOnly, "list" );
-            Contract.Requires<ArgumentException>( !( list is Array ), "list" );
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index <= list.Count, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( count >= 0, "count" );
+            Arg.NotNull( list, "list" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<IList<TItem>>() != null );
-            
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThanOrEqualTo( index, list.Count, "index" );
+            Arg.GreaterThanOrEqualTo( count, 0, "count" );
+
             return list.InsertRange( sequence, index, new int?( count ) );
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace More.Configuration
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Defines the possible deployment environments.

@@ -49,7 +49,7 @@
         /// either a <see cref="Window">window</see> or <see cref="IWin32Window">Win32 window</see>, then the <paramref name="owner"/>
         /// will be set as the owning window before the <paramref name="view"/> is shown.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
-        public static async Task ShowAsync<TViewModel>( this IDialogView<TViewModel> view, object owner ) where TViewModel : class
+        public static Task ShowAsync<TViewModel>( this IDialogView<TViewModel> view, object owner ) where TViewModel : class
         {
             Contract.Requires<ArgumentNullException>( view != null, "view" );
             
@@ -62,7 +62,7 @@
             }
             
             view.Show();
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
         /// <summary>

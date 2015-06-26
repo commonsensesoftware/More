@@ -1,15 +1,15 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Threading;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
 
     /// <summary>
     /// Represents a read-only dictionary.
@@ -29,7 +29,7 @@
         /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}">dictionary</see> to make read-only.</param>
         public ReadOnlyDictionary( IDictionary<TKey, TValue> dictionary )
         {
-            Contract.Requires<ArgumentNullException>( dictionary != null, "dictionary" );
+            Arg.NotNull( dictionary, "dictionary" );
             this.dict = dictionary;
 
             var propertyChanged = dictionary as INotifyPropertyChanged;
@@ -98,7 +98,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -112,7 +112,7 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CollectionChanged;
 
@@ -148,7 +148,7 @@
                 if ( this.Dictionary.Keys.IsReadOnly )
                     return this.Dictionary.Keys;
 
-                return this.Dictionary.Keys.ToArray().AsReadOnly();
+                return this.Dictionary.Keys.ToArray();
             }
         }
 
@@ -190,7 +190,7 @@
                 if ( this.Dictionary.Values.IsReadOnly )
                     return this.Dictionary.Values;
 
-                return this.Dictionary.Values.ToArray().AsReadOnly();
+                return this.Dictionary.Values.ToArray();
             }
         }
 

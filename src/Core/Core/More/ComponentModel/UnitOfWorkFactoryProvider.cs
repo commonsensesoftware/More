@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Represents an object that can locate and provide unit of work factories.
@@ -19,7 +19,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generic support." )]
         public UnitOfWorkFactoryProvider( Func<IEnumerable<IUnitOfWorkFactory>> providerFactory )
         {
-            Contract.Requires<ArgumentNullException>( providerFactory != null, "providerFactory" );
+            Arg.NotNull( providerFactory, "providerFactory" );
             this.factory = providerFactory;
         }
 

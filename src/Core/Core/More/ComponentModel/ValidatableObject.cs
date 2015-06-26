@@ -2,14 +2,14 @@
 {
     using More.Collections.Generic;
     using More.ComponentModel.DataAnnotations;
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Runtime.CompilerServices;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Represents the base implementation for a validatable object.
@@ -135,7 +135,7 @@
         /// <param name="e">The <see cref="DataErrorsChangedEventArgs"/> event data.</param>
         protected virtual void OnErrorsChanged( DataErrorsChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.ErrorsChanged;
 
@@ -155,7 +155,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected bool IsPropertyValid<TValue>( TValue value, [CallerMemberName] string propertyName = null )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
             return this.IsPropertyValid( value, new List<IValidationResult>(), propertyName );
         }
 
@@ -172,14 +172,50 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected virtual bool IsPropertyValid<TValue>( TValue value, ICollection<IValidationResult> results, [CallerMemberName] string propertyName = null )
         {
-            Contract.Requires<ArgumentNullException>( results != null, "results" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( results, "results" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
 
             var context = this.CreateValidationContext();
             context.MemberName = propertyName;
             var valid = Validator.TryValidateProperty( value, context, results );
 
             return valid;
+        }
+
+        /// <summary>
+        /// Validates the value for the specified property name.
+        /// </summary>
+        /// <typeparam name="TValue">The <see cref="Type">type</see> of property value.</typeparam>
+        /// <param name="value">The property value to validate.</param>
+        /// <param name="propertyName">The name of the property to validate. The default value is the name of the
+        /// member the method is invoked from<seealso cref="CallerMemberNameAttribute"/>.</param>
+        /// <remarks>The default implementation updates the associated property errors and raises the appropriate events.
+        /// This method can also be used to reevaluate property validation without triggering a change to the property
+        /// being validated.</remarks>
+        protected virtual void ValidateProperty<TValue>( TValue value, [CallerMemberName] string propertyName = null )
+        {
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+
+            var results = new List<IValidationResult>();
+
+            if ( this.IsPropertyValid( value, results, propertyName ) )
+            {
+                // clear any errors on success and raise error notifications
+                if ( this.PropertyErrors.Remove( propertyName ) )
+                    this.OnErrorsChanged( propertyName );
+            }
+            else if ( results.Count > 0 )
+            {
+                // add or replace errors
+                this.PropertyErrors.SetRange( propertyName, results );
+
+                // raise error notifications
+                this.OnErrorsChanged( propertyName );
+            }
+
+            // raise events
+            this.OnPropertyChanged( propertyName );
+            this.OnPropertyChanged( "IsValid" );
         }
 
         /// <summary>
@@ -191,8 +227,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual IEnumerable<string> FormatErrorMessages( string propertyName, IEnumerable<IValidationResult> results )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
-            Contract.Requires<ArgumentNullException>( results != null, "results" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( results, "results" );
             Contract.Ensures( Contract.Result<IEnumerable<string>>() != null );
 
             var messages = from result in results
@@ -257,9 +293,9 @@
         /// <returns>True if the property was changed; otherwise, false.</returns>
         /// <example>This example illustrates changing a property with validation, which also raises the appropriate events.
         /// <code lang="C#"><![CDATA[
-        /// using global::System;
-        /// using global::System.ComponentModel;
-        /// using global::System.ComponentModel.DataAnnotations;
+        /// using System;
+        /// using System.ComponentModel;
+        /// using System.ComponentModel.DataAnnotations;
         /// 
         /// public class MyObject : ValidatableObject
         /// {
@@ -282,9 +318,9 @@
         /// </example>
         /// <example>This example illustrates changing a property with validation and character casing, which also raises the appropriate events.
         /// <code lang="C#"><![CDATA[
-        /// using global::System;
-        /// using global::System.ComponentModel;
-        /// using global::System.ComponentModel.DataAnnotations;
+        /// using System;
+        /// using System.ComponentModel;
+        /// using System.ComponentModel.DataAnnotations;
         /// 
         /// public class MyObject : ValidatableObject
         /// {
@@ -309,35 +345,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected override bool SetProperty<TValue>( ref TValue backingField, TValue value, IEqualityComparer<TValue> comparer, [CallerMemberName] string propertyName = null )
         {
-            // if property isn't changing, there's nothing to do
+            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+
             if ( !this.OnPropertyChanging( backingField, value, comparer, propertyName ) )
                 return false;
 
-            var results = new List<IValidationResult>();
-            var valid = this.IsPropertyValid( value, results, propertyName );
-
-            // set property backing field after validation
             backingField = value;
-
-            if ( valid )
-            {
-                // clear any errors on success and raise error notifications
-                if ( this.PropertyErrors.Remove( propertyName ) )
-                    this.OnErrorsChanged( propertyName );
-            }
-            else if ( results.Any() )
-            {
-                // add or replace errors
-                this.PropertyErrors.SetRange( propertyName, results );
-
-                // raise error notifications
-                this.OnErrorsChanged( propertyName );
-            }
-
-            // raise events
-            this.OnPropertyChanged( propertyName );
-            this.OnPropertyChanged( "IsValid" );
-
+            this.ValidateProperty( value, propertyName );
             return true;
         }
 

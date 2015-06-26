@@ -1,14 +1,14 @@
 ﻿namespace More.ComponentModel
 {
     using More.Collections.Generic;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a hierarchy of items.
@@ -37,10 +37,10 @@
     /// <example>This example demonstrates how to create a <see cref="HierarchicalItemCollection{T}"/> that can be data bound to the
     /// <see cref="T:System.Windows.Controls.UserControl"/> in the previous example.
     /// <code lang="C#"><![CDATA[
-    /// using global::System;
-    /// using global::System.Collections.Generic;
-    /// using global::System.ComponentModel;
-    /// using global::System.Windows.Controls;
+    /// using System;
+    /// using System.Collections.Generic;
+    /// using System.ComponentModel;
+    /// using System.Windows.Controls;
     /// 
     /// public partial class MyUserControl : UserControl
     /// {
@@ -83,10 +83,10 @@
     /// <example>This example is identical to the previous example except that it sets the <see cref="P:HierarchicalItemCollection{T}.SelectionMode"/> to
     /// <see cref="T:HierarchicalItemSelectionModes.Leaf"/>, which only adds leaf items to the <see cref="P:HierarchicalItemCollection{T}.SelectedItems"/> collection.
     /// <code lang="C#"><![CDATA[
-    /// using global::System;
-    /// using global::System.Collections.Generic;
-    /// using global::System.ComponentModel;
-    /// using global::System.Windows.Controls;
+    /// using System;
+    /// using System.Collections.Generic;
+    /// using System.ComponentModel;
+    /// using System.Windows.Controls;
     /// 
     /// public partial class MyUserControl : UserControl
     /// {
@@ -139,7 +139,7 @@
 
             internal SelectedItemCollection( HierarchicalItemCollection<TItem> owner )
             {
-                Contract.Requires( owner != null, "owner" );
+                Contract.Requires( owner != null );
                 this.owner = owner;
             }
 
@@ -209,7 +209,7 @@
         protected HierarchicalItemCollection( IEqualityComparer<T> comparer )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), new Node<T>[0], comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -220,7 +220,7 @@
         protected HierarchicalItemCollection( Func<Node<T>, IEqualityComparer<T>, HierarchicalItem<T>> factory )
             : this( factory, new Node<T>[0], EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( factory != null, "factory" );
+            Arg.NotNull( factory, "factory" );
         }
 
         /// <summary>
@@ -232,8 +232,8 @@
         protected HierarchicalItemCollection( Func<Node<T>, IEqualityComparer<T>, HierarchicalItem<T>> factory, IEqualityComparer<T> comparer )
             : this( factory, new Node<T>[0], comparer )
         {
-            Contract.Requires<ArgumentNullException>( factory != null, "factory" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( factory, "factory" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -243,7 +243,7 @@
         public HierarchicalItemCollection( Node<T> rootNode )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), new Node<T>[] { rootNode }, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( rootNode != null, "rootNode" );
+            Arg.NotNull( rootNode, "rootNode" );
         }
 
         /// <summary>
@@ -254,8 +254,8 @@
         public HierarchicalItemCollection( Node<T> rootNode, IEqualityComparer<T> comparer )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), new Node<T>[] { rootNode }, comparer )
         {
-            Contract.Requires<ArgumentNullException>( rootNode != null, "rootNode" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( rootNode, "rootNode" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -266,7 +266,7 @@
         public HierarchicalItemCollection( IEnumerable<Node<T>> nodes )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), nodes, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( nodes != null, "nodes" );
+            Arg.NotNull( nodes, "nodes" );
         }
 
         /// <summary>
@@ -278,14 +278,14 @@
         public HierarchicalItemCollection( IEnumerable<Node<T>> nodes, IEqualityComparer<T> comparer )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), nodes, comparer )
         {
-            Contract.Requires<ArgumentNullException>( nodes != null, "nodes" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( nodes, "nodes" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         private HierarchicalItemCollection( Func<Node<T>, IEqualityComparer<T>, HierarchicalItem<T>> factory, IEnumerable<Node<T>> nodes, IEqualityComparer<T> comparer )
         {
-            Contract.Requires( nodes != null, "nodes" );
-            Contract.Requires( comparer != null, "comparer" );
+            Contract.Requires( nodes != null );
+            Contract.Requires( comparer != null );
 
             this.factory = factory;
             this.valueComparer = comparer;
@@ -379,7 +379,8 @@
 
         private void SelectWithoutEvents( HierarchicalItem<T> item, bool? selected )
         {
-            Contract.Requires( item != null ); 
+            Contract.Requires( item != null );
+
             ( (INotifyPropertyChanged) item ).PropertyChanged -= this.OnItemPropertyChanged;
 
             // change state
@@ -429,7 +430,8 @@
         private static bool? GetSelectedState( HierarchicalItem<T> item, HierarchicalItem<T> parent )
         {
             Contract.Requires( item != null );
-            Contract.Requires( parent != null ); 
+            Contract.Requires( parent != null );
+
             if ( !item.IsSelected.HasValue && parent.IsSelected.HasValue )
                 return null;
             else if ( parent.All( i => i.IsSelected.HasValue && i.IsSelected.Value ) )
@@ -443,6 +445,7 @@
         private static IEnumerable<HierarchicalItem<T>> EnumerateParents( HierarchicalItem<T> root )
         {
             Contract.Requires( root != null );
+
             var parent = root.Parent;
 
             while ( parent != null )
@@ -455,6 +458,7 @@
         private void OnItemIsSelectedChanged( HierarchicalItem<T> item )
         {
             Contract.Requires( item != null );
+
             var selected = item.IsSelected;
 
             if ( selected ?? false )
@@ -484,6 +488,7 @@
         private void OnItemIsLeafChanged( HierarchicalItem<T> item )
         {
             Contract.Requires( item != null );
+            
             if ( this.SelectLeavesOnly )
             {
                 // the selection of an item should change when its status as a leaf changes
@@ -503,7 +508,7 @@
         private void AddItemsForNodes( HierarchicalItem<T> parent, IEnumerable<Node<T>> newItems )
         {
             Contract.Requires( parent != null );
-            Contract.Requires( newItems != null ); 
+            Contract.Requires( newItems != null );
 
             if ( this.SynchronizeSelections )
             {
@@ -526,7 +531,7 @@
         private void RemoveItemsForNodes( HierarchicalItem<T> parent, IEnumerable<Node<T>> oldItems )
         {
             Contract.Requires( parent != null );
-            Contract.Requires( oldItems != null ); 
+            Contract.Requires( oldItems != null );
 
             // find all removed items from nodes
             var removedItems = ( from oldItem in oldItems
@@ -562,7 +567,7 @@
         private void SetItemsForNodes( HierarchicalItem<T> parent, int index, IEnumerable<Node<T>> newItems )
         {
             Contract.Requires( parent != null );
-            Contract.Requires( newItems != null ); 
+            Contract.Requires( newItems != null );
 
             if ( this.SynchronizeSelections )
             {
@@ -597,8 +602,8 @@
 
         private void OnSourceNodeChanged( HierarchicalItem<T> parent, NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires( parent != null, "parent" );
-            Contract.Requires( e != null ); 
+            Contract.Requires( parent != null );
+            Contract.Requires( e != null );
 
             switch ( e.Action )
             {
@@ -640,6 +645,7 @@
         {
             Contract.Requires( sender != null );
             Contract.Requires( e != null );
+
             switch ( e.Action )
             {
                 case NotifyCollectionChangedAction.Add:
@@ -688,6 +694,7 @@
         {
             Contract.Requires( sender != null );
             Contract.Requires( e != null );
+
             var item = (HierarchicalItem<T>) sender;
 
             switch ( e.PropertyName )
@@ -714,9 +721,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected HierarchicalItem<T> CreateItem( Node<T> node )
         {
-            Contract.Requires<ArgumentNullException>( node != null, "node" );
+            Arg.NotNull( node, "node" );
             Contract.Ensures( Contract.Result<HierarchicalItem<T>>() != null );
+
             var item = this.factory( node, this.ValueComparer );
+
             item.AddRange( node.Select( n => this.CreateItem( n ) ) );
             node.CollectionChanged += ( s, e ) => this.OnSourceNodeChanged( item, e );
             ( (INotifyPropertyChanged) item ).PropertyChanged += this.OnItemPropertyChanged;
@@ -732,7 +741,7 @@
         /// <remarks>This method is typically only used by the collection to internally create new items.</remarks>
         protected HierarchicalItem<T> CreateItem( T value )
         {
-            Contract.Ensures( Contract.Result<HierarchicalItem<T>>() != null ); 
+            Contract.Ensures( Contract.Result<HierarchicalItem<T>>() != null );
             return this.CreateItem( new Node<T>( value ) );
         }
     }

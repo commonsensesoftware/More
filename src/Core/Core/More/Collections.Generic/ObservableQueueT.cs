@@ -1,15 +1,15 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts; 
-    using global::System.Linq;
-    using global::System.Runtime.InteropServices;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts; 
+    using System.Linq;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Represents a first-in, first-out collection of objects with change notification.
@@ -34,7 +34,7 @@
 
             internal Enumerator( ObservableQueue<T> queue )
             {
-                Contract.Requires( queue != null, "queue" ); 
+                Contract.Requires( queue != null ); 
                 this.queue = queue;
                 this.version = this.queue.version;
                 this.index = -1;
@@ -124,7 +124,7 @@
         public ObservableQueue( IEqualityComparer<T> comparer )
             : this( EmptyArray, comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -135,7 +135,7 @@
         public ObservableQueue( IEnumerable<T> sequence )
             : this( sequence, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>
@@ -149,8 +149,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public ObservableQueue( IEnumerable<T> sequence, IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" );
 
             var list = sequence.ToList();
             var count = list.Count;
@@ -171,7 +171,7 @@
         public ObservableQueue( int capacity )
             : this( capacity, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( capacity >= 0, "capacity" );
+            Arg.GreaterThanOrEqualTo( capacity, 0, "capacity" );
         }
 
         /// <summary>
@@ -182,8 +182,8 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items.</param>
         public ObservableQueue( int capacity, IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( capacity >= 0, "capacity" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
+            Arg.GreaterThanOrEqualTo( capacity, 0, "capacity" );
 
             this.items = new T[capacity];
             this.comparer = comparer;
@@ -217,7 +217,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -231,7 +231,7 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CollectionChanged;
 
@@ -248,7 +248,7 @@
 
         private void SetCapacity( int capacity )
         {
-            Contract.Requires( capacity >= 0, "capacity" ); 
+            Contract.Requires( capacity >= 0 ); 
             var destinationArray = new T[capacity];
 
             if ( this.size > 0 )
@@ -285,8 +285,10 @@
         [SuppressMessageAttribute( "Microsoft.Design", "CA1021:AvoidOutParameters", Justification = "This method returns the value and the count." )]
         protected int DequeueItem( out T result )
         {
-            Contract.Requires<InvalidOperationException>( this.Count > 0 );
             Contract.Ensures( Contract.Result<int>() >= 0 );
+
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.QueueIsEmpty );
 
             var local = this.items[this.head];
             this.items[this.head] = default( T );
@@ -371,6 +373,11 @@
         /// </remarks>
         public virtual T Peek()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.QueueIsEmpty );
+            
+            Contract.EndContractBlock();
+
             return this.items[this.head];
         }
 
@@ -401,6 +408,11 @@
         /// </remarks>
         public virtual T Dequeue()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.QueueIsEmpty );
+
+            Contract.EndContractBlock();
+
             T local;
             var index = this.DequeueItem( out local );
             this.OnPropertyChanged( "Count" );
@@ -471,6 +483,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public virtual void CopyTo( T[] array, int arrayIndex )
         {
+            Arg.NotNull( array, "array" );
+            Arg.InRange( arrayIndex, 0, array.Length + this.Count, "arrayIndex");
+
             var length = array.Length;
             var count = ( ( length - arrayIndex ) < this.size ) ? ( length - arrayIndex ) : this.size;
 

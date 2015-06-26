@@ -1,10 +1,10 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
+    using System;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
 
     /// <summary>
     /// Represents a fiscal week.
@@ -29,8 +29,7 @@
         public FiscalWeek( DateTime firstDay )
             : this( firstDay, firstDay.AddDays( 6d ) )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( firstDay >= DateTime.MinValue, "firstDay" );
-            Contract.Requires<ArgumentOutOfRangeException>( firstDay <= DateTime.MaxValue.AddDays( -6d ), "firstDay" );
+            Arg.InRange( firstDay, DateTime.MinValue, DateTime.MaxValue.AddDays( -6d ), "firstDay" );
         }
 
         /// <summary>
@@ -42,11 +41,13 @@
         /// <paramref name="firstDay"/> is not one week (7 days).</exception>
         public FiscalWeek( DateTime firstDay, DateTime lastDay )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( firstDay >= DateTime.MinValue, "firstDay" );
-            Contract.Requires<ArgumentOutOfRangeException>( firstDay <= DateTime.MaxValue.AddDays( -6d ), "firstDay" );
-            Contract.Requires<ArgumentOutOfRangeException>( lastDay <= DateTime.MaxValue, "lastDay" );
-            Contract.Requires<ArgumentOutOfRangeException>( lastDay > DateTime.MinValue, "lastDay" );
-            Contract.Requires<ArgumentOutOfRangeException>( firstDay < lastDay, "firstDay" );
+            Arg.InRange( firstDay, DateTime.MinValue, DateTime.MaxValue.AddDays( -6d ), "firstDay" );
+            Arg.LessThanOrEqualTo( lastDay, DateTime.MaxValue, "lastDay" );
+            Arg.GreaterThan( lastDay, DateTime.MinValue, "lastDay" );
+            Arg.LessThan( firstDay, lastDay, "firstDay" );
+
+            if ( lastDay.Subtract( firstDay ).Days != 6 )
+                throw new ArgumentOutOfRangeException( "lastDay" );
 
             this.firstDay = firstDay;
             this.lastDay = lastDay;

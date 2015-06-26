@@ -1,15 +1,15 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a concrete, read-only implementation of the <see cref="KeyedCollection{TKey,TItem}"/> class.
@@ -29,7 +29,7 @@
         /// <param name="collection">The <see cref="KeyedCollection{TKey,TItem}">collection</see> to make read-only.</param>
         public ReadOnlyObservableKeyedCollection( KeyedCollection<TKey, TItem> collection )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
+            Arg.NotNull( collection, "collection" );
 
             this.items = collection;
 
@@ -84,7 +84,7 @@
 
         private static bool IsCompatibleObject( object item )
         {
-            return ( item is TItem ) || ( !typeof( TItem ).GetTypeInfo().IsValueType && item == null );
+            return ( item is TItem ) || ( default( TItem ) != null && item == null );
         }
 
         /// <summary>
@@ -112,7 +112,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -127,7 +127,7 @@
         /// <exception cref="ArgumentNullException"><paramref name="e"/> is <see langkeyword="null">null</see>.</exception>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CollectionChanged;
 
@@ -288,7 +288,7 @@
         {
             get
             {
-                return ( (IList) this.Items ).IsReadOnly;
+                return true;
             }
         }
 

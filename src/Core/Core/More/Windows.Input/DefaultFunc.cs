@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     internal static class DefaultFunc
     {
@@ -16,14 +16,14 @@
             return true;
         }
         
-        internal static async Task ExecuteAsync<T>( T arg )
+        internal static Task ExecuteAsync<T>( T arg )
         {
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
-        internal static async Task ExecuteAsync<T1, T2>( T1 arg1, T2 arg2 )
+        internal static Task ExecuteAsync<T1, T2>( T1 arg1, T2 arg2 )
         {
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
     }
 }

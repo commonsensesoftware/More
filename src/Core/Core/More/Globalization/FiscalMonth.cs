@@ -1,12 +1,12 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
 
     /// <summary>
     /// Represents a fiscal month.
@@ -30,7 +30,7 @@
         /// to initialize the month with.</param>
         public FiscalMonth( IEnumerable<FiscalWeek> weeks )
         {
-            Contract.Requires<ArgumentNullException>( weeks != null, "weeks" );
+            Arg.NotNull( weeks, "weeks" );
             this.weeks.AddRange( weeks );
         }
 
@@ -42,7 +42,7 @@
         {
             get
             {
-                return !this.weeks.Any() ? DateTime.Today : this.weeks.First().FirstDay;
+                return !this.Weeks.Any() ? DateTime.Today : this.Weeks.First().FirstDay;
             }
         }
 
@@ -54,7 +54,7 @@
         {
             get
             {
-                return !this.weeks.Any() ? DateTime.Today : this.weeks.Last().LastDay;
+                return !this.Weeks.Any() ? DateTime.Today : this.Weeks.Last().LastDay;
             }
         }
 

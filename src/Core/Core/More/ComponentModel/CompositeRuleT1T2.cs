@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a collection of <see cref="IRule{TInput,TOutput}">rules</see> that can be used
@@ -33,7 +33,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generic support." )]
         protected CompositeRule( IEnumerable<IRule<TInput, TOutput>> rules )
         {
-            Contract.Requires<ArgumentNullException>( rules != null, "rules" );
+            Arg.NotNull( rules, "rules" );
             this.rules = rules.ToList();
         }
 
@@ -68,10 +68,10 @@
         /// <param name="item">The <see cref="IRule{TInput,TOutput}">item</see> to insert.</param>
         protected virtual void InsertItem( int index, IRule<TInput, TOutput> item )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index <= this.Count, "index" );
-            Contract.Requires<ArgumentNullException>( item != null, "item" );
+            Arg.NotNull( item, "item" );
             Contract.Ensures( this.Count == Contract.OldValue( this.Count ) + 1 );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThanOrEqualTo( index, this.Count, "index" );
             this.rules.Add( item );
         }
 
@@ -81,9 +81,9 @@
         /// <param name="index">The zero-based index of the element to remove.</param>
         protected virtual void RemoveItem( int index )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index < this.Count, "index" );
             Contract.Ensures( this.Count == Contract.OldValue( this.Count ) - 1 );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThanOrEqualTo( index, this.Count, "index" );
             this.rules.RemoveAt( index );
         }
 

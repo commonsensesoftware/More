@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents a named command<seealso cref="AsyncNamedCommand{T}"/>.
@@ -23,8 +23,8 @@
         public NamedCommand( string name, Action<T> executeMethod )
             : this( null, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -36,8 +36,8 @@
         public NamedCommand( string id, string name, Action<T> executeMethod )
             : this( id, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -49,9 +49,9 @@
         public NamedCommand( string name, Action<T> executeMethod, Func<T, bool> canExecuteMethod )
             : this( null, name, executeMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -64,9 +64,9 @@
         public NamedCommand( string id, string name, Action<T> executeMethod, Func<T, bool> canExecuteMethod )
             : base( executeMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.id = id;
             this.name = name;
@@ -80,10 +80,12 @@
         {
             get
             {
+                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
                 return this.name;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.name, value );
             }
         }
@@ -96,10 +98,12 @@
         {
             get
             {
+                Contract.Ensures( this.desc != null );
                 return this.desc;
             }
             set
             {
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.desc, value );
             }
         }
@@ -113,13 +117,12 @@
         {
             get
             {
-                if ( string.IsNullOrEmpty( this.id ) )
-                    return this.Name;
-
-                return this.id;
+                Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
+                return string.IsNullOrEmpty( this.id ) ? this.Name : this.id;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.id, value );
             }
         }

@@ -1,13 +1,13 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a observable implementation of the <see cref="KeyedCollection{TKey,TItem}"/>
@@ -28,7 +28,7 @@
         public ObservableKeyedCollection( Func<TItem, TKey> getKeyMethod )
             : this( getKeyMethod, EqualityComparer<TKey>.Default )
         {
-            Contract.Requires<ArgumentNullException>( getKeyMethod != null, "getKeyMethod" );
+            Arg.NotNull( getKeyMethod, "getKeyMethod" );
         }
 
         /// <summary>
@@ -39,8 +39,8 @@
         public ObservableKeyedCollection( Func<TItem, TKey> getKeyMethod, IEqualityComparer<TKey> comparer )
             : base( comparer )
         {
-            Contract.Requires<ArgumentNullException>( getKeyMethod != null, "getKeyMethod" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( getKeyMethod, "getKeyMethod" );
+            Arg.NotNull( comparer, "comparer" );
             this.keyMethod = getKeyMethod;
         }
 
@@ -59,7 +59,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -74,7 +74,7 @@
         /// <exception cref="ArgumentNullException"><paramref name="e"/> is <see langkeyword="null">null</see>.</exception>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CollectionChanged;
 

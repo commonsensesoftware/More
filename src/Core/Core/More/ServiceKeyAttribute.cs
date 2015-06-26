@@ -1,6 +1,6 @@
 ﻿namespace More
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Represents the metadata used to associate a key with a service.

@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Represents a specification that models a logical 'And' expression <seealso cref="Specification{T}"/>.
@@ -19,8 +19,8 @@
         /// <param name="right">The <see cref="ISpecification{T}">specification</see> representing the right-hand side of the unioned specification.</param>
         public LogicalAndSpecification( ISpecification<T> left, ISpecification<T> right )
         {
-            Contract.Requires<ArgumentNullException>( left != null, "left" );
-            Contract.Requires<ArgumentNullException>( right != null, "right" );
+            Arg.NotNull( left, "left" );
+            Arg.NotNull( right, "right" );
             this.left = left;
             this.right = right;
         }

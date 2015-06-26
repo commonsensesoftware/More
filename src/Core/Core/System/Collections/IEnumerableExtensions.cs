@@ -1,9 +1,9 @@
 ﻿namespace System.Collections
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Extension methods for non-generic enumerators.
@@ -19,7 +19,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static bool Any( this IEnumerable sequence )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
 
             var enumerator = sequence.GetEnumerator();
 
@@ -45,7 +45,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int Count( this IEnumerable sequence )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<int>() >= 0 );
 
             var collection = sequence as ICollection;
@@ -81,7 +81,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int IndexOf( this IEnumerable sequence, object item )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<int>() >= -1 );
 
             return sequence.IndexOf( item, EqualityComparer<object>.Default );
@@ -98,8 +98,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static int IndexOf( this IEnumerable sequence, object item, IEqualityComparer comparer )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" );
             Contract.Ensures( Contract.Result<int>() >= -1 );
 
             var enumerator = sequence.GetEnumerator();
@@ -137,14 +137,62 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static object ElementAt( this IEnumerable sequence, int index )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index < sequence.Count(), "index" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
 
             var list = sequence as IList;
 
             if ( list != null )
                 return list[index];
+
+            var enumerator = sequence.GetEnumerator();
+            object value = null;
+
+            try
+            {
+                while ( enumerator.MoveNext() )
+                {
+                    if ( index-- == 0 )
+                    {
+                        value = enumerator.Current;
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                var disposable = enumerator as IDisposable;
+
+                if ( disposable != null )
+                    disposable.Dispose();
+            }
+
+            // if we didn't count down to -1, then the index is greater
+            // than the length of the sequence
+            if ( index != -1 )
+                throw new ArgumentOutOfRangeException( "index" );
+
+            return value;
+        }
+
+        /// <summary>
+        /// Returns the element at a specified index in a sequence.
+        /// </summary>
+        /// <param name="sequence">An <see cref="IEnumerable" /> to return an element from.</param>
+        /// <param name="index">The zero-based index of the element to retrieve.</param>
+        /// <returns>The element at the specified position in the sequence sequence or <c>null</c>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
+        public static object ElementAtOrDefault( this IEnumerable sequence, int index )
+        {
+            Arg.NotNull( sequence, "sequence" );
+
+            if ( index < 0 )
+                return null;
+
+            var list = sequence as IList;
+
+            if ( list != null )
+                return index >= list.Count ? null : list[index];
 
             var enumerator = sequence.GetEnumerator();
             object value = null;

@@ -34,9 +34,9 @@
         /// <param name="sender">The object that triggered the action.</param>
         /// <param name="parameter">The parameter provided to the action.</param>
         /// <returns>A <see cref="Task">task</see> representing the operation.</returns>
-        protected virtual async Task ExecuteAsync( object sender, object parameter )
+        protected virtual Task ExecuteAsync( object sender, object parameter )
         {
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
         private async void ExecuteAsFireAndForget( object sender, object parameter )

@@ -153,6 +153,7 @@
     <Compile Include="IO\BasicPropertiesAdapterT.cs" />
     <Compile Include="IO\DirectoryInfoAdapter.cs" />
     <Compile Include="IO\FileInfoAdapter.cs" />
+    <Compile Include="IO\FileSystem.cs" />
     <Compile Include="IO\IStorageItemExtensions.cs" />
     <Compile Include="SR.Designer.cs">
       <AutoGen>True</AutoGen>

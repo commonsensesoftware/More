@@ -2,8 +2,8 @@
 {
     using More;
     using More.Collections.Generic;
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides extension methods for various data structures such as Stacks, Queues, Trees).
@@ -18,7 +18,7 @@
         /// <returns>An <see cref="IStack{T}"/> object.</returns>
         public static IStack<T> Adapt<T>( this Stack<T> stack )
         {
-            Contract.Requires<ArgumentNullException>( stack != null, "stack" );
+            Arg.NotNull( stack, "stack" );
             Contract.Ensures( Contract.Result<IStack<T>>() != null );
             return new StackAdapter<T>( stack );
         }
@@ -31,7 +31,7 @@
         /// <returns>An <see cref="IQueue{T}"/> object.</returns>
         public static IQueue<T> Adapt<T>( this Queue<T> queue )
         {
-            Contract.Requires<ArgumentNullException>( queue != null, "queue" );
+            Arg.NotNull( queue, "queue" );
             Contract.Ensures( Contract.Result<IQueue<T>>() != null );
             return new QueueAdapter<T>( queue );
         }

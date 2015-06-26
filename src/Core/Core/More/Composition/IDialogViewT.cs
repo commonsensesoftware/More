@@ -1,10 +1,10 @@
 ﻿namespace More.Composition
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Defines the behavior of a view for a dialog window.

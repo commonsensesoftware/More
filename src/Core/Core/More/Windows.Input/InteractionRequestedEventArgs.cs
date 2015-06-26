@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents the event data provided when a user interaction request event is raised.
@@ -16,7 +16,7 @@
         /// <param name="interaction">The <see cref="Interaction">interaction</see> being requested.</param>
         public InteractionRequestedEventArgs( Interaction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, "interaction" );
             this.interaction = interaction;
         }
 

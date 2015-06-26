@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents an observable, named command with an associated data item<seealso cref="AsyncNamedDataItemCommand{TParameter, TItem}"/>.
@@ -31,8 +31,8 @@
         public NamedDataItemCommand( string name, Action<TItem, TParameter> executeMethod, TItem dataItem )
             : this( null, name, executeMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -45,8 +45,8 @@
         public NamedDataItemCommand( string id, string name, Action<TItem, TParameter> executeMethod, TItem dataItem )
             : this( id, name, executeMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -59,9 +59,9 @@
         public NamedDataItemCommand( string name, Action<TItem, TParameter> executeMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
             : this( null, name, executeMethod, canExecuteMethod, dataItem )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -75,9 +75,9 @@
         public NamedDataItemCommand( string id, string name, Action<TItem, TParameter> executeMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
             : base( executeMethod, canExecuteMethod, dataItem )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.id = id;
             this.name = name;
@@ -91,10 +91,12 @@
         {
             get
             {
+                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
                 return this.name;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.name, value );
             }
         }
@@ -107,10 +109,12 @@
         {
             get
             {
+                Contract.Ensures( this.desc != null );
                 return this.desc;
             }
             set
             {
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.desc, value );
             }
         }
@@ -124,10 +128,12 @@
         {
             get
             {
+                Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
                 return string.IsNullOrEmpty( this.id ) ? this.Name : this.id;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.id, value );
             }
         }

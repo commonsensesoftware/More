@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     [ContractClassFor( typeof( IReadOnlyRepository<> ) )]
     internal abstract class IReadOnlyRepositoryContract<T> : IReadOnlyRepository<T> where T : class

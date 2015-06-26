@@ -1,13 +1,13 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Security;
-    using global::System.Security.Principal;
-    using global::System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Security;
+    using System.Security.Principal;
+    using System.Windows.Input;
 
     [ContractClassFor( typeof( IActivity ) )]
     internal abstract class IActivityContract : IActivity
@@ -42,7 +42,6 @@
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value == null || value.Value < DateTime.UtcNow, "value" );
             }
         }
 

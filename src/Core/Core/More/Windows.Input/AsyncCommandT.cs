@@ -1,13 +1,13 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System.ComponentModel;
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
-    using global::System.Windows.Input;
-    using global::System.Threading.Tasks;
     using More.ComponentModel;
+    using System.ComponentModel;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
+    using System.Windows.Input;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents an observable, asychronous command using a delegate<seealso cref="Command{T}"/>.
@@ -15,10 +15,10 @@
     /// <typeparam name="T">The <see cref="Type">type</see> of parameter associated with the command.</typeparam>
     /// <example>This example demonstrates how to create a command that accepts an asynchronous lambda expression to execute.
     /// <code lang="C#"><![CDATA[
-    /// using global::System.Windows.Input;
-    /// using global::System;
-    /// using global::System.Windows;
-    /// using global::System.Windows.Input;
+    /// using System.Windows.Input;
+    /// using System;
+    /// using System.Windows;
+    /// using System.Windows.Input;
     /// 
     /// var command = new Command<string>( parameter => Task.Run( () => Console.WriteLine( parameter ) ) );
     /// var button = new Button();
@@ -46,7 +46,7 @@
         public AsyncCommand( Func<T, Task> executeAsyncMethod )
             : this( executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -56,8 +56,9 @@
         /// <param name="canExecuteMethod">The <see cref="Func{T1,TResult}"/> representing the can execute method.</param>
         public AsyncCommand( Func<T, Task> executeAsyncMethod, Func<T, bool> canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
+
             this.executeAsyncMethod = executeAsyncMethod;
             this.canExecuteMethod = canExecuteMethod;
         }
@@ -68,7 +69,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExecuted( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Executed;
 
@@ -102,7 +103,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCanExecuteChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CanExecuteChanged;
 

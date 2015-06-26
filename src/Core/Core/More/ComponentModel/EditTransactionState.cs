@@ -1,6 +1,6 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Represents the possible edit transaction states.

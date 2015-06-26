@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
 
     [ContractClassFor( typeof( INamedComponent ) )]
     internal abstract class INamedComponentContract : INamedComponent

@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents an asynchronous, cancelable command<see cref="CancelableCommand"/>.
@@ -23,8 +23,8 @@
         public AsyncCancelableCommand( string name, Func<CancelEventArgs, Task> executeAsyncMethod )
             : this( null, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -36,8 +36,8 @@
         public AsyncCancelableCommand( string id, string name, Func<CancelEventArgs, Task> executeAsyncMethod )
             : this( id, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -49,9 +49,9 @@
         public AsyncCancelableCommand( string name, Func<CancelEventArgs, Task> executeAsyncMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : this( null, name, executeAsyncMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -64,9 +64,9 @@
         public AsyncCancelableCommand( string id, string name, Func<CancelEventArgs, Task> executeAsyncMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : base( id, name, executeAsyncMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
             this.executeAsyncMethod = executeAsyncMethod;
         }
 

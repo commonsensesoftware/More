@@ -1,10 +1,10 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Defines the behavior of a repository of items.

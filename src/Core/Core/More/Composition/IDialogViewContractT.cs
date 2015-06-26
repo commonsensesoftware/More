@@ -1,8 +1,8 @@
 ﻿namespace More.Composition
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
 
     [ContractClassFor( typeof( IDialogView<> ) )]
     internal abstract class IDialogViewContract<T> : IDialogView<T> where T : class

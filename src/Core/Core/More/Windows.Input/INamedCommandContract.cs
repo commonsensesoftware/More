@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
     using More.ComponentModel;
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     [ContractClassFor( typeof( INamedCommand ) )]
     internal abstract class INamedCommandContract : INamedCommand

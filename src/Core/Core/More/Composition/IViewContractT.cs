@@ -1,7 +1,7 @@
 ﻿namespace More.Composition
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     [ContractClassFor( typeof( IView<> ) )]
     internal abstract class IViewContract<T> : IView<T> where T : class

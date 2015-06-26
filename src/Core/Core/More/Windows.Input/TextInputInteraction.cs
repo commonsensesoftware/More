@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents an interaction request for text input from a user.
@@ -10,10 +10,10 @@
     /// without any directly knowledge or coupling with a view.
     /// <code lang="C#">
     /// <![CDATA[
-    /// using global::System;
-    /// using global::System.Diagnostics;
-    /// using global::System.Windows;
-    /// using global::System.Windows.Input;
+    /// using System;
+    /// using System.Diagnostics;
+    /// using System.Windows;
+    /// using System.Windows.Input;
     /// 
     /// public class MyViewModel
     /// {
@@ -72,8 +72,8 @@
         public TextInputInteraction( string title, string prompt )
             : this( title, prompt, string.Empty )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
-            Contract.Requires<ArgumentNullException>( prompt != null, "prompt" );
+            Arg.NotNull( title, "title" );
+            Arg.NotNull( prompt, "prompt" );
         }
 
         /// <summary>
@@ -85,9 +85,9 @@
         public TextInputInteraction( string title, string prompt, string defaultResponse )
             : base( title, prompt )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
-            Contract.Requires<ArgumentNullException>( prompt != null, "prompt" );
-            Contract.Requires<ArgumentNullException>( defaultResponse != null, "defaultResponse" );
+            Arg.NotNull( title, "title" );
+            Arg.NotNull( prompt, "prompt" );
+            Arg.NotNull( defaultResponse, "defaultResponse" );
 
             this.Content = prompt;
             this.defaultResponse = defaultResponse;
@@ -106,7 +106,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.defaultResponse, value );
             }
         }

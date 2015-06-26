@@ -1,10 +1,10 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IUnitOfWork{T}"/> class.
@@ -20,7 +20,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task CommitAsync<T>( this IUnitOfWork<T> unitOfWork ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( unitOfWork != null, "unitOfWork" );
+            Arg.NotNull( unitOfWork, "unitOfWork" );
             Contract.Ensures( Contract.Result<Task>() != null );
             return unitOfWork.CommitAsync( CancellationToken.None );
         }

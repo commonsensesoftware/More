@@ -1,9 +1,9 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a typed <see cref="WeakDelegate">weak delegate</see>.
@@ -23,8 +23,6 @@
         public WeakDelegate( T strongDelegate )
             : base( strongDelegate as Delegate )
         {
-            Contract.Requires<ArgumentNullException>( strongDelegate != null, "strongDelegate" );
-            Contract.Requires<InvalidOperationException>( IsDelegateType( typeof( T ) ) );
         }
 
         /// <summary>
@@ -43,7 +41,7 @@
         /// </summary>
         /// <returns>The <see cref="Delegate">delegate</see> of type <typeparamref name="T"/> created or
         /// null if the delegate cannot be created.</returns>
-        public T CreateTypedDelegate()
+        public virtual T CreateTypedDelegate()
         {
             return this.CreateDelegate() as T;
         }

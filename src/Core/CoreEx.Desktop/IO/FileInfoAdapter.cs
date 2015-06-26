@@ -66,11 +66,11 @@
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        public async Task MoveAsync( IFolder destinationFolder, string desiredNewName )
+        public Task MoveAsync( IFolder destinationFolder, string desiredNewName )
         {
             var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
             this.file.MoveTo( destinationFileName );
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
         public Task<Stream> OpenReadAsync()
@@ -109,10 +109,10 @@
             }
         }
 
-        public async Task DeleteAsync()
+        public Task DeleteAsync()
         {
             this.file.Delete();
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
         public Task<IBasicProperties> GetBasicPropertiesAsync()
@@ -121,10 +121,10 @@
             return Task.FromResult( properties );
         }
 
-        public async Task RenameAsync( string desiredName )
+        public Task RenameAsync( string desiredName )
         {
             this.file.MoveTo( desiredName );
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
         public Task<IFolder> GetParentAsync()

@@ -1,5 +1,5 @@
-﻿using global::System;
-using global::System.Reflection;
+﻿using System;
+using System.Reflection;
 
 [assembly: AssemblyTitle( "More" )]
 [assembly: AssemblyProduct( "More" )]

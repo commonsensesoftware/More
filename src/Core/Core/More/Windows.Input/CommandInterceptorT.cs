@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
-    using global::System.Windows.Input;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents a command interceptor.
@@ -24,8 +24,8 @@
         public CommandInterceptor( Action<T> preAction, ICommand command )
             : this( preAction, DefaultAction.None, command )
         {
-            Contract.Requires<ArgumentNullException>( preAction != null, "preAction" );
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
+            Arg.NotNull( preAction, "preAction" );
+            Arg.NotNull( command, "command" );
         }
 
         /// <summary>
@@ -36,8 +36,8 @@
         public CommandInterceptor( ICommand command, Action<T> postAction )
             : this( DefaultAction.None, postAction, command )
         {
-            Contract.Requires<ArgumentNullException>( postAction != null, "postAction" );
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
+            Arg.NotNull( postAction, "postAction" );
+            Arg.NotNull( command, "command" );
         }
 
         /// <summary>
@@ -49,9 +49,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public CommandInterceptor( Action<T> preAction, Action<T> postAction, ICommand command )
         {
-            Contract.Requires<ArgumentNullException>( preAction != null, "preAction" );
-            Contract.Requires<ArgumentNullException>( postAction != null, "postAction" );
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
+            Arg.NotNull( preAction, "preAction" );
+            Arg.NotNull( postAction, "postAction" );
+            Arg.NotNull( command, "command" );
             
             this.command = command;
             this.preAction = preAction;
@@ -70,7 +70,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExecuted( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Executed;
 
@@ -85,7 +85,7 @@
         /// <remarks>Note to inheritors: the base class has no implementation and is not required to be called.</remarks>
         protected virtual void OnCanExecuteChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CanExecuteChanged;
 

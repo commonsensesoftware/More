@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts; 
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Defines the behavior of an object that can locate and provide unit of work factories.

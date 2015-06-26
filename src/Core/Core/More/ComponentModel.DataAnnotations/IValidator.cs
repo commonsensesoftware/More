@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior of an objet that can be used to validate objects, properties, and methods.
     /// </summary>
+    [ContractClass( typeof( IValidatorContract ) )]
     public interface IValidator
     {
         /// <summary>

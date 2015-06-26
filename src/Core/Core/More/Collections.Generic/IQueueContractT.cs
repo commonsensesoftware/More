@@ -1,10 +1,10 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     [ContractClassFor( typeof( IQueue<> ) )]
     internal abstract class IQueueContract<T> : IQueue<T>
@@ -40,7 +40,6 @@
         void IQueue<T>.CopyTo( T[] array, int arrayIndex )
         {
             Contract.Requires<ArgumentNullException>( array != null, "array" );
-            Contract.Requires<ArgumentException>( array.Rank == 1, "array.Rank" );
             Contract.Requires<ArgumentOutOfRangeException>( arrayIndex >= 0, "arrayIndex" );
             Contract.Requires<ArgumentOutOfRangeException>( arrayIndex <= ( array.Length + ( (ICollection) this ).Count ), "arrayIndex" );
         }

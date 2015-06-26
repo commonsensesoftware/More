@@ -1,11 +1,11 @@
 ﻿namespace More.Windows.Input
 {
     using More.IO;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents an interaction request to open one or more files.
@@ -32,8 +32,8 @@
         public OpenFileInteraction( string title, params string[] fileTypeFilter )
             : this( title, false, fileTypeFilter )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
-            Contract.Requires<ArgumentNullException>( fileTypeFilter != null, "fileTypeFilter" );
+            Arg.NotNull( title, "title" );
+            Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
         }
 
         /// <summary>
@@ -45,8 +45,8 @@
         public OpenFileInteraction( string title, bool multiselect, params string[] fileTypeFilter )
             : base( title )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
-            Contract.Requires<ArgumentNullException>( fileTypeFilter != null, "fileTypeFilter" );
+            Arg.NotNull( title, "title" );
+            Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
 
             this.multiselect = multiselect;
             this.fileTypeFilter.AddRange( fileTypeFilter );
@@ -76,6 +76,7 @@
         {
             get
             {
+                Contract.Ensures( Contract.Result<IList<IFile>>() != null );
                 return this.files;
             }
         }
@@ -88,6 +89,7 @@
         {
             get
             {
+                Contract.Ensures( Contract.Result<IList<string>>() != null );
                 return this.fileTypeFilter;
             }
         }

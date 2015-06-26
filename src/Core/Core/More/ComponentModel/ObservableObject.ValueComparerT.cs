@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Reflection;
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
 
     /// <content>
     /// Provides the shared implementation of a private value comparer.
@@ -22,7 +22,7 @@
                 var equatable = x as IEquatable<TValue>;
 
                 // avoid boxing operations for value types
-                if ( typeof( TValue ).GetTypeInfo().IsValueType )
+                if ( default( TValue ) != null )
                 {
                     if ( equatable != null )
                         return equatable.Equals( y );

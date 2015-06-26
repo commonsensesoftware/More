@@ -1,8 +1,8 @@
 ﻿namespace System.Collections.Generic
 {
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IEnumerable{T}"/> interface.
@@ -19,8 +19,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static void ForEach<TItem>( this IEnumerable<TItem> sequence, Action<TItem> action )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( action != null, "action" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( action, "action" );
 
             foreach ( var item in sequence )
                 action( item );
@@ -42,8 +42,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IEnumerable<TItem> With<TItem>( this IEnumerable<TItem> sequence, Action<TItem> action )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( action != null, "action" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( action, "action" );
             Contract.Ensures( Contract.Result<IEnumerable<TItem>>() != null );
 
             foreach ( var item in sequence )
@@ -64,7 +64,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int IndexOf<TItem>( this IEnumerable<TItem> sequence, TItem item )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<int>() >= -1 );
             return sequence.IndexOf( item, EqualityComparer<TItem>.Default );
         }
@@ -82,8 +82,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static int IndexOf<TItem>( this IEnumerable<TItem> sequence, TItem item, IEqualityComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" );
             Contract.Ensures( Contract.Result<int>() >= -1 );
 
             var index = 0;
@@ -112,10 +112,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static IEnumerable<TItem> Between<TItem>( this IEnumerable<TItem> sequence, int pageNumber, int pageSize )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageNumber >= 0, "pageNumber" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize > 0, "pageSize" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<IEnumerable<TItem>>() != null );
+            Arg.GreaterThanOrEqualTo( pageNumber, 0, "pageNumber" );
+            Arg.GreaterThan( pageSize, 0, "pageSize" );
 
             var startIndex = pageNumber * pageSize;
             return sequence.Skip( startIndex ).Take( pageSize );
@@ -137,9 +137,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int PageCount<TItem>( this IEnumerable<TItem> sequence, int pageSize )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize > 0, "pageSize" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<int>() >= 0 );
+            Arg.GreaterThan( pageSize, 0, "pageSize" );
 
             var count = sequence.Count();
             var pageCount = count / pageSize;
@@ -167,8 +167,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int FindIndex<TItem>( this IEnumerable<TItem> sequence, Func<TItem, bool> predicate )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( predicate != null, "predicate" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( predicate, "predicate" );
             Contract.Ensures( Contract.Result<int>() >= -1 );
             return sequence.FindIndex( 0, null, predicate );
         }
@@ -196,10 +196,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static int FindIndex<TItem>( this IEnumerable<TItem> sequence, int startIndex, Func<TItem, bool> predicate )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( startIndex >= 0, "startIndex" );
-            Contract.Requires<ArgumentNullException>( predicate != null, "predicate" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( predicate, "predicate" );
             Contract.Ensures( Contract.Result<int>() >= -1 );
+            Arg.GreaterThanOrEqualTo( startIndex, 0, "startIndex" );
             return sequence.FindIndex( startIndex, null, predicate );
         }
 
@@ -228,11 +228,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3", Justification = "Validated by a code contract." )]
         public static int FindIndex<TItem>( this IEnumerable<TItem> sequence, int startIndex, int count, Func<TItem, bool> predicate )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( startIndex >= 0, "startIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( count >= 0, "count" );
-            Contract.Requires<ArgumentNullException>( predicate != null, "predicate" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( predicate, "predicate" );
             Contract.Ensures( Contract.Result<int>() >= -1 );
+            Arg.GreaterThanOrEqualTo( startIndex, 0, "startIndex" );
+            Arg.GreaterThanOrEqualTo( count, 0, "count" );
             return sequence.FindIndex( startIndex, new int?( count ), predicate );
         }
 
@@ -279,8 +279,8 @@
         /// a single sequence, including the root node, which is written to the standard console output.
         /// <code lang="C#">
         /// <![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
+        /// using System;
+        /// using System.Collections.Generic;
         /// 
         /// public static void Main( params string[] args )
         /// {
@@ -310,7 +310,7 @@
         /// </example>
         public static IEnumerable<TItem> SelfAndFlatten<TItem>( this IEnumerable<TItem> sequence ) where TItem : IEnumerable<TItem>
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<IEnumerable<TItem>>() != null );
 
             var self = new[] { (TItem) sequence };
@@ -328,8 +328,8 @@
         /// a single sequence, which is written to the standard console output.
         /// <code lang="C#">
         /// <![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
+        /// using System;
+        /// using System.Collections.Generic;
         /// 
         /// public static void Main( params string[] args )
         /// {
@@ -358,7 +358,7 @@
         /// </example>
         public static IEnumerable<TItem> Flatten<TItem>( this IEnumerable<TItem> sequence ) where TItem : IEnumerable<TItem>
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<IEnumerable<TItem>>() != null );
 
             // NOTE: this could be achieved using the following, which would avoid the need to initialize a
@@ -381,8 +381,8 @@
         /// related children can be traversed using the specified selector function.
         /// <code lang="C#">
         /// <![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
+        /// using System;
+        /// using System.Collections.Generic;
         /// 
         /// public class TreeNode<T>
         /// {
@@ -449,8 +449,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required to support generics." )]
         public static IEnumerable<TItem> Flatten<TItem>( this IEnumerable<TItem> sequence, Func<TItem, IEnumerable<TItem>> selector )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( selector != null, "selector" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( selector, "selector" );
             Contract.Ensures( Contract.Result<IEnumerable<TItem>>() != null );
 
             // NOTE: this could be achieved using the following, which would avoid the need to initialize a

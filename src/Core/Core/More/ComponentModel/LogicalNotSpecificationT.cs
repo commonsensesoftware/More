@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Represents a specification that models a logical complement to another specification <seealso cref="Specification{T}"/>.
@@ -17,7 +17,7 @@
         /// <param name="complement">The <see cref="ISpecification{T}">specification</see> representing the logical complement the specification.</param>
         public LogicalNotSpecification( ISpecification<T> complement )
         {
-            Contract.Requires<ArgumentNullException>( complement != null, "complement" );
+            Arg.NotNull( complement, "complement" );
             this.complement = complement;
         }
 

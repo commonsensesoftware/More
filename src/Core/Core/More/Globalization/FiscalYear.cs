@@ -1,10 +1,10 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
 
     /// <summary>
     /// Represents a fiscal year.
@@ -28,7 +28,7 @@
         /// in the year.</param>
         public FiscalYear( IDictionary<int, FiscalMonth> months )
         {
-            Contract.Requires<ArgumentNullException>( months != null, "months" );
+            Arg.NotNull( months, "months" );
             this.months.AddRange( months );
         }
 
@@ -40,7 +40,7 @@
         {
             get
             {
-                return !this.months.ContainsKey( 1 ) ? DateTime.Today : this.months[1].FirstDay;
+                return !this.Months.ContainsKey( 1 ) ? DateTime.Today : this.Months[1].FirstDay;
             }
         }
 
@@ -54,7 +54,7 @@
             {
                 // the key should be 12 
                 var key = this.months.Count;
-                return !this.months.ContainsKey( key ) ? DateTime.Today : this.months[key].LastDay;
+                return !this.Months.ContainsKey( key ) ? DateTime.Today : this.Months[key].LastDay;
             }
         }
 

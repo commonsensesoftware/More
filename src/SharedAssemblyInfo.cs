@@ -1,7 +1,7 @@
-﻿using global::System;
-using global::System.Reflection;
-using global::System.Resources;
-using global::System.Runtime.InteropServices;
+﻿using System;
+using System.Reflection;
+using System.Resources;
+using System.Runtime.InteropServices;
 
 #if DEBUG
 [assembly: AssemblyConfiguration( "Debug" )]

@@ -1,9 +1,9 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Defines the behavior of a dictionary which associates multiple values with a single key.

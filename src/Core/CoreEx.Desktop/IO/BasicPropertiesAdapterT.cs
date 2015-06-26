@@ -130,13 +130,13 @@
             return Task.FromResult( properties );
         }
 
-        public async Task SavePropertiesAsync()
+        public Task SavePropertiesAsync()
         {
             // changes to properties take place immediately
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
-        public async Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )
+        public Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )
         {
             foreach ( var property in propertiesToSave )
             {
@@ -146,7 +146,7 @@
                     writer( this.StorageItem, property.Value );
             }
 
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
     }
 }

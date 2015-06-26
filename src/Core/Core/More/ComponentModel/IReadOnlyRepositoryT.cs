@@ -1,12 +1,12 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Defines the behavior of a read-only repository of items.
@@ -25,11 +25,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to paginate the items in a repository using an example query.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {

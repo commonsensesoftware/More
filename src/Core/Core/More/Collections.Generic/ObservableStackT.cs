@@ -1,15 +1,15 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Runtime.InteropServices;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Represents a variable size last-in-first-out (LIFO) collection of instances of the same arbitrary type
@@ -35,7 +35,7 @@
 
             internal Enumerator( ObservableStack<T> stack )
             {
-                Contract.Requires( stack != null, "stack" );
+                Contract.Requires( stack != null );
                 this.stack = stack;
                 this.version = this.stack.version;
                 this.index = -2;
@@ -136,7 +136,7 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items in the collection.</param>
         public ObservableStack( IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
             this.items = EmptyArray;
             this.comparer = comparer;
         }
@@ -149,7 +149,7 @@
         public ObservableStack( IEnumerable<T> sequence )
             : this( sequence, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>
@@ -162,8 +162,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public ObservableStack( IEnumerable<T> sequence, IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" );
 
             var list = sequence.ToList();
             var count = list.Count;
@@ -182,7 +182,7 @@
         public ObservableStack( int capacity )
             : this( capacity, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( capacity >= 0, "capacity" );
+            Arg.GreaterThanOrEqualTo( capacity, 0, "capacity" );
         }
 
         /// <summary>
@@ -193,8 +193,8 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items in the collection.</param>
         public ObservableStack( int capacity, IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( capacity >= 0, "capacity" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
+            Arg.GreaterThanOrEqualTo( capacity, 0, "capacity" );
 
             this.items = new T[capacity];
             this.comparer = comparer;
@@ -228,7 +228,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -242,7 +242,7 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CollectionChanged;
 
@@ -261,8 +261,10 @@
         [SuppressMessageAttribute( "Microsoft.Design", "CA1021:AvoidOutParameters", Justification = "This method returns the value and the count." )]
         protected int PopItem( out T result )
         {
-            Contract.Requires<InvalidOperationException>( this.Count > 0 );
             Contract.Ensures( Contract.Result<int>() >= 0 );
+
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
 
             this.version++;
             var index = --this.size;
@@ -326,6 +328,10 @@
         /// </remarks>
         public virtual T Peek()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
+
+            Contract.EndContractBlock();
             return this.items[this.size - 1];
         }
 
@@ -356,6 +362,11 @@
         /// </remarks>
         public virtual T Pop()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
+            
+            Contract.EndContractBlock();
+
             T local;
             var index = this.PopItem( out local );
 
@@ -433,6 +444,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public virtual void CopyTo( T[] array, int arrayIndex )
         {
+            Arg.NotNull( array, "array" );
+            Arg.InRange( arrayIndex, 0, array.Length + this.Count, "arrayIndex" );
+
             Array.Copy( this.items, 0, array, arrayIndex, this.size );
             Array.Reverse( array, arrayIndex, this.size );
         }

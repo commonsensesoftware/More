@@ -116,10 +116,10 @@
             }
         }
 
-        public async Task DeleteAsync()
+        public Task DeleteAsync()
         {
             this.folder.Delete( true );
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
         public Task<IBasicProperties> GetBasicPropertiesAsync()
@@ -128,10 +128,10 @@
             return Task.FromResult( properties );
         }
 
-        public async Task RenameAsync( string desiredName )
+        public Task RenameAsync( string desiredName )
         {
             this.folder.MoveTo( desiredName );
-            await Task.Yield();
+            return Task.FromResult( 0 );
         }
 
         public Task<IFolder> GetParentAsync()

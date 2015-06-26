@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
     using More.ComponentModel;
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a user interface interaction request.
@@ -36,7 +36,7 @@
         /// <param name="e">The <see cref="InteractionRequestedEventArgs"/> event data.</param>
         protected virtual void OnRequested( InteractionRequestedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Requested;
 
@@ -50,7 +50,7 @@
         /// <param name="interaction">The interaction <see cref="Interaction">interaction</see> request.</param>
         public void Request( T interaction )
         {
-            Contract.Requires<ArgumentException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, "interaction" );
             this.OnRequested( new InteractionRequestedEventArgs( interaction ) );
         }
 

@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.Specialized;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Defines the behavior of a content manager.

@@ -1,7 +1,7 @@
 ﻿namespace More.Composition
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Defines the behavior of a view that can be attached to a view model.

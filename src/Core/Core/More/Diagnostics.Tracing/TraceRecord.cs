@@ -1,8 +1,9 @@
 ﻿namespace More.Diagnostics.Tracing
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents the trace entry used to record traces.
@@ -11,6 +12,16 @@
     public class TraceRecord
     {
         private Lazy<Dictionary<object, object>> properties = new Lazy<Dictionary<object, object>>( () => new Dictionary<object, object>() );
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TraceRecord"/> class.
+        /// </summary>
+        /// <param name="category">The trace category.</param>
+        /// <param name="level">The <see cref="TraceLevel">trace level</see>.</param>
+        public TraceRecord( string category, TraceLevel level )
+            : this( Guid.NewGuid(), category, level )
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceRecord"/> class.
@@ -114,6 +125,7 @@
         {
             get
             {
+                Contract.Ensures( Contract.Result<IDictionary<object, object>>() != null );
                 return this.properties.Value;
             }
         }

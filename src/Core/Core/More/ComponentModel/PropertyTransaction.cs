@@ -1,10 +1,10 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a edit transation for object field members.
@@ -19,7 +19,7 @@
         public PropertyTransaction( object target )
             : base( target )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
+            Arg.NotNull( target, "target" );
         }
 
         /// <summary>
@@ -32,8 +32,8 @@
         public PropertyTransaction( object target, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -46,8 +46,8 @@
         public PropertyTransaction( object target, IEnumerable<string> propertyNames )
             : base( target, propertyNames )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( propertyNames != null, "propertyNames" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( propertyNames, "propertyNames" );
         }
 
         /// <summary>
@@ -60,9 +60,9 @@
         public PropertyTransaction( object target, IEnumerable<string> propertyNames, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, propertyNames, editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( propertyNames != null, "propertyNames" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( propertyNames, "propertyNames" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -73,8 +73,8 @@
         public PropertyTransaction( object target, Func<PropertyInfo, bool> filter )
             : base( target, filter )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( filter != null, "filter" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( filter, "filter" );
         }
 
         /// <summary>
@@ -87,9 +87,9 @@
         public PropertyTransaction( object target, Func<PropertyInfo, bool> filter, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, filter, editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( filter != null, "memberFilter" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( filter, "filter" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -100,6 +100,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override Type GetMemberType( PropertyInfo member )
         {
+            Arg.NotNull( member, "member" );
             return member.PropertyType;
         }
 
@@ -111,6 +112,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override object GetMemberValue( PropertyInfo member )
         {
+            Arg.NotNull( member, "member" );
             return member.GetValue( this.Instance, null );
         }
 
@@ -122,6 +124,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override void SetMemberValue( PropertyInfo member, object value )
         {
+            Arg.NotNull( member, "member" );
             member.SetValue( this.Instance, value, null );
         }
     }

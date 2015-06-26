@@ -1,7 +1,7 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
 
     [ContractClassFor( typeof( ICalendarEpoch ) )]
     internal abstract class ICalendarEpochContract : ICalendarEpoch

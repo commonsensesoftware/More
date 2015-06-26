@@ -1,16 +1,16 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Threading;
 
     /// <summary>
     /// Represents an object that provides runtime services.
     /// </summary>
     public sealed class ServiceProvider : IServiceProvider
     {
-        private static readonly object syncRoot = new object();
         private static readonly ServiceProvider defaultProvider = new ServiceProvider();
-        private static Lazy<IServiceProvider> current = new Lazy<IServiceProvider>( () => Default );
+        private static Lazy<IServiceProvider> current = new Lazy<IServiceProvider>( () => Default, LazyThreadSafetyMode.PublicationOnly );
 
         private ServiceProvider()
         {
@@ -24,9 +24,7 @@
         /// <see cref="IServiceProvider"/>; otherwise, it returns <see langword="null"/>.</returns>
         public object GetService( Type serviceType )
         {
-            // LEGACY: IServiceProvider does not have a code contract
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
 
             if ( typeof( IServiceProvider ).Equals( serviceType ) )
                 return this;
@@ -70,7 +68,7 @@
         /// <param name="serviceLocator">The <see cref="IServiceProvider">service provider</see> to make the current service provider.</param>
         public static void SetCurrent( IServiceProvider serviceLocator )
         {
-            Contract.Requires<ArgumentNullException>( serviceLocator != null, "serviceLocator" );
+            Arg.NotNull( serviceLocator, "serviceLocator" );
             var newCurrent = serviceLocator;
             SetCurrent( () => newCurrent );
         }
@@ -81,10 +79,8 @@
         /// <param name="serviceProviderActivator">The <see cref="Func{T}">function</see> used to activate the new, current <see cref="IServiceProvider">service provider</see>.</param>
         public static void SetCurrent( Func<IServiceProvider> serviceProviderActivator )
         {
-            Contract.Requires<ArgumentNullException>( serviceProviderActivator != null, "serviceProviderActivator" );
-
-            lock ( syncRoot )
-                current = new Lazy<IServiceProvider>( serviceProviderActivator );
+            Arg.NotNull( serviceProviderActivator, "serviceProviderActivator" );
+            current = new Lazy<IServiceProvider>( serviceProviderActivator, LazyThreadSafetyMode.PublicationOnly );
         }
     }
 }

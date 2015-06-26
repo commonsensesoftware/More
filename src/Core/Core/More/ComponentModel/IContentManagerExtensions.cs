@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts; 
-    using global::System.Linq;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts; 
+    using System.Linq;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IContentManager"/> interface.
@@ -23,8 +23,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static void MergeContent( this IContentManager contentManager, object content )
         {
-            Contract.Requires<ArgumentNullException>( contentManager != null, "contentManager" );
-            Contract.Requires<ArgumentNullException>( content != null, "content" );
+            Arg.NotNull( contentManager, "contentManager" );
+            Arg.NotNull( content, "content" );
 
             if ( !contentManager.Content.Contains( content ) )
                 contentManager.AddToContent( content );

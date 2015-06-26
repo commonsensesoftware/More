@@ -1,10 +1,10 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides an adapter for the <see cref="Stack{T}"/> class to the <see cref="IStack{T}"/> interface.
@@ -21,7 +21,7 @@
         /// <param name="innerStack">The <see cref="Stack{T}">stack</see> to adapt to.</param>
         public StackAdapter( Stack<T> innerStack )
         {
-            Contract.Requires<ArgumentNullException>( innerStack != null, "innerStack" );
+            Arg.NotNull( innerStack, "innerStack" );
             this.stack = innerStack;
         }
 
@@ -35,6 +35,10 @@
         /// </remarks>
         public T Peek()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
+
+            Contract.EndContractBlock();
             return this.stack.Peek();
         }
 
@@ -48,6 +52,10 @@
         /// </remarks>
         public T Pop()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
+
+            Contract.EndContractBlock();
             return this.stack.Pop();
         }
 
@@ -100,6 +108,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public void CopyTo( T[] array, int arrayIndex )
         {
+            Arg.NotNull( array, "array" );
+            Arg.InRange( arrayIndex, 0, array.Length + this.Count, "arrayIndex" );
+
             this.stack.CopyTo( array, arrayIndex );
         }
 

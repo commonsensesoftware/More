@@ -2,14 +2,14 @@
 {
     using More.Collections.Generic;
     using More.ComponentModel;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents a user interaction.
@@ -38,7 +38,7 @@
         public Interaction( string title )
             : this( title, null )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, "title" );
         }
 
         /// <summary>
@@ -48,7 +48,7 @@
         /// <param name="content">The content associated with the interaction.</param>
         public Interaction( string title, object content )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, "title" );
 
             this.title = title;
             this.content = content;
@@ -67,7 +67,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.title, value );
             }
         }
@@ -114,7 +114,8 @@
             }
             set
             {
-                this.SetProperty( ref this.defaultCommandIndex, value );
+                if ( this.SetProperty( ref this.defaultCommandIndex, value ) )
+                    this.OnPropertyChanged( "DefaultCommand" );
             }
         }
 
@@ -130,7 +131,8 @@
             }
             set
             {
-                this.SetProperty( ref this.cancelCommandIndex, value );
+                if ( this.SetProperty( ref this.cancelCommandIndex, value ) )
+                    this.OnPropertyChanged( "CancelCommand" );
             }
         }
 

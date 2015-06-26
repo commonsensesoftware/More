@@ -1,7 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a single, self-evaluating rule supporting simple binary evaluation semantics.
@@ -30,6 +31,8 @@
         /// <returns>A unioned <see cref="ISpecification{T}">specification</see> object.</returns>
         public virtual ISpecification<T> And( ISpecification<T> other )
         {
+            Arg.NotNull( other, "other" );
+            Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
             return new LogicalAndSpecification<T>( this, other );
         }
 
@@ -40,6 +43,8 @@
         /// <returns>A unioned <see cref="ISpecification{T}">specification</see> object.</returns>
         public virtual ISpecification<T> Or( ISpecification<T> other )
         {
+            Arg.NotNull( other, "other" );
+            Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
             return new LogicalOrSpecification<T>( this, other );
         }
 
@@ -49,6 +54,7 @@
         /// <returns>A <see cref="ISpecification{T}">specification</see> object.</returns>
         public virtual ISpecification<T> Not()
         {
+            Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
             return new LogicalNotSpecification<T>( this );
         }
 

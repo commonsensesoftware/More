@@ -1,14 +1,14 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a dictionary which associates multiple values with a single key.
@@ -45,7 +45,7 @@
         public MultivalueDictionary( IEqualityComparer<TKey> keyComparer )
             : base( keyComparer )
         {
-            Contract.Requires<ArgumentNullException>( keyComparer != null, "keyComparer" );
+            Arg.NotNull( keyComparer, "keyComparer" );
             this.factory = CreateFactory( () => new Collection<TValue>() );
         }
 
@@ -57,7 +57,7 @@
         public MultivalueDictionary( Func<ICollection<TValue>> valueFactory )
             : base( EqualityComparer<TKey>.Default )
         {
-            Contract.Requires<ArgumentNullException>( valueFactory != null, "valueFactory" );
+            Arg.NotNull( valueFactory, "valueFactory" );
             this.factory = CreateFactory( valueFactory );
         }
 
@@ -70,8 +70,8 @@
         public MultivalueDictionary( IEqualityComparer<TKey> keyComparer, Func<ICollection<TValue>> valueFactory )
             : base( keyComparer )
         {
-            Contract.Requires<ArgumentNullException>( keyComparer != null, "keyComparer" );
-            Contract.Requires<ArgumentNullException>( valueFactory != null, "valueFactory" );
+            Arg.NotNull( keyComparer, "keyComparer" );
+            Arg.NotNull( valueFactory, "valueFactory" );
             this.factory = CreateFactory( valueFactory );
         }
 
@@ -90,7 +90,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -104,7 +104,7 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CollectionChanged;
 
@@ -150,6 +150,8 @@
         /// </remarks>
         public new bool Remove( TKey key )
         {
+            Arg.NotNull( key, "key" );
+
             if ( !this.ContainsKey( key ) )
                 return false;
 
@@ -201,10 +203,13 @@
         {
             get
             {
+                Arg.NotNull( key, "key" );
                 return base[key];
             }
             set
             {
+                Arg.NotNull( key, "key" );
+
                 if ( value == null )
                 {
                     this.Remove( key );
@@ -264,6 +269,7 @@
         /// </remarks>
         public new virtual void Add( TKey key, ICollection<TValue> values )
         {
+            Arg.NotNull( key, "key" );
             this.AddRange( key, values );
         }
 
@@ -344,6 +350,7 @@
         /// <returns>The index of <paramref name="key"/> if found in the <see cref="IMultivalueDictionary{TKey,TValue}">dictionary</see>; otherwise, -1.</returns>
         public int IndexOf( TKey key )
         {
+            Arg.NotNull( key, "key" );
             return this.Keys.IndexOf( key, this.Comparer );
         }
 
@@ -383,6 +390,9 @@
         /// </remarks>
         public virtual void AddRange( TKey key, IEnumerable<TValue> values )
         {
+            Arg.NotNull( key, "key" );
+            Arg.NotNull( values, "values" );
+
             if ( this.ContainsKey( key ) )
             {
                 var collection = base[key];
@@ -436,6 +446,8 @@
         /// </remarks>
         public virtual void Add( TKey key, TValue value )
         {
+            Arg.NotNull( key, "key" );
+
             var exists = this.ContainsKey( key );
             var item = this.GetOrAdd( key, () => this.factory( new[] { value } ) );
 
@@ -472,6 +484,9 @@
         /// </remarks>
         public virtual int RemoveRange( TKey key, IEnumerable<TValue> values )
         {
+            Arg.NotNull( key, "key" );
+            Arg.NotNull( values, "values" );
+
             if ( !this.ContainsKey( key ) )
                 return 0;
 
@@ -522,6 +537,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public virtual int RemoveRange( IEnumerable<TKey> keys )
         {
+            Arg.NotNull( keys, "keys" );
+
             var removed = new List<KeyValuePair<TKey, ICollection<TValue>>>();
             var items = from key in keys
                         where this.ContainsKey( key )
@@ -573,6 +590,8 @@
         /// </remarks>
         public virtual bool Set( TKey key, TValue value )
         {
+            Arg.NotNull( key, "key" );
+
             var replaced = this.ContainsKey( key );
 
             if ( replaced )
@@ -627,6 +646,9 @@
         /// </remarks>
         public virtual bool SetRange( TKey key, IEnumerable<TValue> values )
         {
+            Arg.NotNull( key, "key" );
+            Arg.NotNull( values, "values" );
+
             var replaced = this.ContainsKey( key );
 
             if ( replaced )
@@ -679,6 +701,8 @@
         /// </remarks>
         public virtual bool Remove( TKey key, TValue value )
         {
+            Arg.NotNull( key, "key" );
+
             if ( !this.ContainsKey( key ) )
                 return false;
 
@@ -707,6 +731,7 @@
         /// <returns>True if the dictionary has an associated <paramref name="value"/> with the specified <paramref name="key"/>.</returns>
         public virtual bool Contains( TKey key, TValue value )
         {
+            Arg.NotNull( key, "key" );
             return this.ContainsKey( key ) && this[key].Contains( value );
         }
 
@@ -717,6 +742,7 @@
         /// <returns>If the <paramref name="key"/> exists, then the number of values associated with that <paramref name="key"/>.</returns>
         public virtual int CountValues( TKey key )
         {
+            Arg.NotNull( key, "key" );
             return this.ContainsKey( key ) ? this[key].Count : 0;
         }
 

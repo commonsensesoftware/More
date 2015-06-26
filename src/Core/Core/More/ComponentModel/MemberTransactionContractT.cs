@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     [ContractClassFor( typeof( MemberTransaction<> ) )]
     internal abstract class MemberTransactionContract<T> : MemberTransaction<T> where T : MemberInfo

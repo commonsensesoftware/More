@@ -1,14 +1,14 @@
 ﻿namespace More.ComponentModel
 {
     using More.Collections.Generic;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Linq.Expressions;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IReadOnlyRepository{T}"/> and <see cref="IRepository{T}"/> interfaces.
@@ -25,11 +25,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to paginate the items in a repository using an example query.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -45,8 +45,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> GetAsync<T>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, IQueryable<T>> queryShaper ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( queryShaper != null, "queryShaper" );
+            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( queryShaper, "queryShaper" );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( queryShaper, CancellationToken.None );
         }
@@ -63,8 +63,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<TResult> GetAsync<T, TResult>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, TResult> queryShaper ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( queryShaper != null, "queryShaper" );
+            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( queryShaper, "queryShaper" );
             Contract.Ensures( Contract.Result<Task<TResult>>() != null );
             return repository.GetAsync( queryShaper, CancellationToken.None );
         }
@@ -78,11 +78,11 @@
         /// of all <typeparamref name="T">items</typeparamref> in the repository.</returns>
         /// <example>The following example demonstrates how to retrieve all items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -97,7 +97,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> GetAllAsync<T>( this IReadOnlyRepository<T> repository ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
+            Arg.NotNull( repository, "repository" );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q, CancellationToken.None );
         }
@@ -112,11 +112,11 @@
         /// of all <typeparamref name="T">items</typeparamref> in the repository.</returns>
         /// <example>The following example demonstrates how to retrieve all items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -132,7 +132,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> GetAllAsync<T>( this IReadOnlyRepository<T> repository, CancellationToken cancellationToken ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
+            Arg.NotNull( repository, "repository" );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q, cancellationToken );
         }
@@ -148,11 +148,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to find items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -166,8 +166,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> FindByAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( predicate != null, "predicate" );
+            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( predicate, "predicate" );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q.Where( predicate ), CancellationToken.None );
         }
@@ -184,11 +184,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to find items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -203,8 +203,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> FindByAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( predicate != null, "predicate" );
+            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( predicate, "predicate" );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q.Where( predicate ), cancellationToken );
         }
@@ -220,11 +220,11 @@
         /// or null if no match was found.</returns>
         /// <example>The following example demonstrates how to retrieve a single item from a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -238,8 +238,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<T> GetSingleAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( predicate != null, "predicate" );
+            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( predicate, "predicate" );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
             return repository.GetSingleAsync( predicate, CancellationToken.None );
         }
@@ -256,11 +256,11 @@
         /// or null if no match was found.</returns>
         /// <example>The following example demonstrates how to retrieve a single item from a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -274,8 +274,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static async Task<T> GetSingleAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( predicate != null, "predicate" );
+            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( predicate, "predicate" );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
             var items = await repository.GetAsync( q => q.Where( predicate ), cancellationToken );
             return items.SingleOrDefault();
@@ -292,11 +292,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to paginate all items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -320,10 +320,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, int pageIndex, int pageSize ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageIndex >= 0, "pageIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize >= 1, "pageSize" );
+            Arg.NotNull( repository, "repository" );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
+            Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
+            Arg.GreaterThan( pageSize, 0, "pageSize" );
             return repository.PaginateAsync( pageIndex, pageSize, CancellationToken.None );
         }
 
@@ -339,11 +339,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to paginate all items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -369,22 +369,12 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static async Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, int pageIndex, int pageSize, CancellationToken cancellationToken ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageIndex >= 0, "pageIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize >= 1, "pageSize" );
+            Arg.NotNull( repository, "repository" );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
+            Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
+            Arg.GreaterThan( pageSize, 0, "pageSize" );
 
-            var groups = await repository.GetAsync(
-                q =>
-                {
-                    return q.Between( pageIndex, pageSize )
-                            .GroupBy(
-                                g => new
-                                {
-                                    Total = q.Count()
-                                } );
-                },
-                cancellationToken );
+            var groups = await repository.GetAsync( q => q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } ), cancellationToken );
 
             // return first group
             var result = groups.FirstOrDefault();
@@ -407,11 +397,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to paginate all items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -435,10 +425,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, IQueryable<T>> queryShaper, int pageIndex, int pageSize ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageIndex >= 0, "pageIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize >= 1, "pageSize" );
+            Arg.NotNull( repository, "repository" );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
+            Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
+            Arg.GreaterThan( pageSize, 0, "pageSize" );
             return repository.PaginateAsync( queryShaper, pageIndex, pageSize, CancellationToken.None );
         }
 
@@ -455,11 +445,11 @@
         /// of <typeparamref name="T">items</typeparamref>.</returns>
         /// <example>The following example demonstrates how to paginate all items in a repository.
         /// <code><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.Linq;
-        /// using global::System.Threading;
-        /// using global::System.Threading.Tasks;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading;
+        /// using System.Threading.Tasks;
         /// 
         /// public async static void Main()
         /// {
@@ -485,19 +475,16 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static async Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, IQueryable<T>> queryShaper, int pageIndex, int pageSize, CancellationToken cancellationToken ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageIndex >= 0, "pageIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize >= 1, "pageSize" );
+            Arg.NotNull( repository, "repository" );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
+            Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
+            Arg.GreaterThan( pageSize, 0, "pageSize" );
 
             var groups = await repository.GetAsync(
-                                q =>
+                                query =>
                                 {
-                                    var query = queryShaper( q );
-                                    return query.Between( pageIndex, pageSize ).GroupBy( g => new
-                                    {
-                                        Total = query.Count()
-                                    } );
+                                    var q = queryShaper( query );
+                                    return q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } );
                                 },
                                 cancellationToken );
 
@@ -519,7 +506,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task SaveChangesAsync<T>( this IRepository<T> repository ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
+            Arg.NotNull( repository, "repository" );
             Contract.Ensures( Contract.Result<Task>() != null );
             return repository.SaveChangesAsync( CancellationToken.None );
         }

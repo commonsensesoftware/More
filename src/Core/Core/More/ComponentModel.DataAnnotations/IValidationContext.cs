@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior of the context in which a validation check is performed.
     /// </summary>
+    [ContractClass( typeof( IValidationContextContract ) )]
     public interface IValidationContext : IServiceProvider
     {
         /// <summary>

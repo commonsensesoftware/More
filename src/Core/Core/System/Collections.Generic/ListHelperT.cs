@@ -1,10 +1,9 @@
 ﻿namespace System.Collections.Generic
 {
     using More;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Re-implementation of the sort helper found in the BCL to support sorting and searching any IList{T} implementation.
@@ -22,9 +21,10 @@
 
         private static void SwapByComparable( IList<T> keys, int a, int b )
         {
-            Contract.Requires( keys != null, "keys" );
-            Contract.Requires( a >= 0 && a < keys.Count, "a" );
-            Contract.Requires( b >= 0 && b < keys.Count, "b" );
+            Contract.Requires( keys != null );
+            Contract.Requires( a >= 0 && a < keys.Count );
+            Contract.Requires( b >= 0 && b < keys.Count );
+
             if ( ( a != b ) && ( ( keys[a] == null ) || ( (IComparable<T>) keys[a] ).CompareTo( keys[b] ) > 0 ) )
             {
                 T local = keys[a];
@@ -35,10 +35,11 @@
 
         private static void SwapByComparer( IList<T> keys, IComparer<T> comparer, int a, int b )
         {
-            Contract.Requires( keys != null, "keys" );
-            Contract.Requires( comparer != null, "comparer" );
-            Contract.Requires( a >= 0 && a < keys.Count, "a" );
-            Contract.Requires( b >= 0 && b < keys.Count, "b" );
+            Contract.Requires( keys != null );
+            Contract.Requires( comparer != null );
+            Contract.Requires( a >= 0 && a < keys.Count );
+            Contract.Requires( b >= 0 && b < keys.Count );
+
             if ( ( a != b ) && ( comparer.Compare( keys[a], keys[b] ) > 0 ) )
             {
                 T local = keys[a];
@@ -49,9 +50,10 @@
 
         private static void QuickSortByComparable( IList<T> keys, int left, int right )
         {
-            Contract.Requires( keys != null, "keys" );
-            Contract.Requires( left >= 0 && left <= keys.Count, "left" );
-            Contract.Requires( right >= 0 && right <= keys.Count, "right" );
+            Contract.Requires( keys != null );
+            Contract.Requires( left >= 0 && left <= keys.Count );
+            Contract.Requires( right >= 0 && right <= keys.Count );
+
             int i;
 
         StepOne:
@@ -121,10 +123,11 @@
 
         private static void QuickSortByComparer( IList<T> keys, int left, int right, IComparer<T> comparer )
         {
-            Contract.Requires( keys != null, "keys" );
-            Contract.Requires( comparer != null, "comparer" );
-            Contract.Requires( left >= 0 && left <= keys.Count, "left" );
-            Contract.Requires( right >= 0 && right <= keys.Count, "right" );
+            Contract.Requires( keys != null );
+            Contract.Requires( comparer != null );
+            Contract.Requires( left >= 0 && left <= keys.Count );
+            Contract.Requires( right >= 0 && right <= keys.Count );
+
             do
             {
                 int a = left;
@@ -180,10 +183,11 @@
 
         private static int BinarySearchByComparable( IList<T> list, int index, int length, IComparable<T> value )
         {
-            Contract.Requires( list != null, "list" );
-            Contract.Requires( index >= 0 && index < list.Count, "index" );
-            Contract.Requires( ( length >= 0 ) && ( length <= ( list.Count - index ) ), "length" );
-            Contract.Requires( index + ( length - 1 ) >= 0, "index" );
+            Contract.Requires( list != null );
+            Contract.Requires( index >= 0 && index < list.Count );
+            Contract.Requires( ( length >= 0 ) && ( length <= ( list.Count - index ) ) );
+            Contract.Requires( index + ( length - 1 ) >= 0 );
+
             int i = index;
             int j = ( index + length ) - 1;
 
@@ -214,11 +218,12 @@
 
         private static int BinarySearchByComparer( IList<T> list, int index, int length, T value, IComparer<T> comparer )
         {
-            Contract.Requires( list != null, "list" );
-            Contract.Requires( comparer != null, "comparer" );
-            Contract.Requires( index >= 0 && index < list.Count, "index" );
-            Contract.Requires( ( length >= 0 ) && ( length <= ( list.Count - index ) ), "length" );
-            Contract.Requires( index + ( length - 1 ) >= 0, "index" );
+            Contract.Requires( list != null );
+            Contract.Requires( comparer != null );
+            Contract.Requires( index >= 0 && index < list.Count );
+            Contract.Requires( ( length >= 0 ) && ( length <= ( list.Count - index ) ) );
+            Contract.Requires( index + ( length - 1 ) >= 0 );
+
             var i = index;
             var j = ( index + length ) - 1;
 
@@ -242,11 +247,11 @@
 
         internal static int BinarySearch( IList<T> list, int index, int length, T value, IComparer<T> comparer )
         {
-            Contract.Requires( list != null, "list" );
-            Contract.Requires( comparer != null, "comparer" );
-            Contract.Requires( index >= 0 && index < list.Count, "index" );
-            Contract.Requires( ( length >= 0 ) && ( length <= ( list.Count - index ) ), "length" );
-            Contract.Requires( index + ( length - 1 ) >= 0, "index" );
+            Contract.Requires( list != null );
+            Contract.Requires( comparer != null );
+            Contract.Requires( index >= 0 && index < list.Count );
+            Contract.Requires( ( length >= 0 ) && ( length <= ( list.Count - index ) ) );
+            Contract.Requires( index + ( length - 1 ) >= 0 );
 
             try
             {
@@ -263,11 +268,11 @@
 
         internal static void Sort( IList<T> keys, int index, int length, IComparer<T> comparer )
         {
-            Contract.Requires( keys != null, "keys" );
-            Contract.Requires( index >= 0 && index < keys.Count, "index" );
-            Contract.Requires( ( length >= 0 ) && ( length <= ( keys.Count - index ) ), "length" );
-            Contract.Requires( comparer != null, "comparer" );
-            Contract.Requires( index + ( length - 1 ) >= 0, "index" );
+            Contract.Requires( keys != null );
+            Contract.Requires( index >= 0 && index < keys.Count );
+            Contract.Requires( ( length >= 0 ) && ( length <= ( keys.Count - index ) ) );
+            Contract.Requires( comparer != null );
+            Contract.Requires( index + ( length - 1 ) >= 0 );
 
             try
             {
@@ -278,7 +283,7 @@
             }
             catch ( IndexOutOfRangeException )
             {
-                throw new ArgumentException( string.Format( null, ExceptionMessage.BogusIComparer, default( T ), typeof( T ).Name ) );
+                throw new ArgumentException( string.Format( null, ExceptionMessage.BogusIComparer, default( T ), typeof( T ).GetTypeInfo().Name ) );
             }
             catch ( Exception exception )
             {

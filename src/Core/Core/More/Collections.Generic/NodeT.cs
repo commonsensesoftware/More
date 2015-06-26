@@ -1,13 +1,13 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;    
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;    
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a node collection.
@@ -30,7 +30,7 @@
         public Node( IComparer<T> comparer )
             : this( default( T ), comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -57,7 +57,7 @@
         /// <param name="comparer">An <see cref="IComparer{T}"/> used to evaluate item values.</param>
         public Node( T value, IComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
             this.valueComparer = comparer;
             this.itemComparer = new ComparerAdapter<Node<T>, T>( comparer, i => i.Value );
             this.currentValue = value;
@@ -123,7 +123,7 @@
             }
             private set
             {
-                Contract.Requires( value >= 0, "value" );
+                Contract.Requires( value >= 0 );
 
                 if ( this.depth == value )
                     return;
@@ -156,7 +156,7 @@
 
         private static void UpdateDepth( Node<T> current )
         {
-            Contract.Requires( current != null, "current" );
+            Contract.Requires( current != null );
             var queue = new Queue<Node<T>>();
 
             queue.Enqueue( current );
@@ -205,7 +205,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public void AddRange( IEnumerable<T> values )
         {
-            Contract.Requires<ArgumentNullException>( values != null, "values" );
+            Arg.NotNull( values, "values" );
             this.AddRange( values.ToList().Select( value => new Node<T>( value, this.ValueComparer ) ) );
         }
 

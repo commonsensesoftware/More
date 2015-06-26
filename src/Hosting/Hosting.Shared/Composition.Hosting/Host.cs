@@ -415,28 +415,29 @@
 #if WINDOWS_PHONE_APP
             return this.GetService( serviceType, key );
 #else
+            Type innerServiceType;
             object service = null;
 
             // return multiple services, if requested
-            if ( generator.IsForMany( serviceType ) )
+            if ( generator.IsForMany( serviceType, out innerServiceType ) )
             {
                 var exports = new List<object>();
 
                 if ( key == null )
                 {
                     // if no key is specified and the requested type matches an interface we implement, add ourself
-                    if ( ExportedInterfaces.Contains( serviceType ) )
+                    if ( ExportedInterfaces.Contains( innerServiceType ) )
                         exports.Add( this );
-                    else if ( ExportedTypes.Contains( serviceType ) )
+                    else if ( ExportedTypes.Contains( innerServiceType ) )
                         exports.Add( this.Container );
                 }
 
                 // add any matching, manually added services
-                if ( ( service = base.GetService( serviceType ) ) != null )
+                if ( ( service = base.GetService( innerServiceType ) ) != null )
                     exports.Add( service );
 
                 // add matching exports
-                exports.AddRange( this.Container.GetExports( serviceType, key ) );
+                exports.AddRange( this.Container.GetExports( innerServiceType, key ) );
                 return exports;
             }
 

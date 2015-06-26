@@ -106,6 +106,15 @@ namespace More {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only the file:// URI scheme is supported..
+        /// </summary>
+        internal static string InvalidFileUri {
+            get {
+                return ResourceManager.GetString("InvalidFileUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; property is read-only..
         /// </summary>
         internal static string PropertyIsReadOnly {

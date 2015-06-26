@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a cancelable command<seealso cref="AsyncCancelableCommand"/>.
@@ -22,8 +22,8 @@
         public CancelableCommand( string name, Action<CancelEventArgs> executeMethod )
             : this( null, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -35,8 +35,8 @@
         public CancelableCommand( string id, string name, Action<CancelEventArgs> executeMethod )
             : this( id, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -48,9 +48,9 @@
         public CancelableCommand( string name, Action<CancelEventArgs> executeMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : this( null, name, executeMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -63,9 +63,9 @@
         public CancelableCommand( string id, string name, Action<CancelEventArgs> executeMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : base( id, name, executeMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
             this.executeMethod = executeMethod;
         }
 

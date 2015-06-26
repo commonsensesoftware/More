@@ -1,8 +1,8 @@
 ﻿namespace System.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ICommand"/> interface.
@@ -17,7 +17,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static bool CanExecute( this ICommand command )
         {
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
+            Arg.NotNull( command, "command" );
             return command.CanExecute( null );
         }
 
@@ -28,7 +28,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Execute( this ICommand command )
         {
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
+            Arg.NotNull( command, "command" );
             command.Execute( null );
         }
     }

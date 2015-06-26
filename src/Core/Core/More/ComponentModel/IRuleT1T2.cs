@@ -1,6 +1,6 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Represents a single, self-evaluating rule.

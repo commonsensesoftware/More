@@ -1,9 +1,9 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Threading.Tasks;
 
     [ContractClassFor( typeof( ICalendarProvider ) )]
     internal abstract class ICalendarProviderContract : ICalendarProvider

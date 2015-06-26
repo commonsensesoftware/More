@@ -1,10 +1,10 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides an adapter for the <see cref="Queue{T}"/> class to the <see cref="IQueue{T}"/> interface.
@@ -21,7 +21,7 @@
         /// <param name="innerQueue">The <see cref="Queue{T}">queue</see> to adapt to.</param>
         public QueueAdapter( Queue<T> innerQueue )
         {
-            Contract.Requires<ArgumentNullException>( innerQueue != null, "innerQueue" );
+            Arg.NotNull( innerQueue, "innerQueue" );
             this.queue = innerQueue;
         }
 
@@ -31,6 +31,10 @@
         /// <returns>The object at the begining of the <see cref="QueueAdapter{T}">queue</see>.</returns>
         public T Peek()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.QueueIsEmpty );
+
+            Contract.EndContractBlock();
             return this.queue.Peek();
         }
 
@@ -40,6 +44,10 @@
         /// <returns>The object removed from the begining of the <see cref="IQueue{T}" />.</returns>
         public T Dequeue()
         {
+            if ( this.Count <= 0 )
+                throw new InvalidOperationException( ExceptionMessage.QueueIsEmpty );
+            
+            Contract.EndContractBlock();
             return this.queue.Dequeue();
         }
 
@@ -74,6 +82,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public void CopyTo( T[] array, int arrayIndex )
         {
+            Arg.NotNull( array, "array" );
+            Arg.InRange( arrayIndex, 0, array.Length + this.Count, "arrayIndex" );
+
             this.queue.CopyTo( array, arrayIndex );
         }
 
@@ -95,7 +106,7 @@
         /// <returns>An <see cref="IEnumerator{T}">iterator</see> for the <see cref="QueueAdapter{T}">queue</see>.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.GetEnumerator();
+            return this.queue.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

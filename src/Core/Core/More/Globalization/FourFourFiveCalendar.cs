@@ -1,12 +1,12 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
 
     /// <summary>
     /// Represents an accounting calendar using the 4-4-5 method.
@@ -37,7 +37,7 @@
         public FourFourFiveCalendar( IEnumerable<FiscalYear> years )
             : base( years )
         {
-            Contract.Requires<ArgumentNullException>( years != null, "years" );
+            Arg.NotNull( years, "years" );
 
             foreach ( var year in years )
                 this.calendarYears[year.LastDay.Year] = year;
@@ -45,19 +45,19 @@
 
         private static bool IsValidDate( Calendar calendar, DateTime date )
         {
-            Contract.Requires( calendar != null, "calendar" );
+            Contract.Requires( calendar != null );
             return ( date >= calendar.MinSupportedDateTime ) && ( date <= calendar.MaxSupportedDateTime );
         }
 
         private static bool IsValidYear( Calendar calendar, int year )
         {
-            Contract.Requires( calendar != null, "calendar" );
+            Contract.Requires( calendar != null );
             return ( year >= calendar.MinSupportedDateTime.Year ) && ( year <= calendar.MaxSupportedDateTime.Year );
         }
 
         private static bool IsValidMonth( Calendar calendar, int year, int month, int era )
         {
-            Contract.Requires( calendar != null, "calendar" );
+            Contract.Requires( calendar != null );
 
             if ( month < 1 )
                 return false;
@@ -81,8 +81,8 @@
         /// <returns>The fiscal week of the year.</returns>
         public virtual int GetWeekOfYear( DateTime time )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( time >= this.MinSupportedDateTime && time <= this.MaxSupportedDateTime, "time" );
             Contract.Ensures( Contract.Result<int>() >= 1 );
+            Arg.InRange( time, this.MinSupportedDateTime, this.MaxSupportedDateTime, "time" );
             return this.GetWeekOfYear( time, CalendarWeekRule.FirstDay, this.MinSupportedDateTime.DayOfWeek );
         }
 

@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides metadata to indicate that an activity depends on one or more other activities.
@@ -16,7 +16,7 @@
         /// <param name="activityType">The dependent activity <see cref="Type">type</see>.</param>
         public DependsOnActivityAttribute( Type activityType )
         {
-            Contract.Requires<ArgumentNullException>( activityType != null, "activityType" );
+            Arg.NotNull( activityType, "activityType" );
             this.ActivityType = activityType;
         }
 

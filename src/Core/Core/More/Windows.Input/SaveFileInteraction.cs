@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
     using More.IO;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents an interaction request to open one or more files.
@@ -30,7 +30,7 @@
         public SaveFileInteraction( string title )
             : this( title, string.Empty, string.Empty )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, "title" );
         }
 
         /// <summary>
@@ -41,8 +41,8 @@
         public SaveFileInteraction( string title, string defaultFileExtension )
             : this( title, defaultFileExtension, string.Empty )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
-            Contract.Requires<ArgumentNullException>( defaultFileExtension != null, "defaultFileExtension" );
+            Arg.NotNull( title, "title" );
+            Arg.NotNull( defaultFileExtension, "defaultFileExtension" );
         }
 
         /// <summary>
@@ -54,9 +54,9 @@
         public SaveFileInteraction( string title, string defaultFileExtension, string suggestedFileName )
             : base( title )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
-            Contract.Requires<ArgumentNullException>( defaultFileExtension != null, "defaultFileExtension" );
-            Contract.Requires<ArgumentNullException>( suggestedFileName != null, "suggestedFileName" );
+            Arg.NotNull( title, "title" );
+            Arg.NotNull( defaultFileExtension, "defaultFileExtension" );
+            Arg.NotNull( suggestedFileName, "suggestedFileName" );
 
             this.defaultFileExt = defaultFileExtension;
             this.fileName = suggestedFileName;
@@ -74,7 +74,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.defaultFileExt, value );
             }
         }
@@ -94,7 +94,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.fileName, value );
             }
         }
@@ -108,8 +108,8 @@
         /// <example>The following example demonstrates how to specify file types choices.
         /// <code lang="C#">
         /// <![CDATA[
-        /// using global::System;
-        /// using global::System.Windows.Input;
+        /// using System;
+        /// using System.Windows.Input;
         /// 
         /// public void DemoFileTypeChoices()
         /// {
@@ -125,6 +125,7 @@
         {
             get
             {
+                Contract.Ensures( Contract.Result<IDictionary<string, IList<string>>>() != null );
                 return this.fileTypeChoices;
             }
         }

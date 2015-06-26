@@ -1,10 +1,10 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
+    using System;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
 
     /// <summary>
     /// Represents any type of number.
@@ -192,7 +192,7 @@
         [Pure]
         public string ToString( string format )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNullOrEmpty( format, "format" );
             Contract.Ensures( Contract.Result<string>() != null );
             return this.ToString( format, CultureInfo.CurrentCulture );
         }
@@ -229,7 +229,7 @@
         [Pure]
         public static Number Parse( string text, NumberStyle style )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( text ), "text" );
+            Arg.NotNullOrEmpty( text, "text" );
             Contract.Ensures( Contract.Result<Number>().NumberStyle == style );
             return Parse( text, style, CultureInfo.CurrentCulture );
         }
@@ -244,7 +244,7 @@
         [Pure]
         public static Number Parse( string text, NumberStyle style, IFormatProvider formatProvider )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( text ), "text" );
+            Arg.NotNullOrEmpty( text, "text" );
             Contract.Ensures( Contract.Result<Number>().NumberStyle == style );
             return new Number( decimal.Parse( text, NumberStyles.Any, formatProvider ), style );
         }
@@ -842,10 +842,7 @@
         /// <returns>The <see cref="String">string</see> representation of the value of this instance as specified by the <paramref name="format"/> and <paramref name="formatProvider">provider</paramref>.</returns>
         public string ToString( string format, IFormatProvider formatProvider )
         {
-            // LEGACY: IFormattable does not have a code contract
-            if ( string.IsNullOrEmpty( format ) )
-                throw new ArgumentNullException( "format" );
-
+            Arg.NotNullOrEmpty( format, "format" );
             return this.Value.ToString( format, formatProvider );
         }
     }

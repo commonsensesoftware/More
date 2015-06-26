@@ -1,11 +1,11 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a dynamic object comparer using a delegate.
@@ -13,8 +13,8 @@
     /// <typeparam name="T">The <see cref="Type">type</see> of item to compare.</typeparam>
     /// <example>This example demonstrates a comparer that uses a lambda expression to dynamically compare Person objects.
     /// <code lang="C#"><![CDATA[
-    /// using global::System;
-    /// using global::System.Collections.Generic;
+    /// using System;
+    /// using System.Collections.Generic;
     /// 
     /// var people = new List<Person>();
     /// people.Add( new Person(){ FirstName = "Bob", LastName = "Smith" };
@@ -38,7 +38,7 @@
         public DynamicComparer( Func<T, T, int> comparison )
             : this( comparison, o => o == null ? 0 : o.GetHashCode() )
         {
-            Contract.Requires<ArgumentNullException>( comparison != null, "comparison" );
+            Arg.NotNull( comparison, "comparison" );
         }
 
         /// <summary>
@@ -48,8 +48,8 @@
         /// <param name="getHashCode">The <see cref="Func{T1,TResult}">function</see> used to get the hash code for an object.</param>
         public DynamicComparer( Func<T, T, int> comparison, Func<T, int> getHashCode )
         {
-            Contract.Requires<ArgumentNullException>( comparison != null, "comparison" );
-            Contract.Requires<ArgumentNullException>( getHashCode != null, "getHashCode" );
+            Arg.NotNull( comparison, "comparison" );
+            Arg.NotNull( getHashCode, "getHashCode" );
             this.comparison = comparison;
             this.getHashCode = getHashCode;
         }
@@ -60,7 +60,7 @@
         /// <param name="getHashCode">The <see cref="Func{T1,TResult}">function</see> used to get the hash code for an object.</param>
         public DynamicComparer( Func<T, int> getHashCode )
         {
-            Contract.Requires<ArgumentNullException>( getHashCode != null, "getHashCode" );
+            Arg.NotNull( getHashCode, "getHashCode" );
             this.getHashCode = getHashCode;
             this.comparison = ( i1, i2 ) => this.GetHashCode( i1 ).CompareTo( this.GetHashCode( i2 ) );
         }
@@ -74,7 +74,7 @@
         /// negative one if <paramref name="x"/> is less than <paramref name="y"/>.</returns>
         public int Compare( T x, T y )
         {
-            if ( typeof( T ).GetTypeInfo().IsValueType )
+            if ( default( T ) != null )
                 return this.comparison( x, y );
 
             if ( x == null )

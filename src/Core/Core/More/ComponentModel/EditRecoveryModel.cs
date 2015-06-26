@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.ComponentModel;
+    using System;
+    using System.ComponentModel;
 
     /// <summary>
     /// Represents the possible edit recovery models.

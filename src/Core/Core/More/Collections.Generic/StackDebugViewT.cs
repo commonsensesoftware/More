@@ -1,11 +1,11 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a debugging class used to visualize an instance of the <see cref="IStack{T}"/> interface.
@@ -21,7 +21,7 @@
         /// <param name="stack">The <see cref="IStack{T}"/> instance to debug.</param>
         public StackDebugView( IStack<T> stack )
         {
-            Contract.Requires<ArgumentNullException>( stack != null, "stack" );
+            Arg.NotNull( stack, "stack" );
             this.stack = stack;
         }
 

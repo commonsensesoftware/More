@@ -1,8 +1,8 @@
 ﻿namespace System.Collections.Generic
 {
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ICollection{T}"/> interface.
@@ -11,10 +11,8 @@
     {
         private static ICollection<TItem> AddRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence, int? count, bool clearFirst )
         {
-            Contract.Requires( collection != null, "collection" );
-            Contract.Requires( !collection.IsReadOnly, "collection" );
-            Contract.Requires( !( collection is Array ), "collection" );
-            Contract.Requires( sequence != null, "sequence" );
+            Contract.Requires( collection != null );
+            Contract.Requires( sequence != null );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
 
             // ensure there is something to add
@@ -51,10 +49,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static ICollection<TItem> AddRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<ArgumentException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<ArgumentException>( !( collection is Array ), "collection" );
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
             return collection.AddRange( sequence, count: (int?) null, clearFirst: false );
         }
@@ -71,12 +67,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static ICollection<TItem> AddRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence, int count )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<ArgumentException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<ArgumentException>( !( collection is Array ), "collection" );
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentOutOfRangeException>( count >= 0, "count" );
+            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
+            Arg.GreaterThanOrEqualTo( count, 0, "count" );
             return collection.AddRange( sequence, new int?( count ), clearFirst: false );
         }
 
@@ -91,10 +85,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public static ICollection<TItem> RemoveRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<NotSupportedException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<NotSupportedException>( !( collection is Array ), "collection" );
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
 
             foreach ( var item in sequence )
@@ -116,11 +108,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static ICollection<TItem> RemoveRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence, IEqualityComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<NotSupportedException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<NotSupportedException>( !( collection is Array ), "collection" );
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
 
             foreach ( var item in sequence )
@@ -144,10 +134,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static bool Remove<TItem>( this ICollection<TItem> collection, TItem item, IEqualityComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<NotSupportedException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<NotSupportedException>( !( collection is Array ), "collection" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( comparer, "comparer" );
 
             var match = collection.FirstOrDefault( i => comparer.Equals( i, item ) );
             return collection.Remove( match );
@@ -163,9 +151,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int RemoveAll<TItem>( this ICollection<TItem> collection, TItem item )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<ArgumentException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<ArgumentException>( !( collection is Array ), "collection" );
+            Arg.NotNull( collection, "collection" );
             Contract.Ensures( Contract.Result<int>() >= 0 );
             return collection.RemoveAll( item, EqualityComparer<TItem>.Default );
         }
@@ -182,10 +168,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public static int RemoveAll<TItem>( this ICollection<TItem> collection, TItem item, IEqualityComparer<TItem> comparer )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<ArgumentException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<ArgumentException>( !( collection is Array ), "collection" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( comparer, "comparer" );
             Contract.Ensures( Contract.Result<int>() >= 0 );
 
             var preCount = collection.Count;
@@ -206,10 +190,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static ICollection<TItem> ReplaceAll<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
-            Contract.Requires<NotSupportedException>( !collection.IsReadOnly, "collection" );
-            Contract.Requires<NotSupportedException>( !( collection is Array ), "collection" );
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( sequence, "sequence" );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
             return collection.AddRange( sequence, count: null, clearFirst: true );
         }

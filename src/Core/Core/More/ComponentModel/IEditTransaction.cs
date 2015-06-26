@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Defines the behavior of an edit transaction.

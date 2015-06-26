@@ -1,13 +1,14 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Reflection;
+    using System;
+    using System.Reflection;
 
     internal static class Util
     {
         internal static TObject CastOrDefault<TObject>( object parameter )
         {
-            return parameter == null && typeof( TObject ).GetTypeInfo().IsValueType ? default( TObject ) : (TObject) parameter;
+            var defaultObject = default( TObject );
+            return parameter == null && defaultObject != null ? defaultObject : (TObject) parameter;
         }
     }
 }

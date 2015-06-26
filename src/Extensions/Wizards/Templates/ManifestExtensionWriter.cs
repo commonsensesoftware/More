@@ -19,8 +19,6 @@
         private static readonly XName ExtensionName = ManifestXmlns + "Extension";
         private static readonly IReadOnlyList<Tuple<string, string, Func<XElement>>> mappings = new[]
         {
-            new Tuple<string, string, Func<XElement>>( "$enableOpenFile$", "windows.fileOpenPicker", () => CreateExtension( "windows.fileOpenPicker", "FileOpenPicker" ) ),
-            new Tuple<string, string, Func<XElement>>( "$enableSaveFile$", "windows.fileSavePicker", () => CreateExtension( "windows.fileSavePicker", "FileSavePicker" ) ),
             new Tuple<string, string, Func<XElement>>( "$enableAppSharing$", "windows.shareTarget", () => CreateExtension( "windows.shareTarget", "ShareTarget" ) ),
             new Tuple<string, string, Func<XElement>>( "$enableSearch$", "windows.search", () => new XElement( ExtensionName, new XAttribute( "Category", "windows.search" ) ) ),
             new Tuple<string, string, Func<XElement>>( "$enableAppSearch$", "windows.search", () => new XElement( ExtensionName, new XAttribute( "Category", "windows.search" ) ) ),

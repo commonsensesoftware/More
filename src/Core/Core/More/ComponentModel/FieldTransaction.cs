@@ -1,10 +1,10 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a edit transation for object field members.
@@ -19,7 +19,7 @@
         public FieldTransaction( object target )
             : base( target )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
+            Arg.NotNull( target, "target" );
         }
 
         /// <summary>
@@ -32,8 +32,8 @@
         public FieldTransaction( object target, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -44,9 +44,8 @@
         public FieldTransaction( object target, IEnumerable<string> fieldNames )
             : base( target, fieldNames )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( fieldNames != null, "fieldNames" );
-            Contract.Requires<ArgumentNullException>( Contract.ForAll( fieldNames, memberName => !string.IsNullOrEmpty( memberName ) ), "fieldNames[]" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( fieldNames, "fieldNames" );
         }
 
         /// <summary>
@@ -59,9 +58,9 @@
         public FieldTransaction( object target, IEnumerable<string> fieldNames, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, fieldNames, editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( fieldNames != null, "fieldNames" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( fieldNames, "fieldNames" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -72,8 +71,8 @@
         public FieldTransaction( object target, Func<FieldInfo, bool> filter )
             : base( target, filter )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( filter != null, "filter" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( filter, "filter" );
         }
 
         /// <summary>
@@ -86,9 +85,9 @@
         public FieldTransaction( object target, Func<FieldInfo, bool> filter, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, filter, editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( filter != null, "filter" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( filter, "filter" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -99,6 +98,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override Type GetMemberType( FieldInfo member )
         {
+            Arg.NotNull( member, "member" );
             return member.FieldType;
         }
 
@@ -110,6 +110,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override object GetMemberValue( FieldInfo member )
         {
+            Arg.NotNull( member, "member" );
             return member.GetValue( this.Instance );
         }
 
@@ -121,6 +122,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override void SetMemberValue( FieldInfo member, object value )
         {
+            Arg.NotNull( member, "member" );
             member.SetValue( this.Instance, value );
         }
     }

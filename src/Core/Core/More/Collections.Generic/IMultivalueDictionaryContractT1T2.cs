@@ -1,9 +1,9 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     [ContractClassFor( typeof( IMultivalueDictionary<,> ) )]
     internal abstract class IMultivalueDictionaryContract<TKey, TValue> : IMultivalueDictionary<TKey, TValue>

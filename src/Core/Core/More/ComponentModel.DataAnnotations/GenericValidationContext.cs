@@ -10,7 +10,7 @@
 
         internal GenericValidationContext( object instance, IDictionary<object, object> items )
         {
-            Contract.Requires( instance != null );
+            Arg.NotNull( instance, "instance" );
 
             var dict = items;
             this.items = new Lazy<IDictionary<object, object>>( () => dict ?? new Dictionary<object, object>() );

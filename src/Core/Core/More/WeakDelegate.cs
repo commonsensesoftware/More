@@ -1,9 +1,9 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Reflection;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a <see cref="WeakReference">weak</see> <see cref="Delegate">delegate</see>.
@@ -11,6 +11,7 @@
     [SuppressMessage( "Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "This is an appropriate name for a weakly referenced delegate." )]
     public class WeakDelegate : WeakReference
     {
+        private static readonly TypeInfo DelegateType = typeof( Delegate ).GetTypeInfo();
         private readonly Type type;
         private readonly MethodInfo method;
 
@@ -20,11 +21,20 @@
         /// <param name="strongDelegate">The strong <see cref="Delegate">delegate</see> to make weak.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public WeakDelegate( Delegate strongDelegate )
-            : base( strongDelegate.Target )
+            : base( GetTarget( strongDelegate ) )
         {
-            Contract.Requires<ArgumentNullException>( strongDelegate != null, "strongDelegate" );
+
+
             this.type = strongDelegate.GetType();
             this.method = strongDelegate.GetMethodInfo();
+        }
+
+        private static object GetTarget( Delegate strongDelegate )
+        {
+            if ( strongDelegate == null )
+                throw new ArgumentException( SR.InvalidArgType.FormatDefault( typeof( Delegate ) ), "strongDelegate" );
+
+            return strongDelegate.Target;
         }
 
         /// <summary>
@@ -36,8 +46,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static bool IsDelegateType( Type type )
         {
-            Contract.Requires<ArgumentNullException>( type != null, "type" );
-            return type.GetTypeInfo().IsSubclassOf( typeof( Delegate ) );
+            Arg.NotNull( type, "type" );
+            return DelegateType.IsAssignableFrom( type.GetTypeInfo() );
         }
 
         /// <summary>
@@ -83,7 +93,7 @@
         /// signature; otherwise, false.</returns>
         public bool IsCovariantWithFunction( Type returnType, params Type[] parameterTypes )
         {
-            Contract.Requires<ArgumentNullException>( returnType != null, "returnType" );
+            Arg.NotNull( returnType, "returnType" );
 
             if ( !this.method.ReturnType.GetTypeInfo().IsAssignableFrom( returnType.GetTypeInfo() ) )
                 return false;
@@ -112,7 +122,7 @@
         /// Creates and returns a strongly referenced delegate.
         /// </summary>
         /// <returns>The <see cref="Delegate">delegate</see> created or null if the delegate cannot be created.</returns>
-        public Delegate CreateDelegate()
+        public virtual Delegate CreateDelegate()
         {
             object target = this.Target;
 

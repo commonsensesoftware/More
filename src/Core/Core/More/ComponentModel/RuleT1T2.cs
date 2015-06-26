@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Represents a rule that executes a user-defined callback <see cref="Func{T1,TResult}">function</see>.
@@ -18,7 +18,7 @@
         /// <param name="evaluate">The callback <see cref="Func{T1,TResult}">function</see> to evaluate.</param>
         public Rule( Func<TInput, TOutput> evaluate )
         {
-            Contract.Requires<ArgumentNullException>( evaluate != null, "evaluate" );
+            Arg.NotNull( evaluate, "evaluate" );
             this.evaluate = evaluate;
         }
 

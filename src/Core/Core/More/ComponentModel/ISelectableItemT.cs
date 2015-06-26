@@ -1,10 +1,10 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     /// <summary>
     /// Defines the behavior of a selectable item.

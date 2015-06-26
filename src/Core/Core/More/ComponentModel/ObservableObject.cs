@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Runtime.CompilerServices;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Represents an observable object.
@@ -36,7 +36,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -65,8 +65,8 @@
         /// values of type <see cref="String">string</see> leverage the <see cref="P:StringComparer.Ordinal"/>.</remarks>
         /// <example>This example illustrates testing whether a property is changing.
         /// <code lang="C#"><![CDATA[
-        /// using global::System;
-        /// using global::System.ComponentModel;
+        /// using System;
+        /// using System.ComponentModel;
         /// 
         /// public class MyObject : ObservableObject
         /// {
@@ -93,7 +93,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected bool OnPropertyChanging<TValue>( TValue backingField, TValue value, [CallerMemberName] string propertyName = null )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
             return this.OnPropertyChanging( backingField, value, ValueComparer<TValue>.Default, propertyName );
         }
 
@@ -109,8 +109,8 @@
         /// <returns>True if the property is changing; otherwise false.</returns>
         /// <example>This example illustrates testing whether a property is changing while considering <see cref="String">string</see> casing.
         /// <code lang="C#"><![CDATA[
-        /// using global::System;
-        /// using global::System.ComponentModel;
+        /// using System;
+        /// using System.ComponentModel;
         /// 
         /// public class MyObject : ObservableObject
         /// {
@@ -138,8 +138,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         protected virtual bool OnPropertyChanging<TValue>( TValue backingField, TValue value, IEqualityComparer<TValue> comparer, [CallerMemberName] string propertyName = null )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
             return !comparer.Equals( backingField, value );
         }
 
@@ -154,8 +154,8 @@
         /// <returns>True if the property was changed; otherwise, false.</returns>
         /// <example>This example illustrates changing a property which also raises the appropriate events.
         /// <code lang="C#"><![CDATA[
-        /// using global::System;
-        /// using global::System.ComponentModel;
+        /// using System;
+        /// using System.ComponentModel;
         /// 
         /// public class MyObject : ObservableObject
         /// {
@@ -179,7 +179,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Required to update the backing field without using Reflection or a compiled expression." )]
         protected bool SetProperty<TValue>( ref TValue backingField, TValue value, [CallerMemberName] string propertyName = null )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
             return this.SetProperty( ref backingField, value, ValueComparer<TValue>.Default, propertyName );
         }
 
@@ -195,8 +195,8 @@
         /// <returns>True if the property was changed; otherwise, false.</returns>
         /// <example>This example illustrates changing a property which also raises the appropriate events.
         /// <code lang="C#"><![CDATA[
-        /// using global::System;
-        /// using global::System.ComponentModel;
+        /// using System;
+        /// using System.ComponentModel;
         /// 
         /// public class MyObject : ObservableObject
         /// {
@@ -220,8 +220,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Required to update the backing field without using Reflection or a compiled expression." )]
         protected virtual bool SetProperty<TValue>( ref TValue backingField, TValue value, IEqualityComparer<TValue> comparer, [CallerMemberName] string propertyName = null )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
 
             if ( !this.OnPropertyChanging( backingField, value, comparer, propertyName ) )
                 return false;

@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts; 
+    using System;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Represents a specification that executes a user-defined <see cref="Func{T1,TResult}">function</see>.
@@ -9,10 +9,10 @@
     /// <typeparam name="T">The <see cref="Type">type</see> of item to evaluate.</typeparam>
     /// <example>This example demonstrates how to create a specification that uses a lamda expression for the rule evaluation process.
     /// <code lang="C#"><![CDATA[
-    /// using global::System.ComponentModel;
-    /// using global::System;
-    /// using global::System.Collections.Generic;
-    /// using global::System.Linq;
+    /// using System.ComponentModel;
+    /// using System;
+    /// using System.Collections.Generic;
+    /// using System.Linq;
     /// 
     /// var checkedOut = new Specification<Book>( book => book.IsCheckedOut );
     /// var overdue = new Specification<Book>( book => book.ReturnDate >= DateTime.Today );
@@ -31,7 +31,7 @@
         /// <param name="evaluate">The <see cref="Func{T1,TResult}">function</see> representing the evaluation of the specification.</param>
         public Specification( Func<T, bool> evaluate )
         {
-            Contract.Requires<ArgumentNullException>( evaluate != null, "evaluate" );
+            Arg.NotNull( evaluate, "evaluate" );
             this.evaluate = evaluate;
         }
 

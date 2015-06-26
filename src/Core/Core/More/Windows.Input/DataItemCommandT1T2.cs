@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents an observable command with an associated data item<seealso cref="AsyncDataItemCommand{TParameter, TItem}"/>.
@@ -14,10 +14,10 @@
     /// <example>This example demonstrates how to create a command that has an associated data item.  This scenario works well when an
     /// item bound to a row is clicked and the entire item must be passed to the click handler.
     /// <code lang="C#"><![CDATA[
-    /// using global::System.Windows.Input;
-    /// using global::System;
-    /// using global::System.Windows;
-    /// using global::System.Windows.Input;
+    /// using System.Windows.Input;
+    /// using System;
+    /// using System.Windows;
+    /// using System.Windows.Input;
     /// 
     /// var person = new Person(){ FirstName = "John", LastName = "Doe" }
     /// var command = new DataItemCommand<string, Person>( ( item, parameter ) => item.FirstName = parameter, person );
@@ -49,7 +49,7 @@
         public DataItemCommand( Action<TItem, TParameter> executeMethod, TItem dataItem )
             : this( executeMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -60,8 +60,8 @@
         /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
         public DataItemCommand( Action<TItem, TParameter> executeMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
         {
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.executeMethod = executeMethod;
             this.canExecuteMethod = canExecuteMethod;

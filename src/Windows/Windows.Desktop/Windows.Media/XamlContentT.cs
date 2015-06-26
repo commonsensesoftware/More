@@ -18,11 +18,10 @@
         /// <param name="stream">The <see cref="Stream"/> containing the XAML content to be read.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing an object of type <typeparamref name="T"/>.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
-        protected override async Task<T> OnReadStreamAsync( Stream stream )
+        protected override Task<T> OnReadStreamAsync( Stream stream )
         {
             var result = (T) XamlReader.Load( stream );
-            await Task.Yield();
-            return result;
+            return Task.FromResult( result );
         }
     }
 }

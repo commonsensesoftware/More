@@ -1,9 +1,9 @@
 ﻿namespace System
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
 
     /// <summary>
     /// Provides extension methods for the <see cref="DateTime"/> strucuture.
@@ -23,7 +23,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static bool IsRepresentable( this DateTime date, Calendar calendar, int year, int month, int day )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
 
             if ( date < calendar.MinSupportedDateTime || date > calendar.MaxSupportedDateTime )
                 return false;
@@ -51,9 +51,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static DateTime FirstDayOfWeekInMonth( this DateTime date, DayOfWeek dayOfWeek, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -77,9 +75,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static DateTime LastDayOfWeekInMonth( this DateTime date, DayOfWeek dayOfWeek, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -104,13 +100,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3", Justification = "Validated by a code contract." )]
         public static DateTime DayOfWeekInMonth( this DateTime date, int occurrence, DayOfWeek dayOfWeek, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( occurrence > 0, "occurrence" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
+            Arg.GreaterThan( occurrence, 0, "occurrence" );
 
             var day = date.StartOfMonth( calendar );
 
@@ -141,9 +135,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime StartOfMonth( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetMonth( date ) ) );
 
@@ -162,10 +154,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime StartOfQuarter( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MinSupportedDateTime <= date, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MaxSupportedDateTime >= date, "date" );
-            Contract.Requires<ArgumentException>( calendar.GetMonthsInYear( date.Year ) == 12, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( calendar ) == Contract.OldValue( date.Quarter( calendar ) ) );
 
@@ -183,10 +172,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime StartOfSemester( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MinSupportedDateTime <= date, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MaxSupportedDateTime >= date, "date" );
-            Contract.Requires<ArgumentException>( calendar.GetMonthsInYear( date.Year ) == 12, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( calendar ) == Contract.OldValue( date.Semester( calendar ) ) );
 
@@ -204,9 +190,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime StartOfYear( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
 
             return date.AddDays( (double) ( -calendar.GetDayOfYear( date ) + 1 ) );
@@ -222,13 +206,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime EndOfMonth( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetMonth( date ) ) );
 
-            return calendar.AddMonths( date.StartOfMonth( calendar ), 1 ).AddMilliseconds( -1.0 );
+            return calendar.AddMonths( date.StartOfMonth( calendar ), 1 ).AddTicks( -1L );
         }
 
         /// <summary>
@@ -241,14 +223,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime EndOfQuarter( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MinSupportedDateTime <= date, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MaxSupportedDateTime >= date, "date" );
-            Contract.Requires<ArgumentException>( calendar.GetMonthsInYear( date.Year ) == 12, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( calendar ) == Contract.OldValue( date.Quarter( calendar ) ) );
 
-            return calendar.AddMonths( date.StartOfQuarter( calendar ), 3 ).AddMilliseconds( -1.0 );
+            return calendar.AddMonths( date.StartOfQuarter( calendar ), 3 ).AddTicks( -1L );
         }
 
         /// <summary>
@@ -261,14 +240,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime EndOfSemester( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MinSupportedDateTime <= date, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( calendar.MaxSupportedDateTime >= date, "date" );
-            Contract.Requires<ArgumentException>( calendar.GetMonthsInYear( date.Year ) == 12, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( calendar ) == Contract.OldValue( date.Semester( calendar ) ) );
 
-            return calendar.AddMonths( date.StartOfSemester( calendar ), 6 ).AddMilliseconds( -1.0 );
+            return calendar.AddMonths( date.StartOfSemester( calendar ), 6 ).AddTicks( -1L );
         }
 
         /// <summary>
@@ -281,12 +257,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static DateTime EndOfYear( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
 
-            return calendar.AddYears( date.StartOfYear( calendar ), 1 ).AddMilliseconds( -1.0 );
+            return calendar.AddYears( date.StartOfYear( calendar ), 1 ).AddTicks( -1L );
         }
 
         /// <summary>
@@ -301,9 +275,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int Week( this DateTime date, Calendar calendar, DayOfWeek firstDayOfWeek )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             var rule = CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
@@ -322,9 +294,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int Week( this DateTime date, Calendar calendar, CalendarWeekRule rule, DayOfWeek firstDayOfWeek )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             return calendar.GetWeekOfYear( date, rule, firstDayOfWeek );
@@ -340,9 +310,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int Month( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() <= calendar.GetMonthsInYear( date.Year ) );
 
@@ -359,10 +327,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int Quarter( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
-            Contract.Requires<ArgumentException>( calendar.GetMonthsInYear( date.Year ) == 12, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 5 );
 
@@ -380,10 +345,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int Semester( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
-            Contract.Requires<ArgumentException>( calendar.GetMonthsInYear( date.Year ) == 12, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 3 );
 
@@ -401,9 +363,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int Year( this DateTime date, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
-            Contract.Requires<ArgumentOutOfRangeException>( date >= calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= calendar.MaxSupportedDateTime, "date" );
+            Arg.NotNull( calendar, "calendar" );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 10000 );
 
@@ -419,8 +379,6 @@
         [Pure]
         public static DateTime FirstDayOfWeekInMonth( this DateTime date, DayOfWeek dayOfWeek )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -437,8 +395,6 @@
         [Pure]
         public static DateTime LastDayOfWeekInMonth( this DateTime date, DayOfWeek dayOfWeek )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -456,12 +412,10 @@
         [Pure]
         public static DateTime DayOfWeekInMonth( this DateTime date, int occurrence, DayOfWeek dayOfWeek )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( occurrence > 0, "occurrence" );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
+            Arg.GreaterThan( occurrence, 0, "occurrence" );
 
             return date.DayOfWeekInMonth( occurrence, dayOfWeek, CultureInfo.CurrentCulture.Calendar );
         }
@@ -523,8 +477,6 @@
         [Pure]
         public static DateTime StartOfMonth( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetMonth( date ) ) );
 
@@ -539,9 +491,6 @@
         [Pure]
         public static DateTime StartOfQuarter( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime <= date, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime >= date, "date" );
-            Contract.Requires<ArgumentException>( CultureInfo.CurrentCulture.Calendar.GetMonthsInYear( date.Year ) == 12, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( CultureInfo.CurrentCulture.Calendar ) == Contract.OldValue( date.Quarter( CultureInfo.CurrentCulture.Calendar ) ) );
 
@@ -556,9 +505,6 @@
         [Pure]
         public static DateTime StartOfSemester( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime <= date, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime >= date, "date" );
-            Contract.Requires<ArgumentException>( CultureInfo.CurrentCulture.Calendar.GetMonthsInYear( date.Year ) == 12, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( CultureInfo.CurrentCulture.Calendar ) == Contract.OldValue( date.Semester( CultureInfo.CurrentCulture.Calendar ) ) );
 
@@ -573,8 +519,6 @@
         [Pure]
         public static DateTime StartOfYear( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
 
             return date.StartOfYear( CultureInfo.CurrentCulture.Calendar );
@@ -592,7 +536,7 @@
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
 
-            return date.Date.AddDays( 1.0 ).AddMilliseconds( -1.0 );
+            return date.Date.AddDays( 1.0 ).AddTicks( -1L );
         }
 
         /// <summary>
@@ -617,7 +561,7 @@
         public static DateTime EndOfWeek( this DateTime date, DayOfWeek firstDayOfWeek )
         {
             Contract.Ensures( Contract.Result<DateTime>().Week( CultureInfo.CurrentCulture.Calendar, firstDayOfWeek ) == Contract.OldValue( date.Week( CultureInfo.CurrentCulture.Calendar, firstDayOfWeek ) ) );
-            return date.StartOfWeek( firstDayOfWeek ).AddDays( 7.0 ).AddMilliseconds( -1.0 );
+            return date.StartOfWeek( firstDayOfWeek ).AddDays( 7.0 ).AddTicks( -1L );
         }
 
         /// <summary>
@@ -628,8 +572,6 @@
         [Pure]
         public static DateTime EndOfMonth( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetMonth( date ) ) );
 
@@ -644,9 +586,6 @@
         [Pure]
         public static DateTime EndOfQuarter( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime <= date, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime >= date, "date" );
-            Contract.Requires<ArgumentException>( CultureInfo.CurrentCulture.Calendar.GetMonthsInYear( date.Year ) == 12, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( CultureInfo.CurrentCulture.Calendar ) == Contract.OldValue( date.Quarter( CultureInfo.CurrentCulture.Calendar ) ) );
 
@@ -661,9 +600,6 @@
         [Pure]
         public static DateTime EndOfSemester( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
-            Contract.Requires<ArgumentException>( CultureInfo.CurrentCulture.Calendar.GetMonthsInYear( date.Year ) == 12, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( CultureInfo.CurrentCulture.Calendar ) == Contract.OldValue( date.Semester( CultureInfo.CurrentCulture.Calendar ) ) );
 
@@ -678,8 +614,6 @@
         [Pure]
         public static DateTime EndOfYear( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( CultureInfo.CurrentCulture.Calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( CultureInfo.CurrentCulture.Calendar.GetYear( date ) ) );
 
             return date.EndOfYear( CultureInfo.CurrentCulture.Calendar );
@@ -693,8 +627,6 @@
         [Pure]
         public static int Week( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             var format = CultureInfo.CurrentCulture.DateTimeFormat;
@@ -709,9 +641,6 @@
         [Pure]
         public static int Quarter( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
-            Contract.Requires<InvalidOperationException>( CultureInfo.CurrentCulture.Calendar.GetMonthsInYear( DateTime.Today.Year ) == 12 );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 5 );
 
@@ -726,9 +655,6 @@
         [Pure]
         public static int Semester( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( CultureInfo.CurrentCulture.Calendar.GetMonthsInYear( DateTime.Today.Year ) == 12, "date" );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 3 );
 
@@ -743,8 +669,6 @@
         [Pure]
         public static int Year( this DateTime date )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( date >= CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime, "date" );
-            Contract.Requires<ArgumentOutOfRangeException>( date <= CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime, "date" );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 10000 );
 

@@ -1,9 +1,9 @@
 ﻿namespace System
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IFormattable"/> interface.
@@ -23,8 +23,8 @@
         /// <example>This example demonstrates how using the an implementation of ToString which will leverage the <see cref="ICustomFormatter"/> interface.
         /// <code lang="C#">
         /// <![CDATA[
-        /// using global::System;
-        /// using global::System.Globalization;
+        /// using System;
+        /// using System.Globalization;
         /// 
         /// var calendar = new GregorianFiscalCalendar( 7 );
         /// var formatProvider = new DateTimeFormatProvider( calendar );
@@ -39,8 +39,8 @@
         /// </example>
         public static string ToString<TFormattable>( this TFormattable value, IFormatProvider formatProvider, string format ) where TFormattable : IFormattable
         {
-            Contract.Requires<ArgumentNullException>( value != null, "value" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNull( value, "value" );
+            Arg.NotNullOrEmpty( format, "format" );
             Contract.Ensures( Contract.Result<string>() != null ); 
 
             if ( formatProvider == null )

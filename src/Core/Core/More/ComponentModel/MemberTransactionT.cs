@@ -1,101 +1,22 @@
 ﻿namespace More.ComponentModel
 {
     using More.Collections.Generic;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Reflection;
-    using System.Linq.Expressions;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a edit transation for object members.
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> of <see cref="MemberInfo">member</see> the transaction is for.</typeparam>
     [ContractClass( typeof( MemberTransactionContract<> ) )]
-    public abstract partial class MemberTransaction<T> : IEditTransaction where T : MemberInfo
+    public abstract class MemberTransaction<T> : IEditTransaction where T : MemberInfo
     {
-        /// <summary>
-        /// Represents an edit transaction savepoint.
-        /// </summary>
-        private sealed class EditSavePoint : IEditSavepoint
-        {
-            private readonly IEditTransaction transaction;
-            private readonly IDictionary<string, object> state;
-
-            internal EditSavePoint( IEditTransaction transaction, IDictionary<string, object> state )
-            {
-                Contract.Requires( transaction != null, "transaction" );
-                Contract.Requires( state != null, "state" );
-                this.transaction = transaction;
-                this.state = state;
-            }
-
-            public IEditTransaction Transaction
-            {
-                get
-                {
-                    return this.transaction;
-                }
-            }
-
-            public IDictionary<string, object> State
-            {
-                get
-                {
-                    return this.state;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Represents the default strategy used to take the snapshot of an editable object.
-        /// </summary>
-        private sealed partial class DefaultEditSnapshotStrategy : IEditSnapshotStrategy
-        {
-            private readonly static Lazy<DefaultEditSnapshotStrategy> instance = new Lazy<DefaultEditSnapshotStrategy>( () => new DefaultEditSnapshotStrategy() );
-
-            private DefaultEditSnapshotStrategy()
-            {
-            }
-
-            internal static DefaultEditSnapshotStrategy Instance
-            {
-                get
-                {
-                    return instance.Value;
-                }
-            }
-
-            public object GetSnapshot( object value )
-            {
-                // REF: http://blogs.msdn.com/b/brada/archive/2004/05/03/125427.aspx
-                // Silverlight, Windows Store Apps, and Windows Phone don't support ICloneable (it was explicitly excluded).
-                // We also cannot use automatic deep cloning because binary serialization is not supported.
-
-                // the value is null so nothing to do
-                if ( value == null )
-                    return null;
-
-                // if cloning is supported, it's up to the implementor whether they supported shallow or deep cloning
-                var cloneable = value.AsICloneable();
-
-                if ( cloneable != null )
-                    return cloneable.Clone();
-
-                var cloneableOfT = value as ICloneable<object>;
-
-                if ( cloneableOfT != null )
-                    return cloneableOfT.Clone<object>();
-
-                // the value doesn't support cloning or serialization so we have to take it as is
-                return value;
-            }
-        }
-
         private readonly object instance;
         private readonly Type type;
         private readonly KeyedCollection<string, T> members = new ObservableKeyedCollection<string, T>( m => m.Name );
@@ -108,9 +29,9 @@
         /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
         /// <remarks>All public, supported members are enlisted.</remarks>
         protected MemberTransaction( object target )
-            : this( target, member => true, DefaultEditSnapshotStrategy.Instance )
+            : this( target, member => true, SnapshotStrategy.Default )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
+            Arg.NotNull( target, "target" );
         }
 
         /// <summary>
@@ -123,8 +44,8 @@
         protected MemberTransaction( object target, IEditSnapshotStrategy editSnapshotStrategy )
             : this( target, member => true, editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -133,10 +54,10 @@
         /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
         /// <param name="memberNames">A <see cref="IEnumerable{T}">sequence</see> of member names to enlist in the transaction.</param>
         protected MemberTransaction( object target, IEnumerable<string> memberNames )
-            : this( target, member => memberNames.Contains( member.Name ), DefaultEditSnapshotStrategy.Instance )
+            : this( target, member => memberNames.Contains( member.Name ), SnapshotStrategy.Default )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( memberNames != null, "memberNames" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( memberNames, "memberNames" );
         }
 
         /// <summary>
@@ -149,9 +70,9 @@
         protected MemberTransaction( object target, IEnumerable<string> memberNames, IEditSnapshotStrategy editSnapshotStrategy )
             : this( target, member => memberNames.Contains( member.Name ), editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( memberNames != null, "memberNames" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( memberNames, "memberNames" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -160,10 +81,10 @@
         /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
         /// <param name="memberFilter">A <see cref="Func{T1,TResult}">function</see> used to filter transacted members.</param>
         protected MemberTransaction( object target, Func<T, bool> memberFilter )
-            : this( target, memberFilter, DefaultEditSnapshotStrategy.Instance )
+            : this( target, memberFilter, SnapshotStrategy.Default )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( memberFilter != null, "memberFilter" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( memberFilter, "memberFilter" );
         }
 
         /// <summary>
@@ -177,16 +98,16 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         protected MemberTransaction( object target, Func<T, bool> memberFilter, IEditSnapshotStrategy editSnapshotStrategy )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
-            Contract.Requires<ArgumentNullException>( memberFilter != null, "memberFilter" );
-            Contract.Requires<ArgumentNullException>( editSnapshotStrategy != null, "editSnapshotStrategy" );
+            Arg.NotNull( target, "target" );
+            Arg.NotNull( memberFilter, "memberFilter" );
+            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
 
             this.instance = target;
             this.type = target.GetType();
             this.snapshotStrategy = editSnapshotStrategy;
 
             var allMembers = this.type.GetRuntimeFields().Cast<MemberInfo>().Union( this.type.GetRuntimeProperties() );
-            var filteredMembers = allMembers.OfType<T>().Where( m => memberFilter( m ) && ShouldManage( m ) );
+            var filteredMembers = allMembers.OfType<T>().Where( m => memberFilter( m ) && CanManage( m ) );
 
             this.members.AddRange( filteredMembers );
         }
@@ -257,60 +178,32 @@
         /// Gets the strategy used for snapshots.
         /// </summary>
         /// <value>An <see cref="IEditSnapshotStrategy"/> object.</value>
-        protected IEditSnapshotStrategy EditSnapshotStrategy
+        protected virtual IEditSnapshotStrategy EditSnapshotStrategy
         {
             get
             {
+                Contract.Ensures( Contract.Result<IEditSnapshotStrategy>() != null );
                 return this.snapshotStrategy;
             }
         }
 
-        private static bool ShouldManage( MemberInfo member )
+        private static bool CanManage( MemberInfo member )
         {
-            Contract.Requires( member != null, "member" );
+            Contract.Requires( member != null );
 
             var field = member as FieldInfo;
 
-            if ( field != null )
-            {
-                // exclude read-only, constant, and non-public fields
-                if ( field.IsInitOnly || field.IsLiteral || !field.IsPublic )
-                    return false;
-            }
-            else
+            if ( field == null )
             {
                 var property = member as PropertyInfo;
 
-                if ( property != null )
-                {
-                    // make sure there is a get and set method; otherwise, the property is read-only
-                    // check the setter first as write-only properties are extremely rare
-                    if ( property.SetMethod == null || property.GetMethod == null )
-                        return false;
-                }
+                // make sure there is a get and set method; otherwise, the property is read-only
+                // check the setter first as write-only properties are extremely rare
+                return property != null && property.SetMethod != null && property.GetMethod != null;
             }
 
-            return IsEditable( member );
-        }
-
-        /// <summary>
-        /// Returns a value indicating whether the specified member is editable.
-        /// </summary>
-        /// <param name="member">The <see cref="MemberInfo">member</see> to evaluate.</param>
-        /// <returns>True if <paramref name="member"/> is editable; otherwise, false.</returns>
-        /// <remarks>This property returns true if <paramref name="member"/> does not have the EditableAttribute applied or
-        /// EditableAttribute is applied and the AllowEdit property is true.</remarks>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
-        protected static bool IsEditable( MemberInfo member )
-        {
-            Contract.Requires<ArgumentNullException>( member != null, "member" );
-
-            // UNDONE: System.ComponentModel.DataAnnotations is not currently portable; revert when possible
-            //var attribute = member.GetCustomAttribute<EditableAttribute>( false );
-            //return attribute == null || attribute.AllowEdit;
-
-            dynamic attribute = member.GetCustomAttributes( false ).SingleOrDefault( a => a.GetType().Name == "System.ComponentModel.DataAnnotations.EditableAttribute" );
-            return attribute == null || attribute.AllowEdit;
+            // exclude read-only, constant, and non-public fields
+            return field.IsPublic && !field.IsInitOnly && !field.IsLiteral;
         }
 
         /// <summary>
@@ -320,7 +213,7 @@
         /// <returns>A <see cref="String">string</see> representing the state key.</returns>
         protected virtual string CreateStateKey( T member )
         {
-            Contract.Requires<ArgumentNullException>( member != null, "member" );
+            Arg.NotNull( member, "member" );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
             return string.Format( null, "{0}.{1}", member.DeclaringType.FullName, member.Name );
         }
@@ -453,7 +346,7 @@
             if ( autoCommit )
                 this.OnCommit();
 
-            return new EditSavePoint( this, stateBag.AsReadOnly() );
+            return new EditSavePoint( this, stateBag );
         }
 
         /// <summary>
@@ -476,6 +369,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public void Rollback( IEditSavepoint savepoint )
         {
+            Arg.NotNull( savepoint, "savepoint" );
+
             this.State.ReplaceAll( savepoint.State );
             this.OnRollback();
             this.TransactionState = EditTransactionState.RolledBack;

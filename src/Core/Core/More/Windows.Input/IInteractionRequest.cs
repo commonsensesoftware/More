@@ -1,6 +1,6 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Defines the behavior of a user interface interaction request.

@@ -1,11 +1,11 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Linq;
-    using global::System.Reflection;
-    using global::System.Threading;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading;
 
     /// <summary>
     /// Represents a class that can manage weak event handler references.
@@ -15,7 +15,6 @@
     /// <remarks>The <typeparamref name="TArgs"/> type constraint is not restricted to the <see cref="EventArgs"/> class because the
     /// event handlers for some implementations have event arguments that do not inherit from <see cref="EventArgs"/>; for example,
     /// routed events on some platforms.</remarks>
-    [SuppressMessage( "Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "This class manages weak event handlers with thread synchronization support. Uses of this class are typically long running and do not align well with the prescribed dispose pattern. This class ensures the proper release of locks without requiring consumer to implement IDisposable as well." )]
     public class WeakEventManager<THandler, TArgs>
         where THandler : class
         where TArgs : class

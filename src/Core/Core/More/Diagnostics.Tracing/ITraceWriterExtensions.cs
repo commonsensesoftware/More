@@ -1,13 +1,13 @@
 ﻿namespace More.Diagnostics.Tracing
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Text;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ITraceWriter"/> interface.
@@ -23,8 +23,8 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Debug( this ITraceWriter traceWriter, string category, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Debug, messageFormat, messageArguments );
         }
 
@@ -36,8 +36,8 @@
         /// <param name="exception">The exception to trace.</param>
         public static void Debug( this ITraceWriter traceWriter, string category, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
             Trace( traceWriter, category, TraceLevel.Debug, exception );
         }
 
@@ -51,9 +51,9 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Debug( this ITraceWriter traceWriter, string category, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Debug, exception, messageFormat, messageArguments );
         }
 
@@ -66,8 +66,8 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Error( this ITraceWriter traceWriter, string category, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Error, messageFormat, messageArguments );
         }
 
@@ -79,8 +79,8 @@
         /// <param name="exception">The exception to trace.</param>
         public static void Error( this ITraceWriter traceWriter, string category, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
             Trace( traceWriter, category, TraceLevel.Error, exception );
         }
 
@@ -94,9 +94,9 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Error( this ITraceWriter traceWriter, string category, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Error, exception, messageFormat, messageArguments );
         }
 
@@ -109,8 +109,8 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Fatal( this ITraceWriter traceWriter, string category, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Fatal, messageFormat, messageArguments );
         }
 
@@ -122,8 +122,8 @@
         /// <param name="exception">The exception to trace.</param>
         public static void Fatal( this ITraceWriter traceWriter, string category, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
             Trace( traceWriter, category, TraceLevel.Fatal, exception );
         }
 
@@ -137,9 +137,9 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Fatal( this ITraceWriter traceWriter, string category, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Fatal, exception, messageFormat, messageArguments );
         }
 
@@ -152,8 +152,8 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Info( this ITraceWriter traceWriter, string category, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Info, messageFormat, messageArguments );
         }
 
@@ -165,8 +165,8 @@
         /// <param name="exception">The exception to trace.</param>
         public static void Info( this ITraceWriter traceWriter, string category, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
             Trace( traceWriter, category, TraceLevel.Info, exception );
         }
 
@@ -180,9 +180,9 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Info( this ITraceWriter traceWriter, string category, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Info, exception, messageFormat, messageArguments );
         }
 
@@ -197,8 +197,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Trace( this ITraceWriter traceWriter, string category, TraceLevel level, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
             traceWriter.Trace( category, level, traceRecord => traceRecord.Exception = exception );
         }
 
@@ -215,9 +215,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Trace( this ITraceWriter traceWriter, string category, TraceLevel level, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
 
             traceWriter.Trace(
                 category,
@@ -241,8 +241,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Trace( this ITraceWriter traceWriter, string category, TraceLevel level, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             traceWriter.Trace( category, level, traceRecord => traceRecord.Message = messageFormat.FormatDefault( messageArguments ) );
         }
 
@@ -257,8 +257,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void TraceBegin( this ITraceWriter traceWriter, string category, TraceLevel level, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
 
             traceWriter.Trace(
                 category,
@@ -283,9 +283,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void TraceBegin( this ITraceWriter traceWriter, string category, TraceLevel level, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
 
             traceWriter.Trace(
                 category,
@@ -310,8 +310,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void TraceBegin( this ITraceWriter traceWriter, string category, TraceLevel level, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
 
             traceWriter.Trace(
                 category,
@@ -334,8 +334,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void TraceEnd( this ITraceWriter traceWriter, string category, TraceLevel level, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
 
             traceWriter.Trace(
                 category,
@@ -360,9 +360,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void TraceEnd( this ITraceWriter traceWriter, string category, TraceLevel level, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
 
             traceWriter.Trace(
                 category,
@@ -387,8 +387,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void TraceEnd( this ITraceWriter traceWriter, string category, TraceLevel level, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
 
             traceWriter.Trace(
                 category,
@@ -428,8 +428,8 @@
             Action<TraceRecord> endTrace,
             Action<TraceRecord> errorTrace )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( execute != null, "execute" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( execute, "execute" );
 
             traceWriter.Trace(
                 category,
@@ -501,8 +501,8 @@
             Action<TraceRecord, TResult> endTrace,
             Action<TraceRecord> errorTrace )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( execute != null, "execute" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( execute, "execute" );
             Contract.Ensures( Contract.Result<Task<TResult>>() != null );
 
             traceWriter.Trace(
@@ -623,8 +623,8 @@
             Action<TraceRecord> endTrace,
             Action<TraceRecord> errorTrace )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( execute != null, "execute" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( execute, "execute" );
             Contract.Ensures( Contract.Result<Task>() != null );
 
             traceWriter.Trace(
@@ -721,8 +721,8 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Warn( this ITraceWriter traceWriter, string category, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Warn, messageFormat, messageArguments );
         }
 
@@ -734,8 +734,8 @@
         /// <param name="exception">The exception to trace</param>
         public static void Warn( this ITraceWriter traceWriter, string category, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
             Trace( traceWriter, category, TraceLevel.Warn, exception );
         }
 
@@ -749,9 +749,9 @@
         /// <param name="messageArguments">Optional list of arguments for the <paramref name="messageFormat"/>.</param>
         public static void Warn( this ITraceWriter traceWriter, string category, Exception exception, string messageFormat, params object[] messageArguments )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
-            Contract.Requires<ArgumentNullException>( messageFormat != null, "messageFormat" );
+            Arg.NotNull( traceWriter, "traceWriter" );
+            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( messageFormat, "messageFormat" );
             Trace( traceWriter, category, TraceLevel.Warn, exception, messageFormat, messageArguments );
         }
 

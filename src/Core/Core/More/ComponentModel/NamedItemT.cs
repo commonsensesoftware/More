@@ -1,8 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Represents an item with a corresponding name and description.
@@ -19,7 +20,7 @@
         /// </summary>
         public NamedItem()
         {
-            this.name = this.GetType().Name;
+            this.name = this.GetType().GetTypeInfo().Name;
             this.description = string.Empty;
             this.itemValue = default( T );
         }
@@ -32,8 +33,8 @@
         public NamedItem( string name, string description )
             : this( name, description, default( T ) )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( description != null, "description" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( description, "description" );
         }
 
         /// <summary>
@@ -44,8 +45,8 @@
         /// <param name="value">The item value of type <typeparamref name="T"/>.</param>
         public NamedItem( string name, string description, T value )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( description != null, "description" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( description, "description" );
 
             this.name = name;
             this.description = description;
@@ -76,10 +77,12 @@
         {
             get
             {
+                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
                 return this.name;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.name, value );
             }
         }
@@ -92,10 +95,12 @@
         {
             get
             {
+                Contract.Ensures( this.description != null );
                 return this.description;
             }
             set
             {
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.description, value );
             }
         }

@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1A3F1BC7-4EFE-4442-868F-FB1EF9D5F23D}</ProjectGuid>
@@ -13,9 +13,9 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile151</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,7 +80,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\More.xml</DocumentationFile>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
@@ -142,6 +142,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Arg.cs">
+      <Link>Arg.cs</Link>
+    </Compile>
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
@@ -151,8 +154,12 @@
       <DependentUpon>ExceptionMessage.resx</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="More\ICloneable.cs" />
-    <Compile Include="More\ICloneableExtensions.cs" />
+    <Compile Include="More\ComponentModel.DataAnnotations\IValidationContextContract.cs" />
+    <Compile Include="More\ComponentModel.DataAnnotations\IValidationResultContract.cs" />
+    <Compile Include="More\ComponentModel.DataAnnotations\IValidatorContract.cs" />
+    <Compile Include="More\ComponentModel\RepositoryContractT.cs" />
+    <Compile Include="More\ComponentModel\SnapshotStrategy.cs" />
+    <Compile Include="More\ComponentModel\EditSavePoint.cs" />
     <Compile Include="More\Collections.Generic\CollectionDebugViewT.cs" />
     <Compile Include="More\Collections.Generic\ComparerAdapterT1T2.cs" />
     <Compile Include="More\Collections.Generic\DictionaryDebugViewT1T2.cs" />
@@ -268,7 +275,6 @@
     <Compile Include="More\ComponentModel\UnitOfWorkFactoryProvider.cs" />
     <Compile Include="More\ComponentModel\UnitOfWorkT.cs" />
     <Compile Include="More\ComponentModel\ValidatableObject.cs" />
-    <Compile Include="More\Composition\CompositionServiceProvider.cs" />
     <Compile Include="More\Composition\ICompositionService.cs" />
     <Compile Include="More\Composition\IDialogViewContractT.cs" />
     <Compile Include="More\Composition\IDialogViewT.cs" />
@@ -277,10 +283,10 @@
     <Compile Include="More\Composition\IViewContractT1T2.cs" />
     <Compile Include="More\Composition\IViewT.cs" />
     <Compile Include="More\Composition\IViewT1T2.cs" />
-    <Compile Include="More\Configuration\ConfigurationKey.cs" />
+    <Compile Include="More\Configuration\SettingKey.cs" />
     <Compile Include="More\Configuration\DeploymentEnvironment.cs" />
-    <Compile Include="More\Configuration\IConfigurationSettingLocatorContractT.cs" />
-    <Compile Include="More\Configuration\IConfigurationSettingLocatorT.cs" />
+    <Compile Include="More\Configuration\ISettingLocatorContractT.cs" />
+    <Compile Include="More\Configuration\ISettingLocatorT.cs" />
     <Compile Include="More\DateTimeFormatProvider.cs" />
     <Compile Include="More\DefaultAction.cs" />
     <Compile Include="More\Diagnostics.Tracing\ITraceWriter.cs" />
@@ -297,11 +303,11 @@
     <Compile Include="More\Globalization\ICalendarEpochContract.cs" />
     <Compile Include="More\Globalization\ICalendarProvider.cs" />
     <Compile Include="More\Globalization\ICalendarProviderContract.cs" />
-    <Compile Include="More\ICloneableContractT.cs" />
-    <Compile Include="More\ICloneableT.cs" />
     <Compile Include="More\IO\IBasicProperties.cs" />
     <Compile Include="More\IO\IFileContract.cs" />
     <Compile Include="More\IO\IFileExtensions.cs" />
+    <Compile Include="More\IO\IFileSystem.cs" />
+    <Compile Include="More\IO\IFileSystemContract.cs" />
     <Compile Include="More\IO\IFolder.cs" />
     <Compile Include="More\IO\IFile.cs" />
     <Compile Include="More\IO\IFolderContract.cs" />
@@ -310,12 +316,12 @@
     <Compile Include="More\IO\IStorageItem.cs" />
     <Compile Include="More\IO\IStorageItemProperties.cs" />
     <Compile Include="More\IO\IStorageItemPropertiesContract.cs" />
+    <Compile Include="More\IResourceLocator.cs" />
+    <Compile Include="More\IResourceLocatorContract.cs" />
     <Compile Include="More\Number.cs" />
     <Compile Include="More\NumberStyle.cs" />
     <Compile Include="More\ServiceKeyAttribute.cs" />
     <Compile Include="More\ServiceProvider.cs" />
-    <Compile Include="More\ServiceRegistryKey.cs" />
-    <Compile Include="More\ServiceTypeDisassembler.cs" />
     <Compile Include="More\UriComparer.cs" />
     <Compile Include="More\Util.cs" />
     <Compile Include="More\WeakDelegate.cs" />

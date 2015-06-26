@@ -1,12 +1,12 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents an adapter class that makes an observable source <see cref="IList{T}">list</see> covariant and contravariant.
@@ -28,7 +28,7 @@
         public ObservableVariantListAdapter( IList<TFrom> list )
             : base( list )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
+            Arg.NotNull( list, "list" );
 
             var notifyProperty = list as INotifyPropertyChanged;
             var notifyCollection = list as INotifyCollectionChanged;
@@ -50,8 +50,8 @@
 
         private void OnSourcePropertyChanged( object sender, PropertyChangedEventArgs e )
         {
-            Contract.Requires( sender != null, "sender" );
-            Contract.Requires( e != null, "e" );
+            Contract.Requires( sender != null );
+            Contract.Requires( e != null );
 
             if ( this.SuppressEvents )
                 return;
@@ -69,8 +69,8 @@
 
         private void OnSourceCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires( sender != null, "sender" );
-            Contract.Requires( e != null, "e" );
+            Contract.Requires( sender != null );
+            Contract.Requires( e != null );
 
             if ( !this.SuppressEvents )
                 this.OnCollectionChanged( e );
@@ -91,7 +91,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.PropertyChanged;
 
@@ -106,7 +106,7 @@
         /// <exception cref="ArgumentNullException"><paramref name="e"/> is <see langkeyword="null">null</see>.</exception>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CollectionChanged;
 
@@ -264,7 +264,7 @@
                 var oldItem = this.Items[index];
                 base.SetItem( index, item );
                 this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, oldItem, item, index ) );
+                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, item, oldItem, index ) );
             }
             finally
             {

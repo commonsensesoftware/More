@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ISpecification{T}"/> interface.
@@ -20,8 +20,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ISpecification<T> And<T>( this ISpecification<T> specification, Func<T, bool> other )
         {
-            Contract.Requires<ArgumentNullException>( specification != null, "specification" );
-            Contract.Requires<ArgumentNullException>( other != null );
+            Arg.NotNull( specification, "specification" );
+            Arg.NotNull( other, "other" );
             Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
 
             return specification.And( new Specification<T>( other ) );
@@ -38,8 +38,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ISpecification<T> Or<T>( this ISpecification<T> specification, Func<T, bool> other )
         {
-            Contract.Requires<ArgumentNullException>( specification != null, "specification" );
-            Contract.Requires<ArgumentNullException>( other != null );
+            Arg.NotNull( specification, "specification" );
+            Arg.NotNull( other, "other" );
             Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
 
             return specification.Or( new Specification<T>( other ) );

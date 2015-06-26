@@ -1,9 +1,9 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents an object for comparing <see cref="Uri"/> objects.

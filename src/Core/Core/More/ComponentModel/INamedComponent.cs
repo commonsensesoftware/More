@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts; 
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts; 
 
     /// <summary>
     /// Defines the behavior of a named component.

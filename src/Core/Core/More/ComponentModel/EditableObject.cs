@@ -1,18 +1,20 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Runtime.CompilerServices;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Represents a base implementation of <see cref="IEditableObject"/> with support for two-way data binding.
     /// </summary>
     public abstract class EditableObject : ValidatableObject, IEditableObject, IRevertibleChangeTracking
     {
-        private IEditTransaction transaction;
+        private readonly ISet<string> uneditableMembers;
+        private readonly Lazy<IEditTransaction> transaction;
         private IEditSavepoint savepoint;
         private EditRecoveryModel recoveryModel;
         private bool editing;
@@ -24,6 +26,29 @@
         /// </summary>
         protected EditableObject()
         {
+            this.transaction = new Lazy<IEditTransaction>( this.CreateTransaction );
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditableObject"/> class.
+        /// </summary>
+        /// <param name="uneditableMembers">An array of uneditable member names.</param>
+        protected EditableObject( params string[] uneditableMembers )
+            : this( uneditableMembers.AsEnumerable() )
+        {
+            Arg.NotNull( uneditableMembers, "uneditableMembers" );
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditableObject"/> class.
+        /// </summary>
+        /// <param name="uneditableMembers">A <see cref="IEnumerable{T}">sequence</see> of uneditable member names.</param>
+        protected EditableObject( IEnumerable<string> uneditableMembers )
+        {
+            Arg.NotNull( uneditableMembers, "uneditableMembers" );
+            
+            this.uneditableMembers = new HashSet<string>( uneditableMembers, StringComparer.Ordinal );
+            this.transaction = new Lazy<IEditTransaction>( this.CreateTransaction );
         }
 
         private IEditTransaction Transaction
@@ -31,11 +56,20 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEditTransaction>() != null );
+                return this.transaction.Value;
+            }
+        }
 
-                if ( this.transaction == null )
-                    this.transaction = this.CreateTransaction();
-
-                return this.transaction;
+        /// <summary>
+        /// Gets a collection of the names of the object members that are not editable.
+        /// </summary>
+        /// <value>A <see cref="ISet{T}">set</see> of uneditable member names.</value>
+        protected ISet<string> UneditableMembers
+        {
+            get
+            {
+                Contract.Ensures( this.uneditableMembers != null );
+                return this.uneditableMembers;
             }
         }
 
@@ -96,7 +130,7 @@
         protected virtual IEditTransaction CreateTransaction()
         {
             Contract.Ensures( Contract.Result<IEditTransaction>() != null );
-            return new PropertyTransaction( this );
+            return new PropertyTransaction( this, p => !this.uneditableMembers.Contains( p.Name ) );
         }
 
         /// <summary>
@@ -189,7 +223,7 @@
 
         private void OnPropertyChanged( PropertyChangedEventArgs e, bool suppressStateChange )
         {
-            Contract.Requires( e != null, "e" );
+            Contract.Requires( e != null );
 
             // if not suppressed, change the state
             if ( this.TriggersStateChange( e.PropertyName ) && !suppressStateChange )
@@ -204,6 +238,7 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected override void OnPropertyChanged( PropertyChangedEventArgs e )
         {
+            Arg.NotNull( e, "e" );
             this.OnPropertyChanged( e, false );
         }
 

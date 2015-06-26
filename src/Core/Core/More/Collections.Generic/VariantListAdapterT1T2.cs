@@ -1,12 +1,12 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;    
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts; 
-    using global::System.Linq;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics;    
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts; 
+    using System.Linq;
 
     /// <summary>
     /// Represents an adapter class that makes the source <see cref="IList{T}">list</see> covariant and contravariant.
@@ -27,7 +27,7 @@
         /// <param name="list">The <see cref="IList{T}">list</see> to enable type variance for.</param>
         public VariantListAdapter( IList<TFrom> list )
         {
-            Contract.Requires<ArgumentNullException>( list != null, "list" );
+            Arg.NotNull( list, "list" );
             this.items = list;
         }
 
@@ -60,9 +60,9 @@
         /// <param name="item">The <typeparamref name="TFrom">item</typeparamref> to insert.</param>
         protected virtual void InsertItem( int index, TFrom item )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index <= this.Items.Count, "index" );
             Contract.Ensures( this.Count == Contract.OldValue( this.Count ) + 1 );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThanOrEqualTo( index, this.Items.Count, "index" );
             this.Items.Insert( index, item );
         }
 
@@ -72,9 +72,9 @@
         /// <param name="index">The zero-based index of the item to remove.</param>
         protected virtual void RemoveItem( int index )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index < this.Items.Count, "index" );
             Contract.Ensures( this.Count == Contract.OldValue( this.Count ) - 1 );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThanOrEqualTo( index, this.Items.Count, "index" );
             this.Items.RemoveAt( index );
         }
 
@@ -85,9 +85,9 @@
         /// <param name="item">The replacement <typeparamref name="TFrom">item</typeparamref> to set.</param>
         protected virtual void SetItem( int index, TFrom item )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index < this.Items.Count, "index" );
             Contract.Ensures( this.Count == Contract.OldValue( this.Count ) );
+            Arg.GreaterThanOrEqualTo( index, 0, "index" );
+            Arg.LessThanOrEqualTo( index, this.Items.Count, "index" );
             this.Items[index] = item;
         }
 
@@ -98,10 +98,10 @@
         /// <param name="newIndex">The zero-based index of the destination in the list.</param>
         protected virtual void MoveItem( int oldIndex, int newIndex )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( oldIndex >= 0, "oldIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( oldIndex < this.Items.Count, "oldIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( newIndex >= 0, "newIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( newIndex < this.Items.Count, "newIndex" );
+            Arg.GreaterThanOrEqualTo( oldIndex, 0, "oldIndex" );
+            Arg.LessThan( oldIndex, this.Items.Count, "oldIndex" );
+            Arg.GreaterThanOrEqualTo( newIndex, 0, "newIndex" );
+            Arg.LessThan( newIndex, this.Items.Count, "newIndex" );
 
             var item = this.Items[oldIndex];
             this.RemoveItem( oldIndex );
@@ -190,9 +190,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "False positive" )]
         public void CopyTo( TTo[] array, int arrayIndex )
         {
-            if ( array == null )
-                throw new ArgumentNullException( "array" );
-
+            Arg.NotNull( array, "array" );
             var other = new TFrom[array.Length];
             this.Items.CopyTo( other, arrayIndex );
             other.Cast<TTo>().ToArray().CopyTo( array, arrayIndex );

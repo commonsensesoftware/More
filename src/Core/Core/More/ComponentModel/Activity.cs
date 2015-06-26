@@ -1,20 +1,20 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;    
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.IO;
-    using global::System.Linq;
-    using global::System.Reflection;
-    using global::System.Runtime.InteropServices;
-    using global::System.Security.Principal;
-    using global::System.Text;
-    using global::System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using System.Security.Principal;
+    using System.Text;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents the base implementation for a activity.
@@ -87,9 +87,8 @@
             if ( descriptor != null )
                 return new ActivityMetadata( new Guid( descriptor.Id ), descriptor.Name, descriptor.Description );
 
-            var guid = typeInfo.GetCustomAttributes<GuidAttribute>( false ).FirstOrDefault();
-            var id = guid == null || string.IsNullOrEmpty( guid.Value ) ? Guid.NewGuid() : new Guid( guid.Value );
-            var name = type.Name;
+            var id = Guid.NewGuid();
+            var name = typeInfo.Name;
 
             // derive name from type name, which is probably in the form of {name}Activity
             // also account of the name being just "Activity"
@@ -101,7 +100,7 @@
 
         private static string FormatException( Exception ex )
         {
-            Contract.Requires( ex != null, "ex" );
+            Contract.Requires( ex != null );
             Contract.Ensures( Contract.Result<string>() != null );
 
             string message = null;
@@ -136,7 +135,7 @@
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "args", Justification = "Consistency; same name as parameter in String.Format." )]
         protected void Log( string format, object[] args )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNullOrEmpty( format, "format" );
             this.Log( format.FormatDefault( args ) );
         }
 
@@ -146,7 +145,7 @@
         /// <param name="message">The message to log.</param>
         protected virtual void Log( string message )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
+            Arg.NotNullOrEmpty( message, "message" );
         }
 
         /// <summary>
@@ -156,8 +155,8 @@
         /// <param name="exception">The <see cref="Exception"/> for the error that occurred.</param>
         protected virtual void OnUnhandledException( IServiceProvider serviceProvider, Exception exception )
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
-            Contract.Requires<ArgumentNullException>( exception != null, "exception" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( exception, "exception" );
 
             var ex = exception;
 
@@ -173,7 +172,7 @@
         /// <param name="e">The <see cref="ActivityCompletedEventArgs"/> event data.</param>
         protected virtual void OnCompleted( ActivityCompletedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Completed;
 
@@ -187,7 +186,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCanExecuteChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CanExecuteChanged;
 
@@ -209,8 +208,8 @@
 
         private void OnDependenciesChanged( object sender, NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires( sender != null, "sender" );
-            Contract.Requires( e != null, "e" );
+            Contract.Requires( sender != null );
+            Contract.Requires( e != null );
 
             switch ( e.Action )
             {
@@ -336,10 +335,12 @@
         {
             get
             {
+                Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
                 return this.Metadata.Name;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, "value" );
                 this.SetProperty( ref this.Metadata.Name, value );
             }
         }
@@ -352,10 +353,12 @@
         {
             get
             {
+                Contract.Ensures( Contract.Result<string>() != null );
                 return this.Metadata.Description;
             }
             set
             {
+                Arg.NotNull( value, "value" );
                 this.SetProperty( ref this.Metadata.Description, value );
             }
         }
@@ -369,10 +372,12 @@
         {
             get
             {
+
                 return this.expiration;
             }
             set
             {
+
                 this.SetProperty( ref this.expiration, value );
             }
         }
@@ -386,6 +391,7 @@
         {
             get
             {
+                Contract.Ensures( Contract.Result<ICollection<IActivity>>() != null );
                 return this.dependencies;
             }
         }
@@ -396,6 +402,7 @@
         /// <param name="stateBag">The <see cref="IDictionary{TKey,TValue}"/> containing the state information.</param>
         public virtual void LoadState( IDictionary<string, string> stateBag )
         {
+            Arg.NotNull( stateBag, "stateBag" );
         }
 
         /// <summary>
@@ -405,6 +412,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract" )]
         public virtual void SaveState( IDictionary<string, string> stateBag )
         {
+            Arg.NotNull( stateBag, "stateBag" );
         }
 
         /// <summary>
@@ -416,6 +424,7 @@
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "serviceProvider", Justification = "False positive" )]
         public virtual bool CanExecute( IServiceProvider serviceProvider )
         {
+            Arg.NotNull( serviceProvider, "serviceProvider" );
             return this.IsReady;
         }
 
@@ -428,6 +437,8 @@
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "serviceProvider", Justification = "False positive" )]
         public void Execute( IServiceProvider serviceProvider )
         {
+            Arg.NotNull( serviceProvider, "serviceProvider" );
+
             // capture the current service provider so that it can be forwarded in the Completed event
             this.currentServiceProvider = serviceProvider;
             this.OnExecute( serviceProvider );

@@ -23,6 +23,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)More\IO\IPlatformStorageItemT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)More\IO\IPlatformStorageItemTContract.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)More\ServiceContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\ServiceProviderAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\ServiceRegistryKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\ServiceTypeDisassembler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel\IServiceContainerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel\ISupportInitializeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\EnumExtensions.cs" />

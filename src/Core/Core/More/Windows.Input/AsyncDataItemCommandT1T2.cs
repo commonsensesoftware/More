@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents an observable, asychronous command with an associated data item<seealso cref="DataItemCommand{TParameter,TItem}"/>.
@@ -35,7 +35,7 @@
         public AsyncDataItemCommand( Func<TItem, TParameter, Task> executeAsyncMethod, TItem dataItem )
             : this( executeAsyncMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -46,8 +46,8 @@
         /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
         public AsyncDataItemCommand( Func<TItem, TParameter, Task> executeAsyncMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
         {
-            Contract.Requires<ArgumentNullException>( executeAsyncMethod != null, "executeAsyncMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.executeAsyncMethod = executeAsyncMethod;
             this.canExecuteMethod = canExecuteMethod;

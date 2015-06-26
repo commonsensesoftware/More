@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     [ContractClassFor( typeof( IEditSavepoint ) )]
     internal abstract class IEditSavepointContract : IEditSavepoint
@@ -15,11 +15,11 @@
             }
         }
 
-        IDictionary<string, object> IEditSavepoint.State
+        IReadOnlyDictionary<string, object> IEditSavepoint.State
         {
             get
             {
-                Contract.Ensures( Contract.Result<IDictionary<string, object>>() != null );
+                Contract.Ensures( Contract.Result<IReadOnlyDictionary<string, object>>() != null );
                 return null;
             }
         }

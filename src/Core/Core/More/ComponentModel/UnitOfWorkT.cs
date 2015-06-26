@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents the base implementation for a unit of work.
@@ -33,7 +33,7 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to comparer item equality.</param>
         protected UnitOfWork( IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
 
             this.comparer = comparer;
             this.inserted = new HashSet<T>( comparer );
@@ -133,6 +133,8 @@
         /// <param name="item">The new  to register.</param>
         public virtual void RegisterNew( T item )
         {
+            Arg.NotNull( item, "item" );
+
             var hasChanges = this.HasPendingChanges;
 
             if ( this.DeletedItems.Contains( item ) )
@@ -152,6 +154,8 @@
         /// <param name="item">The changed <typeparamref name="T">item</typeparamref> to register.</param>
         public virtual void RegisterChanged( T item )
         {
+            Arg.NotNull( item, "item" );
+
             var hasChanges = this.HasPendingChanges;
 
             if ( !this.InsertedItems.Contains( item ) && !this.DeletedItems.Contains( item ) )
@@ -167,6 +171,8 @@
         /// <param name="item">The removed <typeparamref name="T">item</typeparamref> to register.</param>
         public virtual void RegisterRemoved( T item )
         {
+            Arg.NotNull( item, "item" );
+
             var hasChanges = this.HasPendingChanges;
             var added = this.InsertedItems.Remove( item );
 
@@ -185,6 +191,8 @@
         /// <param name="item">The <typeparamref name="T">item</typeparamref> to unregister.</param>
         public virtual void Unregister( T item )
         {
+            Arg.NotNull( item, "item" );
+
             var hasChanges = this.HasPendingChanges;
 
             this.InsertedItems.Remove( item );

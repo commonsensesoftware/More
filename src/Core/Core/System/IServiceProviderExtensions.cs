@@ -1,35 +1,16 @@
 ﻿namespace System
 {
     using More;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IServiceProvider"/> interface.
     /// </summary>
     public static class IServiceProviderExtensions
     {
-        /// <summary>
-        /// Returns all services of the given <paramref name="serviceType">type</paramref>.
-        /// </summary>
-        /// <param name="serviceProvider">The extended <see cref="IServiceProvider"/> object.</param>
-        /// <param name="serviceType">The <see cref="Type">type</see> of object requested.</param>
-        /// <returns>A <see cref="IEnumerable{T}">sequence</see> of services of the requested <paramref name="serviceType">type</paramref>.</returns>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
-        public static IEnumerable<object> GetServices( this IServiceProvider serviceProvider, Type serviceType )
-        {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
-            Contract.Ensures( Contract.Result<IEnumerable<object>>() != null );
-
-            var generator = new ServiceTypeDisassembler();
-            var multipleServicesType = generator.ForMany( serviceType );
-            return ( (IEnumerable<object>) serviceProvider.GetService( multipleServicesType ) ) ?? Enumerable.Empty<object>();
-        }
-
         /// <summary>
         /// Gets the strongly-typed service object of the specified type.
         /// </summary>
@@ -39,7 +20,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static TService GetService<TService>( this IServiceProvider serviceProvider ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
             return (TService) serviceProvider.GetService( typeof( TService ) );
         }
 
@@ -53,8 +34,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static object GetRequiredService( this IServiceProvider serviceProvider, Type serviceType )
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceType, "serviceType" );
             Contract.Ensures( Contract.Result<object>() != null );
 
             var service = serviceProvider.GetService( serviceType );
@@ -75,7 +56,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static TService GetRequiredService<TService>( this IServiceProvider serviceProvider ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
             Contract.Ensures( Contract.Result<TService>() != null );
 
             var service = (TService) serviceProvider.GetService( typeof( TService ) );
@@ -97,7 +78,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static bool TryGetService<TService>( this IServiceProvider serviceProvider, out TService service ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
             service = null;
 
             try
@@ -123,8 +104,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static bool TryGetService( this IServiceProvider serviceProvider, Type serviceType, out object service )
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceType, "serviceType" );
             service = null;
 
             try
@@ -147,11 +128,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static IEnumerable<TService> GetServices<TService>( this IServiceProvider serviceProvider ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Arg.NotNull( serviceProvider, "serviceProvider" );
             Contract.Ensures( Contract.Result<IEnumerable<TService>>() != null );
 
-            var generator = new ServiceTypeDisassembler();
-            var multipleServicesType = generator.ForMany( typeof( TService ) );
+            var multipleServicesType = typeof( IEnumerable<TService> );
             return ( (IEnumerable<TService>) serviceProvider.GetService( multipleServicesType ) ) ?? Enumerable.Empty<TService>();
         }
     }

@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Threading;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IEventBroker"/> interface.
@@ -20,11 +20,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Subscribe<TEventArgs>( this IEventBroker eventBroker, string eventName, Action<string, object, TEventArgs> handler ) where TEventArgs : class
         {
-            Contract.Requires<ArgumentNullException>( eventBroker != null, "eventBroker" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( eventName ), "eventName" );
-            Contract.Requires<ArgumentNullException>( handler != null, "handler" );
+            Arg.NotNull( eventBroker, "eventBroker" );
+            Arg.NotNullOrEmpty( eventName, "eventName" );
+            Arg.NotNull( handler, "handler" );
 
-            eventBroker.Subscribe<TEventArgs>( eventName, handler, SynchronizationContext.Current ?? new SynchronizationContext() );
+            eventBroker.Subscribe<TEventArgs>( eventName, handler, SynchronizationContext.Current );
         }
     }
 }

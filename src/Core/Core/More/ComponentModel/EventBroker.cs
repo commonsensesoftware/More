@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Linq;
-    using global::System.Threading;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
 
     /// <summary>
     /// Represents an event broker.
@@ -11,7 +11,7 @@
     public class EventBroker : IEventBroker
     {
         private readonly object syncRoot = new object();
-        private readonly Dictionary<string, List<SynchronizedWeakDelegate>> handlers = new Dictionary<string, List<SynchronizedWeakDelegate>>();
+        private readonly Dictionary<string, List<WeakDelegate>> handlers = new Dictionary<string, List<WeakDelegate>>();
 
         /// <summary>
         /// Publishes the specified event.
@@ -20,9 +20,12 @@
         /// <param name="eventName">The name of the event to publish.</param>
         /// <param name="eventSource">The source of the event.</param>
         /// <param name="eventArgs">The <typeparamref name="TEventArgs">event arguments</typeparamref>.</param>
-        public void Publish<TEventArgs>( string eventName, object eventSource, TEventArgs eventArgs ) where TEventArgs : class
+        public virtual void Publish<TEventArgs>( string eventName, object eventSource, TEventArgs eventArgs ) where TEventArgs : class
         {
-            List<SynchronizedWeakDelegate> list;
+            Arg.NotNullOrEmpty( eventName, "eventName" );
+            Arg.NotNull( eventArgs, "eventArgs" );
+
+            List<WeakDelegate> list;
 
             if ( !this.handlers.TryGetValue( eventName, out list ) )
                 return;
@@ -37,17 +40,17 @@
 
                     // make sure the handler matches the published event
                     // note: the event name is not a guarantee
-                    if ( !handler.IsMatch( eventArgsType ) )
+                    if ( !handler.IsCovariantWithMethod( typeof( string ), typeof( object ), eventArgsType ) )
                         continue;
 
-                    var callback = handler.CreateCallback();
+                    var callback = handler.CreateDelegate();
 
                     // if the callback is null, then the source of the handler is dead;
                     // otherwise, invoke the defined callback
                     if ( callback == null )
                         list.RemoveAt( i );
                     else
-                        callback( eventName, eventSource, eventArgs );
+                        callback.DynamicInvoke( eventName, eventSource, eventArgs );
                 }
             }
         }
@@ -59,11 +62,16 @@
         /// <param name="eventName">The name of the event to subscribe to.</param>
         /// <param name="handler">The <see cref="Action{T1,T2,T3}">action</see> to perform when the evnet is raised.</param>
         /// <param name="context">The <see cref="SynchronizationContext">synchronization context</see> to subscribe on.</param>
-        public void Subscribe<TEventArgs>( string eventName, Action<string, object, TEventArgs> handler, SynchronizationContext context ) where TEventArgs : class
+        public virtual void Subscribe<TEventArgs>( string eventName, Action<string, object, TEventArgs> handler, SynchronizationContext context ) where TEventArgs : class
         {
-            var weakDelegate = new WeakDelegate( handler );
-            var item = new SynchronizedWeakDelegate( weakDelegate, context );
-            List<SynchronizedWeakDelegate> list;
+            Arg.NotNullOrEmpty( eventName, "eventName" );
+            Arg.NotNull( handler, "handler" );
+
+            WeakDelegate item =
+                context == null ?
+                new WeakDelegate<Action<string, object, TEventArgs>>( handler ) :
+                new SynchronizedWeakDelegate<TEventArgs>( handler, context );
+            List<WeakDelegate> list;
 
             if ( !this.handlers.TryGetValue( eventName, out list ) )
             {
@@ -72,7 +80,7 @@
                     if ( !this.handlers.TryGetValue( eventName, out list ) )
                     {
                         // since the list didn't exist, add the item here to avoid a second lock
-                        list = new List<SynchronizedWeakDelegate>();
+                        list = new List<WeakDelegate>();
                         list.Add( item );
                         this.handlers.Add( eventName, list );
                         return;
@@ -90,9 +98,12 @@
         /// <typeparam name="TEventArgs">The <see cref="Type">type</see> of event arguments to subscribe to.</typeparam>
         /// <param name="eventName">The name of the event to subscribe to.</param>
         /// <param name="handler">The <see cref="Action{T1,T2,T3}">action</see> to perform when the evnet is raised.</param>
-        public void Unsubscribe<TEventArgs>( string eventName, Action<string, object, TEventArgs> handler ) where TEventArgs : class
+        public virtual void Unsubscribe<TEventArgs>( string eventName, Action<string, object, TEventArgs> handler ) where TEventArgs : class
         {
-            List<SynchronizedWeakDelegate> list;
+            Arg.NotNullOrEmpty( eventName, "eventName" );
+            Arg.NotNull( handler, "handler" );
+
+            List<WeakDelegate> list;
 
             lock ( this.syncRoot )
             {

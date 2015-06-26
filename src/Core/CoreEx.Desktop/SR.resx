@@ -132,6 +132,9 @@
   <data name="InvalidArgType" xml:space="preserve">
     <value>The parameter must be an instance of type '{0}'.</value>
   </data>
+  <data name="InvalidFileUri" xml:space="preserve">
+    <value>Only the file:// URI scheme is supported.</value>
+  </data>
   <data name="PropertyIsReadOnly" xml:space="preserve">
     <value>The '{0}' property is read-only.</value>
   </data>

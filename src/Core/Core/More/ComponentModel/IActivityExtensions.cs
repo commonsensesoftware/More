@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Reflection;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IActivity"/> interface.
@@ -22,7 +22,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IEnumerable<Type> DependsOn( this IActivity activity )
         {
-            Contract.Requires<ArgumentNullException>( activity != null, "activity" );
+            Arg.NotNull( activity, "activity" );
 
             var type = activity.GetType().GetTypeInfo();
             return type.GetCustomAttributes<DependsOnActivityAttribute>( false ).Select( a => a.ActivityType ).ToArray();

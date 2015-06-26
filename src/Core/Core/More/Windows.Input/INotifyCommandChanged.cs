@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Windows.Input;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents a command that support change notification.

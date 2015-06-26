@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)More\Composition\IApplicationState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)More\Composition\IApplicationStateContract.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)More\IO\BasicPropertiesAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)More\IO\FileSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)More\IO\IStorageItemExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)More\IO\StorageFileAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)More\IO\StorageFolderAdapter.cs" />

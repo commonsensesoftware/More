@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior of an object that describes an activity.
@@ -31,10 +31,12 @@
         /// <param name="description">The activity description.</param>
         public ActivityDescriptor( string id, string name, string description )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( id ), "id" );
-            Contract.Requires<ArgumentException>( IsValidIdentifier( id ), "id" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( description != null, "description" );
+            Arg.NotNullOrEmpty( id, "id" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( description, "description" );
+
+            if ( !IsValidIdentifier( id ) )
+                throw new ArgumentException( ExceptionMessage.InvalidActivityId, "id" );
 
             this.Id = id;
             this.Name = name;
@@ -53,8 +55,11 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( string.IsNullOrEmpty( value ), "value" );
-                Contract.Requires<ArgumentException>( IsValidIdentifier( value ), "value" );
+                Arg.NotNullOrEmpty( value, "value" );
+
+                if ( !IsValidIdentifier( value ) )
+                    throw new ArgumentException( ExceptionMessage.InvalidActivityId, "value" );
+
                 this.id = value;
             }
         }
@@ -71,7 +76,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( value ), "value" );
+                Arg.NotNullOrEmpty( value, "value" );
                 this.name = value;
             }
         }

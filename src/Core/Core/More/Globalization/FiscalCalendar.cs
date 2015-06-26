@@ -1,11 +1,11 @@
 ﻿namespace More.Globalization
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
 
     /// <summary>
     /// Represents the base implementation for a fiscal calendar.
@@ -29,7 +29,7 @@
         /// <exception cref="ArgumentException"><paramref name="years"/> is empty.</exception>
         protected FiscalCalendar( IEnumerable<FiscalYear> years )
         {
-            Contract.Requires<ArgumentNullException>( years != null, "years" );
+            Arg.NotNull( years, "years" );
 
             this.calendarYears.AddRange( years );
 

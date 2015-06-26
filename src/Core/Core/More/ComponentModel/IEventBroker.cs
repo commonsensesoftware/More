@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Threading;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Threading;
 
     /// <summary>
     /// Defines the behavior of an event broker.

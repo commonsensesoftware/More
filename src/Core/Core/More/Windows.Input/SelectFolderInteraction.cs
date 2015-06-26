@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
     using More.IO;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents an interaction request to select a folder.
@@ -29,8 +29,8 @@
         public SelectFolderInteraction( string title, params string[] fileTypeFilter )
             : base( title )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
-            Contract.Requires<ArgumentNullException>( fileTypeFilter != null, "fileTypeFilter" );
+            Arg.NotNull( title, "title" );
+            Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
 
             this.fileTypeFilter.AddRange( fileTypeFilter );
         }

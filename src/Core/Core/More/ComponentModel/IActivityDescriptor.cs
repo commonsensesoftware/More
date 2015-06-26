@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior of an object that describes an activity.

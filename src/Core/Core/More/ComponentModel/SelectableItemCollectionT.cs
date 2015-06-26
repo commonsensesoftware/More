@@ -1,15 +1,15 @@
 ﻿namespace More.ComponentModel
 {
     using More.Collections.Generic;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Collections.Specialized;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a collection of selectable items.
@@ -17,13 +17,13 @@
     /// <typeparam name="T">The <see cref="Type">type</see> of item to make selectable.</typeparam>
     /// <example>This example demonstrates to create a collection of library books and then check-out the selected books.
     /// <code lang="C#"><![CDATA[
-    /// using global::System;
-    /// using global::System.Collections.Generic;
-    /// using global::System.ComponentModel;
-    /// using global::System.Linq;
-    /// using global::System.Windows;
-    /// using global::System.Windows.Controls;
-    /// using global::System.Windows.Data;
+    /// using System;
+    /// using System.Collections.Generic;
+    /// using System.ComponentModel;
+    /// using System.Linq;
+    /// using System.Windows;
+    /// using System.Windows.Controls;
+    /// using System.Windows.Data;
     /// 
     /// public class Book
     /// {
@@ -89,13 +89,13 @@
     /// select or unselect all items.  The 'All' item itself will never be included in the <see cref="P:SelectedItems"/> or
     /// <see cref="P:SelectedValues"/> properties.
     /// <code lang="C#"><![CDATA[
-    /// using global::System;
-    /// using global::System.Collections.Generic;
-    /// using global::System.ComponentModel;
-    /// using global::System.Linq;
-    /// using global::System.Windows;
-    /// using global::System.Windows.Controls;
-    /// using global::System.Windows.Data;
+    /// using System;
+    /// using System.Collections.Generic;
+    /// using System.ComponentModel;
+    /// using System.Linq;
+    /// using System.Windows;
+    /// using System.Windows.Controls;
+    /// using System.Windows.Data;
     /// 
     /// public class Book
     /// {
@@ -179,8 +179,8 @@
 
             internal SelectedValuesMediator( ObservableCollection<TItem> source, ICollection<TItem> targetCollection )
             {
-                Contract.Requires( source != null, "source" );
-                Contract.Requires( targetCollection != null, "targetCollection" );
+                Contract.Requires( source != null );
+                Contract.Requires( targetCollection != null );
 
                 this.source = source;
                 this.targetCollection = targetCollection;
@@ -206,8 +206,8 @@
 
             private void OnSourceChanged( object sender, NotifyCollectionChangedEventArgs e )
             {
-                Contract.Requires( sender != null, "sender" );
-                Contract.Requires( e != null, "e" );
+                Contract.Requires( sender != null );
+                Contract.Requires( e != null );
 
                 // disable events (to prevent cyclic recursion)
                 if ( this.target != null )
@@ -243,8 +243,8 @@
 
             private void OnTargetChanged( object sender, NotifyCollectionChangedEventArgs e )
             {
-                Contract.Requires( sender != null, "sender" );
-                Contract.Requires( e != null, "e" );
+                Contract.Requires( sender != null );
+                Contract.Requires( e != null );
 
                 // disable events (to prevent cyclic recursion)
                 this.source.CollectionChanged -= this.OnSourceChanged;
@@ -296,7 +296,7 @@
             internal SelectAllItem( SelectableItemCollection<TValue> owner, TValue value )
                 : base( false, value )
             {
-                Contract.Requires( owner != null, "owner" );
+                Contract.Requires( owner != null );
                 this.owner = owner;
             }
 
@@ -333,6 +333,8 @@
             [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Handled by base class" )]
             protected override void OnPropertyChanged( PropertyChangedEventArgs e )
             {
+                Arg.NotNull( e, "e" );
+
                 base.OnPropertyChanged( e );
 
                 if ( this.suppressEvents ||
@@ -365,7 +367,7 @@
 
             internal ItemCollection( IEqualityComparer<TItem> comparer )
             {
-                Contract.Requires( comparer != null, "comparer" );
+                Contract.Requires( comparer != null );
 
                 // since we don't have a comparer that can be used here for the standard 0,1,-1 values use -1 as the non-equal value
                 // we're only interested in equality so that should suffice for this internally implementation
@@ -375,8 +377,8 @@
 
             internal void Initialize( SelectableItemCollection<TItem> source, IEnumerable<TItem> sequence )
             {
-                Contract.Requires( source != null, "source" );
-                Contract.Requires( sequence != null, "sequence" );
+                Contract.Requires( source != null );
+                Contract.Requires( sequence != null );
 
                 this.owner = source;
 
@@ -571,8 +573,8 @@
 
             internal SelectedValuesCollection( SelectableItemCollection<TValue> owner, IEqualityComparer<TValue> comparer )
             {
-                Contract.Requires( owner != null, "owner" );
-                Contract.Requires( comparer != null, "comparer" );
+                Contract.Requires( owner != null );
+                Contract.Requires( comparer != null );
                 this.owner = owner;
                 this.comparer = comparer;
             }
@@ -664,7 +666,7 @@
         protected SelectableItemCollection( Func<T, IEqualityComparer<T>, SelectableItem<T>> factory )
             : this( factory, Enumerable.Empty<T>(), (object) null, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( factory != null, "factory" ); 
+            Arg.NotNull( factory, "factory" ); 
         }
 
         /// <summary>
@@ -674,7 +676,7 @@
         protected SelectableItemCollection( IEqualityComparer<T> comparer )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), Enumerable.Empty<T>(), (object) null, comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" ); 
+            Arg.NotNull( comparer, "comparer" ); 
         }
 
         /// <summary>
@@ -686,8 +688,8 @@
         protected SelectableItemCollection( Func<T, IEqualityComparer<T>, SelectableItem<T>> factory, IEqualityComparer<T> comparer )
             : this( factory, Enumerable.Empty<T>(), (object) null, comparer )
         {
-            Contract.Requires<ArgumentNullException>( factory != null, "factory" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" ); 
+            Arg.NotNull( factory, "factory" );
+            Arg.NotNull( comparer, "comparer" ); 
         }
 
         /// <summary>
@@ -697,7 +699,7 @@
         public SelectableItemCollection( IEnumerable<T> sequence )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) null, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" ); 
+            Arg.NotNull( sequence, "sequence" ); 
         }
 
         /// <summary>
@@ -708,8 +710,8 @@
         public SelectableItemCollection( IEnumerable<T> sequence, IEqualityComparer<T> comparer )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) null, comparer )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" ); 
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" ); 
         }
 
         /// <summary>
@@ -720,7 +722,7 @@
         public SelectableItemCollection( IEnumerable<T> sequence, T selectAllValue )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) selectAllValue, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" ); 
+            Arg.NotNull( sequence, "sequence" ); 
         }
 
         /// <summary>
@@ -732,8 +734,8 @@
         public SelectableItemCollection( IEnumerable<T> sequence, T selectAllValue, IEqualityComparer<T> comparer )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) selectAllValue, comparer )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" ); 
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" ); 
         }
 
         private SelectableItemCollection(
@@ -743,9 +745,9 @@
             IEqualityComparer<T> comparer )
             : base( new ItemCollection<T>( comparer ) )
         {
-            Contract.Requires( sequence != null, "factory" );
-            Contract.Requires( sequence != null, "sequence" );
-            Contract.Requires( comparer != null, "comparer" );
+            Contract.Requires( sequence != null );
+            Contract.Requires( sequence != null );
+            Contract.Requires( comparer != null );
 
             this.factory = factory;
             this.valueComparer = comparer;
@@ -810,13 +812,13 @@
         /// the sychronization is one-way.  Invoking <see cref="IDisposable.Dispose"/> on the returned object terminates mediation.</remarks>
         /// <example>This example demonstrates to create a mediator that automatically synchronizes selected values to an external collection.
         /// <code lang="C#"><![CDATA[
-        /// using global::System;
-        /// using global::System.Collections.Generic;
-        /// using global::System.ComponentModel;
-        /// using global::System.Linq;
-        /// using global::System.Windows;
-        /// using global::System.Windows.Controls;
-        /// using global::System.Windows.Data;
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.ComponentModel;
+        /// using System.Linq;
+        /// using System.Windows;
+        /// using System.Windows.Controls;
+        /// using System.Windows.Data;
         /// 
         /// public class MyModel
         /// {
@@ -867,7 +869,7 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "This method creates and returns a disposable object." )]
         public virtual IDisposable CreateSelectedValuesMediator( ICollection<T> target )
         {
-            Contract.Requires<ArgumentNullException>( target != null, "target" );
+            Arg.NotNull( target, "target" );
             Contract.Ensures( Contract.Result<IDisposable>() != null );
             return new SelectedValuesMediator<T>( this.SelectedValues, target );
         }

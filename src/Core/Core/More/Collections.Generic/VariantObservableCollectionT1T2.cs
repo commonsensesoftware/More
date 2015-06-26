@@ -1,12 +1,12 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a covariant and contravariant version of the <see cref="ObservableCollection{T}"/> class.
@@ -31,7 +31,7 @@
         public VariantObservableCollection( IEnumerable<TFrom> sequence )
             : base( sequence.Cast<TTo>() )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, "sequence" );
         }
 
         int IList<TFrom>.IndexOf( TFrom item )
@@ -79,9 +79,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "False positive" )]
         void ICollection<TFrom>.CopyTo( TFrom[] array, int arrayIndex )
         {
-            if ( array == null )
-                throw new ArgumentNullException( "array" );
-
+            Arg.NotNull( array, "array" );
             var other = new TTo[array.Length];
             this.Items.CopyTo( other, arrayIndex );
             other.Cast<TFrom>().ToList().CopyTo( array, arrayIndex );

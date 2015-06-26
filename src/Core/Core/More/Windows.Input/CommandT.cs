@@ -1,11 +1,11 @@
 ﻿namespace More.Windows.Input
 {
     using More.ComponentModel;
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents an observable command using a delegate<seealso cref="AsyncCommand{T}"/>.
@@ -13,10 +13,10 @@
     /// <typeparam name="T">The <see cref="Type">type</see> of parameter associated with the command.</typeparam>
     /// <example>This example demonstrates how to create a command that accepts a lambda expression to execute.
     /// <code lang="C#"><![CDATA[
-    /// using global::System.Windows.Input;
-    /// using global::System;
-    /// using global::System.Windows;
-    /// using global::System.Windows.Input;
+    /// using System.Windows.Input;
+    /// using System;
+    /// using System.Windows;
+    /// using System.Windows.Input;
     /// 
     /// var command = new Command<string>( parameter => Console.WriteLine( parameter ) );
     /// var button = new Button();
@@ -44,7 +44,7 @@
         public Command( Action<T> executeMethod )
             : this( executeMethod, DefaultFunc.CanExecute )
         {
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -54,8 +54,9 @@
         /// <param name="canExecuteMethod">The <see cref="Func{T1,TResult}"/> representing the can execute method.</param>
         public Command( Action<T> executeMethod, Func<T, bool> canExecuteMethod )
         {
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNull( executeMethod, "executeMethod" );
+            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
+
             this.executeMethod = executeMethod;
             this.canExecuteMethod = canExecuteMethod;
         }
@@ -66,7 +67,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExecuted( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Executed;
 
@@ -100,7 +101,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCanExecuteChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.CanExecuteChanged;
 

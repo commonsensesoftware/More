@@ -1,18 +1,19 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Threading;
-    using global::System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents a repository of items.
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> of item in the repository.</typeparam>
+    [ContractClass( typeof( RepositoryContract<> ) )]
     public abstract class Repository<T> : ObservableObject, IRepository<T> where T : class
     {
         private readonly IUnitOfWork<T> unitOfWork;
@@ -24,7 +25,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected Repository( IUnitOfWork<T> unitOfWork )
         {
-            Contract.Requires<ArgumentNullException>( unitOfWork != null, "unitOfWork" );
+            Arg.NotNull( unitOfWork, "unitOfWork" );
             this.unitOfWork = unitOfWork;
             this.unitOfWork.PropertyChanged += this.OnUnitOfWorkPropertyChanged;
         }
@@ -56,6 +57,7 @@
         /// <param name="queryShaper">The <see cref="Func{T1,TResult}">function</see> that shapes the <see cref="IQueryable{T}">query</see> to execute.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken">cancellation token</see> that can be used to cancel the operation.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing the retrieved <see cref="IEnumerable{T}">sequence</see> of <typeparamref name="T">items</typeparamref>.</returns>
+        [SuppressMessage( "Microsoft.Contracts", "CC1055", Justification = "Validation provided by inherited type." )]
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics support." )]
         public abstract Task<IEnumerable<T>> GetAsync( Func<IQueryable<T>, IQueryable<T>> queryShaper, CancellationToken cancellationToken );
 
@@ -66,6 +68,7 @@
         /// <param name="queryShaper">The <see cref="Func{T,TResult}">function</see> that shapes the <see cref="IQueryable{T}">query</see> to execute.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken">cancellation token</see> that can be used to cancel the operation.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing the <typeparamref name="TResult">result</typeparamref> of the operation.</returns>
+        [SuppressMessage( "Microsoft.Contracts", "CC1055", Justification = "Validation provided by inherited type." )]
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics support." )]
         public abstract Task<TResult> GetAsync<TResult>( Func<IQueryable<T>, TResult> queryShaper, CancellationToken cancellationToken );
 
@@ -87,6 +90,7 @@
         /// <param name="item">The new item to add.</param>
         public virtual void Add( T item )
         {
+            Arg.NotNull( item, "item" );
             this.UnitOfWork.RegisterNew( item );
         }
 
@@ -96,6 +100,7 @@
         /// <param name="item">The item to remove.</param>
         public virtual void Remove( T item )
         {
+            Arg.NotNull( item, "item" );
             this.UnitOfWork.RegisterRemoved( item );
         }
 
@@ -105,6 +110,7 @@
         /// <param name="item">The item to update.</param>
         public virtual void Update( T item )
         {
+            Arg.NotNull( item, "item" );
             this.UnitOfWork.RegisterChanged( item );
         }
 

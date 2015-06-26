@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents debugging class used to visualize an instance of the <see cref="SelectableItemCollectionDebugView{T}"/> class.
@@ -21,7 +21,7 @@
         /// <param name="collection">The <see cref="SelectableItemCollection{T}">collection</see> to debug.</param>
         public SelectableItemCollectionDebugView( SelectableItemCollection<T> collection )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
+            Arg.NotNull( collection, "collection" );
             this.source = collection;
         }
 

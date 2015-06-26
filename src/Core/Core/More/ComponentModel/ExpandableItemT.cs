@@ -1,11 +1,11 @@
 ﻿namespace More.ComponentModel
 {
     using More.Windows.Input;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents an expandable item.
@@ -34,7 +34,7 @@
         public ExpandableItem( T value, IEqualityComparer<T> comparer )
             : this( false, value, comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -55,7 +55,7 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare values.</param>
         public ExpandableItem( bool expanded, T value, IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
 
             this.Value = value;
             this.expanded = expanded;
@@ -83,7 +83,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExpanded( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Expanded;
 
@@ -97,7 +97,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCollapsed( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Collapsed;
 

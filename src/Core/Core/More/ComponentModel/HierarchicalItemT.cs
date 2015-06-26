@@ -1,14 +1,14 @@
 ﻿namespace More.ComponentModel
 {
     using More.Windows.Input;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     /// <summary>
     /// Represents a hierarchical item.
@@ -55,7 +55,7 @@
         protected internal HierarchicalItem( T value, bool? selected, IEqualityComparer<T> comparer )
             : this( value, selected, new Command<object>( DefaultAction.None, p => true ), comparer )
         {
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -66,7 +66,7 @@
         public HierarchicalItem( T value, ICommand clickCommand )
             : this( value, null, clickCommand, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( clickCommand != null, "clickCommand" );
+            Arg.NotNull( clickCommand, "clickCommand" );
         }
 
         /// <summary>
@@ -78,7 +78,7 @@
         public HierarchicalItem( T value, bool? selected, ICommand clickCommand )
             : this( value, selected, clickCommand, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( clickCommand != null, "clickCommand" );
+            Arg.NotNull( clickCommand, "clickCommand" );
         }
 
         /// <summary>
@@ -90,8 +90,8 @@
         public HierarchicalItem( T value, ICommand clickCommand, IEqualityComparer<T> comparer )
             : this( value, null, clickCommand, comparer )
         {
-            Contract.Requires<ArgumentNullException>( clickCommand != null, "clickCommand" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( clickCommand, "clickCommand" );
+            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -103,8 +103,8 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare values.</param>
         public HierarchicalItem( T value, bool? selected, ICommand clickCommand, IEqualityComparer<T> comparer )
         {
-            Contract.Requires<ArgumentNullException>( clickCommand != null, "clickCommand" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( clickCommand, "clickCommand" );
+            Arg.NotNull( comparer, "comparer" );
 
             this.comparer = comparer;
             this.selected = selected;
@@ -142,7 +142,7 @@
             }
             protected internal set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0, "value" );
 
                 if ( this.depth == value )
                     return;
@@ -187,7 +187,7 @@
 
         private static void UpdateDepth( HierarchicalItem<T> current )
         {
-            Contract.Requires( current != null, "current" );
+            Contract.Requires( current != null );
 
             var queue = new Queue<HierarchicalItem<T>>();
             queue.Enqueue( current );
@@ -219,7 +219,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnClicked( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Clicked;
 
@@ -233,7 +233,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnSelected( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Selected;
 
@@ -247,7 +247,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnUnselected( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Unselected;
 
@@ -261,7 +261,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnIndeterminate( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Indeterminate;
 
@@ -275,7 +275,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExpanded( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Expanded;
 
@@ -289,7 +289,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCollapsed( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, "e" );
 
             var handler = this.Collapsed;
 
@@ -462,7 +462,8 @@
             }
             protected internal set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
+                Arg.NotNull( value, "value" );
+
                 if ( this.click == value )
                     return;
 

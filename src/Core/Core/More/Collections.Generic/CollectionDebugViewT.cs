@@ -1,11 +1,11 @@
 ﻿namespace More.Collections.Generic
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents debugging class used to visualize an instance of the <see cref="ICollection{T}"/> interface.
@@ -21,7 +21,7 @@
         /// <param name="collection">The <see cref="ICollection{T}">collection</see> to debug.</param>
         public CollectionDebugView( ICollection<T> collection )
         {
-            Contract.Requires<ArgumentNullException>( collection != null, "collection" );
+            Arg.NotNull( collection, "collection" );
             this.source = collection;
         }
 

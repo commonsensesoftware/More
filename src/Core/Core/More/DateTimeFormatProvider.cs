@@ -1,12 +1,12 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Globalization;
-    using global::System.Linq;
-    using global::System.Text;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// Represents a custom date and time format provider, which supports the standard date and time format specifiers as well as
@@ -92,7 +92,7 @@
     /// <example>This example demonstrates how using the an implementation of ToString which will leverage the <see cref="ICustomFormatter"/> interface.
     /// <code lang="C#">
     /// <![CDATA[
-    /// using global::System;
+    /// using System;
     /// 
     /// var formatProvider = new DateTimeFormatProvider();
     /// var dateTime = new DateTime( 2010, 7, 1 );
@@ -125,18 +125,18 @@
             internal DateTimeFormatToken( string format )
                 : this( format, false, false )
             {
-                Contract.Requires( format != null, "format" );
+                Contract.Requires( format != null );
             }
 
             internal DateTimeFormatToken( string format, bool literal )
                 : this( format, literal, false )
             {
-                Contract.Requires( format != null, "format" );
+                Contract.Requires( format != null );
             }
 
             internal DateTimeFormatToken( string format, bool literal, bool invalid )
             {
-                Contract.Requires( format != null, "format" );
+                Contract.Requires( format != null );
                 this.Format = format;
                 this.IsLiteral = literal;
                 this.IsInvalid = invalid;
@@ -339,7 +339,7 @@
         public DateTimeFormatProvider( DateTimeFormatInfo dateTimeFormat )
             : this( dateTimeFormat, dateTimeFormat.Calendar )
         {
-            Contract.Requires<ArgumentNullException>( dateTimeFormat != null, "dateTimeFormat" );
+            Arg.NotNull( dateTimeFormat, "dateTimeFormat" );
         }
 
         /// <summary>
@@ -349,7 +349,7 @@
         public DateTimeFormatProvider( Calendar calendar )
             : this( DateTimeFormatInfo.CurrentInfo, calendar )
         {
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
+            Arg.NotNull( calendar, "calendar" );
         }
 
         /// <summary>
@@ -359,8 +359,8 @@
         /// <param name="calendar">The <see cref="Calendar"/> used by the format provider.</param>
         public DateTimeFormatProvider( DateTimeFormatInfo dateTimeFormat, Calendar calendar )
         {
-            Contract.Requires<ArgumentNullException>( dateTimeFormat != null, "dateTimeFormat" );
-            Contract.Requires<ArgumentNullException>( calendar != null, "calendar" );
+            Arg.NotNull( dateTimeFormat, "dateTimeFormat" );
+            Arg.NotNull( calendar, "calendar" );
             this.dateTimeFormat = dateTimeFormat;
             this.calendar = calendar;
         }
@@ -412,7 +412,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         private string GetCustomFormat( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Contract.Requires( !string.IsNullOrEmpty( format ), "format" );
+            Contract.Requires( !string.IsNullOrEmpty( format ) );
             Contract.Ensures( Contract.Result<string>() != null );
 
             switch ( format[0] )
@@ -432,7 +432,7 @@
 
         private static int ToDateTimeMonth( Calendar calendar, DateTime value )
         {
-            Contract.Requires( calendar != null, "calendar" );
+            Contract.Requires( calendar != null );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             var epoch = calendar.FirstMonthOfYear();
@@ -452,7 +452,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatYearPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNullOrEmpty( format, "format" );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             switch ( format.Length )
@@ -479,7 +479,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatSemesterPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNullOrEmpty( format, "format" );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             switch ( format.Length )
@@ -506,7 +506,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatQuarterPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNullOrEmpty( format, "format" );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             switch ( format.Length )
@@ -533,7 +533,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatMonthPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNullOrEmpty( format, "format" );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             // NOTE: the DateTimeFormatInfo cannot be overridden or supplied an alternate calendar.
@@ -566,7 +566,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatDatePart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( format ), "format" );
+            Arg.NotNullOrEmpty( format, "format" );
             Contract.Ensures( Contract.Result<string>() != null );
 
             // since we're going to let the DateTime do its normal thing, we need to prepend the %

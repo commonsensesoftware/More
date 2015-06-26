@@ -61,6 +61,25 @@
         }
 
         /// <summary>
+        /// Returns all services of the given <paramref name="serviceType">type</paramref>.
+        /// </summary>
+        /// <param name="serviceProvider">The extended <see cref="IServiceProvider"/> object.</param>
+        /// <param name="serviceType">The <see cref="Type">type</see> of object requested.</param>
+        /// <returns>A <see cref="IEnumerable{T}">sequence</see> of services of the requested <paramref name="serviceType">type</paramref>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
+        public static IEnumerable<object> GetServices( this IServiceProvider serviceProvider, Type serviceType )
+        {
+            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Contract.Ensures( Contract.Result<IEnumerable<object>>() != null );
+
+            var generator = new ServiceTypeDisassembler();
+            var multipleServicesType = generator.ForMany( serviceType );
+            return ( (IEnumerable<object>) serviceProvider.GetService( multipleServicesType ) ) ?? Enumerable.Empty<object>();
+        }
+
+        /// <summary>
         /// Returns all services of the given <paramref name="serviceType">type</paramref> and key.
         /// </summary>
         /// <param name="serviceProvider">The extended <see cref="IServiceProvider"/> object.</param>

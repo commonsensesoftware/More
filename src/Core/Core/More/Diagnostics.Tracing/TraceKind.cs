@@ -1,6 +1,6 @@
 ﻿namespace More.Diagnostics.Tracing
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Represents the possible kinds of tracing operations.
