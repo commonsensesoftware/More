@@ -24,8 +24,8 @@
         public ExtensionMethodToPropertyDescriptor( string propertyName, Func<TObject, TValue> accessor )
             : this( propertyName, accessor, null )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( accessor, "accessor" );
         }
 
         /// <summary>
@@ -38,8 +38,8 @@
         public ExtensionMethodToPropertyDescriptor( string propertyName, Func<TObject, TValue> accessor, Action<TObject, TValue> mutator )
             : base( propertyName, new Attribute[0] )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( accessor, "accessor" );
 
             this.accessor = accessor;
             this.mutator = mutator;

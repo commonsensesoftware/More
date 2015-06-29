@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -42,7 +43,8 @@
         /// <param name="instance">The instance to define extension properties for.</param>
         public ExtensionPropertyScope( T instance )
         {
-            Contract.Requires<ArgumentNullException>( instance != null, "instance" );
+            Arg.NotNull( instance, "instance" );
+
             this.instance = instance;
             this.provider = new TypeDescriptionProvider<T>( this.CreateFactory );
             TypeDescriptor.AddProvider( this.provider, this.instance );
@@ -115,9 +117,10 @@
         ///     }
         /// }
         /// ]]></code></example>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public void Add<TValue>( Func<T, TValue> accessor )
         {
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNull( accessor, "accessor" );
             this.descriptor.AddExtensionProperty( accessor.Method.Name, accessor );
         }
 
@@ -158,8 +161,8 @@
         /// ]]></code></example>
         public void Add<TValue>( string propertyName, Func<T, TValue> accessor )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( accessor, "accessor" );
             this.descriptor.AddExtensionProperty( propertyName, accessor );
         }
 
@@ -232,8 +235,8 @@
         /// ]]></code></example>
         public void Add<TValue>( string propertyName, Func<T, TValue> accessor, Action<T, TValue> mutator )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( accessor, "accessor" );
             this.descriptor.AddExtensionProperty( propertyName, accessor, mutator );
         }
     }

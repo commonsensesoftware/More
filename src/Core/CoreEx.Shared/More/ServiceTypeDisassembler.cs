@@ -1,8 +1,10 @@
 ﻿namespace More
 {
+    using More.Collections.Generic;
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Reflection;
 
@@ -19,7 +21,7 @@
             Contract.Requires( type != null );
             Contract.Ensures( Contract.Result<TypeInfo>() != null );
 
-            var closedTypes = new Stack<TypeInfo>();
+            var closedTypes = new Stack<TypeInfo>().Adapt();
             return DisassembleServiceType( type, closedTypes );
         }
 
@@ -30,10 +32,12 @@
         /// <param name="closedTypes">The disassembled, closed <see cref="TypeInfo">type</see> arguments.</param>
         /// <returns>The disassembled <see cref="TypeInfo">type</see>.</returns>
         /// <remarks>If the specified <paramref name="type"/> is not generic, then the original type is returned.</remarks>
-        protected static TypeInfo DisassembleServiceType( TypeInfo type, Stack<TypeInfo> closedTypes )
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
+        protected static TypeInfo DisassembleServiceType( TypeInfo type, IStack<TypeInfo> closedTypes )
         {
-            Contract.Requires( type != null );
-            Contract.Requires( closedTypes != null );
+            Arg.NotNull( type, "type" );
+            Arg.NotNull( closedTypes, "closedTypes" );
             Contract.Ensures( Contract.Result<TypeInfo>() != null );
 
             while ( type.IsGenericType )
@@ -51,9 +55,9 @@
         /// <param name="serviceType">The service <see cref="Type">type</see> to extract the key from.</param>
         /// <returns>The key extracted from the specified <paramref name="serviceType">service type</paramref> or <c>null</c> if no key is associated.</returns>
         /// <remarks>The value of the key is derived from the applied <see cref="ServiceKeyAttribute"/>.</remarks>
-        public string ExtractKey( Type serviceType )
+        public virtual string ExtractKey( Type serviceType )
         {
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
 
             // find true decorated service type and extract the key from any applied attribute
             var type = DisassembleServiceType( serviceType.GetTypeInfo() );
@@ -70,9 +74,9 @@
         /// <returns>A <see cref="Type">type</see> representing multiple instances of the specified <paramref name="serviceType">service type</paramref>.</returns>
         /// <remarks>If the specified <paramref name="serviceType">service type</paramref> is assignable from <see cref="IEnumerable"/>,
         /// then the original type is returned; otherwise, the returned type is assignable from <see cref="IEnumerable"/>.</remarks>
-        public Type ForMany( Type serviceType )
+        public virtual Type ForMany( Type serviceType )
         {
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
             Contract.Ensures( Contract.Result<Type>() != null );
 
             if ( Enumerable.IsAssignableFrom( serviceType.GetTypeInfo() ) )
@@ -86,9 +90,9 @@
         /// </summary>
         /// <param name="serviceType">The service <see cref="Type">type</see> to evaluate.</param>
         /// <returns>True if the specified <paramref name="serviceType">service type</paramref> represents multiple service instances; otherwise, false.</returns>
-        public bool IsForMany( Type serviceType )
+        public virtual bool IsForMany( Type serviceType )
         {
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
             return Enumerable.IsAssignableFrom( serviceType.GetTypeInfo() );
         }
 
@@ -100,9 +104,10 @@
         /// the same as the <paramref name="serviceType">service type</paramref> when the specified type does not
         /// represent multiple instances.</param>
         /// <returns>True if the specified <paramref name="serviceType">service type</paramref> represents multiple service instances; otherwise, false.</returns>
-        public bool IsForMany( Type serviceType, out Type singleServiceType )
+        [SuppressMessage( "Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Optimization for callers if they also want to know the matched service type." )]
+        public virtual bool IsForMany( Type serviceType, out Type singleServiceType )
         {
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
             Contract.Ensures( Contract.ValueAtReturn( out singleServiceType ) != null );
 
             singleServiceType = serviceType;

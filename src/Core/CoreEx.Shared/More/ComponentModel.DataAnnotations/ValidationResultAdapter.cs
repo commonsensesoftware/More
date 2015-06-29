@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel.DataAnnotations
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel.DataAnnotations;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.Contracts;
 
     internal sealed class ValidationResultAdapter : IValidationResult
     {

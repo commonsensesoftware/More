@@ -69,8 +69,8 @@
         [ReflectionPermission( SecurityAction.PermitOnly, Flags = ReflectionPermissionFlag.NoFlags )]
         public CompositeValidatorAttribute( Type factoryType, string methodName )
         {
-            Contract.Requires<ArgumentNullException>( factoryType != null, "factoryType" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( methodName ), "methodName" );
+            Arg.NotNull( factoryType, "factoryType" );
+            Arg.NotNullOrEmpty( methodName, "methodName" );
             
             var flags = BindingFlags.IgnoreCase | BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy;
             var method = factoryType.GetMethod( methodName, flags );

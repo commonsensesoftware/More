@@ -1,0 +1,29 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+ <!-- TEMP: due to a bug in nuget.exe 2.8.x, metadata cannot be extracted from a pcl. this will be fixed in 3.0 -->
+ <metadata>
+  <id>$id$</id>
+  <version>1.0.0.0</version>
+  <authors>Chris Martinez</authors>
+  <owners>Commonsense Software</owners>
+  <title>More - UI</title>
+  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <description>The user interface foundation library for the "More" framework.</description>
+  <summary>Provides "More" patterns and practices for user interface applications.</summary>
+  <releaseNotes></releaseNotes>
+  <language>en-US</language>
+  <!--<projectUrl></projectUrl>-->
+  <!--<iconUrl></iconUrl>-->
+  <tags>More Patterns Practices UI User Interfaces Model View MVVM MVC MVP</tags>
+  <copyright>Commonsense Software</copyright>
+  <references>
+   <reference file="$id$.dll" />
+  </references>
+  <dependencies>
+   <dependency id="More" version="$version$" />
+  </dependencies>
+ </metadata>
+ <files>
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\CodeContracts" />
+ </files>
+</package>

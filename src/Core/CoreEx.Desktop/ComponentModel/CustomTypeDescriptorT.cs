@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
 
@@ -38,10 +39,11 @@
         /// </summary>
         /// <param name="parent">The parent <see cref="ICustomTypeDescriptor">type descriptor</see>.</param>
         /// <param name="other">The other <see cref="CustomTypeDescriptor{T}">type descriptor</see> to initialize the new instance from.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public CustomTypeDescriptor( ICustomTypeDescriptor parent, CustomTypeDescriptor<T> other )
             : base( parent )
         {
-            Contract.Requires<ArgumentNullException>( other != null, "other" );
+            Arg.NotNull( other, "other" );
             this.extensionProperties.AddRange( other.extensionProperties );
         }
 
@@ -88,9 +90,10 @@
         ///     }
         /// }
         /// ]]></code></example>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public void AddExtensionProperty<TValue>( Func<T, TValue> accessor )
         {
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNull( accessor, "accessor" );
             this.AddExtensionProperty( accessor.Method.Name, accessor );
         }
 
@@ -136,8 +139,8 @@
         /// ]]></code></example>
         public void AddExtensionProperty<TValue>( string propertyName, Func<T, TValue> accessor )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( accessor, "accessor" );
             this.AddExtensionProperty( propertyName, accessor, null );
         }
 
@@ -215,8 +218,8 @@
         /// ]]></code></example>
         public virtual void AddExtensionProperty<TValue>( string propertyName, Func<T, TValue> accessor, Action<T, TValue> mutator )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
-            Contract.Requires<ArgumentNullException>( accessor != null, "accessor" );
+            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( accessor, "accessor" );
 
             if ( this.extensionProperties.Contains( propertyName ) )
                 this.extensionProperties.Remove( propertyName );

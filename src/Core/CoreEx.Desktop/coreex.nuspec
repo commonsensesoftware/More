@@ -6,17 +6,17 @@
   <authors>Chris Martinez</authors>
   <owners>$author$</owners>
   <frameworkAssemblies>
-   <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net451" />
-   <frameworkAssembly assemblyName="System.Configuration" targetFramework="net451" />
+   <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net45" />
+   <frameworkAssembly assemblyName="System.Configuration" targetFramework="net45" />
    <frameworkAssembly assemblyName="System.Core" />
-   <frameworkAssembly assemblyName="System.Reflection.Context" targetFramework="net451" />
+   <frameworkAssembly assemblyName="System.Reflection.Context" targetFramework="net45" />
    <frameworkAssembly assemblyName="System.Xml" />
    <frameworkAssembly assemblyName="System.Xml.Linq" />
   </frameworkAssemblies>
-  <title>More Framework</title>
+  <title>More - Extensions</title>
   <requireLicenseAcceptance>false</requireLicenseAcceptance>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices to the Microsoft Base Class Library (BCL).</summary>
+  <summary>Provides "More" patterns and practices that contains platform-specific extensions.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
   <!--<projectUrl></projectUrl>-->
@@ -31,7 +31,7 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net451\CodeContracts" />
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
 
   <file src="..\CoreEx.Windows\$bin$\$id$.dll" target="lib\win81" />
   <file src="..\CoreEx.Windows\$bin$\$id$.xml" target="lib\win81" />

@@ -149,6 +149,7 @@
             var target = new MockValidatableObject();
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
+            var serviceProvider = new Mock<IServiceProvider>();
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
@@ -171,11 +172,9 @@
                        } )
                      .Returns( () => valid );
 
-            var container = new ServiceContainer();
+            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
 
-            container.AddService( typeof( IValidator ), validator.Object );
-
-            ServiceProvider.SetCurrent( container );
+            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             target.PropertyChanged += ( s, e ) => propertyChanged = true;
             target.ErrorsChanged += ( s, e ) => errorsChanged = true;
@@ -201,6 +200,7 @@
             var target = new MockValidatableObject();
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
+            var serviceProvider = new Mock<IServiceProvider>();
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
@@ -225,11 +225,9 @@
                        } )
                      .Returns( () => valid );
 
-            var container = new ServiceContainer();
+            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
 
-            container.AddService( typeof( IValidator ), validator.Object );
-
-            ServiceProvider.SetCurrent( container );
+            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             target.PropertyChanged += ( s, e ) => propertyChanged = true;
             target.ErrorsChanged += ( s, e ) => errorsChanged = true;
@@ -256,6 +254,7 @@
             var target = new MockValidatableObject();
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
+            var serviceProvider = new Mock<IServiceProvider>();
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
@@ -278,11 +277,9 @@
                        } )
                      .Returns( () => valid );
 
-            var container = new ServiceContainer();
+            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
 
-            container.AddService( typeof( IValidator ), validator.Object );
-
-            ServiceProvider.SetCurrent( container );
+            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             target.InvokeSetProperty( "Name", ref mockBackingField, expected, StringComparer.Ordinal );
 
@@ -421,6 +418,7 @@
             // arrange
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
+            var serviceProvider = new Mock<IServiceProvider>();
             var target = new MockValidatableObject();
 
             context.SetupProperty( c => c.MemberName );
@@ -430,11 +428,9 @@
             validator.Setup( v => v.TryValidateProperty( It.IsAny<object>(), It.IsAny<IValidationContext>(), It.IsAny<ICollection<IValidationResult>>() ) )
                      .Returns( expected );
 
-            var container = new ServiceContainer();
+            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
 
-            container.AddService( typeof( IValidator ), validator.Object );
-
-            ServiceProvider.SetCurrent( container );
+            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             var actual = target.InvokeIsPropertyValid( "Name", value );
@@ -452,6 +448,7 @@
             var results = new List<IValidationResult>();
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
+            var serviceProvider = new Mock<IServiceProvider>();
             var target = new MockValidatableObject();
             var valid = false;
 
@@ -475,11 +472,9 @@
                          } )
                      .Returns( () => valid );
 
-            var container = new ServiceContainer();
+            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
 
-            container.AddService( typeof( IValidator ), validator.Object );
-
-            ServiceProvider.SetCurrent( container );
+            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             target.InvokeIsPropertyValid( "Name", value, results );
@@ -561,6 +556,7 @@
             // arrange
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
+            var serviceProvider = new Mock<IServiceProvider>();
             var target = new MockValidatableObject();
 
             context.SetupProperty( c => c.MemberName );
@@ -571,11 +567,9 @@
                      .Callback<object, IValidationContext, ICollection<IValidationResult>>( ( v, c, r ) => r.Add( new Mock<IValidationResult>().Object ) )
                      .Returns( false );
 
-            var container = new ServiceContainer();
+            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
 
-            container.AddService( typeof( IValidator ), validator.Object );
-
-            ServiceProvider.SetCurrent( container );
+            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             target.Name = string.Empty;
@@ -590,6 +584,7 @@
             // arrange
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
+            var serviceProvider = new Mock<IServiceProvider>();
             var target = new MockValidatableObject();
             var valid = false;
 
@@ -615,11 +610,9 @@
                         } )
                      .Returns( () => valid );
 
-            var container = new ServiceContainer();
+            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
 
-            container.AddService( typeof( IValidator ), validator.Object );
-
-            ServiceProvider.SetCurrent( container );
+            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             target.Name = string.Empty;

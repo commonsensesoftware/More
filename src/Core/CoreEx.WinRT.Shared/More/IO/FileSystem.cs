@@ -18,6 +18,8 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the retreived <see cref="IFolder">folder</see>.</returns>
         public async Task<IFolder> GetFolderAsync( string path )
         {
+            Arg.NotNullOrEmpty( path, "path" );
+
             var folder = await StorageFolder.GetFolderFromPathAsync( path );
             return folder.AsFolder();
         }
@@ -29,6 +31,8 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the retreived <see cref="IFile">file</see>.</returns>
         public async Task<IFile> GetFileAsync( string path )
         {
+            Arg.NotNullOrEmpty( path, "path" );
+
             if ( !Path.IsPathRooted( path ) )
                 path = Path.Combine( path, Package.Current.InstalledLocation.Path );
 
@@ -43,6 +47,8 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the retreived <see cref="IFile">file</see>.</returns>
         public async Task<IFile> GetFileAsync( Uri uri )
         {
+            Arg.NotNull( uri, "uri" );
+
             var file = await StorageFile.GetFileFromApplicationUriAsync( uri );
             return file.AsFile();
         }

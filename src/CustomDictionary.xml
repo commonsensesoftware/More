@@ -17,6 +17,7 @@
    <Word>PlugIn</Word>
    <Word>Subfeature</Word>
    <Word>Flyout</Word>
+   <Word>Uneditable</Word>
   </Recognized>
   <DiscreteExceptions>
    <Term>Commonsense</Term>
@@ -28,6 +29,7 @@
    <Term>PlugIn</Term>
    <Term>Subfeature</Term>
    <Term>Flyout</Term>
+   <Term>Uneditable</Term>
   </DiscreteExceptions>
  </Words>
  <Acronyms>

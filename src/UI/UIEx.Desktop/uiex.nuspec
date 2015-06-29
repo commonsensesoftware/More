@@ -1,0 +1,35 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+ <metadata>
+  <id>$id$</id>
+  <version>$version$</version>
+  <authors>Chris Martinez</authors>
+  <owners>$author$</owners>
+  <frameworkAssemblies>
+   <frameworkAssembly assemblyName="System.Core" />
+  </frameworkAssemblies>
+  <title>More - UI Extensions</title>
+  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <description>$description$</description>
+  <summary>Provides "More" patterns and practices for user interface applications that contain platform-specific extensions.</summary>
+  <releaseNotes></releaseNotes>
+  <language>en-US</language>
+  <!--<projectUrl></projectUrl>-->
+  <!--<iconUrl></iconUrl>-->
+  <tags>More Patterns Practices</tags>
+  <copyright>$author$</copyright>
+  <references>
+   <reference file="$id$.dll" />
+  </references>
+  <dependencies>
+   <dependency id="More" version="$version$" />
+  </dependencies>
+ </metadata>
+ <files>
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
+
+  <file src="..\UIEx.Phone\$bin$\$id$.dll" target="lib\portable-wp81+wpa81" />
+  <file src="..\UIEx.Phone\$bin$\$id$.xml" target="lib\portable-wp81+wpa81" />
+  <file src="..\UIEx.Phone\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
+ </files>
+</package>

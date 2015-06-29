@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>More</RootNamespace>
     <AssemblyName>More.Windows</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -250,6 +251,14 @@
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\UIEx.Desktop\UIEx.Desktop.csproj">
+      <Project>{26d1aa58-1623-454e-87c9-0e46dc31cf27}</Project>
+      <Name>UIEx.Desktop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\UI\UI.csproj">
+      <Project>{9aca8e82-303b-4114-9e0a-84a3ad67f766}</Project>
+      <Name>UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

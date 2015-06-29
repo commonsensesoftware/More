@@ -6,33 +6,44 @@
   <authors>Chris Martinez</authors>
   <owners>$author$</owners>
   <frameworkAssemblies>
-   <frameworkAssembly assemblyName="PresentationCore" targetFramework="net451" />
-   <frameworkAssembly assemblyName="PresentationFramework" targetFramework="net451" />
-   <frameworkAssembly assemblyName="System.Windows.Interactivity" targetFramework="net451" />
-   <frameworkAssembly assemblyName="System.Xaml" targetFramework="net451" />
-   <frameworkAssembly assemblyName="UIAutomationProvider" targetFramework="net451" />
-   <frameworkAssembly assemblyName="UIAutomationTypes" targetFramework="net451" />
-   <frameworkAssembly assemblyName="WindowsBase" targetFramework="net451" />
+   <frameworkAssembly assemblyName="PresentationCore" targetFramework="net45" />
+   <frameworkAssembly assemblyName="PresentationFramework" targetFramework="net45" />
+   <frameworkAssembly assemblyName="System.Windows.Interactivity" targetFramework="net45" />
+   <frameworkAssembly assemblyName="System.Xaml" targetFramework="net45" />
+   <frameworkAssembly assemblyName="UIAutomationProvider" targetFramework="net45" />
+   <frameworkAssembly assemblyName="UIAutomationTypes" targetFramework="net45" />
+   <frameworkAssembly assemblyName="WindowsBase" targetFramework="net45" />
   </frameworkAssemblies>
-  <title>More Windows Framework</title>
+  <title>More - UI Presentation</title>
   <requireLicenseAcceptance>false</requireLicenseAcceptance>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for user interfaces to the Microsoft Base Class Library (BCL).</summary>
+  <summary>Provides "More" patterns and practices for user interfaces.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
   <!--<projectUrl></projectUrl>-->
   <!--<iconUrl></iconUrl>-->
-  <tags>More Patterns Practices Windows User Interface UI Store Phone MVVM</tags>
+  <tags>More Patterns Practices Windows User Interface UI Store Phone</tags>
   <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More.Extensions" version="$version$" />
+   <group targetFramework="net45">
+    <dependency id="More.Extensions" version="$version$" />
+    <dependency id="More.UI.Extensions" version="$version$" /> 
+   </group>
+   <group targetFramework="win81">
+    <dependency id="More.Extensions" version="$version$" />
+    <dependency id="More.UI" version="$version$" />
+   </group>
+   <group targetFramework="portable-wp81+wpa81">
+    <dependency id="More.Extensions" version="$version$" />
+    <dependency id="More.UI.Extensions" version="$version$" />
+   </group>
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net451\CodeContracts" />
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
 
   <file src="..\Windows.Store\$bin$\$id$.dll" target="lib\win81" />
   <file src="..\Windows.Store\$bin$\$id$.xml" target="lib\win81" />

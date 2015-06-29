@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@
         /// <param name="propertiesToRetrieve">A <see cref="IEnumerable{T}">sequence</see> of properties names to retrieve.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing a <see cref="IDictionary{TKey,TValue}">collection</see>
         /// of the retrieved properties.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         Task<IDictionary<string, object>> RetrievePropertiesAsync( IEnumerable<string> propertiesToRetrieve );
 
         /// <summary>
@@ -31,6 +33,7 @@
         /// <param name="propertiesToSave">A <see cref="IDictionary{TKey,TValue}">collection</see> of the properties
         /// and their values to save.</param>
         /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave );
     }
 }

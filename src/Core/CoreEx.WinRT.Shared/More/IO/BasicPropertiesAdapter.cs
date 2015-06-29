@@ -42,6 +42,7 @@
 
         public Task<IDictionary<string, object>> RetrievePropertiesAsync( IEnumerable<string> propertiesToRetrieve )
         {
+            Arg.NotNull( propertiesToRetrieve, "propertiesToRetrieve" );
             return this.properties.RetrievePropertiesAsync( propertiesToRetrieve ).AsTask();
         }
 
@@ -52,6 +53,7 @@
 
         public Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )
         {
+            Arg.NotNull( propertiesToSave, "propertiesToSave" );
             return this.properties.SavePropertiesAsync( propertiesToSave ).AsTask();
         }
     }

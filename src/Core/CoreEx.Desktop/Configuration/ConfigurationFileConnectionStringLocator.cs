@@ -98,6 +98,7 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the <see cref="ConnectionStringSettings">connection string</see> or null if no match is found.</returns>
         public virtual ConnectionStringSettings Locate( string key )
         {
+            Arg.NotNullOrEmpty( key, "key" );
             return this.Locate( key, this.DefaultEnvironment );
         }
 
@@ -113,6 +114,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "This is validated by a code contract" )]
         public virtual ConnectionStringSettings Locate( string key, DeploymentEnvironment environment )
         {
+            Arg.NotNullOrEmpty( key, "key" );
+
             var connectionString = ConfigurationManager.ConnectionStrings[key];
 
             if ( connectionString != null || this.NextLocator == null )

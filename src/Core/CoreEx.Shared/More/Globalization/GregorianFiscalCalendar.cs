@@ -20,8 +20,7 @@
         /// <param name="epochMonth">The first month (1-12) in the calendar.</param>
         public GregorianFiscalCalendar( int epochMonth )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( epochMonth >= 1, "epochMonth" );
-            Contract.Requires<ArgumentOutOfRangeException>( epochMonth <= 12, "epochMonth" );
+            Arg.InRange( epochMonth, 1, 12, "epochMonth" );
             this.epochMonth = epochMonth;
         }
 
@@ -208,6 +207,5 @@
                 return this.epochMonth;
             }
         }
-
     }
 }

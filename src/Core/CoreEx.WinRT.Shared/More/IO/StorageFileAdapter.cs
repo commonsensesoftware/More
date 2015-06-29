@@ -44,12 +44,15 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
         {
+            Arg.NotNull( fileToReplace, "fileToReplace" );
             return this.file.CopyAndReplaceAsync( fileToReplace.AsFile() ).AsTask();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public async Task<IFile> CopyAsync( IFolder destinationFolder, string desiredNewName )
         {
+            Arg.NotNull( destinationFolder, "destinationFolder" );
+            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
             var copy = await this.file.CopyAsync( destinationFolder.AsFolder(), desiredNewName );
             return new StorageFileAdapter( copy );
         }
@@ -57,12 +60,15 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task MoveAndReplaceAsync( IFile fileToReplace )
         {
+            Arg.NotNull( fileToReplace, "fileToReplace" );
             return this.file.MoveAndReplaceAsync( fileToReplace.AsFile() ).AsTask();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task MoveAsync( IFolder destinationFolder, string desiredNewName )
         {
+            Arg.NotNull( destinationFolder, "destinationFolder" );
+            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
             return this.file.MoveAsync( destinationFolder.AsFolder(), desiredNewName ).AsTask();
         }
 
@@ -113,6 +119,7 @@
 
         public Task RenameAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
             return this.file.RenameAsync( desiredName ).AsTask();
         }
 

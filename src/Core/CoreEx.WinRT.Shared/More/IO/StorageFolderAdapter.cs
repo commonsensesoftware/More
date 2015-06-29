@@ -27,18 +27,21 @@
 
         public async Task<IFile> CreateFileAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
             var file = await this.folder.CreateFileAsync( desiredName );
             return new StorageFileAdapter( file );
         }
 
         public async Task<IFolder> CreateFolderAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
             var folder = await this.folder.CreateFolderAsync( desiredName );
             return new StorageFolderAdapter( folder );
         }
 
         public async Task<IFile> GetFileAsync( string name )
         {
+            Arg.NotNullOrEmpty( name, "name" );
             var file = await this.folder.GetFileAsync( name );
             return new StorageFileAdapter( file );
         }
@@ -51,6 +54,7 @@
 
         public async Task<IFolder> GetFolderAsync( string name )
         {
+            Arg.NotNullOrEmpty( name, "name" );
             var folder = await this.folder.GetFolderAsync( name );
             return new StorageFolderAdapter( folder );
         }
@@ -63,6 +67,8 @@
 
         public async Task<IStorageItem> GetItemAsync( string name )
         {
+            Arg.NotNullOrEmpty( name, "name" );
+
             var item = await this.folder.GetItemAsync( name );
             var file = item as StorageFile;
 
@@ -139,6 +145,7 @@
 
         public Task RenameAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
             return this.folder.RenameAsync( desiredName ).AsTask();
         }
 

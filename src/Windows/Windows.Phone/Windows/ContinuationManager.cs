@@ -25,7 +25,7 @@
         /// <param name="id">The identifier of the created interaction request.</param>
         /// <param name="continuation">The continuation <see cref="Action{T}">action</see>.</param>
         /// <returns>A new <see cref="InteractionRequest{T}">interaction request</see> with support for continuations.</returns>
-        public InteractionRequest<TInteraction> CreateInterationRequest<TInteraction, TEventArgs>( string id, Action<TEventArgs> continuation )
+        public InteractionRequest<TInteraction> CreateInteractionRequest<TInteraction, TEventArgs>( string id, Action<TEventArgs> continuation )
             where TInteraction : Interaction
             where TEventArgs : IContinuationActivatedEventArgs
         {

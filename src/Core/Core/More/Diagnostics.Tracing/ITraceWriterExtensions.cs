@@ -416,7 +416,7 @@
         /// <param name="errorTrace">The <see cref="Action"/> to invoke if an error was encountered performing the operation, 
         /// allowing the given <see cref="TraceRecord"/> to be filled in. It may be null.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7", Justification = "Validated by a code contract." )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6", Justification = "Validated by a code contract." )]
         public static void TraceBeginEnd(
             this ITraceWriter traceWriter,
             string category,
@@ -489,7 +489,7 @@
         /// <returns>The <see cref="Task"/> returned by the operation.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Nested generic required for this method." )]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7", Justification = "Validated by a code contract." )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6", Justification = "Validated by a code contract." )]
         public static Task<TResult> TraceBeginEndAsync<TResult>(
             this ITraceWriter traceWriter,
             string category,
@@ -611,7 +611,7 @@
         /// allowing the given <see cref="TraceRecord"/> to be filled in. It may be null.</param>
         /// <returns>The <see cref="Task"/> returned by the operation.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7", Justification = "Validated by a code contract." )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6", Justification = "Validated by a code contract." )]
         public static Task TraceBeginEndAsync(
             this ITraceWriter traceWriter,
             string category,

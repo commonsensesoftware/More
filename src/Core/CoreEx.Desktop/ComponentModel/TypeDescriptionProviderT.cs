@@ -19,7 +19,7 @@
         /// <param name="typeDescriptorFactory">The <see cref="Func{T,TResult}">factory method</see> used to create type descriptors.</param>
         public TypeDescriptionProvider( Func<ICustomTypeDescriptor, ICustomTypeDescriptor> typeDescriptorFactory )
         {
-            Contract.Requires<ArgumentNullException>( typeDescriptorFactory != null, "typeDescriptorFactory" );
+            Arg.NotNull( typeDescriptorFactory, "typeDescriptorFactory" );
             this.factory = typeDescriptorFactory;
         }
 

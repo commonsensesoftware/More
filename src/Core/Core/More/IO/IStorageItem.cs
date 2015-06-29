@@ -1,6 +1,7 @@
 ﻿namespace More.IO
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
 
@@ -47,6 +48,7 @@
         /// Gets the basic properties of the current item (like a file or folder).
         /// </summary>
         /// <returns>A <see cref="Task{T}">task</see> containing the associated <see cref="IBasicProperties">basic properties</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is an asynchronous, non-deterministic method." )]
         Task<IBasicProperties> GetBasicPropertiesAsync();
 
         /// <summary>
@@ -60,6 +62,7 @@
         /// Gets the parent folder of the current storage item.
         /// </summary>
         /// <returns>When this method completes, it returns the parent folder as a <see cref="IFolder"/>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is an asynchronous, non-deterministic method." )]
         Task<IFolder> GetParentAsync();
     }
 }

@@ -26,6 +26,8 @@
 
         public Task<IFile> CreateFileAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+
             var newFileName = System.IO.Path.Combine( this.folder.FullName, desiredName );
             var newFile = new FileInfo( newFileName );
 
@@ -40,12 +42,16 @@
 
         public Task<IFolder> CreateFolderAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+
             IFolder newFolder = new DirectoryInfoAdapter( this.folder.CreateSubdirectory( desiredName ) );
             return Task.FromResult( newFolder );
         }
 
         public Task<IFile> GetFileAsync( string name )
         {
+            Arg.NotNullOrEmpty( name, "name" );
+            
             var fileInfo = this.folder.EnumerateFiles().FirstOrDefault( f => f.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
             IFile file = fileInfo == null ? null : new FileInfoAdapter( fileInfo );
             return Task.FromResult( file );
@@ -62,9 +68,11 @@
 
         public Task<IFolder> GetFolderAsync( string name )
         {
+            Arg.NotNullOrEmpty( name, "name" );
+
             var directoryInfo = this.folder.EnumerateDirectories().FirstOrDefault( d => d.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
-            IFolder folder = directoryInfo == null ? null : new DirectoryInfoAdapter( directoryInfo );
-            return Task.FromResult( folder );
+            IFolder result = directoryInfo == null ? null : new DirectoryInfoAdapter( directoryInfo );
+            return Task.FromResult( result );
         }
 
         public Task<IReadOnlyList<IFolder>> GetFoldersAsync()
@@ -78,6 +86,8 @@
 
         public async Task<IStorageItem> GetItemAsync( string name )
         {
+            Arg.NotNullOrEmpty( name, "name" );
+
             var folder = await this.GetFolderAsync( name );
 
             if ( folder == null )
@@ -130,6 +140,8 @@
 
         public Task RenameAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+
             this.folder.MoveTo( desiredName );
             return Task.FromResult( 0 );
         }

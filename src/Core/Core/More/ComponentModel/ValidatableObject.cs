@@ -192,6 +192,7 @@
         /// <remarks>The default implementation updates the associated property errors and raises the appropriate events.
         /// This method can also be used to reevaluate property validation without triggering a change to the property
         /// being validated.</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "The value is provided a compile-time. An exception will be thrown if not provided." )]
         protected virtual void ValidateProperty<TValue>( TValue value, [CallerMemberName] string propertyName = null )
         {
             Arg.NotNullOrEmpty( propertyName, "propertyName" );

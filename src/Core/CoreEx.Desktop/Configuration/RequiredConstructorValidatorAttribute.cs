@@ -60,8 +60,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                Contract.Requires<ArgumentException>( Contract.ForAll( value, item => item != null ), "value[]" );
+                Arg.NotNull( value, "value" );
                 this.parameters.ReplaceAll( value );
             }
         }

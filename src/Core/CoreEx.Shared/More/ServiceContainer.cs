@@ -1,12 +1,13 @@
 ﻿namespace More
 {
     using More.Collections.Generic;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel.Design;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Reflection;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Design;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Represents the base implementation for a <see cref="IServiceContainer">service container</see>.
@@ -187,11 +188,8 @@
         /// <remarks><see cref="IDisposable">Disposable</see> services created by the <paramref name="callback"/> will be automatically disposed when the container is disposed.</remarks>
         public virtual void AddService( Type serviceType, ServiceCreatorCallback callback, bool promote )
         {
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
-
-            if ( callback == null )
-                throw new ArgumentNullException( "callback" );
+            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( callback, "callback" );
 
             var type = serviceType;
             var create = callback;
@@ -223,13 +221,12 @@
         /// <param name="promote">True to promote this request to any parent service containers; otherwise, false.</param>
         /// <exception cref="ArgumentNullException"><paramref name="serviceType"/> or <paramref name="serviceInstance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="serviceType"/> is not assignable from <paramref name="serviceInstance"/>.</exception>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public virtual void AddService( Type serviceType, object serviceInstance, bool promote )
         {
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
-
-            if ( serviceInstance == null )
-                throw new ArgumentNullException( "serviceInstance" );
+            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
 
             if ( !serviceType.GetTypeInfo().IsAssignableFrom( serviceInstance.GetType().GetTypeInfo() ) )
                 throw new ArgumentOutOfRangeException( "serviceInstance" );
@@ -261,8 +258,7 @@
         /// <exception cref="ArgumentNullException"><paramref name="serviceType"/> is <c>null</c>.</exception>
         public virtual void RemoveService( Type serviceType, bool promote )
         {
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
 
             var key = new ServiceRegistryKey( serviceType );
             this.registry.Remove( key );
@@ -280,8 +276,7 @@
         /// parent containers, if any. If multiple services are requested, resolution is constrainted to the current container.</remarks>
         public virtual object GetService( Type serviceType )
         {
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
 
             var key = new ServiceRegistryKey( serviceType );
             ServiceEntry entry;
@@ -301,11 +296,12 @@
         /// Creates a child container for the current container.
         /// </summary>
         /// <returns>A new, child <see cref="IServiceContainer">service container</see>.</returns>
+        [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed by the caller." )]
         public virtual IServiceContainer CreateChildContainer()
         {
             Contract.Ensures( Contract.Result<IServiceContainer>() != null );
-            IServiceContainer parent = this;
-            return new ServiceContainer( parent );
+            IServiceContainer parentContainer = this;
+            return new ServiceContainer( parentContainer );
         }
 
         /// <summary>

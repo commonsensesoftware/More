@@ -14,7 +14,7 @@
     /// <remarks>This validator only supports validation of <see cref="Type">type</see> instances.</remarks>
     public class RequiredConstructorValidator : ConfigurationValidatorBase
     {
-        private readonly IList<Type> parameters;
+        private readonly IReadOnlyList<Type> parameters;
         private readonly bool allowContravariance;
 
         /// <summary>
@@ -25,8 +25,7 @@
         public RequiredConstructorValidator( IEnumerable<Type> parameters )
             : this( false, parameters )
         {
-            Contract.Requires<ArgumentNullException>( parameters != null, "parameters" );
-            Contract.Requires( Contract.ForAll( parameters, item => item != null ), "parameters[]" );
+            Arg.NotNull( parameters, "parameters" );
         }
 
         /// <summary>
@@ -36,11 +35,10 @@
         /// <param name="parameters">The <see cref="IEnumerable{T}">sequence</see> of parameters, in positional order, that are required.</param>
         public RequiredConstructorValidator( bool allowContravariance, IEnumerable<Type> parameters )
         {
-            Contract.Requires<ArgumentNullException>( parameters != null, "parameters" );
-            Contract.Requires( Contract.ForAll( parameters, item => item != null ), "parameters[]" );
+            Arg.NotNull( parameters, "parameters" );
 
             this.allowContravariance = allowContravariance;
-            this.parameters = parameters.ToList().AsReadOnly();
+            this.parameters = parameters.ToArray();
         }
 
         /// <summary>
@@ -59,14 +57,12 @@
         /// <summary>
         /// Gets the list of parameter <see cref="Type">types</see> the required constructor must use.
         /// </summary>
-        /// <value>The list of parameter <see cref="Type">types</see> the required constructor must use.</value>
-        public IList<Type> Parameters
+        /// <value>The <see cref="IReadOnlyList{T}">read-only list</see> of parameter <see cref="Type">types</see> the required constructor must use.</value>
+        public IReadOnlyList<Type> Parameters
         {
             get
             {
-                Contract.Ensures( Contract.Result<IList<Type>>() != null );
-                Contract.Ensures( Contract.ForAll( Contract.Result<IList<Type>>(), item => item != null ) );
-                Contract.Ensures( Contract.Result<IList<Type>>().IsReadOnly );
+                Contract.Ensures( Contract.Result<IReadOnlyList<Type>>() != null );
                 return this.parameters;
             }
         }
@@ -102,7 +98,7 @@
                     return;
             }
 
-            var parameterNames = string.Join( ",", this.Parameters.Select( item => item.FullName ).ToArray() );
+            var parameterNames = string.Join( ",", this.Parameters.Select( item => item.FullName ) );
             var message = SR.RequiredConstructorMissing.FormatInvariant( typeToValidate.FullName, parameterNames );
             throw new ConfigurationErrorsException( message );
         }
@@ -110,8 +106,6 @@
         private bool IsMatch( IEnumerable<Type> availableParameters )
         {
             Contract.Requires( availableParameters != null );
-            Contract.Requires( availableParameters.Count() == this.Parameters.Count );
-
             var unmatched = availableParameters.Where( ( t, i ) => !t.IsAssignableFrom( this.Parameters[i] ) ).Any();
             return !unmatched;
         }

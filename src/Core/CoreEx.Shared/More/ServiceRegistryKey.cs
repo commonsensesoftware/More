@@ -20,7 +20,7 @@
         public ServiceRegistryKey( Type serviceType )
             : this( serviceType, new ServiceTypeDisassembler().ExtractKey( serviceType ) )
         {
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
         }
 
         /// <summary>
@@ -30,7 +30,7 @@
         /// <param name="serviceKey">The key associated with the registered service.</param>
         public ServiceRegistryKey( Type serviceType, string serviceKey )
         {
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
 
             this.type = serviceType;
             this.key = serviceKey;
@@ -40,7 +40,7 @@
         /// Gets the type of registered service.
         /// </summary>
         /// <value>The registered service <see cref="Type">type</see>.</value>
-        public Type Type
+        public Type ServiceType
         {
             get
             {
@@ -69,8 +69,8 @@
         {
             // taken from System.Runtime.Numerics.Complex.GetHashCode
             return this.Key == null ?
-                   this.Type.GetHashCode() :
-                   ( StringComparer.Ordinal.GetHashCode( this.Key ) % Modulus ) ^ this.Type.GetHashCode();
+                   this.ServiceType.GetHashCode() :
+                   ( StringComparer.Ordinal.GetHashCode( this.Key ) % Modulus ) ^ this.ServiceType.GetHashCode();
         }
 
         /// <summary>

@@ -6,14 +6,14 @@
   <authors>Chris Martinez</authors>
   <owners>$author$</owners>
   <frameworkAssemblies>
-   <frameworkAssembly assemblyName="PresentationCore" targetFramework="net451" />
-   <frameworkAssembly assemblyName="PresentationFramework" targetFramework="net451" />
-   <frameworkAssembly assemblyName="System.Configuration" targetFramework="net451" />
-   <frameworkAssembly assemblyName="System.Core" targetFramework="net451" />
+   <frameworkAssembly assemblyName="PresentationCore" targetFramework="net45" />
+   <frameworkAssembly assemblyName="PresentationFramework" targetFramework="net45" />
+   <frameworkAssembly assemblyName="System.Configuration" targetFramework="net45" />
+   <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
    <frameworkAssembly assemblyName="System.Xaml" targetFramework="net415" />
-   <frameworkAssembly assemblyName="System.Xml" targetFramework="net451" />
-   <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="net451" />
-   <frameworkAssembly assemblyName="WindowsBase" targetFramework="net451" />
+   <frameworkAssembly assemblyName="System.Xml" targetFramework="net45" />
+   <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="net45" />
+   <frameworkAssembly assemblyName="WindowsBase" targetFramework="net45" />
   </frameworkAssemblies>
   <title>More Windows Hosting Framework</title>
   <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -35,7 +35,7 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net451\CodeContracts" />
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
 
   <file src="..\Hosting.Store\$bin$\$id$.dll" target="lib\win81" />
   <file src="..\Hosting.Store\$bin$\$id$.xml" target="lib\win81" />

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
 
@@ -37,6 +38,8 @@
         /// </summary>
         /// <returns>A <see cref="Task{T}">task</see> containing the retrieved <see cref="IReadOnlyList{T}">read-only list</see>
         /// of <see cref="IFile">files</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is an asynchronous, non-deterministic method." )]
         Task<IReadOnlyList<IFile>> GetFilesAsync();
 
         /// <summary>
@@ -51,6 +54,8 @@
         /// </summary>
         /// <returns>A <see cref="Task{T}">task</see> containing the retrieved <see cref="IReadOnlyList{T}">read-only list</see>
         /// of <see cref="IFolder">folders</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is an asynchronous, non-deterministic method." )]
         Task<IReadOnlyList<IFolder>> GetFoldersAsync();
         
         /// <summary>
@@ -65,6 +70,8 @@
         /// </summary>
         /// <returns>A <see cref="Task{T}">task</see> containing the retrieved <see cref="IReadOnlyList{T}">read-only list</see>
         /// of <see cref="IStorageItem">storage items</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is an asynchronous, non-deterministic method." )]
         Task<IReadOnlyList<IStorageItem>> GetItemsAsync();
     }
 }

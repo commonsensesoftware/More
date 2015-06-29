@@ -1,9 +1,9 @@
 ﻿namespace More.Windows
 {
     using More.Windows.Input;
-    using global::System;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     [ContractClassFor( typeof( IContinuationManager ) )]
     internal abstract class IContinuationManagerContract : IContinuationManager
@@ -13,7 +13,7 @@
             Contract.Requires<ArgumentNullException>( eventArgs != null, "eventArgs" );
         }
 
-        InteractionRequest<TInteraction> IContinuationManager.CreateInterationRequest<TInteraction, TEventArgs>( string id, Action<TEventArgs> continuation )
+        InteractionRequest<TInteraction> IContinuationManager.CreateInteractionRequest<TInteraction, TEventArgs>( string id, Action<TEventArgs> continuation )
         {
             Contract.Requires<ArgumentNullException>( continuation != null, "continuation" );
             Contract.Ensures( Contract.Result<InteractionRequest<TInteraction>>() != null );

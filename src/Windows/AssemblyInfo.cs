@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
 
-[assembly: AssemblyTitle( "More.Windows" )]
-[assembly: AssemblyProduct( "More.Windows" )]
-[assembly: AssemblyDescription( "The common user interface library for the \"More\" framework." )]
+[assembly: AssemblyTitle( "More.UI.Presentation" )]
+[assembly: AssemblyProduct( "More.UI.Presentation" )]
+[assembly: AssemblyDescription( "The presentation user interface library for the \"More\" framework." )]

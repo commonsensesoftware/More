@@ -54,6 +54,7 @@
         /// </summary>
         /// <param name="valueFactory">The factory <see cref="Func{T}">method</see> used to create
         /// <typeparamref name="TValue">value</typeparamref> <see cref="ICollection{T}">collections</see>.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Validated by a code contract." )]
         public MultivalueDictionary( Func<ICollection<TValue>> valueFactory )
             : base( EqualityComparer<TKey>.Default )
         {
@@ -67,6 +68,7 @@
         /// <param name="keyComparer">The <see cref="IEqualityComparer{TKey}">comparer</see> used to compare keys.</param>
         /// <param name="valueFactory">The factory <see cref="Func{T}">method</see> used to create
         /// <typeparamref name="TValue">value</typeparamref> <see cref="ICollection{T}">collections</see>.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         public MultivalueDictionary( IEqualityComparer<TKey> keyComparer, Func<ICollection<TValue>> valueFactory )
             : base( keyComparer )
         {

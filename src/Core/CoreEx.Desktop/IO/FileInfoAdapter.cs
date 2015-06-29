@@ -44,6 +44,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
         {
+            Arg.NotNull( fileToReplace, "fileToReplace" );
+
             var destinationFileName = fileToReplace.Path;
             IFile copy = new FileInfoAdapter( this.file.CopyTo( destinationFileName, true ) );
             return Task.FromResult( copy );
@@ -52,6 +54,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IFile> CopyAsync( IFolder destinationFolder, string desiredNewName )
         {
+            Arg.NotNull( destinationFolder, "destinationFolder" );
+            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
+
             var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
             IFile copy = new FileInfoAdapter( this.file.CopyTo( destinationFileName ) );
             return Task.FromResult( copy );
@@ -60,6 +65,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public async Task MoveAndReplaceAsync( IFile fileToReplace )
         {
+            Arg.NotNull( fileToReplace, "fileToReplace" );
+
             var destinationFileName = fileToReplace.Path;
             await fileToReplace.DeleteAsync();
             this.file.MoveTo( destinationFileName );
@@ -68,6 +75,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task MoveAsync( IFolder destinationFolder, string desiredNewName )
         {
+            Arg.NotNull( destinationFolder, "destinationFolder" );
+            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
+
             var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
             this.file.MoveTo( destinationFileName );
             return Task.FromResult( 0 );
@@ -123,6 +133,8 @@
 
         public Task RenameAsync( string desiredName )
         {
+            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+
             this.file.MoveTo( desiredName );
             return Task.FromResult( 0 );
         }

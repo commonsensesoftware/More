@@ -1,9 +1,9 @@
 ﻿namespace More.ComponentModel.DataAnnotations
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel.DataAnnotations;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     /// <summary>
     /// Represents an adapter for the portable <see cref="IValidator"/> interface to the <see cref="Validator"/> class.
@@ -20,6 +20,9 @@
         /// <returns>True if the object validates; otherwise, false.</returns>
         public virtual bool TryValidateObject( object instance, IValidationContext validationContext, ICollection<IValidationResult> validationResults )
         {
+            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( validationContext, "validationContext" );
+
             ValidationContext context;
 
             if ( !validationContext.TryGetService( out context ) )
@@ -45,6 +48,9 @@
         /// <returns>True if the object validates; otherwise, false.</returns>
         public virtual bool TryValidateObject( object instance, IValidationContext validationContext, ICollection<IValidationResult> validationResults, bool validateAllProperties )
         {
+            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( validationContext, "validationContext" );
+
             ValidationContext context;
 
             if ( !validationContext.TryGetService( out context ) )
@@ -67,6 +73,8 @@
         /// <returns>True if the property validates; otherwise, false.</returns>
         public virtual bool TryValidateProperty( object value, IValidationContext validationContext, ICollection<IValidationResult> validationResults )
         {
+            Arg.NotNull( validationContext, "validationContext" );
+
             ValidationContext context;
 
             if ( !validationContext.TryGetService( out context ) )
@@ -87,6 +95,9 @@
         /// <param name="validationContext">The context that describes the object to validate.</param>
         public virtual void ValidateObject( object instance, IValidationContext validationContext )
         {
+            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( validationContext, "validationContext" );
+
             ValidationContext context;
 
             if ( validationContext.TryGetService( out context ) )
@@ -102,6 +113,9 @@
         /// <param name="validateAllProperties">True to validate all properties; otherwise, false.</param>
         public virtual void ValidateObject( object instance, IValidationContext validationContext, bool validateAllProperties )
         {
+            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( validationContext, "validationContext" );
+
             ValidationContext context;
 
             if ( validationContext.TryGetService( out context ) )
@@ -115,6 +129,8 @@
         /// <param name="validationContext">The context that describes the property to validate.</param>
         public virtual void ValidateProperty( object value, IValidationContext validationContext )
         {
+            Arg.NotNull( validationContext, "validationContext" );
+
             ValidationContext context;
 
             if ( validationContext.TryGetService( out context ) )

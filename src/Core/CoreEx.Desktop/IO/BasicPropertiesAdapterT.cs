@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Threading.Tasks;
@@ -115,8 +116,11 @@
             }
         }
 
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IDictionary<string, object>> RetrievePropertiesAsync( IEnumerable<string> propertiesToRetrieve )
         {
+            Arg.NotNull( propertiesToRetrieve, "propertiesToRetrieve" );
+
             IDictionary<string, object> properties = new Dictionary<string, object>();
 
             foreach ( var property in propertiesToRetrieve )
@@ -136,8 +140,11 @@
             return Task.FromResult( 0 );
         }
 
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )
         {
+            Arg.NotNull( propertiesToSave, "propertiesToSave" );
+
             foreach ( var property in propertiesToSave )
             {
                 Action<T, object> writer;

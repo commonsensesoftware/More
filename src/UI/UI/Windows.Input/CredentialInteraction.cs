@@ -1,13 +1,42 @@
 ﻿namespace More.Windows.Input
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents an interaction request to capture credentials from a user.
     /// </summary>
     public class CredentialInteraction : Interaction
     {
+        private sealed class BinaryComparer : IEqualityComparer<byte[]>
+        {
+            internal static readonly IEqualityComparer<byte[]> Instance = new BinaryComparer();
+
+            private BinaryComparer() { }
+
+            public bool Equals( byte[] x, byte[] y )
+            {
+                if ( x == null )
+                    return y == null;
+
+                if ( y == null )
+                    return false;
+
+                if ( x.Length != y.Length )
+                    return false;
+
+                return x.SequenceEqual( y );
+            }
+
+            public int GetHashCode( byte[] obj )
+            {
+                return obj == null ? 0 : obj.GetHashCode();
+            }
+        }
+
         private bool saved;
         private bool shouldSave;
         private byte[] credential;
@@ -69,15 +98,17 @@
         /// Gets or sets a user's credential.
         /// </summary>
         /// <value>The user's credential in binary form.</value>
+        [SuppressMessage( "Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The value is safely copied internally." )]
         public byte[] Credential
         {
             get
             {
-                return this.credential;
+                return this.credential == null ? null : (byte[]) this.credential.Clone();
             }
             set
             {
-                this.SetProperty( ref this.credential, value );
+                var newValue = value == null ? value : (byte[]) value.Clone();
+                this.SetProperty( ref this.credential, newValue, BinaryComparer.Instance );
             }
         }
 

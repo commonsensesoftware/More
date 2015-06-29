@@ -28,8 +28,8 @@
         /// the user represented by <paramref name="identity"/> belongs to.</param>
         public GenericPrincipal( IIdentity identity, IEnumerable<string> roles )
         {
-            Contract.Requires<ArgumentNullException>( identity != null, "identity" );
-            Contract.Requires<ArgumentNullException>( roles != null, "roles" );
+            Arg.NotNull( identity, "identity" );
+            Arg.NotNull( roles, "roles" );
           
             this.Identity = identity;
             this.roles.AddRange( roles );

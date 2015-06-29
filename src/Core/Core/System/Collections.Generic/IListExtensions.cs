@@ -192,7 +192,7 @@
             Arg.LessThan( index, list.Count, "index" );
             Arg.GreaterThanOrEqualTo( count, 0, "count" );
             Arg.LessThanOrEqualTo( count, list.Count - index, "count" );
-            Arg.GreaterThanOrEqualTo( index + ( count - 1 ), 0, "index" );
+            Arg.GreaterThanOrEqualTo( checked( index + ( count - 1 ) ), 0, "index" );
 
             if ( list.Count == 0 )
                 return list;
@@ -295,7 +295,7 @@
             Arg.LessThan( index, list.Count, "index" );
             Arg.GreaterThanOrEqualTo( count, 0, "count" );
             Arg.LessThanOrEqualTo( count, list.Count - index, "count" );
-            Arg.GreaterThanOrEqualTo( index + ( count - 1 ), 0, "index" );
+            Arg.GreaterThanOrEqualTo( checked( index + ( count - 1 ) ), 0, "index" );
 
             if ( list.Count == 0 )
                 return -1;

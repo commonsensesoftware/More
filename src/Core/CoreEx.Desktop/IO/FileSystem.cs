@@ -1,6 +1,7 @@
 ﻿namespace More.IO
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -16,6 +17,8 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the retreived <see cref="IFolder">folder</see>.</returns>
         public Task<IFolder> GetFolderAsync( string path )
         {
+            Arg.NotNullOrEmpty( path, "path" );
+
             var directory = new DirectoryInfo( path );
             return Task.FromResult( directory.AsFolder() );
         }
@@ -25,8 +28,11 @@
         /// </summary>
         /// <param name="path">The path of the file to retrieve.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing the retreived <see cref="IFile">file</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "The path may not be convertible to a URI." )]
         public Task<IFile> GetFileAsync( string path )
         {
+            Arg.NotNullOrEmpty( path, "path" );
+
             var file = new FileInfo( path );
             return Task.FromResult( file.AsFile() );
         }
@@ -36,8 +42,11 @@
         /// </summary>
         /// <param name="uri">The <see cref="Uri">URI</see> of the file to retrieve.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing the retreived <see cref="IFile">file</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IFile> GetFileAsync( Uri uri )
         {
+            Arg.NotNull( uri, "uri" );
+
             if ( !uri.IsFile )
                 throw new FileNotFoundException( SR.InvalidFileUri );
 

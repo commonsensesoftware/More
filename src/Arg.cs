@@ -13,6 +13,7 @@ internal static class Arg
     }
 
     [ContractArgumentValidator]
+    [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Contract validator." )]
     internal static void NotNullOrEmpty( string param, string paramName )
     {
         if ( string.IsNullOrEmpty( param ) )

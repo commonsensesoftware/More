@@ -70,7 +70,7 @@
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -194,7 +194,6 @@
     <Compile Include="More\ComponentModel\ActivityCompletedEventArgs.cs" />
     <Compile Include="More\ComponentModel\ActivityContract.cs" />
     <Compile Include="More\ComponentModel\ActivityDescriptor.cs" />
-    <Compile Include="More\ComponentModel\ClickableItemT.cs" />
     <Compile Include="More\ComponentModel\CompositeRuleT.cs" />
     <Compile Include="More\ComponentModel\CompositeRuleT1T2.cs" />
     <Compile Include="More\ComponentModel\DependsOnActivityAttribute.cs" />
@@ -202,11 +201,7 @@
     <Compile Include="More\ComponentModel\EditRecoveryModel.cs" />
     <Compile Include="More\ComponentModel\EditTransactionState.cs" />
     <Compile Include="More\ComponentModel\EventBroker.cs" />
-    <Compile Include="More\ComponentModel\ExpandableItemT.cs" />
     <Compile Include="More\ComponentModel\FieldTransaction.cs" />
-    <Compile Include="More\ComponentModel\HierarchicalItemCollectionT.cs" />
-    <Compile Include="More\ComponentModel\HierarchicalItemSelectionModes.cs" />
-    <Compile Include="More\ComponentModel\HierarchicalItemT.cs" />
     <Compile Include="More\ComponentModel\IActivity.cs" />
     <Compile Include="More\ComponentModel\IActivityContract.cs" />
     <Compile Include="More\ComponentModel\IActivityDescriptor.cs" />
@@ -214,12 +209,6 @@
     <Compile Include="More\ComponentModel\IActivityExtensions.cs" />
     <Compile Include="More\ComponentModel\IActivityManager.cs" />
     <Compile Include="More\ComponentModel\IActivityManagerContract.cs" />
-    <Compile Include="More\ComponentModel\IClickableItemContractT.cs" />
-    <Compile Include="More\ComponentModel\IClickableItemExtensions.cs" />
-    <Compile Include="More\ComponentModel\IClickableItemT.cs" />
-    <Compile Include="More\ComponentModel\IContentManager.cs" />
-    <Compile Include="More\ComponentModel\IContentManagerContract.cs" />
-    <Compile Include="More\ComponentModel\IContentManagerExtensions.cs" />
     <Compile Include="More\ComponentModel\IEditSavepoint.cs" />
     <Compile Include="More\ComponentModel\IEditSavepointContract.cs" />
     <Compile Include="More\ComponentModel\IEditSnapshotStrategy.cs" />
@@ -228,8 +217,6 @@
     <Compile Include="More\ComponentModel\IEventBroker.cs" />
     <Compile Include="More\ComponentModel\IEventBrokerContract.cs" />
     <Compile Include="More\ComponentModel\IEventBrokerExtensions.cs" />
-    <Compile Include="More\ComponentModel\IExpandableItemContractT.cs" />
-    <Compile Include="More\ComponentModel\IExpandableItemT.cs" />
     <Compile Include="More\ComponentModel\INamedComponent.cs" />
     <Compile Include="More\ComponentModel\INamedComponentContract.cs" />
     <Compile Include="More\ComponentModel\IReadOnlyRepositoryContractT.cs" />
@@ -239,8 +226,6 @@
     <Compile Include="More\ComponentModel\IRepositoryT.cs" />
     <Compile Include="More\ComponentModel\IRuleT.cs" />
     <Compile Include="More\ComponentModel\IRuleT1T2.cs" />
-    <Compile Include="More\ComponentModel\ISelectableItemContractT.cs" />
-    <Compile Include="More\ComponentModel\ISelectableItemT.cs" />
     <Compile Include="More\ComponentModel\ISpecificationContractT.cs" />
     <Compile Include="More\ComponentModel\ISpecificationExtensions.cs" />
     <Compile Include="More\ComponentModel\ISpecificationT.cs" />
@@ -263,9 +248,6 @@
     <Compile Include="More\ComponentModel\RepositoryT.cs" />
     <Compile Include="More\ComponentModel\RuleT.cs" />
     <Compile Include="More\ComponentModel\RuleT1T2.cs" />
-    <Compile Include="More\ComponentModel\SelectableItemCollectionDebugViewT.cs" />
-    <Compile Include="More\ComponentModel\SelectableItemCollectionT.cs" />
-    <Compile Include="More\ComponentModel\SelectableItemT.cs" />
     <Compile Include="More\ComponentModel\SpecificationBaseT.cs" />
     <Compile Include="More\ComponentModel\SpecificationT.cs" />
     <Compile Include="More\ComponentModel\SynchronizedWeakDelegate.cs" />
@@ -276,13 +258,6 @@
     <Compile Include="More\ComponentModel\UnitOfWorkT.cs" />
     <Compile Include="More\ComponentModel\ValidatableObject.cs" />
     <Compile Include="More\Composition\ICompositionService.cs" />
-    <Compile Include="More\Composition\IDialogViewContractT.cs" />
-    <Compile Include="More\Composition\IDialogViewT.cs" />
-    <Compile Include="More\Composition\IShellView.cs" />
-    <Compile Include="More\Composition\IViewContractT.cs" />
-    <Compile Include="More\Composition\IViewContractT1T2.cs" />
-    <Compile Include="More\Composition\IViewT.cs" />
-    <Compile Include="More\Composition\IViewT1T2.cs" />
     <Compile Include="More\Configuration\SettingKey.cs" />
     <Compile Include="More\Configuration\DeploymentEnvironment.cs" />
     <Compile Include="More\Configuration\ISettingLocatorContractT.cs" />
@@ -323,37 +298,9 @@
     <Compile Include="More\ServiceKeyAttribute.cs" />
     <Compile Include="More\ServiceProvider.cs" />
     <Compile Include="More\UriComparer.cs" />
-    <Compile Include="More\Util.cs" />
     <Compile Include="More\WeakDelegate.cs" />
     <Compile Include="More\WeakDelegateT.cs" />
     <Compile Include="More\WeakEventManagerT1T2.cs" />
-    <Compile Include="More\Windows.Input\AsyncCancelableCommand.cs" />
-    <Compile Include="More\Windows.Input\AsyncCommandT.cs" />
-    <Compile Include="More\Windows.Input\AsyncDataItemCommandT1T2.cs" />
-    <Compile Include="More\Windows.Input\AsyncNamedCommandT.cs" />
-    <Compile Include="More\Windows.Input\AsyncNamedDataItemCommandT1T2.cs" />
-    <Compile Include="More\Windows.Input\CancelableCommand.cs" />
-    <Compile Include="More\Windows.Input\CommandInterceptorT.cs" />
-    <Compile Include="More\Windows.Input\CommandT.cs" />
-    <Compile Include="More\Windows.Input\CredentialInteraction.cs" />
-    <Compile Include="More\Windows.Input\DataItemCommandT1T2.cs" />
-    <Compile Include="More\Windows.Input\DefaultFunc.cs" />
-    <Compile Include="More\Windows.Input\InteractionExtensions.cs" />
-    <Compile Include="More\Windows.Input\IInteractionRequest.cs" />
-    <Compile Include="More\Windows.Input\INamedCommand.cs" />
-    <Compile Include="More\Windows.Input\INamedCommandContract.cs" />
-    <Compile Include="More\Windows.Input\INotifyCommandChanged.cs" />
-    <Compile Include="More\Windows.Input\INotifyCommandChangedExtensions.cs" />
-    <Compile Include="More\Windows.Input\Interaction.cs" />
-    <Compile Include="More\Windows.Input\InteractionRequestedEventArgs.cs" />
-    <Compile Include="More\Windows.Input\InteractionRequestT.cs" />
-    <Compile Include="More\Windows.Input\NamedCommandT.cs" />
-    <Compile Include="More\Windows.Input\NamedDataItemCommandT1T2.cs" />
-    <Compile Include="More\Windows.Input\OpenFileInteraction.cs" />
-    <Compile Include="More\Windows.Input\PrintInteraction.cs" />
-    <Compile Include="More\Windows.Input\SaveFileInteraction.cs" />
-    <Compile Include="More\Windows.Input\SelectFolderInteraction.cs" />
-    <Compile Include="More\Windows.Input\TextInputInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SR.Designer.cs">
       <AutoGen>True</AutoGen>

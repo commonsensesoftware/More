@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
  <!-- TEMP: due to a bug in nuget.exe 2.8.x, metadata cannot be extracted from a pcl. this will be fixed in 3.0 -->
  <metadata>
-  <id>More</id>
+  <id>$id$</id>
   <version>1.0.0.0</version>
   <authors>Chris Martinez</authors>
   <owners>Commonsense Software</owners>
@@ -23,6 +23,6 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net451+win81+wpa81\CodeContracts" />
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\CodeContracts" />
  </files>
 </package>

@@ -1,5 +1,6 @@
 ﻿namespace More
 {
+    using More.Collections.Generic;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -10,7 +11,7 @@
     /// </summary>
     public class ServiceTypeAssembler : ServiceTypeDisassembler
     {
-        private static Type AssembleServiceType( Type projectedType, Stack<TypeInfo> closedTypes )
+        private static Type AssembleServiceType( Type projectedType, IStack<TypeInfo> closedTypes )
         {
             Contract.Requires( closedTypes != null );
             Contract.Requires( closedTypes.Count > 0 );
@@ -50,9 +51,9 @@
         /// with an associated key.</returns>
         /// <remarks>This method dynamically creates a new <see cref="Type">type</see> which has the <see cref="ServiceKeyAttribute"/> applied.
         /// Types that already have this attribute applied should not use this method.</remarks>
-        public Type ApplyKey( Type serviceType, string key )
+        public virtual Type ApplyKey( Type serviceType, string key )
         {
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
             Contract.Ensures( Contract.Result<Type>() != null );
 
             // short-circuit if there's nothing to do
@@ -60,7 +61,7 @@
                 return serviceType;
 
             // create projected type with service key
-            var closedTypes = new Stack<TypeInfo>();
+            var closedTypes = new Stack<TypeInfo>().Adapt();
             var type = DisassembleServiceType( serviceType.GetTypeInfo(), closedTypes );
             var context = new ServiceAttributeContext( key );
             var projectedType = context.MapType( type );

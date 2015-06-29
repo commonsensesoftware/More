@@ -91,6 +91,7 @@
         /// <returns>The <see cref="Uri">URL</see> or <c>null</c> if no match is found.</returns>
         public Uri Locate( string key )
         {
+            Arg.NotNullOrEmpty( key, "key" );
             return this.Locate( key, DeploymentEnvironment.Unspecified );
         }
 
@@ -102,6 +103,8 @@
         /// <returns>The <see cref="Uri">URL</see> or <c>null</c> if no match is found.</returns>
         public virtual Uri Locate( string key, DeploymentEnvironment environment )
         {
+            Arg.NotNullOrEmpty( key, "key" );
+
             var url = this.LocateUrl( key );
 
             if ( url != null || this.NextLocator == null )

@@ -1,10 +1,10 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
 
     /// <summary>
     /// Represents a <see cref="IServiceProvider">service provider</see> that can adapt to another
@@ -22,7 +22,7 @@
         /// <param name="resolve">The <see cref="Func{T1,T2,TResult}">function</see> used to resolve a single service of a particular <see cref="Type">type</see>.</param>
         public ServiceProviderAdapter( Func<Type, string, object> resolve )
         {
-            Contract.Requires<ArgumentNullException>( resolve != null, "resolve" );
+            Arg.NotNull( resolve, "resolve" );
 
             this.resolve = resolve;
             this.resolveAll = this.DefaultResolveAll;
@@ -33,10 +33,11 @@
         /// </summary>
         /// <param name="resolve">The <see cref="Func{T1,T2,TResult}">function</see> used to resolve a single service of a particular <see cref="Type">type</see>.</param>
         /// <param name="resolveAll">The <see cref="Func{T1,T2,TResult}">function</see> used to resolve all services of a particular <see cref="Type">type</see>.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         public ServiceProviderAdapter( Func<Type, string, object> resolve, Func<Type, string, IEnumerable<object>> resolveAll )
         {
-            Contract.Requires<ArgumentNullException>( resolve != null, "resolve" );
-            Contract.Requires<ArgumentNullException>( resolveAll != null, "resolveAll" );
+            Arg.NotNull( resolve, "resolve" );
+            Arg.NotNull( resolveAll, "resolveAll" );
 
             this.resolve = resolve;
             this.resolveAll = resolveAll;
@@ -89,8 +90,7 @@
         /// <paramref name="serviceType">service type</paramref> or null if no match is found.</returns>
         public virtual object GetService( Type serviceType )
         {
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
+            Arg.NotNull( serviceType, "serviceType" );
 
             var key = this.Disassembler.ExtractKey( serviceType );
             Type innerServiceType;

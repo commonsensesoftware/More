@@ -17,6 +17,8 @@
         /// <returns>A new validation context.</returns>
         public virtual IValidationContext CreateContext( object instance, IDictionary<object, object> items )
         {
+            Arg.NotNull( instance, "instance" );
+
             var context = new ValidationContext( instance, ServiceProvider.Current, items );
             return new ValidationContextAdapter( context );
         }

@@ -95,7 +95,7 @@
 
             // match any explicitly registered services that the host satisfies
             var services = from entry in this.host.Registry
-                           let serviceContract = new CompositionContract( entry.Type, entry.Key )
+                           let serviceContract = new CompositionContract( entry.ServiceType, entry.Key )
                            where serviceContract.Equals( contract )
                            select entry;
 

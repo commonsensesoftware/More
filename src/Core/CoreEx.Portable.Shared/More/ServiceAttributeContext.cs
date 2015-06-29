@@ -1,11 +1,11 @@
 ﻿namespace More
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Reflection;
-    using global::System.Reflection.Context;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
+    using System.Reflection.Context;
 
     internal sealed class ServiceAttributeContext : CustomReflectionContext
     {

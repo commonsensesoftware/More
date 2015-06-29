@@ -1,9 +1,9 @@
 ﻿namespace More.Windows
 {
     using More.Windows.Input;
-    using global::System;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Windows.Input;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.ApplicationModel.Activation;
 
     /// <summary>
@@ -21,14 +21,15 @@
         /// <param name="continuationManager">The extended <see cref="IContinuationManager">continuation manager</see>.</param>
         /// <param name="continuation">The continuation <see cref="Action{T}">action</see>.</param>
         /// <returns>A new <see cref="InteractionRequest{T}">interaction request</see> with support for continuations.</returns>
-        public static InteractionRequest<TInteraction> CreateInterationRequest<TInteraction, TEventArgs>( this IContinuationManager continuationManager, Action<TEventArgs> continuation )
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        public static InteractionRequest<TInteraction> CreateInteractionRequest<TInteraction, TEventArgs>( this IContinuationManager continuationManager, Action<TEventArgs> continuation )
             where TInteraction : Interaction
             where TEventArgs : IContinuationActivatedEventArgs
         {
-            Contract.Requires<ArgumentNullException>( continuationManager != null, "continuationManager" );
-            Contract.Requires<ArgumentNullException>( continuation != null, "continuation" );
+            Arg.NotNull( continuationManager, "continuationManager" );
+            Arg.NotNull( continuation, "continuation" );
             Contract.Ensures( Contract.Result<InteractionRequest<TInteraction>>() != null );
-            return continuationManager.CreateInterationRequest<TInteraction, TEventArgs>( null, continuation );
+            return continuationManager.CreateInteractionRequest<TInteraction, TEventArgs>( null, continuation );
         }
     }
 }

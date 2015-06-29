@@ -34,7 +34,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel\ISupportInitialize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\ComponentModel\ISupportInitializeNotification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Globalization\GregorianCalendar.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System\ICloneable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\IO\WindowsRuntimeStorageExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Security.Principal\GenericIdentity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Security.Principal\GenericPrincipal.cs" />

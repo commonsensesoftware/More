@@ -1,6 +1,7 @@
 ﻿namespace More.ComponentModel
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -43,9 +44,10 @@
         ///     }
         /// }
         /// ]]></code></example>
+        [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed by the caller." )]
         public static ExtensionPropertyScope<T> ExtensionProperties<T>( this T instance )
         {
-            Contract.Requires<ArgumentNullException>( instance != null, "instance" );
+            Arg.NotNull( instance, "instance" );
             Contract.Ensures( Contract.Result<ExtensionPropertyScope<T>>() != null );
             return new ExtensionPropertyScope<T>( instance );
         }

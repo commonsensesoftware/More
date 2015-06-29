@@ -21,7 +21,7 @@
 
             internal InitializationScope( ISupportInitialize source )
             {
-                Contract.Requires( source != null, "source" ); 
+                Contract.Requires( source != null ); 
                 this.source = source;
                 this.source.BeginInit();
             }
@@ -74,7 +74,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IDisposable Initialize<TObject>( this TObject source ) where TObject : ISupportInitialize
         {
-            Contract.Requires<ArgumentNullException>( source != null, "source" );
+            Arg.NotNull( source, "source" );
             Contract.Ensures( Contract.Result<IDisposable>() != null );
             return new InitializationScope( source );
         }

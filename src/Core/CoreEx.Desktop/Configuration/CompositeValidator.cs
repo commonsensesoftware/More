@@ -22,9 +22,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public CompositeValidator( IEnumerable<ConfigurationValidatorBase> validators )
         {
-            Contract.Requires<ArgumentNullException>( validators != null, "validators" );
-            Contract.Requires<ArgumentException>( validators.Count() > 0, "validators" );
-            Contract.Requires<ArgumentException>( Contract.ForAll( validators, item => item != null ), "validators[]" );
+            Arg.NotNull( validators, "validators" );
             this.validators = validators.ToArray();
         }
 

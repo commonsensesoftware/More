@@ -269,9 +269,6 @@
   <data name="InvalidFormatString" xml:space="preserve">
     <value>Input string was not in a correct format.</value>
   </data>
-  <data name="ItemDoesNotExistInSource" xml:space="preserve">
-    <value>The specified item does not exist in the source collection.</value>
-  </data>
   <data name="MissingRequiredService" xml:space="preserve">
     <value>A required service of type '{0}' could not be found.</value>
   </data>

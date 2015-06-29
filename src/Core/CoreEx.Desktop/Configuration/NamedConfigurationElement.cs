@@ -34,7 +34,7 @@
         /// <param name="name">The name of the element.</param>
         protected NamedConfigurationElement( string name )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrWhiteSpace( name ), "name" );
+            Arg.NotNullOrEmpty( name, "name" );
             this.Name = name;
         }
 
@@ -48,12 +48,12 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrWhiteSpace( Contract.Result<string>() ) ); 
+                Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) ); 
                 return (string) base[NameProperty];
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( !string.IsNullOrWhiteSpace( value ), "value" );
+                Arg.NotNullOrEmpty( value, "value" );
                 base[NameProperty] = value;
             }
         }

@@ -30,7 +30,7 @@
         protected NamedTypeConfigurationElement( string name, Type baseType )
             : base( name )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrWhiteSpace( name ), "name" );
+            Arg.NotNullOrEmpty( name, "name" );
             this.BaseType = baseType;
         }
 

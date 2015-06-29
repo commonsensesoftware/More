@@ -18,7 +18,7 @@
         public GenericIdentity( string name )
             : this( name, string.Empty, !string.IsNullOrEmpty( name ) )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
+            Arg.NotNullOrEmpty( name, "name" );
         }
 
         /// <summary>
@@ -29,8 +29,8 @@
         public GenericIdentity( string name, string authenticationType )
             : this( name, authenticationType, !string.IsNullOrEmpty( name ) )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( authenticationType != null, "authenticationType" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( authenticationType, "authenticationType" );
         }
 
         /// <summary>
@@ -41,8 +41,9 @@
         /// <param name="authenticated">Indicates whether the identity is authenticated.</param>
         public GenericIdentity( string name, string authenticationType, bool authenticated )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( authenticationType != null, "authenticationType" );
+            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( authenticationType, "authenticationType" );
+
             this.Name = name;
             this.AuthenticationType = authenticationType;
             this.IsAuthenticated = authenticated;

@@ -18,7 +18,7 @@
         /// <returns>The platform-specific <see cref="StorageFile">file information</see>.</returns>
         public static StorageFile AsFile( this IFile file )
         {
-            Contract.Requires<ArgumentNullException>( file != null, "file" );
+            Arg.NotNull( file, "file" );
             Contract.Ensures( Contract.Result<StorageFile>() != null );
 
             var platform = file as IPlatformStorageItem<StorageFile>;
@@ -36,7 +36,7 @@
         /// <returns>The platform-specific <see cref="StorageFolder">folder information</see>.</returns>
         public static StorageFolder AsFolder( this IFolder folder )
         {
-            Contract.Requires<ArgumentNullException>( folder != null, "folder" );
+            Arg.NotNull( folder, "folder" );
             Contract.Ensures( Contract.Result<StorageFolder>() != null );
 
             var platform = folder as IPlatformStorageItem<StorageFolder>;

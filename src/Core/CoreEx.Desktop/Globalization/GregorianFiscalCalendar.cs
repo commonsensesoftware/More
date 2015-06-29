@@ -17,8 +17,7 @@
         public GregorianFiscalCalendar( int epochMonth, GregorianCalendarTypes calendarType )
             : base( calendarType )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( epochMonth >= 1, "epochMonth" );
-            Contract.Requires<ArgumentOutOfRangeException>( epochMonth <= 12, "epochMonth" );
+            Arg.InRange( epochMonth, 1, 12, "epochMonth" );
             this.epochMonth = epochMonth;
         }
     }

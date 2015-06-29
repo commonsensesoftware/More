@@ -37,7 +37,7 @@
         public WindowCloseInteraction( string title, object content, bool canceled )
             : base( title, content )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, "title" );
             this.canceled = canceled;
         }
 

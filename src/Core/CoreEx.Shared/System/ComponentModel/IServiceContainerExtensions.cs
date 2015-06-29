@@ -23,8 +23,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void AddService<TService, TInstance>( this IServiceContainer serviceContainer, ServiceCreatorCallback callback ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( callback != null, "callback" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( callback, "callback" );
             serviceContainer.AddService( typeof( TService ), callback, false );
         }
 
@@ -41,8 +41,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void AddService<TService, TInstance>( this IServiceContainer serviceContainer, ServiceCreatorCallback callback, bool promote ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( callback != null, "callback" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( callback, "callback" );
             serviceContainer.AddService( typeof( TService ), callback, promote );
         }
 
@@ -56,8 +56,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void AddService<TService>( this IServiceContainer serviceContainer, TService serviceInstance ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
             serviceContainer.AddService( typeof( TService ), serviceInstance, false );
         }
 
@@ -71,8 +71,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void AddService<TService>( this IServiceContainer serviceContainer, TService serviceInstance, bool promote ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
             serviceContainer.AddService( typeof( TService ), serviceInstance, promote );
         }
 
@@ -88,8 +88,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void AddService<TService, TInstance>( this IServiceContainer serviceContainer, TInstance serviceInstance ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
             serviceContainer.AddService( typeof( TService ), serviceInstance, false );
         }
 
@@ -105,8 +105,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void AddService<TService, TInstance>( this IServiceContainer serviceContainer, TInstance serviceInstance, bool promote ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
             serviceContainer.AddService( typeof( TService ), serviceInstance, promote );
         }
 
@@ -121,9 +121,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void AddService( this IServiceContainer serviceContainer, Type serviceType, ServiceCreatorCallback callback )
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
-            Contract.Requires<ArgumentNullException>( callback != null, "callback" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( callback, "callback" );
             serviceContainer.AddService( serviceType, callback, false );
         }
 
@@ -140,9 +140,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static void AddService( this IServiceContainer serviceContainer, Type serviceType, object serviceInstance )
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
             serviceContainer.AddService( serviceType, serviceInstance, false );
         }
 
@@ -156,7 +156,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void RemoveService<TService>( this IServiceContainer serviceContainer )
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
             serviceContainer.RemoveService( typeof( TService ), false );
         }
 
@@ -170,7 +170,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void RemoveService<TService>( this IServiceContainer serviceContainer, bool promote )
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
             serviceContainer.RemoveService( typeof( TService ), promote );
         }
 
@@ -183,8 +183,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void RemoveService( this IServiceContainer serviceContainer, Type serviceType )
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceType != null, "serviceType" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceType, "serviceType" );
             serviceContainer.RemoveService( serviceType, false );
         }
 
@@ -201,8 +201,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void ReplaceService<TService, TInstance>( this IServiceContainer serviceContainer, ServiceCreatorCallback callback ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( callback != null, "callback" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( callback, "callback" );
 
             serviceContainer.RemoveService( typeof( TService ), false );
             serviceContainer.AddService( typeof( TService ), callback, false );
@@ -221,8 +221,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void ReplaceService<TService, TInstance>( this IServiceContainer serviceContainer, ServiceCreatorCallback callback, bool promote ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( callback != null, "callback" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( callback, "callback" );
 
             serviceContainer.RemoveService( typeof( TService ), promote );
             serviceContainer.AddService( typeof( TService ), callback, promote );
@@ -238,8 +238,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReplaceService<TService>( this IServiceContainer serviceContainer, TService serviceInstance ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
 
             serviceContainer.RemoveService( typeof( TService ), false );
             serviceContainer.AddService( typeof( TService ), serviceInstance, false );
@@ -255,8 +255,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReplaceService<TService>( this IServiceContainer serviceContainer, TService serviceInstance, bool promote ) where TService : class
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
 
             serviceContainer.RemoveService( typeof( TService ), promote );
             serviceContainer.AddService( typeof( TService ), serviceInstance, promote );
@@ -274,8 +274,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void ReplaceService<TService, TInstance>( this IServiceContainer serviceContainer, TInstance serviceInstance ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
 
             serviceContainer.RemoveService( typeof( TService ), false );
             serviceContainer.AddService( typeof( TService ), serviceInstance, false );
@@ -293,8 +293,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Reduces common programming mistakes." )]
         public static void ReplaceService<TService, TInstance>( this IServiceContainer serviceContainer, TInstance serviceInstance, bool promote ) where TInstance : class, TService
         {
-            Contract.Requires<ArgumentNullException>( serviceContainer != null, "serviceContainer" );
-            Contract.Requires<ArgumentNullException>( serviceInstance != null, "serviceInstance" );
+            Arg.NotNull( serviceContainer, "serviceContainer" );
+            Arg.NotNull( serviceInstance, "serviceInstance" );
 
             serviceContainer.RemoveService( typeof( TService ), promote );
             serviceContainer.AddService( typeof( TService ), serviceInstance, promote );
