@@ -2,13 +2,24 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+# ignore visual studio files
 *.suo
 *.user
+
+# ignore template-generated file version
 FileVersionInfo.cs
+
+# ignore build outputs
 bin/
 obj/
 FakesAssemblies/
+
+# ignore nuget packages folder
 /src/packages
 /src/NuGet
+
+# ignore generated visual studio template files
 /src/Extensions/Templates/**/*.vstemplate
 
+# ignore generated html files (typically from portability analysis)
+*.htm

@@ -33,7 +33,7 @@
         public SettingAttribute( string key )
             : base( key )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( key ), "key" );
+            Arg.NotNullOrEmpty( key, "key" );
         }
 
         /// <summary>
@@ -62,7 +62,7 @@
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
+                Arg.NotNull( value, "value" );
                 this.defaultValue = value;
             }
         }
@@ -91,7 +91,7 @@
         /// maps to <see cref="Object"/>, it will become the fallback converter for all conversions.</remarks>
         public static void SetConverter<TValue>( Func<object, Type, IFormatProvider, TValue> converter )
         {
-            Contract.Requires<ArgumentNullException>( converter != null, "converter" );
+            Arg.NotNull( converter, "converter" );
 
             lock ( syncRoot )
                 mappedConverters.Value[typeof( TValue )] = new UserDefinedConverter<TValue>( converter );
@@ -109,7 +109,7 @@
         /// primitive types. To register additional conversion methods, use the <see cref="SetConverter{T}"/> method.</remarks>
         public static object Convert( object value, Type targetType, IFormatProvider formatProvider )
         {
-            Contract.Requires<ArgumentNullException>( targetType != null, "targetType" );
+            Arg.NotNull( targetType, "targetType" );
 
             IDictionary<Type, ITypeConverter> converters;
             ITypeConverter converter;
@@ -124,7 +124,7 @@
             }
 
             // special handling for enumerations
-            if ( targetType.GetTypeInfo().IsEnum )
+            if ( typeof( Enum ).GetTypeInfo().IsAssignableFrom( targetType.GetTypeInfo() ) )
             {
                 // there is a single type converter that handles all enumerations
                 lock ( syncRoot )

@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
+ <UsingTask TaskName="GetPackageMetadata" AssemblyFile="Build\bin\More.Build.Tasks.dll" />
+
  <PropertyGroup>
   <NuGetExe>$(MSBuildThisFileDirectory)packages\NuGet.CommandLine.2.8.5\tools\nuget.exe</NuGetExe>
   <PackageOutDir>$(MSBuildThisFileDirectory)NuGet</PackageOutDir>
   <CurrentOutDir>$(OutDir.TrimEnd("\"))</CurrentOutDir>
+  <NuGetPackTarget>$(ProjectPath)</NuGetPackTarget>
+  <NuGetPackProperties>bin=$(CurrentOutDir)</NuGetPackProperties>
  </PropertyGroup>
 
  <Target Name="BeforeBuild" Condition="Exists('$(PackageOutDir)')">
@@ -18,13 +22,34 @@
 
  </Target>
 
- <Target Name="AfterBuild">
-<Message Text="CurrentOutDir=$(CurrentOutDir)" Importance="high" />
+ <!-- only run this target when the pack target is not the source project itself
+      note: this is typically when a *.nuspec file is directly specified, which
+      usually occurs for when advanced dependency groups are needed. multiple
+      dependency groups are apparently not supported (or not correctly supported)
+      when running "pack" against a source project -->
+ <Target Name="ResolveNuGetMetadata" Condition=" '$(NuGetPackTarget)' != '$(ProjectPath)' ">
+  
+   <!-- use custom task to resolve metadata tokens for *.nuspec file -->
+  <GetPackageMetadata SourceProjectPath="$(ProjectPath)">
+   <Output PropertyName="PackageVersion" TaskParameter="SemanticVersion" />
+   <Output PropertyName="PackageAuthor" TaskParameter="Author" />
+   <Output PropertyName="PackageDescription" TaskParameter="Description" />
+  </GetPackageMetadata>
+  
+   <!-- append resolved metadata tokens -->
+  <PropertyGroup>
+   <NuGetPackProperties>id=$(AssemblyName);version=$(PackageVersion);author=$(PackageAuthor);description=$(PackageDescription);$(NuGetPackProperties)</NuGetPackProperties>
+  </PropertyGroup>
+ 
+ </Target>
+
+ <Target Name="AfterBuild" DependsOnTargets="ResolveNuGetMetadata">
+
   <!-- create output folder as necessary -->
   <MakeDir Condition="!Exists('$(PackageOutDir)')" Directories="$(PackageOutDir)" />
 
   <!-- create packages -->
-  <Exec Command="&quot;$(NuGetExe)&quot; pack &quot;$(ProjectPath)&quot; -Properties &quot;Bin=$(CurrentOutDir)&quot; -OutputDirectory &quot;$(PackageOutDir)&quot; -NoPackageAnalysis -NonInteractive -Verbosity quiet" />
+  <Exec Command="&quot;$(NuGetExe)&quot; pack &quot;$(NuGetPackTarget)&quot; -Properties &quot;$(NuGetPackProperties)&quot; -OutputDirectory &quot;$(PackageOutDir)&quot; -NoPackageAnalysis -NonInteractive -Verbosity quiet" />
 
  </Target>
 

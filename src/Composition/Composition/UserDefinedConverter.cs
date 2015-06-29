@@ -16,6 +16,7 @@
 
         public object Convert( object value, Type targetType, IFormatProvider formatProvider )
         {
+            Contract.Assume( targetType != null );
             return this.converter( value, targetType, formatProvider );
         }
     }

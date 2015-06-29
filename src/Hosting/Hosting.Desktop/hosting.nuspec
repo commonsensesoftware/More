@@ -15,13 +15,14 @@
    <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="net45" />
    <frameworkAssembly assemblyName="WindowsBase" targetFramework="net45" />
   </frameworkAssemblies>
-  <title>More Windows Hosting Framework</title>
-  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <title>More - UI Hosting</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for hosting user interfaces to the Microsoft Base Class Library (BCL).</summary>
+  <summary>Provides "More" patterns and practices for hosting user interface applications.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
-  <!--<projectUrl></projectUrl>-->
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
+  <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <!--<iconUrl></iconUrl>-->
   <tags>More Patterns Practices Windows Hosting User Interface UI Store Phone MVVM</tags>
   <copyright>$author$</copyright>
@@ -30,8 +31,8 @@
   </references>
   <dependencies>
    <dependency id="More" version="$version$" />
-   <dependency id="More.Windows" version="$version$" />
    <dependency id="More.Composition" version="$version$" />
+   <dependency id="More.UI.Presentation" version="$version$" />
   </dependencies>
  </metadata>
  <files>

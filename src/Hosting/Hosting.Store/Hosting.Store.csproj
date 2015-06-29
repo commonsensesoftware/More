@@ -218,6 +218,10 @@
       <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UI\UI\UI.csproj">
+      <Project>{9aca8e82-303b-4114-9e0a-84a3ad67f766}</Project>
+      <Name>UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Windows\Windows.Store\Windows.Store.csproj">
       <Project>{bfc50995-6e56-4bdf-b4df-41be95c2cf56}</Project>
       <Name>Windows.Store</Name>

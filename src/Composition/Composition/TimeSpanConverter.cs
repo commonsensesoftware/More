@@ -6,7 +6,7 @@
     {
         protected override TimeSpan Convert( string input, Type targetType, IFormatProvider formatProvider )
         {
-            return TimeSpan.Parse( input );
+            return TimeSpan.Parse( input, formatProvider );
         }
     }
 }

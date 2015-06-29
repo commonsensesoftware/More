@@ -5,14 +5,14 @@
   <version>$version$</version>
   <authors>Chris Martinez</authors>
   <owners>$author$</owners>
-  <frameworkAssemblies />
-  <title>More Composition Framework</title>
-  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <title>More - Composition</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for composition to the Microsoft Base Class Library (BCL).</summary>
+  <summary>Provides "More" patterns and practices for component composition.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
-  <!--<projectUrl></projectUrl>-->
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
+  <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <!--<iconUrl></iconUrl>-->
   <tags>More Patterns Practices Composition MEF</tags>
   <copyright>$author$</copyright>
@@ -24,8 +24,6 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="bin\$configuration$\$id$.dll" target="lib\portable-net45+win+wpa81+wp80" />
-  <file src="bin\$configuration$\$id$.xml" target="lib\portable-net45+win+wpa81+wp80" />
-  <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net45+win+wpa81+wp80\CodeContracts" />
+  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\CodeContracts" />
  </files>
 </package>

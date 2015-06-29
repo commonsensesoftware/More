@@ -15,12 +15,13 @@
    <frameworkAssembly assemblyName="WindowsBase" targetFramework="net45" />
   </frameworkAssemblies>
   <title>More - UI Presentation</title>
-  <requireLicenseAcceptance>false</requireLicenseAcceptance>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for user interfaces.</summary>
+  <summary>Provides "More" patterns and practices for user interface presentations.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
-  <!--<projectUrl></projectUrl>-->
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
+  <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <!--<iconUrl></iconUrl>-->
   <tags>More Patterns Practices Windows User Interface UI Store Phone</tags>
   <copyright>$author$</copyright>
@@ -37,7 +38,6 @@
     <dependency id="More.UI" version="$version$" />
    </group>
    <group targetFramework="portable-wp81+wpa81">
-    <dependency id="More.Extensions" version="$version$" />
     <dependency id="More.UI.Extensions" version="$version$" />
    </group>
   </dependencies>

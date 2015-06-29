@@ -5,22 +5,22 @@
   <version>$version$</version>
   <authors>Chris Martinez</authors>
   <owners>$author$</owners>
-  <title>More - UI</title>
+  <title>More - Validation</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for user interface applications.</summary>
+  <summary>Provides "More" patterns and practices for validation.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <!--<iconUrl></iconUrl>-->
-  <tags>More Patterns Practices UI User Interfaces Model View MVVM MVC MVP</tags>
+  <tags>More Patterns Practices Composition MEF</tags>
   <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More" version="$version$" />
+   <dependency id="Microsoft.Composition" version="1.0.30" />
   </dependencies>
  </metadata>
  <files>

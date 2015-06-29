@@ -23,9 +23,9 @@
         /// </summary>
         /// <param name="locator">The <see cref="Func{T1,TResult}">function</see> used to locate a configuration value.</param>
         public ConfigurationExportProvider( Func<string, object> locator )
-            : this( locator, typeof( ConfigurationExportProvider ).Name )
+            : this( locator, "ConfigurationExportProvider" )
         {
-            Contract.Requires<ArgumentNullException>( locator != null, "locator" );
+            Arg.NotNull( locator, "locator" );
         }
 
         /// <summary>
@@ -35,8 +35,8 @@
         /// <param name="origin">The origin of exported promises.</param>
         public ConfigurationExportProvider( Func<string, object> locator, string origin )
         {
-            Contract.Requires<ArgumentNullException>( locator != null, "locator" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( origin ), "origin" );
+            Arg.NotNull( locator, "locator" );
+            Arg.NotNullOrEmpty( origin, "origin" );
 
             this.locate = locator;
             this.origin = origin;

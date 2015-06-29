@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
- <!-- TEMP: due to a bug in nuget.exe 2.8.x, metadata cannot be extracted from a pcl. this will be fixed in 3.0 -->
  <metadata>
   <id>$id$</id>
-  <version>1.0.0.0</version>
+  <version>$version$</version>
   <authors>Chris Martinez</authors>
-  <owners>Commonsense Software</owners>
+  <owners>$author$</owners>
   <title>More Framework</title>
-  <requireLicenseAcceptance>false</requireLicenseAcceptance>
-  <description>The core library for the "More" framework.</description>
-  <summary>Provides "More" patterns and practices to the Microsoft Base Class Library (BCL).</summary>
+  <description>$description$</description>
+  <summary>Provides "More" patterns and practices for a wide variety of application models.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
-  <!--<projectUrl></projectUrl>-->
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
+  <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <!--<iconUrl></iconUrl>-->
   <tags>More Patterns Practices</tags>
-  <copyright>Commonsense Software</copyright>
+  <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />
   </references>
