@@ -6,6 +6,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Composition;
     using System.Composition.Convention;
@@ -258,7 +259,6 @@
 
             // build default conventions
             builder.ForTypesDerivedFrom<IActivity>().Export( b => b.AddMetadata( "ExportedType", t => t ) ).Export<IActivity>();
-            builder.ForType<ValidatorAdapter>().Export<IValidator>(); // this provides portable data annotations bridge
             builder.ForTypesMatching<IUnitOfWorkFactory>( unitOfWorkFactory.IsSatisfiedBy ).Export<IUnitOfWorkFactory>().Shared();
             builder.ForTypesMatching( dataAccess.IsSatisfiedBy ).ExportInterfaces( assembly.IsSatisfiedBy );
             this.AddUISpecificConventions( builder );

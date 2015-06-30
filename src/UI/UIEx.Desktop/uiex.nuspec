@@ -24,6 +24,7 @@
   </references>
   <dependencies>
    <dependency id="More" version="$version$" />
+   <dependency id="More.UI" version="$version$" />
   </dependencies>
  </metadata>
  <files>

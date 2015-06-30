@@ -132,49 +132,9 @@
    <OutputSubPath>More\Windows</OutputSubPath>
   </VSTemplate>
  </ItemGroup>
- <PropertyGroup>
-  <TransformOnBuild>true</TransformOnBuild>
-  <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
-  <BeforeTransform>ResolveNuGetPackageRef</BeforeTransform>
- </PropertyGroup>
  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
- <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\t4.nuget.targets" />
- <Target Name="ResolveNuGetPackageRef">
-  <ResolvePackageReference SourceProjectPath="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\Core\Core\Core.csproj">
-   <Output PropertyName="CoreVersion" TaskParameter="SemanticVersion" />
-  </ResolvePackageReference>
-  <ResolvePackageReference SourceProjectPath="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\Core\CoreEx.Windows\CoreEx.Windows.csproj">
-   <Output PropertyName="CoreExVersion" TaskParameter="SemanticVersion" />
-  </ResolvePackageReference>
-  <ResolvePackageReference SourceProjectPath="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\Composition\Composition\Composition.csproj">
-   <Output PropertyName="CompositionVersion" TaskParameter="SemanticVersion" />
-  </ResolvePackageReference>
-  <ResolvePackageReference SourceProjectPath="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\Windows\Windows.Store\Windows.Store.csproj">
-   <Output PropertyName="WindowsVersion" TaskParameter="SemanticVersion" />
-  </ResolvePackageReference>
-  <ResolvePackageReference SourceProjectPath="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\Hosting\Hosting.Store\Hosting.Store.csproj">
-   <Output PropertyName="HostingVersion" TaskParameter="SemanticVersion" />
-  </ResolvePackageReference>
-  <ItemGroup>
-   <T4ParameterValues Include="CoreVersion">
-    <Value>$(CoreVersion)</Value>
-   </T4ParameterValues>
-   <T4ParameterValues Include="CoreExVersion">
-    <Value>$(CoreExVersion)</Value>
-   </T4ParameterValues>
-   <T4ParameterValues Include="CompositionVersion">
-    <Value>$(CompositionVersion)</Value>
-   </T4ParameterValues>
-   <T4ParameterValues Include="WindowsVersion">
-    <Value>$(WindowsVersion)</Value>
-   </T4ParameterValues>
-   <T4ParameterValues Include="HostingVersion">
-    <Value>$(HostingVersion)</Value>
-   </T4ParameterValues>
-  </ItemGroup>
- </Target>
- <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
+ <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), template.targets))\template.targets" />
  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

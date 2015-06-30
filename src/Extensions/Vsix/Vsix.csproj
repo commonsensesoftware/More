@@ -172,23 +172,9 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
     </ProjectReference>
-    <ProjectReference Include="..\Templates\Desktop\Items\WpfInteractionViewModel\WpfInteractionViewModel.csproj">
-      <Project>{bab63221-4f76-4581-860b-a04691b5da67}</Project>
-      <Name>WpfInteractionViewModel</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\Templates\Desktop\Items\WpfUserControlView\WpfUserControlView.csproj">
       <Project>{8c08ae5a-3809-45ad-8118-ae256419ece2}</Project>
       <Name>WpfUserControlView</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\Templates\Desktop\Items\WpfViewModel\WpfViewModel.csproj">
-      <Project>{504b712b-5c1c-4a67-97a4-dd99a469f702}</Project>
-      <Name>WpfViewModel</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
@@ -231,9 +217,7 @@
     <ProjectReference Include="..\Templates\Phone\Items\WpInteractionViewModel\WpInteractionViewModel.csproj">
       <Project>{62ac5515-17dc-412b-ba7b-f96aef78aff3}</Project>
       <Name>WpInteractionViewModel</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
     <ProjectReference Include="..\Templates\Phone\Items\WpPageViewModel\WpPageViewModel.csproj">
       <Project>{7e0f2cf7-ffcd-4113-9cba-eadeead933e8}</Project>
@@ -249,19 +233,22 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\Templates\Phone\Items\WpViewModel\WpViewModel.csproj">
-      <Project>{7cd98233-5528-4be6-8299-17df3bc9da4e}</Project>
-      <Name>WpViewModel</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\Templates\Phone\Projects\WpApplication\WpApplication.csproj">
       <Project>{0ece0842-1aaa-433f-858f-5daf221aa9c0}</Project>
       <Name>WpApplication</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Portable\Items\UaInteractionViewModel\UaInteractionViewModel.csproj">
+      <Project>{1d8df605-17e2-40a0-aaed-2bb8e753c101}</Project>
+      <Name>UaInteractionViewModel</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Portable\Items\UaViewModel\UaViewModel.csproj">
+      <Project>{b8962100-bf81-46f5-ba50-0ffd89314a11}</Project>
+      <Name>UaViewModel</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\Templates\Store\Items\WsBlankPageView\WsBlankPageView.csproj">
       <Project>{a9adbfa6-e7d4-424a-a1e8-592df2d34ff3}</Project>
@@ -294,13 +281,6 @@
     <ProjectReference Include="..\Templates\Store\Items\WsUserControlView\WsUserControlView.csproj">
       <Project>{4735f948-a4fd-481a-af03-7ff88917e3c6}</Project>
       <Name>WsUserControlView</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\Templates\Store\Items\WsViewModel\WsViewModel.csproj">
-      <Project>{5fda94e9-3eed-4ff1-92dd-5f8daf20d9f4}</Project>
-      <Name>WsViewModel</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

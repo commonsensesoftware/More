@@ -1,6 +1,7 @@
 ﻿namespace More.Composition.Hosting
 {
     using More.ComponentModel;
+    using More.ComponentModel.DataAnnotations;
     using System;
     using System.ComponentModel.Design;
     using System.Composition.Convention;
@@ -58,7 +59,13 @@
             config.WithProvider( new HostExportDescriptorProvider( this, "Host" ) );
             config.WithProvider( new ConfigurationExportProvider( this.configSettingLocator, "Host" ) );
 
-            return config.CreateContainer();
+            var container = config.CreateContainer();
+
+            // register default services directly after the underlying container is created
+            // optimization: call base implementation because this object will never be composed
+            base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
+
+            return container;
         }
 
         partial void AddWinRTSpecificConventions( ConventionBuilder builder );

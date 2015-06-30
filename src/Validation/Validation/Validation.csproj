@@ -130,9 +130,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Content Include="..\..\CustomDictionary.xml">
+    <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
       <Link>CustomDictionary.xml</Link>
-    </Content>
+    </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Arg.cs">
@@ -202,8 +202,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
- <Import Project="..\..\nuget.pack.targets" />
- <Import Project="..\..\fileversion.targets" />
+  <Import Project="..\..\nuget.pack.targets" />
+  <Import Project="..\..\fileversion.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -48,7 +48,7 @@
         {
             Contract.Requires( attributes != null );
 
-            var attribute = attributes.FirstOrDefault( a => a.AttributeClass.Name == "AssemblyCompanyAttribute" );
+            var attribute = attributes.FirstOrDefault( a => a.AttributeClass.Name == "AssemblyDescriptionAttribute" );
 
             if ( attribute == null )
                 return null;

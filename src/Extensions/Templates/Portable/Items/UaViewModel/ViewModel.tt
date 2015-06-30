@@ -1,14 +1,14 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
 <#@ output extension=".vstemplate" #>
-<#@ parameter type="System.String" name="CoreVersion" #><?xml version="1.0" encoding="utf-8" ?>
+<#@ parameter type="System.String" name="CoreVersion" #>
+<#@ parameter type="System.String" name="UIVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
   <DefaultName>ViewModel.cs</DefaultName>
   <Name>View Model (More)</Name>
   <Icon Package="{FAE04EC1-301F-11d3-BF4B-00C04F79EFBC}" ID="4515" />
   <Description>A class that implements a view model in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.WPF.CSharp.ViewModel</TemplateID>
-  <TemplateGroupID>WPF</TemplateGroupID>
+  <TemplateID>More.Portable.CSharp.ViewModel</TemplateID>
   <ProjectType>CSharp</ProjectType>
   <SortOrder>10</SortOrder>
   <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
@@ -32,6 +32,7 @@
  <WizardData>
   <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
    <package id="More" version="<#= CoreVersion #>" />
+   <package id="More.UI" version="<#= UIVersion #>" />
   </packages>
  </WizardData>
  <WizardExtension>

@@ -30,7 +30,6 @@
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More" version="$version$" />
    <dependency id="More.Composition" version="$version$" />
    <dependency id="More.UI.Presentation" version="$version$" />
   </dependencies>

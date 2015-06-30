@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "WsViewModel" )]
+[assembly: AssemblyTitle( "UaViewModel" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "WsViewModel" )]
-[assembly: AssemblyCopyright( "Copyright ©  2014" )]
+[assembly: AssemblyProduct( "UaViewModel" )]
+[assembly: AssemblyCopyright( "Copyright ©  2015" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid( "c1922cee-2fcc-4e3a-98ba-3eb1764a8429" )]
+[assembly: Guid( "a3b5069e-d365-4848-bf2e-897a76786ad9" )]
 
 // Version information for an assembly consists of the following four values:
 //

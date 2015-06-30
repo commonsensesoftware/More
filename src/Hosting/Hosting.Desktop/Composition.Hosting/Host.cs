@@ -1,6 +1,7 @@
 ﻿namespace More.Composition.Hosting
 {
     using More.ComponentModel;
+    using More.ComponentModel.DataAnnotations;
     using System;
     using System.Composition.Convention;
     using System.Composition.Hosting;
@@ -40,7 +41,13 @@
             config.WithProvider( new HostExportDescriptorProvider( this, origin ) );
             config.WithProvider( new ConfigurationExportProvider( this.configSettingLocator, origin ) );
 
-            return config.CreateContainer();
+            var container = config.CreateContainer();
+
+            // register default services directly after the underlying container is created
+            // optimization: call base implementation because this object will never be composed
+            base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
+
+            return container;
         }
 
         partial void AddPlatformSpecificConventions( ConventionBuilder builder )

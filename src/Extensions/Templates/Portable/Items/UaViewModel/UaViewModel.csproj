@@ -8,33 +8,18 @@
   </FileUpgradeFlags>
   <OldToolsVersion>12.0</OldToolsVersion>
   <UpgradeBackupLocation />
-  <PublishUrl>publish\</PublishUrl>
-  <Install>true</Install>
-  <InstallFrom>Disk</InstallFrom>
-  <UpdateEnabled>false</UpdateEnabled>
-  <UpdateMode>Foreground</UpdateMode>
-  <UpdateInterval>7</UpdateInterval>
-  <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-  <UpdatePeriodically>false</UpdatePeriodically>
-  <UpdateRequired>false</UpdateRequired>
-  <MapFileExtensions>true</MapFileExtensions>
-  <ApplicationRevision>0</ApplicationRevision>
-  <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-  <IsWebBootstrapper>false</IsWebBootstrapper>
-  <UseApplicationTrust>false</UseApplicationTrust>
-  <BootstrapperEnabled>true</BootstrapperEnabled>
  </PropertyGroup>
  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
  <PropertyGroup>
   <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
   <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
   <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-  <ProjectGuid>{504B712B-5C1C-4A67-97A4-DD99A469F702}</ProjectGuid>
+  <ProjectGuid>{B8962100-BF81-46F5-BA50-0FFD89314A11}</ProjectGuid>
   <OutputType>Library</OutputType>
   <AppDesignerFolder>Properties</AppDesignerFolder>
-  <RootNamespace>WpfViewModel</RootNamespace>
-  <AssemblyName>WpfViewModel</AssemblyName>
-  <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+  <RootNamespace>UaViewModel</RootNamespace>
+  <AssemblyName>UaViewModel</AssemblyName>
+  <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   <FileAlignment>512</FileAlignment>
   <GeneratePkgDefFile>false</GeneratePkgDefFile>
   <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
@@ -84,52 +69,20 @@
   </None>
  </ItemGroup>
  <ItemGroup>
-  <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
- </ItemGroup>
- <ItemGroup>
-  <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
-   <Visible>False</Visible>
-   <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
-   <Install>true</Install>
-  </BootstrapperPackage>
-  <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-   <Visible>False</Visible>
-   <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-   <Install>false</Install>
-  </BootstrapperPackage>
-  <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-   <Visible>False</Visible>
-   <ProductName>.NET Framework 3.5 SP1</ProductName>
-   <Install>false</Install>
-  </BootstrapperPackage>
- </ItemGroup>
- <ItemGroup>
   <VSTemplate Include="ViewModel.vstemplate">
-   <OutputSubPath>More\Windows Desktop</OutputSubPath>
+   <OutputSubPath>More\Universal Apps</OutputSubPath>
+   <DependentUpon>ViewModel.tt</DependentUpon>
    <AutoGen>True</AutoGen>
    <DesignTime>True</DesignTime>
-   <DependentUpon>ViewModel.tt</DependentUpon>
+   <SubType>Designer</SubType>
   </VSTemplate>
  </ItemGroup>
- <PropertyGroup>
-  <TransformOnBuild>true</TransformOnBuild>
-  <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
-  <BeforeTransform>ResolveNuGetPackageRef</BeforeTransform>
- </PropertyGroup>
+ <ItemGroup>
+  <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+ </ItemGroup>
  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
- <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\t4.nuget.targets" />
- <Target Name="ResolveNuGetPackageRef">
-  <ResolvePackageReference SourceProjectPath="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), More.sln))\Core\Core\Core.csproj">
-   <Output PropertyName="CoreVersion" TaskParameter="SemanticVersion" />
-  </ResolvePackageReference>
-  <ItemGroup>
-   <T4ParameterValues Include="CoreVersion">
-    <Value>$(CoreVersion)</Value>
-   </T4ParameterValues>
-  </ItemGroup>
- </Target>
- <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
+ <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), template.targets))\template.targets" />
  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

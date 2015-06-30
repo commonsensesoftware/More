@@ -11,13 +11,14 @@
    <frameworkAssembly assemblyName="System.Xml" />
    <frameworkAssembly assemblyName="System.Xml.Linq" />
   </frameworkAssemblies>
-  <title>More Web Hosting Framework</title>
-  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <title>More - Web Hosting</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for web hosting to Microsoft ASP.NET and the Base Class Library (BCL).</summary>
+  <summary>Provides "More" patterns and practices for hosting web applications.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
-  <!--<projectUrl></projectUrl>-->
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
+  <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <!--<iconUrl></iconUrl>-->
   <tags>More Patterns Practices Hosting User Interface UI Web MVC ASP.NET WebAPI</tags>
   <copyright>$author$</copyright>
@@ -27,8 +28,8 @@
   <dependencies>
    <dependency id="More.Extensions" version="$version$" />
    <dependency id="More.Composition" version="$version$" />
-   <dependency id="Microsoft.AspNet.Mvc" version="5.2.2" />
-   <dependency id="Microsoft.AspNet.WebApi" version="5.2.2" />
+   <dependency id="Microsoft.AspNet.Mvc" version="5.2.3" />
+   <dependency id="Microsoft.AspNet.WebApi" version="5.2.3" />
   </dependencies>
  </metadata>
  <files>

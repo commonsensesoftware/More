@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
 
-[assembly: AssemblyTitle( "More.Windows.Hosting" )]
-[assembly: AssemblyProduct( "More.Windows.Hosting" )]
-[assembly: AssemblyDescription( "The Windows user interface hosting library for the \"More\" framework." )]
+[assembly: AssemblyTitle( "More.UI.Hosting" )]
+[assembly: AssemblyProduct( "More.UI.Hosting" )]
+[assembly: AssemblyDescription( "The user interface hosting library for the \"More\" framework." )]
