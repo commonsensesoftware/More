@@ -3,7 +3,12 @@
  <Metadata>
   <Identity Id="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab" Version="1.0.0" Language="en-US" Publisher="Commonsense Software" />
   <DisplayName>More Framework</DisplayName>
-  <Description xml:space="preserve">The More framework is a collection of patterns and practices for creating robust solutions using the Microsoft .NET Framework.  Features include comphrensive extensions for collections, data structures, component models, view models, composition, and other intrinsic concepts not present in the Microsoft .NET Framework Base Class Library (BCL).</Description>
+  <Description xml:space="preserve">The More framework is a collection of patterns and practices for creating robust solutions using the Microsoft .NET Framework.  Features include comphrensive extensions for collections, data structures, component models, view models, composition, and other intrinsic concepts not present in the Microsoft .NET Framework Base Class Library (BCL). The core libraries are portable across Windows Desktop, Windows Store, Windows Phone, Xamarin Android, and Xamarin iOS projects.</Description>
+  <MoreInfo>http://github.com/commonsensesoftware/more</MoreInfo>
+  <License>LICENSE</License>
+  <GettingStartedGuide>http://commonsensesoftware.github.io/More/</GettingStartedGuide>
+  <Icon>Icon.png</Icon>
+  <PreviewImage>Preview.png</PreviewImage>
   <Tags>More Design Patterns Practices Windows WPF WinRT Phone Store Extensions Composition UI MVVM</Tags>
  </Metadata>
  <Installation>
@@ -16,11 +21,11 @@
   <!-- package definition registry entries -->
   <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="References.pkgdef" />
   <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="Generators.pkgdef" />
-  
+
   <!-- assemblies -->
   <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Wizards" Path="|Wizards|" AssemblyName="|Wizards;AssemblyName|" />
   <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Editors" Path="|Editors|" AssemblyName="|Editors;AssemblyName|" />
-  
+
   <!-- desktop item and project templates -->
   <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="EfDbContext" d:TargetPath="|EfDbContext;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
   <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfUserControlView" d:TargetPath="|WpfUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />

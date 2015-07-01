@@ -565,6 +565,15 @@ namespace More.VisualStudio {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initializing data sources....
+        /// </summary>
+        internal static string StatusInitializingDataSources {
+            get {
+                return ResourceManager.GetString("StatusInitializingDataSources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Control Only.
         /// </summary>
         internal static string UserControlOnly {

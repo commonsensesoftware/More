@@ -16,7 +16,7 @@
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
-  <!--<iconUrl></iconUrl>-->
+  <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/more.png</iconUrl>
   <tags>More Patterns Practices</tags>
   <copyright>$author$</copyright>
   <references>

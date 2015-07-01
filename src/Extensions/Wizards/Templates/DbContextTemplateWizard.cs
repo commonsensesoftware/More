@@ -146,7 +146,6 @@
                 return;
 
             var name = this.GetString( "$connectionStringKey$" );
-            var providerName = this.GetString( "$providerName$", "System.Data.SqlClient" );
             var configFile = this.GetOrCreateConfigFile();
             var sourceControl = this.DesignTimeEnvironment.SourceControl;
 
@@ -154,12 +153,11 @@
             if ( sourceControl.IsItemUnderSCC( configFile.Name ) && !sourceControl.IsItemCheckedOut( configFile.Name ) )
                 sourceControl.CheckOutItem( configFile.Name );
 
-            // add <add/> element to <connectionStrings/>
+            // get <connectionStrings/> element
             var path = configFile.FileNames[1];
             var xml = XDocument.Load( path );
             var configuration = xml.Root;
             var connectionStrings = configuration.Element( "connectionStrings" );
-            var add = new XElement( "add", new XAttribute( "name", name ), new XAttribute( "connectionString", cs ), new XAttribute( "providerName", providerName ) );
 
             // add <connectionStrings/> element as necessary
             if ( connectionStrings == null )
@@ -168,8 +166,25 @@
                 configuration.Add( connectionStrings );
             }
 
-            // save the changes
-            connectionStrings.Add( add );
+            // try to find existing <add/> element with matching name
+            var add = connectionStrings.Elements( "add" ).FirstOrDefault( e => (string) e.Attribute( "name" ) == name );
+
+            // add or update <add/> element
+            if ( add == null )
+            {
+                var providerName = this.GetString( "$providerName$", "System.Data.SqlClient" );
+                add = new XElement( "add", new XAttribute( "name", name ), new XAttribute( "connectionString", cs ), new XAttribute( "providerName", providerName ) );
+                connectionStrings.Add( add );
+            }
+            else
+            {
+                // if a provider name isn't provided, use the current value (if any) or assume the default value
+                var providerName = this.GetString( "$providerName$", (string) add.Attribute( "providerName" ) ?? "System.Data.SqlClient" );
+                add.SetAttributeValue( "connectionString", cs );
+                add.SetAttributeValue( "providerName", providerName );
+            }
+
+            // save changes
             xml.Save( path );
         }
 
@@ -194,47 +209,21 @@
             this.UpdateConfigFileIfNeeded();
         }
 
-        private DbContextReplacementsMapper CreateMapper( DbContextItemTemplateWizardViewModel model, Window window, IProgress<Window> progress )
+        private DbContextReplacementsMapper CreateMapper( DbContextItemTemplateWizardViewModel model )
         {
             Contract.Requires( model != null );
-            Contract.Requires( window != null );
-            Contract.Requires( progress != null );
             Contract.Ensures( Contract.Result<DbContextReplacementsMapper>() != null );
 
-            DbContextReplacementsMapper mapper;
+            var dataProviderManager = this.Context.GetRequiredService<IVsDataProviderManager>();
+            var providerMapper = new Lazy<IDTAdoDotNetProviderMapper>( this.Context.GetRequiredService<IDTAdoDotNetProviderMapper> );
+            var dataExplorerConnectionManager = this.Context.GetRequiredService<IVsDataExplorerConnectionManager>();
+            Func<IVsDataConnectionManager> dataConnectionManagerFactory = this.Context.GetRequiredService<IVsDataConnectionManager>;
+            IGlobalConnectionService globalConnectionService;
 
-            try
-            {
-                var dataProviderManager = this.Context.GetRequiredService<IVsDataProviderManager>();
-                var providerMapper = new Lazy<IDTAdoDotNetProviderMapper>( this.Context.GetRequiredService<IDTAdoDotNetProviderMapper> );
-                var dataExplorerConnectionManager = this.Context.GetRequiredService<IVsDataExplorerConnectionManager>();
-                Func<IVsDataConnectionManager> dataConnectionManagerFactory = this.Context.GetRequiredService<IVsDataConnectionManager>;
-                IGlobalConnectionService globalConnectionService;
+            // we honor the global connection service if available, but we don't need it
+            this.Context.TryGetService( out globalConnectionService );
 
-                this.Context.TryGetService( out globalConnectionService );
-
-                // create the mapper and perform the mapping now (in the background)
-                mapper = new DbContextReplacementsMapper( this.Project, this.Context, dataProviderManager, globalConnectionService, providerMapper, dataExplorerConnectionManager, dataConnectionManagerFactory );
-                mapper.Map( this.Context.Replacements, model );
-            }
-            finally
-            {
-                // note: this is effectively a callback to close the specified window
-                progress.Report( window );
-            }
-
-            return mapper;
-        }
-
-        private Task<DbContextReplacementsMapper> CreateMapperAsync( DbContextItemTemplateWizardViewModel model, Window window, IProgress<Window> progress )
-        {
-            Contract.Requires( model != null );
-            Contract.Requires( window != null );
-            Contract.Requires( progress != null );
-            Contract.Ensures( Contract.Result<Task<DbContextReplacementsMapper>>() != null );
-            
-            // mapping the data connections from visual studio can be expensive, so create and run the initial mapping in the background
-            return Task.Run( () => this.CreateMapper( model, window, progress ) );
+            return new DbContextReplacementsMapper( this.Project, this.Context, dataProviderManager, globalConnectionService, providerMapper, dataExplorerConnectionManager, dataConnectionManagerFactory );
         }
 
         private DbContextItemTemplateWizard CreateView( DbContextItemTemplateWizardViewModel model, IVsUIShell shell )
@@ -258,8 +247,16 @@
         protected override bool TryRunWizard( IVsUIShell shell )
         {
             var model = new DbContextItemTemplateWizardViewModel();
-            var mapper = Loader.LoadAsync( this.CreateMapperAsync, shell, SR.StatusInitializing, model ).Result;
+            var mapper = this.CreateMapper( model );
             var view = this.CreateView( model, shell );
+            var statusBar = this.DesignTimeEnvironment.StatusBar;
+
+            // the mapping relies on visual studio enumerating the available data sources,
+            // which could take a while. we [seemingly] cannot run this in the background
+            // so provide the user with some feedback to let them know we are doing work.
+            statusBar.Text = SR.StatusInitializingDataSources;
+            mapper.Map( this.Context.Replacements, model );
+            statusBar.Clear();
 
             if ( !( view.ShowDialog( shell ) ?? false ) )
                 return false;

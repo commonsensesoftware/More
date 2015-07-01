@@ -3,12 +3,13 @@
     using Microsoft.VisualStudio.Shell.Interop;
     using More.VisualStudio.Views;
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
     using System.Windows;
 
     /// <summary>
-    /// Represents a loader utility to from an asynchronous task while displaying feedback to the user.
+    /// Represents a loader utility to perform an asynchronous task while displaying feedback to the user.
     /// </summary>
     internal static class Loader
     {
@@ -31,10 +32,11 @@
             return task;
         }
 
+        [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Previously used. Preserved for future use." )]
         internal static Task<TResult> LoadAsync<TArg, TResult>( Func<TArg, Window, IProgress<Window>, Task<TResult>> load, IVsUIShell owner, string status, TArg arg )
         {
             Contract.Requires( load != null );
-            Contract.Ensures( Contract.Result<Task>() != null );
+            Contract.Ensures( Contract.Result<Task<TResult>>() != null );
 
             var window = new ProgressWindow( status )
             {

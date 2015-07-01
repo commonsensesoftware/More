@@ -1,308 +1,321 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
- <PropertyGroup>
-  <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
-  <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-  <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  <FileUpgradeFlags>
-  </FileUpgradeFlags>
-  <OldToolsVersion>12.0</OldToolsVersion>
-  <UpgradeBackupLocation />
-  <PublishUrl>publish\</PublishUrl>
-  <Install>true</Install>
-  <InstallFrom>Disk</InstallFrom>
-  <UpdateEnabled>false</UpdateEnabled>
-  <UpdateMode>Foreground</UpdateMode>
-  <UpdateInterval>7</UpdateInterval>
-  <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-  <UpdatePeriodically>false</UpdatePeriodically>
-  <UpdateRequired>false</UpdateRequired>
-  <MapFileExtensions>true</MapFileExtensions>
-  <ApplicationRevision>0</ApplicationRevision>
-  <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-  <IsWebBootstrapper>false</IsWebBootstrapper>
-  <UseApplicationTrust>false</UseApplicationTrust>
-  <BootstrapperEnabled>true</BootstrapperEnabled>
-  <TargetFrameworkProfile />
- </PropertyGroup>
- <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-  <DebugSymbols>true</DebugSymbols>
-  <OutputPath>bin\x86\Debug\</OutputPath>
-  <DefineConstants>DEBUG;TRACE</DefineConstants>
-  <DebugType>full</DebugType>
-  <PlatformTarget>x86</PlatformTarget>
-  <ErrorReport>prompt</ErrorReport>
-  <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
- </PropertyGroup>
- <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-  <OutputPath>bin\x86\Release\</OutputPath>
-  <DefineConstants>TRACE</DefineConstants>
-  <Optimize>true</Optimize>
-  <DebugType>pdbonly</DebugType>
-  <PlatformTarget>x86</PlatformTarget>
-  <ErrorReport>prompt</ErrorReport>
-  <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
- </PropertyGroup>
- <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
- <PropertyGroup>
-  <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-  <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-  <SchemaVersion>2.0</SchemaVersion>
-  <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-  <ProjectGuid>{4DAC9CAF-5504-4C51-8D80-7003D6429BDA}</ProjectGuid>
-  <OutputType>Library</OutputType>
-  <AppDesignerFolder>Properties</AppDesignerFolder>
-  <RootNamespace>Vsix</RootNamespace>
-  <AssemblyName>Vsix</AssemblyName>
-  <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-  <TargetVsixContainerName>More.vsix</TargetVsixContainerName>
-  <GeneratePkgDefFile>false</GeneratePkgDefFile>
-  <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
-  <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
-  <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
-  <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
-  <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
- </PropertyGroup>
- <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-  <DebugSymbols>true</DebugSymbols>
-  <DebugType>full</DebugType>
-  <Optimize>false</Optimize>
-  <OutputPath>bin\Debug\</OutputPath>
-  <DefineConstants>DEBUG;TRACE</DefineConstants>
-  <ErrorReport>prompt</ErrorReport>
-  <WarningLevel>4</WarningLevel>
-  <UseVSHostingProcess>true</UseVSHostingProcess>
- </PropertyGroup>
- <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-  <DebugType>pdbonly</DebugType>
-  <Optimize>true</Optimize>
-  <OutputPath>bin\Release\</OutputPath>
-  <DefineConstants>TRACE</DefineConstants>
-  <ErrorReport>prompt</ErrorReport>
-  <WarningLevel>4</WarningLevel>
- </PropertyGroup>
- <ItemGroup>
-  <Compile Include="Properties\AssemblyInfo.cs" />
- </ItemGroup>
- <ItemGroup>
-  <!-- include solution generated packages -->
-  <Content Include="..\..\NuGet\*.nupkg">
-   <Link>Packages\%(FileName)%(Extension)</Link>
-   <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   <IncludeInVSIX>true</IncludeInVSIX>
-  </Content>
-  <!-- the mef package must be embedded for templates to support offline scenarios -->
-  <Content Include="..\..\packages\Microsoft.Composition.1.0.30\Microsoft.Composition*.nupkg">
-   <Link>Packages\%(FileName)%(Extension)</Link>
-   <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   <IncludeInVSIX>true</IncludeInVSIX>
-  </Content>
-  <Content Include="References.pkgdef">
-   <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   <IncludeInVSIX>true</IncludeInVSIX>
-  </Content>
-  <None Include="app.config" />
-  <Content Include="Packages\EntityFramework.6.1.3.nupkg">
-   <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   <IncludeInVSIX>true</IncludeInVSIX>
-  </Content>
-  <None Include="source.extension.vsixmanifest">
-   <SubType>Designer</SubType>
-  </None>
- </ItemGroup>
- <ItemGroup>
-  <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
-   <Visible>False</Visible>
-   <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
-   <Install>true</Install>
-  </BootstrapperPackage>
-  <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-   <Visible>False</Visible>
-   <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-   <Install>false</Install>
-  </BootstrapperPackage>
-  <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-   <Visible>False</Visible>
-   <ProductName>.NET Framework 3.5 SP1</ProductName>
-   <Install>false</Install>
-  </BootstrapperPackage>
- </ItemGroup>
- <ItemGroup>
-  <ProjectReference Include="..\..\Composition\Composition\Composition.csproj">
-   <Project>{4c62c756-3d31-4012-aa79-711dbbd55b9a}</Project>
-   <Name>Composition</Name>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-  </ProjectReference>
-  <ProjectReference Include="..\..\Core\CoreEx.Desktop\CoreEx.Desktop.csproj">
-   <Project>{abff6d49-1c8f-4da5-86ed-07033105981b}</Project>
-   <Name>CoreEx.Desktop</Name>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-  </ProjectReference>
-  <ProjectReference Include="..\..\Core\Core\Core.csproj">
-   <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
-   <Name>Core</Name>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-  </ProjectReference>
-  <ProjectReference Include="..\..\Hosting\Hosting.Desktop\Hosting.Desktop.csproj">
-   <Project>{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}</Project>
-   <Name>Hosting.Desktop</Name>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-  </ProjectReference>
-  <ProjectReference Include="..\..\Windows\Windows.Desktop\Windows.Desktop.csproj">
-   <Project>{116fcd14-4c55-418b-b925-7b1600b2b667}</Project>
-   <Name>Windows.Desktop</Name>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-  </ProjectReference>
-  <ProjectReference Include="..\Editors\Editors.csproj">
-   <Project>{4a4b2737-1171-4378-a02a-f977f049ce82}</Project>
-   <Name>Editors</Name>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Desktop\Items\EfDbContext\EfDbContext.csproj">
-   <Project>{43630ad0-73d0-40f0-a083-5e2c2febc326}</Project>
-   <Name>EfDbContext</Name>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Desktop\Items\WpfChildWindowViewModel\WpfChildWindowViewModel.csproj">
-   <Project>{1fa7da2d-f0df-4655-80d1-0c01b66b35a8}</Project>
-   <Name>WpfChildWindowViewModel</Name>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Desktop\Items\WpfUserControlView\WpfUserControlView.csproj">
-   <Project>{8c08ae5a-3809-45ad-8118-ae256419ece2}</Project>
-   <Name>WpfUserControlView</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Desktop\Items\WpfWindowShellView\WpfWindowShellView.csproj">
-   <Project>{f5095ce4-67a1-4f69-86d6-905e00445144}</Project>
-   <Name>WpfWindowShellView</Name>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Desktop\Items\WpfWindowViewModel\WpfWindowViewModel.csproj">
-   <Project>{5146654a-24a8-41f1-98df-06003169d86d}</Project>
-   <Name>WpfWindowViewModel</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Desktop\Items\WpfWindowView\WpfWindowView.csproj">
-   <Project>{1129f23d-52db-4e16-b3c3-bff93964c8a6}</Project>
-   <Name>WpfWindowView</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Desktop\Projects\WpfApplication\WpfApplication.csproj">
-   <Project>{66188710-03dd-4226-a6ca-1d2be072cd02}</Project>
-   <Name>WpfApplication</Name>
-   <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Phone\Items\WpBlankPageView\WpBlankPageView.csproj">
-   <Project>{336d7de3-32d8-464e-9884-68e0f571c6d4}</Project>
-   <Name>WpBlankPageView</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Phone\Items\WpInteractionViewModel\WpInteractionViewModel.csproj">
-   <Project>{62ac5515-17dc-412b-ba7b-f96aef78aff3}</Project>
-   <Name>WpInteractionViewModel</Name>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Phone\Items\WpPageViewModel\WpPageViewModel.csproj">
-   <Project>{7e0f2cf7-ffcd-4113-9cba-eadeead933e8}</Project>
-   <Name>WpPageViewModel</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Phone\Items\WpUserControlView\WpUserControlView.csproj">
-   <Project>{11adead2-cf50-47b2-94e4-9572c4b59283}</Project>
-   <Name>WpUserControlView</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Phone\Projects\WpApplication\WpApplication.csproj">
-   <Project>{0ece0842-1aaa-433f-858f-5daf221aa9c0}</Project>
-   <Name>WpApplication</Name>
-   <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Portable\Items\UaInteractionViewModel\UaInteractionViewModel.csproj">
-   <Project>{1d8df605-17e2-40a0-aaed-2bb8e753c101}</Project>
-   <Name>UaInteractionViewModel</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Portable\Items\UaViewModel\UaViewModel.csproj">
-   <Project>{b8962100-bf81-46f5-ba50-0ffd89314a11}</Project>
-   <Name>UaViewModel</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Store\Items\WsBlankPageView\WsBlankPageView.csproj">
-   <Project>{a9adbfa6-e7d4-424a-a1e8-592df2d34ff3}</Project>
-   <Name>WsBlankPageView</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Store\Items\WsInteractionViewModel\WsInteractionViewModel.csproj">
-   <Project>{22a0f29d-b272-412e-b108-f539af3e01c6}</Project>
-   <Name>WsInteractionViewModel</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Store\Items\WsPageViewModel\WsPageViewModel.csproj">
-   <Project>{3f4ab3cd-15a2-4d5f-b7d7-cb1407ab74e9}</Project>
-   <Name>WsPageViewModel</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Store\Items\WsSettingsFlyout\WsSettingsFlyout.csproj">
-   <Project>{d208b9b3-6ed5-4c36-831f-fd067c3b8df4}</Project>
-   <Name>WsSettingsFlyout</Name>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Store\Items\WsUserControlView\WsUserControlView.csproj">
-   <Project>{4735f948-a4fd-481a-af03-7ff88917e3c6}</Project>
-   <Name>WsUserControlView</Name>
-   <VSIXSubPath>ItemTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Templates\Store\Projects\WsBlankApplication\WsBlankApplication.csproj">
-   <Project>{9776e03c-da9a-49c9-a8be-7542da645896}</Project>
-   <Name>WsBlankApplication</Name>
-   <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-   <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-   <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-  </ProjectReference>
-  <ProjectReference Include="..\Wizards\Wizards.csproj">
-   <Project>{c309bd97-17e7-4539-9af6-9f01e2e13d6f}</Project>
-   <Name>Wizards</Name>
-  </ProjectReference>
- </ItemGroup>
- <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
- <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
- <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>12.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{4DAC9CAF-5504-4C51-8D80-7003D6429BDA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Vsix</RootNamespace>
+    <AssemblyName>Vsix</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetVsixContainerName>More.vsix</TargetVsixContainerName>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- include solution generated packages -->
+    <Content Include="..\..\NuGet\*.nupkg">
+      <Link>Packages\%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <!-- the mef package must be embedded for templates to support offline scenarios -->
+    <Content Include="..\..\packages\Microsoft.Composition.1.0.30\Microsoft.Composition*.nupkg">
+      <Link>Packages\%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Preview.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="References.pkgdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\..\LICENSE">
+      <Link>LICENSE</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="app.config" />
+    <Content Include="Packages\EntityFramework.6.1.3.nupkg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Composition\Composition\Composition.csproj">
+      <Project>{4c62c756-3d31-4012-aa79-711dbbd55b9a}</Project>
+      <Name>Composition</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\CoreEx.Desktop\CoreEx.Desktop.csproj">
+      <Project>{abff6d49-1c8f-4da5-86ed-07033105981b}</Project>
+      <Name>CoreEx.Desktop</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
+      <Name>Core</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Hosting\Hosting.Desktop\Hosting.Desktop.csproj">
+      <Project>{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}</Project>
+      <Name>Hosting.Desktop</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Windows\Windows.Desktop\Windows.Desktop.csproj">
+      <Project>{116fcd14-4c55-418b-b925-7b1600b2b667}</Project>
+      <Name>Windows.Desktop</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Editors\Editors.csproj">
+      <Project>{4a4b2737-1171-4378-a02a-f977f049ce82}</Project>
+      <Name>Editors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Items\EfDbContext\EfDbContext.csproj">
+      <Project>{43630ad0-73d0-40f0-a083-5e2c2febc326}</Project>
+      <Name>EfDbContext</Name>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Items\WpfChildWindowViewModel\WpfChildWindowViewModel.csproj">
+      <Project>{1fa7da2d-f0df-4655-80d1-0c01b66b35a8}</Project>
+      <Name>WpfChildWindowViewModel</Name>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Items\WpfUserControlView\WpfUserControlView.csproj">
+      <Project>{8c08ae5a-3809-45ad-8118-ae256419ece2}</Project>
+      <Name>WpfUserControlView</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Items\WpfWindowShellView\WpfWindowShellView.csproj">
+      <Project>{f5095ce4-67a1-4f69-86d6-905e00445144}</Project>
+      <Name>WpfWindowShellView</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Items\WpfWindowViewModel\WpfWindowViewModel.csproj">
+      <Project>{5146654a-24a8-41f1-98df-06003169d86d}</Project>
+      <Name>WpfWindowViewModel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Items\WpfWindowView\WpfWindowView.csproj">
+      <Project>{1129f23d-52db-4e16-b3c3-bff93964c8a6}</Project>
+      <Name>WpfWindowView</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Projects\WpfApplication\WpfApplication.csproj">
+      <Project>{66188710-03dd-4226-a6ca-1d2be072cd02}</Project>
+      <Name>WpfApplication</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Phone\Items\WpBlankPageView\WpBlankPageView.csproj">
+      <Project>{336d7de3-32d8-464e-9884-68e0f571c6d4}</Project>
+      <Name>WpBlankPageView</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Phone\Items\WpInteractionViewModel\WpInteractionViewModel.csproj">
+      <Project>{62ac5515-17dc-412b-ba7b-f96aef78aff3}</Project>
+      <Name>WpInteractionViewModel</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Phone\Items\WpPageViewModel\WpPageViewModel.csproj">
+      <Project>{7e0f2cf7-ffcd-4113-9cba-eadeead933e8}</Project>
+      <Name>WpPageViewModel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Phone\Items\WpUserControlView\WpUserControlView.csproj">
+      <Project>{11adead2-cf50-47b2-94e4-9572c4b59283}</Project>
+      <Name>WpUserControlView</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Phone\Projects\WpApplication\WpApplication.csproj">
+      <Project>{0ece0842-1aaa-433f-858f-5daf221aa9c0}</Project>
+      <Name>WpApplication</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Portable\Items\UaInteractionViewModel\UaInteractionViewModel.csproj">
+      <Project>{1d8df605-17e2-40a0-aaed-2bb8e753c101}</Project>
+      <Name>UaInteractionViewModel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Portable\Items\UaViewModel\UaViewModel.csproj">
+      <Project>{b8962100-bf81-46f5-ba50-0ffd89314a11}</Project>
+      <Name>UaViewModel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Store\Items\WsBlankPageView\WsBlankPageView.csproj">
+      <Project>{a9adbfa6-e7d4-424a-a1e8-592df2d34ff3}</Project>
+      <Name>WsBlankPageView</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Store\Items\WsInteractionViewModel\WsInteractionViewModel.csproj">
+      <Project>{22a0f29d-b272-412e-b108-f539af3e01c6}</Project>
+      <Name>WsInteractionViewModel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Store\Items\WsPageViewModel\WsPageViewModel.csproj">
+      <Project>{3f4ab3cd-15a2-4d5f-b7d7-cb1407ab74e9}</Project>
+      <Name>WsPageViewModel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Store\Items\WsSettingsFlyout\WsSettingsFlyout.csproj">
+      <Project>{d208b9b3-6ed5-4c36-831f-fd067c3b8df4}</Project>
+      <Name>WsSettingsFlyout</Name>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Store\Items\WsUserControlView\WsUserControlView.csproj">
+      <Project>{4735f948-a4fd-481a-af03-7ff88917e3c6}</Project>
+      <Name>WsUserControlView</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\Store\Projects\WsBlankApplication\WsBlankApplication.csproj">
+      <Project>{9776e03c-da9a-49c9-a8be-7542da645896}</Project>
+      <Name>WsBlankApplication</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Wizards\Wizards.csproj">
+      <Project>{c309bd97-17e7-4539-9af6-9f01e2e13d6f}</Project>
+      <Name>Wizards</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

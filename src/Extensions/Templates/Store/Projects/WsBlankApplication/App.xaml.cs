@@ -38,9 +38,7 @@
         /// <returns>An application <see cref="Host">host</see>.</returns>
         protected override Host CreateHost()
         {
-            var host = new FrameHost<MainPage>();
-            
-            host.AddService( typeof( IValidator ), ( sp, t ) => new ValidationAdapter() );$if$ ($enableSettings$ == true)
+            var host = new FrameHost<MainPage>();$if$ ($enableSettings$ == true)
             
             // adding an entry for the Settings contract (aka charm)
             host.WithConfiguration<ContractSettings>()

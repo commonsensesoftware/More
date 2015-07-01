@@ -102,7 +102,7 @@
  </ItemGroup>
  <ItemGroup>
   <VSTemplate Include="InteractionViewModel.vstemplate">
-   <OutputSubPath>More\Universal Apps</OutputSubPath>
+   <OutputSubPath>More\Universal</OutputSubPath>
    <DependentUpon>InteractionViewModel.tt</DependentUpon>
    <AutoGen>True</AutoGen>
    <DesignTime>True</DesignTime>

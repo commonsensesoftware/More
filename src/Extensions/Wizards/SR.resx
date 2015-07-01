@@ -360,4 +360,7 @@
   <data name="StatusInitializing" xml:space="preserve">
     <value>Initializing...</value>
   </data>
+  <data name="StatusInitializingDataSources" xml:space="preserve">
+    <value>Initializing data sources...</value>
+  </data>
 </root>

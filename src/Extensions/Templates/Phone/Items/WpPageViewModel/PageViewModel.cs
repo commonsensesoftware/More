@@ -55,9 +55,9 @@ $endif$$if$ ($showTips$ == true)
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: Add or modify this interaction requests and commands to suit your needs$endif$$if$ ($enableOpenFile$ == true)
-            this.openFile = continuationManager.CreateInterationRequest<OpenFileInteraction, IFileOpenPickerContinuationEventArgs>( "OpenFile", this.OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
-            this.saveFile = continuationManager.CreateInterationRequest<SaveFileInteraction, IFileSavePickerContinuationEventArgs>( "SaveFile", this.OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
-            this.selectFolder = continuationManager.CreateInterationRequest<SelectFolderInteraction, IFolderPickerContinuationEventArgs>( "SelectFolder", this.OnFolderSelected );$endif$
+            this.openFile = continuationManager.CreateInteractionRequest<OpenFileInteraction, IFileOpenPickerContinuationEventArgs>( "OpenFile", this.OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
+            this.saveFile = continuationManager.CreateInteractionRequest<SaveFileInteraction, IFileSavePickerContinuationEventArgs>( "SaveFile", this.OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
+            this.selectFolder = continuationManager.CreateInteractionRequest<SelectFolderInteraction, IFolderPickerContinuationEventArgs>( "SelectFolder", this.OnFolderSelected );$endif$
             this.interactionRequests.Add( this.userFeedback );
             this.interactionRequests.Add( this.navigate );$if$ ($enableOpenFile$ == true)
             this.interactionRequests.Add( this.openFile );$endif$$if$ ($enableSaveFile$ == true)
