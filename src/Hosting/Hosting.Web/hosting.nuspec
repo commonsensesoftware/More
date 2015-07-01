@@ -19,7 +19,7 @@
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
-  <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/more.png</iconUrl>
+  <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</iconUrl>
   <tags>More Patterns Practices Hosting User Interface UI Web MVC ASP.NET WebAPI</tags>
   <copyright>$author$</copyright>
   <references>

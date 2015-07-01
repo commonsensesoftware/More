@@ -23,7 +23,7 @@
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
-  <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/more.png</iconUrl>
+  <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</iconUrl>
   <tags>More Patterns Practices Windows Hosting User Interface UI Store Phone MVVM</tags>
   <copyright>$author$</copyright>
   <references>
