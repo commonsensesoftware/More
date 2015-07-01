@@ -21,8 +21,21 @@
         /// </summary>
         /// <param name="strongDelegate">The strong <typeparamref name="T">delegate</typeparamref> to make weak.</param>
         public WeakDelegate( T strongDelegate )
-            : base( strongDelegate as Delegate )
+            : base( GetDelegate( strongDelegate ) )
         {
+        }
+
+        private static Delegate GetDelegate( T strongDelegate )
+        {
+            if ( strongDelegate == null )
+                return null;
+
+            var @delegate = strongDelegate as Delegate;
+
+            if ( @delegate == null )
+                throw new ArgumentException( SR.InvalidArgType.FormatDefault( typeof( Delegate ) ), "strongDelegate" );
+
+            return @delegate;
         }
 
         /// <summary>

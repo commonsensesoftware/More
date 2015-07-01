@@ -2,9 +2,9 @@
 {
     using Microsoft.Build.Framework;
     using Microsoft.CodeAnalysis;
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
 
     /// <summary>
     /// Represents a Microsoft Build <see cref="ITask">task</see> which resolves the NuGet
@@ -21,20 +21,7 @@
         {
             Contract.Assume( attributes != null );
 
-            // find the assembly version attributes. the "informational" flavor supports
-            // semantic versioning for nuget and should be preferred if both are specified
-            var metadata = from attr in attributes
-                           let name = attr.AttributeClass.Name
-                           where name == "AssemblyInformationalVersionAttribute" || name == "AssemblyVersionAttribute"
-                           select attr;
-            var attribute = metadata.FirstOrDefault();
-            
-            if ( attribute == null )
-                this.SemanticVersion = null;
-            else
-                // both attributes have exactly one string parameter containing the version value
-                this.SemanticVersion = (string) attribute.ConstructorArguments[0].Value;
-
+            this.SemanticVersion = attributes.GetSemanticVersion();
             this.IsValid = !string.IsNullOrEmpty( this.SemanticVersion );
         }
 

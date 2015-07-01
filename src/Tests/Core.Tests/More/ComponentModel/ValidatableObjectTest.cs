@@ -358,41 +358,6 @@
             Assert.False( valid );
         }
 
-        [Fact( DisplayName = "is valid should return false for partially valid object" )]
-        public void IsValidPropertyShouldReturnFalseWhenDatesAreInvalid()
-        {
-            // arrange
-            var target = new MockValidatableObject();
-
-            target.Name = "test";
-
-            // hired today, but fired last year!
-            target.HireDate = DateTime.Today;
-            target.SeparationDate = DateTime.Today.AddYears( -1 );
-
-            // act
-            var valid = target.IsValid;
-
-            // assert
-            Assert.False( valid );
-        }
-
-        [Fact( DisplayName = "is valid should return true for valid object" )]
-        public void IsValidPropertyShouldReturnTrueWhenObjectIsValid()
-        {
-            // arrange
-            var target = new MockValidatableObject();
-
-            target.Name = "test";
-            target.Address = "123 Some Place";
-
-            // act
-            var valid = target.IsValid;
-
-            // assert
-            Assert.True( valid );
-        }
-
         [Fact( DisplayName = "is property valid should not allow null or empty name" )]
         public void IsPropertyValidShouldNotAllowNullOrEmptyPropertyName()
         {

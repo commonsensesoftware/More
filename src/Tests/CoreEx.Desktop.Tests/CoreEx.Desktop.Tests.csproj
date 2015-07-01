@@ -50,6 +50,7 @@
     <Reference Include="System.4.0.0.0.Fakes">
       <HintPath>FakesAssemblies\System.4.0.0.0.Fakes.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -80,6 +81,7 @@
     <Compile Include="More\ComponentModel\DependsOnActivityAttributeTest.cs" />
     <Compile Include="More\ComponentModel\ExtensionMethodToPropertyDescriptorT1T2Test.cs" />
     <Compile Include="More\ComponentModel\TypeDescriptionProviderTTest.cs" />
+    <Compile Include="More\ComponentModel\ValidatableObjectTest.cs" />
     <Compile Include="More\DateTimeFormatProviderTest.cs" />
     <Compile Include="More\Globalization\GregorianFiscalCalendarTest.cs" />
     <Compile Include="More\ServiceProviderAdapterTest.cs" />

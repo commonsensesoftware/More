@@ -23,17 +23,13 @@
         public WeakDelegate( Delegate strongDelegate )
             : base( GetTarget( strongDelegate ) )
         {
-
-
             this.type = strongDelegate.GetType();
             this.method = strongDelegate.GetMethodInfo();
         }
 
         private static object GetTarget( Delegate strongDelegate )
         {
-            if ( strongDelegate == null )
-                throw new ArgumentException( SR.InvalidArgType.FormatDefault( typeof( Delegate ) ), "strongDelegate" );
-
+            Arg.NotNull( strongDelegate, "strongDelegate" );
             return strongDelegate.Target;
         }
 

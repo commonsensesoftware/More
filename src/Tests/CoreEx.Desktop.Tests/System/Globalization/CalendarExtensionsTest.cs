@@ -10,7 +10,6 @@
     /// <summary>
     /// Provides unit tests for <see cref="CalendarExtensions"/>.
     /// </summary>
-    [Collection( "Fakes" )]
     public class CalendarExtensionsTest
     {
         [Fact( DisplayName = "first day of week in month should return correct result" )]
@@ -221,235 +220,292 @@
         [Fact( DisplayName = "current end of month should return correct result" )]
         public void CurrentEndOfMonthShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 6, 30 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentEndOfMonth();
+                var expected = new DateTime( 2013, 6, 30 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentEndOfMonth();
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "current end of quarter should return correct result" )]
         public void CurrentEndOfQuarterShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 6, 30 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentEndOfQuarter();
+                var expected = new DateTime( 2013, 6, 30 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentEndOfQuarter();
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "curent end of semester should return correct result" )]
         public void CurrentEndOfSemesterShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 6, 30 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentEndOfSemester();
+                var expected = new DateTime( 2013, 6, 30 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentEndOfSemester();
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "current end of week should return correct result" )]
         public void CurrentEndOfWeekShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 2 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 2 );
 
-            var expected = new DateTime( 2013, 6, 8 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentEndOfWeek();
+                var expected = new DateTime( 2013, 6, 8 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentEndOfWeek();
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "current end of week with start day should return correct result" )]
         public void CurrentEndOfWeekWithCustomStartShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 2 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 2 );
 
-            var expected = new DateTime( 2013, 6, 7 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentEndOfWeek( DayOfWeek.Saturday );
+                var expected = new DateTime( 2013, 6, 7 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentEndOfWeek( DayOfWeek.Saturday );
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "current end of year should return correct result" )]
         public void CurrentEndOfYearShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 12, 31 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentEndOfYear();
+                var expected = new DateTime( 2013, 12, 31 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentEndOfYear();
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "current first day of week in month should return correct result" )]
         public void CurrentFirstDayOfWeekInMonthShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 6, 3 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentFirstDayOfWeekInMonth( DayOfWeek.Monday );
+                var expected = new DateTime( 2013, 6, 3 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentFirstDayOfWeekInMonth( DayOfWeek.Monday );
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "current last day of week in month should return correct result" )]
         public void CurrentLastDayOfWeekInMonthShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 6, 28 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentLastDayOfWeekInMonth( DayOfWeek.Friday );
+                var expected = new DateTime( 2013, 6, 28 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentLastDayOfWeekInMonth( DayOfWeek.Friday );
 
-            Assert.Equal( expected.Date, actual.Date );
+                Assert.Equal( expected.Date, actual.Date );
+            }
         }
 
         [Fact( DisplayName = "current quarter should return correct result" )]
         public void CurrentQuarterShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = 2;
-            var target = new GregorianCalendar();
-            var actual = target.CurrentQuarter();
+                var expected = 2;
+                var target = new GregorianCalendar();
+                var actual = target.CurrentQuarter();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current semester should return correct result" )]
         public void CurrentSemesterShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = 1;
-            var target = new GregorianCalendar();
-            var actual = target.CurrentSemester();
+                var expected = 1;
+                var target = new GregorianCalendar();
+                var actual = target.CurrentSemester();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current start of month should return correct result" )]
         public void CurrentStartOfMonthShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 15 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 15 );
 
-            var expected = new DateTime( 2013, 6, 1 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentStartOfMonth();
+                var expected = new DateTime( 2013, 6, 1 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentStartOfMonth();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current start of quarter should return correct result" )]
         public void CurrentStartOfQuarterShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 4, 1 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentStartOfQuarter();
+                var expected = new DateTime( 2013, 4, 1 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentStartOfQuarter();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current start of semester should return correct result" )]
         public void CurrentStartOfSemesterShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 1, 1 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentStartOfSemester();
+                var expected = new DateTime( 2013, 1, 1 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentStartOfSemester();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current start of week should return correct result" )]
         public void CurrentStartOfWeekShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2013, 5, 26 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentStartOfWeek();
+                var expected = new DateTime( 2013, 5, 26 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentStartOfWeek();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current start of week with start day should return correct result" )]
         public void CurrentStartOfWeekWithCustomStartShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 8 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 8 );
 
-            var expected = new DateTime( 2013, 6, 3 );
-            var target = new GregorianCalendar();
-            var actual = target.CurrentStartOfWeek( DayOfWeek.Monday );
+                var expected = new DateTime( 2013, 6, 3 );
+                var target = new GregorianCalendar();
+                var actual = target.CurrentStartOfWeek( DayOfWeek.Monday );
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current start of year should return correct result" )]
         public void CurrentStartOfYearShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = new DateTime( 2012, 7, 1 );
-            var target = new GregorianFiscalCalendar( 7 ); // because fiscal calendar starts in July
-            var actual = target.CurrentStartOfYear();
+                var expected = new DateTime( 2012, 7, 1 );
+                var target = new GregorianFiscalCalendar( 7 ); // because fiscal calendar starts in July
+                var actual = target.CurrentStartOfYear();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current week should return correct result" )]
         public void CurrentWeekShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = 22;
-            var target = new GregorianCalendar();
-            var actual = target.CurrentWeek();
+                var expected = 22;
+                var target = new GregorianCalendar();
+                var actual = target.CurrentWeek();
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current week with start day should return correct result" )]
         public void CurrentWeekWithCustomStartShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2013, 6, 1 );
 
-            var expected = 23;
-            var target = new GregorianCalendar();
-            var actual = target.CurrentWeek( DayOfWeek.Saturday );
+                var expected = 23;
+                var target = new GregorianCalendar();
+                var actual = target.CurrentWeek( DayOfWeek.Saturday );
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
 
         [Fact( DisplayName = "current year should return correct result" )]
         public void CurrentYearShouldReturnExpectedResult()
         {
-            ShimDateTime.TodayGet = () => new DateTime( 2012, 7, 1 );
+            using ( ShimsContext.Create() )
+            {
+                ShimDateTime.TodayGet = () => new DateTime( 2012, 7, 1 );
 
-            // this test sets the fiscal year to start in july. the calendar will
-            // report the "fiscal year" as the year reported by the true calendar
-            // year at the end of the current "fiscal year"; therefore, although
-            // DateTime.Today is 7/1/2012, 2013 will be reported because the
-            // current year ends on 6/30/2013.
+                // this test sets the fiscal year to start in july. the calendar will
+                // report the "fiscal year" as the year reported by the true calendar
+                // year at the end of the current "fiscal year"; therefore, although
+                // DateTime.Today is 7/1/2012, 2013 will be reported because the
+                // current year ends on 6/30/2013.
 
-            var target = new GregorianFiscalCalendar( 7 );
-            var actual = target.CurrentYear();
-            var expected = 2013;
+                var target = new GregorianFiscalCalendar( 7 );
+                var actual = target.CurrentYear();
+                var expected = 2013;
 
-            Assert.Equal( expected, actual );
+                Assert.Equal( expected, actual );
+            }
         }
     }
 }

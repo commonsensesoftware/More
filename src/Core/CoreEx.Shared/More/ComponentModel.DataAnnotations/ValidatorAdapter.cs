@@ -31,7 +31,8 @@
             var results = new List<ValidationResult>();
             var valid = Validator.TryValidateObject( instance, context, results );
 
-            validationResults.AddRange( results.Select( r => new ValidationResultAdapter( r ) ) );
+            if ( validationResults != null )
+                validationResults.AddRange( results.Select( r => new ValidationResultAdapter( r ) ) );
 
             return valid;
         }
@@ -59,7 +60,8 @@
             var results = new List<ValidationResult>();
             var valid = Validator.TryValidateObject( instance, context, results, validateAllProperties );
 
-            validationResults.AddRange( results.Select( r => new ValidationResultAdapter( r ) ) );
+            if ( validationResults != null )
+                validationResults.AddRange( results.Select( r => new ValidationResultAdapter( r ) ) );
 
             return valid;
         }
@@ -83,7 +85,8 @@
             var results = new List<ValidationResult>();
             var valid = Validator.TryValidateProperty( value, context, results );
 
-            validationResults.AddRange( results.Select( r => new ValidationResultAdapter( r ) ) );
+            if ( validationResults != null )
+                validationResults.AddRange( results.Select( r => new ValidationResultAdapter( r ) ) );
 
             return valid;
         }

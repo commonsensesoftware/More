@@ -14,13 +14,13 @@
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <!--<iconUrl></iconUrl>-->
-  <tags>More Patterns Practices Composition MEF</tags>
+  <tags>More Patterns Practices Validation Data Annotations</tags>
   <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="Microsoft.Composition" version="1.0.30" />
+   <dependency id="More" version="$version$" />
   </dependencies>
  </metadata>
  <files>

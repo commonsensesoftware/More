@@ -5,58 +5,12 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
 
     /// <summary>
     /// Represents a Microsoft Build <see cref="ITask">task</see> which gets metadata for a NuGet package from a source project.
     /// </summary>
     public class GetPackageMetadata : AssemblyMetadataTask
     {
-        private static string GetSemanticVersion( IReadOnlyList<AttributeData> attributes )
-        {
-            Contract.Requires( attributes != null );
-
-            // find the assembly version attributes. the "informational" flavor supports
-            // semantic versioning for nuget and should be preferred if both are specified
-            var metadata = from attr in attributes
-                           let name = attr.AttributeClass.Name
-                           where name == "AssemblyInformationalVersionAttribute" || name == "AssemblyVersionAttribute"
-                           select attr;
-            var attribute = metadata.FirstOrDefault();
-
-            if ( attribute == null )
-                return null;
-
-            // both attributes have exactly one string parameter containing the version value
-            return (string) attribute.ConstructorArguments[0].Value;
-        }
-
-        private static string GetAuthor( IReadOnlyList<AttributeData> attributes )
-        {
-            Contract.Requires( attributes != null );
-
-            var attribute = attributes.FirstOrDefault( a => a.AttributeClass.Name == "AssemblyCompanyAttribute" );
-
-            if ( attribute == null )
-                return null;
-
-            // attribute has exactly one string parameter containing the value
-            return (string) attribute.ConstructorArguments[0].Value;
-        }
-
-        private static string GetDescription( IReadOnlyList<AttributeData> attributes )
-        {
-            Contract.Requires( attributes != null );
-
-            var attribute = attributes.FirstOrDefault( a => a.AttributeClass.Name == "AssemblyDescriptionAttribute" );
-
-            if ( attribute == null )
-                return null;
-
-            // attribute has exactly one string parameter containing the value
-            return (string) attribute.ConstructorArguments[0].Value;
-        }
-
         /// <summary>
         /// Populates the metadata provided by the task using the specified attributes.
         /// </summary>
@@ -66,9 +20,9 @@
         {
             Contract.Assume( attributes != null );
 
-            this.SemanticVersion = GetSemanticVersion( attributes );
-            this.Author = GetAuthor( attributes );
-            this.Description = GetDescription( attributes );
+            this.SemanticVersion = attributes.GetSemanticVersion();
+            this.Author = attributes.GetCompany();
+            this.Description = attributes.GetDescription();
         }
 
         /// <summary>
