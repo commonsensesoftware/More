@@ -28,7 +28,6 @@
         public CompositeRule( IEnumerable<IRule<T, T>> rules )
             : base( rules )
         {
-            Arg.NotNull( rules, "rules" );
         }
 
         /// <summary>

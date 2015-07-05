@@ -124,7 +124,6 @@
         public ObservableQueue( IEqualityComparer<T> comparer )
             : this( EmptyArray, comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -135,7 +134,6 @@
         public ObservableQueue( IEnumerable<T> sequence )
             : this( sequence, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>
@@ -171,7 +169,6 @@
         public ObservableQueue( int capacity )
             : this( capacity, EqualityComparer<T>.Default )
         {
-            Arg.GreaterThanOrEqualTo( capacity, 0, "capacity" );
         }
 
         /// <summary>

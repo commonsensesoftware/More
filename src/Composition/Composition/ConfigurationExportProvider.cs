@@ -25,7 +25,6 @@
         public ConfigurationExportProvider( Func<string, object> locator )
             : this( locator, "ConfigurationExportProvider" )
         {
-            Arg.NotNull( locator, "locator" );
         }
 
         /// <summary>

@@ -35,7 +35,6 @@
         public AsyncDataItemCommand( Func<TItem, TParameter, Task> executeAsyncMethod, TItem dataItem )
             : this( executeAsyncMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>

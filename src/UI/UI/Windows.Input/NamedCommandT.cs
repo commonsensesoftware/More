@@ -23,8 +23,6 @@
         public NamedCommand( string name, Action<T> executeMethod )
             : this( null, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -36,8 +34,6 @@
         public NamedCommand( string id, string name, Action<T> executeMethod )
             : this( id, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -49,9 +45,6 @@
         public NamedCommand( string name, Action<T> executeMethod, Func<T, bool> canExecuteMethod )
             : this( null, name, executeMethod, canExecuteMethod )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -65,8 +58,6 @@
             : base( executeMethod, canExecuteMethod )
         {
             Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.id = id;
             this.name = name;

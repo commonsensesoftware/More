@@ -22,8 +22,6 @@
         public CancelableCommand( string name, Action<CancelEventArgs> executeMethod )
             : this( null, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -35,8 +33,6 @@
         public CancelableCommand( string id, string name, Action<CancelEventArgs> executeMethod )
             : this( id, name, executeMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -48,9 +44,6 @@
         public CancelableCommand( string name, Action<CancelEventArgs> executeMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : this( null, name, executeMethod, canExecuteMethod )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -63,9 +56,6 @@
         public CancelableCommand( string id, string name, Action<CancelEventArgs> executeMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : base( id, name, executeMethod, canExecuteMethod )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
             this.executeMethod = executeMethod;
         }
 

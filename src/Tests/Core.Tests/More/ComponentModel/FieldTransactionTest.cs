@@ -21,13 +21,13 @@
             Assert.Equal( "target", ex.ParamName );
 
             ex = Assert.Throws<ArgumentNullException>( () => new FieldTransaction( new object(), (IEnumerable<string>) null ) );
-            Assert.Equal( "fieldNames", ex.ParamName );
+            Assert.Equal( "memberNames", ex.ParamName );
 
             ex = Assert.Throws<ArgumentNullException>( () => new FieldTransaction( null, f => true ) );
             Assert.Equal( "target", ex.ParamName );
 
             ex = Assert.Throws<ArgumentNullException>( () => new FieldTransaction( new object(), (Func<FieldInfo, bool>) null ) );
-            Assert.Equal( "filter", ex.ParamName );
+            Assert.Equal( "memberFilter", ex.ParamName );
         }
 
         [Fact( DisplayName = "begin should not support nested transactions" )]

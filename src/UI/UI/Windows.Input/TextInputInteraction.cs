@@ -72,8 +72,6 @@
         public TextInputInteraction( string title, string prompt )
             : this( title, prompt, string.Empty )
         {
-            Arg.NotNull( title, "title" );
-            Arg.NotNull( prompt, "prompt" );
         }
 
         /// <summary>
@@ -85,7 +83,6 @@
         public TextInputInteraction( string title, string prompt, string defaultResponse )
             : base( title, prompt )
         {
-            Arg.NotNull( title, "title" );
             Arg.NotNull( prompt, "prompt" );
             Arg.NotNull( defaultResponse, "defaultResponse" );
 

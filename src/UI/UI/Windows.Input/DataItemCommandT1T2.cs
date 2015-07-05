@@ -49,7 +49,6 @@
         public DataItemCommand( Action<TItem, TParameter> executeMethod, TItem dataItem )
             : this( executeMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>

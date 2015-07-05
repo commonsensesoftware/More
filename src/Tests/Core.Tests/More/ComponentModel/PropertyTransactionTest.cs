@@ -21,13 +21,13 @@
             Assert.Equal( "target", ex.ParamName );
 
             ex = Assert.Throws<ArgumentNullException>( () => new PropertyTransaction( new object(), (IEnumerable<string>) null ) );
-            Assert.Equal( "propertyNames", ex.ParamName );
+            Assert.Equal( "memberNames", ex.ParamName );
 
             ex = Assert.Throws<ArgumentNullException>( () => new PropertyTransaction( null, f => true ) );
             Assert.Equal( "target", ex.ParamName );
 
             ex = Assert.Throws<ArgumentNullException>( () => new PropertyTransaction( new object(), (Func<PropertyInfo, bool>) null ) );
-            Assert.Equal( "filter", ex.ParamName );
+            Assert.Equal( "memberFilter", ex.ParamName );
         }
 
         [Fact( DisplayName = "begin should not allow nested transaction" )]

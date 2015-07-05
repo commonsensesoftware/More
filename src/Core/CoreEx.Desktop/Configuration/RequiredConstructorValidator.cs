@@ -25,7 +25,6 @@
         public RequiredConstructorValidator( IEnumerable<Type> parameters )
             : this( false, parameters )
         {
-            Arg.NotNull( parameters, "parameters" );
         }
 
         /// <summary>

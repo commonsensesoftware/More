@@ -14,6 +14,7 @@
     using global::Windows.UI.Popups;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
+    using More.IO;
 
     /// <content>
     /// Provides additional implementation specific to Windows Runtime applications.
@@ -63,6 +64,7 @@
 
             // register default services directly after the underlying container is created
             // optimization: call base implementation because this object will never be composed
+            base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
             base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
 
             return container;

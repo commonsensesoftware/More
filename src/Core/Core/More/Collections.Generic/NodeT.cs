@@ -30,7 +30,6 @@
         public Node( IComparer<T> comparer )
             : this( default( T ), comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>

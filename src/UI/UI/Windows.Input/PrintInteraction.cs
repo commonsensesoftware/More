@@ -24,7 +24,6 @@
         public PrintInteraction( string title )
             : base( title )
         {
-            Arg.NotNull( title, "title" );
         }
 
         /// <summary>

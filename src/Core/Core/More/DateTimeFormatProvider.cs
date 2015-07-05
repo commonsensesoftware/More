@@ -337,9 +337,8 @@
         /// <param name="dateTimeFormat">The <see cref="DateTimeFormatInfo"/> used by the format provider.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public DateTimeFormatProvider( DateTimeFormatInfo dateTimeFormat )
-            : this( dateTimeFormat, dateTimeFormat.Calendar )
+            : this( dateTimeFormat, dateTimeFormat == null ? null : dateTimeFormat.Calendar )
         {
-            Arg.NotNull( dateTimeFormat, "dateTimeFormat" );
         }
 
         /// <summary>

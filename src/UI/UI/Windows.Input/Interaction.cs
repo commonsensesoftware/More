@@ -38,7 +38,6 @@
         public Interaction( string title )
             : this( title, null )
         {
-            Arg.NotNull( title, "title" );
         }
 
         /// <summary>

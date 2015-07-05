@@ -188,6 +188,7 @@
 
         }
 
+        private static readonly Node<T>[] EmptyNodes = new Node<T>[0];
         private readonly IEqualityComparer<T> valueComparer;
         private readonly IEqualityComparer<HierarchicalItem<T>> itemComparer;
         private readonly SelectedItemCollection<T> selectedItems;
@@ -198,7 +199,7 @@
         /// Initializes a new instance of the <see cref="HierarchicalItemCollection{T}"/> class.
         /// </summary>
         protected HierarchicalItemCollection()
-            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), new Node<T>[0], EqualityComparer<T>.Default )
+            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), EmptyNodes, EqualityComparer<T>.Default )
         {
         }
 
@@ -207,9 +208,8 @@
         /// </summary>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items.</param>
         protected HierarchicalItemCollection( IEqualityComparer<T> comparer )
-            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), new Node<T>[0], comparer )
+            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), EmptyNodes, comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -218,9 +218,8 @@
         /// <param name="factory">The <see cref="Func{T1,T2,TResult}">function</see> representing the factory method used to create new items.</param>
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required to support generics." )]
         protected HierarchicalItemCollection( Func<Node<T>, IEqualityComparer<T>, HierarchicalItem<T>> factory )
-            : this( factory, new Node<T>[0], EqualityComparer<T>.Default )
+            : this( factory, EmptyNodes, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( factory, "factory" );
         }
 
         /// <summary>
@@ -230,10 +229,8 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items.</param>
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required to support generics." )]
         protected HierarchicalItemCollection( Func<Node<T>, IEqualityComparer<T>, HierarchicalItem<T>> factory, IEqualityComparer<T> comparer )
-            : this( factory, new Node<T>[0], comparer )
+            : this( factory, EmptyNodes, comparer )
         {
-            Arg.NotNull( factory, "factory" );
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -241,7 +238,7 @@
         /// </summary>
         /// <param name="rootNode">The <see cref="Node{T}"/> representing the root node in the collection.</param>
         public HierarchicalItemCollection( Node<T> rootNode )
-            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), new Node<T>[] { rootNode }, EqualityComparer<T>.Default )
+            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), rootNode == null ? EmptyNodes : new Node<T>[] { rootNode }, EqualityComparer<T>.Default )
         {
             Arg.NotNull( rootNode, "rootNode" );
         }
@@ -252,10 +249,9 @@
         /// <param name="rootNode">The <see cref="Node{T}"/> representing the root node in the collection.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items.</param>
         public HierarchicalItemCollection( Node<T> rootNode, IEqualityComparer<T> comparer )
-            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), new Node<T>[] { rootNode }, comparer )
+            : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), rootNode == null ? EmptyNodes : new Node<T>[] { rootNode }, comparer )
         {
             Arg.NotNull( rootNode, "rootNode" );
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -266,7 +262,6 @@
         public HierarchicalItemCollection( IEnumerable<Node<T>> nodes )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), nodes, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( nodes, "nodes" );
         }
 
         /// <summary>
@@ -278,14 +273,12 @@
         public HierarchicalItemCollection( IEnumerable<Node<T>> nodes, IEqualityComparer<T> comparer )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), nodes, comparer )
         {
-            Arg.NotNull( nodes, "nodes" );
-            Arg.NotNull( comparer, "comparer" );
         }
 
         private HierarchicalItemCollection( Func<Node<T>, IEqualityComparer<T>, HierarchicalItem<T>> factory, IEnumerable<Node<T>> nodes, IEqualityComparer<T> comparer )
         {
-            Contract.Requires( nodes != null );
-            Contract.Requires( comparer != null );
+            Arg.NotNull( nodes, "nodes" );
+            Arg.NotNull( comparer, "comparer" );
 
             this.factory = factory;
             this.valueComparer = comparer;
@@ -488,7 +481,7 @@
         private void OnItemIsLeafChanged( HierarchicalItem<T> item )
         {
             Contract.Requires( item != null );
-            
+
             if ( this.SelectLeavesOnly )
             {
                 // the selection of an item should change when its status as a leaf changes

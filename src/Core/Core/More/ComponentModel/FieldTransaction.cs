@@ -19,7 +19,6 @@
         public FieldTransaction( object target )
             : base( target )
         {
-            Arg.NotNull( target, "target" );
         }
 
         /// <summary>
@@ -32,8 +31,6 @@
         public FieldTransaction( object target, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -44,8 +41,6 @@
         public FieldTransaction( object target, IEnumerable<string> fieldNames )
             : base( target, fieldNames )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( fieldNames, "fieldNames" );
         }
 
         /// <summary>
@@ -58,9 +53,6 @@
         public FieldTransaction( object target, IEnumerable<string> fieldNames, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, fieldNames, editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( fieldNames, "fieldNames" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -71,8 +63,6 @@
         public FieldTransaction( object target, Func<FieldInfo, bool> filter )
             : base( target, filter )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( filter, "filter" );
         }
 
         /// <summary>
@@ -85,9 +75,6 @@
         public FieldTransaction( object target, Func<FieldInfo, bool> filter, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, filter, editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( filter, "filter" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>

@@ -149,10 +149,10 @@
     </None>
     <Compile Include="Windows.Interactivity\SavedFileAdapter.cs" />
     <Compile Include="Windows.Interactivity\WindowAction.CommandMediator.cs" />
-    <Content Include="windows.tt">
+    <None Include="windows.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>windows.nuspec</LastGenOutput>
-    </Content>
+      <LastGenOutput>windows.desktop.nuspec</LastGenOutput>
+    </None>
     <Resource Include="Windows.Media.Effects\GrayscaleEffect.ps" />
   </ItemGroup>
   <ItemGroup>

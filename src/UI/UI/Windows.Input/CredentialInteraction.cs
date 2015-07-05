@@ -59,7 +59,6 @@
         public CredentialInteraction( string title )
             : base( title )
         {
-            Arg.NotNull( title, "title" );
         }
 
         /// <summary>

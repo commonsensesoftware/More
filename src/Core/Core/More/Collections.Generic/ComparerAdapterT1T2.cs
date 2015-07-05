@@ -39,7 +39,6 @@
         public ComparerAdapter( Func<TItem, TValue> selector )
             : this( Comparer<TValue>.Default, selector, EqualityComparer<TValue>.Default.GetHashCode )
         {
-            Arg.NotNull( selector, "selector" );
         }
 
         /// <summary>
@@ -51,8 +50,6 @@
         public ComparerAdapter( IComparer<TValue> comparer, Func<TItem, TValue> selector )
             : this( comparer, selector, EqualityComparer<TValue>.Default.GetHashCode )
         {
-            Arg.NotNull( comparer, "comparer" );
-            Arg.NotNull( selector, "selector" );
         }
 
         /// <summary>

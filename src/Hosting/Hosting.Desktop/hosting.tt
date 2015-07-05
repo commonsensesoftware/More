@@ -1,5 +1,5 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
-<#@ output extension=".nuspec" #>
+<#@ output extension=".desktop.nuspec" #>
 <#@ parameter type="System.String" name="CompositionVersion" #>
 <#@ parameter type="System.String" name="PresentationVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">

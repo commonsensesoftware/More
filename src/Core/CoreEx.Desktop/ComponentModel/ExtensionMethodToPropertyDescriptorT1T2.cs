@@ -24,8 +24,6 @@
         public ExtensionMethodToPropertyDescriptor( string propertyName, Func<TObject, TValue> accessor )
             : this( propertyName, accessor, null )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            Arg.NotNull( accessor, "accessor" );
         }
 
         /// <summary>
@@ -38,7 +36,6 @@
         public ExtensionMethodToPropertyDescriptor( string propertyName, Func<TObject, TValue> accessor, Action<TObject, TValue> mutator )
             : base( propertyName, new Attribute[0] )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
             Arg.NotNull( accessor, "accessor" );
 
             this.accessor = accessor;

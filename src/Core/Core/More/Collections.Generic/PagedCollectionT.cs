@@ -22,7 +22,6 @@
         protected PagedCollection( IEnumerable<T> sequence )
             : this( new ObservableCollection<T>( sequence ) )
         {
-            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>
@@ -31,9 +30,8 @@
         /// <param name="collection">The <see cref="ObservableCollection{T}"/> containing the current data page of items.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected PagedCollection( ObservableCollection<T> collection )
-            : this( collection, collection.Count )
+            : this( collection, collection == null ? 0 : collection.Count )
         {
-            Arg.NotNull( collection, "collection" );
         }
 
         /// <summary>
@@ -44,7 +42,6 @@
         public PagedCollection( IEnumerable<T> sequence, long totalCount )
             : this( new ObservableCollection<T>( sequence ), totalCount )
         {
-            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>

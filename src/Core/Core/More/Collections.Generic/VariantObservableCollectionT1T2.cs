@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="sequence">A <see cref="IEnumerable{T}">sequence</see> of items to initially make covariant.</param>
         public VariantObservableCollection( IEnumerable<TFrom> sequence )
-            : base( sequence.Cast<TTo>() )
+            : base( sequence == null ? Enumerable.Empty<TTo>() : sequence.Cast<TTo>() )
         {
             Arg.NotNull( sequence, "sequence" );
         }

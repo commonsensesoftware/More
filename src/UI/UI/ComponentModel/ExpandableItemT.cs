@@ -34,7 +34,6 @@
         public ExpandableItem( T value, IEqualityComparer<T> comparer )
             : this( false, value, comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>

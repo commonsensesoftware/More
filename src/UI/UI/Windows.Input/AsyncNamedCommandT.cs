@@ -23,8 +23,6 @@
         public AsyncNamedCommand( string name, Func<T, Task> executeAsyncMethod )
             : this( null, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -36,8 +34,6 @@
         public AsyncNamedCommand( string id, string name, Func<T, Task> executeAsyncMethod )
             : this( id, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -49,9 +45,6 @@
         public AsyncNamedCommand( string name, Func<T, Task> executeAsyncMethod, Func<T, bool> canExecuteMethod )
             : this( null, name, executeAsyncMethod, canExecuteMethod )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -65,8 +58,6 @@
             : base( executeAsyncMethod, canExecuteMethod )
         {
             Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.id = id;
             this.name = name;

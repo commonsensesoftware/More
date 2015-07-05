@@ -23,6 +23,7 @@
         public static IEnumerable<Type> DependsOn( this IActivity activity )
         {
             Arg.NotNull( activity, "activity" );
+            Contract.Ensures( Contract.Result<IEnumerable<Type>>() != null );
 
             var type = activity.GetType().GetTypeInfo();
             return type.GetCustomAttributes<DependsOnActivityAttribute>( false ).Select( a => a.ActivityType ).ToArray();

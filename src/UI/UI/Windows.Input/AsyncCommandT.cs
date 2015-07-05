@@ -46,7 +46,6 @@
         public AsyncCommand( Func<T, Task> executeAsyncMethod )
             : this( executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>

@@ -55,7 +55,6 @@
         protected internal HierarchicalItem( T value, bool? selected, IEqualityComparer<T> comparer )
             : this( value, selected, new Command<object>( DefaultAction.None, p => true ), comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>
@@ -66,7 +65,6 @@
         public HierarchicalItem( T value, ICommand clickCommand )
             : this( value, null, clickCommand, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( clickCommand, "clickCommand" );
         }
 
         /// <summary>
@@ -78,7 +76,6 @@
         public HierarchicalItem( T value, bool? selected, ICommand clickCommand )
             : this( value, selected, clickCommand, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( clickCommand, "clickCommand" );
         }
 
         /// <summary>
@@ -90,8 +87,6 @@
         public HierarchicalItem( T value, ICommand clickCommand, IEqualityComparer<T> comparer )
             : this( value, null, clickCommand, comparer )
         {
-            Arg.NotNull( clickCommand, "clickCommand" );
-            Arg.NotNull( comparer, "comparer" );
         }
 
         /// <summary>

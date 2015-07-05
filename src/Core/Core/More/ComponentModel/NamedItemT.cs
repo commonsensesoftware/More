@@ -33,8 +33,6 @@
         public NamedItem( string name, string description )
             : this( name, description, default( T ) )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( description, "description" );
         }
 
         /// <summary>

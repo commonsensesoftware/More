@@ -22,7 +22,6 @@
         public ValidationContext( object instance, IDictionary<object, object> items )
             : this( instance, ServiceProvider.Current, items )
         {
-            Arg.NotNull( instance, "instance" );
         }
 
         /// <summary>

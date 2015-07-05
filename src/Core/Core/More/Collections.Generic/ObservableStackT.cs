@@ -135,10 +135,8 @@
         /// that is empty and has the default initial capacity.</summary>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items in the collection.</param>
         public ObservableStack( IEqualityComparer<T> comparer )
+            : this( EmptyArray, comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
-            this.items = EmptyArray;
-            this.comparer = comparer;
         }
 
         /// <summary>
@@ -149,7 +147,6 @@
         public ObservableStack( IEnumerable<T> sequence )
             : this( sequence, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( sequence, "sequence" );
         }
 
         /// <summary>
@@ -182,7 +179,6 @@
         public ObservableStack( int capacity )
             : this( capacity, EqualityComparer<T>.Default )
         {
-            Arg.GreaterThanOrEqualTo( capacity, 0, "capacity" );
         }
 
         /// <summary>

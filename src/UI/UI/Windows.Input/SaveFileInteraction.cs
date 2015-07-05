@@ -30,7 +30,6 @@
         public SaveFileInteraction( string title )
             : this( title, string.Empty, string.Empty )
         {
-            Arg.NotNull( title, "title" );
         }
 
         /// <summary>
@@ -41,8 +40,6 @@
         public SaveFileInteraction( string title, string defaultFileExtension )
             : this( title, defaultFileExtension, string.Empty )
         {
-            Arg.NotNull( title, "title" );
-            Arg.NotNull( defaultFileExtension, "defaultFileExtension" );
         }
 
         /// <summary>
@@ -54,7 +51,6 @@
         public SaveFileInteraction( string title, string defaultFileExtension, string suggestedFileName )
             : base( title )
         {
-            Arg.NotNull( title, "title" );
             Arg.NotNull( defaultFileExtension, "defaultFileExtension" );
             Arg.NotNull( suggestedFileName, "suggestedFileName" );
 

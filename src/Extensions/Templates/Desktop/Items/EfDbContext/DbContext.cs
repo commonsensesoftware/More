@@ -17,9 +17,9 @@
     using ConnectionStringSettings = System.Configuration.ConnectionStringSettings;$endif$
 
     /// <summary>
-    /// Represents a combination of the <see cref="IRepository{T}"/> and <see cref="IUnitOfWork{T}">Unit Of Work</see> patterns
-    /// such that it can be used to query from a database and group together changes that will then be written back to the store
-    /// as a unit<seealso cref="IReadOnlyRepository{T}"/>.
+    /// Represents a combination of the <see cref="IRepository{T}">Repository</see> and <see cref="IUnitOfWork{T}">Unit Of Work</see> patterns
+    /// such that it can be used to query from a data store and group together changes that will then be written back to the store as a unit of
+    /// work<seealso cref="IReadOnlyRepository{T}"/>.
     /// </summary>
     public partial class $safeitemrootname$ : DbContext$implementedInterfaces$
     {

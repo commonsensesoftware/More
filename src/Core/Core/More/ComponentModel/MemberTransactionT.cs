@@ -31,7 +31,6 @@
         protected MemberTransaction( object target )
             : this( target, member => true, SnapshotStrategy.Default )
         {
-            Arg.NotNull( target, "target" );
         }
 
         /// <summary>
@@ -44,8 +43,6 @@
         protected MemberTransaction( object target, IEditSnapshotStrategy editSnapshotStrategy )
             : this( target, member => true, editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -54,9 +51,8 @@
         /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
         /// <param name="memberNames">A <see cref="IEnumerable{T}">sequence</see> of member names to enlist in the transaction.</param>
         protected MemberTransaction( object target, IEnumerable<string> memberNames )
-            : this( target, member => memberNames.Contains( member.Name ), SnapshotStrategy.Default )
+            : this( target, member => ( memberNames ?? Enumerable.Empty<string>() ).Contains( member.Name ), SnapshotStrategy.Default )
         {
-            Arg.NotNull( target, "target" );
             Arg.NotNull( memberNames, "memberNames" );
         }
 
@@ -68,11 +64,9 @@
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
         protected MemberTransaction( object target, IEnumerable<string> memberNames, IEditSnapshotStrategy editSnapshotStrategy )
-            : this( target, member => memberNames.Contains( member.Name ), editSnapshotStrategy )
+            : this( target, member => ( memberNames ?? Enumerable.Empty<string>() ).Contains( member.Name ), editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
             Arg.NotNull( memberNames, "memberNames" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -83,8 +77,6 @@
         protected MemberTransaction( object target, Func<T, bool> memberFilter )
             : this( target, memberFilter, SnapshotStrategy.Default )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( memberFilter, "memberFilter" );
         }
 
         /// <summary>

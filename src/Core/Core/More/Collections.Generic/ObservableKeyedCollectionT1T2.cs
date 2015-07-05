@@ -28,7 +28,6 @@
         public ObservableKeyedCollection( Func<TItem, TKey> getKeyMethod )
             : this( getKeyMethod, EqualityComparer<TKey>.Default )
         {
-            Arg.NotNull( getKeyMethod, "getKeyMethod" );
         }
 
         /// <summary>

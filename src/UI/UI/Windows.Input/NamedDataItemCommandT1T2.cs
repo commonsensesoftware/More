@@ -31,8 +31,6 @@
         public NamedDataItemCommand( string name, Action<TItem, TParameter> executeMethod, TItem dataItem )
             : this( null, name, executeMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -45,8 +43,6 @@
         public NamedDataItemCommand( string id, string name, Action<TItem, TParameter> executeMethod, TItem dataItem )
             : this( id, name, executeMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>
@@ -59,9 +55,6 @@
         public NamedDataItemCommand( string name, Action<TItem, TParameter> executeMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
             : this( null, name, executeMethod, canExecuteMethod, dataItem )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -76,8 +69,6 @@
             : base( executeMethod, canExecuteMethod, dataItem )
         {
             Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.id = id;
             this.name = name;

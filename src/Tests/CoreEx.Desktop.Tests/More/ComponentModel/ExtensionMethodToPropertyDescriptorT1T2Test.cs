@@ -15,17 +15,10 @@
         [Fact( DisplayName = "new extension method property descriptor should not allow null or empty name" )]
         public void ConstructorShouldNotAllowNullOrEmptyPropertyName()
         {
-            var ex = Assert.Throws<ArgumentNullException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( null, o => o ) );
-            Assert.Equal( "propertyName", ex.ParamName );
-
-            ex = Assert.Throws<ArgumentNullException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( "", o => o ) );
-            Assert.Equal( "propertyName", ex.ParamName );
-
-            ex = Assert.Throws<ArgumentNullException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( null, o => o, DefaultAction.None ) );
-            Assert.Equal( "propertyName", ex.ParamName );
-
-            ex = Assert.Throws<ArgumentNullException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( "", o => o, DefaultAction.None ) );
-            Assert.Equal( "propertyName", ex.ParamName );
+            Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( null, o => o ) );
+            Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( "", o => o ) );
+            Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( null, o => o, DefaultAction.None ) );
+            Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( "", o => o, DefaultAction.None ) );
         }
 
         [Fact( DisplayName = "can reset should return false" )]

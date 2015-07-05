@@ -32,8 +32,6 @@
         public OpenFileInteraction( string title, params string[] fileTypeFilter )
             : this( title, false, fileTypeFilter )
         {
-            Arg.NotNull( title, "title" );
-            Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
         }
 
         /// <summary>
@@ -45,7 +43,6 @@
         public OpenFileInteraction( string title, bool multiselect, params string[] fileTypeFilter )
             : base( title )
         {
-            Arg.NotNull( title, "title" );
             Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
 
             this.multiselect = multiselect;

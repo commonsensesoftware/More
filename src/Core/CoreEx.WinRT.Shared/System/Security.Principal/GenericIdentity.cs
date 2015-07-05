@@ -18,7 +18,6 @@
         public GenericIdentity( string name )
             : this( name, string.Empty, !string.IsNullOrEmpty( name ) )
         {
-            Arg.NotNullOrEmpty( name, "name" );
         }
 
         /// <summary>
@@ -29,8 +28,6 @@
         public GenericIdentity( string name, string authenticationType )
             : this( name, authenticationType, !string.IsNullOrEmpty( name ) )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( authenticationType, "authenticationType" );
         }
 
         /// <summary>

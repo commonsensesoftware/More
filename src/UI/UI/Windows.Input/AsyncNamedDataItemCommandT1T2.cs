@@ -31,8 +31,6 @@
         public AsyncNamedDataItemCommand( string name, Func<TItem, TParameter, Task> executeAsyncMethod, TItem dataItem )
             : this( null, name, executeAsyncMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -45,8 +43,6 @@
         public AsyncNamedDataItemCommand( string id, string name, Func<TItem, TParameter, Task> executeAsyncMethod, TItem dataItem )
             : this( id, name, executeAsyncMethod, DefaultFunc.CanExecute, dataItem )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -59,9 +55,6 @@
         public AsyncNamedDataItemCommand( string name, Func<TItem, TParameter, Task> executeAsyncMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
             : this( null, name, executeAsyncMethod, canExecuteMethod, dataItem )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -76,8 +69,6 @@
             : base( executeAsyncMethod, canExecuteMethod, dataItem )
         {
             Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
 
             this.id = id;
             this.name = name;

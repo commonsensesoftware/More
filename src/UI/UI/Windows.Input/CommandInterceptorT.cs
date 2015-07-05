@@ -24,8 +24,6 @@
         public CommandInterceptor( Action<T> preAction, ICommand command )
             : this( preAction, DefaultAction.None, command )
         {
-            Arg.NotNull( preAction, "preAction" );
-            Arg.NotNull( command, "command" );
         }
 
         /// <summary>
@@ -36,8 +34,6 @@
         public CommandInterceptor( ICommand command, Action<T> postAction )
             : this( DefaultAction.None, postAction, command )
         {
-            Arg.NotNull( postAction, "postAction" );
-            Arg.NotNull( command, "command" );
         }
 
         /// <summary>

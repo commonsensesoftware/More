@@ -1,5 +1,5 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
-<#@ output extension=".nuspec" #>
+<#@ output extension=".desktop.nuspec" #>
 <#@ parameter type="System.String" name="CoreExVersion" #>
 <#@ parameter type="System.String" name="UIVersion" #>
 <#@ parameter type="System.String" name="UIExVersion" #><?xml version="1.0"?>

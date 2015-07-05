@@ -29,7 +29,6 @@
         public SelectFolderInteraction( string title, params string[] fileTypeFilter )
             : base( title )
         {
-            Arg.NotNull( title, "title" );
             Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
 
             this.fileTypeFilter.AddRange( fileTypeFilter );

@@ -20,7 +20,6 @@
         public ServiceRegistryKey( Type serviceType )
             : this( serviceType, new ServiceTypeDisassembler().ExtractKey( serviceType ) )
         {
-            Arg.NotNull( serviceType, "serviceType" );
         }
 
         /// <summary>

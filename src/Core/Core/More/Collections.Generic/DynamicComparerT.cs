@@ -38,7 +38,6 @@
         public DynamicComparer( Func<T, T, int> comparison )
             : this( comparison, o => o == null ? 0 : o.GetHashCode() )
         {
-            Arg.NotNull( comparison, "comparison" );
         }
 
         /// <summary>

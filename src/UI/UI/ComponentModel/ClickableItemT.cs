@@ -24,7 +24,6 @@
         public ClickableItem( T value, ICommand clickCommand )
             : this( value, clickCommand, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( clickCommand, "clickCommand" );
         }
 
         /// <summary>

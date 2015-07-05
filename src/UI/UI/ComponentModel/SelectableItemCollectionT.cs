@@ -666,7 +666,6 @@
         protected SelectableItemCollection( Func<T, IEqualityComparer<T>, SelectableItem<T>> factory )
             : this( factory, Enumerable.Empty<T>(), (object) null, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( factory, "factory" ); 
         }
 
         /// <summary>
@@ -676,7 +675,6 @@
         protected SelectableItemCollection( IEqualityComparer<T> comparer )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), Enumerable.Empty<T>(), (object) null, comparer )
         {
-            Arg.NotNull( comparer, "comparer" ); 
         }
 
         /// <summary>
@@ -688,8 +686,6 @@
         protected SelectableItemCollection( Func<T, IEqualityComparer<T>, SelectableItem<T>> factory, IEqualityComparer<T> comparer )
             : this( factory, Enumerable.Empty<T>(), (object) null, comparer )
         {
-            Arg.NotNull( factory, "factory" );
-            Arg.NotNull( comparer, "comparer" ); 
         }
 
         /// <summary>
@@ -699,7 +695,6 @@
         public SelectableItemCollection( IEnumerable<T> sequence )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) null, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( sequence, "sequence" ); 
         }
 
         /// <summary>
@@ -710,8 +705,6 @@
         public SelectableItemCollection( IEnumerable<T> sequence, IEqualityComparer<T> comparer )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) null, comparer )
         {
-            Arg.NotNull( sequence, "sequence" );
-            Arg.NotNull( comparer, "comparer" ); 
         }
 
         /// <summary>
@@ -722,7 +715,6 @@
         public SelectableItemCollection( IEnumerable<T> sequence, T selectAllValue )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) selectAllValue, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( sequence, "sequence" ); 
         }
 
         /// <summary>
@@ -734,8 +726,6 @@
         public SelectableItemCollection( IEnumerable<T> sequence, T selectAllValue, IEqualityComparer<T> comparer )
             : this( ( v, c ) => new SelectableItem<T>( v, c ), sequence, (object) selectAllValue, comparer )
         {
-            Arg.NotNull( sequence, "sequence" );
-            Arg.NotNull( comparer, "comparer" ); 
         }
 
         private SelectableItemCollection(
@@ -745,9 +735,9 @@
             IEqualityComparer<T> comparer )
             : base( new ItemCollection<T>( comparer ) )
         {
-            Contract.Requires( sequence != null );
-            Contract.Requires( sequence != null );
-            Contract.Requires( comparer != null );
+            Arg.NotNull( factory, "factory" );
+            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( comparer, "comparer" );
 
             this.factory = factory;
             this.valueComparer = comparer;

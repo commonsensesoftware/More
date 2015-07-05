@@ -44,7 +44,6 @@
         public Command( Action<T> executeMethod )
             : this( executeMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNull( executeMethod, "executeMethod" );
         }
 
         /// <summary>

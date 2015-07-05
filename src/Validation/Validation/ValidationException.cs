@@ -47,7 +47,7 @@
         /// <param name="value">The value that caused the exception.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public ValidationException( IValidationResult validationResult, object value )
-            : base( validationResult.ErrorMessage )
+            : base( validationResult == null ? null : validationResult.ErrorMessage )
         {
             Arg.NotNull( validationResult, "validationResult" );
             this.validationResult = new Lazy<IValidationResult>( () => validationResult );

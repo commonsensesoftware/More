@@ -19,7 +19,6 @@
         public PropertyTransaction( object target )
             : base( target )
         {
-            Arg.NotNull( target, "target" );
         }
 
         /// <summary>
@@ -32,8 +31,6 @@
         public PropertyTransaction( object target, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -46,8 +43,6 @@
         public PropertyTransaction( object target, IEnumerable<string> propertyNames )
             : base( target, propertyNames )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( propertyNames, "propertyNames" );
         }
 
         /// <summary>
@@ -60,9 +55,6 @@
         public PropertyTransaction( object target, IEnumerable<string> propertyNames, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, propertyNames, editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( propertyNames, "propertyNames" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>
@@ -73,8 +65,6 @@
         public PropertyTransaction( object target, Func<PropertyInfo, bool> filter )
             : base( target, filter )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( filter, "filter" );
         }
 
         /// <summary>
@@ -87,9 +77,6 @@
         public PropertyTransaction( object target, Func<PropertyInfo, bool> filter, IEditSnapshotStrategy editSnapshotStrategy )
             : base( target, filter, editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( filter, "filter" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
         }
 
         /// <summary>

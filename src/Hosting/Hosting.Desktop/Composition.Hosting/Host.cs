@@ -2,6 +2,7 @@
 {
     using More.ComponentModel;
     using More.ComponentModel.DataAnnotations;
+    using More.IO;
     using System;
     using System.Composition.Convention;
     using System.Composition.Hosting;
@@ -45,6 +46,7 @@
 
             // register default services directly after the underlying container is created
             // optimization: call base implementation because this object will never be composed
+            base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
             base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
 
             return container;

@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="uneditableMembers">An array of uneditable member names.</param>
         protected EditableObject( params string[] uneditableMembers )
-            : this( uneditableMembers.AsEnumerable() )
+            : this( (IEnumerable<string>) uneditableMembers )
         {
             Arg.NotNull( uneditableMembers, "uneditableMembers" );
         }
@@ -46,7 +46,7 @@
         protected EditableObject( IEnumerable<string> uneditableMembers )
         {
             Arg.NotNull( uneditableMembers, "uneditableMembers" );
-            
+
             this.uneditableMembers = new HashSet<string>( uneditableMembers, StringComparer.Ordinal );
             this.transaction = new Lazy<IEditTransaction>( this.CreateTransaction );
         }

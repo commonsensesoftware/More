@@ -23,8 +23,6 @@
         public AsyncCancelableCommand( string name, Func<CancelEventArgs, Task> executeAsyncMethod )
             : this( null, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -36,8 +34,6 @@
         public AsyncCancelableCommand( string id, string name, Func<CancelEventArgs, Task> executeAsyncMethod )
             : this( id, name, executeAsyncMethod, DefaultFunc.CanExecute )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
         }
 
         /// <summary>
@@ -49,9 +45,6 @@
         public AsyncCancelableCommand( string name, Func<CancelEventArgs, Task> executeAsyncMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : this( null, name, executeAsyncMethod, canExecuteMethod )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
         }
 
         /// <summary>
@@ -64,9 +57,6 @@
         public AsyncCancelableCommand( string id, string name, Func<CancelEventArgs, Task> executeAsyncMethod, Func<CancelEventArgs, bool> canExecuteMethod )
             : base( id, name, executeAsyncMethod, canExecuteMethod )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
             this.executeAsyncMethod = executeAsyncMethod;
         }
 

@@ -187,10 +187,10 @@
     <None Include="..\..\More.snk">
       <Link>More.snk</Link>
     </None>
-    <Content Include="validation.tt">
+    <None Include="validation.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>validation.nuspec</LastGenOutput>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">

@@ -1,5 +1,5 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
-<#@ output extension=".nuspec" #>
+<#@ output extension=".desktop.nuspec" #>
 <#@ parameter type="System.String" name="CoreVersion" #>
 <#@ parameter type="System.String" name="UIVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
@@ -20,7 +20,7 @@
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</iconUrl>
-  <tags>More Patterns Practices</tags>
+  <tags>More Patterns Practices UI User Interfaces Model View MVVM MVC MVP</tags>
   <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />

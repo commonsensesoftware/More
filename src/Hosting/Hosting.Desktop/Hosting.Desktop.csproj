@@ -160,11 +160,11 @@
     <Compile Include="Composition.Hosting\HostException.cs" />
     <Compile Include="Composition.Hosting\ShowShellViewT.cs" />
     <Compile Include="Composition.Hosting\WindowsHostT.cs" />
-    <Content Include="hosting.tt">
+    <None Include="hosting.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>hosting.nuspec</LastGenOutput>
-    </Content>
+      <LastGenOutput>hosting.desktop.nuspec</LastGenOutput>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

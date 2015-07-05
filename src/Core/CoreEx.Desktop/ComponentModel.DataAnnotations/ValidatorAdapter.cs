@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel.DataAnnotations
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.ComponentModel.DataAnnotations;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// Provides additional implementation specific to Windows Desktop applications.
