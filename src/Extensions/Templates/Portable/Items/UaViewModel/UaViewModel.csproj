@@ -71,6 +71,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <VSTemplate Include="ViewModel.vstemplate">
+      <OutputSubPath>More\Universal</OutputSubPath>
+      <DependentUpon>ViewModel.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <SubType>Designer</SubType>
+    </VSTemplate>
+  </ItemGroup>
+  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

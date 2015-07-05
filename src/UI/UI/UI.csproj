@@ -135,11 +135,11 @@
     <None Include="..\..\More.snk">
       <Link>More.snk</Link>
     </None>
-    <None Include="ui.tt">
+    <Content Include="ui.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ui.nuspec</LastGenOutput>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Arg.cs">

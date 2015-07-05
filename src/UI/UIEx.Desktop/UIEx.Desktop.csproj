@@ -158,11 +158,11 @@
     <None Include="..\..\More.snk">
       <Link>More.snk</Link>
     </None>
-    <None Include="uiex.tt">
+    <Content Include="uiex.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>uiex.nuspec</LastGenOutput>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
