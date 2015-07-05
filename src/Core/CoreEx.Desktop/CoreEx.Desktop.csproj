@@ -182,10 +182,10 @@
     <None Include="..\..\More.snk">
       <Link>More.snk</Link>
     </None>
-    <Content Include="coreex.tt">
+    <None Include="coreex.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
