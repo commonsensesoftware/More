@@ -5,25 +5,22 @@
   <version>$version$</version>
   <authors>Chris Martinez</authors>
   <owners>$author$</owners>
-  <title>More - Validation</title>
+  <frameworkAssemblies>
+   <frameworkAssembly assemblyName="System.Core" />
+  </frameworkAssemblies>
+  <title>More - UI Extensions</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for validation.</summary>
+  <summary>Provides "More" patterns and practices for user interface applications that contain platform-specific extensions.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</iconUrl>
-  <tags>More Patterns Practices Validation Data Annotations</tags>
+  <tags>More Patterns Practices</tags>
   <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More" version="$version$" />
-  </dependencies>
- </metadata>
- <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\CodeContracts" />
- </files>
-</package>
+   <dependency id="More" version="

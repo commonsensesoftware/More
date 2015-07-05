@@ -78,7 +78,6 @@
     <Compile Include="More\Collections.Generic\DataStructureExtensionsTest.cs" />
     <Compile Include="More\Collections.Generic\DictionaryDebugViewT1T2Test.cs" />
     <Compile Include="More\Collections.Generic\DynamicComparerTTest.cs" />
-    <Compile Include="More\Configuration\SettingKeyTest.cs" />
     <Compile Include="System\Collections.Generic\DataStructureExtensionsTest.cs" />
     <Compile Include="System\Collections.Generic\ICollectionExtensionsTest.cs" />
     <Compile Include="System\Collections.Generic\IDictionaryExtensionsTest.cs" />
@@ -122,8 +121,6 @@
     <Compile Include="More\ComponentModel\UnitOfWorkTest.cs" />
     <Compile Include="More\ComponentModel\UnitOfWorkTTest.cs" />
     <Compile Include="More\ComponentModel\ValidatableObjectTest.cs" />
-    <Compile Include="More\Diagnostics.Tracing\ITraceWriterExtensionsTest.cs" />
-    <Compile Include="More\Diagnostics.Tracing\TraceRecordTest.cs" />
     <Compile Include="More\Globalization\FiscalMonthTest.cs" />
     <Compile Include="More\Globalization\FiscalWeekTest.cs" />
     <Compile Include="More\Globalization\FiscalYearTest.cs" />

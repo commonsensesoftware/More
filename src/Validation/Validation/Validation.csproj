@@ -187,7 +187,10 @@
     <None Include="..\..\More.snk">
       <Link>More.snk</Link>
     </None>
-    <None Include="validation.nuspec" />
+    <Content Include="validation.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>validation.nuspec</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
@@ -200,6 +203,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ValidationMessage.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\nuget.pack.targets" />

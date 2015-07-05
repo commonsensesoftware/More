@@ -1,6 +1,5 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Configuration;
     using System;
     using System.ComponentModel;
 #if NETFX_CORE

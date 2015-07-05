@@ -156,8 +156,6 @@
     <Compile Include="ComponentModel\ExtensionPropertyScopeExtensions.cs" />
     <Compile Include="Configuration\CompositeValidator.cs" />
     <Compile Include="Configuration\CompositeValidatorAttribute.cs" />
-    <Compile Include="Configuration\ConfigurationFileConnectionStringLocator.cs" />
-    <Compile Include="Configuration\ConfigurationFileUrlLocator.cs" />
     <Compile Include="Configuration\NamedConfigurationElement.cs" />
     <Compile Include="Configuration\NamedTypeConfigurationElement.cs" />
     <Compile Include="Configuration\NonAbstractTypeValidator.cs" />
@@ -184,9 +182,10 @@
     <None Include="..\..\More.snk">
       <Link>More.snk</Link>
     </None>
-    <None Include="coreex.nuspec">
+    <Content Include="coreex.tt">
       <SubType>Designer</SubType>
-    </None>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">

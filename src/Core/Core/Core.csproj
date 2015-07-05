@@ -258,17 +258,8 @@
     <Compile Include="More\ComponentModel\UnitOfWorkT.cs" />
     <Compile Include="More\ComponentModel\ValidatableObject.cs" />
     <Compile Include="More\Composition\ICompositionService.cs" />
-    <Compile Include="More\Configuration\SettingKey.cs" />
-    <Compile Include="More\Configuration\DeploymentEnvironment.cs" />
-    <Compile Include="More\Configuration\ISettingLocatorContractT.cs" />
-    <Compile Include="More\Configuration\ISettingLocatorT.cs" />
     <Compile Include="More\DateTimeFormatProvider.cs" />
     <Compile Include="More\DefaultAction.cs" />
-    <Compile Include="More\Diagnostics.Tracing\ITraceWriter.cs" />
-    <Compile Include="More\Diagnostics.Tracing\ITraceWriterExtensions.cs" />
-    <Compile Include="More\Diagnostics.Tracing\TraceKind.cs" />
-    <Compile Include="More\Diagnostics.Tracing\TraceLevel.cs" />
-    <Compile Include="More\Diagnostics.Tracing\TraceRecord.cs" />
     <Compile Include="More\Globalization\FiscalCalendar.cs" />
     <Compile Include="More\Globalization\FiscalMonth.cs" />
     <Compile Include="More\Globalization\FiscalWeek.cs" />

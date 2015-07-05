@@ -6,7 +6,6 @@
  </PropertyGroup>
  
  <UsingTask TaskName="ResolvePackageReference" AssemblyFile="$(TemplateRootDirectory)\Build\bin\More.Build.Tasks.dll" />
- <UsingTask TaskName="GetPackageMetadata" AssemblyFile="$(TemplateRootDirectory)\Build\bin\More.Build.Tasks.dll" />
 
  <PropertyGroup>
   <TransformOnBuild>true</TransformOnBuild>

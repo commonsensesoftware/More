@@ -135,9 +135,11 @@
     <None Include="..\..\More.snk">
       <Link>More.snk</Link>
     </None>
-    <None Include="ui.nuspec">
+    <Content Include="ui.tt">
       <SubType>Designer</SubType>
-    </None>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ui.nuspec</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Arg.cs">
@@ -224,9 +226,12 @@
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
- <Import Project="..\..\nuget.pack.targets" />
- <Import Project="..\..\fileversion.targets" />
+  <Import Project="..\..\nuget.pack.targets" />
+  <Import Project="..\..\fileversion.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

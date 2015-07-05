@@ -15,7 +15,3 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 [assembly: CLSCompliant( true )]
 [assembly: NeutralResourcesLanguage( "en" )]
-#if !OVERRIDE_VERSION
-[assembly: AssemblyVersion( "1.0.0.0" )]
-[assembly: AssemblyInformationalVersion( "1.0.0" )]
-#endif

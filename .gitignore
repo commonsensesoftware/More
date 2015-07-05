@@ -18,6 +18,14 @@ FakesAssemblies/
 /src/packages
 /src/NuGet
 
+# ignore generated nuspec files
+/src/Core/CoreEx.Desktop/coreex.nuspec
+/src/UI/UI/ui.nuspec
+/src/UI/UIEx.Desktop/uiex.nuspec
+/src/Validation/Validation/validation.nuspec
+/src/Windows/Windows.Desktop/windows.nuspec
+/src/Hosting/Hosting.Desktop/hosting.nuspec
+
 # ignore generated visual studio template files
 /src/Extensions/Templates/**/*.vstemplate
 

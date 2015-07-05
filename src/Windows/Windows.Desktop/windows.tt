@@ -1,4 +1,8 @@
-﻿<?xml version="1.0"?>
+﻿<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".nuspec" #>
+<#@ parameter type="System.String" name="CoreExVersion" #>
+<#@ parameter type="System.String" name="UIVersion" #>
+<#@ parameter type="System.String" name="UIExVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
  <metadata>
   <id>$id$</id>
@@ -30,15 +34,16 @@
   </references>
   <dependencies>
    <group targetFramework="net45">
-    <dependency id="More.Extensions" version="$version$" />
-    <dependency id="More.UI.Extensions" version="$version$" /> 
+    <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
+    <dependency id="More.UI.Extensions" version="<#= UIExVersion #>" /> 
    </group>
    <group targetFramework="win81">
-    <dependency id="More.Extensions" version="$version$" />
-    <dependency id="More.UI" version="$version$" />
+    <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
+    <dependency id="More.UI" version="<#= UIVersion #>" />
    </group>
    <group targetFramework="portable-wp81+wpa81">
-    <dependency id="More.UI.Extensions" version="$version$" />
+    <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
+    <dependency id="More.UI.Extensions" version="<#= UIExVersion #>" />
    </group>
   </dependencies>
  </metadata>

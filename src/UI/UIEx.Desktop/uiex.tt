@@ -1,4 +1,7 @@
-﻿<?xml version="1.0"?>
+﻿<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".nuspec" #>
+<#@ parameter type="System.String" name="CoreVersion" #>
+<#@ parameter type="System.String" name="UIVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
  <metadata>
   <id>$id$</id>
@@ -23,8 +26,8 @@
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More" version="$version$" />
-   <dependency id="More.UI" version="$version$" />
+   <dependency id="More" version="<#= CoreVersion #>" />
+   <dependency id="More.UI" version="<#= UIVersion #>" />
   </dependencies>
  </metadata>
  <files>
