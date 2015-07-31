@@ -33,7 +33,7 @@
         /// <param name="converter">The <see cref="IValueConverter"/> encapsulated by the attribute.</param>
         protected ValueConverterBaseAttribute( IValueConverter converter )
         {
-            Contract.Requires<ArgumentNullException>( converter != null, "converter" );
+            Arg.NotNull( converter, nameof( converter ) );
             this.converter = converter;
         }
 
@@ -46,7 +46,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IValueConverter>() != null );
-                return this.converter;
+                return converter;
             }
         }
     }

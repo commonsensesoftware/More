@@ -38,6 +38,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         protected async override void OnUnhandledException( IServiceProvider serviceProvider, Exception exception )
         {
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( exception, nameof( exception ) );
+
             base.OnUnhandledException( serviceProvider, exception );
             await new MessageDialog( exception.Message, SR.ActivityFailedCaption ).ShowAsync();
         }

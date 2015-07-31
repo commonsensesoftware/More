@@ -43,8 +43,8 @@
         public CustomTypeDescriptor( ICustomTypeDescriptor parent, CustomTypeDescriptor<T> other )
             : base( parent )
         {
-            Arg.NotNull( other, "other" );
-            this.extensionProperties.AddRange( other.extensionProperties );
+            Arg.NotNull( other, nameof( other ) );
+            extensionProperties.AddRange( other.extensionProperties );
         }
 
         /// <summary>
@@ -93,8 +93,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public void AddExtensionProperty<TValue>( Func<T, TValue> accessor )
         {
-            Arg.NotNull( accessor, "accessor" );
-            this.AddExtensionProperty( accessor.Method.Name, accessor );
+            Arg.NotNull( accessor, nameof( accessor ) );
+            AddExtensionProperty( accessor.Method.Name, accessor );
         }
 
         /// <summary>
@@ -139,9 +139,9 @@
         /// ]]></code></example>
         public void AddExtensionProperty<TValue>( string propertyName, Func<T, TValue> accessor )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            Arg.NotNull( accessor, "accessor" );
-            this.AddExtensionProperty( propertyName, accessor, null );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            Arg.NotNull( accessor, nameof( accessor ) );
+            AddExtensionProperty( propertyName, accessor, null );
         }
 
         /// <summary>
@@ -218,14 +218,14 @@
         /// ]]></code></example>
         public virtual void AddExtensionProperty<TValue>( string propertyName, Func<T, TValue> accessor, Action<T, TValue> mutator )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            Arg.NotNull( accessor, "accessor" );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            Arg.NotNull( accessor, nameof( accessor ) );
 
-            if ( this.extensionProperties.Contains( propertyName ) )
-                this.extensionProperties.Remove( propertyName );
+            if ( extensionProperties.Contains( propertyName ) )
+                extensionProperties.Remove( propertyName );
 
             var property = new ExtensionMethodToPropertyDescriptor<T, TValue>( propertyName, accessor, mutator );
-            this.extensionProperties.Add( property );
+            extensionProperties.Add( property );
         }
 
         /// <summary>
@@ -243,7 +243,7 @@
         /// <returns>A <see cref="PropertyDescriptorCollection"/> object.</returns>
         public override PropertyDescriptorCollection GetProperties()
         {
-            return this.GetProperties( null );
+            return GetProperties( null );
         }
 
         /// <summary>
@@ -254,7 +254,7 @@
         public override PropertyDescriptorCollection GetProperties( Attribute[] attributes )
         {
             var properties = new List<PropertyDescriptor>( base.GetProperties( attributes ).Cast<PropertyDescriptor>() );
-            properties.AddRange( this.extensionProperties );
+            properties.AddRange( extensionProperties );
             return new PropertyDescriptorCollection( properties.ToArray(), true );
         }
 

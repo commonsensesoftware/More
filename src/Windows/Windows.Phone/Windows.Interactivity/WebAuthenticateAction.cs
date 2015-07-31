@@ -15,7 +15,7 @@
     /// </content>
     public partial class WebAuthenticateAction
     {
-        private void Authenticate( WebAuthenticateInteraction webAuthenticate )
+        private static void Authenticate( WebAuthenticateInteraction webAuthenticate )
         {
             Contract.Requires( webAuthenticate != null );
             

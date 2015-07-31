@@ -21,8 +21,8 @@
         /// <param name="collection">The <see cref="ICollection{T}">collection</see> to debug.</param>
         public CollectionDebugView( ICollection<T> collection )
         {
-            Arg.NotNull( collection, "collection" );
-            this.source = collection;
+            Arg.NotNull( collection, nameof( collection ) );
+            source = collection;
         }
 
 
@@ -36,8 +36,8 @@
         {
             get
             {
-                Contract.Ensures( this.source != null );
-                return this.source.ToArray();
+                Contract.Ensures( source != null );
+                return source.ToArray();
             }
         }
     }

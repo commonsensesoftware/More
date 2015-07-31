@@ -22,11 +22,11 @@
 
             dialog.ContinuationData.AddRange( interaction.ContinuationData );
             dialog.FileTypeFilter.AddRange( interaction.FileTypeFilter );
-            dialog.SuggestedStartLocation = this.SuggestedStartLocation;
-            dialog.ViewMode = this.ViewMode;
+            dialog.SuggestedStartLocation = SuggestedStartLocation;
+            dialog.ViewMode = ViewMode;
 
-            if ( !string.IsNullOrEmpty( this.SettingsIdentifier ) )
-                dialog.SettingsIdentifier = this.SettingsIdentifier;
+            if ( !string.IsNullOrEmpty( SettingsIdentifier ) )
+                dialog.SettingsIdentifier = SettingsIdentifier;
 
             if ( saveButton != null )
                 dialog.CommitButtonText = saveButton.Name;
@@ -48,7 +48,7 @@
             var interaction = GetRequestedInteraction<OpenFileInteraction>( parameter );
 
             if ( interaction != null )
-                this.OpenFiles( interaction );
+                OpenFiles( interaction );
 
             return null;
         }

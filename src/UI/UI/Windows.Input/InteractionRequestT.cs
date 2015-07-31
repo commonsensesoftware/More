@@ -36,12 +36,9 @@
         /// <param name="e">The <see cref="InteractionRequestedEventArgs"/> event data.</param>
         protected virtual void OnRequested( InteractionRequestedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Requested;
-
-            if ( handler != null )
-                handler( this, e );
+            Requested?.Invoke( this, e );
         }
 
         /// <summary>
@@ -50,8 +47,8 @@
         /// <param name="interaction">The interaction <see cref="Interaction">interaction</see> request.</param>
         public void Request( T interaction )
         {
-            Arg.NotNull( interaction, "interaction" );
-            this.OnRequested( new InteractionRequestedEventArgs( interaction ) );
+            Arg.NotNull( interaction, nameof( interaction ) );
+            OnRequested( new InteractionRequestedEventArgs( interaction ) );
         }
 
         /// <summary>
@@ -62,11 +59,11 @@
         {
             get
             {
-                return this.id;
+                return id;
             }
             set
             {
-                this.SetProperty( ref this.id, value );
+                SetProperty( ref id, value );
             }
         }
 

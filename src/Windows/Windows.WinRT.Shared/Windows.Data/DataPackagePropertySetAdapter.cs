@@ -3,7 +3,8 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;    
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
     using global::Windows.ApplicationModel.DataTransfer;
     using global::Windows.Foundation.Metadata;
     using global::Windows.Storage.Streams;
@@ -16,18 +17,18 @@
         internal DataPackagePropertySetAdapter( DataPackagePropertySet propertySet )
         {
             Contract.Requires( propertySet != null );
-            this.adapted = propertySet;
+            adapted = propertySet;
         }
 
         public Uri ApplicationListingUri
         {
             get
             {
-                return this.adapted.ApplicationListingUri;
+                return adapted.ApplicationListingUri;
             }
             set
             {
-                this.adapted.ApplicationListingUri = value;
+                adapted.ApplicationListingUri = value;
             }
         }
 
@@ -35,11 +36,11 @@
         {
             get
             {
-                return this.adapted.ApplicationName;
+                return adapted.ApplicationName;
             }
             set
             {
-                this.adapted.ApplicationName = value;
+                adapted.ApplicationName = value;
             }
         }
 
@@ -47,11 +48,11 @@
         {
             get
             {
-                return this.adapted.ContentSourceApplicationLink;
+                return adapted.ContentSourceApplicationLink;
             }
             set
             {
-                this.adapted.ContentSourceApplicationLink = value;
+                adapted.ContentSourceApplicationLink = value;
             }
         }
 
@@ -59,11 +60,11 @@
         {
             get
             {
-                return this.adapted.ContentSourceWebLink;
+                return adapted.ContentSourceWebLink;
             }
             set
             {
-                this.adapted.ContentSourceWebLink = value;
+                adapted.ContentSourceWebLink = value;
             }
         }
 
@@ -71,11 +72,11 @@
         {
             get
             {
-                return this.adapted.Description;
+                return adapted.Description;
             }
             set
             {
-                this.adapted.Description = value;
+                adapted.Description = value;
             }
         }
 
@@ -83,7 +84,7 @@
         {
             get
             {
-                return this.adapted.FileTypes;
+                return adapted.FileTypes;
             }
         }
 
@@ -91,11 +92,11 @@
         {
             get
             {
-                return this.adapted.LogoBackgroundColor;
+                return adapted.LogoBackgroundColor;
             }
             set
             {
-                this.adapted.LogoBackgroundColor = value;
+                adapted.LogoBackgroundColor = value;
             }
         }
 
@@ -103,11 +104,11 @@
         {
             get
             {
-                return this.adapted.PackageFamilyName;
+                return adapted.PackageFamilyName;
             }
             set
             {
-                this.adapted.PackageFamilyName = value;
+                adapted.PackageFamilyName = value;
             }
         }
 
@@ -115,11 +116,11 @@
         {
             get
             {
-                return this.adapted.Square30x30Logo;
+                return adapted.Square30x30Logo;
             }
             set
             {
-                this.adapted.Square30x30Logo = value;
+                adapted.Square30x30Logo = value;
             }
         }
 
@@ -127,11 +128,11 @@
         {
             get
             {
-                return this.adapted.Thumbnail;
+                return adapted.Thumbnail;
             }
             set
             {
-                this.adapted.Thumbnail = value;
+                adapted.Thumbnail = value;
             }
         }
 
@@ -139,37 +140,39 @@
         {
             get
             {
-                return this.adapted.Title;
+                return adapted.Title;
             }
             set
             {
-                this.adapted.Title = value;
+                adapted.Title = value;
             }
         }
 
         public bool ContainsKey( string key )
         {
-            return this.adapted.ContainsKey( key );
+            return adapted.ContainsKey( key );
         }
 
+        [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Required to implement IDictionary<K,V>." )]
         public IEnumerable<string> Keys
         {
             get
             {
-                return this.adapted.Keys;
+                return adapted.Keys;
             }
         }
 
         public bool TryGetValue( string key, out object value )
         {
-            return this.adapted.TryGetValue( key, out value );
+            return adapted.TryGetValue( key, out value );
         }
 
+        [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Required to implement IDictionary<K,V>." )]
         public IEnumerable<object> Values
         {
             get
             {
-                return this.adapted.Values;
+                return adapted.Values;
             }
         }
 
@@ -177,11 +180,11 @@
         {
             get
             {
-                return this.adapted[key];
+                return adapted[key];
             }
             set
             {
-                this.adapted[key] = value;
+                adapted[key] = value;
             }
         }
 
@@ -189,79 +192,80 @@
         {
             get
             {
-                return this.adapted.Count;
+                return adapted.Count;
             }
         }
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
-            IEnumerable<KeyValuePair<string, object>> @this = this.adapted;
+            IEnumerable<KeyValuePair<string, object>> @this = adapted;
             return @this.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            IEnumerable<KeyValuePair<string, object>> @this = this.adapted;
+            IEnumerable<KeyValuePair<string, object>> @this = adapted;
             return @this.GetEnumerator();
         }
 
         public void Add( string key, object value )
         {
-            this.adapted.Add( key, value );
+            adapted.Add( key, value );
         }
 
         ICollection<string> IDictionary<string, object>.Keys
         {
             get
             {
-                return this.adapted.Keys;
+                return adapted.Keys;
             }
         }
 
         public bool Remove( string key )
         {
-            return this.adapted.Remove( key );
+            return adapted.Remove( key );
         }
 
         ICollection<object> IDictionary<string, object>.Values
         {
             get
             {
-                return this.adapted.Values;
+                return adapted.Values;
             }
         }
 
         public void Add( KeyValuePair<string, object> item )
         {
-            this.adapted.Add( item );
+            adapted.Add( item );
         }
 
         public void Clear()
         {
-            this.adapted.Clear();
+            adapted.Clear();
         }
 
         public bool Contains( KeyValuePair<string, object> item )
         {
-            return this.adapted.Contains( item );
+            return adapted.Contains( item );
         }
 
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Handled by adapted object." )]
         public void CopyTo( KeyValuePair<string, object>[] array, int arrayIndex )
         {
-            this.adapted.CopyTo( array, arrayIndex );
+            adapted.CopyTo( array, arrayIndex );
         }
 
         public bool IsReadOnly
         {
             get
             {
-                return this.adapted.IsReadOnly;
+                return adapted.IsReadOnly;
             }
         }
 
         public bool Remove( KeyValuePair<string, object> item )
         {
-            return this.adapted.Remove( item );
+            return adapted.Remove( item );
         }
     }
 }

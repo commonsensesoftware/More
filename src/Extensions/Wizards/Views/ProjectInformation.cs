@@ -25,15 +25,15 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public ProjectInformation( Project project )
         {
-            Contract.Requires<ArgumentNullException>( project != null, "project" );
+            Arg.NotNull( project, nameof( project ) );
 
             // note: currently only considering C# and VB; refactor to support other languages as needed
-            this.fileExtension = project.IsVisualBasic() ? ".vb" : ".cs";
-            this.projectDirectory = Path.GetDirectoryName( project.FullName );
-            this.projectPath = project.FullName;
-            this.targetDirectory = project.GetTargetDirectory();
-            this.targetPath = project.GetTargetPath();
-            this.intermediateDirectory = project.GetIntermediateDirectory();
+            fileExtension = project.IsVisualBasic() ? ".vb" : ".cs";
+            projectDirectory = Path.GetDirectoryName( project.FullName );
+            projectPath = project.FullName;
+            targetDirectory = project.GetTargetDirectory();
+            targetPath = project.GetTargetPath();
+            intermediateDirectory = project.GetIntermediateDirectory();
         }
 
         /// <summary>
@@ -44,8 +44,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.fileExtension ) );
-                return this.fileExtension;
+                Contract.Ensures( !string.IsNullOrEmpty( fileExtension ) );
+                return fileExtension;
             }
         }
 
@@ -57,8 +57,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.projectDirectory ) );
-                return this.projectDirectory;
+                Contract.Ensures( !string.IsNullOrEmpty( projectDirectory ) );
+                return projectDirectory;
             }
         }
 
@@ -70,8 +70,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.projectPath ) );
-                return this.projectPath;
+                Contract.Ensures( !string.IsNullOrEmpty( projectPath ) );
+                return projectPath;
             }
         }
 
@@ -83,8 +83,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.targetDirectory ) );
-                return this.targetDirectory;
+                Contract.Ensures( !string.IsNullOrEmpty( targetDirectory ) );
+                return targetDirectory;
             }
         }
 
@@ -96,8 +96,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.targetPath ) );
-                return this.targetPath;
+                Contract.Ensures( !string.IsNullOrEmpty( targetPath ) );
+                return targetPath;
             }
         }
 
@@ -109,8 +109,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.intermediateDirectory ) );
-                return this.intermediateDirectory;
+                Contract.Ensures( !string.IsNullOrEmpty( intermediateDirectory ) );
+                return intermediateDirectory;
             }
         }
     }

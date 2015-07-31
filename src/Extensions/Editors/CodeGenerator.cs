@@ -28,7 +28,7 @@
         /// </summary>
         protected CodeGenerator()
         {
-            this.defaultExtension = new Lazy<string>( this.GetDefaultExtension );
+            defaultExtension = new Lazy<string>( GetDefaultExtension );
         }
 
         /// <summary>
@@ -41,7 +41,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.defaultExtension.Value;
+                return defaultExtension.Value;
             }
         }
 
@@ -56,10 +56,10 @@
         {
             Contract.Ensures( Contract.Result<string>() != null );
 
-            if ( this.site == null )
+            if ( site == null )
                 return string.Empty;
 
-            using ( var serviceProvider = new VisualStudioServiceProvider( (IOleServiceProvider) this.site ) )
+            using ( var serviceProvider = new VisualStudioServiceProvider( (IOleServiceProvider) site ) )
             {
                 IVSMDCodeDomProvider provider;
                 CodeDomProvider codeProvider;
@@ -74,7 +74,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Exposed as the DefaultExtension property." )]
         int IVsSingleFileGenerator.DefaultExtension( out string pbstrDefaultExtension )
         {
-            var ext = this.DefaultExtension;
+            var ext = DefaultExtension;
 
             if ( ext.Length > 0 && ext[0] != '.' )
                 ext = "." + ext;
@@ -90,13 +90,13 @@
             Debug.Assert( rgbOutputFileContents != null, "rgbOutputFileContents is null" );
             Debug.Assert( rgbOutputFileContents.Length > 0, "rgbOutputFileContents is zero-length" );
 
-            var serviceProvider = this.site == null ? ServiceProvider.Current : new VisualStudioServiceProvider( (IOleServiceProvider) this.site );
+            var serviceProvider = site == null ? ServiceProvider.Current : new VisualStudioServiceProvider( (IOleServiceProvider) site );
             var context = new CodeGeneratorContext( wszInputFilePath, bstrInputFileContents, wszDefaultNamespace, new VsProgressAdapter( pGenerateProgress ), serviceProvider );
 
             try
             {
                 // generate content as stream
-                using ( var stream = this.Generate( context ) )
+                using ( var stream = Generate( context ) )
                 {
                     var temp = stream as MemoryStream;
                     var size = (int) stream.Length;
@@ -138,7 +138,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Only used or called by VS." )]
         void IObjectWithSite.GetSite( ref Guid riid, out IntPtr ppvSite )
         {
-            if ( this.site == null )
+            if ( site == null )
                 Marshal.ThrowExceptionForHR( NoInterface );
 
             var iunknown = Marshal.GetIUnknownForObject( site );
@@ -151,7 +151,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Only used or called by VS." )]
         void IObjectWithSite.SetSite( object pUnkSite )
         {
-            this.site = pUnkSite;
+            site = pUnkSite;
         }
     }
 }

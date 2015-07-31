@@ -65,7 +65,7 @@
         /// </summary>
         public ConditionalBrushConverter()
         {
-            this.brush = new SolidColorBrush( Colors.Gray );
+            brush = new SolidColorBrush( Colors.Gray );
         }
 
         /// <summary>
@@ -74,8 +74,8 @@
         /// <param name="defaultBrush">The default <see cref="Brush">brush</see> for the converter.</param>
         public ConditionalBrushConverter( Brush defaultBrush )
         {
-            Contract.Requires<ArgumentNullException>( defaultBrush != null, "defaultBrush" );
-            this.brush = defaultBrush;
+            Arg.NotNull( defaultBrush, nameof( defaultBrush ) );
+            brush = defaultBrush;
         }
 
         /// <summary>
@@ -87,12 +87,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<Brush>() != null );
-                return this.brush;
+                return brush;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.brush = value;
+                Arg.NotNull( value, nameof( value ) );
+                brush = value;
             }
         }
 
@@ -105,7 +105,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<ConditionalBrushRule>>() != null );
-                return this.rules.Value;
+                return rules.Value;
             }
         }
 
@@ -131,14 +131,14 @@
             var item = value == null ? (decimal?) null : new decimal?( System.Convert.ToDecimal( value, culture ) );
 
             // select matching color from rule set
-            foreach ( var rule in this.Rules )
+            foreach ( var rule in Rules )
             {
                 if ( rule.Evaluate( item ) )
                     return rule.Brush;
             }
 
             // if no rules are satisfied, use the default color
-            return this.DefaultBrush;
+            return DefaultBrush;
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "All conversions performed by this type are one-way." )]

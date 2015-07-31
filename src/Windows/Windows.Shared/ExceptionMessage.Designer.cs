@@ -853,5 +853,16 @@ namespace More
                 return ResourceManager.GetString( "ContinuationCannotBeStaticMethod", resourceCulture );
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The type '{0}' does not have a parameterless constructor..
+        /// </summary>
+        internal static string NoParameterlessConstructor
+        {
+            get
+            {
+                return ResourceManager.GetString( "NoParameterlessConstructor", resourceCulture );
+            }
+        }
     }
 }

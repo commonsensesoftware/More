@@ -33,7 +33,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 1 && Contract.Result<int>() <= 12 );
-                return this.epochMonth;
+                return epochMonth;
             }
         }
 
@@ -44,8 +44,8 @@
         /// <returns>The one-based day of the year.</returns>
         public override int GetDayOfYear( DateTime time )
         {
-            var year = time.Year - ( time.Month < this.epochMonth ? 1 : 0 );
-            var start = new DateTime( year, this.epochMonth, 1 );
+            var year = time.Year - ( time.Month < epochMonth ? 1 : 0 );
+            var start = new DateTime( year, epochMonth, 1 );
             return (int) Math.Ceiling( time.Subtract( start ).TotalDays ) + 1;
         }
 
@@ -63,13 +63,13 @@
         [SuppressMessage( "Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "year-1", Justification = "Validated by calendar year boundary" )]
         public override int GetDaysInMonth( int year, int month, int era )
         {
-            if ( year < this.MinSupportedDateTime.Year || year > this.MaxSupportedDateTime.Year )
+            if ( year < MinSupportedDateTime.Year || year > MaxSupportedDateTime.Year )
                 throw new ArgumentOutOfRangeException( "year" );
 
             if ( month < 1 || month > 12 )
                 throw new ArgumentOutOfRangeException( "month" );
 
-            month = this.epochMonth + ( month - 1 );
+            month = epochMonth + ( month - 1 );
 
             if ( month > 12 )
                 month -= 12;
@@ -90,18 +90,18 @@
         [SuppressMessage( "Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "year-1", Justification = "Validated by calendar year boundary" )]
         public override int GetDaysInYear( int year, int era )
         {
-            if ( this.epochMonth == 1 )
+            if ( epochMonth == 1 )
                 return base.GetDaysInYear( year, era );
 
-            if ( year < this.MinSupportedDateTime.Year || year > this.MaxSupportedDateTime.Year )
+            if ( year < MinSupportedDateTime.Year || year > MaxSupportedDateTime.Year )
                 throw new ArgumentOutOfRangeException( "year" );
 
             var days = 0;
 
-            for ( var month = this.epochMonth; month <= 12; month++ )
+            for ( var month = epochMonth; month <= 12; month++ )
                 days += base.GetDaysInMonth( year - 1, month, era );
 
-            for ( var month = 1; month < this.epochMonth; month++ )
+            for ( var month = 1; month < epochMonth; month++ )
                 days += base.GetDaysInMonth( year, month, era );
 
             return days;
@@ -114,10 +114,10 @@
         /// <returns>An integer from 1 to 12 representing the month.</returns>
         public override int GetMonth( DateTime time )
         {
-            if ( time.Month >= this.epochMonth )
-                return ( time.Month - this.epochMonth ) + 1;
+            if ( time.Month >= epochMonth )
+                return ( time.Month - epochMonth ) + 1;
 
-            return ( this.epochMonth + time.Month ) - 1;
+            return ( epochMonth + time.Month ) - 1;
         }
 
         /// <summary>
@@ -129,7 +129,7 @@
         {
             var year = base.GetYear( time );
 
-            if ( this.epochMonth == 1 || time.Month < this.epochMonth )
+            if ( epochMonth == 1 || time.Month < epochMonth )
                 return year;
 
             return year + 1;
@@ -151,10 +151,10 @@
 
             var leapYear = base.IsLeapYear( year, era );
 
-            if ( this.epochMonth < 3 )
+            if ( epochMonth < 3 )
                 return leapYear;
 
-            return leapYear || ( this.epochMonth > 2 && year > this.MinSupportedDateTime.Year && base.IsLeapYear( year - 1, era ) );
+            return leapYear || ( epochMonth > 2 && year > MinSupportedDateTime.Year && base.IsLeapYear( year - 1, era ) );
         }
 
         /// <summary>
@@ -182,14 +182,14 @@
             if ( month < 1 || month > 12 )
                 throw new ArgumentOutOfRangeException( "month" );
 
-            month = this.epochMonth + ( month - 1 );
+            month = epochMonth + ( month - 1 );
 
             if ( month > 12 )
                 month -= 12;
             else
                 year--;
 
-            if ( year < this.MinSupportedDateTime.Year || year > this.MaxSupportedDateTime.Year )
+            if ( year < MinSupportedDateTime.Year || year > MaxSupportedDateTime.Year )
                 throw new ArgumentOutOfRangeException( "year" );
 
             return base.ToDateTime( year, month, day, hour, minute, second, millisecond, era );
@@ -204,7 +204,7 @@
         {
             get
             {
-                return this.epochMonth;
+                return epochMonth;
             }
         }
     }

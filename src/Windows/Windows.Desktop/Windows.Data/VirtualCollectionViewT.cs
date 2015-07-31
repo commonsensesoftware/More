@@ -52,37 +52,37 @@
 
                 this.@this = @this;
                 this.source = source;
-                ( (INotifyCollectionChanged) this.source ).CollectionChanged += this.OnCollectionChanged;
+                ( (INotifyCollectionChanged) this.source ).CollectionChanged += OnCollectionChanged;
             }
 
             private void Dispose( bool disposing )
             {
-                if ( this.disposed )
+                if ( disposed )
                     return;
 
-                this.disposed = true;
+                disposed = true;
 
                 if ( !disposing )
                     return;
 
-                if ( this.source != null )
+                if ( source != null )
                 {
-                    ( (INotifyCollectionChanged) this.source ).CollectionChanged -= this.OnCollectionChanged;
-                    this.source = null;
+                    ( (INotifyCollectionChanged) source ).CollectionChanged -= OnCollectionChanged;
+                    source = null;
                 }
 
-                this.@this = null;
+                @this = null;
             }
 
             private void OnCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
             {
                 if ( e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null )
-                    this.@this.Items.AddRange( e.NewItems.OfType<T>() );
+                    @this.Items.AddRange( e.NewItems.OfType<T>() );
             }
 
             public void Dispose()
             {
-                this.Dispose( true );
+                Dispose( true );
                 GC.SuppressFinalize( this );
             }
         }
@@ -117,11 +117,11 @@
         /// </summary>
         ~VirtualCollectionView()
         {
-            if ( this.items != null )
-                this.items.FrozenItems.CollectionChanged -= this.OnFrozenItemsChanged;
+            if ( items != null )
+                items.FrozenItems.CollectionChanged -= OnFrozenItemsChanged;
 
-            if ( this.sortDescriptions != null )
-                ( (INotifyCollectionChanged) this.sortDescriptions ).CollectionChanged += this.OnSortDescriptionsChanged;
+            if ( sortDescriptions != null )
+                ( (INotifyCollectionChanged) sortDescriptions ).CollectionChanged += OnSortDescriptionsChanged;
         }
 
         /// <summary>
@@ -132,7 +132,7 @@
         public VirtualCollectionView( Func<PagingArguments, Task<PagedCollection<T>>> pagingMethod )
             : this( pagingMethod, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( pagingMethod != null, "pagingMethod" );
+            Arg.NotNull( pagingMethod, nameof( pagingMethod ) );
         }
 
         /// <summary>
@@ -144,23 +144,23 @@
         public VirtualCollectionView( Func<PagingArguments, Task<PagedCollection<T>>> pagingMethod, IEqualityComparer<T> comparer )
             : base( new FrozenItemCollection<T>() )
         {
-            Contract.Requires<ArgumentNullException>( pagingMethod != null, "pagingMethod" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( pagingMethod, nameof( pagingMethod ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
-            this.items = (FrozenItemCollection<T>) this.Items;
-            this.items.FrozenItems.CollectionChanged += this.OnFrozenItemsChanged;
-            this.flags[CanSortFlag] = true;
+            items = (FrozenItemCollection<T>) Items;
+            items.FrozenItems.CollectionChanged += OnFrozenItemsChanged;
+            flags[CanSortFlag] = true;
             this.pagingMethod = pagingMethod;
             this.comparer = comparer;
 
-            ( (INotifyCollectionChanged) this.sortDescriptions ).CollectionChanged += this.OnSortDescriptionsChanged;
+            ( (INotifyCollectionChanged) sortDescriptions ).CollectionChanged += OnSortDescriptionsChanged;
         }
 
         private bool IsRefreshDeferred
         {
             get
             {
-                var value = this.deferLevel > 0;
+                var value = deferLevel > 0;
                 return value;
             }
         }
@@ -174,7 +174,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<T>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -186,7 +186,7 @@
         {
             get
             {
-                var value = this.TotalItemCount > -1;
+                var value = TotalItemCount > -1;
                 return value;
             }
         }
@@ -200,7 +200,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                var value = (int) Math.Ceiling( (double) this.ItemCount / (double) this.PageSize );
+                var value = (int) Math.Ceiling( (double) ItemCount / (double) PageSize );
                 return value;
             }
         }
@@ -214,7 +214,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= -1 );
-                var value = this.PageCount - 1;
+                var value = PageCount - 1;
                 return value;
             }
         }
@@ -227,13 +227,13 @@
         {
             get
             {
-                return this.currentItem;
+                return currentItem;
             }
             private set
             {
-                this.currentItem = value;
-                this.OnCurrentChanged( EventArgs.Empty );
-                this.OnPropertyChanged( "CurrentItem" );
+                currentItem = value;
+                OnCurrentChanged( EventArgs.Empty );
+                OnPropertyChanged( "CurrentItem" );
             }
         }
 
@@ -245,7 +245,7 @@
         {
             get
             {
-                return this.Items;
+                return Items;
             }
         }
 
@@ -258,16 +258,16 @@
         {
             get
             {
-                return this.filter;
+                return filter;
             }
             set
             {
-                if ( this.filter == value )
+                if ( filter == value )
                     return;
 
-                this.filter = value;
-                this.predicate = value == null ? (Predicate<object>) null : o => this.filter( (T) o );
-                this.OnPropertyChanged( "Filter" );
+                filter = value;
+                predicate = value == null ? (Predicate<object>) null : o => filter( (T) o );
+                OnPropertyChanged( "Filter" );
             }
         }
 
@@ -280,7 +280,7 @@
         {
             get
             {
-                return this.items.FrozenItems;
+                return items.FrozenItems;
             }
         }
 
@@ -295,40 +295,40 @@
         {
             get
             {
-                return this.items.UnfrozenItems;
+                return items.UnfrozenItems;
             }
         }
 
         private async void RefreshPageIndex( int pageIndex )
         {
-            if ( this.PageIndex != pageIndex )
+            if ( PageIndex != pageIndex )
             {
                 var args = new PageChangingEventArgs( pageIndex );
-                this.IsPageChanging = true;
-                this.OnPageChanging( args );
+                IsPageChanging = true;
+                OnPageChanging( args );
 
                 if ( args.Cancel )
                 {
-                    this.IsPageChanging = false;
+                    IsPageChanging = false;
                     return;
                 }
             }
 
             // if a refresh is queued while we're deferring, keep track of the last index.
             // this could triggered by actions other than the Refresh() method (ex: sorting)
-            if ( this.IsRefreshDeferred )
+            if ( IsRefreshDeferred )
             {
-                this.deferredPageIndex = pageIndex;
+                deferredPageIndex = pageIndex;
                 return;
             }
 
             // subscribe to paged operation
-            var actualPageSize = Math.Max( this.PageSize - this.FrozenItems.Count, 1 );
-            var arguments = new PagingArguments( pageIndex, actualPageSize, this.SortDescriptions );
-            var pagedItems = await this.pagingMethod( arguments );
+            var actualPageSize = Math.Max( PageSize - FrozenItems.Count, 1 );
+            var arguments = new PagingArguments( pageIndex, actualPageSize, SortDescriptions );
+            var pagedItems = await pagingMethod( arguments );
 
-            this.OnRefreshed( pagedItems );
-            this.OnRefreshComplete( pageIndex );
+            OnRefreshed( pagedItems );
+            OnRefreshComplete( pageIndex );
         }
 
         private void OnRefreshed( PagedCollection<T> pagedItems )
@@ -336,30 +336,30 @@
             Contract.Requires( pagedItems != null, "pagedItems" );
 
             // terminate previous subscription
-            if ( this.pagedItemSubscription != null )
-                this.pagedItemSubscription.Dispose();
+            if ( pagedItemSubscription != null )
+                pagedItemSubscription.Dispose();
 
             // replace all items from the provided collection
-            this.Items.ReplaceAll( pagedItems );
+            Items.ReplaceAll( pagedItems );
 
             // items may be provided all at once or provided asynchronously; subscribe to any additions
-            this.pagedItemSubscription = new PagingSubscription( this, pagedItems );
+            pagedItemSubscription = new PagingSubscription( this, pagedItems );
 
             // update collection view
-            this.ItemCount = (int) pagedItems.TotalCount;
-            this.TotalItemCount = this.ItemCount + this.FrozenItems.Count;
-            this.MoveCurrentToPosition( -1, false );
+            ItemCount = (int) pagedItems.TotalCount;
+            TotalItemCount = ItemCount + FrozenItems.Count;
+            MoveCurrentToPosition( -1, false );
         }
 
         private void OnRefreshComplete( int pageIndex )
         {
-            if ( !this.IsPageChanging )
+            if ( !IsPageChanging )
                 return;
 
             // update page index when the operation is complete
-            this.IsPageChanging = false;
-            this.PageIndex = pageIndex;
-            this.OnPageChanged( EventArgs.Empty );
+            IsPageChanging = false;
+            PageIndex = pageIndex;
+            OnPageChanged( EventArgs.Empty );
         }
 
         /// <summary>
@@ -368,7 +368,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -377,12 +377,9 @@
         /// <param name="e">The <see cref="PageChangingEventArgs"/> event data.</param>
         protected virtual void OnPageChanging( PageChangingEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PageChanging;
-
-            if ( handler != null )
-                handler( this, e );
+            PageChanging?.Invoke( this, e );
         }
 
         /// <summary>
@@ -391,12 +388,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnPageChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PageChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PageChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -405,12 +399,9 @@
         /// <param name="e">The <see cref="CurrentChangingEventArgs"/> event data.</param>
         protected virtual void OnCurrentChanging( CurrentChangingEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CurrentChanging;
-
-            if ( handler != null )
-                handler( this, e );
+            CurrentChanging?.Invoke( this, e );
         }
 
         /// <summary>
@@ -419,12 +410,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCurrentChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CurrentChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CurrentChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -436,26 +424,26 @@
         protected virtual bool MoveCurrentToPosition( int position, bool cancelable )
         {
             // succeeded, but we're already on this index
-            if ( this.CurrentPosition == position && !this.IsPageChanging )
+            if ( CurrentPosition == position && !IsPageChanging )
                 return false;
 
             var args = new CurrentChangingEventArgs( cancelable );
-            this.OnCurrentChanging( args );
+            OnCurrentChanging( args );
 
             if ( args.IsCancelable && args.Cancel )
                 return false;
 
             // out of range
-            if ( position < 0 || position >= this.Count )
+            if ( position < 0 || position >= Count )
             {
-                this.CurrentPosition = position < 0 ? -1 : this.Count;
-                this.CurrentItem = default( T );
+                CurrentPosition = position < 0 ? -1 : Count;
+                CurrentItem = default( T );
                 return false;
             }
 
             // update current item
-            this.CurrentItem = this.Items[position];
-            this.CurrentPosition = position;
+            CurrentItem = Items[position];
+            CurrentPosition = position;
             return true;
         }
 
@@ -467,15 +455,15 @@
         public bool MoveCurrentTo( T item )
         {
             // not in collection
-            if ( !this.Contains( item ) )
+            if ( !Contains( item ) )
                 return false;
 
             // succeeded, but this is already the current item
-            if ( this.Comparer.Equals( this.CurrentItem, item ) )
+            if ( Comparer.Equals( CurrentItem, item ) )
                 return false;
 
             var args = new CurrentChangingEventArgs( true );
-            this.OnCurrentChanging( args );
+            OnCurrentChanging( args );
 
             if ( args.Cancel )
                 return false;
@@ -483,13 +471,13 @@
             var position = 0;
 
             // update current position
-            using ( var iterator = this.Items.GetEnumerator() )
+            using ( var iterator = Items.GetEnumerator() )
             {
                 while ( iterator.MoveNext() )
                 {
-                    if ( this.Comparer.Equals( iterator.Current, item ) )
+                    if ( Comparer.Equals( iterator.Current, item ) )
                     {
-                        this.CurrentPosition = position;
+                        CurrentPosition = position;
                         break;
                     }
 
@@ -497,7 +485,7 @@
                 }
             }
 
-            this.CurrentItem = item;
+            CurrentItem = item;
             return true;
         }
 
@@ -510,12 +498,12 @@
             {
                 case NotifyCollectionChangedAction.Add:
                     {
-                        if ( e.NewItems == null || e.NewItems.Count == 0 || this.Items.Count <= this.PageSize )
+                        if ( e.NewItems == null || e.NewItems.Count == 0 || Items.Count <= PageSize )
                             return;
 
                         // if we're not at the end, then we need to refresh the page
-                        if ( this.PageIndex != this.LastPageIndex )
-                            this.RefreshPageIndex( this.PageIndex );
+                        if ( PageIndex != LastPageIndex )
+                            RefreshPageIndex( PageIndex );
 
                         break;
                     }
@@ -525,16 +513,16 @@
                             return;
 
                         // if we're not at the end, then we need to refresh the page
-                        if ( this.Items.Count < this.PageSize && this.PageIndex != this.LastPageIndex )
-                            this.RefreshPageIndex( this.PageIndex );
+                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
+                            RefreshPageIndex( PageIndex );
 
                         break;
                     }
                 case NotifyCollectionChangedAction.Reset:
                     {
                         // if we're not at the end, then we need to refresh the page
-                        if ( this.Items.Count < this.PageSize && this.PageIndex != this.LastPageIndex )
-                            this.RefreshPageIndex( this.PageIndex );
+                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
+                            RefreshPageIndex( PageIndex );
 
                         break;
                     }
@@ -548,15 +536,15 @@
                 case NotifyCollectionChangedAction.Add:
                 case NotifyCollectionChangedAction.Replace:
                     {
-                        if ( this.HasRefreshed )
-                            this.MoveToFirstPage();
+                        if ( HasRefreshed )
+                            MoveToFirstPage();
 
                         break;
                     }
                 case NotifyCollectionChangedAction.Remove:
                     {
-                        if ( this.SortDescriptions.Count > 0 && this.HasRefreshed )
-                            this.MoveToFirstPage();
+                        if ( SortDescriptions.Count > 0 && HasRefreshed )
+                            MoveToFirstPage();
 
                         break;
                     }
@@ -579,7 +567,7 @@
             {
                 case "Count":
                     {
-                        this.OnPropertyChanged( "IsEmpty" );
+                        OnPropertyChanged( "IsEmpty" );
                         break;
                     }
             }
@@ -602,15 +590,15 @@
         {
             get
             {
-                return this.flags[CanFilterFlag];
+                return flags[CanFilterFlag];
             }
             protected set
             {
-                if ( this.flags[CanFilterFlag] == value )
+                if ( flags[CanFilterFlag] == value )
                     return;
 
-                this.flags[CanFilterFlag] = value;
-                this.OnPropertyChanged( "CanFilter" );
+                flags[CanFilterFlag] = value;
+                OnPropertyChanged( "CanFilter" );
             }
         }
 
@@ -622,15 +610,15 @@
         {
             get
             {
-                return this.flags[CanGroupFlag];
+                return flags[CanGroupFlag];
             }
             protected set
             {
-                if ( this.flags[CanGroupFlag] == value )
+                if ( flags[CanGroupFlag] == value )
                     return;
 
-                this.flags[CanGroupFlag] = value;
-                this.OnPropertyChanged( "CanGroup" );
+                flags[CanGroupFlag] = value;
+                OnPropertyChanged( "CanGroup" );
             }
         }
 
@@ -642,21 +630,21 @@
         {
             get
             {
-                return this.flags[CanSortFlag];
+                return flags[CanSortFlag];
             }
             protected set
             {
-                if ( this.flags[CanSortFlag] == value )
+                if ( flags[CanSortFlag] == value )
                     return;
 
-                this.flags[CanSortFlag] = value;
-                this.OnPropertyChanged( "CanSort" );
+                flags[CanSortFlag] = value;
+                OnPropertyChanged( "CanSort" );
             }
         }
 
         bool ICollectionView.Contains( object item )
         {
-            return this.Contains( (T) item );
+            return Contains( (T) item );
         }
 
         /// <summary>
@@ -667,7 +655,7 @@
         {
             get
             {
-                return this.culture;
+                return culture;
             }
             set
             {
@@ -675,11 +663,11 @@
                 if ( value == null )
                     throw new ArgumentNullException( "value" );
 
-                if ( object.Equals( this.culture, value ) )
+                if ( object.Equals( culture, value ) )
                     return;
 
-                this.culture = value;
-                this.OnPropertyChanged( "Culture" );
+                culture = value;
+                OnPropertyChanged( "Culture" );
             }
         }
 
@@ -697,7 +685,7 @@
         {
             get
             {
-                return this.CurrentItem;
+                return CurrentItem;
             }
         }
 
@@ -709,17 +697,17 @@
         {
             get
             {
-                return this.currentPosition;
+                return currentPosition;
             }
             private set
             {
-                if ( this.currentPosition == value )
+                if ( currentPosition == value )
                     return;
 
-                this.currentPosition = value;
-                this.OnPropertyChanged( "CurrentPosition" );
-                this.OnPropertyChanged( "IsCurrentBeforeFirst" );
-                this.OnPropertyChanged( "IsCurrentAfterLast" );
+                currentPosition = value;
+                OnPropertyChanged( "CurrentPosition" );
+                OnPropertyChanged( "IsCurrentBeforeFirst" );
+                OnPropertyChanged( "IsCurrentAfterLast" );
             }
         }
 
@@ -736,16 +724,16 @@
         {
             get
             {
-                return this.predicate;
+                return predicate;
             }
             set
             {
-                if ( this.predicate == value )
+                if ( predicate == value )
                     return;
 
-                this.predicate = value;
-                this.filter = value == null ? (Predicate<T>) null : o => this.predicate( (T) o );
-                this.OnPropertyChanged( "Filter" );
+                predicate = value;
+                filter = value == null ? (Predicate<T>) null : o => predicate( (T) o );
+                OnPropertyChanged( "Filter" );
             }
         }
 
@@ -757,7 +745,7 @@
         {
             get
             {
-                return this.groupDescriptions.Value;
+                return groupDescriptions.Value;
             }
         }
 
@@ -769,7 +757,7 @@
         {
             get
             {
-                return this.groups.Value;
+                return groups.Value;
             }
         }
 
@@ -781,7 +769,7 @@
         {
             get
             {
-                return this.CurrentPosition >= this.Count;
+                return CurrentPosition >= Count;
             }
         }
 
@@ -793,7 +781,7 @@
         {
             get
             {
-                return this.CurrentPosition < 0;
+                return CurrentPosition < 0;
             }
         }
 
@@ -805,13 +793,13 @@
         {
             get
             {
-                return this.Count == 0;
+                return Count == 0;
             }
         }
 
         bool ICollectionView.MoveCurrentTo( object item )
         {
-            return this.MoveCurrentTo( (T) item );
+            return MoveCurrentTo( (T) item );
         }
 
         /// <summary>
@@ -820,7 +808,7 @@
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
         public bool MoveCurrentToFirst()
         {
-            return this.MoveCurrentToPosition( 0 );
+            return MoveCurrentToPosition( 0 );
         }
 
         /// <summary>
@@ -829,7 +817,7 @@
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
         public bool MoveCurrentToLast()
         {
-            return this.MoveCurrentToPosition( this.Count - 1 );
+            return MoveCurrentToPosition( Count - 1 );
         }
 
         /// <summary>
@@ -838,7 +826,7 @@
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
         public bool MoveCurrentToNext()
         {
-            return this.MoveCurrentToPosition( this.CurrentPosition + 1 );
+            return MoveCurrentToPosition( CurrentPosition + 1 );
         }
 
         /// <summary>
@@ -848,7 +836,7 @@
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
         public bool MoveCurrentToPosition( int position )
         {
-            return this.MoveCurrentToPosition( position, true );
+            return MoveCurrentToPosition( position, true );
         }
 
         /// <summary>
@@ -857,7 +845,7 @@
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
         public bool MoveCurrentToPrevious()
         {
-            return this.MoveCurrentToPosition( this.CurrentPosition - 1 );
+            return MoveCurrentToPosition( CurrentPosition - 1 );
         }
 
         /// <summary>
@@ -865,23 +853,23 @@
         /// </summary>
         public virtual void Refresh()
         {
-            if ( this.IsRefreshDeferred )
+            if ( IsRefreshDeferred )
                 return;
 
-            var pageIndex = this.PageIndex;
+            var pageIndex = PageIndex;
 
             // is this a callback from a deferred refresh?
-            if ( this.deferredPageIndex > -1 )
+            if ( deferredPageIndex > -1 )
             {
                 // refresh the last deferred page index instead of the current page index
-                pageIndex = this.deferredPageIndex;
-                this.deferredPageIndex = -1;
+                pageIndex = deferredPageIndex;
+                deferredPageIndex = -1;
             }
 
             if ( pageIndex < 0 )
-                this.MoveToFirstPage();
+                MoveToFirstPage();
             else
-                this.RefreshPageIndex( pageIndex );
+                RefreshPageIndex( pageIndex );
         }
 
         /// <summary>
@@ -892,7 +880,7 @@
         {
             get
             {
-                return this.sortDescriptions;
+                return sortDescriptions;
             }
         }
 
@@ -900,7 +888,7 @@
         {
             get
             {
-                return this.SourceCollection;
+                return SourceCollection;
             }
         }
 
@@ -912,15 +900,15 @@
         {
             get
             {
-                return this.items.FrozenItemPosition;
+                return items.FrozenItemPosition;
             }
             set
             {
-                if ( this.items.FrozenItemPosition == value )
+                if ( items.FrozenItemPosition == value )
                     return;
 
-                this.items.FrozenItemPosition = value;
-                this.OnPropertyChanged( "FrozenItemPosition" );
+                items.FrozenItemPosition = value;
+                OnPropertyChanged( "FrozenItemPosition" );
             }
         }
 
@@ -928,7 +916,7 @@
         {
             get
             {
-                return this.FrozenItems;
+                return FrozenItems;
             }
         }
 
@@ -936,7 +924,7 @@
         {
             get
             {
-                return this.UnfrozenItems;
+                return UnfrozenItems;
             }
         }
 
@@ -948,15 +936,15 @@
         {
             get
             {
-                return this.flags[CanChangePageFlag];
+                return flags[CanChangePageFlag];
             }
             protected set
             {
-                if ( this.flags[CanChangePageFlag] == value )
+                if ( flags[CanChangePageFlag] == value )
                     return;
 
-                this.flags[CanChangePageFlag] = value;
-                this.OnPropertyChanged( "CanChangePage" );
+                flags[CanChangePageFlag] = value;
+                OnPropertyChanged( "CanChangePage" );
             }
         }
 
@@ -968,15 +956,15 @@
         {
             get
             {
-                return this.flags[IsPageChangingFlag];
+                return flags[IsPageChangingFlag];
             }
             protected set
             {
-                if ( this.flags[IsPageChangingFlag] == value )
+                if ( flags[IsPageChangingFlag] == value )
                     return;
 
-                this.flags[IsPageChangingFlag] = value;
-                this.OnPropertyChanged( "IsPageChanging" );
+                flags[IsPageChangingFlag] = value;
+                OnPropertyChanged( "IsPageChanging" );
             }
         }
 
@@ -988,17 +976,17 @@
         {
             get
             {
-                return this.itemCount;
+                return itemCount;
             }
             private set
             {
-                if ( this.itemCount == value )
+                if ( itemCount == value )
                     return;
 
-                this.itemCount = value;
-                this.OnPropertyChanged( "ItemCount" );
-                this.OnPropertyChanged( "PageCount" );
-                this.CanChangePage = this.PageCount > 1;
+                itemCount = value;
+                OnPropertyChanged( "ItemCount" );
+                OnPropertyChanged( "PageCount" );
+                CanChangePage = PageCount > 1;
             }
         }
 
@@ -1008,7 +996,7 @@
         /// <returns>True if the operation succeeds; otherwise, false.</returns>
         public bool MoveToFirstPage()
         {
-            return this.MoveToPage( 0 );
+            return MoveToPage( 0 );
         }
 
         /// <summary>
@@ -1017,10 +1005,10 @@
         /// <returns>True if the operation succeeds; otherwise, false.</returns>
         public bool MoveToLastPage()
         {
-            if ( this.Count == 0 )
+            if ( Count == 0 )
                 return false;
 
-            return this.MoveToPage( this.LastPageIndex );
+            return MoveToPage( LastPageIndex );
         }
 
         /// <summary>
@@ -1029,7 +1017,7 @@
         /// <returns>True if the operation succeeds; otherwise, false.</returns>
         public bool MoveToNextPage()
         {
-            return this.MoveToPage( this.PageIndex + 1 );
+            return MoveToPage( PageIndex + 1 );
         }
 
         /// <summary>
@@ -1040,11 +1028,11 @@
         public virtual bool MoveToPage( int pageIndex )
         {
             // page index is out of range (note: TotalItemCount = -1 until the collection is refresh at least once)
-            if ( pageIndex < 0 || ( this.HasRefreshed && pageIndex > this.LastPageIndex ) )
+            if ( pageIndex < 0 || ( HasRefreshed && pageIndex > LastPageIndex ) )
                 return false;
 
             // note: refresh even if this is the same page index because external conditions may have changed
-            this.RefreshPageIndex( pageIndex );
+            RefreshPageIndex( pageIndex );
             return true;
         }
 
@@ -1054,7 +1042,7 @@
         /// <returns>True if the operation succeeds; otherwise, false.</returns>
         public bool MoveToPreviousPage()
         {
-            return this.MoveToPage( this.PageIndex - 1 );
+            return MoveToPage( PageIndex - 1 );
         }
 
         /// <summary>
@@ -1075,16 +1063,16 @@
         {
             get
             {
-                return this.currentPageIndex;
+                return currentPageIndex;
             }
             private set
             {
-                if ( this.currentPageIndex == value )
+                if ( currentPageIndex == value )
                     return;
 
-                this.currentPageIndex = value;
-                this.OnPropertyChanged( "PageIndex" );
-                this.CanChangePage = this.PageCount > 1;
+                currentPageIndex = value;
+                OnPropertyChanged( "PageIndex" );
+                CanChangePage = PageCount > 1;
             }
         }
 
@@ -1096,7 +1084,7 @@
         {
             get
             {
-                return this.pageSize;
+                return pageSize;
             }
             set
             {
@@ -1104,22 +1092,22 @@
                 if ( value < 1 )
                     throw new ArgumentOutOfRangeException( "value" );
 
-                if ( this.pageSize == value )
+                if ( pageSize == value )
                     return;
 
-                this.pageSize = value;
-                this.OnPropertyChanged( "PageSize" );
+                pageSize = value;
+                OnPropertyChanged( "PageSize" );
 
-                if ( !this.HasRefreshed )
+                if ( !HasRefreshed )
                     return;
 
-                this.OnPropertyChanged( "PageCount" );
-                this.CanChangePage = this.PageCount > 1;
+                OnPropertyChanged( "PageCount" );
+                CanChangePage = PageCount > 1;
 
-                if ( this.PageIndex > this.LastPageIndex )
-                    this.MoveToLastPage();
+                if ( PageIndex > LastPageIndex )
+                    MoveToLastPage();
                 else
-                    this.RefreshPageIndex( this.PageIndex );
+                    RefreshPageIndex( PageIndex );
             }
         }
 
@@ -1132,29 +1120,29 @@
         {
             get
             {
-                return this.totalCount;
+                return totalCount;
             }
             private set
             {
-                if ( this.totalCount == value )
+                if ( totalCount == value )
                     return;
 
-                this.totalCount = value;
-                this.OnPropertyChanged( "TotalItemCount" );
+                totalCount = value;
+                OnPropertyChanged( "TotalItemCount" );
             }
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is not meant to be publicly visible." )]
         void IDeferrable.BeginDefer()
         {
-            Interlocked.Increment( ref this.deferLevel );
+            Interlocked.Increment( ref deferLevel );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is not meant to be publicly visible." )]
         void IDeferrable.EndDefer()
         {
-            if ( Interlocked.Decrement( ref this.deferLevel ) == 0 )
-                this.Refresh();
+            if ( Interlocked.Decrement( ref deferLevel ) == 0 )
+                Refresh();
         }
     }
 }

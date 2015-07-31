@@ -44,11 +44,11 @@
         {
             get
             {
-                return this.allowAbstract;
+                return allowAbstract;
             }
             set
             {
-                this.allowAbstract = value;
+                allowAbstract = value;
             }
         }
 
@@ -60,11 +60,11 @@
         {
             get
             {
-                return this.allowInterface;
+                return allowInterface;
             }
             set
             {
-                this.allowInterface = value;
+                allowInterface = value;
             }
         }
 
@@ -76,11 +76,11 @@
         {
             get
             {
-                return this.allowGenericTypeDefinition;
+                return allowGenericTypeDefinition;
             }
             set
             {
-                this.allowGenericTypeDefinition = value;
+                allowGenericTypeDefinition = value;
             }
         }
 
@@ -95,13 +95,13 @@
             if ( typeToValidate == null )
                 throw new ArgumentException( SR.InvalidArgType.FormatDefault( typeof( Type ) ), "value" );
 
-            if ( !this.AllowAbstract && typeToValidate.IsAbstract )
+            if ( !AllowAbstract && typeToValidate.IsAbstract )
                 throw new ConfigurationErrorsException( SR.AbstractNotSupported.FormatDefault( typeToValidate ) );
 
-            if ( !this.AllowInterface && typeToValidate.IsInterface )
+            if ( !AllowInterface && typeToValidate.IsInterface )
                 throw new ConfigurationErrorsException( SR.InterfaceNotSupported.FormatDefault( typeToValidate ) );
 
-            if ( !this.AllowGenericTypeDefinition && typeToValidate.IsGenericTypeDefinition )
+            if ( !AllowGenericTypeDefinition && typeToValidate.IsGenericTypeDefinition )
                 throw new ConfigurationErrorsException( SR.GenericTypeDefNotSupported.FormatDefault( typeToValidate ) );
         }
 

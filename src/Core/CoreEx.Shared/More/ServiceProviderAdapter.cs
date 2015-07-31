@@ -22,10 +22,10 @@
         /// <param name="resolve">The <see cref="Func{T1,T2,TResult}">function</see> used to resolve a single service of a particular <see cref="Type">type</see>.</param>
         public ServiceProviderAdapter( Func<Type, string, object> resolve )
         {
-            Arg.NotNull( resolve, "resolve" );
+            Arg.NotNull( resolve, nameof( resolve ) );
 
             this.resolve = resolve;
-            this.resolveAll = this.DefaultResolveAll;
+            resolveAll = DefaultResolveAll;
         }
 
         /// <summary>
@@ -36,8 +36,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         public ServiceProviderAdapter( Func<Type, string, object> resolve, Func<Type, string, IEnumerable<object>> resolveAll )
         {
-            Arg.NotNull( resolve, "resolve" );
-            Arg.NotNull( resolveAll, "resolveAll" );
+            Arg.NotNull( resolve, nameof( resolve ) );
+            Arg.NotNull( resolveAll, nameof( resolveAll ) );
 
             this.resolve = resolve;
             this.resolveAll = resolveAll;
@@ -48,7 +48,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ServiceTypeDisassembler>() != null );
-                return this.disassembler.Value;
+                return disassembler.Value;
             }
         }
 
@@ -69,7 +69,7 @@
             try
             {
                 // return sequence with a single element
-                var service = this.resolve( serviceType, key );
+                var service = resolve( serviceType, key );
 
                 if ( service != null )
                     services.Add( service );
@@ -90,14 +90,14 @@
         /// <paramref name="serviceType">service type</paramref> or null if no match is found.</returns>
         public virtual object GetService( Type serviceType )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
 
-            var key = this.Disassembler.ExtractKey( serviceType );
+            var key = Disassembler.ExtractKey( serviceType );
             Type innerServiceType;
 
             // return multiple services, if requested
-            if ( this.Disassembler.IsForMany( serviceType, out innerServiceType ) )
-                return this.resolveAll( innerServiceType, key );
+            if ( Disassembler.IsForMany( serviceType, out innerServiceType ) )
+                return resolveAll( innerServiceType, key );
 
             if ( key == null )
             {
@@ -106,7 +106,7 @@
                     return this;
             }
 
-            return this.resolve( serviceType, key );
+            return resolve( serviceType, key );
         }
     }
 }

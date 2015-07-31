@@ -38,13 +38,13 @@
         {$if$ ($showTips$ == true)
 
             // TODO: Add or modify this interaction requests and commands to suit your needs.$endif$
-            this.interactionRequests.Add( this.userFeedback );$if$ ($enableOpenFile$ == true)
-            this.interactionRequests.Add( this.openFile );$endif$$if$ ($enableSaveFile$ == true)
-            this.interactionRequests.Add( this.saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            this.interactionRequests.Add( this.selectFolder );$endif$$if$ ($enableOpenFile$ == true)
-            this.commands.Add( new NamedCommand<object>( "OpenFile", "Open File", this.OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            this.commands.Add( new NamedCommand<object>( "SaveFile", "Save File", this.OnSaveFile, this.OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            this.commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", this.OnSelectFolder ) );$endif$
+            interactionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
+            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            interactionRequests.Add( selectFolder );$endif$$if$ ($enableOpenFile$ == true)
+            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
         }
 
         /// <summary>
@@ -56,8 +56,8 @@
         {
             get
             {
-                Contract.Ensures( this.interactionRequests != null );
-                return this.interactionRequests;
+                Contract.Ensures( interactionRequests != null );
+                return interactionRequests;
             }
         }
 
@@ -71,8 +71,8 @@
         {
             get
             {
-                Contract.Ensures( this.commands != null );
-                return this.commands;
+                Contract.Ensures( commands != null );
+                return commands;
             }
         }
 
@@ -83,7 +83,7 @@
         protected void Alert( string message )
         {
             Contract.Requires( message != null );
-            this.Alert( this.Title, message );
+            Alert( Title, message );
         }
 
         /// <summary>
@@ -95,7 +95,7 @@
         {
             Contract.Requires( !string.IsNullOrEmpty( title ) );
             Contract.Requires( message != null );
-            this.userFeedback.Request( new Interaction( title, message ) );
+            userFeedback.Request( new Interaction( title, message ) );
         }
 
         /// <summary>
@@ -132,7 +132,7 @@
                 }
             };
 
-            this.userFeedback.Request( interaction );
+            userFeedback.Request( interaction );
         }$if$ ($enableOpenFile$ == true)
 
         private void OnOpenFile( object parameter )
@@ -153,12 +153,12 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Open", p => this.OnFilesOpened( interaction.Files ) ),
+                    new NamedCommand<object>( "Open", p => OnFilesOpened( interaction.Files ) ),
                     new NamedCommand<object>( "Cancel", DefaultAction.None )
                 }
             };
 
-            this.openFile.Request( interaction );
+            openFile.Request( interaction );
         }
 
         private void OnFilesOpened( IList<IFile> files )
@@ -188,12 +188,12 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Save", p => this.OnFileSaved( interaction.SavedFile ) ),
+                    new NamedCommand<object>( "Save", p => OnFileSaved( interaction.SavedFile ) ),
                     new NamedCommand<object>( "Cancel", DefaultAction.None )
                 }
             };
 
-            this.saveFile.Request( interaction );
+            saveFile.Request( interaction );
         }
 
         private async void OnFileSaved( IFile file )
@@ -216,12 +216,12 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Select", p => this.OnFolderSelected( interaction.Folder ) ),
+                    new NamedCommand<object>( "Select", p => OnFolderSelected( interaction.Folder ) ),
                     new NamedCommand<object>( "Cancel", DefaultAction.None )
                 }
             };
 
-            this.selectFolder.Request( interaction );
+            selectFolder.Request( interaction );
         }
 
         private void OnFolderSelected( DirectoryInfo folder )

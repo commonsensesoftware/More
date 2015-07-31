@@ -56,12 +56,12 @@
             var dialog = Activator.CreateInstance( dialogType );
 
             dialogType.GetProperty( "Description" ).SetValue( dialog, selectFolder.Title, null );
-            dialogType.GetProperty( "RootFolder " ).SetValue( dialog, this.RootFolder, null );
+            dialogType.GetProperty( "RootFolder " ).SetValue( dialog, RootFolder, null );
 
             if ( selectFolder.Folder != null )
                 dialogType.GetProperty( "SelectedPath" ).SetValue( dialog, selectFolder.Folder.Name, null );
 
-            var owner = CreateLegacyWindowOwner( Window.GetWindow( this.AssociatedObject ) );
+            var owner = CreateLegacyWindowOwner( Window.GetWindow( AssociatedObject ) );
             string selectedPath = null;
 
             try
@@ -96,12 +96,12 @@
             var dialog = new FolderBrowserDialog();
 
             dialog.Title = selectFolder.Title;
-            dialog.RootFolder = this.RootFolder;
+            dialog.RootFolder = RootFolder;
 
             if ( selectFolder.Folder != null )
                 dialog.SelectedPath = selectFolder.Folder.Name;
 
-            var owner = Window.GetWindow( this.AssociatedObject );
+            var owner = Window.GetWindow( AssociatedObject );
             var result = dialog.ShowDialog( owner ) ?? false;
 
             if ( result )
@@ -134,7 +134,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Invoke( InteractionRequestedEventArgs args )
         {
-            Contract.Requires<ArgumentNullException>( args != null, "args" );
+            Arg.NotNull( args, nameof( args ) );
 
             var selectFolder = args.Interaction as SelectFolderInteraction;
 
@@ -145,9 +145,9 @@
 
             // use legacy method for Windows XP and prior
             if ( Environment.OSVersion.Version.Major < 6 )
-                folder = this.LegacySelectFolder( selectFolder );
+                folder = LegacySelectFolder( selectFolder );
             else
-                folder = this.SelectFolder( selectFolder );
+                folder = SelectFolder( selectFolder );
 
             InvokeCallbackCommand( selectFolder, folder );
         }
@@ -162,7 +162,7 @@
             var args = parameter as InteractionRequestedEventArgs;
 
             if ( args != null )
-                this.Invoke( args );
+                Invoke( args );
         }
     }
 }

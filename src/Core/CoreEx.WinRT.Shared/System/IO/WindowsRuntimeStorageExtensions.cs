@@ -22,7 +22,7 @@
         /// <returns>A platform-neutral <see cref="IFile">file</see>.</returns>
         public static IFile AsFile( this StorageFile file )
         {
-            Arg.NotNull( file, "file" );
+            Arg.NotNull( file, nameof( file ) );
             Contract.Ensures( Contract.Result<IFile>() != null );
             return new StorageFileAdapter( file );
         }
@@ -34,7 +34,7 @@
         /// <returns>A platform-neutral <see cref="IFolder">folder</see>.</returns>
         public static IFolder AsFolder( this StorageFolder folder )
         {
-            Arg.NotNull( folder, "folder" );
+            Arg.NotNull( folder, nameof( folder ) );
             Contract.Ensures( Contract.Result<IFolder>() != null );
             return new StorageFolderAdapter( folder );
         }

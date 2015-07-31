@@ -65,7 +65,7 @@
         /// <param name="defaultFormat">The default format for the converter.</param>
         public NumberConverter( string defaultFormat )
         {
-            this.DefaultFormat = defaultFormat;
+            DefaultFormat = defaultFormat;
         }
 
         /// <summary>
@@ -74,7 +74,7 @@
         /// <param name="defaultConverter">The default <see cref="IValueConverter">value converter</see> for the new instance.</param>
         public NumberConverter( IValueConverter defaultConverter )
         {
-            this.DefaultValueConverter = defaultConverter;
+            DefaultValueConverter = defaultConverter;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<NumberStyleRule>>() != null );
-                return this.rules.Value;
+                return rules.Value;
             }
         }
 
@@ -122,8 +122,8 @@
             // select format and value converter
             if ( rule == null )
             {
-                format = this.DefaultFormat;
-                converter = this.DefaultValueConverter;
+                format = DefaultFormat;
+                converter = DefaultValueConverter;
             }
             else
             {
@@ -189,13 +189,13 @@
 
             // select matching rule from rule set
             var number = value == null ? (Number?) null : new Number?( (Number) value );
-            var formatRule = this.Rules.FirstOrDefault( r => r.Evaluate( number ) );
+            var formatRule = Rules.FirstOrDefault( r => r.Evaluate( number ) );
 
             // format number according to rule
 #if NETFX_CORE
-            return this.FormatNumber( formatRule, number, language );
+            return FormatNumber( formatRule, number, language );
 #else
-            return this.FormatNumber( formatRule, number, culture );
+            return FormatNumber( formatRule, number, culture );
 #endif
         }
 

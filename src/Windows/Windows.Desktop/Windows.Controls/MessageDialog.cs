@@ -87,8 +87,8 @@
 
             private void OnCommandExecuted( object sender, EventArgs e )
             {
-                var commandIndex = this.dialog.Commands.IndexOf( (INamedCommand) sender );
-                this.dialog.OnCommandExecuted( commandIndex );
+                var commandIndex = dialog.Commands.IndexOf( (INamedCommand) sender );
+                dialog.OnCommandExecuted( commandIndex );
             }
 
             protected override void InsertItem( int index, INamedCommand item )
@@ -96,7 +96,7 @@
                 base.InsertItem( index, item );
 
                 if ( item != null )
-                    item.Executed += this.OnCommandExecuted;
+                    item.Executed += OnCommandExecuted;
             }
 
             protected override void RemoveItem( int index )
@@ -105,7 +105,7 @@
                 base.RemoveItem( index );
 
                 if ( item != null )
-                    item.Executed -= this.OnCommandExecuted;
+                    item.Executed -= OnCommandExecuted;
             }
 
             protected override void SetItem( int index, INamedCommand item )
@@ -114,10 +114,10 @@
                 base.SetItem( index, item );
 
                 if ( oldItem != null )
-                    oldItem.Executed -= this.OnCommandExecuted;
+                    oldItem.Executed -= OnCommandExecuted;
 
                 if ( item != null )
-                    item.Executed += this.OnCommandExecuted;
+                    item.Executed += OnCommandExecuted;
             }
         }
 
@@ -129,14 +129,14 @@
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty DefaultCommandIndexProperty =
-            DependencyProperty.Register( "DefaultCommandIndex", typeof( int ), typeof( MessageDialog ), new PropertyMetadata( -1, OnDefaultCommandIndexChanged ) );
+            DependencyProperty.Register( nameof( DefaultCommandIndex ), typeof( int ), typeof( MessageDialog ), new PropertyMetadata( -1, OnDefaultCommandIndexChanged ) );
 
         /// <summary>
         /// Gets or sets the cancel command index dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty CancelCommandIndexProperty =
-            DependencyProperty.Register( "CancelCommandIndex", typeof( int ), typeof( MessageDialog ), new PropertyMetadata( -1, OnCancelCommandIndexChanged ) );
+            DependencyProperty.Register( nameof( CancelCommandIndex ), typeof( int ), typeof( MessageDialog ), new PropertyMetadata( -1, OnCancelCommandIndexChanged ) );
 
         private readonly CommandCollection commands;
         private bool opened;
@@ -146,10 +146,10 @@
         /// </summary>
         public MessageDialog()
         {
-            this.commands = new CommandCollection( this );
-            this.DefaultStyleKey = typeof( MessageDialog );
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            this.SizeChanged += ( s, e ) => this.SetValue( ClientSizeProperty, this.GetClientSize() );
+            commands = new CommandCollection( this );
+            DefaultStyleKey = typeof( MessageDialog );
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            SizeChanged += ( s, e ) => SetValue( ClientSizeProperty, this.GetClientSize() );
         }
 
         /// <summary>
@@ -160,17 +160,17 @@
         {
             get
             {
-                return this.opened;
+                return opened;
             }
             private set
             {
-                if ( this.opened == value )
+                if ( opened == value )
                     return;
 
-                this.opened = value;
+                opened = value;
 
-                if ( this.opened )
-                    this.OnOpened( EventArgs.Empty );
+                if ( opened )
+                    OnOpened( EventArgs.Empty );
             }
         }
 
@@ -186,12 +186,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= -1 );
-                return (int) this.GetValue( DefaultCommandIndexProperty );
+                return (int) GetValue( DefaultCommandIndexProperty );
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= -1 );
-                this.SetValue( DefaultCommandIndexProperty, value );
+                Arg.GreaterThanOrEqualTo( value, -1, nameof( value ) );
+                SetValue( DefaultCommandIndexProperty, value );
             }
         }
 
@@ -207,12 +207,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= -1 );
-                return (int) this.GetValue( CancelCommandIndexProperty );
+                return (int) GetValue( CancelCommandIndexProperty );
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= -1 );
-                this.SetValue( CancelCommandIndexProperty, value );
+                Arg.GreaterThanOrEqualTo( value, -1, nameof( value ) );
+                SetValue( CancelCommandIndexProperty, value );
             }
         }
 
@@ -225,7 +225,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ObservableCollection<INamedCommand>>() != null );
-                return this.commands;
+                return commands;
             }
         }
 
@@ -237,7 +237,7 @@
         {
             get
             {
-                return (Size) this.GetValue( ClientSizeProperty.DependencyProperty );
+                return (Size) GetValue( ClientSizeProperty.DependencyProperty );
             }
         }
 
@@ -247,12 +247,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnOpened( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Opened;
-
-            if ( handler != null )
-                handler( this, e );
+            Opened?.Invoke( this, e );
         }
 
         /// <summary>
@@ -265,7 +262,7 @@
             this.RemoveIcon();
 
             // WPF does not have an "Opened" event or method to override.  Simulate "Opened" after the window is initialized.
-            this.IsOpen = true;
+            IsOpen = true;
         }
 
         /// <summary>
@@ -274,31 +271,31 @@
         /// <param name="commandIndex">The zero-based index of the command that was executed.</param>
         protected virtual void OnCommandExecuted( int commandIndex )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( commandIndex >= -1, "commandIndex" );
+            Arg.GreaterThanOrEqualTo( commandIndex, -1, nameof( commandIndex ) );
 
             // setting the dialog result before Show() or ShowDialog() is called
             // will throw an exception. guard against that scenario.
-            if ( !this.IsOpen )
+            if ( !IsOpen )
                 return;
 
-            if ( commandIndex == this.DefaultCommandIndex )
-                this.DialogResult = true;
-            else if ( commandIndex == this.CancelCommandIndex )
-                this.DialogResult = false;
+            if ( commandIndex == DefaultCommandIndex )
+                DialogResult = true;
+            else if ( commandIndex == CancelCommandIndex )
+                DialogResult = false;
             else
-                this.Close();
+                Close();
         }
 
         internal void ExecuteCommand( int commandIndex )
         {
             Contract.Requires( commandIndex >= -1 );
 
-            var command = this.Commands.ElementAtOrDefault( commandIndex );
+            var command = Commands.ElementAtOrDefault( commandIndex );
 
             if ( command != null )
                 command.Execute();
 
-            this.OnCommandExecuted( commandIndex );
+            OnCommandExecuted( commandIndex );
         }
 
         private static void OnDefaultCommandIndexChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e )
@@ -331,13 +328,13 @@
                 case Key.Enter:
                     {
                         e.Handled = true;
-                        this.ExecuteCommand( this.DefaultCommandIndex );
+                        ExecuteCommand( DefaultCommandIndex );
                         break;
                     }
                 case Key.Escape:
                     {
                         e.Handled = true;
-                        this.ExecuteCommand( this.CancelCommandIndex );
+                        ExecuteCommand( CancelCommandIndex );
                         break;
                     }
             }
@@ -352,7 +349,7 @@
         protected override void OnClosed( EventArgs e )
         {
             base.OnClosed( e );
-            this.IsOpen = false;
+            IsOpen = false;
         }
 
         /// <summary>

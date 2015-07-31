@@ -1,16 +1,16 @@
 ﻿namespace More.Windows.Controls
 {
-    using More.Windows.Media;
+    using Media;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
-    using System.Windows.Media;
 
     /// <summary>
     /// Provides extension methods for the <see cref="DataGridColumn"/> class.
@@ -24,18 +24,18 @@
             internal DataGridBoundColumnAdapter( DataGridBoundColumn boundColumn )
             {
                 Contract.Requires( boundColumn != null );
-                this.columm = boundColumn;
+                columm = boundColumn;
             }
 
             public BindingBase Binding
             {
                 get
                 {
-                    return this.columm.Binding;
+                    return columm.Binding;
                 }
                 set
                 {
-                    this.columm.Binding = value;
+                    columm.Binding = value;
                 }
             }
 
@@ -43,11 +43,11 @@
             {
                 get
                 {
-                    return this.columm.ClipboardContentBinding;
+                    return columm.ClipboardContentBinding;
                 }
                 set
                 {
-                    this.columm.ClipboardContentBinding = value;
+                    columm.ClipboardContentBinding = value;
                 }
             }
         }
@@ -115,8 +115,8 @@
         /// for the specified property name.</remarks>
         public static DataGridColumn Add( this ICollection<DataGridColumn> columns, string propertyName )
         {
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( columns, nameof( columns ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             return Add( columns, propertyName, Util.HeaderTextFromPropertyName( propertyName ) );
         }
@@ -130,8 +130,8 @@
         /// <returns>A <see cref="DataGridColumn"/> object.</returns>
         public static DataGridColumn Add( this ICollection<DataGridColumn> columns, string propertyName, string header )
         {
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( columns, nameof( columns ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var column = new OptionalDataGridTextColumn();
@@ -153,9 +153,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static DataGridColumn Add<TColumn>( this ICollection<DataGridColumn> columns, TColumn column, string propertyName, string header ) where TColumn : DataGridBoundColumn
         {
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( columns, nameof( columns ) );
+            Arg.NotNull( column, nameof( column ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var binding = new Binding( propertyName );
@@ -178,8 +178,8 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the added <see cref="DataGridColumn"/> object.</returns>
         public static Task<DataGridColumn> AddUsingTemplateAsync( this ICollection<DataGridColumn> columns, string templateName, string header )
         {
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( templateName ), "templateName" );
+            Arg.NotNull( columns, nameof( columns ) );
+            Arg.NotNullOrEmpty( templateName, nameof( templateName ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             // NOTE: the resource must be resolved from the calling assembly
@@ -197,9 +197,9 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the added <see cref="DataGridColumn"/> object.</returns>
         public static Task<DataGridColumn> AddUsingTemplateAsync( this ICollection<DataGridColumn> columns, string templateName, string editTemplateName, string header )
         {
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( templateName ), "templateName" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( editTemplateName ), "editTemplateName" );
+            Arg.NotNull( columns, nameof( columns ) );
+            Arg.NotNullOrEmpty( templateName, nameof( templateName ) );
+            Arg.NotNullOrEmpty( editTemplateName, nameof( editTemplateName ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             // NOTE: the resource must be resolved from the calling assembly
@@ -217,9 +217,9 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the added <see cref="DataGridColumn"/> object.</returns>
         public static Task<DataGridColumn> AddFromResourceAsync( this ICollection<DataGridColumn> columns, string resourceName, string templateName, string header )
         {
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( templateName ), "templateName" );
+            Arg.NotNull( columns, nameof( columns ) );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
+            Arg.NotNullOrEmpty( templateName, nameof( templateName ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             // NOTE: the resource must be resolved from the calling assembly
@@ -238,10 +238,10 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the added <see cref="DataGridColumn"/> object.</returns>
         public static Task<DataGridColumn> AddFromResourceAsync( this ICollection<DataGridColumn> columns, string resourceName, string templateName, string editTemplateName, string header )
         {
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( templateName ), "templateName" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( editTemplateName ), "editTemplateName" );
+            Arg.NotNull( columns, nameof( columns ) );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
+            Arg.NotNullOrEmpty( templateName, nameof( templateName ) );
+            Arg.NotNullOrEmpty( editTemplateName, nameof( editTemplateName ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             // NOTE: the resource must be resolved from the calling assembly
@@ -356,7 +356,7 @@
         /// <returns>A <see cref="Binding"/> object or null if the column doesn't support data binding.</returns>
         public static Binding GetBinding( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
 
             var c1 = column as DataGridBoundColumn;
 
@@ -374,7 +374,7 @@
         /// <returns>A <see cref="Binding"/> object or null if the column doesn't support data binding.</returns>
         public static Binding GetClipboardContentBinding( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
 
             var c1 = column as DataGridBoundColumn;
 
@@ -394,14 +394,20 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static TColumn Clone<TColumn>( this TColumn column ) where TColumn : DataGridColumn
         {
-            // NOTE: since DataGridColumn is abstract, we manually check for a parameterless constructor rather than using the new() type constraint
-            // which supports scenarios such as cloning all the columns in a collection (which may be of different types)
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
-            Contract.Requires<InvalidOperationException>( !column.GetType().IsAbstract );
-            Contract.Requires<InvalidOperationException>( Contract.Exists( column.GetType().GetConstructors(), c => c.GetParameters().Length == 0 ) );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<TColumn>() != null );
 
-            var clone = (TColumn) Activator.CreateInstance( column.GetType() );
+            var columnType = column.GetType();
+
+            // NOTE: since DataGridColumn is abstract, we manually check for a parameterless constructor rather than using the new() type constraint
+            // which supports scenarios such as cloning all the columns in a collection (which may be of different types). For example, we want
+            // to call Clone<T> on a collection of MyColumnBase which is abstract, but we are cloning mixed, concrete types such as MyColumn1 and
+            // MyColumn2.  The new() constraint cannot be applied to MyColumnBase and a collection of mixed column types cannot be cloned without
+            // using MyColumnBase as the type constraint.
+            if ( columnType.IsAbstract || !columnType.GetConstructors().Any( c => c.GetParameters().Length == 0 ) )
+                throw new InvalidOperationException( ExceptionMessage.NoParameterlessConstructor.FormatDefault( columnType ) );
+
+            var clone = (TColumn) Activator.CreateInstance( columnType );
             var binding = column.ClipboardContentBinding as Binding;
 
             if ( binding != null )
@@ -471,7 +477,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn ReadOnly( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             column.IsReadOnly = true;
@@ -494,7 +500,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn ReadWrite( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             column.IsReadOnly = false;
@@ -516,7 +522,7 @@
         /// property will be set to false; otherwise, this method has no effect.</remarks>
         public static DataGridColumn Required( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var optionalColumn = column as IOptionalDataGridColumn;
@@ -536,7 +542,7 @@
         /// property will be set to true; otherwise, this method has no effect.</remarks>
         public static DataGridColumn Optional( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var optionalColumn = column as IOptionalDataGridColumn;
@@ -555,7 +561,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn Visible( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.Visibility = Visibility.Visible;
             return column;
@@ -569,7 +575,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn Hidden( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.Visibility = Visibility.Collapsed;
             return column;
@@ -584,7 +590,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn SetWidth( this DataGridColumn column, double? width )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             if ( width == null )
@@ -603,7 +609,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn SetAutoWidth( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.Width = DataGridLength.Auto;
             return column;
@@ -617,7 +623,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn SetWidthToCells( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.Width = DataGridLength.SizeToCells;
             return column;
@@ -631,7 +637,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn SetWidthToHeader( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.Width = DataGridLength.SizeToHeader;
             return column;
@@ -646,7 +652,7 @@
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn SetConverter( this DataGridColumn column, IValueConverter converter )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             return SetConverter( column, converter, null );
         }
@@ -661,7 +667,7 @@
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn SetConverter( this DataGridColumn column, IValueConverter converter, object parameter )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var boundColumn = column.GetBoundColumn();
@@ -680,7 +686,7 @@
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn EnableSort( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             return EnableSort( column, null );
         }
@@ -696,7 +702,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn EnableSort( this DataGridColumn column, string memberPath )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             column.CanUserSort = true;
@@ -729,7 +735,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn DisableSort( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.CanUserSort = false;
             return column;
@@ -743,7 +749,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn EnableResize( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.CanUserResize = true;
             return column;
@@ -757,7 +763,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn DisableResize( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.CanUserResize = false;
             return column;
@@ -771,7 +777,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn EnableReorder( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.CanUserReorder = true;
             return column;
@@ -785,7 +791,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn DisableReorder( this DataGridColumn column )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
             column.CanUserReorder = false;
             return column;
@@ -800,7 +806,7 @@
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn SetFormat( this DataGridColumn column, string format )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var boundColumn = column.GetBoundColumn();
@@ -820,7 +826,7 @@
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn SetFallbackValue( this DataGridColumn column, object fallbackValue )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var boundColumn = column.GetBoundColumn();
@@ -840,7 +846,7 @@
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn SetTargetNullValue( this DataGridColumn column, object nullValue )
         {
-            Contract.Requires<ArgumentNullException>( column != null, "column" );
+            Arg.NotNull( column, nameof( column ) );
             Contract.Ensures( Contract.Result<DataGridColumn>() != null );
 
             var boundColumn = column.GetBoundColumn();

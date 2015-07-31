@@ -40,8 +40,8 @@
 
             private void OnCommandExecuted( object sender, EventArgs e )
             {
-                var commandIndex = this.dialog.Commands.IndexOf( (INamedCommand) sender );
-                this.dialog.OnCommandExecuted( commandIndex );
+                var commandIndex = dialog.Commands.IndexOf( (INamedCommand) sender );
+                dialog.OnCommandExecuted( commandIndex );
             }
 
             protected override void InsertItem( int index, INamedCommand item )
@@ -49,7 +49,7 @@
                 base.InsertItem( index, item );
 
                 if ( item != null )
-                    item.Executed += this.OnCommandExecuted;
+                    item.Executed += OnCommandExecuted;
             }
 
             protected override void RemoveItem( int index )
@@ -58,7 +58,7 @@
                 base.RemoveItem( index );
 
                 if ( item != null )
-                    item.Executed -= this.OnCommandExecuted;
+                    item.Executed -= OnCommandExecuted;
             }
 
             protected override void SetItem( int index, INamedCommand item )
@@ -67,10 +67,10 @@
                 base.SetItem( index, item );
 
                 if ( oldItem != null )
-                    oldItem.Executed -= this.OnCommandExecuted;
+                    oldItem.Executed -= OnCommandExecuted;
 
                 if ( item != null )
-                    item.Executed += this.OnCommandExecuted;
+                    item.Executed += OnCommandExecuted;
             }
         }
 
@@ -83,7 +83,7 @@
         /// </summary>
         protected InputDialog()
         {
-            this.commands = new CommandCollection( this );
+            commands = new CommandCollection( this );
         }
 
         /// <summary>
@@ -151,11 +151,11 @@
             get
             {
                 Contract.Ensures( Contract.Result<ObservableCollection<INamedCommand>>() != null );
-                return this.commands;
+                return commands;
             }
         }
 
-        private Window Window
+        private static Window Window
         {
             get
             {
@@ -167,38 +167,37 @@
             }
         }
 
-        private void OnWindowSizeChanged( object sender, WindowSizeChangedEventArgs e )
-        {
-            this.ArrangePopupContent( e.Size );
-        }
+        private void OnWindowSizeChanged( object sender, WindowSizeChangedEventArgs e ) => ArrangePopupContent( e.Size );
 
         private void ArrangePopupContent( Size size )
         {
-            this.Width = size.Width;
-            this.popup.VerticalOffset = Math.Max( ( size.Height - this.ActualHeight ), 0d ) / 2d;
+            Width = size.Width;
+            popup.VerticalOffset = Math.Max( ( size.Height - ActualHeight ), 0d ) / 2d;
         }
 
         private Popup CreatePopup()
         {
             Contract.Ensures( Contract.Result<Popup>() != null );
 
-            var newPopup = new Popup() {
+            var newPopup = new Popup()
+            {
                 Child = this,
 #if NETFX_CORE
                 IsLightDismissEnabled = true
 #endif
             };
 
-            newPopup.Loaded += ( s, e ) => {
-                this.OnOpened();
+            newPopup.Loaded += ( s, e ) =>
+            {
+                OnOpened();
 
-                var window = this.Window;
+                var window = Window;
 
                 if ( window == null )
                     return;
 
-                this.ArrangePopupContent( new Size( window.Bounds.Width, window.Bounds.Height ) );
-                window.SizeChanged += this.OnWindowSizeChanged;
+                ArrangePopupContent( new Size( window.Bounds.Width, window.Bounds.Height ) );
+                window.SizeChanged += OnWindowSizeChanged;
             };
 
             return newPopup;
@@ -206,16 +205,16 @@
 
         private void Close()
         {
-            var window = this.Window;
+            var window = Window;
 
             if ( window != null )
-                window.SizeChanged -= this.OnWindowSizeChanged;
+                window.SizeChanged -= OnWindowSizeChanged;
 
-            if ( this.popup == null )
+            if ( popup == null )
                 return;
 
-            this.popup.IsOpen = false;
-            this.popup = null;
+            popup.IsOpen = false;
+            popup = null;
         }
 
         /// <summary>
@@ -226,11 +225,11 @@
         {
             Contract.Ensures( Contract.Result<IAsyncOperation<T>>() != null );
 
-            this.Response = null;
-            this.popup = this.CreatePopup();
-            this.popup.IsOpen = true;
+            Response = null;
+            popup = CreatePopup();
+            popup.IsOpen = true;
 
-            return AsyncInfo.Run( this.ShowDialog );
+            return AsyncInfo.Run( ShowDialog );
         }
 
         /// <summary>
@@ -245,12 +244,14 @@
         {
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
-            this.completionSource = new TaskCompletionSource<T>();
-            token.Register( () => {
-                this.Close();
-                this.completionSource.TrySetResult( null );
-            } );
-            return this.completionSource.Task;
+            completionSource = new TaskCompletionSource<T>();
+            token.Register(
+                () =>
+                {
+                    Close();
+                    completionSource.TrySetResult( null );
+                } );
+            return completionSource.Task;
         }
 
         /// <summary>
@@ -259,27 +260,23 @@
         /// <param name="commandIndex">The zero-based index of the command that was executed.</param>
         protected virtual void OnCommandExecuted( int commandIndex )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( commandIndex >= -1, "commandIndex" );
+            Arg.GreaterThanOrEqualTo( commandIndex, -1, nameof( commandIndex ) );
 
-            this.Close();
+            Close();
 
-            var accepted = commandIndex == this.DefaultCommandIndex;
-            var response = accepted ? this.Response : null;
+            var accepted = commandIndex == DefaultCommandIndex;
+            var response = accepted ? Response : null;
 
-            if ( this.completionSource != null )
-                this.completionSource.TrySetResult( response );
+            if ( completionSource != null )
+                completionSource.TrySetResult( response );
         }
 
         internal void ExecuteCommand( int commandIndex )
         {
             Contract.Requires( commandIndex >= -1 );
 
-            var command = this.Commands.ElementAtOrDefault( commandIndex );
-
-            if ( command != null )
-                command.Execute();
-
-            this.OnCommandExecuted( commandIndex );
+            Commands.ElementAtOrDefault( commandIndex )?.Execute();
+            OnCommandExecuted( commandIndex );
         }
 
         /// <summary>
@@ -294,13 +291,13 @@
                 case Key.Enter:
                     {
                         e.Handled = true;
-                        this.ExecuteCommand( this.DefaultCommandIndex );
+                        ExecuteCommand( DefaultCommandIndex );
                         break;
                     }
                 case Key.Escape:
                     {
                         e.Handled = true;
-                        this.ExecuteCommand( this.CancelCommandIndex );
+                        ExecuteCommand( CancelCommandIndex );
                         break;
                     }
             }

@@ -23,8 +23,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<TMedia> FromEmbeddedResourceAsync<TMedia>( this MediaContent<TMedia> content, string resourceName )
         {
-            Contract.Requires<ArgumentNullException>( content != null, "content" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
+            Arg.NotNull( content, nameof( content ) );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
             Contract.Ensures( Contract.Result<Task<TMedia>>() != null );
 
             var application = Application.Current;

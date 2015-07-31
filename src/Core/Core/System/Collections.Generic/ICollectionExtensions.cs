@@ -49,8 +49,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static ICollection<TItem> AddRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence )
         {
-            Arg.NotNull( collection, "collection" );
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( collection, nameof( collection ) );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
             return collection.AddRange( sequence, count: (int?) null, clearFirst: false );
         }
@@ -67,8 +67,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static ICollection<TItem> AddRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence, int count )
         {
-            Arg.NotNull( collection, "collection" );
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( collection, nameof( collection ) );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
             Arg.GreaterThanOrEqualTo( count, 0, "count" );
             return collection.AddRange( sequence, new int?( count ), clearFirst: false );
@@ -85,8 +85,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public static ICollection<TItem> RemoveRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence )
         {
-            Arg.NotNull( collection, "collection" );
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( collection, nameof( collection ) );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
 
             foreach ( var item in sequence )
@@ -108,9 +108,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static ICollection<TItem> RemoveRange<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence, IEqualityComparer<TItem> comparer )
         {
-            Arg.NotNull( collection, "collection" );
-            Arg.NotNull( sequence, "sequence" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( collection, nameof( collection ) );
+            Arg.NotNull( sequence, nameof( sequence ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
 
             foreach ( var item in sequence )
@@ -134,8 +134,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static bool Remove<TItem>( this ICollection<TItem> collection, TItem item, IEqualityComparer<TItem> comparer )
         {
-            Arg.NotNull( collection, "collection" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( collection, nameof( collection ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
             var match = collection.FirstOrDefault( i => comparer.Equals( i, item ) );
             return collection.Remove( match );
@@ -151,7 +151,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int RemoveAll<TItem>( this ICollection<TItem> collection, TItem item )
         {
-            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( collection, nameof( collection ) );
             Contract.Ensures( Contract.Result<int>() >= 0 );
             return collection.RemoveAll( item, EqualityComparer<TItem>.Default );
         }
@@ -168,8 +168,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public static int RemoveAll<TItem>( this ICollection<TItem> collection, TItem item, IEqualityComparer<TItem> comparer )
         {
-            Arg.NotNull( collection, "collection" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( collection, nameof( collection ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Contract.Ensures( Contract.Result<int>() >= 0 );
 
             var preCount = collection.Count;
@@ -190,8 +190,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static ICollection<TItem> ReplaceAll<TItem>( this ICollection<TItem> collection, IEnumerable<TItem> sequence )
         {
-            Arg.NotNull( collection, "collection" );
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( collection, nameof( collection ) );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<ICollection<TItem>>() != null );
             return collection.AddRange( sequence, count: null, clearFirst: true );
         }

@@ -20,9 +20,9 @@
         {
             // optimize evaluation strings and non-strings durng rule construction
             if ( typeof( string ).Equals( typeof( T ) ) )
-                this.evaluate = this.EvaluateString;
+                evaluate = EvaluateString;
             else
-                this.evaluate = EvaluateDefault;
+                evaluate = EvaluateDefault;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@
         public RequiredRule( string errorMessage )
             : this()
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             this.errorMessage = errorMessage;
         }
 
@@ -50,7 +50,7 @@
         {
             if ( property == null || property.Value == null )
             {
-                var message = this.errorMessage ?? ValidationMessage.RequiredValidationError.FormatDefault( property.Name );
+                var message = errorMessage ?? ValidationMessage.RequiredValidationError.FormatDefault( property.Name );
                 return new ValidationResult( message, property.Name );
             }
 
@@ -63,15 +63,15 @@
 
             if ( property == null )
             {
-                message = this.errorMessage ?? ValidationMessage.RequiredValidationError.FormatDefault( property.Name );
+                message = errorMessage ?? ValidationMessage.RequiredValidationError.FormatDefault( property.Name );
                 return new ValidationResult( message, property.Name );
             }
 
             var str = property.Value as string;
 
-            if ( str == null || ( str.Length == 0 && !this.AllowEmptyStrings ) )
+            if ( str == null || ( str.Length == 0 && !AllowEmptyStrings ) )
             {
-                message = this.errorMessage ?? ValidationMessage.RequiredValidationError.FormatDefault( property.Name );
+                message = errorMessage ?? ValidationMessage.RequiredValidationError.FormatDefault( property.Name );
                 return new ValidationResult( message, property.Name );
             }
 
@@ -85,7 +85,7 @@
         /// <returns>The <see cref="IValidationResult">validation result</see> of the evaluation.</returns>
         public virtual IValidationResult Evaluate( Property<T> item )
         {
-            return this.evaluate( item );
+            return evaluate( item );
         }
     }
 }

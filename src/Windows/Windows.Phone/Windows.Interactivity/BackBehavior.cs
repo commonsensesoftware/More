@@ -16,7 +16,7 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
-    ///  xmlns:More="using:System.Windows.Interactivity">
+    ///  xmlns:More="using:More.Windows.Interactivity">
     /// <Interactivity:Interaction.Behaviors>
     ///  <More:BackBehavior />
     /// </Interactivity:Interaction.Behaviors>
@@ -32,7 +32,7 @@
         {
             INavigationService navigationService;
 
-            if ( Util.TryResolveNavigationService( this.AssociatedObject, out navigationService ) && navigationService.CanGoBack )
+            if ( Util.TryResolveNavigationService( AssociatedObject, out navigationService ) && navigationService.CanGoBack )
             {
                 navigationService.GoBack();
                 e.Handled = true;
@@ -45,7 +45,7 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            HardwareButtons.BackPressed += this.OnBackPressed;
+            HardwareButtons.BackPressed += OnBackPressed;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            HardwareButtons.BackPressed -= this.OnBackPressed;
+            HardwareButtons.BackPressed -= OnBackPressed;
             base.OnDetaching();
         }
     }

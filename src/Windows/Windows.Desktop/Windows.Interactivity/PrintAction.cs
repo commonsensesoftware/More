@@ -21,35 +21,35 @@
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty ShowPrintOptionsProperty =
-            DependencyProperty.Register( "ShowPrintOptions", typeof( bool ), typeof( PrintAction ), new PropertyMetadata( true ) );
+            DependencyProperty.Register( nameof( ShowPrintOptions ), typeof( bool ), typeof( PrintAction ), new PropertyMetadata( true ) );
 
         /// <summary>
         /// Gets the dependency property for the window <see cref="Style">style</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty StyleProperty =
-            DependencyProperty.Register( "Style", typeof( Style ), typeof( PrintAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( Style ), typeof( Style ), typeof( PrintAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property indicating whether search is supported.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty SupportsSearchProperty =
-            DependencyProperty.Register( "SupportsSearch", typeof( bool ), typeof( PrintAction ), new PropertyMetadata( false ) );
+            DependencyProperty.Register( nameof( SupportsSearch ), typeof( bool ), typeof( PrintAction ), new PropertyMetadata( false ) );
 
         /// <summary>
         /// Gets the dependency property for the document.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty DocumentProperty =
-            DependencyProperty.Register( "Document", typeof( FixedDocument ), typeof( PrintAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( Document ), typeof( FixedDocument ), typeof( PrintAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property for the document source resource URI.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty DocumentSourceProperty =
-            DependencyProperty.Register( "DocumentSource", typeof( Uri ), typeof( PrintAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( DocumentSource ), typeof( Uri ), typeof( PrintAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets a value indicating whether the action allow user print preferences.
@@ -59,11 +59,11 @@
         {
             get
             {
-                return (bool) this.GetValue( ShowPrintOptionsProperty );
+                return (bool) GetValue( ShowPrintOptionsProperty );
             }
             set
             {
-                this.SetValue( ShowPrintOptionsProperty, value );
+                SetValue( ShowPrintOptionsProperty, value );
             }
         }
 
@@ -76,11 +76,11 @@
         {
             get
             {
-                return (Style) this.GetValue( StyleProperty );
+                return (Style) GetValue( StyleProperty );
             }
             set
             {
-                this.SetValue( StyleProperty, value );
+                SetValue( StyleProperty, value );
             }
         }
 
@@ -92,11 +92,11 @@
         {
             get
             {
-                return (bool) this.GetValue( SupportsSearchProperty );
+                return (bool) GetValue( SupportsSearchProperty );
             }
             set
             {
-                this.SetValue( SupportsSearchProperty, value );
+                SetValue( SupportsSearchProperty, value );
             }
         }
 
@@ -108,11 +108,11 @@
         {
             get
             {
-                return (FixedDocument) this.GetValue( DocumentProperty );
+                return (FixedDocument) GetValue( DocumentProperty );
             }
             set
             {
-                this.SetValue( DocumentProperty, value );
+                SetValue( DocumentProperty, value );
             }
         }
 
@@ -125,11 +125,11 @@
         {
             get
             {
-                return (Uri) this.GetValue( DocumentSourceProperty );
+                return (Uri) GetValue( DocumentSourceProperty );
             }
             set
             {
-                this.SetValue( DocumentSourceProperty, value );
+                SetValue( DocumentSourceProperty, value );
             }
         }
 
@@ -154,14 +154,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Print( PrintInteraction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
 
-            var doc = this.Document ?? GetDocument( this.DocumentSource );
+            var doc = Document ?? GetDocument( DocumentSource );
             doc.DataContext = interaction.Content;
 
             var dialog = new PrintDialog();
 
-            if ( this.ShowPrintOptions )
+            if ( ShowPrintOptions )
             {
                 var result = dialog.ShowDialog() ?? false;
 
@@ -184,9 +184,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void PrintPreview( PrintInteraction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
 
-            var doc = this.Document ?? GetDocument( this.DocumentSource );
+            var doc = Document ?? GetDocument( DocumentSource );
             doc.DataContext = interaction.Content;
 
             var viewer = new DocumentViewer()
@@ -197,12 +197,12 @@
             {
                 Title = SR.PrintPreviewTitle.FormatDefault( interaction.Title ),
                 Content = viewer,
-                Owner = Window.GetWindow( this.AssociatedObject ),
+                Owner = Window.GetWindow( AssociatedObject ),
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
 
-            if ( this.Style != null )
-                window.Style = this.Style;
+            if ( Style != null )
+                window.Style = Style;
 
             viewer.ApplyTemplate();
 
@@ -214,7 +214,7 @@
             if ( double.IsNaN( window.Width ) )
                 window.Width = 500d;
 
-            if ( !this.SupportsSearch )
+            if ( !SupportsSearch )
             {
                 // hide the search box by collapsing the templated content control
                 var searchBox = (ContentControl) viewer.Template.FindName( "PART_FindToolBarHost", viewer );
@@ -236,9 +236,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Invoke( InteractionRequestedEventArgs args )
         {
-            Contract.Requires<ArgumentNullException>( args != null, "args" );
+            Arg.NotNull( args, nameof( args ) );
 
-            if ( this.DocumentSource == null )
+            if ( DocumentSource == null )
                 return;
 
             var interaction = args.Interaction as PrintInteraction;
@@ -247,9 +247,9 @@
                 return;
 
             if ( interaction.PrintPreview )
-                this.PrintPreview( interaction );
+                PrintPreview( interaction );
             else
-                this.Print( interaction );
+                Print( interaction );
         }
 
         /// <summary>
@@ -262,7 +262,7 @@
             var args = parameter as InteractionRequestedEventArgs;
 
             if ( args != null )
-                this.Invoke( args );
+                Invoke( args );
         }
     }
 }

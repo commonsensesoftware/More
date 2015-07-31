@@ -42,8 +42,8 @@
         /// <summary>
         /// Specifies that the sharing operation is complete.
         /// </summary>
-        /// <param name="quicklink">A <see cref="QuickLink">quick link</see> that the system saves as a shortcut for future sharing operations.</param>
-        void ReportCompleted( QuickLink quicklink );
+        /// <param name="quickLink">A <see cref="QuickLink">quick link</see> that the system saves as a shortcut for future sharing operations.</param>
+        void ReportCompleted( QuickLink quickLink );
 
         /// <summary>
         /// Specifies that the application has acquired the content that the user wants to share.

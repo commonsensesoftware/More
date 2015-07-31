@@ -18,7 +18,7 @@
         /// <param name="evaluate">The callback <see cref="Func{T1,TResult}">function</see> to evaluate.</param>
         public Rule( Func<TInput, TOutput> evaluate )
         {
-            Arg.NotNull( evaluate, "evaluate" );
+            Arg.NotNull( evaluate, nameof( evaluate ) );
             this.evaluate = evaluate;
         }
 
@@ -29,7 +29,7 @@
         /// <returns>The result of the evaluation.</returns>
         public TOutput Evaluate( TInput item )
         {
-            return this.evaluate( item );
+            return evaluate( item );
         }
     }
 }

@@ -17,7 +17,7 @@
         /// <param name="window">The <see cref="Window">window</see> to remove the icon from.</param>
         public static void RemoveIcon( this Window window )
         {
-            Contract.Requires<ArgumentNullException>( window != null, "window" );
+            Arg.NotNull( window, nameof( window ) );
 
             var helper = new WindowInteropHelper( window );
             var hwnd = helper.Handle;
@@ -49,7 +49,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Size GetClientSize( this Window window )
         {
-            Contract.Requires<ArgumentNullException>( window != null, "window" );
+            Arg.NotNull( window, nameof( window ) );
 
             var width = window.ActualWidth - ( SystemParameters.ResizeFrameVerticalBorderWidth * 2d );
             var height = window.ActualHeight - ( ( SystemParameters.ResizeFrameHorizontalBorderHeight * 2d ) + SystemParameters.WindowCaptionHeight );
@@ -64,7 +64,7 @@
         /// <param name="value">Indicates whether the close button is enabled.</param>
         public static void SetCloseButtonEnabled( this Window window, bool value )
         {
-            Contract.Requires<ArgumentNullException>( window != null, "window" );
+            Arg.NotNull( window, nameof( window ) );
 
             var helper = new WindowInteropHelper( window );
             var hwnd = helper.Handle;

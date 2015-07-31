@@ -1,7 +1,8 @@
 ﻿namespace More.Windows.Data
 {
-    using global::System;
-    using global::System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.ApplicationModel.DataTransfer;
     using global::Windows.Foundation;
     using global::Windows.Storage;
@@ -53,7 +54,8 @@
         /// <summary>
         /// Gets the application link in the <see cref="IDataPackageView"/> object.
         /// </summary>
-        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the application <see cref="Uri">link</see>.</returns>
+        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the application <see cref="T:Uri">link</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<Uri> GetApplicationLinkAsync();
 
         /// <summary>
@@ -61,6 +63,7 @@
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the
         /// <see cref="IRandomAccessStreamReference">stream</see> with the bitmap image.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<IRandomAccessStreamReference> GetBitmapAsync();
 
         /// <summary>
@@ -74,6 +77,7 @@
         /// Gets the HTML stored in the <see cref="IDataPackageView"/> object.
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the HTML.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<string> GetHtmlFormatAsync();
 
         /// <summary>
@@ -81,12 +85,15 @@
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the
         /// <see cref="IReadOnlyDictionary{TKey,TValue}">data</see> referenced in the HTML content.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics support." )]
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<IReadOnlyDictionary<string, IRandomAccessStreamReference>> GetResourceMapAsync();
 
         /// <summary>
         /// Gets the rich text formatted (RTF) content contained in a <see cref="IDataPackageView"/>.
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the rich text formatted content.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<string> GetRtfAsync();
 
         /// <summary>
@@ -94,12 +101,15 @@
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing a
         /// <see cref="IReadOnlyList{T}">read-only list</see> of <see cref="IStorageItem">files and folders</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics support." )]
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<IReadOnlyList<IStorageItem>> GetStorageItemsAsync();
 
         /// <summary>
         /// Gets the text in the <see cref="IDataPackageView"/> object.
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the text.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<string> GetTextAsync();
 
         /// <summary>
@@ -112,7 +122,8 @@
         /// <summary>
         /// Gets the web link in the <see cref="IDataPackageView"/> object.
         /// </summary>
-        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the web <see cref="Uri">link</see>.</returns>
+        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the web <see cref="T:Uri">link</see>.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<Uri> GetWebLinkAsync();
 
         /// <summary>

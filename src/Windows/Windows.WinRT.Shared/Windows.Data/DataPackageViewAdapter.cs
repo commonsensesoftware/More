@@ -18,8 +18,8 @@
         internal DataPackageViewAdapter( DataPackageView dataPackageView )
         {
             Contract.Requires( dataPackageView != null );
-            this.adapted = dataPackageView;
-            this.properties = new Lazy<IDataPackagePropertySetView>( () => new DataPackagePropertySetViewAdapter( this.adapted.Properties ) );
+            adapted = dataPackageView;
+            properties = new Lazy<IDataPackagePropertySetView>( () => new DataPackagePropertySetViewAdapter( adapted.Properties ) );
         }
 
 
@@ -27,7 +27,7 @@
         {
             get
             {
-                return this.adapted.AvailableFormats;
+                return adapted.AvailableFormats;
             }
         }
 
@@ -35,7 +35,7 @@
         {
             get
             {
-                return this.properties.Value;
+                return properties.Value;
             }
         }
 
@@ -43,72 +43,72 @@
         {
             get
             {
-                return this.adapted.RequestedOperation;
+                return adapted.RequestedOperation;
             }
         }
 
         public bool Contains( string formatId )
         {
-            return this.adapted.Contains( formatId );
+            return adapted.Contains( formatId );
         }
 
         public IAsyncOperation<Uri> GetApplicationLinkAsync()
         {
-            return this.adapted.GetApplicationLinkAsync();
+            return adapted.GetApplicationLinkAsync();
         }
 
         public IAsyncOperation<IRandomAccessStreamReference> GetBitmapAsync()
         {
             var options = TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion;
-            return this.adapted.GetBitmapAsync().AsTask().ContinueWith( t => (IRandomAccessStreamReference) t.Result, options ).AsAsyncOperation();
+            return adapted.GetBitmapAsync().AsTask().ContinueWith( t => (IRandomAccessStreamReference) t.Result, options ).AsAsyncOperation();
         }
 
         public IAsyncOperation<object> GetDataAsync( string formatId )
         {
-            return this.adapted.GetDataAsync( formatId );
+            return adapted.GetDataAsync( formatId );
         }
 
         public IAsyncOperation<string> GetHtmlFormatAsync()
         {
-            return this.adapted.GetHtmlFormatAsync();
+            return adapted.GetHtmlFormatAsync();
         }
 
         public IAsyncOperation<IReadOnlyDictionary<string, IRandomAccessStreamReference>> GetResourceMapAsync()
         {
             var options = TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion;
-            var task = this.adapted.GetResourceMapAsync().AsTask();
+            var task = adapted.GetResourceMapAsync().AsTask();
             var continuation = task.ContinueWith<IReadOnlyDictionary<string, IRandomAccessStreamReference>>( t => t.Result.ToDictionary( p => p.Key, p => (IRandomAccessStreamReference) p.Value ), options );
             return continuation.AsAsyncOperation();
         }
 
         public IAsyncOperation<string> GetRtfAsync()
         {
-            return this.adapted.GetRtfAsync();
+            return adapted.GetRtfAsync();
         }
 
         public IAsyncOperation<IReadOnlyList<IStorageItem>> GetStorageItemsAsync()
         {
-            return this.adapted.GetStorageItemsAsync();
+            return adapted.GetStorageItemsAsync();
         }
 
         public IAsyncOperation<string> GetTextAsync()
         {
-            return this.adapted.GetTextAsync();
+            return adapted.GetTextAsync();
         }
 
         public IAsyncOperation<string> GetTextAsync( string formatId )
         {
-            return this.adapted.GetTextAsync( formatId );
+            return adapted.GetTextAsync( formatId );
         }
 
         public IAsyncOperation<Uri> GetWebLinkAsync()
         {
-            return this.adapted.GetWebLinkAsync();
+            return adapted.GetWebLinkAsync();
         }
 
         public void ReportOperationCompleted( DataPackageOperation value )
         {
-            this.adapted.ReportOperationCompleted( value );
+            adapted.ReportOperationCompleted( value );
         }
     }
 }

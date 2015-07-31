@@ -1,6 +1,7 @@
 ﻿namespace More.Windows.Controls
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
@@ -19,13 +20,13 @@
         /// <param name="frame">The <see cref="Frame">frame</see> to adapt to.</param>
         public FrameNavigationAdapter( Frame frame )
         {
-            Contract.Requires<ArgumentNullException>( frame != null, "frame" );
+            Arg.NotNull( frame, nameof( frame ) );
 
             this.frame = frame;
-            this.frame.Navigated += ( s, e ) => this.OnNavigated( new NavigationEventArgsAdapter( e ) );
-            this.frame.Navigating += ( s, e ) => this.OnNavigating( new NavigatingCancelEventArgsAdapter( e ) );
-            this.frame.NavigationFailed += ( s, e ) => this.OnNavigationFailed( new NavigationEventArgsAdapter( e ) );
-            this.frame.NavigationStopped += ( s, e ) => this.OnNavigationStopped( new NavigationEventArgsAdapter( e ) );
+            this.frame.Navigated += ( s, e ) => OnNavigated( new NavigationEventArgsAdapter( e ) );
+            this.frame.Navigating += ( s, e ) => OnNavigating( new NavigatingCancelEventArgsAdapter( e ) );
+            this.frame.NavigationFailed += ( s, e ) => OnNavigationFailed( new NavigationEventArgsAdapter( e ) );
+            this.frame.NavigationStopped += ( s, e ) => OnNavigationStopped( new NavigationEventArgsAdapter( e ) );
         }
 
         /// <summary>
@@ -36,8 +37,8 @@
         {
             get
             {
-                Contract.Ensures( this.frame != null );
-                return this.frame;
+                Contract.Ensures( frame != null );
+                return frame;
             }
         }
 
@@ -45,56 +46,44 @@
         /// Raises the <see cref="E:Navigated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigated( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.Navigated;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            Navigated?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:Navigating"/> event.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigating( INavigationStartingEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.Navigating;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            Navigating?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:NavigationFailed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigationFailed( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.NavigationFailed;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            NavigationFailed?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:NavigationStopped"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigationStopped( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.NavigationStopped;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            NavigationStopped?.Invoke( this, e );
         }
 
         /// <summary>
@@ -106,7 +95,7 @@
         {
             get
             {
-                return this.Frame.CanGoBack;
+                return Frame.CanGoBack;
             }
         }
 
@@ -119,25 +108,19 @@
         {
             get
             {
-                return this.Frame.CanGoForward;
+                return Frame.CanGoForward;
             }
         }
 
         /// <summary>
         /// Navigates to the most recent item in back navigation history, if a frame manages its own navigation history.
         /// </summary>
-        public virtual void GoBack()
-        {
-            this.Frame.GoBack();
-        }
+        public virtual void GoBack() => Frame.GoBack();
 
         /// <summary>
         /// Navigates to the most recent item in forward navigation history, if a frame manages its own navigation history.
         /// </summary>
-        public virtual void GoForward()
-        {
-            this.Frame.GoForward();
-        }
+        public virtual void GoForward() => Frame.GoForward();
 
         /// <summary>
         /// Causes the frame to load content that is specified by data type, also passing a parameter to be interpreted by the target of the navigation.
@@ -145,10 +128,7 @@
         /// <returns>True if the frame can navigate according to its settings; otherwise, false.</returns>
         /// <param name="sourcePageType">The data type of the content to load.</param>
         /// <param name="parameter">The object parameter to pass to the target.</param>
-        public virtual bool Navigate( Type sourcePageType, object parameter )
-        {
-            return this.Frame.Navigate( sourcePageType, parameter );
-        }
+        public virtual bool Navigate( Type sourcePageType, object parameter ) => Frame.Navigate( sourcePageType, parameter );
 
         /// <summary>
         /// Causes the service to load content that is specified by URI, also passing a parameter to be interpreted by the target of the navigation.
@@ -166,7 +146,7 @@
                 return false;
 
             // let navigation service do what it normally does
-            return this.Frame.Navigate( page, parameter );
+            return Frame.Navigate( page, parameter );
         }
 
         /// <summary>
@@ -176,8 +156,8 @@
         /// <returns>The previous navigation history cache size value.</returns>
         public int SetCacheSize( int cacheSize )
         {
-            var oldValue = this.Frame.CacheSize;
-            this.Frame.CacheSize = cacheSize;
+            var oldValue = Frame.CacheSize;
+            Frame.CacheSize = cacheSize;
             return oldValue;
         }
 

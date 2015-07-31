@@ -11,17 +11,15 @@
     /// </content>
     public partial class Host : IKeyedServiceProvider
     {
-        partial void AddWinRTSpecificConventions( ConventionBuilder builder )
+        static partial void AddWinRTSpecificConventions( ConventionBuilder builder )
         {
             builder.ForType<ContinuationManager>().Export<IContinuationManager>().Shared();
         }
 
         private object GetService( Type serviceType, string key )
         {
-            this.CheckDisposed();
-
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
+            CheckDisposed();
 
             var generator = new ServiceTypeDisassembler();
             object service = null;
@@ -37,7 +35,7 @@
                     if ( ExportedInterfaces.Contains( serviceType ) )
                         exports.Add( this );
                     else if ( ExportedTypes.Contains( serviceType ) )
-                        exports.Add( this.Container );
+                        exports.Add( Container );
                 }
 
                 // add any matching, manually added services
@@ -45,7 +43,7 @@
                     exports.Add( service );
 
                 // add matching exports
-                exports.AddRange( this.Container.GetExports( serviceType, key ) );
+                exports.AddRange( Container.GetExports( serviceType, key ) );
                 return exports;
             }
 
@@ -55,7 +53,7 @@
                 if ( ExportedInterfaces.Contains( serviceType ) )
                     return this;
                 else if ( ExportedTypes.Contains( serviceType ) )
-                    return this.Container;
+                    return Container;
             }
 
             // return any matching, manually added services
@@ -64,7 +62,7 @@
 
             // return matching export
             object export;
-            this.Container.TryGetExport( serviceType, key, out export );
+            Container.TryGetExport( serviceType, key, out export );
 
             return export;
         }
@@ -76,9 +74,6 @@
         /// <param name="key">The key the object was registered with.</param>
         /// <returns>The service instance corresponding to the requested <paramref name="serviceType">service type</paramref>
         /// or <c>null</c> if no match is found.</returns>
-        object IKeyedServiceProvider.GetService( Type serviceType, string key )
-        {
-            return this.GetService( serviceType, key );
-        }
+        object IKeyedServiceProvider.GetService( Type serviceType, string key ) => GetService( serviceType, key );
     }
 }

@@ -44,14 +44,14 @@
 
             if ( error == null )
             {
-                hr = this.progress.Progress( (uint) value.Completed, (uint) value.Total );
+                hr = progress.Progress( (uint) value.Completed, (uint) value.Total );
             }
             else
             {
                 var warning = Convert.ToInt32( error.IsWarning );
                 var line = error.Line == null ? MinusOne : (uint) error.Line.Value;
                 var column = line == MinusOne ? MinusOne : ( error.Column == null ? MinusOne : (uint) error.Column.Value );
-                hr = this.progress.GeneratorError( warning, 0U, error.Message, line, column );
+                hr = progress.GeneratorError( warning, 0U, error.Message, line, column );
             }
 
             Marshal.ThrowExceptionForHR( hr );

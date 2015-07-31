@@ -34,19 +34,19 @@
 
         private RepositoryTracer( IRepository<T> repository, Type repositoryType, HttpRequestMessage request, string category )
         {
-            Contract.Requires( repository != null );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNullOrEmpty( category, nameof( category ) );
             Contract.Requires( repositoryType != null );
-            Contract.Requires( !string.IsNullOrEmpty( category ) );
 
-            this.operatorName = repositoryType.Name;
-            this.decorated = repository;
-            this.decorated.PropertyChanged += this.OnDecoratedPropertyChanged;
+            operatorName = repositoryType.Name;
+            decorated = repository;
+            decorated.PropertyChanged += OnDecoratedPropertyChanged;
             this.category = category;
 
             if ( ( this.request = request ) != null )
-                this.traceWriter = request.GetConfiguration().Services.GetTraceWriter() ?? NullTraceWriter.Instance;
+                traceWriter = request.GetConfiguration().Services.GetTraceWriter() ?? NullTraceWriter.Instance;
             else
-                this.traceWriter = NullTraceWriter.Instance;
+                traceWriter = NullTraceWriter.Instance;
         }
 
         /// <summary>
@@ -56,9 +56,8 @@
         /// <param name="request">The <see cref="HttpRequestMessage">request</see> associated with the repository.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public RepositoryTracer( IReadOnlyRepository<T> repository, HttpRequestMessage request )
-            : this( new ReadOnlyRepositoryAdapter<T>( repository ), repository.GetType(), request, "Data" )
+            : this( new ReadOnlyRepositoryAdapter<T>( repository ), repository?.GetType() ?? typeof( IReadOnlyRepository<T> ), request, "Data" )
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
         }
 
         /// <summary>
@@ -69,10 +68,8 @@
         /// <param name="category">The trace category.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public RepositoryTracer( IReadOnlyRepository<T> repository, HttpRequestMessage request, string category )
-            : this( new ReadOnlyRepositoryAdapter<T>( repository ), repository.GetType(), request, category )
+            : this( new ReadOnlyRepositoryAdapter<T>( repository ), repository?.GetType() ?? typeof( IReadOnlyRepository<T> ), request, category )
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( category ), "category" );
         }
 
         /// <summary>
@@ -82,9 +79,8 @@
         /// <param name="request">The <see cref="HttpRequestMessage">request</see> associated with the repository.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public RepositoryTracer( IRepository<T> repository, HttpRequestMessage request )
-            : this( repository, repository.GetType(), request, "Data" )
+            : this( repository, repository?.GetType() ?? typeof( IRepository<T> ), request, "Data" )
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
         }
 
         /// <summary>
@@ -95,18 +91,16 @@
         /// <param name="category">The trace category.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public RepositoryTracer( IRepository<T> repository, HttpRequestMessage request, string category )
-            : this( repository, repository.GetType(), request, category )
+            : this( repository, repository?.GetType() ?? typeof( IRepository<T> ), request, category )
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( category ), "category" );
         }
 
         private void OnDecoratedPropertyChanged( object sender, PropertyChangedEventArgs e )
         {
             Contract.Requires( e != null );
 
-            if ( string.IsNullOrEmpty( e.PropertyName ) || e.PropertyName == "HasPendingChanges" )
-                this.OnPropertyChanged( e );
+            if ( string.IsNullOrEmpty( e.PropertyName ) || e.PropertyName == nameof( HasPendingChanges ) )
+                OnPropertyChanged( e );
         }
 
         /// <summary>
@@ -117,13 +111,13 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.category ) );
-                return this.category;
+                Contract.Ensures( !string.IsNullOrEmpty( category ) );
+                return category;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( value ), "value" );
-                this.category = value;
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                category = value;
             }
         }
 
@@ -135,8 +129,8 @@
         {
             get
             {
-                Contract.Ensures( this.traceWriter != null );
-                return this.traceWriter;
+                Contract.Ensures( traceWriter != null );
+                return traceWriter;
             }
         }
 
@@ -148,8 +142,8 @@
         {
             get
             {
-                Contract.Ensures( this.request != null );
-                return this.request;
+                Contract.Ensures( request != null );
+                return request;
             }
         }
 
@@ -159,18 +153,20 @@
         /// <param name="item">The new item to add.</param>
         public virtual void Add( T item )
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            Arg.NotNull( item, nameof( item ) );
+
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "Add";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( Add );
                 } );
 
-            this.decorated.Add( item );
+            decorated.Add( item );
         }
 
         /// <summary>
@@ -178,18 +174,18 @@
         /// </summary>
         public virtual void DiscardChanges()
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "DiscardChanges";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( DiscardChanges );
                 } );
 
-            this.decorated.DiscardChanges();
+            decorated.DiscardChanges();
         }
 
         /// <summary>
@@ -200,7 +196,7 @@
         {
             get
             {
-                return this.decorated.HasPendingChanges;
+                return decorated.HasPendingChanges;
             }
         }
 
@@ -210,18 +206,20 @@
         /// <param name="item">The item to remove.</param>
         public virtual void Remove( T item )
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            Arg.NotNull( item, nameof( item ) );
+
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "Remove";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( Remove );
                 } );
 
-            this.decorated.Remove( item );
+            decorated.Remove( item );
         }
 
         /// <summary>
@@ -233,14 +231,14 @@
         {
             var duration = new TraceStopwatch( tr => tr.Message = SR.RepositorySaveChangesAsyncBegin, tr => tr.Message = SR.RepositorySaveChangesAsyncEnd );
 
-            return this.TraceWriter.TraceBeginEndAsync(
-                this.Request,
-                this.TraceCategory,
+            return TraceWriter.TraceBeginEndAsync(
+                Request,
+                TraceCategory,
                 TraceLevel.Info,
-                this.operatorName,
-                "SaveChangesAsync",
+                operatorName,
+                nameof( SaveChangesAsync ),
                 duration.StartTrace,
-                () => this.decorated.SaveChangesAsync( cancellationToken ),
+                () => decorated.SaveChangesAsync( cancellationToken ),
                 duration.EndTrace,
                 null );
         }
@@ -251,18 +249,20 @@
         /// <param name="item">The item to update.</param>
         public virtual void Update( T item )
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            Arg.NotNull( item, nameof( item ) );
+
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "Update";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( Update );
                 } );
 
-            this.decorated.Update( item );
+            decorated.Update( item );
         }
 
         /// <summary>
@@ -274,16 +274,18 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the <typeparamref name="TResult">result</typeparamref> of the operation.</returns>
         public virtual Task<TResult> GetAsync<TResult>( Func<IQueryable<T>, TResult> queryShaper, CancellationToken cancellationToken )
         {
+            Arg.NotNull( queryShaper, nameof( queryShaper ) );
+
             var duration = new TraceStopwatch<TResult>( tr => tr.Message = SR.RepositoryGetAsyncBegin, ( tr, r ) => tr.Message = SR.RepositoryGetAsyncEnd );
 
-            return this.TraceWriter.TraceBeginEndAsync(
-                this.Request,
-                this.TraceCategory,
+            return TraceWriter.TraceBeginEndAsync(
+                Request,
+                TraceCategory,
                 TraceLevel.Info,
-                this.operatorName,
-                "GetAsync",
+                operatorName,
+                nameof( GetAsync ),
                 duration.StartTrace,
-                () => this.decorated.GetAsync( queryShaper, cancellationToken ),
+                () => decorated.GetAsync( queryShaper, cancellationToken ),
                 duration.EndTrace,
                 null );
         }
@@ -296,16 +298,18 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the retrieved <see cref="IEnumerable{T}">sequence</see> of <typeparamref name="T">items</typeparamref>.</returns>
         public virtual Task<IEnumerable<T>> GetAsync( Func<IQueryable<T>, IQueryable<T>> queryShaper, CancellationToken cancellationToken )
         {
+            Arg.NotNull( queryShaper, nameof( queryShaper ) );
+
             var duration = new TraceStopwatch<IEnumerable<T>>( tr => tr.Message = SR.RepositoryGetAsyncBegin, ( tr, r ) => tr.Message = SR.RepositoryGetAsyncEnd );
 
-            return this.TraceWriter.TraceBeginEndAsync(
-                this.Request,
-                this.TraceCategory,
+            return TraceWriter.TraceBeginEndAsync(
+                Request,
+                TraceCategory,
                 TraceLevel.Info,
-                this.operatorName,
-                "GetAsync",
+                operatorName,
+                nameof( GetAsync ),
                 duration.StartTrace,
-                () => this.decorated.GetAsync( queryShaper, cancellationToken ),
+                () => decorated.GetAsync( queryShaper, cancellationToken ),
                 duration.EndTrace,
                 null );
         }
@@ -318,7 +322,7 @@
         {
             get
             {
-                return Decorator.GetInner( this.decorated );
+                return Decorator.GetInner( decorated );
             }
         }
 
@@ -327,7 +331,7 @@
             get
             {
                 // note: decorated object could be read-only and adapted with another decorator
-                return Decorator.GetInner<IReadOnlyRepository<T>>( this.decorated );
+                return Decorator.GetInner<IReadOnlyRepository<T>>( decorated );
             }
         }
     }

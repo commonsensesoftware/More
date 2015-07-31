@@ -87,7 +87,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override Type GetMemberType( PropertyInfo member )
         {
-            Arg.NotNull( member, "member" );
+            Arg.NotNull( member, nameof( member ) );
             return member.PropertyType;
         }
 
@@ -99,8 +99,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override object GetMemberValue( PropertyInfo member )
         {
-            Arg.NotNull( member, "member" );
-            return member.GetValue( this.Instance, null );
+            Arg.NotNull( member, nameof( member ) );
+            return member.GetValue( Instance, null );
         }
 
         /// <summary>
@@ -111,8 +111,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         protected override void SetMemberValue( PropertyInfo member, object value )
         {
-            Arg.NotNull( member, "member" );
-            member.SetValue( this.Instance, value, null );
+            Arg.NotNull( member, nameof( member ) );
+            member.SetValue( Instance, value, null );
         }
     }
 }

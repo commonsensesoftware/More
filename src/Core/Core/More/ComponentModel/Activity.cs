@@ -33,9 +33,10 @@
             {
                 Contract.Requires( !string.IsNullOrEmpty( name ) );
                 Contract.Requires( description != null );
-                this.Id = id;
-                this.Name = name;
-                this.Description = description;
+
+                Id = id;
+                Name = name;
+                Description = description;
             }
         }
 
@@ -51,8 +52,8 @@
         /// </summary>
         protected Activity()
         {
-            this.metadata = new Lazy<ActivityMetadata>( this.GetMetadata );
-            this.dependencies.CollectionChanged += this.OnDependenciesChanged;
+            metadata = new Lazy<ActivityMetadata>( GetMetadata );
+            dependencies.CollectionChanged += OnDependenciesChanged;
         }
 
         /// <summary>
@@ -63,7 +64,7 @@
         {
             get
             {
-                return this.Dependencies.All( t => t.IsCompleted );
+                return Dependencies.All( t => t.IsCompleted );
             }
         }
 
@@ -72,7 +73,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ActivityMetadata>() != null );
-                return this.metadata.Value;
+                return metadata.Value;
             }
         }
 
@@ -80,7 +81,7 @@
         {
             Contract.Ensures( Contract.Result<ActivityMetadata>() != null );
 
-            var type = this.GetType();
+            var type = GetType();
             var typeInfo = type.GetTypeInfo();
             var descriptor = typeInfo.GetCustomAttributes( false ).OfType<IActivityDescriptor>().FirstOrDefault();
 
@@ -135,8 +136,8 @@
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "args", Justification = "Consistency; same name as parameter in String.Format." )]
         protected void Log( string format, object[] args )
         {
-            Arg.NotNullOrEmpty( format, "format" );
-            this.Log( format.FormatDefault( args ) );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
+            Log( format.FormatDefault( args ) );
         }
 
         /// <summary>
@@ -145,7 +146,7 @@
         /// <param name="message">The message to log.</param>
         protected virtual void Log( string message )
         {
-            Arg.NotNullOrEmpty( message, "message" );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
         }
 
         /// <summary>
@@ -155,15 +156,15 @@
         /// <param name="exception">The <see cref="Exception"/> for the error that occurred.</param>
         protected virtual void OnUnhandledException( IServiceProvider serviceProvider, Exception exception )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
-            Arg.NotNull( exception, "exception" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( exception, nameof( exception ) );
 
             var ex = exception;
 
             while ( ex is System.Reflection.TargetInvocationException && ex.InnerException != null )
                 ex = ex.InnerException;
 
-            this.Log( FormatException( ex ) );
+            Log( FormatException( ex ) );
         }
 
         /// <summary>
@@ -172,12 +173,9 @@
         /// <param name="e">The <see cref="ActivityCompletedEventArgs"/> event data.</param>
         protected virtual void OnCompleted( ActivityCompletedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Completed;
-
-            if ( handler != null )
-                handler( this, e );
+            Completed?.Invoke( this, e );
         }
 
         /// <summary>
@@ -186,12 +184,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCanExecuteChanged( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CanExecuteChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CanExecuteChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -202,8 +197,8 @@
 
         private void OnActivityCompleted( object sender, ActivityCompletedEventArgs e )
         {
-            if ( this.CanExecute( e.ServiceProvider ) )
-                this.Execute( e.ServiceProvider );
+            if ( CanExecute( e.ServiceProvider ) )
+                Execute( e.ServiceProvider );
         }
 
         private void OnDependenciesChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -219,7 +214,7 @@
                             break;
 
                         foreach ( var activity in e.NewItems.OfType<IActivity>() )
-                            activity.Completed += this.OnActivityCompleted;
+                            activity.Completed += OnActivityCompleted;
 
                         break;
                     }
@@ -229,7 +224,7 @@
                             break;
 
                         foreach ( var activity in e.OldItems.OfType<IActivity>() )
-                            activity.Completed -= this.OnActivityCompleted;
+                            activity.Completed -= OnActivityCompleted;
 
                         break;
                     }
@@ -238,15 +233,15 @@
                         if ( e.OldItems != null )
                         {
                             foreach ( var oldItem in e.OldItems.OfType<IActivity>() )
-                                oldItem.Completed -= this.OnActivityCompleted;
+                                oldItem.Completed -= OnActivityCompleted;
                         }
 
                         if ( e.NewItems != null )
                         {
                             foreach ( var newItem in e.NewItems.OfType<IActivity>() )
                             {
-                                newItem.Completed -= this.OnActivityCompleted;
-                                newItem.Completed += this.OnActivityCompleted;
+                                newItem.Completed -= OnActivityCompleted;
+                                newItem.Completed += OnActivityCompleted;
                             }
                         }
 
@@ -254,7 +249,7 @@
                     }
             }
 
-            this.OnCanExecuteChanged( EventArgs.Empty );
+            OnCanExecuteChanged( EventArgs.Empty );
         }
 
         /// <summary>
@@ -264,7 +259,7 @@
         /// <returns>True if the current instance equals the specified object; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IActivity );
+            return Equals( obj as IActivity );
         }
 
         /// <summary>
@@ -273,7 +268,7 @@
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            return this.Id.GetHashCode() + ( this.InstanceId == null ? 0 : this.InstanceId.GetHashCode() );
+            return Id.GetHashCode() + ( InstanceId == null ? 0 : InstanceId.GetHashCode() );
         }
 
         /// <summary>
@@ -284,7 +279,7 @@
         {
             get
             {
-                return this.Metadata.Id;
+                return Metadata.Id;
             }
         }
 
@@ -297,11 +292,11 @@
         {
             get
             {
-                return this.instanceId;
+                return instanceId;
             }
             set
             {
-                this.SetProperty( ref this.instanceId, value );
+                SetProperty( ref instanceId, value );
             }
         }
 
@@ -313,17 +308,17 @@
         {
             get
             {
-                return this.completed;
+                return completed;
             }
             protected set
             {
-                if ( !this.SetProperty( ref this.completed, value ) )
+                if ( !SetProperty( ref completed, value ) )
                     return;
 
                 if ( value )
-                    this.OnCompleted( new ActivityCompletedEventArgs( this.currentServiceProvider ) );
+                    OnCompleted( new ActivityCompletedEventArgs( currentServiceProvider ) );
 
-                this.OnCanExecuteChanged( EventArgs.Empty );
+                OnCanExecuteChanged( EventArgs.Empty );
             }
         }
 
@@ -336,12 +331,12 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return this.Metadata.Name;
+                return Metadata.Name;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
-                this.SetProperty( ref this.Metadata.Name, value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                SetProperty( ref Metadata.Name, value );
             }
         }
 
@@ -354,12 +349,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.Metadata.Description;
+                return Metadata.Description;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.Metadata.Description, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref Metadata.Description, value );
             }
         }
 
@@ -373,12 +368,12 @@
             get
             {
 
-                return this.expiration;
+                return expiration;
             }
             set
             {
 
-                this.SetProperty( ref this.expiration, value );
+                SetProperty( ref expiration, value );
             }
         }
 
@@ -392,7 +387,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ICollection<IActivity>>() != null );
-                return this.dependencies;
+                return dependencies;
             }
         }
 
@@ -402,7 +397,7 @@
         /// <param name="stateBag">The <see cref="IDictionary{TKey,TValue}"/> containing the state information.</param>
         public virtual void LoadState( IDictionary<string, string> stateBag )
         {
-            Arg.NotNull( stateBag, "stateBag" );
+            Arg.NotNull( stateBag, nameof( stateBag ) );
         }
 
         /// <summary>
@@ -412,7 +407,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract" )]
         public virtual void SaveState( IDictionary<string, string> stateBag )
         {
-            Arg.NotNull( stateBag, "stateBag" );
+            Arg.NotNull( stateBag, nameof( stateBag ) );
         }
 
         /// <summary>
@@ -424,8 +419,8 @@
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "serviceProvider", Justification = "False positive" )]
         public virtual bool CanExecute( IServiceProvider serviceProvider )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
-            return this.IsReady;
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            return IsReady;
         }
 
         /// <summary>
@@ -437,11 +432,11 @@
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "serviceProvider", Justification = "False positive" )]
         public void Execute( IServiceProvider serviceProvider )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
 
             // capture the current service provider so that it can be forwarded in the Completed event
-            this.currentServiceProvider = serviceProvider;
-            this.OnExecute( serviceProvider );
+            currentServiceProvider = serviceProvider;
+            OnExecute( serviceProvider );
         }
 
         /// <summary>
@@ -458,10 +453,10 @@
         {
             if ( other == null )
                 return false;
-            else if ( !this.GetType().Equals( other.GetType() ) ) // must be the same type of activity
+            else if ( !GetType().Equals( other.GetType() ) ) // must be the same type of activity
                 return false;
 
-            return this.GetHashCode().Equals( other.GetHashCode() );
+            return GetHashCode().Equals( other.GetHashCode() );
         }
 
         /// <summary>
@@ -471,7 +466,7 @@
         /// <returns>True if the activity can execute; otherwise, false.</returns>
         bool ICommand.CanExecute( object parameter )
         {
-            return this.CanExecute( (IServiceProvider) parameter );
+            return CanExecute( (IServiceProvider) parameter );
         }
 
         /// <summary>
@@ -480,7 +475,7 @@
         /// <param name="parameter">A parameter <see cref="Object"/> pass to the command.</param>
         void ICommand.Execute( object parameter )
         {
-            this.Execute( (IServiceProvider) parameter );
+            Execute( (IServiceProvider) parameter );
         }
 
         /// <summary>

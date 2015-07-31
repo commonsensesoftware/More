@@ -31,7 +31,7 @@
         /// <returns>A unioned <see cref="ISpecification{T}">specification</see> object.</returns>
         public virtual ISpecification<T> And( ISpecification<T> other )
         {
-            Arg.NotNull( other, "other" );
+            Arg.NotNull( other, nameof( other ) );
             Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
             return new LogicalAndSpecification<T>( this, other );
         }
@@ -43,7 +43,7 @@
         /// <returns>A unioned <see cref="ISpecification{T}">specification</see> object.</returns>
         public virtual ISpecification<T> Or( ISpecification<T> other )
         {
-            Arg.NotNull( other, "other" );
+            Arg.NotNull( other, nameof( other ) );
             Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
             return new LogicalOrSpecification<T>( this, other );
         }
@@ -61,7 +61,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "A specification is a specialized rule. The interface is intentionally hidden." )]
         bool IRule<T, bool>.Evaluate( T item )
         {
-            return this.IsSatisfiedBy( item );
+            return IsSatisfiedBy( item );
         }
     }
 }

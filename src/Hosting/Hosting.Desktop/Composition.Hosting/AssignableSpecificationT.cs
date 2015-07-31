@@ -18,7 +18,7 @@
             return otherType.IsPublic &&
                   ( !otherType.IsAbstract || otherType.IsInterface ) &&
                   !otherType.IsGenericTypeDefinition &&
-                   this.type.IsAssignableFrom( otherType );
+                   type.IsAssignableFrom( otherType );
         }
     }
 }

@@ -23,8 +23,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task BuildupAsync( this IDataGridColumnBuilder builder, ICollection<DataGridColumn> columns )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( columns, nameof( columns ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return builder.BuildupAsync( columns, ColumnBuildOrders.Default, CancellationToken.None );
         }
@@ -40,8 +40,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task BuildupAsync( this IDataGridColumnBuilder builder, ICollection<DataGridColumn> columns, ColumnBuildOrders buildOrders )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( columns, nameof( columns ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return builder.BuildupAsync( columns, buildOrders, CancellationToken.None );
         }
@@ -57,8 +57,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task BuildupAsync( this IDataGridColumnBuilder builder, ICollection<DataGridColumn> columns, CancellationToken cancellationToken )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( columns, nameof( columns ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return builder.BuildupAsync( columns, ColumnBuildOrders.Default, cancellationToken );
         }
@@ -72,8 +72,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task AppendToAsync( this IDataGridColumnBuilder builder, ICollection<DataGridColumn> columns )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( columns, nameof( columns ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return builder.AppendToAsync( columns, ColumnBuildOrders.Default, CancellationToken.None );
         }
@@ -88,8 +88,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task AppendToAsync( this IDataGridColumnBuilder builder, ICollection<DataGridColumn> columns, ColumnBuildOrders buildOrders )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( columns, nameof( columns ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return builder.AppendToAsync( columns, buildOrders, CancellationToken.None );
         }
@@ -104,8 +104,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task AppendToAsync( this IDataGridColumnBuilder builder, ICollection<DataGridColumn> columns, CancellationToken cancellationToken )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
-            Contract.Requires<ArgumentNullException>( columns != null, "columns" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( columns, nameof( columns ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return builder.AppendToAsync( columns, ColumnBuildOrders.Default, cancellationToken );
         }

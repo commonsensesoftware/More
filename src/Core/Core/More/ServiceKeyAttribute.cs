@@ -27,7 +27,7 @@
         {
             get
             {
-                return this.key;
+                return key;
             }
         }
     }

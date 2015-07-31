@@ -29,11 +29,11 @@
         /// <exception cref="ArgumentException"><paramref name="years"/> is empty.</exception>
         protected FiscalCalendar( IEnumerable<FiscalYear> years )
         {
-            Arg.NotNull( years, "years" );
+            Arg.NotNull( years, nameof( years ) );
 
-            this.calendarYears.AddRange( years );
+            calendarYears.AddRange( years );
 
-            if ( this.calendarYears.Count == 0 )
+            if ( calendarYears.Count == 0 )
                 throw new ArgumentException( "years.Count() > 0", "years" );
         }
 
@@ -46,7 +46,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() > 0 );
-                return this.calendarYears.First().FirstDay.Month;
+                return calendarYears.First().FirstDay.Month;
             }
         }
 
@@ -59,7 +59,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEnumerable<FiscalYear>>() != null );
-                return this.calendarYears;
+                return calendarYears;
             }
         }
 
@@ -71,7 +71,7 @@
         {
             get
             {
-                return this.calendarYears.First().FirstDay;
+                return calendarYears.First().FirstDay;
             }
         }
 
@@ -83,7 +83,7 @@
         {
             get
             {
-                return this.calendarYears.Last().LastDay;
+                return calendarYears.Last().LastDay;
             }
         }
 
@@ -96,7 +96,7 @@
         {
             get
             {
-                return this.EpochMonth;
+                return EpochMonth;
             }
         }
     }

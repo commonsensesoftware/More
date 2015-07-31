@@ -55,8 +55,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static object GetService( this IServiceProvider serviceProvider, Type serviceType, string key )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             return GetServiceWithKey( serviceProvider, serviceType, key );
         }
 
@@ -70,8 +70,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static IEnumerable<object> GetServices( this IServiceProvider serviceProvider, Type serviceType )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.Result<IEnumerable<object>>() != null );
 
             var generator = new ServiceTypeDisassembler();
@@ -90,8 +90,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static IEnumerable<object> GetServices( this IServiceProvider serviceProvider, Type serviceType, string key )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.Result<IEnumerable<object>>() != null );
             return GetServicesWithKey<object>( serviceProvider, serviceType, key );
         }
@@ -106,7 +106,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static TService GetService<TService>( this IServiceProvider serviceProvider, string key ) where TService : class
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
             return (TService) serviceProvider.GetService( typeof( TService ), key );
         }
 
@@ -121,8 +121,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static object GetRequiredService( this IServiceProvider serviceProvider, Type serviceType, string key )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.Result<object>() != null );
 
             var service = serviceProvider.GetService( serviceType, key );
@@ -144,7 +144,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static TService GetRequiredService<TService>( this IServiceProvider serviceProvider, string key ) where TService : class
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
             Contract.Ensures( Contract.Result<TService>() != null );
 
             var service = (TService) serviceProvider.GetService( typeof( TService ), key );
@@ -168,7 +168,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static bool TryGetService<TService>( this IServiceProvider serviceProvider, out TService service, string key ) where TService : class
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
             service = null;
 
             try
@@ -196,8 +196,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static bool TryGetService( this IServiceProvider serviceProvider, Type serviceType, out object service, string key )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             service = null;
 
             try
@@ -222,7 +222,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         public static IEnumerable<TService> GetServices<TService>( this IServiceProvider serviceProvider, string key ) where TService : class
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
             Contract.Ensures( Contract.Result<IEnumerable<TService>>() != null );
             return GetServicesWithKey<TService>( serviceProvider, typeof( TService ), key );
         }

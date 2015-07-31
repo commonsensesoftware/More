@@ -66,8 +66,8 @@
         {
             get
             {
-                Contract.Ensures( this.steps != null );
-                return this.steps;
+                Contract.Ensures( steps != null );
+                return steps;
             }
         }
 
@@ -79,14 +79,14 @@
         public virtual object Convert( object value, Type targetType, object parameter, CultureInfo culture )
 #endif
         {
-            if ( !this.Steps.Any() )
+            if ( !Steps.Any() )
                 return value;
 
             // the target type must match the type defined for the final converter
-            if ( !object.Equals( this.Steps.Last().TargetType, targetType ) )
+            if ( !object.Equals( Steps.Last().TargetType, targetType ) )
                 throw new ArgumentException( ExceptionMessage.UnsupportedConversionType.FormatDefault( targetType ), "targetType" );
 
-            foreach ( var step in this.Steps )
+            foreach ( var step in Steps )
             {
 #if NETFX_CORE
                 value = step.Converter.Convert( value, step.TargetType, step.ConverterParameter, language );
@@ -106,14 +106,14 @@
         public virtual object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
 #endif
         {
-            if ( !this.Steps.Any() )
+            if ( !Steps.Any() )
                 return value;
 
             // the target type must match the type defined for the final converter
-            if ( !object.Equals( this.Steps.First().TargetType, targetType ) )
+            if ( !object.Equals( Steps.First().TargetType, targetType ) )
                 throw new ArgumentException( ExceptionMessage.UnsupportedConversionType.FormatDefault( targetType ), "targetType" );
 
-            foreach ( var step in this.Steps.Reverse() )
+            foreach ( var step in Steps.Reverse() )
             {
 #if NETFX_CORE
                 value = step.Converter.Convert( value, step.TargetType, step.ConverterParameter, language );

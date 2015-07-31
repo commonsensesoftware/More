@@ -13,7 +13,7 @@
         /// </summary>
         public ProgressWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -22,8 +22,8 @@
         /// <param name="status">The status text to display during progress.</param>
         public ProgressWindow( string status )
         {
-            this.InitializeComponent();
-            this.Status.Text = status;
+            InitializeComponent();
+            Status.Text = status;
         }
     }
 }

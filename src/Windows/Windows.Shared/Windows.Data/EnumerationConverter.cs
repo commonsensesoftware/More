@@ -83,7 +83,7 @@
         {
             get
             {
-                if ( this.UseNumericFormat )
+                if ( UseNumericFormat )
                     return "D";
 
                 return "G";
@@ -98,7 +98,7 @@
                 if ( ( formatChar != "G" ) && ( formatChar != "D" ) )
                     throw new FormatException( ExceptionMessage.EnumConverterException );
 
-                this.UseNumericFormat = formatChar == "D";
+                UseNumericFormat = formatChar == "D";
             }
         }
 
@@ -136,7 +136,7 @@
             if ( !supported && numeric )
             {
                 // conversion to numeric formats are only allowed if the format is set to numeric
-                if ( !this.UseNumericFormat )
+                if ( !UseNumericFormat )
                     throw new ArgumentException( ExceptionMessage.NumericFormatMustBeUsedToConvertEnumToNumber.FormatDefault( targetType ), "targetType" );
 
                 supported = true;
@@ -160,7 +160,7 @@
 
             // handle null values
             if ( value == null )
-                return boolean ? null : this.DefaultNullValue;
+                return boolean ? null : DefaultNullValue;
 
             // echo value
             if ( value.GetType() == underlyingType )
@@ -173,8 +173,8 @@
                 return object.Equals( actualValue, GetParameterAsEnum( actualValue.GetType(), parameter ) );
 
             // handle strings with or without formatting
-            if ( this.UseNumericFormat )
-                return ( (IFormattable) actualValue ).ToString( this.Format, culture );
+            if ( UseNumericFormat )
+                return ( (IFormattable) actualValue ).ToString( Format, culture );
 
             var displayName = actualValue.GetDisplayName();
 
@@ -237,7 +237,7 @@
                 // parse string
                 if ( text != null )
                 {
-                    if ( string.Equals( text, this.DefaultNullValue, StringComparison.Ordinal ) )
+                    if ( string.Equals( text, DefaultNullValue, StringComparison.Ordinal ) )
                         return null;
 
                     return GetEnumFromString( targetType, text );

@@ -34,11 +34,11 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare values.</param>
         public ClickableItem( T value, ICommand clickCommand, IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( clickCommand, "clickCommand" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( clickCommand, nameof( clickCommand ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
-            this.Click = new CommandInterceptor<object>( p => this.OnClicked( EventArgs.Empty ), clickCommand );
-            this.Value = value;
+            Click = new CommandInterceptor<object>( p => OnClicked( EventArgs.Empty ), clickCommand );
+            Value = value;
             this.comparer = comparer;
         }
 
@@ -50,8 +50,8 @@
         {
             get
             {
-                Contract.Ensures( this.comparer != null );
-                return this.comparer;
+                Contract.Ensures( comparer != null );
+                return comparer;
             }
         }
 
@@ -61,12 +61,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnClicked( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Clicked;
-
-            if ( handler != null )
-                handler( this, e );
+            Clicked?.Invoke( this, e );
         }
 
         /// <summary>
@@ -76,7 +73,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IClickableItem<T> );
+            return Equals( obj as IClickableItem<T> );
         }
 
         /// <summary>
@@ -85,7 +82,7 @@
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            return this.Value == null ? 0 : this.Comparer.GetHashCode( this.Value );
+            return Value == null ? 0 : Comparer.GetHashCode( Value );
         }
 
         /// <summary>
@@ -94,7 +91,7 @@
         /// <returns>The string representation of the current instance.</returns>
         public override string ToString()
         {
-            return this.Value == null ? string.Empty : this.Value.ToString();
+            return Value == null ? string.Empty : Value.ToString();
         }
 
         /// <summary>
@@ -157,7 +154,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public bool Equals( IClickableItem<T> other )
         {
-            return !object.Equals( other, null ) && this.Comparer.Equals( this.Value, other.Value );
+            return !object.Equals( other, null ) && Comparer.Equals( Value, other.Value );
         }
 
         /// <summary>
@@ -167,7 +164,7 @@
         /// <returns>True if the specified value equals the current instance; otherwise, false.</returns>
         public bool Equals( T other )
         {
-            return this.Comparer.Equals( this.Value, other );
+            return Comparer.Equals( Value, other );
         }
     }
 }

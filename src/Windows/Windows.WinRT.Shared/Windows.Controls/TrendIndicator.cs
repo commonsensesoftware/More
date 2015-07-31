@@ -12,7 +12,7 @@
     public partial class TrendIndicator : ISupportInitialize
     {
         private static readonly DependencyProperty ScoreBrushProperty =
-            DependencyProperty.Register( "ScoreBrush", typeof( Brush ), typeof( TrendIndicator ), new PropertyMetadata( DefaultScoreBrush ) );
+            DependencyProperty.Register( nameof( ScoreBrush ), typeof( Brush ), typeof( TrendIndicator ), new PropertyMetadata( DefaultScoreBrush ) );
 
         /// <summary>
         /// Gets or sets the the score brush color.
@@ -22,12 +22,12 @@
         {
             get
             {
-                var result = (Brush) this.GetValue( ScoreBrushProperty ) ?? DefaultScoreBrush;
+                var result = (Brush) GetValue( ScoreBrushProperty ) ?? DefaultScoreBrush;
                 return result;
             }
             protected set
             {
-                this.SetValue( ScoreBrushProperty, value );
+                SetValue( ScoreBrushProperty, value );
             }
         }
 
@@ -53,21 +53,21 @@
         /// </summary>
         public virtual void EndInit()
         {
-            if ( this.IsInitialized )
+            if ( IsInitialized )
                 return;
 
-            this.IsInitialized = true;
+            IsInitialized = true;
 
             // if the Trend property is set, trigger a property change after initialization
-            if ( this.ReadLocalValue( TrendProperty ) != DependencyProperty.UnsetValue )
+            if ( ReadLocalValue( TrendProperty ) != DependencyProperty.UnsetValue )
             {
-                this.UpdateVisualState();
-                this.OnTrendChanged( EventArgs.Empty );
+                UpdateVisualState();
+                OnTrendChanged( EventArgs.Empty );
             }
 
             // if the Score property is set, trigger a property change after initialization
-            if ( this.ReadLocalValue( ScoreProperty ) != DependencyProperty.UnsetValue )
-                this.OnScoreChanged( EventArgs.Empty );
+            if ( ReadLocalValue( ScoreProperty ) != DependencyProperty.UnsetValue )
+                OnScoreChanged( EventArgs.Empty );
         }
 
         /// <summary>
@@ -76,7 +76,7 @@
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            this.UpdateVisualState();
+            UpdateVisualState();
         }
     }
 }

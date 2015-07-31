@@ -2,6 +2,7 @@
 {   
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using global::Windows.UI.Xaml.Controls;
@@ -27,7 +28,7 @@
             {
                 get
                 {
-                    return this.source;
+                    return source;
                 }
             }
 
@@ -35,7 +36,7 @@
             {
                 get
                 {
-                    return this.source.IsSuccess;
+                    return source.IsSuccess;
                 }
             }
 
@@ -43,7 +44,7 @@
             {
                 get
                 {
-                    return this.source.Uri;
+                    return source.Uri;
                 }
             }
         }
@@ -62,7 +63,7 @@
             {
                 get
                 {
-                    return this.source;
+                    return source;
                 }
             }
 
@@ -70,11 +71,11 @@
             {
                 get
                 {
-                    return this.source.Cancel;
+                    return source.Cancel;
                 }
                 set
                 {
-                    this.source.Cancel = value;
+                    source.Cancel = value;
                 }
             }
 
@@ -82,7 +83,7 @@
             {
                 get
                 {
-                    return this.source.Uri;
+                    return source.Uri;
                 }
             }
         }
@@ -95,11 +96,11 @@
         /// <param name="webView">The <see cref="WebView">web view</see> to adapt to.</param>
         public WebViewNavigationAdapter( WebView webView )
         {
-            Contract.Requires<ArgumentNullException>( webView != null, "webView" );
+            Arg.NotNull( webView, nameof( webView ) );
 
             this.webView = webView;
-            this.webView.NavigationCompleted += this.OnWebViewNavigationCompleted;
-            this.webView.NavigationStarting += ( s, e ) => this.OnNavigating( new WebViewNavigationStartingEventArgsAdapter( e ) );
+            this.webView.NavigationCompleted += OnWebViewNavigationCompleted;
+            this.webView.NavigationStarting += ( s, e ) => OnNavigating( new WebViewNavigationStartingEventArgsAdapter( e ) );
         }
 
         /// <summary>
@@ -110,8 +111,8 @@
         {
             get
             {
-                Contract.Ensures( this.webView != null );
-                return this.webView;
+                Contract.Ensures( webView != null );
+                return webView;
             }
         }
 
@@ -122,65 +123,53 @@
             var e = new WebViewNavigationCompletedEventArgsAdapter( args );
 
             if ( args.IsSuccess )
-                this.OnNavigated( e );
+                OnNavigated( e );
             else
-                this.OnNavigationFailed( e );
+                OnNavigationFailed( e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:Navigated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigated( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.Navigated;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            Navigated?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:Navigating"/> event.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigating( INavigationStartingEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.Navigating;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            Navigating?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:NavigationFailed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigationFailed( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.NavigationFailed;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            NavigationFailed?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:NavigationStopped"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigationStopped( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.NavigationStopped;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            NavigationStopped?.Invoke( this, e );
         }
 
         /// <summary>
@@ -192,7 +181,7 @@
         {
             get
             {
-                return this.WebView.CanGoBack;
+                return WebView.CanGoBack;
             }
         }
 
@@ -205,25 +194,19 @@
         {
             get
             {
-                return this.WebView.CanGoForward;
+                return WebView.CanGoForward;
             }
         }
 
         /// <summary>
         /// Navigates to the most recent item in back navigation history, if a web view manages its own navigation history.
         /// </summary>
-        public virtual void GoBack()
-        {
-            this.WebView.GoBack();
-        }
+        public virtual void GoBack() => WebView.GoBack();
 
         /// <summary>
         /// Navigates to the most recent item in forward navigation history, if a web view manages its own navigation history.
         /// </summary>
-        public virtual void GoForward()
-        {
-            this.WebView.GoForward();
-        }
+        public virtual void GoForward() => WebView.GoForward();
 
         bool INavigationService.Navigate( Type sourcePageType, object parameter )
         {
@@ -242,14 +225,12 @@
                 return false;
 
             // cannot evaluate Cancel because the event args cannot be created
-            this.WebView.Navigate( sourcePage );
+            WebView.Navigate( sourcePage );
             return true;
         }
 
-        int INavigationService.SetCacheSize( int cacheSize )
-        {
-            return 0;
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden because this adapter does not support cache sizes." )]
+        int INavigationService.SetCacheSize( int cacheSize ) => 0;
 
         /// <summary>
         /// Occurs when the content that is being navigated to has been found and is available from the Content property, although it may not have completed loading.

@@ -26,8 +26,8 @@
         public TemplateOption( string id, string name )
             : this( id, name, string.Empty )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( id ), "id" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
+            Arg.NotNullOrEmpty( id, nameof( id ) );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
         }
 
         /// <summary>
@@ -38,9 +38,9 @@
         /// <param name="description">The option description.</param>
         public TemplateOption( string id, string name, string description )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( id ), "id" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( description != null, "description" );
+            Arg.NotNullOrEmpty( id, nameof( id ) );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            Arg.NotNull( description, nameof( description ) );
 
             this.id = id;
             this.name = name;
@@ -55,8 +55,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.id ) );
-                return this.id;
+                Contract.Ensures( !string.IsNullOrEmpty( id ) );
+                return id;
             }
         }
 
@@ -68,8 +68,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
-                return this.name;
+                Contract.Ensures( !string.IsNullOrEmpty( name ) );
+                return name;
             }
         }
 
@@ -81,8 +81,8 @@
         {
             get
             {
-                Contract.Ensures( this.description != null );
-                return this.description;
+                Contract.Ensures( description != null );
+                return description;
             }
         }
 
@@ -95,11 +95,11 @@
         {
             get
             {
-                return this.enabled;
+                return enabled;
             }
             set
             {
-                this.SetProperty( ref this.enabled, value );
+                SetProperty( ref enabled, value );
             }
         }
 
@@ -112,11 +112,11 @@
         {
             get
             {
-                return this.optional;
+                return optional;
             }
             set
             {
-                this.SetProperty( ref this.optional, value );
+                SetProperty( ref optional, value );
             }
         }
     }

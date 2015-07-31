@@ -29,12 +29,12 @@
         /// <returns>A <see cref="Task{T}">task</see> containing an object of type <typeparamref name="T"/>.</returns>
         public virtual async Task<T> FromEmbeddedResourceAsync( Assembly assembly, string resourceName )
         {
-            Contract.Requires<ArgumentNullException>( assembly != null, "assembly" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
+            Arg.NotNull( assembly, nameof( assembly ) );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
             using ( var stream = assembly.GetManifestResourceStream( resourceName ) )
-                return await this.OnReadStreamAsync( stream );
+                return await OnReadStreamAsync( stream );
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
         /// <returns>A <see cref="Task{T}">task</see> representing the download operation.</returns>
         public virtual async Task<T> DownloadAsync( Uri resourceUri )
         {
-            Contract.Requires<ArgumentNullException>( resourceUri != null, "resourceUri" );
+            Arg.NotNull( resourceUri, nameof( resourceUri ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
             var handler = new HttpClientHandler()
@@ -56,7 +56,7 @@
             using ( var client = new HttpClient( handler, true ) )
             {
                 using ( var stream = await client.GetStreamAsync( resourceUri ) )
-                    return await this.OnReadStreamAsync( stream );
+                    return await OnReadStreamAsync( stream );
             }
         }
     }

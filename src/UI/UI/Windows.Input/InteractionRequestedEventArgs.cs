@@ -16,7 +16,7 @@
         /// <param name="interaction">The <see cref="Interaction">interaction</see> being requested.</param>
         public InteractionRequestedEventArgs( Interaction interaction )
         {
-            Arg.NotNull( interaction, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
             this.interaction = interaction;
         }
 
@@ -28,8 +28,8 @@
         {
             get
             {
-                Contract.Ensures( this.interaction != null );
-                return this.interaction;
+                Contract.Ensures( interaction != null );
+                return interaction;
             }
         }
     }

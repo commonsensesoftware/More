@@ -34,7 +34,7 @@
         /// <param name="parameters">The <see cref="IEnumerable{T}">sequence</see> of parameters, in positional order, that are required.</param>
         public RequiredConstructorValidator( bool allowContravariance, IEnumerable<Type> parameters )
         {
-            Arg.NotNull( parameters, "parameters" );
+            Arg.NotNull( parameters, nameof( parameters ) );
 
             this.allowContravariance = allowContravariance;
             this.parameters = parameters.ToArray();
@@ -49,7 +49,7 @@
         {
             get
             {
-                return this.allowContravariance;
+                return allowContravariance;
             }
         }
 
@@ -62,7 +62,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IReadOnlyList<Type>>() != null );
-                return this.parameters;
+                return parameters;
             }
         }
 
@@ -77,13 +77,13 @@
             if ( typeToValidate == null )
                 throw new ArgumentException( SR.InvalidArgType.FormatDefault( typeof( Type ) ), "value" );
 
-            if ( this.AllowContravariance )
+            if ( AllowContravariance )
             {
                 var constructors = from ctor in typeToValidate.GetConstructors()
                                    let args = ctor.GetParameters()
-                                   where args.Length == this.Parameters.Count
+                                   where args.Length == Parameters.Count
                                    let argTypes = args.Select( a => a.ParameterType )
-                                   where this.IsMatch( argTypes )
+                                   where IsMatch( argTypes )
                                    select ctor;
 
                 if ( constructors.Any() )
@@ -91,13 +91,13 @@
             }
             else
             {
-                var constructor = typeToValidate.GetConstructor( this.Parameters.ToArray() );
+                var constructor = typeToValidate.GetConstructor( Parameters.ToArray() );
 
                 if ( constructor != null )
                     return;
             }
 
-            var parameterNames = string.Join( ",", this.Parameters.Select( item => item.FullName ) );
+            var parameterNames = string.Join( ",", Parameters.Select( item => item.FullName ) );
             var message = SR.RequiredConstructorMissing.FormatInvariant( typeToValidate.FullName, parameterNames );
             throw new ConfigurationErrorsException( message );
         }
@@ -105,7 +105,7 @@
         private bool IsMatch( IEnumerable<Type> availableParameters )
         {
             Contract.Requires( availableParameters != null );
-            var unmatched = availableParameters.Where( ( t, i ) => !t.IsAssignableFrom( this.Parameters[i] ) ).Any();
+            var unmatched = availableParameters.Where( ( t, i ) => !t.IsAssignableFrom( Parameters[i] ) ).Any();
             return !unmatched;
         }
 

@@ -1,7 +1,8 @@
 ﻿namespace More.Windows.Data
 {
-    using global::System;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
     using global::Windows.ApplicationModel.DataTransfer;
 
     /// <summary>
@@ -40,6 +41,7 @@
         /// </summary>
         /// <returns>An object that allows you to share or send content asynchronously. When the
         /// object is disposed, the deferral to the original operation ends.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This method has side effects and should not be a property." )]
         IDisposable GetDeferral();
     }
 }

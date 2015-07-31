@@ -24,7 +24,7 @@
         /// <returns>True if the action performed a navigation operation; otherwise, false.</returns>
         public override object Execute( object sender, object parameter )
         {
-            return this.Execute( sender, parameter, null );
+            return Execute( sender, parameter, null );
         }
 
         /// <summary>

@@ -42,13 +42,13 @@
                 // create and show the view
                 var model = new TypeBrowserViewModel()
                 {
-                    NameConvention = this.NameConvention,
-                    FilterByConvention = !string.IsNullOrEmpty( this.NameConvention ),
-                    LocalAssembly = this.localAssembly
+                    NameConvention = NameConvention,
+                    FilterByConvention = !string.IsNullOrEmpty( NameConvention ),
+                    LocalAssembly = localAssembly
                 };
 
-                model.RestrictedBaseTypeNames.AddRange( this.RestrictedBaseTypeNames ?? Enumerable.Empty<string>() );
-                model.LocalAssemblyReferences.AddRange( AddSystemRuntimeIfNeeded( this.localAssemblyReferences ) );
+                model.RestrictedBaseTypeNames.AddRange( RestrictedBaseTypeNames ?? Enumerable.Empty<string>() );
+                model.LocalAssemblyReferences.AddRange( AddSystemRuntimeIfNeeded( localAssemblyReferences ) );
 
                 using ( var view = new TypeBrowserDialog( model ) )
                 {
@@ -58,15 +58,15 @@
                     };
 
                     // change title from default value only if an alternate title is provided
-                    if ( !string.IsNullOrEmpty( this.Title ) )
-                        model.Title = this.Title;
+                    if ( !string.IsNullOrEmpty( Title ) )
+                        model.Title = Title;
 
                     var result = view.ShowDialog();
 
                     // if a type is selected, set it. wrap the type so that it is
                     // serialized across appdomain boundaries
                     if ( ( result ?? false ) )
-                        this.SelectedType = new SimpleType( model.SelectedType );
+                        SelectedType = new SimpleType( model.SelectedType );
 
                     helper.Owner = IntPtr.Zero;
 
@@ -121,11 +121,11 @@
                 try
                 {
                     // try creating a dynamic assembly by compiling the source project with roslyn into memory
-                    var result = await CreateDynamicAssemblyAsync( this.SourceProject, localAssemblyName.ContentType );
+                    var result = await CreateDynamicAssemblyAsync( SourceProject, localAssemblyName.ContentType );
 
-                    if ( ( this.localAssembly = result.Item1 ) != null )
+                    if ( ( localAssembly = result.Item1 ) != null )
                     {
-                        this.localAssemblyReferences = result.Item2 ?? this.localAssembly.GetReferencedAssemblies();
+                        localAssemblyReferences = result.Item2 ?? localAssembly.GetReferencedAssemblies();
                         return;
                     }
                 }
@@ -135,10 +135,10 @@
                 }
 
                 // if that fails, try loading the output assembly of the source project from the last build
-                if ( ( this.localAssembly = LoadLocalAssemblyFromExistingBuild( this.SourceProject ) ) == null )
-                    this.localAssemblyReferences = new AssemblyName[0];
+                if ( ( localAssembly = LoadLocalAssemblyFromExistingBuild( SourceProject ) ) == null )
+                    localAssemblyReferences = new AssemblyName[0];
                 else
-                    this.localAssemblyReferences = this.localAssembly.GetReferencedAssemblies();
+                    localAssemblyReferences = localAssembly.GetReferencedAssemblies();
             }
 
             private static bool ReferencesFacadesIndirectly( Project project )

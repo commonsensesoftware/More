@@ -9,6 +9,7 @@
     <Import_RootNamespace>More</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ActivityManagerBaseContract.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ActivityManagerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\Host.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ShowShellViewT.cs" />

@@ -36,7 +36,7 @@
         /// <param name="memberNames">The list of member names that have validation errors.</param>
         public ValidationResult( string errorMessage, IEnumerable<string> memberNames )
         {
-            this.ErrorMessage = errorMessage;
+            ErrorMessage = errorMessage;
             this.memberNames = memberNames ?? System.Linq.Enumerable.Empty<string>();
         }
 
@@ -50,8 +50,8 @@
             if ( validationResult == null )
                 throw new ArgumentNullException( "validationResult" );
 
-            this.ErrorMessage = validationResult.ErrorMessage;
-            this.memberNames = validationResult.memberNames;
+            ErrorMessage = validationResult.ErrorMessage;
+            memberNames = validationResult.memberNames;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@
         {
             get
             {
-                return this.memberNames;
+                return memberNames;
             }
         }
 

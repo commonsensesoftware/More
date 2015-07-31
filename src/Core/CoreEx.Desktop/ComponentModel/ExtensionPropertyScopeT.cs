@@ -23,7 +23,7 @@
         /// </summary>
         ~ExtensionPropertyScope()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         /// <summary>
@@ -32,9 +32,9 @@
         /// <remarks>This constructor applies any defined extension properties to the all instances of type <typeparamref name="T"/>.</remarks>
         public ExtensionPropertyScope()
         {
-            this.allInstances = true;
-            this.provider = new TypeDescriptionProvider<T>( this.CreateFactory );
-            TypeDescriptor.AddProvider( this.provider, typeof( T ) );
+            allInstances = true;
+            provider = new TypeDescriptionProvider<T>( CreateFactory );
+            TypeDescriptor.AddProvider( provider, typeof( T ) );
         }
 
         /// <summary>
@@ -43,32 +43,32 @@
         /// <param name="instance">The instance to define extension properties for.</param>
         public ExtensionPropertyScope( T instance )
         {
-            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( instance, nameof( instance ) );
 
             this.instance = instance;
-            this.provider = new TypeDescriptionProvider<T>( this.CreateFactory );
-            TypeDescriptor.AddProvider( this.provider, this.instance );
+            provider = new TypeDescriptionProvider<T>( CreateFactory );
+            TypeDescriptor.AddProvider( provider, this.instance );
         }
 
         private ICustomTypeDescriptor CreateFactory( ICustomTypeDescriptor parent )
         {
-            return new CustomTypeDescriptor<T>( parent, this.descriptor );
+            return new CustomTypeDescriptor<T>( parent, descriptor );
         }
 
         private void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            if ( this.allInstances )
-                TypeDescriptor.RemoveProvider( this.provider, typeof( T ) );
+            if ( allInstances )
+                TypeDescriptor.RemoveProvider( provider, typeof( T ) );
             else
-                TypeDescriptor.RemoveProvider( this.provider, this.instance );
+                TypeDescriptor.RemoveProvider( provider, instance );
         }
 
         /// <summary>
@@ -76,7 +76,7 @@
         /// </summary>
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
 
@@ -120,8 +120,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public void Add<TValue>( Func<T, TValue> accessor )
         {
-            Arg.NotNull( accessor, "accessor" );
-            this.descriptor.AddExtensionProperty( accessor.Method.Name, accessor );
+            Arg.NotNull( accessor, nameof( accessor ) );
+            descriptor.AddExtensionProperty( accessor.Method.Name, accessor );
         }
 
         /// <summary>
@@ -161,9 +161,9 @@
         /// ]]></code></example>
         public void Add<TValue>( string propertyName, Func<T, TValue> accessor )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            Arg.NotNull( accessor, "accessor" );
-            this.descriptor.AddExtensionProperty( propertyName, accessor );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            Arg.NotNull( accessor, nameof( accessor ) );
+            descriptor.AddExtensionProperty( propertyName, accessor );
         }
 
         /// <summary>
@@ -235,9 +235,9 @@
         /// ]]></code></example>
         public void Add<TValue>( string propertyName, Func<T, TValue> accessor, Action<T, TValue> mutator )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            Arg.NotNull( accessor, "accessor" );
-            this.descriptor.AddExtensionProperty( propertyName, accessor, mutator );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            Arg.NotNull( accessor, nameof( accessor ) );
+            descriptor.AddExtensionProperty( propertyName, accessor, mutator );
         }
     }
 }

@@ -22,7 +22,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "False positive. The overload is called using a constructed Uri object." )]
         public Task<T> FromResourceAsync( string resourceName )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
             // trim off any leading '/' characters
@@ -31,7 +31,7 @@
             var assemblyName = System.Reflection.Assembly.GetCallingAssembly().GetName();
             var uri = new Uri( TypeExtensions.PackUriFormat.FormatInvariant( assemblyName.Name, resourceName ), UriKind.Relative );
 
-            return this.FromResourceAsync( uri );
+            return FromResourceAsync( uri );
         }
 
         /// <summary>
@@ -41,7 +41,7 @@
         /// <returns>A <see cref="Task{T}">task</see> containing an object of type <typeparamref name="T"/>.</returns>
         public virtual async Task<T> FromResourceAsync( Uri resourceUri )
         {
-            Contract.Requires<ArgumentNullException>( resourceUri != null, "resourceUri" );
+            Arg.NotNull( resourceUri, nameof( resourceUri ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
             var info = Application.GetResourceStream( resourceUri );
@@ -52,7 +52,7 @@
             T content;
 
             using ( var stream = info.Stream )
-                content = await this.OnReadStreamAsync( stream );
+                content = await OnReadStreamAsync( stream );
 
             return content;
         }

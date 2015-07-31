@@ -126,17 +126,17 @@
         {
             get
             {
-                if ( this.twoDigitYearMax == -1 )
-                    this.twoDigitYearMax = 0x7ed;
+                if ( twoDigitYearMax == -1 )
+                    twoDigitYearMax = 0x7ed;
 
-                return this.twoDigitYearMax;
+                return twoDigitYearMax;
             }
             set
             {
                 if ( ( value < 0x63 ) || ( value > 0x270f ) )
                     throw new ArgumentOutOfRangeException( "year", ExceptionMessage.ArgumentOutOfRangeRange.FormatDefault( 0x63, 0x270f ) );
 
-                this.twoDigitYearMax = value;
+                twoDigitYearMax = value;
             }
         }
 
@@ -177,8 +177,8 @@
 
             var ticks = DateToTicks( datePart, index, day ) + ( time.Ticks % 0xc92a69c000L );
 
-            if ( ( ticks < this.MinSupportedDateTime.Ticks ) || ( ticks > this.MaxSupportedDateTime.Ticks ) )
-                throw new ArgumentException( ExceptionMessage.ArgumentResultCalendarRange.FormatDefault( this.MinSupportedDateTime, this.MaxSupportedDateTime ) );
+            if ( ( ticks < MinSupportedDateTime.Ticks ) || ( ticks > MaxSupportedDateTime.Ticks ) )
+                throw new ArgumentException( ExceptionMessage.ArgumentResultCalendarRange.FormatDefault( MinSupportedDateTime, MaxSupportedDateTime ) );
 
             return new DateTime( ticks );
         }
@@ -193,7 +193,7 @@
         public override DateTime AddYears( DateTime time, int years )
         {
             var months = checked( years * 12 );
-            return this.AddMonths( time, months );
+            return AddMonths( time, months );
         }
 
         /// <summary>
@@ -363,10 +363,10 @@
             if ( ( year < 1 ) || ( year > 0x270f ) )
                 throw new ArgumentOutOfRangeException( "year", ExceptionMessage.ArgumentOutOfRangeRange.FormatDefault( 1, 0x270f ) );
 
-            if ( ( day < 1 ) || ( day > this.GetDaysInMonth( year, month ) ) )
-                throw new ArgumentOutOfRangeException( "day", ExceptionMessage.ArgumentOutOfRangeRange.FormatDefault( 1, this.GetDaysInMonth( year, month ) ) );
+            if ( ( day < 1 ) || ( day > GetDaysInMonth( year, month ) ) )
+                throw new ArgumentOutOfRangeException( "day", ExceptionMessage.ArgumentOutOfRangeRange.FormatDefault( 1, GetDaysInMonth( year, month ) ) );
 
-            if ( !this.IsLeapYear( year ) )
+            if ( !IsLeapYear( year ) )
                 return false;
 
             return ( month == 2 ) && ( day == 0x1d );

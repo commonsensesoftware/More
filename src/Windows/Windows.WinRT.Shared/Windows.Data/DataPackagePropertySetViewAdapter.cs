@@ -16,14 +16,14 @@
         internal DataPackagePropertySetViewAdapter( DataPackagePropertySetView propertySetView )
         {
             Contract.Requires( propertySetView != null );
-            this.adapted = propertySetView;
+            adapted = propertySetView;
         }
 
         public Uri ApplicationListingUri
         {
             get
             {
-                return this.adapted.ApplicationListingUri;
+                return adapted.ApplicationListingUri;
             }
         }
 
@@ -31,7 +31,7 @@
         {
             get
             {
-                return this.adapted.ApplicationName;
+                return adapted.ApplicationName;
             }
         }
 
@@ -39,7 +39,7 @@
         {
             get
             {
-                return this.adapted.ContentSourceApplicationLink;
+                return adapted.ContentSourceApplicationLink;
             }
         }
 
@@ -47,7 +47,7 @@
         {
             get
             {
-                return this.adapted.ContentSourceWebLink;
+                return adapted.ContentSourceWebLink;
             }
         }
 
@@ -55,7 +55,7 @@
         {
             get
             {
-                return this.adapted.Description;
+                return adapted.Description;
             }
         }
 
@@ -63,7 +63,7 @@
         {
             get
             {
-                return this.adapted.FileTypes;
+                return adapted.FileTypes;
             }
         }
 
@@ -71,7 +71,7 @@
         {
             get
             {
-                return this.adapted.LogoBackgroundColor;
+                return adapted.LogoBackgroundColor;
             }
         }
 
@@ -79,7 +79,7 @@
         {
             get
             {
-                return this.adapted.PackageFamilyName;
+                return adapted.PackageFamilyName;
             }
         }
 
@@ -87,7 +87,7 @@
         {
             get
             {
-                return this.adapted.Square30x30Logo;
+                return adapted.Square30x30Logo;
             }
         }
 
@@ -95,7 +95,7 @@
         {
             get
             {
-                return this.adapted.Thumbnail;
+                return adapted.Thumbnail;
             }
         }
 
@@ -103,33 +103,33 @@
         {
             get
             {
-                return this.adapted.Title;
+                return adapted.Title;
             }
         }
 
         public bool ContainsKey( string key )
         {
-            return this.adapted.ContainsKey( key );
+            return adapted.ContainsKey( key );
         }
 
         public IEnumerable<string> Keys
         {
             get
             {
-                return this.adapted.Keys;
+                return adapted.Keys;
             }
         }
 
         public bool TryGetValue( string key, out object value )
         {
-            return this.adapted.TryGetValue( key, out value );
+            return adapted.TryGetValue( key, out value );
         }
 
         public IEnumerable<object> Values
         {
             get
             {
-                return this.adapted.Values;
+                return adapted.Values;
             }
         }
 
@@ -137,7 +137,7 @@
         {
             get
             {
-                return this.adapted[key];
+                return adapted[key];
             }
         }
 
@@ -145,19 +145,19 @@
         {
             get
             {
-                return this.adapted.Count;
+                return adapted.Count;
             }
         }
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
-            IEnumerable<KeyValuePair<string, object>> @this = this.adapted;
+            IEnumerable<KeyValuePair<string, object>> @this = adapted;
             return @this.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            IEnumerable<KeyValuePair<string, object>> @this = this.adapted;
+            IEnumerable<KeyValuePair<string, object>> @this = adapted;
             return @this.GetEnumerator();
         }
     }

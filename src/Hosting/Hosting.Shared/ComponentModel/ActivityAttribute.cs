@@ -25,7 +25,7 @@
         public ActivityAttribute()
             : base( typeof( IActivity ) )
         {
-            this.Init();
+            Init();
         }
 
         /// <summary>
@@ -36,8 +36,8 @@
         public ActivityAttribute( string contractName )
             : base( contractName, typeof( IActivity ) )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( contractName ), "contractName" );
-            this.Init();
+            Arg.NotNullOrEmpty( contractName, nameof( contractName ) );
+            Init();
         }
 
         /// <summary>
@@ -47,8 +47,8 @@
         public ActivityAttribute( Type contractType )
             : base( contractType )
         {
-            Contract.Requires<ArgumentNullException>( contractType != null, "contractType" );
-            this.Init();
+            Arg.NotNull( contractType, nameof( contractType ) );
+            Init();
         }
 
         /// <summary>
@@ -59,9 +59,9 @@
         public ActivityAttribute( string contractName, Type contractType )
             : base( contractName, contractType )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( contractName ), "contractName" );
-            Contract.Requires<ArgumentNullException>( contractType != null, "contractType" );
-            this.Init();
+            Arg.NotNullOrEmpty( contractName, nameof( contractName ) );
+            Arg.NotNull( contractType, nameof( contractType ) );
+            Init();
         }
 
         /// <summary>
@@ -73,12 +73,14 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return this.id.Value;
+                return id.Value;
             }
             set
             {
-                Contract.Requires<ArgumentException>( IsValidIdentifier( value ), "value" );
-                this.id = new Lazy<string>( () => value );
+                if ( !IsValidIdentifier( value ) )
+                    throw new ArgumentException( ExceptionMessage.InvalidActivityId, nameof( value ) );
+
+                id = new Lazy<string>( () => value );
             }
         }
 
@@ -91,12 +93,12 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return this.name.Value;
+                return name.Value;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( value ), "value" );
-                this.name = new Lazy<string>( () => value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                name = new Lazy<string>( () => value );
             }
         }
 
@@ -108,13 +110,13 @@
         {
             get
             {
-                Contract.Ensures( this.desc != null );
-                return this.desc;
+                Contract.Ensures( desc != null );
+                return desc;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.desc = value;
+                Arg.NotNull( value, nameof( value ) );
+                desc = value;
             }
         }
 
@@ -130,17 +132,17 @@
 
         private void Init()
         {
-            this.id = new Lazy<string>( Guid.NewGuid().ToString );
-            this.name = new Lazy<string>( this.GetDefaultName );
+            id = new Lazy<string>( Guid.NewGuid().ToString );
+            name = new Lazy<string>( GetDefaultName );
         }
 
         private string GetDefaultName()
         {
             Contract.Ensures( string.IsNullOrEmpty( Contract.Result<string>() ) );
 
-            var type = this.GetType();
+            var type = GetType();
 
-            if ( type.Name.EndsWith( "Attribute" ) )
+            if ( type.Name.EndsWith( "Attribute", StringComparison.Ordinal ) )
                 return type.Name.Substring( 0, type.Name.Length - 9 );
 
             return type.Name;

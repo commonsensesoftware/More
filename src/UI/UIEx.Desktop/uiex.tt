@@ -31,10 +31,10 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
+  <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
 
-  <file src="..\UIEx.Phone\$bin$\$id$.dll" target="lib\portable-wp81+wpa81" />
-  <file src="..\UIEx.Phone\$bin$\$id$.xml" target="lib\portable-wp81+wpa81" />
-  <file src="..\UIEx.Phone\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
+  <file src="..\UIEx.Phone\bin\$configuration$\$id$.dll" target="lib\portable-wp81+wpa81" />
+  <file src="..\UIEx.Phone\bin\$configuration$\$id$.xml" target="lib\portable-wp81+wpa81" />
+  <file src="..\UIEx.Phone\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
  </files>
 </package>

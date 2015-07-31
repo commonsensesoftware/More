@@ -21,17 +21,17 @@
             internal SortPropertyInfo( string propertyPath, bool descending, IComparer comparer )
                 : this()
             {
-                this.PropertyPath = propertyPath;
-                this.Descending = descending;
-                this.Comparer = comparer;
+                PropertyPath = propertyPath;
+                Descending = descending;
+                Comparer = comparer;
             }
 
             internal SortPropertyInfo( SortDescription sortDescription, IComparer comparer )
                 : this()
             {
-                this.PropertyPath = sortDescription.PropertyName;
-                this.Descending = sortDescription.Direction == ListSortDirection.Descending;
-                this.Comparer = comparer;
+                PropertyPath = sortDescription.PropertyName;
+                Descending = sortDescription.Direction == ListSortDirection.Descending;
+                Comparer = comparer;
             }
 
             internal IComparer Comparer
@@ -54,8 +54,8 @@
 
             internal object GetValue( object target )
             {
-                if ( !string.IsNullOrEmpty( this.PropertyPath ) )
-                    return ReflectHelper.InvokePath( target, this.PropertyPath );
+                if ( !string.IsNullOrEmpty( PropertyPath ) )
+                    return ReflectHelper.InvokePath( target, PropertyPath );
 
                 return target;
             }
@@ -72,10 +72,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public SortPropertyComparer( SortDescriptionCollection sortProperties )
         {
-            Contract.Requires<ArgumentNullException>( sortProperties != null, "sortProperties" );
-            Contract.Requires<ArgumentException>( sortProperties.Count > 0, "sortProperties.Count" );
+            Arg.NotNull( sortProperties, nameof( sortProperties ) );
             this.sortProperties = sortProperties;
-            this.properties = CreatePropertyInfo( this.sortProperties );
+            properties = CreatePropertyInfo( this.sortProperties );
         }
 
         private static IList<SortPropertyInfo> CreatePropertyInfo( SortDescriptionCollection sortProperties )
@@ -121,7 +120,7 @@
         {
             var result = 0;
 
-            foreach ( var property in this.properties )
+            foreach ( var property in properties )
             {
                 object valueX = property.GetValue( x );
                 object valueY = property.GetValue( y );
@@ -144,7 +143,7 @@
         /// Greater than zero <paramref name="x"/> is greater than <paramref name="y"/>.</returns>
         public int Compare( object x, object y )
         {
-            return this.Compare( (T) x, (T) y );
+            return Compare( (T) x, (T) y );
         }
     }
 }

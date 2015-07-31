@@ -34,8 +34,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.displayName ) );
-                return this.displayName;
+                Contract.Ensures( !string.IsNullOrEmpty( displayName ) );
+                return displayName;
             }
         }
 
@@ -48,7 +48,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                var value = this.Connection;
+                var value = Connection;
                 return value == null ? string.Empty : value.DecryptedConnectionString();
             }
         }
@@ -58,7 +58,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IVsDataConnection>() != null );
-                return this.dataConnection.Value;
+                return dataConnection.Value;
             }
         }
     }

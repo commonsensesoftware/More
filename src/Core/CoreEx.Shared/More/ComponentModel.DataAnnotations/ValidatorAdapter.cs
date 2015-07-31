@@ -20,8 +20,8 @@
         /// <returns>True if the object validates; otherwise, false.</returns>
         public virtual bool TryValidateObject( object instance, IValidationContext validationContext, ICollection<IValidationResult> validationResults )
         {
-            Arg.NotNull( instance, "instance" );
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             ValidationContext context;
 
@@ -49,8 +49,8 @@
         /// <returns>True if the object validates; otherwise, false.</returns>
         public virtual bool TryValidateObject( object instance, IValidationContext validationContext, ICollection<IValidationResult> validationResults, bool validateAllProperties )
         {
-            Arg.NotNull( instance, "instance" );
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             ValidationContext context;
 
@@ -75,7 +75,7 @@
         /// <returns>True if the property validates; otherwise, false.</returns>
         public virtual bool TryValidateProperty( object value, IValidationContext validationContext, ICollection<IValidationResult> validationResults )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             ValidationContext context;
 
@@ -98,8 +98,8 @@
         /// <param name="validationContext">The context that describes the object to validate.</param>
         public virtual void ValidateObject( object instance, IValidationContext validationContext )
         {
-            Arg.NotNull( instance, "instance" );
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             ValidationContext context;
 
@@ -116,8 +116,8 @@
         /// <param name="validateAllProperties">True to validate all properties; otherwise, false.</param>
         public virtual void ValidateObject( object instance, IValidationContext validationContext, bool validateAllProperties )
         {
-            Arg.NotNull( instance, "instance" );
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             ValidationContext context;
 
@@ -132,7 +132,7 @@
         /// <param name="validationContext">The context that describes the property to validate.</param>
         public virtual void ValidateProperty( object value, IValidationContext validationContext )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             ValidationContext context;
 

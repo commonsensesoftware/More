@@ -41,8 +41,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ConventionBuilder AddNamespace( this ConventionBuilder builder, string folder )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( folder ), "folder" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( folder, nameof( folder ) );
             Contract.Ensures( Contract.Result<ConventionBuilder>() != null );
 
             var dir = folder;
@@ -60,7 +60,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ConventionBuilder AddPartsNamespace( this ConventionBuilder builder )
         {
-            Contract.Requires<ArgumentNullException>( builder != null, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<ConventionBuilder>() != null );
             return builder.AddNamespace( "Parts" );
         }

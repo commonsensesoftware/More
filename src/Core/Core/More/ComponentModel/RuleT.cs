@@ -17,7 +17,7 @@
         /// <param name="evaluate">The callback <see cref="Action{T}">method</see> to evaluate.</param>
         public Rule( Action<T> evaluate )
         {
-            Arg.NotNull( evaluate, "evaluate" );
+            Arg.NotNull( evaluate, nameof( evaluate ) );
             this.evaluate = evaluate;
         }
 
@@ -27,7 +27,7 @@
         /// <param name="item">The item to evaluate.</param>
         public void Evaluate( T item )
         {
-            this.evaluate( item );
+            evaluate( item );
         }
     }
 }

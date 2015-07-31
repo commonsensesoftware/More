@@ -59,7 +59,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "This only works for a DataGrid object." )]
         public static IEnumerable<DataGridColumn> GetColumns( DataGrid dataGrid )
         {
-            Contract.Requires<ArgumentNullException>( dataGrid != null, "dataGrid" );
+            Arg.NotNull( dataGrid, nameof( dataGrid ) );
             return (IEnumerable<DataGridColumn>) dataGrid.GetValue( ColumnsProperty );
         }
 
@@ -72,7 +72,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "This only works for a DataGrid object." )]
         public static void SetColumns( DataGrid dataGrid, IEnumerable<DataGridColumn> columns )
         {
-            Contract.Requires<ArgumentNullException>( dataGrid != null, "dataGrid" );
+            Arg.NotNull( dataGrid, nameof( dataGrid ) );
             dataGrid.SetValue( ColumnsProperty, columns );
         }
 
@@ -85,7 +85,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "This only works for a DataGrid object." )]
         public static IList GetSelectedItems( DataGrid dataGrid )
         {
-            Contract.Requires<ArgumentNullException>( dataGrid != null, "dataGrid" );
+            Arg.NotNull( dataGrid, nameof( dataGrid ) );
             return (IList) dataGrid.GetValue( SelectedItemsProperty );
         }
 
@@ -98,7 +98,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "This only works for a DataGrid object." )]
         public static void SetSelectedItems( DataGrid dataGrid, IList selectedItems )
         {
-            Contract.Requires<ArgumentNullException>( dataGrid != null, "dataGrid" );
+            Arg.NotNull( dataGrid, nameof( dataGrid ) );
             dataGrid.SetValue( SelectedItemsProperty, selectedItems );
         }
 

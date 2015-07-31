@@ -24,7 +24,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Invoke( InteractionRequestedEventArgs args )
         {
-            Contract.Requires<ArgumentNullException>( args != null, "args" );
+            Arg.NotNull( args, nameof( args ) );
 
             var textInput = args.Interaction as TextInputInteraction;
 
@@ -39,7 +39,7 @@
             behavior.CloseCommand = textInput.CancelCommand;
             System.Windows.Interactivity.Interaction.GetBehaviors( dialog ).Add( behavior );
 
-            dialog.Owner = Window.GetWindow( this.AssociatedObject );
+            dialog.Owner = Window.GetWindow( AssociatedObject );
             dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dialog.Title = textInput.Title;
             dialog.Content = textInput.Content;
@@ -63,7 +63,7 @@
             var args = parameter as InteractionRequestedEventArgs;
 
             if ( args != null )
-                this.Invoke( args );
+                Invoke( args );
         }
     }
 }

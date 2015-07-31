@@ -53,7 +53,7 @@
         /// Types that already have this attribute applied should not use this method.</remarks>
         public virtual Type ApplyKey( Type serviceType, string key )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.Result<Type>() != null );
 
             // short-circuit if there's nothing to do

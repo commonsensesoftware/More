@@ -1,9 +1,10 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Design;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using global::Windows.Foundation;
@@ -32,17 +33,17 @@
 
                 // wire up popup
                 this.popup = popup;
-                this.popup.Closed += this.OnPopupClosed;
+                this.popup.Closed += OnPopupClosed;
 
                 // wire up commands
                 if ( ( this.interaction = interaction ) != null )
-                    this.interaction.Commands.ForEach( c => c.Executed += this.OnExecuted );
+                    this.interaction.Commands.ForEach( c => c.Executed += OnExecuted );
 
                 // force layout and update layout when window resizes
                 if ( ( this.window = window ) != null )
                 {
-                    this.ArrangePopupContent( new Size( window.Bounds.Width, window.Bounds.Height ) );
-                    window.SizeChanged += this.OnWindowSizeChanged;
+                    ArrangePopupContent( new Size( window.Bounds.Width, window.Bounds.Height ) );
+                    window.SizeChanged += OnWindowSizeChanged;
                 }
             }
 
@@ -50,33 +51,30 @@
             {
                 get
                 {
-                    return this.popup != null && this.popup.IsOpen;
+                    return popup != null && popup.IsOpen;
                 }
             }
 
-            private void OnWindowSizeChanged( object sender, WindowSizeChangedEventArgs e )
-            {
-                this.ArrangePopupContent( e.Size );
-            }
+            private void OnWindowSizeChanged( object sender, WindowSizeChangedEventArgs e ) => ArrangePopupContent( e.Size );
 
             private void ArrangePopupContent( Size size )
             {
-                var content = (FrameworkElement) this.popup.Child;
+                var content = (FrameworkElement) popup.Child;
                 content.Width = size.Width;
-                this.popup.VerticalOffset = Math.Max( ( size.Height - content.ActualHeight ), 0d ) / 2d;
+                popup.VerticalOffset = Math.Max( ( size.Height - content.ActualHeight ), 0d ) / 2d;
             }
 
             private void OnPopupClosed( object sender, object e )
             {
-                if ( this.executed || this.interaction == null )
+                if ( executed || interaction == null )
                 {
-                    this.Close();
+                    Close();
                     return;
                 }
 
-                var cancel = this.interaction.CancelCommand;
+                var cancel = interaction.CancelCommand;
 
-                this.Close();
+                Close();
 
                 if ( cancel != null )
                     cancel.Execute();
@@ -84,38 +82,38 @@
 
             private void OnExecuted( object sender, EventArgs e )
             {
-                if ( this.executed )
+                if ( executed )
                     return;
 
-                this.executed = true;
-                this.Close();
+                executed = true;
+                Close();
             }
 
             internal void Show()
             {
-                if ( this.popup != null )
-                    this.popup.IsOpen = true;
+                if ( popup != null )
+                    popup.IsOpen = true;
             }
 
             internal void Close()
             {
-                if ( this.interaction != null )
+                if ( interaction != null )
                 {
-                    this.interaction.Commands.ForEach( c => c.Executed -= this.OnExecuted );
-                    this.interaction = null;
+                    interaction.Commands.ForEach( c => c.Executed -= OnExecuted );
+                    interaction = null;
                 }
 
-                if ( this.popup != null )
+                if ( popup != null )
                 {
-                    this.popup.Closed -= this.OnPopupClosed;
-                    this.popup.IsOpen = false;
-                    this.popup = null;
+                    popup.Closed -= OnPopupClosed;
+                    popup.IsOpen = false;
+                    popup = null;
                 }
 
-                if ( this.window != null )
+                if ( window != null )
                 {
-                    this.window.SizeChanged -= this.OnWindowSizeChanged;
-                    this.window = null;
+                    window.SizeChanged -= OnWindowSizeChanged;
+                    window = null;
                 }
             }
         }
@@ -124,29 +122,33 @@
         /// Gets the dependency property of the view name.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ViewNameProperty =
-            DependencyProperty.Register( "ViewName", typeof( string ), typeof( PopupAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ViewName ), typeof( string ), typeof( PopupAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property of the view <see cref="Type">type</see> name.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ViewTypeNameProperty =
-            DependencyProperty.Register( "ViewTypeName", typeof( string ), typeof( PopupAction ), new PropertyMetadata( null, OnViewTypeNamePropertyChanged ) );
+            DependencyProperty.Register( nameof( ViewTypeName ), typeof( string ), typeof( PopupAction ), new PropertyMetadata( null, OnViewTypeNamePropertyChanged ) );
 
         /// <summary>
         /// Gets the dependency property for the popup view <see cref="T:Style">style</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty PopupStyleProperty =
-            DependencyProperty.Register( "PopupStyle", typeof( Style ), typeof( PopupAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( PopupStyle ), typeof( Style ), typeof( PopupAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property for the view <see cref="DataTemplate">content template</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ContentTemplateProperty =
-            DependencyProperty.Register( "ContentTemplate", typeof( DataTemplate ), typeof( PopupAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ContentTemplate ), typeof( DataTemplate ), typeof( PopupAction ), new PropertyMetadata( (object) null ) );
 
         private Lazy<Type> viewType = new Lazy<Type>( () => null );
         private ChildWindow childWindow;
@@ -159,11 +161,11 @@
         {
             get
             {
-                return (string) this.GetValue( ViewNameProperty );
+                return (string) GetValue( ViewNameProperty );
             }
             set
             {
-                this.SetValue( ViewNameProperty, value );
+                SetValue( ViewNameProperty, value );
             }
         }
 
@@ -175,11 +177,11 @@
         {
             get
             {
-                return (string) this.GetValue( ViewTypeNameProperty );
+                return (string) GetValue( ViewTypeNameProperty );
             }
             set
             {
-                this.SetValue( ViewTypeNameProperty, value );
+                SetValue( ViewTypeNameProperty, value );
             }
         }
 
@@ -191,7 +193,7 @@
         {
             get
             {
-                return this.viewType.Value;
+                return viewType.Value;
             }
         }
 
@@ -204,11 +206,11 @@
         {
             get
             {
-                return (Style) this.GetValue( PopupStyleProperty );
+                return (Style) GetValue( PopupStyleProperty );
             }
             set
             {
-                this.SetValue( PopupStyleProperty, value );
+                SetValue( PopupStyleProperty, value );
             }
         }
 
@@ -221,15 +223,15 @@
         {
             get
             {
-                return (DataTemplate) this.GetValue( ContentTemplateProperty );
+                return (DataTemplate) GetValue( ContentTemplateProperty );
             }
             set
             {
-                this.SetValue( ContentTemplateProperty, value );
+                SetValue( ContentTemplateProperty, value );
             }
         }
 
-        private Window Window
+        private static Window Window
         {
             get
             {
@@ -270,17 +272,17 @@
         {
             object view = null;
 
-            if ( this.ViewType == null )
+            if ( ViewType == null )
             {
-                if ( string.IsNullOrEmpty( this.ViewName ) )
+                if ( string.IsNullOrEmpty( ViewName ) )
                     return view;
 
-                ServiceProvider.Current.TryGetService( typeof( object ), out view, this.ViewName );
+                ServiceProvider.Current.TryGetService( typeof( object ), out view, ViewName );
                 return view;
             }
 
-            if ( !ServiceProvider.Current.TryGetService( this.ViewType, out view, this.ViewName ) )
-                view = Activator.CreateInstance( this.ViewType );
+            if ( !ServiceProvider.Current.TryGetService( ViewType, out view, ViewName ) )
+                view = Activator.CreateInstance( ViewType );
 
             return view;
         }
@@ -293,8 +295,8 @@
             // create content presenter
             var presenter = new ContentPresenter();
 
-            if ( this.ContentTemplate != null )
-                presenter.ContentTemplate = this.ContentTemplate;
+            if ( ContentTemplate != null )
+                presenter.ContentTemplate = ContentTemplate;
 
             // use view or confirmation as content
             presenter.Content = view ?? interaction;
@@ -307,8 +309,8 @@
                 IsLightDismissEnabled = true
             };
 
-            if ( this.PopupStyle != null )
-                popup.Style = this.PopupStyle;
+            if ( PopupStyle != null )
+                popup.Style = PopupStyle;
 
             return popup;
         }
@@ -317,11 +319,11 @@
         {
             Contract.Requires( interaction != null );
 
-            var window = this.Window;
-            var popup = this.CreatePopup( interaction, view );
+            var window = Window;
+            var popup = CreatePopup( interaction, view );
 
-            this.childWindow = new ChildWindow( window, popup, interaction );
-            this.childWindow.Show();
+            childWindow = new ChildWindow( window, popup, interaction );
+            childWindow.Show();
         }
 
         /// <summary>
@@ -338,11 +340,11 @@
                 return null;
 
             // cannot execute action if the child window is already being shown
-            if ( this.childWindow != null && this.childWindow.IsOpen )
+            if ( childWindow != null && childWindow.IsOpen )
                 return null;
 
-            var view = this.CreateView();
-            this.ShowPopup( interaction, view );
+            var view = CreateView();
+            ShowPopup( interaction, view );
 
             return null;
         }

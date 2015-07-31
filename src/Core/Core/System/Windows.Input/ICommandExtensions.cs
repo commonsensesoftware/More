@@ -17,7 +17,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static bool CanExecute( this ICommand command )
         {
-            Arg.NotNull( command, "command" );
+            Arg.NotNull( command, nameof( command ) );
             return command.CanExecute( null );
         }
 
@@ -28,7 +28,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Execute( this ICommand command )
         {
-            Arg.NotNull( command, "command" );
+            Arg.NotNull( command, nameof( command ) );
             command.Execute( null );
         }
     }

@@ -1,6 +1,7 @@
 ﻿namespace More.Windows.Controls
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.Foundation;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
@@ -14,22 +15,25 @@
         /// Gets or sets the title dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register( "Title", typeof( string ), typeof( TextInputDialog ), new PropertyMetadata( null ) );
+            DependencyProperty.Register( nameof( Title ), typeof( string ), typeof( TextInputDialog ), new PropertyMetadata( null ) );
 
         /// <summary>
         /// Gets or sets the default command index dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty DefaultCommandIndexProperty =
-            DependencyProperty.Register( "DefaultCommandIndex", typeof( int ), typeof( TextInputDialog ), new PropertyMetadata( -1, OnDefaultCommandIndexChanged ) );
+            DependencyProperty.Register( nameof( DefaultCommandIndex ), typeof( int ), typeof( TextInputDialog ), new PropertyMetadata( -1, OnDefaultCommandIndexChanged ) );
 
         /// <summary>
         /// Gets or sets the cancel command index dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty CancelCommandIndexProperty =
-            DependencyProperty.Register( "CancelCommandIndex", typeof( int ), typeof( TextInputDialog ), new PropertyMetadata( -1, OnCancelCommandIndexChanged ) );
+            DependencyProperty.Register( nameof( CancelCommandIndex ), typeof( int ), typeof( TextInputDialog ), new PropertyMetadata( -1, OnCancelCommandIndexChanged ) );
 
         /// <summary>
         /// Gets or sets the title of the dialog.
@@ -39,11 +43,11 @@
         {
             get
             {
-                return (string) this.GetValue( TitleProperty );
+                return (string) GetValue( TitleProperty );
             }
             set
             {
-                this.SetValue( TitleProperty, value );
+                SetValue( TitleProperty, value );
             }
         }
 
@@ -58,11 +62,11 @@
         {
             get
             {
-                return (int) this.GetValue( DefaultCommandIndexProperty );
+                return (int) GetValue( DefaultCommandIndexProperty );
             }
             set
             {
-                this.SetValue( DefaultCommandIndexProperty, value );
+                SetValue( DefaultCommandIndexProperty, value );
             }
         }
 
@@ -77,11 +81,11 @@
         {
             get
             {
-                return (int) this.GetValue( CancelCommandIndexProperty );
+                return (int) GetValue( CancelCommandIndexProperty );
             }
             set
             {
-                this.SetValue( CancelCommandIndexProperty, value );
+                SetValue( CancelCommandIndexProperty, value );
             }
         }
 
@@ -90,12 +94,12 @@
         /// </summary>
         protected override void OnOpened()
         {
-            if ( this.input == null )
+            if ( input == null )
                 return;
 
-            this.input.Text = this.DefaultResponse;
-            this.input.Focus( FocusState.Programmatic );
-            this.input.SelectAll();
+            input.Text = DefaultResponse;
+            input.Focus( FocusState.Programmatic );
+            input.SelectAll();
         }
 
         /// <summary>
@@ -105,10 +109,10 @@
         {
             base.OnApplyTemplate();
 
-            this.input = this.GetTemplateChild( "InputTextBox" ) as TextBox;
+            input = GetTemplateChild( "InputTextBox" ) as TextBox;
 
-            if ( this.input != null )
-                this.input.KeyUp += this.OnTextBoxKeyUp;
+            if ( input != null )
+                input.KeyUp += OnTextBoxKeyUp;
         }
     }
 }

@@ -16,7 +16,7 @@
         /// </summary>
         public ValidationException()
         {
-            this.validationResult = new Lazy<IValidationResult>( () => new ValidationResult( (string) null ) );
+            validationResult = new Lazy<IValidationResult>( () => new ValidationResult( (string) null ) );
         }
 
         /// <summary>
@@ -26,7 +26,7 @@
         public ValidationException( string message )
             : base( message )
         {
-            this.validationResult = new Lazy<IValidationResult>( () => new ValidationResult( message ) );
+            validationResult = new Lazy<IValidationResult>( () => new ValidationResult( message ) );
         }
 
         /// <summary>
@@ -37,7 +37,7 @@
         public ValidationException( string message, Exception innerException )
             : base( message, innerException )
         {
-            this.validationResult = new Lazy<IValidationResult>( () => new ValidationResult( message ) );
+            validationResult = new Lazy<IValidationResult>( () => new ValidationResult( message ) );
         }
 
         /// <summary>
@@ -49,9 +49,9 @@
         public ValidationException( IValidationResult validationResult, object value )
             : base( validationResult == null ? null : validationResult.ErrorMessage )
         {
-            Arg.NotNull( validationResult, "validationResult" );
+            Arg.NotNull( validationResult, nameof( validationResult ) );
             this.validationResult = new Lazy<IValidationResult>( () => validationResult );
-            this.Value = value;
+            Value = value;
         }
 
         /// <summary>
@@ -62,8 +62,8 @@
         public ValidationException( string errorMessage, object value )
             : base( errorMessage )
         {
-            this.validationResult = new Lazy<IValidationResult>( () => new ValidationResult( errorMessage ) );
-            this.Value = value;
+            validationResult = new Lazy<IValidationResult>( () => new ValidationResult( errorMessage ) );
+            Value = value;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IValidationResult>() != null );
-                return this.validationResult.Value;
+                return validationResult.Value;
             }
         }
 

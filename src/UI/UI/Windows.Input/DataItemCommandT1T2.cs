@@ -37,8 +37,8 @@
         /// </summary>
         protected DataItemCommand()
         {
-            this.canExecuteMethod = DefaultFunc.CanExecute;
-            this.executeMethod = DefaultAction.None;
+            canExecuteMethod = DefaultFunc.CanExecute;
+            executeMethod = DefaultAction.None;
         }
 
         /// <summary>
@@ -59,12 +59,12 @@
         /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
         public DataItemCommand( Action<TItem, TParameter> executeMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
         {
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
+            Arg.NotNull( executeMethod, nameof( executeMethod ) );
+            Arg.NotNull( canExecuteMethod, nameof( canExecuteMethod ) );
 
             this.executeMethod = executeMethod;
             this.canExecuteMethod = canExecuteMethod;
-            this.item = dataItem;
+            item = dataItem;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<TItem>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -88,11 +88,11 @@
         {
             get
             {
-                return this.item;
+                return item;
             }
             protected set
             {
-                this.SetProperty( ref this.item, value, this.Comparer );
+                SetProperty( ref item, value, Comparer );
             }
         }
 
@@ -103,7 +103,7 @@
         /// <returns>True if the command can be executed; otherwise, false.  The default implementation always returns true.</returns>
         public override bool CanExecute( TParameter parameter )
         {
-            return this.canExecuteMethod( this.Item, parameter );
+            return canExecuteMethod( Item, parameter );
         }
 
         /// <summary>
@@ -112,8 +112,8 @@
         /// <param name="parameter">The associated parameter with the command.</param>
         public override void Execute( TParameter parameter )
         {
-            this.executeMethod( this.Item, parameter );
-            this.OnExecuted( EventArgs.Empty );
+            executeMethod( Item, parameter );
+            OnExecuted( EventArgs.Empty );
         }
     }
 }

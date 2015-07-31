@@ -3,7 +3,9 @@
     using More.Windows.Input;
     using System;
     using System.Collections.ObjectModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
+    using System.Globalization;
     using System.Linq;
     using System.Windows.Interactivity;
     using global::Windows.Foundation;
@@ -28,7 +30,7 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:i="using:System.Windows.Interactivity"
-    ///  xmlns:More="using:System.Windows.Interactivity">
+    ///  xmlns:More="using:More.Windows.Interactivity">
     ///  <i:Interaction.Behaviors>
     ///   <More:SettingsContractBehavior>
     ///    <More:ApplicationSetting Name="Defaults" ViewTypeName="DefaultSettings" />
@@ -47,15 +49,17 @@
         /// Gets or sets the show request dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ShowRequestProperty =
-            DependencyProperty.Register( "ShowRequest", typeof( object ), typeof( SettingsContractBehavior ), new PropertyMetadata( null, OnShowRequestChanged ) );
+            DependencyProperty.Register( nameof( ShowRequest ), typeof( object ), typeof( SettingsContractBehavior ), new PropertyMetadata( null, OnShowRequestChanged ) );
 
         /// <summary>
         /// Gets the dependency property for the flyout popup <see cref="T:Style">style</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty FlyoutStyleProperty =
-            DependencyProperty.Register( "FlyoutStyle", typeof( Style ), typeof( SettingsContractBehavior ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( FlyoutStyle ), typeof( Style ), typeof( SettingsContractBehavior ), new PropertyMetadata( (object) null ) );
 
         private readonly ObservableCollection<ApplicationSetting> appSettings = new ObservableCollection<ApplicationSetting>();
         private SettingsPane settingsPane;
@@ -66,25 +70,25 @@
         /// </summary>
         public SettingsContractBehavior()
         {
-            this.FlyoutWidth = SettingsFlyoutWidth.Narrow;
+            FlyoutWidth = SettingsFlyoutWidth.Narrow;
         }
 
         private SettingsPane SettingsPane
         {
             get
             {
-                return this.settingsPane;
+                return settingsPane;
             }
             set
             {
-                if ( this.settingsPane == value )
+                if ( settingsPane == value )
                     return;
 
-                if ( this.settingsPane != null )
-                    this.settingsPane.CommandsRequested -= this.OnCommandsRequested;
+                if ( settingsPane != null )
+                    settingsPane.CommandsRequested -= OnCommandsRequested;
 
-                if ( ( this.settingsPane = value ) != null )
-                    this.settingsPane.CommandsRequested += this.OnCommandsRequested;
+                if ( ( settingsPane = value ) != null )
+                    settingsPane.CommandsRequested += OnCommandsRequested;
             }
         }
 
@@ -107,11 +111,11 @@
         {
             get
             {
-                return (IInteractionRequest) this.GetValue( ShowRequestProperty );
+                return (IInteractionRequest) GetValue( ShowRequestProperty );
             }
             set
             {
-                this.SetValue( ShowRequestProperty, value );
+                SetValue( ShowRequestProperty, value );
             }
         }
 
@@ -124,7 +128,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<ApplicationSetting>>() != null );
-                return this.appSettings;
+                return appSettings;
             }
         }
 
@@ -137,11 +141,11 @@
         {
             get
             {
-                return (Style) this.GetValue( FlyoutStyleProperty );
+                return (Style) GetValue( FlyoutStyleProperty );
             }
             set
             {
-                this.SetValue( FlyoutStyleProperty, value );
+                SetValue( FlyoutStyleProperty, value );
             }
         }
 
@@ -171,7 +175,7 @@
                 return;
             }
 
-            var appSetting = this.ApplicationSettings.FirstOrDefault( a => a.Name == name );
+            var appSetting = ApplicationSettings.FirstOrDefault( a => a.Name == name );
 
             if ( appSetting == null )
             {
@@ -180,22 +184,22 @@
                 return;
             }
 
-            this.ShowFlyout( appSetting, true );
+            ShowFlyout( appSetting, true );
         }
 
         private void ShowFlyout( ApplicationSetting appSetting, bool showIndependent )
         {
             Contract.Requires( appSetting != null );
 
-            var view = this.CreateView( appSetting );
+            var view = CreateView( appSetting );
             var flyout = view as SettingsFlyout;
 
             if ( flyout == null )
             {
-                var content = this.CreateView( appSetting ) as UIElement;
+                var content = CreateView( appSetting ) as UIElement;
 
                 if ( content != null )
-                    this.ShowSettings( content );
+                    ShowSettings( content );
 
                 return;
             }
@@ -208,11 +212,11 @@
 
         private void OnCommandsRequested( SettingsPane sender, SettingsPaneCommandsRequestedEventArgs e )
         {
-            foreach ( var appSetting in this.ApplicationSettings )
+            foreach ( var appSetting in ApplicationSettings )
             {
                 var setting = appSetting;
-                UICommandInvokedHandler handler = c => this.ShowFlyout( setting, false );
-                var id = ( appSetting.Id ?? string.Empty ) + appSetting.GetHashCode().ToString();
+                UICommandInvokedHandler handler = c => ShowFlyout( setting, false );
+                var id = ( appSetting.Id ?? string.Empty ) + appSetting.GetHashCode().ToString( CultureInfo.InvariantCulture );
                 var appCommand = new SettingsCommand( id, appSetting.Name, handler );
                 e.Request.ApplicationCommands.Add( appCommand );
             }
@@ -221,7 +225,7 @@
         private void OnWindowActivated( object sender, WindowActivatedEventArgs e )
         {
             if ( e.WindowActivationState == CoreWindowActivationState.Deactivated )
-                this.HideSettings();
+                HideSettings();
         }
 
         private void OnPopupClosed( object sender, object e )
@@ -229,22 +233,22 @@
             var window = Window.Current;
 
             if ( window != null )
-                window.Activated -= this.OnWindowActivated;
+                window.Activated -= OnWindowActivated;
         }
 
         private void HideSettings()
         {
-            if ( this.popup == null )
+            if ( popup == null )
                 return;
 
-            this.popup.Closed -= this.OnPopupClosed;
-            this.popup.IsOpen = false;
-            this.popup = null;
+            popup.Closed -= OnPopupClosed;
+            popup.IsOpen = false;
+            popup = null;
         }
 
         private void ShowSettings( UIElement content )
         {
-            this.HideSettings();
+            HideSettings();
 
             var bounds = new Rect();
             var window = Window.Current;
@@ -252,11 +256,11 @@
             if ( window != null )
             {
                 bounds = window.Bounds;
-                window.Activated += this.OnWindowActivated;
+                window.Activated += OnWindowActivated;
             }
 
-            var style = this.FlyoutStyle;
-            var settingsWidth = (double) ( (int) this.FlyoutWidth );
+            var style = FlyoutStyle;
+            var settingsWidth = (double) ( (int) FlyoutWidth );
             var transitionEdge = EdgeTransitionLocation.Right;
             var leftOffset = bounds.Width - settingsWidth;
 
@@ -283,22 +287,22 @@
                 element.Height = bounds.Height;
             }
 
-            this.popup = new Popup();
-            this.popup.Closed += this.OnPopupClosed;
+            popup = new Popup();
+            popup.Closed += OnPopupClosed;
 
             // apply style if set
             if ( style != null )
-                this.popup.Style = style;
+                popup.Style = style;
 
             // set explicit properties that cannot be styled and show popup
-            this.popup.Child = content;
-            this.popup.IsLightDismissEnabled = true;
-            this.popup.ChildTransitions = transitions;
-            this.popup.Width = settingsWidth;
-            this.popup.Height = bounds.Height;
-            this.popup.SetValue( Canvas.LeftProperty, leftOffset );
-            this.popup.SetValue( Canvas.TopProperty, 0d );
-            this.popup.IsOpen = true;
+            popup.Child = content;
+            popup.IsLightDismissEnabled = true;
+            popup.ChildTransitions = transitions;
+            popup.Width = settingsWidth;
+            popup.Height = bounds.Height;
+            popup.SetValue( Canvas.LeftProperty, leftOffset );
+            popup.SetValue( Canvas.TopProperty, 0d );
+            popup.IsOpen = true;
         }
 
         /// <summary>
@@ -309,9 +313,10 @@
         /// <remarks>If the view specified by the <see cref="P:ViewType">window type</see> is a composed view,
         /// the default implementation will be to use the <see cref="P:ServiceLocator.Current">current service provider</see>
         /// to compose it.  If the view is not composed, then the fallback method will be <see cref="M:Activator.CreateInstance(Type)"/>.</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual object CreateView( ApplicationSetting applicationSetting )
         {
-            Contract.Requires<ArgumentNullException>( applicationSetting != null, "applicationSetting" );
+            Arg.NotNull( applicationSetting, nameof( applicationSetting ) );
 
             var key = applicationSetting.Id;
             var type = applicationSetting.ViewType;
@@ -343,10 +348,7 @@
             return view;
         }
 
-        private void OnAssociatedObjectUnloaded( object sender, RoutedEventArgs e )
-        {
-            this.Detach();
-        }
+        private void OnAssociatedObjectUnloaded( object sender, RoutedEventArgs e ) => Detach();
 
         /// <summary>
         /// Overrides the default behavior when the behavior is attached to an associated object.
@@ -354,8 +356,8 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.AssociatedObject.Unloaded += this.OnAssociatedObjectUnloaded;
-            this.SettingsPane = SettingsPane.GetForCurrentView();
+            AssociatedObject.Unloaded += OnAssociatedObjectUnloaded;
+            SettingsPane = SettingsPane.GetForCurrentView();
         }
 
         /// <summary>
@@ -363,9 +365,9 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            this.AssociatedObject.Unloaded -= this.OnAssociatedObjectUnloaded;
-            this.HideSettings();
-            this.SettingsPane = null;
+            AssociatedObject.Unloaded -= OnAssociatedObjectUnloaded;
+            HideSettings();
+            SettingsPane = null;
             base.OnDetaching();
         }
     }

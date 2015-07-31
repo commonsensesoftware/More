@@ -16,7 +16,7 @@
 
             ~InitializationScope()
             {
-                this.Dispose( false );
+                Dispose( false );
             }
 
             internal InitializationScope( ISupportInitialize source )
@@ -28,20 +28,20 @@
 
             private void Dispose( bool disposing )
             {
-                if ( this.disposed )
+                if ( disposed )
                     return;
 
-                this.disposed = true;
+                disposed = true;
 
-                if ( disposing && this.source != null )
-                    this.source.EndInit();
+                if ( disposing && source != null )
+                    source.EndInit();
 
-                this.source = null;
+                source = null;
             }
 
             public void Dispose()
             {
-                this.Dispose( true );
+                Dispose( true );
                 GC.SuppressFinalize( this );
             }
         }
@@ -74,7 +74,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IDisposable Initialize<TObject>( this TObject source ) where TObject : ISupportInitialize
         {
-            Arg.NotNull( source, "source" );
+            Arg.NotNull( source, nameof( source ) );
             Contract.Ensures( Contract.Result<IDisposable>() != null );
             return new InitializationScope( source );
         }

@@ -15,37 +15,37 @@
 
         ~PrintTaskOptionDetailsWrapper()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         internal PrintTaskOptionDetailsWrapper( PrintTaskOptionDetails details )
         {
             Contract.Requires( details != null );
             this.details = details;
-            this.details.OptionChanged += this.OnOptionChanged;
+            this.details.OptionChanged += OnOptionChanged;
         }
 
         private void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            if ( this.details != null )
+            if ( details != null )
             {
-                this.details.OptionChanged -= this.OnOptionChanged;
-                this.details = null;
+                details.OptionChanged -= OnOptionChanged;
+                details = null;
             }
 
-            if ( this.listCallbacks != null )
-                this.listCallbacks.Clear();
+            if ( listCallbacks != null )
+                listCallbacks.Clear();
 
-            if ( this.textCallbacks != null )
-                this.textCallbacks.Clear();
+            if ( textCallbacks != null )
+                textCallbacks.Clear();
         }
 
         private void OnOptionChanged( PrintTaskOptionDetails sender, PrintTaskOptionChangedEventArgs e )
@@ -54,7 +54,7 @@
             Action<IPrintCustomOptionDetails> textOptionCallback;
 
             // try text options first
-            if ( this.textCallbacks.TryGetValue( optionId, out textOptionCallback ) )
+            if ( textCallbacks.TryGetValue( optionId, out textOptionCallback ) )
             {
                 textOptionCallback( (IPrintCustomOptionDetails) sender.Options[optionId] );
                 return;
@@ -63,7 +63,7 @@
             Action<IPrintItemListOptionDetails> listOptionCallback;
 
             // then try list options
-            if ( this.listCallbacks.TryGetValue( optionId, out listOptionCallback ) )
+            if ( listCallbacks.TryGetValue( optionId, out listOptionCallback ) )
                 listOptionCallback( (IPrintItemListOptionDetails) sender.Options[optionId] );
         }
 
@@ -71,7 +71,7 @@
         {
             get
             {
-                return this.details.DisplayedOptions;
+                return details.DisplayedOptions;
             }
         }
 
@@ -79,38 +79,41 @@
         {
             get
             {
-                return this.details.Options;
+                return details.Options;
             }
         }
 
         public IPrintItemListOptionDetails CreateItemListOption( string optionId, string displayName, Action<IPrintItemListOptionDetails> optionChanged )
         {
-            var option = this.details.CreateItemListOption( optionId, displayName );
+            Arg.NotNullOrEmpty( optionId, nameof( optionId ) );
+            Arg.NotNullOrEmpty( displayName, nameof( displayName ) );
+
+            var option = details.CreateItemListOption( optionId, displayName );
 
             if ( optionChanged != null )
-                this.listCallbacks[optionId] = optionChanged;
+                listCallbacks[optionId] = optionChanged;
 
             return option;
         }
 
         public IPrintCustomOptionDetails CreateTextOption( string optionId, string displayName, Action<IPrintCustomOptionDetails> optionChanged )
         {
-            var option = this.details.CreateTextOption( optionId, displayName );
+            Arg.NotNullOrEmpty( optionId, nameof( optionId ) );
+            Arg.NotNullOrEmpty( displayName, nameof( displayName ) );
+
+            var option = details.CreateTextOption( optionId, displayName );
 
             if ( optionChanged != null )
-                this.textCallbacks[optionId] = optionChanged;
+                textCallbacks[optionId] = optionChanged;
 
             return option;
         }
 
-        public PrintPageDescription GetPageDescription( uint jobPageNumber )
-        {
-            return this.details.GetPageDescription( jobPageNumber );
-        }
+        public PrintPageDescription GetPageDescription( uint jobPageNumber ) => details.GetPageDescription( jobPageNumber );
 
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

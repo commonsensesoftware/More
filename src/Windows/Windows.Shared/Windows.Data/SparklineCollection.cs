@@ -42,7 +42,6 @@
         public SparklineCollection( double translateX )
             : this( translateX, 5d )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( translateX >= 0d, "translateX" );
         }
 
         /// <summary>
@@ -53,8 +52,8 @@
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "translateX", Justification = "False positive" )]
         public SparklineCollection( double translateX, double interval )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( translateX >= 0d, "translateX" );
-            Contract.Requires<ArgumentOutOfRangeException>( interval > 0d, "interval" );
+            Arg.GreaterThanOrEqualTo( translateX, 0d, nameof( translateX ) );
+            Arg.GreaterThan( interval, 0d, nameof( interval ) );
             this.translateX = translateX;
             this.interval = interval;
         }
@@ -67,8 +66,8 @@
         {
             get
             {
-                Contract.Ensures( this.points.Count >= 0 );
-                return this.points.Count;
+                Contract.Ensures( points.Count >= 0 );
+                return points.Count;
             }
         }
 
@@ -81,9 +80,7 @@
         {
             get
             {
-                Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-                Contract.Requires<ArgumentOutOfRangeException>( index < this.Count, "index" );
-                return this.points[index].Y;
+                return points[index].Y;
             }
         }
 
@@ -95,15 +92,15 @@
         {
             get
             {
-                Contract.Ensures( this.interval > 0d );
-                return this.interval;
+                Contract.Ensures( interval > 0d );
+                return interval;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value > 0d, "value" );
+                Arg.GreaterThan( value, 0d, nameof( value ) );
 
-                if ( this.SetProperty( ref this.interval, value ) )
-                    this.PlotDataPoints();
+                if ( SetProperty( ref interval, value ) )
+                    PlotDataPoints();
             }
         }
 
@@ -116,23 +113,23 @@
         {
             get
             {
-                Contract.Ensures( this.translateX >= 0d );
-                return this.translateX;
+                Contract.Ensures( translateX >= 0d );
+                return translateX;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0d, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0d, nameof( value ) );
 
-                if ( this.SetProperty( ref this.translateX, value ) )
-                    this.PlotDataPoints();
+                if ( SetProperty( ref translateX, value ) )
+                    PlotDataPoints();
             }
         }
 
         private void PlotDataPoints()
         {
-            var copy = this.points.Select( p => p.Y ).ToArray();
-            this.Clear();
-            copy.ForEach( this.Add );
+            var copy = points.Select( p => p.Y ).ToArray();
+            Clear();
+            copy.ForEach( Add );
         }
 
         /// <summary>
@@ -141,12 +138,9 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -155,16 +149,16 @@
         /// <param name="dataPoint">The value of the data point.</param>
         public virtual void Add( double dataPoint )
         {
-            Contract.Ensures( this.Count == Contract.OldValue( this.Count ) + 1 );
+            Contract.Ensures( Count == Contract.OldValue( Count ) + 1 );
             
-            var x = this.TranslateX + ( (double) this.Count * this.Interval );
+            var x = TranslateX + ( (double) Count * Interval );
             var point = new Point( x, dataPoint );
 
-            this.points.Add( point );
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnPropertyChanged( "Coordinates" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, point, this.Count - 1 ) );
+            points.Add( point );
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnPropertyChanged( "Coordinates" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, point, Count - 1 ) );
         }
 
         /// <summary>
@@ -173,16 +167,13 @@
         /// <param name="index">The zero-based index of the data point in the collection to remove.</param>
         public virtual void RemoveAt( int index )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index < this.Count, "index" );
-            
-            var point = this.points[index];
+            var point = points[index];
 
-            this.points.RemoveAt( index );
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnPropertyChanged( "Coordinates" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, point, index ) );
+            points.RemoveAt( index );
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnPropertyChanged( "Coordinates" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, point, index ) );
         }
 
         /// <summary>
@@ -190,17 +181,17 @@
         /// </summary>
         public virtual void Clear()
         {
-            Contract.Ensures( this.Count == 0 );
-            Contract.Ensures( this.Coordinates.Length == 0 );
+            Contract.Ensures( Count == 0 );
+            Contract.Ensures( Coordinates.Length == 0 );
             
-            if ( this.Count == 0 )
+            if ( Count == 0 )
                 return;
 
-            this.points.Clear();
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnPropertyChanged( "Coordinates" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+            points.Clear();
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnPropertyChanged( "Coordinates" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 
         /// <summary>
@@ -210,7 +201,7 @@
         public override string ToString()
         {
             var coordinates = new StringBuilder();
-            var iterator = this.GetEnumerator();
+            var iterator = GetEnumerator();
 
             if ( iterator.MoveNext() )
             {
@@ -235,7 +226,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.ToString();
+                return ToString();
             }
         }
 
@@ -245,12 +236,12 @@
         /// <returns>An <see cref="IEnumerator{T}"/> object.</returns>
         public virtual IEnumerator<Point> GetEnumerator()
         {
-            return this.points.GetEnumerator();
+            return points.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         /// <summary>

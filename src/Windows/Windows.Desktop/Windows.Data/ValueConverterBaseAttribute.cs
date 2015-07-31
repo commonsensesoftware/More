@@ -32,7 +32,7 @@
         /// <returns>The converted <see cref="Object"/>.</returns>
         public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
         {
-            return this.Converter.Convert( value, targetType, parameter, culture );
+            return Converter.Convert( value, targetType, parameter, culture );
         }
 
         /// <summary>
@@ -45,7 +45,7 @@
         /// <returns>The converted <see cref="Object"/>.</returns>
         public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
         {
-            return this.Converter.ConvertBack( value, targetType, parameter, culture );
+            return Converter.ConvertBack( value, targetType, parameter, culture );
         }
     }
 }

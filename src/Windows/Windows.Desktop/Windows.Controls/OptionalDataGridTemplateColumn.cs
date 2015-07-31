@@ -21,7 +21,7 @@
         /// </summary>
         public OptionalDataGridTemplateColumn()
         {
-            this.IsOptional = true;
+            IsOptional = true;
         }
 
         /// <summary>
@@ -37,15 +37,15 @@
         {
             get
             {
-                return this.contentProperty;
+                return contentProperty;
             }
             set
             {
-                if ( StringComparer.Ordinal.Equals( this.contentProperty, value ) )
+                if ( StringComparer.Ordinal.Equals( contentProperty, value ) )
                     return;
 
-                this.contentProperty = value;
-                this.NotifyPropertyChanged( "ContentDependencyProperty" );
+                contentProperty = value;
+                NotifyPropertyChanged( "ContentDependencyProperty" );
             }
         }
 
@@ -62,15 +62,15 @@
         {
             get
             {
-                return this.contentProperty;
+                return contentProperty;
             }
             set
             {
-                if ( StringComparer.Ordinal.Equals( this.editingContentProperty, value ) )
+                if ( StringComparer.Ordinal.Equals( editingContentProperty, value ) )
                     return;
 
-                this.editingContentProperty = value;
-                this.NotifyPropertyChanged( "EditingContentDependencyProperty" );
+                editingContentProperty = value;
+                NotifyPropertyChanged( "EditingContentDependencyProperty" );
             }
         }
 
@@ -128,8 +128,8 @@
         {
             var element = base.GenerateEditingElement( cell, dataItem );
 
-            if ( !string.IsNullOrEmpty( this.EditingContentDependencyProperty ) && this.Binding != null )
-                ApplyDataBinding( element, this.EditingContentDependencyProperty, this.Binding );
+            if ( !string.IsNullOrEmpty( EditingContentDependencyProperty ) && Binding != null )
+                ApplyDataBinding( element, EditingContentDependencyProperty, Binding );
 
             return element;
         }
@@ -144,8 +144,8 @@
         {
             var element = base.GenerateElement( cell, dataItem );
 
-            if ( !string.IsNullOrEmpty( this.ContentDependencyProperty ) && this.Binding != null )
-                ApplyDataBinding( element, this.ContentDependencyProperty, this.Binding );
+            if ( !string.IsNullOrEmpty( ContentDependencyProperty ) && Binding != null )
+                ApplyDataBinding( element, ContentDependencyProperty, Binding );
 
             return element;
         }

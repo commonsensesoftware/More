@@ -30,7 +30,7 @@
             /// </remarks>
             internal void Execute( object parameter )
             {
-                this.InvokeActions( parameter );
+                InvokeActions( parameter );
             }
         }
 
@@ -45,7 +45,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<System.Windows.Interactivity.TriggerActionCollection>() != null );
-                return this.proxy.Actions;
+                return proxy.Actions;
             }
         }
 
@@ -57,7 +57,7 @@
         /// is typically the relevant event arguments.</param>
         protected virtual void Execute( object sender, object parameter )
         {
-            this.proxy.Execute( parameter );
+            proxy.Execute( parameter );
         }
 
         /// <summary>
@@ -66,7 +66,7 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.proxy.Attach( this.AssociatedObject );
+            proxy.Attach( AssociatedObject );
         }
 
         /// <summary>
@@ -75,7 +75,7 @@
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            this.proxy.Detach();
+            proxy.Detach();
         }
     }
 }

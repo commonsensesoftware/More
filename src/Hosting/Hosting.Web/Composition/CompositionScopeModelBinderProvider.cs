@@ -19,10 +19,11 @@
         /// </summary>
         /// <param name="contextFactory">The factory <see cref="Func{T}">method</see> used to retrieve the
         /// current <see cref="CompositionContext">context</see> used by the resolver.</param>
+        [CLSCompliant( false )]
         public CompositionScopeModelBinderProvider( Func<CompositionContext> contextFactory )
         {
-            Contract.Requires<ArgumentNullException>( contextFactory != null, "contextFactory" );
-            this.factory = contextFactory;
+            Arg.NotNull( contextFactory, nameof( contextFactory ) );
+            factory = contextFactory;
         }
 
         /// <summary>
@@ -33,7 +34,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static string GetModelBinderContractName( Type modelType )
         {
-            Contract.Requires<ArgumentNullException>( modelType != null, "modelType" );
+            Arg.NotNull( modelType, nameof( modelType ) );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
             return modelType.AssemblyQualifiedName + ModelBinderContractNameSuffix;
         }
@@ -52,7 +53,7 @@
             var contractName = GetModelBinderContractName( modelType );
             IModelBinder export = null;
 
-            if ( !this.factory().TryGetExport( contractName, out export ) )
+            if ( !factory().TryGetExport( contractName, out export ) )
                 export = null;
 
             return export;

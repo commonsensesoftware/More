@@ -108,8 +108,8 @@
         [SuppressMessage( "Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Intentionally left as an instance member." )]
         internal void ApplyExtensions( Project project, Func<string, bool> resolveOption )
         {
-            Contract.Requires<ArgumentNullException>( project != null, "project" );
-            Contract.Requires<ArgumentNullException>( resolveOption != null, "resolveOption" );
+            Arg.NotNull( project, nameof( project ) );
+            Arg.NotNull( resolveOption, nameof( resolveOption ) );
 
             var manifest = GetAppxManifest( project );
 
@@ -130,7 +130,7 @@
             if ( !changed || !extensions.HasElements )
                 return;
 
-            var service = (IVsQueryEditQuerySave2) this.serviceProvider.GetService( typeof( SVsQueryEditQuerySave ) );
+            var service = (IVsQueryEditQuerySave2) serviceProvider.GetService( typeof( SVsQueryEditQuerySave ) );
             var files = new [] { fileName };
             var editFlags = 2U; // tagVSQueryEditFlags. QEF_DisallowInMemoryEdits
             uint verdict;

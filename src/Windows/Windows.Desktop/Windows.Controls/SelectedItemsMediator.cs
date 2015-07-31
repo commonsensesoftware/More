@@ -26,45 +26,45 @@
             Contract.Requires( items != null );
             Contract.Requires( itemEvents != null );
 
-            this.Key = CreateKey( dataGrid, items );
+            Key = CreateKey( dataGrid, items );
             this.dataGrid = dataGrid;
-            this.dataGrid.SelectionChanged += this.OnSelectedItemsChanged;
+            this.dataGrid.SelectionChanged += OnSelectedItemsChanged;
             this.items = items;
             this.itemEvents = itemEvents;
-            this.itemEvents.CollectionChanged += this.OnCollectionChanged;
+            this.itemEvents.CollectionChanged += OnCollectionChanged;
         }
 
         private bool IsSuppressingEvents
         {
             get
             {
-                return this.suppressSelectionChanged || this.suppressCollectionChanged;
+                return suppressSelectionChanged || suppressCollectionChanged;
             }
         }
 
         private void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            if ( this.dataGrid != null )
+            if ( dataGrid != null )
             {
-                this.dataGrid.SelectionChanged -= this.OnSelectedItemsChanged;
-                this.dataGrid = null;
+                dataGrid.SelectionChanged -= OnSelectedItemsChanged;
+                dataGrid = null;
             }
 
-            if ( this.itemEvents != null )
+            if ( itemEvents != null )
             {
-                this.itemEvents.CollectionChanged -= this.OnCollectionChanged;
-                this.itemEvents = null;
+                itemEvents.CollectionChanged -= OnCollectionChanged;
+                itemEvents = null;
             }
 
-            this.items = null;
+            items = null;
         }
 
         internal static long CreateKey( DataGrid dataGrid, object items )
@@ -79,29 +79,29 @@
             Contract.Requires( e != null );
 
             // exit if events are suppressed
-            if ( this.IsSuppressingEvents )
+            if ( IsSuppressingEvents )
                 return;
 
             // suppress collection changed events
-            this.suppressCollectionChanged = true;
+            suppressCollectionChanged = true;
 
             // remove old items
             if ( e.RemovedItems != null )
             {
                 foreach ( object item in e.RemovedItems )
-                    this.items.Remove( item );
+                    items.Remove( item );
             }
 
             // add new items
             if ( e.AddedItems != null )
             {
                 foreach ( object item in e.AddedItems )
-                    if ( !this.items.Contains( item ) )
-                        this.items.Add( item );
+                    if ( !items.Contains( item ) )
+                        items.Add( item );
             }
 
             // enable events
-            this.suppressCollectionChanged = false;
+            suppressCollectionChanged = false;
         }
 
         private void OnCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -109,23 +109,23 @@
             Contract.Requires( e != null );
 
             // exit if events are suppressed
-            if ( this.IsSuppressingEvents )
+            if ( IsSuppressingEvents )
                 return;
 
-            this.suppressSelectionChanged = true;
+            suppressSelectionChanged = true;
 
             // HACK: the DataGrid will throw an exception if selected items are cleared while in single selection mode.
             // The user can actually unselect a row in the UI by pressing CTRL+Click on a selected row, even while in
             // single selection mode.  To get around this problem, temporarily switch to multiselect mode, clear the
             // items, and then revert back to single selection mode.
 
-            var singleSelect = this.dataGrid.SelectionMode == DataGridSelectionMode.Single;
-            this.dataGrid.SelectionMode = DataGridSelectionMode.Extended;
+            var singleSelect = dataGrid.SelectionMode == DataGridSelectionMode.Single;
+            dataGrid.SelectionMode = DataGridSelectionMode.Extended;
 
             if ( e.Action == NotifyCollectionChangedAction.Reset )
             {
                 // clear selected items
-                this.dataGrid.SelectedItems.Clear();
+                dataGrid.SelectedItems.Clear();
             }
             else
             {
@@ -133,7 +133,7 @@
                 if ( e.OldItems != null )
                 {
                     foreach ( object item in e.OldItems )
-                        this.dataGrid.SelectedItems.Remove( item );
+                        dataGrid.SelectedItems.Remove( item );
                 }
 
                 // add new items
@@ -142,18 +142,18 @@
                     if ( singleSelect )
                     {
                         // add or replace current item
-                        if ( this.dataGrid.SelectedItems.Count == 0 )
-                            this.dataGrid.SelectedItems.Add( e.NewItems[0] );
+                        if ( dataGrid.SelectedItems.Count == 0 )
+                            dataGrid.SelectedItems.Add( e.NewItems[0] );
                         else
-                            this.dataGrid.SelectedItems[0] = e.NewItems[0];
+                            dataGrid.SelectedItems[0] = e.NewItems[0];
                     }
                     else
                     {
                         // add all new items not already selected
                         foreach ( object item in e.NewItems )
                         {
-                            if ( !this.dataGrid.SelectedItems.Contains( item ) )
-                                this.dataGrid.SelectedItems.Add( item );
+                            if ( !dataGrid.SelectedItems.Contains( item ) )
+                                dataGrid.SelectedItems.Add( item );
                         }
                     }
                 }
@@ -161,15 +161,15 @@
 
             // revert selection mode
             if ( singleSelect )
-                this.dataGrid.SelectionMode = DataGridSelectionMode.Single;
+                dataGrid.SelectionMode = DataGridSelectionMode.Single;
 
             // enable events
-            this.suppressSelectionChanged = false;
+            suppressSelectionChanged = false;
         }
 
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

@@ -22,7 +22,7 @@
             IContinuationManager continuationManager;
 
             // continue the operation as appropriate
-            if ( e != null && this.Host.TryGetService( out continuationManager ) )
+            if ( e != null && Host.TryGetService( out continuationManager ) )
                 continuationManager.Continue( e );
         }
     }

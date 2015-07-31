@@ -85,7 +85,7 @@
         /// </summary>
         public DataGridColumnBuilder()
         {
-            this.adapterBindingPath = string.Empty;
+            adapterBindingPath = string.Empty;
         }
 
         /// <summary>
@@ -97,7 +97,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public DataGridColumnBuilder( string adapterBindingPath )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( adapterBindingPath ), "adapterBindingPath" );
+            Arg.NotNullOrEmpty( adapterBindingPath, nameof( adapterBindingPath ) );
             this.adapterBindingPath = adapterBindingPath.TrimEnd( '.' );
         }
 
@@ -189,12 +189,12 @@
             DataTemplate template = null;
 
             // look up existing data template
-            if ( this.templates.TryGetValue( resourceUri, out template ) )
+            if ( templates.TryGetValue( resourceUri, out template ) )
                 return template;
 
             // create and cache data template for future reference
-            template = await this.templateFactory.FromResourceAsync( resourceUri );
-            this.templates.TryAdd( resourceUri, template );
+            template = await templateFactory.FromResourceAsync( resourceUri );
+            templates.TryAdd( resourceUri, template );
 
             return template;
         }
@@ -207,12 +207,12 @@
             Style style = null;
 
             // look up existing style
-            if ( this.styles.TryGetValue( resourceUri, out style ) )
+            if ( styles.TryGetValue( resourceUri, out style ) )
                 return style;
 
             // create and cache styles for future reference
-            style = await this.styleFactory.FromResourceAsync( resourceUri );
-            this.styles.TryAdd( resourceUri, style );
+            style = await styleFactory.FromResourceAsync( resourceUri );
+            styles.TryAdd( resourceUri, style );
 
             return style;
         }
@@ -225,12 +225,12 @@
             ResourceDictionary resources = null;
 
             // look up existing resource dictionary
-            if ( this.resourceDictionaries.TryGetValue( resourceUri, out resources ) )
+            if ( resourceDictionaries.TryGetValue( resourceUri, out resources ) )
                 return resources;
 
             // create and cache resource dictionary for future reference
-            resources = await this.resourceDictionaryFactory.FromResourceAsync( resourceUri );
-            this.resourceDictionaries.TryAdd( resourceUri, resources );
+            resources = await resourceDictionaryFactory.FromResourceAsync( resourceUri );
+            resourceDictionaries.TryAdd( resourceUri, resources );
 
             return resources;
         }
@@ -245,13 +245,13 @@
             var key = string.Format( CultureInfo.InvariantCulture, "{0}:{1}", resourceUri.ToString(), resourceKey );
             DataTemplate template = null;
 
-            if ( this.parsedTemplates.TryGetValue( key, out template ) )
+            if ( parsedTemplates.TryGetValue( key, out template ) )
                 return template;
 
-            var resources = await this.GetResourceDictionaryAsync( resourceUri );
+            var resources = await GetResourceDictionaryAsync( resourceUri );
 
             template = (DataTemplate) resources[resourceKey];
-            this.parsedTemplates.TryAdd( key, template );
+            parsedTemplates.TryAdd( key, template );
 
             return template;
         }
@@ -266,13 +266,13 @@
             var key = string.Format( CultureInfo.InvariantCulture, "{0}:{1}", resourceUri.ToString(), resourceKey );
             Style style = null;
 
-            if ( this.parsedStyles.TryGetValue( key, out style ) )
+            if ( parsedStyles.TryGetValue( key, out style ) )
                 return style;
 
-            var resources = await this.GetResourceDictionaryAsync( resourceUri );
+            var resources = await GetResourceDictionaryAsync( resourceUri );
 
             style = (Style) resources[resourceKey];
-            this.parsedStyles.TryAdd( key, style );
+            parsedStyles.TryAdd( key, style );
 
             return style;
         }
@@ -291,11 +291,11 @@
             {
                 // resolve template from specified assembly
                 if ( !string.IsNullOrEmpty( attribute.CellTemplateName ) )
-                    column.CellTemplate = await this.GetDataTemplateAsync( type.CreatePackUri( attribute.CellTemplateName ) );
+                    column.CellTemplate = await GetDataTemplateAsync( type.CreatePackUri( attribute.CellTemplateName ) );
 
                 // resolve template from specified assembly
                 if ( !column.IsReadOnly && !string.IsNullOrEmpty( attribute.CellEditingTemplateName ) )
-                    column.CellEditingTemplate = await this.GetDataTemplateAsync( type.CreatePackUri( attribute.CellEditingTemplateName ) );
+                    column.CellEditingTemplate = await GetDataTemplateAsync( type.CreatePackUri( attribute.CellEditingTemplateName ) );
             }
             else
             {
@@ -304,11 +304,11 @@
 
                 // resolve template from resource dictionary
                 if ( !string.IsNullOrEmpty( attribute.CellTemplateName ) )
-                    column.CellTemplate = await this.GetDataTemplateFromResourceAsync( resourceUri, attribute.CellTemplateName );
+                    column.CellTemplate = await GetDataTemplateFromResourceAsync( resourceUri, attribute.CellTemplateName );
 
                 // resolve template from resource dictionary
                 if ( !column.IsReadOnly && !string.IsNullOrEmpty( attribute.CellEditingTemplateName ) )
-                    column.CellEditingTemplate = await this.GetDataTemplateFromResourceAsync( resourceUri, attribute.CellEditingTemplateName );
+                    column.CellEditingTemplate = await GetDataTemplateFromResourceAsync( resourceUri, attribute.CellEditingTemplateName );
             }
         }
 
@@ -331,11 +331,11 @@
             {
                 // resolve template from specified assembly
                 if ( !string.IsNullOrEmpty( attribute.ElementStyleName ) )
-                    boundColumn.ElementStyle = await this.GetStyleAsync( type.CreatePackUri( attribute.ElementStyleName ) );
+                    boundColumn.ElementStyle = await GetStyleAsync( type.CreatePackUri( attribute.ElementStyleName ) );
 
                 // resolve template from specified assembly
                 if ( !boundColumn.IsReadOnly && !string.IsNullOrEmpty( attribute.EditingElementStyleName ) )
-                    boundColumn.EditingElementStyle = await this.GetStyleAsync( type.CreatePackUri( attribute.EditingElementStyleName ) );
+                    boundColumn.EditingElementStyle = await GetStyleAsync( type.CreatePackUri( attribute.EditingElementStyleName ) );
             }
             else
             {
@@ -344,11 +344,11 @@
 
                 // resolve template from resource dictionary
                 if ( !string.IsNullOrEmpty( attribute.ElementStyleName ) )
-                    boundColumn.ElementStyle = await this.GetStyleFromResourceAsync( resourceUri, attribute.ElementStyleName );
+                    boundColumn.ElementStyle = await GetStyleFromResourceAsync( resourceUri, attribute.ElementStyleName );
 
                 // resolve template from resource dictionary
                 if ( !column.IsReadOnly && !string.IsNullOrEmpty( attribute.EditingElementStyleName ) )
-                    boundColumn.EditingElementStyle = await this.GetStyleFromResourceAsync( resourceUri, attribute.EditingElementStyleName );
+                    boundColumn.EditingElementStyle = await GetStyleFromResourceAsync( resourceUri, attribute.EditingElementStyleName );
             }
         }
 
@@ -509,7 +509,7 @@
                 if ( template == null )
                 {
                     // no templates are defined so use a text column
-                    var column = BuildUpColumn( this.CreateTextColumn(), attribute, propertyName, adapterPath );
+                    var column = BuildUpColumn( CreateTextColumn(), attribute, propertyName, adapterPath );
                     var binding = CreateBinding( propertyName, adapterPath, converter, attribute );
 
                     SetOptional( column, !attribute.IsRequired );
@@ -520,14 +520,14 @@
                     var style = GetAttribute<DataGridElementStyleAttribute>( property.Item2 );
 
                     if ( style != null )
-                        await this.ApplyStylesAsync( type, column, style );
+                        await ApplyStylesAsync( type, column, style );
 
                     columns.Add( column );
                 }
                 else
                 {
                     // create a templated column
-                    var column = BuildUpColumn( this.CreateTemplateColumn(), attribute, propertyName, adapterPath );
+                    var column = BuildUpColumn( CreateTemplateColumn(), attribute, propertyName, adapterPath );
                     var binding = CreateBinding( propertyName, adapterPath, converter, attribute );
 
                     SetOptional( column, !attribute.IsRequired );
@@ -536,7 +536,7 @@
                     column.ClipboardContentBinding = binding.Clone();
 
                     // apply data templates to column
-                    await this.ApplyTemplatesAsync( type, column, template );
+                    await ApplyTemplatesAsync( type, column, template );
 
                     columns.Add( column );
                 }
@@ -587,7 +587,7 @@
         {
             get
             {
-                return this.adapterBindingPath;
+                return adapterBindingPath;
             }
         }
 
@@ -601,8 +601,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public virtual Task BuildupAsync( ICollection<DataGridColumn> columns, ColumnBuildOrders buildOrders, CancellationToken cancellationToken )
         {
+            Arg.NotNull( columns, nameof( columns ) );
             columns.Clear();
-            return this.AppendToAsync( columns, buildOrders, cancellationToken );
+            return AppendToAsync( columns, buildOrders, cancellationToken );
         }
 
         /// <summary>
@@ -614,7 +615,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public virtual async Task AppendToAsync( ICollection<DataGridColumn> columns, ColumnBuildOrders buildOrders, CancellationToken cancellationToken )
         {
-            var columnsToAppend = await this.GetColumnsAsync( this.TargetType, this.AdapterBindingPath, buildOrders, cancellationToken );
+            Arg.NotNull( columns, nameof( columns ) );
+            var columnsToAppend = await GetColumnsAsync( TargetType, AdapterBindingPath, buildOrders, cancellationToken );
             columns.AddRange( columnsToAppend );
         }
     }

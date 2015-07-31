@@ -31,7 +31,7 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public StringLengthRule( int maximumLength, string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Arg.GreaterThanOrEqualTo( maximumLength, 0, "maximumLength" );
 
             this.maximumLength = maximumLength;
@@ -60,7 +60,7 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public StringLengthRule( int minimumLength, int maximumLength, string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Arg.GreaterThanOrEqualTo( minimumLength, 0, "minimumLength" );
             Arg.GreaterThanOrEqualTo( maximumLength, minimumLength, "maximumLength" );
 
@@ -77,8 +77,8 @@
         {
             get
             {
-                Contract.Ensures( this.minimumLength >= 0 );
-                return this.minimumLength;
+                Contract.Ensures( minimumLength >= 0 );
+                return minimumLength;
             }
         }
 
@@ -90,8 +90,8 @@
         {
             get
             {
-                Contract.Ensures( Contract.Result<int>() >= this.MinimumLength );
-                return this.maximumLength;
+                Contract.Ensures( Contract.Result<int>() >= MinimumLength );
+                return maximumLength;
             }
         }
 
@@ -107,15 +107,15 @@
 
             var length = item.Value.Length;
 
-            if ( length >= this.MinimumLength && length <= this.MaximumLength )
+            if ( length >= MinimumLength && length <= MaximumLength )
                 return ValidationResult.Success;
 
             string message;
 
-            if ( this.MinimumLength == 0 )
-                message = this.errorMessage ?? ValidationMessage.StringLengthValidationError.FormatDefault( item.Name, this.MaximumLength );
+            if ( MinimumLength == 0 )
+                message = errorMessage ?? ValidationMessage.StringLengthValidationError.FormatDefault( item.Name, MaximumLength );
             else
-                message = this.errorMessage ?? ValidationMessage.StringLengthValidationErrorIncludingMinimum.FormatDefault( item.Name, this.MaximumLength, this.MinimumLength );
+                message = errorMessage ?? ValidationMessage.StringLengthValidationErrorIncludingMinimum.FormatDefault( item.Name, MaximumLength, MinimumLength );
 
             return new ValidationResult( message, item.Name );
         }

@@ -28,7 +28,7 @@
         /// <param name="memberNames">An <see cref="Array">array</see> invalid member names.</param>
         public ValidationResult( string errorMessage, params string[] memberNames )
         {
-            Arg.NotNull( memberNames, "memberNames" );
+            Arg.NotNull( memberNames, nameof( memberNames ) );
             this.errorMessage = errorMessage;
             this.memberNames = memberNames;
         }
@@ -40,7 +40,7 @@
         /// <param name="memberNames">A <see cref="IEnumerable{T}">sequence</see> invalid member names.</param>
         public ValidationResult( string errorMessage, IEnumerable<string> memberNames )
         {
-            Arg.NotNull( memberNames, "memberNames" );
+            Arg.NotNull( memberNames, nameof( memberNames ) );
             this.errorMessage = errorMessage;
             this.memberNames = memberNames;
         }
@@ -53,11 +53,11 @@
         {
             get
             {
-                return this.errorMessage;
+                return errorMessage;
             }
             set
             {
-                this.errorMessage = value;
+                errorMessage = value;
             }
         }
 
@@ -69,7 +69,7 @@
         {
             get
             {
-                return this.memberNames;
+                return memberNames;
             }
         }
     }

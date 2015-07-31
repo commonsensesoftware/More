@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Composition\FrameShellViewT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\PageViewT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\ShellViewBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PageUriHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReflectHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Windows.Data\BindingExtensions.cs" />

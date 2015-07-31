@@ -14,8 +14,8 @@
         {
             Contract.Requires( other != null );
 
-            this.valid = other.valid;
-            this.format = other.format;
+            valid = other.valid;
+            format = other.format;
         }
 
         internal PropertyComparisonRule( Expression<Func<TObject, TValue>> propertyExpression, Func<TValue, TValue, bool> valid, Func<string, string, string> format )
@@ -36,7 +36,7 @@
             Contract.Requires( valid != null );
 
             this.valid = valid;
-            this.format = ( s1, s2 ) => null;
+            format = ( s1, s2 ) => null;
         }
 
         protected override IValidationResult Evaluate( Property<TValue> sourceProperty, Property<TValue> targetProperty )
@@ -44,10 +44,10 @@
             if ( sourceProperty == null || targetProperty == null )
                 return ValidationResult.Success;
 
-            if ( this.valid( sourceProperty.Value, targetProperty.Value ) )
+            if ( valid( sourceProperty.Value, targetProperty.Value ) )
                 return ValidationResult.Success;
 
-            var message = this.ErrorMessage ?? this.format( sourceProperty.Name, targetProperty.Name );
+            var message = ErrorMessage ?? format( sourceProperty.Name, targetProperty.Name );
             return new ValidationResult( message, sourceProperty.Name, targetProperty.Name );
         }
 

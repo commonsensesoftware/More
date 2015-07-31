@@ -22,7 +22,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract" )]
         public static Uri CreateXamlResourceUri( this Type type )
         {
-            Contract.Requires<ArgumentNullException>( type != null, "type" );
+            Arg.NotNull( type, nameof( type ) );
             Contract.Ensures( Contract.Result<Uri>() != null );
             
             var resourceName = XamlResourceNameFormat.FormatInvariant( type.FullName.Replace( '.', '/' ) );
@@ -31,9 +31,11 @@
             return uri;
         }
 
+        [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Not used by all platforms." )]
         internal static Type GetNestedPropertyType( this Type parentType, string propertyPath )
         {
-            Contract.Requires( parentType != null, "parentType" ); 
+            Contract.Requires( parentType != null ); 
+
             if ( parentType == null )
                 return null;
 

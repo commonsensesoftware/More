@@ -30,12 +30,12 @@
             if ( x == null && y == null )
                 return false;
 
-            return this.defaultComparer.Equals( x, y );
+            return defaultComparer.Equals( x, y );
         }
 
         public int GetHashCode( string obj )
         {
-            return this.defaultComparer.GetHashCode( obj );
+            return defaultComparer.GetHashCode( obj );
         }
     }
 }

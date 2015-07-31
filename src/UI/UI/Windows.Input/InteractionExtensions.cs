@@ -28,7 +28,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static bool ExecuteDefaultCommand( this Interaction interaction )
         {
-            Arg.NotNull( interaction, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
             return ExecuteCommand( interaction.DefaultCommand );
         }
 
@@ -41,7 +41,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static bool ExecuteCancelCommand( this Interaction interaction )
         {
-            Arg.NotNull( interaction, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
             return ExecuteCommand( interaction.CancelCommand );
         }
     }

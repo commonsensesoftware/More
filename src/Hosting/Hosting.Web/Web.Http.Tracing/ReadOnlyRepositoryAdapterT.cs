@@ -1,6 +1,6 @@
 ﻿namespace More.Web.Http.Tracing
 {
-    using More.ComponentModel;
+    using ComponentModel;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -21,6 +21,7 @@
 
         public void Add( T item )
         {
+            Arg.NotNull( item, nameof( item ) );
         }
 
         public void DiscardChanges()
@@ -37,6 +38,7 @@
 
         public void Remove( T item )
         {
+            Arg.NotNull( item, nameof( item ) );
         }
 
         public Task SaveChangesAsync( CancellationToken cancellationToken )
@@ -46,23 +48,26 @@
 
         public void Update( T item )
         {
+            Arg.NotNull( item, nameof( item ) );
         }
 
         public Task<TResult> GetAsync<TResult>( Func<IQueryable<T>, TResult> queryShaper, CancellationToken cancellationToken )
         {
-            return this.repository.GetAsync( queryShaper, cancellationToken );
+            Arg.NotNull( queryShaper, nameof( queryShaper ) );
+            return repository.GetAsync( queryShaper, cancellationToken );
         }
 
         public Task<IEnumerable<T>> GetAsync( Func<IQueryable<T>, IQueryable<T>> queryShaper, CancellationToken cancellationToken )
         {
-            return this.repository.GetAsync( queryShaper, cancellationToken );
+            Arg.NotNull( queryShaper, nameof( queryShaper ) );
+            return repository.GetAsync( queryShaper, cancellationToken );
         }
 
         public IReadOnlyRepository<T> Inner
         {
             get
             {
-                return this.repository;
+                return repository;
             }
         }
     }

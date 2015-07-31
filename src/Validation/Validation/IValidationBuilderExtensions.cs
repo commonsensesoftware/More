@@ -22,7 +22,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Required<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new RequiredRule<TValue>() );
         }
@@ -38,8 +38,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Required<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new RequiredRule<TValue>( errorMessage ) );
         }
@@ -55,7 +55,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Required<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, bool allowEmptyStrings )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new RequiredRule<TValue>() { AllowEmptyStrings = allowEmptyStrings } );
         }
@@ -72,8 +72,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Required<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, bool allowEmptyStrings, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new RequiredRule<TValue>( errorMessage ) { AllowEmptyStrings = allowEmptyStrings } );
         }
@@ -88,7 +88,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> StringLength<TObject>( this IValidationBuilder<TObject, string> builder, int maximumLength )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             Arg.GreaterThanOrEqualTo( maximumLength, 0, "maximumLength" );
 
@@ -106,8 +106,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> StringLength<TObject>( this IValidationBuilder<TObject, string> builder, int maximumLength, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             Arg.GreaterThanOrEqualTo( maximumLength, 0, "maximumLength" );
             return builder.Apply( new StringLengthRule( maximumLength, errorMessage ) );
@@ -124,7 +124,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> StringLength<TObject>( this IValidationBuilder<TObject, string> builder, int minimumLength, int maximumLength )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             Arg.GreaterThanOrEqualTo( minimumLength, 0, "minimumLength" );
             Arg.GreaterThanOrEqualTo( maximumLength, minimumLength, "maximumLength" );
@@ -143,8 +143,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> StringLength<TObject>( this IValidationBuilder<TObject, string> builder, int minimumLength, int maximumLength, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             Arg.GreaterThanOrEqualTo( minimumLength, 0, "minimumLength" );
             Arg.GreaterThanOrEqualTo( maximumLength, minimumLength, "maximumLength" );
@@ -163,7 +163,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Range<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, TValue minimum, TValue maximum ) where TValue : struct,IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             Arg.GreaterThanOrEqualTo( maximum, minimum, "maximum" );
             return builder.Apply( new RangeRule<TValue>( minimum, maximum ) );
@@ -182,8 +182,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Range<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, TValue minimum, TValue maximum, string errorMessage ) where TValue : struct,IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             Arg.GreaterThanOrEqualTo( maximum, minimum, "maximum" );
             return builder.Apply( new RangeRule<TValue>( minimum, maximum, errorMessage ) );
@@ -202,7 +202,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue?> Range<TObject, TValue>( this IValidationBuilder<TObject, TValue?> builder, TValue minimum, TValue maximum ) where TValue : struct,IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue?>>() != null );
             Arg.GreaterThanOrEqualTo( maximum, minimum, "maximum" );
             return builder.Apply( new NullableRangeRule<TValue>( minimum, maximum ) );
@@ -222,8 +222,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue?> Range<TObject, TValue>( this IValidationBuilder<TObject, TValue?> builder, TValue minimum, TValue maximum, string errorMessage ) where TValue : struct,IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue?>>() != null );
             Arg.GreaterThanOrEqualTo( maximum, minimum, "maximum" );
             return builder.Apply( new NullableRangeRule<TValue>( minimum, maximum, errorMessage ) );
@@ -239,8 +239,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> RegularExpression<TObject>( this IValidationBuilder<TObject, string> builder, string pattern )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new RegularExpressionRule( pattern ) );
         }
@@ -256,9 +256,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> RegularExpression<TObject>( this IValidationBuilder<TObject, string> builder, string pattern, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new RegularExpressionRule( pattern, errorMessage ) );
         }
@@ -273,7 +273,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Size<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, int minimumCount ) where TValue : IEnumerable
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             Arg.GreaterThanOrEqualTo( minimumCount, 0, "minimumCount" );
             return builder.Apply( new SizeRule<TValue>( minimumCount ) );
@@ -290,8 +290,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Size<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, int minimumCount, string errorMessage ) where TValue : IEnumerable
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             Arg.GreaterThanOrEqualTo( minimumCount, 0, "minimumCount" );
             return builder.Apply( new SizeRule<TValue>( minimumCount, errorMessage ) );
@@ -308,7 +308,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Size<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, int minimumCount, int maximumCount ) where TValue : IEnumerable
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             Arg.GreaterThanOrEqualTo( minimumCount, 0, "minimumCount" );
             Arg.GreaterThanOrEqualTo( maximumCount, minimumCount, "maximumCount" );
@@ -327,8 +327,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, TValue> Size<TObject, TValue>( this IValidationBuilder<TObject, TValue> builder, int minimumCount, int maximumCount, string errorMessage ) where TValue : IEnumerable
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             Arg.GreaterThanOrEqualTo( minimumCount, 0, "minimumCount" );
             Arg.GreaterThanOrEqualTo( maximumCount, minimumCount, "maximumCount" );
@@ -344,7 +344,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> CreditCard<TObject>( this IValidationBuilder<TObject, string> builder )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new CreditCardRule() );
         }
@@ -359,8 +359,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> CreditCard<TObject>( this IValidationBuilder<TObject, string> builder, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new CreditCardRule( errorMessage ) );
         }
@@ -374,7 +374,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Email<TObject>( this IValidationBuilder<TObject, string> builder )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new EmailRule() );
         }
@@ -389,8 +389,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Email<TObject>( this IValidationBuilder<TObject, string> builder, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new EmailRule( errorMessage ) );
         }
@@ -404,7 +404,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Phone<TObject>( this IValidationBuilder<TObject, string> builder )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new PhoneRule() );
         }
@@ -419,8 +419,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Phone<TObject>( this IValidationBuilder<TObject, string> builder, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new PhoneRule( errorMessage ) );
         }
@@ -434,7 +434,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Url<TObject>( this IValidationBuilder<TObject, string> builder )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new UrlRule() );
         }
@@ -449,8 +449,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Url<TObject>( this IValidationBuilder<TObject, string> builder, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new UrlRule( errorMessage ) );
         }
@@ -465,7 +465,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Url<TObject>( this IValidationBuilder<TObject, string> builder, UriKind kind )
         {
-            Arg.NotNull( builder, "builder" );
+            Arg.NotNull( builder, nameof( builder ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new UrlRule( kind ) );
         }
@@ -481,8 +481,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IValidationBuilder<TObject, string> Url<TObject>( this IValidationBuilder<TObject, string> builder, UriKind kind, string errorMessage )
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, string>>() != null );
             return builder.Apply( new UrlRule( kind, errorMessage ) );
         }
@@ -501,8 +501,8 @@
             this IValidationBuilder<TObject, TValue> builder,
             Expression<Func<TObject, TValue>> targetProperty ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
 
             var rule = new PropertyComparisonRule<TObject, TValue>(
@@ -529,9 +529,9 @@
             Expression<Func<TObject, TValue>> targetProperty,
             string errorMessage ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new PropertyComparisonRule<TObject, TValue>( targetProperty, ( v1, v2 ) => v1.CompareTo( v2 ) < 0, errorMessage ) );
         }
@@ -550,8 +550,8 @@
             this IValidationBuilder<TObject, TValue> builder,
             Expression<Func<TObject, TValue>> targetProperty ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
 
             var rule = new PropertyComparisonRule<TObject, TValue>(
@@ -578,9 +578,9 @@
             Expression<Func<TObject, TValue>> targetProperty,
             string errorMessage ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new PropertyComparisonRule<TObject, TValue>( targetProperty, ( v1, v2 ) => v1.CompareTo( v2 ) <= 0, errorMessage ) );
         }
@@ -599,8 +599,8 @@
             this IValidationBuilder<TObject, TValue> builder,
             Expression<Func<TObject, TValue>> targetProperty ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
 
             var rule = new PropertyComparisonRule<TObject, TValue>(
@@ -627,9 +627,9 @@
             Expression<Func<TObject, TValue>> targetProperty,
             string errorMessage ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new PropertyComparisonRule<TObject, TValue>( targetProperty, ( v1, v2 ) => v1.CompareTo( v2 ) > 0, errorMessage ) );
         }
@@ -648,8 +648,8 @@
             this IValidationBuilder<TObject, TValue> builder,
             Expression<Func<TObject, TValue>> targetProperty ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
 
             var rule = new PropertyComparisonRule<TObject, TValue>(
@@ -676,9 +676,9 @@
             Expression<Func<TObject, TValue>> targetProperty,
             string errorMessage ) where TValue : IComparable<TValue>
         {
-            Arg.NotNull( builder, "builder" );
-            Arg.NotNull( targetProperty, "targetProperty" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNull( builder, nameof( builder ) );
+            Arg.NotNull( targetProperty, nameof( targetProperty ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Contract.Ensures( Contract.Result<IValidationBuilder<TObject, TValue>>() != null );
             return builder.Apply( new PropertyComparisonRule<TObject, TValue>( targetProperty, ( v1, v2 ) => v1.CompareTo( v2 ) >= 0, errorMessage ) );
         }

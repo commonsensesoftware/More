@@ -30,10 +30,10 @@
         /// <param name="traceRecord">The <see cref="TraceRecord">trace record</see> associated with the operation.</param>
         public void StartTrace( TraceRecord traceRecord )
         {
-            Contract.Requires<ArgumentNullException>( traceRecord != null, "traceRecord" );
+            Arg.NotNull( traceRecord, nameof( traceRecord ) );
 
-            this.Start();
-            this.startTrace( traceRecord );
+            Start();
+            startTrace( traceRecord );
         }
 
         /// <summary>
@@ -42,11 +42,11 @@
         /// <param name="traceRecord">The <see cref="TraceRecord">trace record</see> associated with the operation.</param>
         public void EndTrace( TraceRecord traceRecord )
         {
-            Contract.Requires<ArgumentNullException>( traceRecord != null, "traceRecord" );
+            Arg.NotNull( traceRecord, nameof( traceRecord ) );
 
-            this.Stop();
-            traceRecord.SetDuration( this.Elapsed );
-            this.endTrace( traceRecord );
+            Stop();
+            traceRecord.SetDuration( Elapsed );
+            endTrace( traceRecord );
         }
     }
 }

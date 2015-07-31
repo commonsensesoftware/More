@@ -31,7 +31,7 @@
         /// <returns>The converted <see cref="Object"/>.</returns>
         public object Convert( object value, Type targetType, object parameter, string language )
         {
-            return this.Converter.Convert( value, targetType, parameter, language );
+            return Converter.Convert( value, targetType, parameter, language );
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
         /// <returns>The converted <see cref="Object"/>.</returns>
         public object ConvertBack( object value, Type targetType, object parameter, string language )
         {
-            return this.Converter.ConvertBack( value, targetType, parameter, language );
+            return Converter.ConvertBack( value, targetType, parameter, language );
         }
     }
 }

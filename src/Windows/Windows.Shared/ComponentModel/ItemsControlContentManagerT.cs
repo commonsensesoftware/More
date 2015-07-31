@@ -37,7 +37,7 @@
         /// <param name="itemsControl">The underlying items control of type <typeparamref name="T"/> for the content manager.</param>
         public ItemsControlContentManager( T itemsControl )
         {
-            Contract.Requires<ArgumentNullException>( itemsControl != null, "itemsControl" );
+            Arg.NotNull( itemsControl, nameof( itemsControl ) );
             this.itemsControl = itemsControl;
         }
 
@@ -50,7 +50,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<T>() != null );
-                return this.itemsControl;
+                return itemsControl;
             }
         }
 
@@ -60,12 +60,9 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -76,7 +73,7 @@
         {
             get
             {
-                return this.ItemsControl.Items.Cast<object>();
+                return ItemsControl.Items.Cast<object>();
             }
         }
 
@@ -86,12 +83,14 @@
         /// <param name="content">The <see cref="Object">object</see> representing the content to set.</param>
         public virtual void SetContent( object content )
         {
+            Arg.NotNull( content, nameof( content ) );
+
             // exit if there's nothing to do
-            if ( this.ItemsControl.Items.Count == 1 && object.Equals( this.ItemsControl.Items[0], content ) )
+            if ( ItemsControl.Items.Count == 1 && object.Equals( ItemsControl.Items[0], content ) )
                 return;
 
-            this.ClearContent();
-            this.AddToContent( content );
+            ClearContent();
+            AddToContent( content );
         }
 
         /// <summary>
@@ -100,13 +99,14 @@
         /// <param name="content">The <see cref="Object">object</see> representing the content to add.</param>
         public virtual void AddToContent( object content )
         {
+            Arg.NotNull( content, nameof( content ) );
 #if NETFX_CORE
-            this.ItemsControl.Items.Add( content );
-            var index = this.ItemsControl.Items.IndexOf( content );
+            ItemsControl.Items.Add( content );
+            var index = ItemsControl.Items.IndexOf( content );
 #else
-            var index = this.ItemsControl.Items.Add( content );
+            var index = ItemsControl.Items.Add( content );
 #endif
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, content, index ) );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, content, index ) );
         }
 
         /// <summary>
@@ -115,13 +115,15 @@
         /// <param name="content">The <see cref="Object">object</see> representing the content to remove.</param>
         public virtual void RemoveFromContent( object content )
         {
-            var index = this.ItemsControl.Items.IndexOf( content );
+            Arg.NotNull( content, nameof( content ) );
+
+            var index = ItemsControl.Items.IndexOf( content );
 
             if ( index < 0 )
                 return;
 
-            this.ItemsControl.Items.RemoveAt( index );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, content, index ) );
+            ItemsControl.Items.RemoveAt( index );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, content, index ) );
         }
 
         /// <summary>
@@ -129,8 +131,8 @@
         /// </summary>
         public virtual void ClearContent()
         {
-            this.ItemsControl.Items.Clear();
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+            ItemsControl.Items.Clear();
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
         /// <summary>
         /// Occurs when the content collection has changed.

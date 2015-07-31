@@ -51,7 +51,7 @@
         {
             get
             {
-                var validator = new NonAbstractTypeValidator( this.AllowAbstract, this.AllowInterface, this.AllowGenericTypeDefinition );
+                var validator = new NonAbstractTypeValidator( AllowAbstract, AllowInterface, AllowGenericTypeDefinition );
                 return validator;
             }
         }

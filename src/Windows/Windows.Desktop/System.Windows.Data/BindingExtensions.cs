@@ -18,7 +18,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static Binding Clone( this Binding binding )
         {
-            Contract.Requires<ArgumentNullException>( binding != null, "binding" );
+            Arg.NotNull( binding, nameof( binding ) );
             Contract.Ensures( Contract.Result<Binding>() != null );
 
             var clone = new Binding();

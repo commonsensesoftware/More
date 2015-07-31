@@ -13,7 +13,7 @@
         /// </summary>
         public OptionalDataGridTextColumn()
         {
-            this.IsOptional = true;
+            IsOptional = true;
         }
 
         /// <summary>

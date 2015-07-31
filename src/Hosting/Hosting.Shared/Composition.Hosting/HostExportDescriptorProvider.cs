@@ -20,17 +20,15 @@
             internal SelfExportSpecification( Host host )
             {
                 Contract.Requires( host != null );
-                this.typeInfo = host.GetType().GetTypeInfo();
+                typeInfo = host.GetType().GetTypeInfo();
             }
 
             public override bool IsSatisfiedBy( CompositionContract item )
             {
-                Contract.Assert( item != null );
-
-                if ( item.ContractName != null )
+                if ( item == null || item.ContractName != null )
                     return false;
 
-                if ( !item.ContractType.GetTypeInfo().IsAssignableFrom( this.typeInfo ) )
+                if ( !item.ContractType.GetTypeInfo().IsAssignableFrom( typeInfo ) )
                     return false;
 
                 return item.MetadataConstraints == null || !item.MetadataConstraints.Any();
@@ -54,7 +52,7 @@
 
             this.host = host;
             this.origin = origin;
-            this.selfExportSpecification = new SelfExportSpecification( host );
+            selfExportSpecification = new SelfExportSpecification( host );
         }
 
         private ExportDescriptorPromise ExportHostPart( CompositionContract contract, DependencyAccessor descriptorAccessor )
@@ -63,8 +61,8 @@
             Contract.Requires( descriptorAccessor != null );
             Contract.Ensures( Contract.Result<ExportDescriptorPromise>() != null );
 
-            Func<IEnumerable<CompositionDependency>, ExportDescriptor> factory = dependencies => ExportDescriptor.Create( ( context, operation ) => this.host, NoMetadata );
-            var promise = new ExportDescriptorPromise( contract, this.origin, true, NoDependencies, factory );
+            Func<IEnumerable<CompositionDependency>, ExportDescriptor> factory = dependencies => ExportDescriptor.Create( ( context, operation ) => host, NoMetadata );
+            var promise = new ExportDescriptorPromise( contract, origin, true, NoDependencies, factory );
             return promise;
         }
 
@@ -74,9 +72,9 @@
             Contract.Requires( descriptorAccessor != null );
             Contract.Ensures( Contract.Result<ExportDescriptorPromise>() != null );
 
-            CompositeActivator activator = ( context, operation ) => this.host.GetService( contract.ContractType, contract.ContractName );
+            CompositeActivator activator = ( context, operation ) => host.GetService( contract.ContractType, contract.ContractName );
             Func<IEnumerable<CompositionDependency>, ExportDescriptor> factory = dependencies => ExportDescriptor.Create( activator, NoMetadata );
-            var promise = new ExportDescriptorPromise( contract, this.origin, true, NoDependencies, factory );
+            var promise = new ExportDescriptorPromise( contract, origin, true, NoDependencies, factory );
             return promise;
         }
 
@@ -90,17 +88,17 @@
         public override IEnumerable<ExportDescriptorPromise> GetExportDescriptors( CompositionContract contract, DependencyAccessor descriptorAccessor )
         {
             // match contracts that the host itself satisfies
-            if ( this.selfExportSpecification.IsSatisfiedBy( contract ) )
-                return new[] { this.ExportHostPart( contract, descriptorAccessor ) };
+            if ( selfExportSpecification.IsSatisfiedBy( contract ) )
+                return new[] { ExportHostPart( contract, descriptorAccessor ) };
 
             // match any explicitly registered services that the host satisfies
-            var services = from entry in this.host.Registry
+            var services = from entry in host.Registry
                            let serviceContract = new CompositionContract( entry.ServiceType, entry.Key )
                            where serviceContract.Equals( contract )
                            select entry;
 
             if ( services.Any() )
-                return new[] { this.ExportServicePart( contract, descriptorAccessor ) };
+                return new[] { ExportServicePart( contract, descriptorAccessor ) };
 
             return NoExportDescriptors;
         }

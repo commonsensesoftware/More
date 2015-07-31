@@ -37,8 +37,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static ICollectionView OrderBy( this ICollectionView view, string propertyName )
         {
-            Contract.Requires<ArgumentNullException>( view != null, "view" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( view, nameof( view ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<ICollectionView>() != null );
             return Sort( view, propertyName, ListSortDirection.Ascending, false );
         }
@@ -53,8 +53,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static ICollectionView OrderByDescending( this ICollectionView view, string propertyName )
         {
-            Contract.Requires<ArgumentNullException>( view != null, "view" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( view, nameof( view ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<ICollectionView>() != null );
             return Sort( view, propertyName, ListSortDirection.Descending, false );
         }
@@ -69,8 +69,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static ICollectionView ThenBy( this ICollectionView view, string propertyName )
         {
-            Contract.Requires<ArgumentNullException>( view != null, "view" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( view, nameof( view ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<ICollectionView>() != null );
             return Sort( view, propertyName, ListSortDirection.Ascending, true );
         }
@@ -85,8 +85,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static ICollectionView ThenByDescending( this ICollectionView view, string propertyName )
         {
-            Contract.Requires<ArgumentNullException>( view != null, "view" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( view, nameof( view ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<ICollectionView>() != null );
             return Sort( view, propertyName, ListSortDirection.Descending, true );
         }
@@ -101,8 +101,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static ICollectionView GroupBy( this ICollectionView view, string propertyName )
         {
-            Contract.Requires<ArgumentNullException>( view != null, "view" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), "propertyName" );
+            Arg.NotNull( view, nameof( view ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             Contract.Ensures( Contract.Result<ICollectionView>() != null );
             view.GroupDescriptions.Add( new PropertyGroupDescription( propertyName ) );
             return view;

@@ -98,17 +98,17 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare values.</param>
         public HierarchicalItem( T value, bool? selected, ICommand clickCommand, IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( clickCommand, "clickCommand" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( clickCommand, nameof( clickCommand ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
             this.comparer = comparer;
             this.selected = selected;
-            this.click = new CommandInterceptor<object>( clickCommand, p => this.OnClicked( EventArgs.Empty ) );
-            this.Select = new Command<object>( p => this.IsSelected = true );
-            this.Unselect = new Command<object>( p => this.IsSelected = false );
-            this.Expand = new Command<object>( p => this.IsExpanded = true );
-            this.Collapse = new Command<object>( p => this.IsExpanded = false );
-            this.Value = value;
+            click = new CommandInterceptor<object>( clickCommand, p => OnClicked( EventArgs.Empty ) );
+            Select = new Command<object>( p => IsSelected = true );
+            Unselect = new Command<object>( p => IsSelected = false );
+            Expand = new Command<object>( p => IsExpanded = true );
+            Collapse = new Command<object>( p => IsExpanded = false );
+            Value = value;
         }
 
         /// <summary>
@@ -120,7 +120,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<T>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -133,17 +133,17 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                return this.depth;
+                return depth;
             }
             protected internal set
             {
                 Arg.GreaterThanOrEqualTo( value, 0, "value" );
 
-                if ( this.depth == value )
+                if ( depth == value )
                     return;
 
-                this.depth = value;
-                this.OnPropertyChanged( "Depth" );
+                depth = value;
+                OnPropertyChanged( "Depth" );
             }
         }
 
@@ -155,7 +155,7 @@
         {
             get
             {
-                return this.Count == 0;
+                return Count == 0;
             }
         }
 
@@ -167,15 +167,15 @@
         {
             get
             {
-                return this.parent;
+                return parent;
             }
             private set
             {
-                if ( this.parent == value )
+                if ( parent == value )
                     return;
 
-                this.parent = value;
-                this.OnPropertyChanged( "Parent" );
+                parent = value;
+                OnPropertyChanged( "Parent" );
                 UpdateDepth( this );
             }
         }
@@ -205,7 +205,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected virtual void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -214,12 +214,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnClicked( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Clicked;
-
-            if ( handler != null )
-                handler( this, e );
+            Clicked?.Invoke( this, e );
         }
 
         /// <summary>
@@ -228,12 +225,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnSelected( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Selected;
-
-            if ( handler != null )
-                handler( this, e );
+            Selected?.Invoke( this, e );
         }
 
         /// <summary>
@@ -242,12 +236,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnUnselected( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Unselected;
-
-            if ( handler != null )
-                handler( this, e );
+            Unselected?.Invoke( this, e );
         }
 
         /// <summary>
@@ -256,12 +247,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnIndeterminate( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Indeterminate;
-
-            if ( handler != null )
-                handler( this, e );
+            Indeterminate?.Invoke( this, e );
         }
 
         /// <summary>
@@ -270,12 +258,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExpanded( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Expanded;
-
-            if ( handler != null )
-                handler( this, e );
+            Expanded?.Invoke( this, e );
         }
 
         /// <summary>
@@ -284,12 +269,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCollapsed( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Collapsed;
-
-            if ( handler != null )
-                handler( this, e );
+            Collapsed?.Invoke( this, e );
         }
 
         /// <summary>
@@ -300,7 +282,7 @@
         /// is reconstituted from a persistence medium.</remarks>
         protected internal virtual void SetHashCode( int newHashCode )
         {
-            this.hashCode = newHashCode;
+            hashCode = newHashCode;
         }
 
         /// <summary>
@@ -342,7 +324,7 @@
         /// <param name="index">The zero-based index of the item to remove.</param>
         protected override void RemoveItem( int index )
         {
-            Contract.Assume( index >= 0 && index < this.Count );
+            Contract.Assume( index >= 0 && index < Count );
             var item = this[index];
             base.RemoveItem( index );
 
@@ -358,7 +340,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Facilitated by sub and super types." )]
         protected override void SetItem( int index, HierarchicalItem<T> item )
         {
-            Contract.Assume( index >= 0 && index < this.Count );
+            Contract.Assume( index >= 0 && index < Count );
             base.SetItem( index, item );
 
             Contract.Assume( item != null );
@@ -372,7 +354,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as HierarchicalItem<T> );
+            return Equals( obj as HierarchicalItem<T> );
         }
 
         /// <summary>
@@ -384,15 +366,15 @@
             // if the hash code has been manually set, use that value
             // instead of recomputing a new hash
 
-            if ( this.hashCode != null )
-                return this.hashCode.Value;
+            if ( hashCode != null )
+                return hashCode.Value;
 
-            var hash = this.Depth + 1;
+            var hash = Depth + 1;
 
-            if ( this.Value != null )
-                hash += this.Comparer.GetHashCode( this.Value );
+            if ( Value != null )
+                hash += Comparer.GetHashCode( Value );
 
-            for ( var item = this.Parent; item != null; item = item.Parent )
+            for ( var item = Parent; item != null; item = item.Parent )
                 hash ^= item.GetHashCode();
 
             return hash;
@@ -404,7 +386,7 @@
         /// <returns>The string representation of the current instance.</returns>
         public override string ToString()
         {
-            return this.Value == null ? string.Empty : this.Value.ToString();
+            return Value == null ? string.Empty : Value.ToString();
         }
 
         /// <summary>
@@ -453,18 +435,18 @@
         {
             get
             {
-                return this.click;
+                return click;
             }
             protected internal set
             {
-                Arg.NotNull( value, "value" );
+                Arg.NotNull( value, nameof( value ) );
 
-                if ( this.click == value )
+                if ( click == value )
                     return;
 
                 // wrap the command with an interceptor to ensure the Click event is raised when the command is invoked
-                this.click = new CommandInterceptor<object>( value, p => this.OnClicked( EventArgs.Empty ) );
-                this.OnPropertyChanged( "Click" );
+                click = new CommandInterceptor<object>( value, p => OnClicked( EventArgs.Empty ) );
+                OnPropertyChanged( "Click" );
             }
         }
 
@@ -481,23 +463,23 @@
         {
             get
             {
-                return this.selected;
+                return selected;
             }
             set
             {
-                if ( Nullable.Equals( this.selected, value ) )
+                if ( Nullable.Equals( selected, value ) )
                     return;
 
-                this.selected = value;
+                selected = value;
 
-                if ( !this.selected.HasValue )
-                    this.OnIndeterminate( EventArgs.Empty );
-                else if ( this.selected.Value )
-                    this.OnSelected( EventArgs.Empty );
+                if ( !selected.HasValue )
+                    OnIndeterminate( EventArgs.Empty );
+                else if ( selected.Value )
+                    OnSelected( EventArgs.Empty );
                 else
-                    this.OnUnselected( EventArgs.Empty );
+                    OnUnselected( EventArgs.Empty );
 
-                this.OnPropertyChanged( "IsSelected" );
+                OnPropertyChanged( "IsSelected" );
             }
         }
 
@@ -544,20 +526,20 @@
         {
             get
             {
-                return this.expanded;
+                return expanded;
             }
             set
             {
-                if ( this.expanded == value )
+                if ( expanded == value )
                     return;
 
-                this.expanded = value;
-                this.OnPropertyChanged( "IsExpanded" );
+                expanded = value;
+                OnPropertyChanged( "IsExpanded" );
 
-                if ( this.expanded )
-                    this.OnExpanded( EventArgs.Empty );
+                if ( expanded )
+                    OnExpanded( EventArgs.Empty );
                 else
-                    this.OnCollapsed( EventArgs.Empty );
+                    OnCollapsed( EventArgs.Empty );
             }
         }
 
@@ -598,7 +580,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public bool Equals( HierarchicalItem<T> other )
         {
-            return !object.Equals( other, null ) && this.GetHashCode().Equals( other.GetHashCode() );
+            return !object.Equals( other, null ) && GetHashCode().Equals( other.GetHashCode() );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it MAY not consider item Depth." )]
@@ -610,7 +592,7 @@
             var otherItem = other as HierarchicalItem<T>;
 
             // we can compare values, but this may not be the same item if it's at a different depth
-            return !object.Equals( otherItem, null ) ? this.GetHashCode().Equals( other.GetHashCode() ) : this.Comparer.Equals( this.Value, other.Value );
+            return !object.Equals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it MAY not consider item Depth." )]
@@ -622,7 +604,7 @@
             var otherItem = other as HierarchicalItem<T>;
 
             // we can compare values, but this may not be the same item if it's at a different depth
-            return !object.Equals( otherItem, null ) ? this.GetHashCode().Equals( other.GetHashCode() ) : this.Comparer.Equals( this.Value, other.Value );
+            return !object.Equals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it MAY not consider item Depth." )]
@@ -634,14 +616,14 @@
             var otherItem = other as HierarchicalItem<T>;
 
             // we can compare values, but this may not be the same item if it's at a different depth
-            return !object.Equals( otherItem, null ) ? this.GetHashCode().Equals( other.GetHashCode() ) : this.Comparer.Equals( this.Value, other.Value );
+            return !object.Equals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it WILL not consider item Depth." )]
         bool IEquatable<T>.Equals( T other )
         {
             // we can compare values, but this may not be the same item if it's at a different depth
-            return this.Comparer.Equals( this.Value, other );
+            return Comparer.Equals( Value, other );
         }
     }
 }

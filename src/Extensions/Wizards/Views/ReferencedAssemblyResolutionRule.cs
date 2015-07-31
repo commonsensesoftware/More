@@ -23,7 +23,7 @@
 
         public Assembly Evaluate( ResolveEventArgs item )
         {
-            return item == null ? null : this.Evaluate( new AssemblyName( item.Name ) );
+            return item == null ? null : Evaluate( new AssemblyName( item.Name ) );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "The method should return null rather than throw an unhandled exception." )]
@@ -34,7 +34,7 @@
 
             // note: AssemblyName.ReferenceMatchesDefinition will report that the assembly names match even if the versions are different.
             // the implementation is 'externed' so it is assume that it simply does not account for version (which matters in for our purposes)
-            var assemblyReference = this.localAssemblyReferences.FirstOrDefault( other => AssemblyName.ReferenceMatchesDefinition( item, other ) && item.Version == other.Version );
+            var assemblyReference = localAssemblyReferences.FirstOrDefault( other => AssemblyName.ReferenceMatchesDefinition( item, other ) && item.Version == other.Version );
 
             if ( assemblyReference == null )
                 return null;

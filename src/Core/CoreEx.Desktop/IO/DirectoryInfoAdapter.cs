@@ -20,15 +20,15 @@
         {
             get
             {
-                return this.folder;
+                return folder;
             }
         }
 
         public Task<IFile> CreateFileAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
 
-            var newFileName = System.IO.Path.Combine( this.folder.FullName, desiredName );
+            var newFileName = System.IO.Path.Combine( folder.FullName, desiredName );
             var newFile = new FileInfo( newFileName );
 
             // close the stream immediately; creates a zero-byte file
@@ -42,24 +42,24 @@
 
         public Task<IFolder> CreateFolderAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
 
-            IFolder newFolder = new DirectoryInfoAdapter( this.folder.CreateSubdirectory( desiredName ) );
+            IFolder newFolder = new DirectoryInfoAdapter( folder.CreateSubdirectory( desiredName ) );
             return Task.FromResult( newFolder );
         }
 
         public Task<IFile> GetFileAsync( string name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
             
-            var fileInfo = this.folder.EnumerateFiles().FirstOrDefault( f => f.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
+            var fileInfo = folder.EnumerateFiles().FirstOrDefault( f => f.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
             IFile file = fileInfo == null ? null : new FileInfoAdapter( fileInfo );
             return Task.FromResult( file );
         }
 
         public Task<IReadOnlyList<IFile>> GetFilesAsync()
         {
-            var query = from fileInfo in this.folder.EnumerateFiles()
+            var query = from fileInfo in folder.EnumerateFiles()
                         let file = (IFile) new FileInfoAdapter( fileInfo )
                         select file;
             IReadOnlyList<IFile> files = query.ToArray();
@@ -68,9 +68,9 @@
 
         public Task<IFolder> GetFolderAsync( string name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
 
-            var directoryInfo = this.folder.EnumerateDirectories().FirstOrDefault( d => d.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
+            var directoryInfo = folder.EnumerateDirectories().FirstOrDefault( d => d.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
             IFolder result = directoryInfo == null ? null : new DirectoryInfoAdapter( directoryInfo );
             return Task.FromResult( result );
         }
@@ -86,19 +86,19 @@
 
         public async Task<IStorageItem> GetItemAsync( string name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
 
-            var folder = await this.GetFolderAsync( name );
+            var folder = await GetFolderAsync( name );
 
             if ( folder == null )
-                return await this.GetFileAsync( name );
+                return await GetFileAsync( name );
 
             return folder;
         }
 
         public async Task<IReadOnlyList<IStorageItem>> GetItemsAsync()
         {
-            IReadOnlyList<IStorageItem> items = ( await this.GetFoldersAsync() ).Cast<IStorageItem>().Union( await this.GetFilesAsync() ).ToArray();
+            IReadOnlyList<IStorageItem> items = ( await GetFoldersAsync() ).Cast<IStorageItem>().Union( await GetFilesAsync() ).ToArray();
             return items;
         }
 
@@ -106,7 +106,7 @@
         {
             get
             {
-                return this.folder.CreationTime;
+                return folder.CreationTime;
             }
         }
 
@@ -114,7 +114,7 @@
         {
             get
             {
-                return this.folder.Name;
+                return folder.Name;
             }
         }
 
@@ -122,52 +122,52 @@
         {
             get
             {
-                return this.folder.FullName;
+                return folder.FullName;
             }
         }
 
         public Task DeleteAsync()
         {
-            this.folder.Delete( true );
+            folder.Delete( true );
             return Task.FromResult( 0 );
         }
 
         public Task<IBasicProperties> GetBasicPropertiesAsync()
         {
-            IBasicProperties properties = new BasicPropertiesAdapter<DirectoryInfo>( this.folder );
+            IBasicProperties properties = new BasicPropertiesAdapter<DirectoryInfo>( folder );
             return Task.FromResult( properties );
         }
 
         public Task RenameAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
 
-            this.folder.MoveTo( desiredName );
+            folder.MoveTo( desiredName );
             return Task.FromResult( 0 );
         }
 
         public Task<IFolder> GetParentAsync()
         {
-            IFolder parent = this.folder.Parent == null ? null : new DirectoryInfoAdapter( this.folder.Parent );
+            IFolder parent = folder.Parent == null ? null : new DirectoryInfoAdapter( folder.Parent );
             return Task.FromResult( parent );
         }
 
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IStorageItem );
+            return Equals( obj as IStorageItem );
         }
 
         public bool Equals( IStorageItem other )
         {
             if ( other is IFolder )
-                return this.folder.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
+                return folder.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
 
             return false;
         }
 
         public override int GetHashCode()
         {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode( this.folder.FullName );
+            return StringComparer.OrdinalIgnoreCase.GetHashCode( folder.FullName );
         }
     }
 }

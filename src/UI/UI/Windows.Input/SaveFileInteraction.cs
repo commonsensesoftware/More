@@ -51,11 +51,11 @@
         public SaveFileInteraction( string title, string defaultFileExtension, string suggestedFileName )
             : base( title )
         {
-            Arg.NotNull( defaultFileExtension, "defaultFileExtension" );
-            Arg.NotNull( suggestedFileName, "suggestedFileName" );
+            Arg.NotNull( defaultFileExtension, nameof( defaultFileExtension ) );
+            Arg.NotNull( suggestedFileName, nameof( suggestedFileName ) );
 
-            this.defaultFileExt = defaultFileExtension;
-            this.fileName = suggestedFileName;
+            defaultFileExt = defaultFileExtension;
+            fileName = suggestedFileName;
         }
 
         /// <summary>
@@ -66,12 +66,12 @@
         {
             get
             {
-                return this.defaultFileExt;
+                return defaultFileExt;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.defaultFileExt, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref defaultFileExt, value );
             }
         }
 
@@ -86,12 +86,12 @@
         {
             get
             {
-                return this.fileName;
+                return fileName;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.fileName, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref fileName, value );
             }
         }
 
@@ -122,7 +122,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IDictionary<string, IList<string>>>() != null );
-                return this.fileTypeChoices;
+                return fileTypeChoices;
             }
         }
 

@@ -19,8 +19,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generic support." )]
         public UnitOfWorkFactoryProvider( Func<IEnumerable<IUnitOfWorkFactory>> providerFactory )
         {
-            Arg.NotNull( providerFactory, "providerFactory" );
-            this.factory = providerFactory;
+            Arg.NotNull( providerFactory, nameof( providerFactory ) );
+            factory = providerFactory;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@
         {
             get
             {
-                return this.factory();
+                return factory();
             }
         }
     }

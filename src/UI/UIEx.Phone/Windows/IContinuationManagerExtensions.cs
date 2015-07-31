@@ -26,8 +26,8 @@
             where TInteraction : Interaction
             where TEventArgs : IContinuationActivatedEventArgs
         {
-            Arg.NotNull( continuationManager, "continuationManager" );
-            Arg.NotNull( continuation, "continuation" );
+            Arg.NotNull( continuationManager, nameof( continuationManager ) );
+            Arg.NotNull( continuation, nameof( continuation ) );
             Contract.Ensures( Contract.Result<InteractionRequest<TInteraction>>() != null );
             return continuationManager.CreateInteractionRequest<TInteraction, TEventArgs>( null, continuation );
         }

@@ -24,13 +24,13 @@
         /// </summary>
         public DataGridColumnAttribute()
         {
-            this.CanReorder = true;
-            this.CanResize = true;
-            this.CanSort = true;
-            this.DisplayIndex = -1;
-            this.MaxWidth = double.PositiveInfinity;
-            this.Width = double.NaN;
-            this.Visibility = Visibility.Visible;
+            CanReorder = true;
+            CanResize = true;
+            CanSort = true;
+            DisplayIndex = -1;
+            MaxWidth = double.PositiveInfinity;
+            Width = double.NaN;
+            Visibility = Visibility.Visible;
         }
 
         /// <summary>

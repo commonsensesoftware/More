@@ -23,7 +23,7 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public CreditCardRule( string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             this.errorMessage = errorMessage;
         }
 
@@ -68,7 +68,7 @@
             if ( item == null || item.Value == null || ValidCheckSum( item.Value ) )
                 return ValidationResult.Success;
 
-            var message = this.errorMessage ?? ValidationMessage.CreditCardInvalid.FormatDefault( item.Name );
+            var message = errorMessage ?? ValidationMessage.CreditCardInvalid.FormatDefault( item.Name );
             return new ValidationResult( message, item.Name );
         }
     }

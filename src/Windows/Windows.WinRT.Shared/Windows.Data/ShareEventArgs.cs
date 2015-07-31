@@ -21,11 +21,11 @@
         /// <param name="shareOperation">The representation of the <see cref="ShareOperation">share operation</see>.</param>
         public ShareEventArgs( ApplicationExecutionState previousExecutionState, ShareOperation shareOperation )
         {
-            Contract.Requires<ArgumentNullException>( shareOperation != null, "shareOperation" );
+            Arg.NotNull( shareOperation, nameof( shareOperation ) );
 
-            this.PreviousExecutionState = previousExecutionState;
-            this.adapted = shareOperation;
-            this.dataPackageView = new Lazy<IDataPackageView>( () => new DataPackageViewAdapter( this.adapted.Data ) );
+            PreviousExecutionState = previousExecutionState;
+            adapted = shareOperation;
+            dataPackageView = new Lazy<IDataPackageView>( () => new DataPackageViewAdapter( adapted.Data ) );
         }
 
         /// <summary>
@@ -46,7 +46,7 @@
         {
             get
             {
-                return this.dataPackageView.Value;
+                return dataPackageView.Value;
             }
         }
 
@@ -58,66 +58,45 @@
         {
             get
             {
-                return this.adapted.QuickLinkId;
+                return adapted.QuickLinkId;
             }
         }
 
         /// <summary>
         /// Removes the quick link from the list of quick links that are available to the user.
         /// </summary>
-        public void RemoveThisQuickLink()
-        {
-            this.adapted.RemoveThisQuickLink();
-        }
+        public void RemoveThisQuickLink() => adapted.RemoveThisQuickLink();
 
         /// <summary>
         /// Specifies that the sharing operation is complete.
         /// </summary>
-        public void ReportCompleted()
-        {
-            this.adapted.ReportCompleted();
-        }
+        public void ReportCompleted() => adapted.ReportCompleted();
 
         /// <summary>
         /// Specifies that the sharing operation is complete.
         /// </summary>
-        /// <param name="quicklink">A <see cref="QuickLink">quick link</see> that the system saves as a shortcut for future sharing operations.</param>
-        public void ReportCompleted( QuickLink quicklink )
-        {
-            this.adapted.ReportCompleted( quicklink );
-        }
+        /// <param name="quickLink">A <see cref="QuickLink">quick link</see> that the system saves as a shortcut for future sharing operations.</param>
+        public void ReportCompleted( QuickLink quickLink ) => adapted.ReportCompleted( quickLink );
 
         /// <summary>
         /// Specifies that the application has acquired the content that the user wants to share.
         /// </summary>
-        public void ReportDataRetrieved()
-        {
-            this.adapted.ReportDataRetrieved();
-        }
+        public void ReportDataRetrieved() => adapted.ReportDataRetrieved();
 
         /// <summary>
         /// Specifies that an error occurred during the sharing operation.
         /// </summary>
         /// <param name="value">Specifies the error message. The system displays this message to the user.</param>
-        public void ReportError( string value )
-        {
-            this.adapted.ReportError( value );
-        }
+        public void ReportError( string value ) => adapted.ReportError( value );
 
         /// <summary>
         /// Specifies that the application has started to acquire the content that the user wants to share.
         /// </summary>
-        public void ReportStarted()
-        {
-            this.adapted.ReportStarted();
-        }
+        public void ReportStarted() => adapted.ReportStarted();
 
         /// <summary>
         /// Specifies that the application has requested that the system allow the sharing operation to run as a background task.
         /// </summary>
-        public void ReportSubmittedBackgroundTask()
-        {
-            this.adapted.ReportSubmittedBackgroundTask();
-        }
+        public void ReportSubmittedBackgroundTask() => adapted.ReportSubmittedBackgroundTask();
     }
 }

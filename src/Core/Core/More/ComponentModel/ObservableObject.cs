@@ -25,10 +25,7 @@
         /// <param name="propertyName">The name of the property that changed. The default value is the name of the
         /// member the method is invoked from<seealso cref="CallerMemberNameAttribute"/>.</param>
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
-        protected void OnPropertyChanged( [CallerMemberName] string propertyName = null )
-        {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
-        }
+        protected void OnPropertyChanged( [CallerMemberName] string propertyName = null ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
 
         /// <summary>
         /// Raises the <see cref="E:PropertyChanged"/> event.
@@ -36,21 +33,14 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
-
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:PropertyChanged"/> event when all properties have changed.
         /// </summary>
-        protected void OnAllPropertiesChanged()
-        {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( null ) );
-        }
+        protected void OnAllPropertiesChanged() => OnPropertyChanged( new PropertyChangedEventArgs( null ) );
 
         /// <summary>
         /// Raises the <see cref="E:PropertyChanging"/> event.
@@ -93,8 +83,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected bool OnPropertyChanging<TValue>( TValue backingField, TValue value, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            return this.OnPropertyChanging( backingField, value, ValueComparer<TValue>.Default, propertyName );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            return OnPropertyChanging( backingField, value, ValueComparer<TValue>.Default, propertyName );
         }
 
         /// <summary>
@@ -138,8 +128,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         protected virtual bool OnPropertyChanging<TValue>( TValue backingField, TValue value, IEqualityComparer<TValue> comparer, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNull( comparer, "comparer" );
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( comparer, nameof( comparer ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
             return !comparer.Equals( backingField, value );
         }
 
@@ -179,8 +169,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Required to update the backing field without using Reflection or a compiled expression." )]
         protected bool SetProperty<TValue>( ref TValue backingField, TValue value, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            return this.SetProperty( ref backingField, value, ValueComparer<TValue>.Default, propertyName );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            return SetProperty( ref backingField, value, ValueComparer<TValue>.Default, propertyName );
         }
 
         /// <summary>
@@ -220,14 +210,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Required to update the backing field without using Reflection or a compiled expression." )]
         protected virtual bool SetProperty<TValue>( ref TValue backingField, TValue value, IEqualityComparer<TValue> comparer, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNull( comparer, "comparer" );
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( comparer, nameof( comparer ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
-            if ( !this.OnPropertyChanging( backingField, value, comparer, propertyName ) )
+            if ( !OnPropertyChanging( backingField, value, comparer, propertyName ) )
                 return false;
 
             backingField = value;
-            this.OnPropertyChanged( propertyName );
+            OnPropertyChanged( propertyName );
             return true;
         }
 

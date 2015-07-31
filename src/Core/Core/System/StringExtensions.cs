@@ -38,8 +38,8 @@
         [Pure]
         public static bool IsMatch( this string value, string pattern )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             return Regex.IsMatch( value, pattern, RegexOptions.None );
         }
 
@@ -54,8 +54,8 @@
         [Pure]
         public static bool IsMatch( this string value, string pattern, RegexOptions options )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             return Regex.IsMatch( value, pattern, options );
         }
 
@@ -68,8 +68,8 @@
         [Pure]
         public static Match Match( this string value, string pattern )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             Contract.Ensures( Contract.Result<Match>() != null );
             return Regex.Match( value, pattern, RegexOptions.None );
         }
@@ -85,8 +85,8 @@
         [Pure]
         public static Match Match( this string value, string pattern, RegexOptions options )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             Contract.Ensures( Contract.Result<Match>() != null );
             return Regex.Match( value, pattern, options );
         }
@@ -100,8 +100,8 @@
         [Pure]
         public static MatchCollection Matches( this string value, string pattern )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             Contract.Ensures( Contract.Result<MatchCollection>() != null );
             return Regex.Matches( value, pattern, RegexOptions.None );
         }
@@ -117,8 +117,8 @@
         [Pure]
         public static MatchCollection Matches( this string value, string pattern, RegexOptions options )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             Contract.Ensures( Contract.Result<MatchCollection>() != null );
             return Regex.Matches( value, pattern, options );
         }
@@ -132,8 +132,8 @@
         [Pure]
         public static string[] Split( this string value, string pattern )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             Contract.Ensures( Contract.Result<string[]>() != null );
             return Regex.Split( value, pattern, RegexOptions.None );
         }
@@ -149,8 +149,8 @@
         [Pure]
         public static string[] Split( this string value, string pattern, RegexOptions options )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
             Contract.Ensures( Contract.Result<string[]>() != null );
             return Regex.Split( value, pattern, options );
         }
@@ -167,9 +167,9 @@
         [Pure]
         public static string Replace( this string value, string pattern, string replacement )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
-            Arg.NotNull( replacement, "replacement" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
+            Arg.NotNull( replacement, nameof( replacement ) );
             Contract.Ensures( Contract.Result<string>() != null );
             return Regex.Replace( value, pattern, replacement, RegexOptions.None );
         }
@@ -187,9 +187,9 @@
         [Pure]
         public static string Replace( this string value, string pattern, string replacement, RegexOptions options )
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( pattern, "pattern" );
-            Arg.NotNull( replacement, "replacement" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
+            Arg.NotNull( replacement, nameof( replacement ) );
             Contract.Ensures( Contract.Result<string>() != null );
             return Regex.Replace( value, pattern, replacement, options );
         }
@@ -241,7 +241,7 @@
         [Pure]
         public static string FormatInvariant( this string format, params object[] args )
         {
-            Arg.NotNull( format, "format" );
+            Arg.NotNull( format, nameof( format ) );
             Contract.Ensures( Contract.Result<string>() != null );
             return string.Format( CultureInfo.InvariantCulture, format, args );
         }
@@ -256,7 +256,7 @@
         [Pure]
         public static string FormatDefault( this string format, params object[] args )
         {
-            Arg.NotNull( format, "format" );
+            Arg.NotNull( format, nameof( format ) );
             Contract.Ensures( Contract.Result<string>() != null );
             return string.Format( CultureInfo.CurrentCulture, format, args );
         }
@@ -270,7 +270,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static string Left( this string value, int length )
         {
-            Arg.NotNull( value, "value" );
+            Arg.NotNull( value, nameof( value ) );
             Contract.Ensures( Contract.Result<string>() != null );
             Contract.Ensures( Contract.Result<string>().Length == length );
             Arg.LessThanOrEqualTo( length, value.Length, "length" );
@@ -287,7 +287,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static string Right( this string value, int length )
         {
-            Arg.NotNull( value, "value" );
+            Arg.NotNull( value, nameof( value ) );
             Contract.Ensures( Contract.Result<string>() != null );
             Contract.Ensures( Contract.Result<string>().Length == length );
             Arg.LessThanOrEqualTo( length, value.Length, "length" );

@@ -29,7 +29,7 @@
         public SelectFolderInteraction( string title, params string[] fileTypeFilter )
             : base( title )
         {
-            Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
+            Arg.NotNull( fileTypeFilter, nameof( fileTypeFilter ) );
 
             this.fileTypeFilter.AddRange( fileTypeFilter );
         }
@@ -42,7 +42,7 @@
         {
             get
             {
-                return this.fileTypeFilter;
+                return fileTypeFilter;
             }
         }
 

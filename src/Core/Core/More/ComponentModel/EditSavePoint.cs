@@ -24,7 +24,7 @@
         {
             get
             {
-                return this.transaction;
+                return transaction;
             }
         }
 
@@ -32,7 +32,7 @@
         {
             get
             {
-                return this.state;
+                return state;
             }
         }
     }

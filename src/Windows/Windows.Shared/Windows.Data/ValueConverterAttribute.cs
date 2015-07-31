@@ -37,9 +37,8 @@
         /// <param name="converterType">The <see cref="Type"/> of <see cref="IValueConverter"/> to create.</param>
         public ValueConverterAttribute( Type converterType )
         {
-            Contract.Requires<ArgumentNullException>( converterType != null, "converterType" );
-            Contract.Requires<ArgumentException>( IsValidConverterType( converterType ), "converterType" );
-            this.type = converterType;
+            Arg.NotNull( converterType, nameof( converterType ) );
+            type = converterType;
         }
 
         /// <summary>
@@ -51,9 +50,7 @@
         public ValueConverterAttribute( Type converterType, params object[] constructorArguments )
             : this( converterType )
         {
-            Contract.Requires<ArgumentNullException>( converterType != null, "converterType" );
-            Contract.Requires<ArgumentException>( IsValidConverterType( converterType ), "converterType" );
-            this.ctorArgs.AddRange( constructorArguments );
+            ctorArgs.AddRange( constructorArguments );
         }
 
         /// <summary>
@@ -64,12 +61,12 @@
         {
             get
             {
-                return this.type;
+                return type;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.type = value;
+                Arg.NotNull( value, nameof( value ) );
+                type = value;
             }
         }
 
@@ -83,13 +80,13 @@
         {
             get
             {
-                Contract.Ensures( this.ctorArgs != null );
-                return this.ctorArgs.ToArray();
+                Contract.Ensures( ctorArgs != null );
+                return ctorArgs.ToArray();
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.ctorArgs.ReplaceAll( value );
+                Arg.NotNull( value, nameof( value ) );
+                ctorArgs.ReplaceAll( value );
             }
         }
 
@@ -123,23 +120,23 @@
         {
             get
             {
-                Contract.Ensures( this.converter != null );
+                Contract.Ensures( converter != null );
 
-                if ( this.converter == null )
+                if ( converter == null )
                 {
-                    var converterType = this.ConverterType;
+                    var converterType = ConverterType;
 
                     if ( converterType == null )
                         throw new InvalidOperationException( ExceptionMessage.AttributePropertyUnset.FormatDefault( "ConverterType" ) );
                     else if ( !IsValidConverterType( converterType ) )
                         throw new InvalidOperationException( ExceptionMessage.InvalidValueConverterType.FormatDefault( converterType, typeof( IValueConverter ) ) );
 
-                    var instance = Activator.CreateInstance( converterType, this.ConstructorArguments );
-                    ApplyPropertyInitializers( instance, this.PropertyInitializers );
-                    this.converter = (IValueConverter) instance;
+                    var instance = Activator.CreateInstance( converterType, ConstructorArguments );
+                    ApplyPropertyInitializers( instance, PropertyInitializers );
+                    converter = (IValueConverter) instance;
                 }
 
-                return this.converter;
+                return converter;
             }
         }
 
@@ -152,7 +149,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static bool IsValidConverterType( Type converterType )
         {
-            Contract.Requires<ArgumentNullException>( converterType != null, "converterType" );
+            Arg.NotNull( converterType, nameof( converterType ) );
 #if NETFX_CORE
             var type = converterType.GetTypeInfo();
             return type.IsPublic && !type.IsAbstract && typeof( IValueConverter ).GetTypeInfo().IsAssignableFrom( type );

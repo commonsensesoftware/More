@@ -56,7 +56,7 @@
         /// <returns>True if the rule is satisified; otherwise, false.</returns>
         public bool Evaluate( Number? item )
         {
-            return item != null && item.Value.NumberStyle == this.NumberStyle;
+            return item != null && item.Value.NumberStyle == NumberStyle;
         }
     }
 }

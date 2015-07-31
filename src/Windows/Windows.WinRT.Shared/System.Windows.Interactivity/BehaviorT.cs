@@ -52,22 +52,22 @@
         /// <exception cref="T:System.InvalidOperationException">dependencyObject does not satisfy the Behavior type constraint.</exception>
         public void Attach( T associatedObject )
         {
-            if ( associatedObject == this.AssociatedObject )
+            if ( associatedObject == AssociatedObject )
                 return;
 
-            if ( this.AssociatedObject != null )
+            if ( AssociatedObject != null )
                 throw new InvalidOperationException( ExceptionMessage.CannotHostBehaviorMultipleTimesExceptionMessage );
 
             this.VerifyAccess();
-            this.AssociatedObject = associatedObject;
-            this.OnAttached();
+            AssociatedObject = associatedObject;
+            OnAttached();
         }
 
         DependencyObject IBehavior.AssociatedObject
         {
             get
             {
-                return this.AssociatedObject;
+                return AssociatedObject;
             }
         }
 
@@ -76,7 +76,7 @@
             if ( associatedObject != null && !typeof( T ).GetTypeInfo().IsAssignableFrom( associatedObject.GetType().GetTypeInfo() ) )
                 throw new InvalidOperationException( ExceptionMessage.TypeConstraintViolatedExceptionMessage.FormatDefault( new object[] { base.GetType().Name, associatedObject.GetType().Name, typeof( T ).Name } ) );
 
-            this.Attach( (T) associatedObject );
+            Attach( (T) associatedObject );
         }
 
         /// <summary>
@@ -84,9 +84,9 @@
         /// </summary>
         public void Detach()
         {
-            this.OnDetaching();
+            OnDetaching();
             this.VerifyAccess();
-            this.AssociatedObject = null;
+            AssociatedObject = null;
         }
     }
 }

@@ -26,8 +26,8 @@
                 Contract.Requires( !string.IsNullOrEmpty( location ) );
                 Contract.Requires( assembly != null );
 
-                this.Location = location;
-                this.Assembly = assembly;
+                Location = location;
+                Assembly = assembly;
             }
         }
 
@@ -39,7 +39,7 @@
             Contract.Requires( folder != null );
             Contract.Ensures( Contract.Result<Task>() != null );
 
-            if ( this.initialized )
+            if ( initialized )
                 return;
 
             var temp = new List<AssemblyEntry>();
@@ -56,25 +56,25 @@
                 temp.Add( entry );
             }
 
-            lock ( this.entries )
+            lock ( entries )
             {
-                if ( this.initialized )
+                if ( initialized )
                     return;
 
-                this.initialized = true;
-                this.entries.ReplaceAll( temp );
+                initialized = true;
+                entries.ReplaceAll( temp );
             }
         }
 
         private void EnsureAssemblyEntries()
         {
-            if ( this.initialized )
+            if ( initialized )
                 return;
 
             // note: the current package cannot be accessed on a background thread. get the installation
             // folder now and forward just the folder for enumeration in the background task.
             var folder = Package.Current.InstalledLocation;
-            var task = Task.Run( () => this.EnsureAssemblyEntries( folder ) );
+            var task = Task.Run( () => EnsureAssemblyEntries( folder ) );
 
             // this method is not async and in order to make it async, we would have to change the api.
             // instead we run the async operation in the background and wait for the results. this
@@ -89,10 +89,10 @@
             Contract.Requires( !string.IsNullOrEmpty( typeName ) );
             Contract.Requires( ex != null );
 
-            this.EnsureAssemblyEntries();
+            EnsureAssemblyEntries();
 
             var sourceType = new TypeName( typeName );
-            var types = ( from entry in this.entries
+            var types = ( from entry in entries
                           from type in entry.Assembly.ExportedTypes
                           let targetType = new TypeName( type )
                           where sourceType.IsMatch( targetType )
@@ -128,7 +128,7 @@
         /// <returns>An instance of the requested <see cref="Assembly">assembly</see>, or null if no assembly can be located.</returns>
         public Assembly GetAssembly( AssemblyName name )
         {
-            return this.GetAssembly( name, true );
+            return GetAssembly( name, true );
         }
 
         /// <summary>
@@ -138,9 +138,9 @@
         /// <returns>The path to the file from which the assembly was loaded.</returns>
         public string GetPathOfAssembly( AssemblyName name )
         {
-            this.EnsureAssemblyEntries();
+            EnsureAssemblyEntries();
 
-            var locations = from entry in this.entries
+            var locations = from entry in entries
                             let otherName = entry.Assembly.GetName()
                             where name.FullName == otherName.FullName &&
                                   name.Version == otherName.Version &&
@@ -158,7 +158,7 @@
         /// <returns>An instance of <see cref="Type">type</see> that corresponds to the specified name, or null if no type can be found.</returns>
         public Type GetType( string name )
         {
-            return this.GetType( name, true, false );
+            return GetType( name, true, false );
         }
 
         /// <summary>
@@ -171,7 +171,7 @@
         /// <returns>An instance of <see cref="Type">type</see> that corresponds to the specified name, or null if no type can be found.</returns>
         public Type GetType( string name, bool throwOnError )
         {
-            return this.GetType( name, throwOnError, false );
+            return GetType( name, throwOnError, false );
         }
 
         /// <summary>
@@ -195,9 +195,9 @@
             if ( name == null )
                 throw new ArgumentNullException( "name" );
 
-            this.EnsureAssemblyEntries();
+            EnsureAssemblyEntries();
 
-            var assembly = ( from entry in this.entries
+            var assembly = ( from entry in entries
                              let otherName = entry.Assembly.GetName()
                              where name.FullName == otherName.FullName &&
                                    name.Version == otherName.Version &&
@@ -253,7 +253,7 @@
                 throw;
             }
 
-            return this.GetTypeByName( name, throwOnError, ex );
+            return GetTypeByName( name, throwOnError, ex );
         }
     }
 }

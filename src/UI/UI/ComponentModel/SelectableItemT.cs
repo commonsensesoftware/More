@@ -56,13 +56,13 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare values.</param>
         public SelectableItem( bool? selected, T value, IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
-            this.Value = value;
+            Value = value;
             this.selected = selected;
             this.comparer = comparer;
-            this.Select = new Command<object>( p => this.IsSelected = true );
-            this.Unselect = new Command<object>( p => this.IsSelected = false );
+            Select = new Command<object>( p => IsSelected = true );
+            Unselect = new Command<object>( p => IsSelected = false );
         }
 
         /// <summary>
@@ -74,7 +74,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<T>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -84,12 +84,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnSelected( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Selected;
-
-            if ( handler != null )
-                handler( this, e );
+            Selected?.Invoke( this, e );
         }
 
         /// <summary>
@@ -98,12 +95,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnUnselected( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Unselected;
-
-            if ( handler != null )
-                handler( this, e );
+            Unselected?.Invoke( this, e );
         }
 
         /// <summary>
@@ -112,12 +106,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnIndeterminate( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Indeterminate;
-
-            if ( handler != null )
-                handler( this, e );
+            Indeterminate?.Invoke( this, e );
         }
 
         /// <summary>
@@ -127,7 +118,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as ISelectableItem<T> );
+            return Equals( obj as ISelectableItem<T> );
         }
 
         /// <summary>
@@ -136,7 +127,7 @@
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            return this.Value == null ? 0 : this.Comparer.GetHashCode( this.Value );
+            return Value == null ? 0 : Comparer.GetHashCode( Value );
         }
 
         /// <summary>
@@ -145,7 +136,7 @@
         /// <returns>The string representation of the current instance.</returns>
         public override string ToString()
         {
-            return this.Value == null ? string.Empty : this.Value.ToString();
+            return Value == null ? string.Empty : Value.ToString();
         }
 
         /// <summary>
@@ -184,19 +175,19 @@
         {
             get
             {
-                return this.selected;
+                return selected;
             }
             set
             {
-                if ( !this.SetProperty( ref this.selected, value, NullBoolComparer ) )
+                if ( !SetProperty( ref selected, value, NullBoolComparer ) )
                     return;
 
-                if ( this.selected == null )
-                    this.OnIndeterminate( EventArgs.Empty );
-                else if ( this.selected.Value )
-                    this.OnSelected( EventArgs.Empty );
+                if ( selected == null )
+                    OnIndeterminate( EventArgs.Empty );
+                else if ( selected.Value )
+                    OnSelected( EventArgs.Empty );
                 else
-                    this.OnUnselected( EventArgs.Empty );
+                    OnUnselected( EventArgs.Empty );
             }
         }
 
@@ -252,7 +243,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public bool Equals( ISelectableItem<T> other )
         {
-            return !object.Equals( other, null ) && this.Comparer.Equals( this.Value, other.Value );
+            return !object.Equals( other, null ) && Comparer.Equals( Value, other.Value );
         }
 
         /// <summary>
@@ -262,7 +253,7 @@
         /// <returns>True if the specified value equals the current instance; otherwise, false.</returns>
         public bool Equals( T other )
         {
-            return this.Comparer.Equals( this.Value, other );
+            return Comparer.Equals( Value, other );
         }
     }
 }

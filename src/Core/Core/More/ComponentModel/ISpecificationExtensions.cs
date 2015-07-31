@@ -20,8 +20,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ISpecification<T> And<T>( this ISpecification<T> specification, Func<T, bool> other )
         {
-            Arg.NotNull( specification, "specification" );
-            Arg.NotNull( other, "other" );
+            Arg.NotNull( specification, nameof( specification ) );
+            Arg.NotNull( other, nameof( other ) );
             Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
 
             return specification.And( new Specification<T>( other ) );
@@ -38,8 +38,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ISpecification<T> Or<T>( this ISpecification<T> specification, Func<T, bool> other )
         {
-            Arg.NotNull( specification, "specification" );
-            Arg.NotNull( other, "other" );
+            Arg.NotNull( specification, nameof( specification ) );
+            Arg.NotNull( other, nameof( other ) );
             Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
 
             return specification.Or( new Specification<T>( other ) );

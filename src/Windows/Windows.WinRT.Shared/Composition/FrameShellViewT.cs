@@ -26,8 +26,8 @@
         public FrameShellView( IServiceProvider serviceProvider )
             : base( serviceProvider )
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
-            this.StartPage = typeof( T );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            StartPage = typeof( T );
         }
     }
 }

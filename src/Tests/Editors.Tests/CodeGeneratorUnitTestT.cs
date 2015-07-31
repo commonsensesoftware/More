@@ -25,8 +25,8 @@
 
         protected CodeGeneratorUnitTest()
         {
-            this.serviceProvider.QueryServiceGuidRefGuidRefIntPtrOut = this.QueryService;
-            this.RegisterService( this.CreateCodeDomProvider );
+            serviceProvider.QueryServiceGuidRefGuidRefIntPtrOut = QueryService;
+            RegisterService( CreateCodeDomProvider );
         }
 
         private int QueryService( ref Guid guidService, ref Guid riid, out IntPtr ppvObject )
@@ -35,7 +35,7 @@
 
             Lazy<object> service;
 
-            if ( !this.services.TryGetValue( guidService, out service ) )
+            if ( !services.TryGetValue( guidService, out service ) )
                 return NoInterface;
 
             ppvObject = Marshal.GetIUnknownForObject( service.Value );
@@ -46,7 +46,7 @@
         {
             var codeProvider = new Mock<CodeDomProvider>();
             var provider = new Mock<IVSMDCodeDomProvider>();
-            var ext = this.LanguageFileExtension;
+            var ext = LanguageFileExtension;
 
             // the CodeDomProvider does not include the leading period; strip it as necessary
             if ( ext[0] == '.' )
@@ -62,48 +62,48 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.fileExtension ) );
-                return this.fileExtension;
+                Contract.Ensures( !string.IsNullOrEmpty( fileExtension ) );
+                return fileExtension;
             }
             set
             {
                 Contract.Requires( !string.IsNullOrEmpty( value ) );
-                this.fileExtension = value;
+                fileExtension = value;
             }
         }
 
         protected void RegisterService<TService>( TService service )
         {
             Contract.Requires( service != null );
-            this.services[typeof( TService ).GUID] = new Lazy<object>( () => service );
+            services[typeof( TService ).GUID] = new Lazy<object>( () => service );
         }
 
         protected void RegisterService<TService>( Func<TService> activator )
         {
             Contract.Requires( activator != null );
             var ctor = activator;
-            this.services[typeof( TService ).GUID] = new Lazy<object>( () => ctor() );
+            services[typeof( TService ).GUID] = new Lazy<object>( () => ctor() );
         }
 
         protected T CreateCodeGenerator()
         {
             var instance = new T();
             IObjectWithSite target = instance;
-            target.SetSite( this.serviceProvider );
+            target.SetSite( serviceProvider );
             return instance;
         }
 
         protected int Generate( string filePath, string fileContent, string defaultNamespace, out string generatedContent )
         {
             var progress = new Mock<IVsGeneratorProgress>().Object;
-            return this.Generate( filePath, fileContent, defaultNamespace, progress, out generatedContent );
+            return Generate( filePath, fileContent, defaultNamespace, progress, out generatedContent );
         }
 
         protected int Generate( string filePath, string fileContent, string defaultNamespace, IVsGeneratorProgress progress, out string generatedContent )
         {
             generatedContent = null;
 
-            IVsSingleFileGenerator generator = this.CreateCodeGenerator();
+            IVsSingleFileGenerator generator = CreateCodeGenerator();
             var output = new IntPtr[1];
             var outputSize = 0U;
             var result = generator.Generate( filePath, fileContent, defaultNamespace, output, out outputSize, progress );
@@ -122,14 +122,14 @@
         [Fact]
         public virtual void DefaultExtensionPropertyShouldReturnExpectedValue()
         {
-            var expected = this.LanguageFileExtension;
+            var expected = LanguageFileExtension;
 
             if ( expected[0] == '.' )
                 expected = ".g" + expected;
             else
                 expected = ".g." + expected;
 
-            var generator = this.CreateCodeGenerator();
+            var generator = CreateCodeGenerator();
             var actual = generator.DefaultExtension;
 
             Assert.Equal( expected, actual );
@@ -138,14 +138,14 @@
         [Fact]
         public virtual void DefaultExtensionMethodShouldReturnExpectedValue()
         {
-            var expected = this.LanguageFileExtension;
+            var expected = LanguageFileExtension;
 
             if ( expected[0] == '.' )
                 expected = ".g" + expected;
             else
                 expected = ".g." + expected;
 
-            IVsSingleFileGenerator generator = this.CreateCodeGenerator();
+            IVsSingleFileGenerator generator = CreateCodeGenerator();
             string actual;
             var result = generator.DefaultExtension( out actual );
 

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using global::Windows.ApplicationModel.DataTransfer;
 
@@ -14,22 +15,16 @@
         {
             Contract.Requires( request != null );
             this.request = request;
-            this.data = new Lazy<IDataPackage>( this.CreateDataPackage );
+            data = new Lazy<IDataPackage>( CreateDataPackage );
         }
 
-        private IDataPackage CreateDataPackage()
-        {
-            if ( this.request.Data == null )
-                this.request.Data = new DataPackage();
-
-            return new DataPackageAdapter( this.request.Data );
-        }
+        private IDataPackage CreateDataPackage() => new DataPackageAdapter( request.Data ?? ( request.Data = new DataPackage() ) );
 
         public IDataPackage Data
         {
             get
             {
-                return this.data.Value;
+                return data.Value;
             }
         }
 
@@ -37,18 +32,17 @@
         {
             get
             {
-                return this.request.Deadline;
+                return request.Deadline;
             }
         }
 
         public void FailWithDisplayText( string value )
         {
-            this.request.FailWithDisplayText( value );
+            Arg.NotNull( value, nameof( value ) );
+            request.FailWithDisplayText( value );
         }
 
-        public IDisposable GetDeferral()
-        {
-            return new DeferralAdapter( this.request.GetDeferral().Complete );
-        }
+        [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Must be disposed by the caller." )]
+        public IDisposable GetDeferral() => new DeferralAdapter( request.GetDeferral().Complete );
     }
 }

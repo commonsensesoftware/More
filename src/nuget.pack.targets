@@ -3,8 +3,8 @@
 
  <PropertyGroup>
   <RootDirectory>$(MSBuildThisFileDirectory)</RootDirectory>
-  <!--<VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>-->
-  <VisualStudioVersion>12.0</VisualStudioVersion>
+  <!--<VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>-->
+  <VisualStudioVersion>14.0</VisualStudioVersion>
   <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
  </PropertyGroup>
 
@@ -12,11 +12,11 @@
  <UsingTask TaskName="ResolvePackageReference" AssemblyFile="$(RootDirectory)Build\bin\More.Build.Tasks.dll" />
 
  <PropertyGroup>
-  <NuGetExe>$(RootDirectory)packages\NuGet.CommandLine.2.8.5\tools\nuget.exe</NuGetExe>
+  <NuGetExe>$(RootDirectory)packages\NuGet.CommandLine.2.8.6\tools\nuget.exe</NuGetExe>
   <PackageOutDir>$(RootDirectory)NuGet</PackageOutDir>
-  <CurrentOutDir>$(OutDir.TrimEnd("\"))</CurrentOutDir>
   <NuGetPackTarget>$(ProjectPath)</NuGetPackTarget>
-  <NuGetPackProperties>bin=$(CurrentOutDir)</NuGetPackProperties>
+  <NuGetPackProperties Condition=" '$(Configuration)'=='' ">configuration=Release</NuGetPackProperties>
+  <NuGetPackProperties Condition=" '$(Configuration)'!='' ">configuration=$(Configuration)</NuGetPackProperties>
   <TransformOnBuild>true</TransformOnBuild>
   <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
   <BeforeTransform>ResolveNuGetPackageRef</BeforeTransform>

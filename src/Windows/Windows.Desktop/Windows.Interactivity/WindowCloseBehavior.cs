@@ -16,14 +16,14 @@
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty CloseCommandProperty =
-            DependencyProperty.Register( "CloseCommand", typeof( ICommand ), typeof( WindowCloseBehavior ), new PropertyMetadata( OnCloseCommandChanged ) );
+            DependencyProperty.Register( nameof( CloseCommand ), typeof( ICommand ), typeof( WindowCloseBehavior ), new PropertyMetadata( OnCloseCommandChanged ) );
 
         /// <summary>
         /// Gets or sets the close request dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty CloseRequestProperty =
-            DependencyProperty.Register( "CloseRequest", typeof( IInteractionRequest ), typeof( WindowCloseBehavior ), new PropertyMetadata( OnCloseRequestChanged ) );
+            DependencyProperty.Register( nameof( CloseRequest ), typeof( IInteractionRequest ), typeof( WindowCloseBehavior ), new PropertyMetadata( OnCloseRequestChanged ) );
 
         private Window window;
         private volatile bool closing;
@@ -36,11 +36,11 @@
         {
             get
             {
-                return (ICommand) this.GetValue( CloseCommandProperty );
+                return (ICommand) GetValue( CloseCommandProperty );
             }
             set
             {
-                this.SetValue( CloseCommandProperty, value );
+                SetValue( CloseCommandProperty, value );
             }
         }
 
@@ -52,11 +52,11 @@
         {
             get
             {
-                return (IInteractionRequest) this.GetValue( CloseRequestProperty );
+                return (IInteractionRequest) GetValue( CloseRequestProperty );
             }
             set
             {
-                this.SetValue( CloseRequestProperty, value );
+                SetValue( CloseRequestProperty, value );
             }
         }
 
@@ -96,68 +96,68 @@
 
         private void OnCanExecuteChanged( object sender, EventArgs e )
         {
-            if ( this.window == null || !this.window.IsInitialized )
+            if ( window == null || !window.IsInitialized )
                 return;
 
             var command = (ICommand) sender;
 
             if ( command != null )
-                this.window.SetCloseButtonEnabled( command.CanExecute() );
+                window.SetCloseButtonEnabled( command.CanExecute() );
         }
 
         private void OnCloseRequested( object sender, InteractionRequestedEventArgs e )
         {
-            if ( this.window == null )
+            if ( window == null )
                 return;
 
             var notification = e.Interaction as WindowCloseInteraction;
             var dialogResult = new bool?( !notification.Canceled );
             var modal = System.Windows.Interop.ComponentDispatcher.IsThreadModal;
 
-            if ( modal && !Nullable.Equals( this.window.DialogResult, dialogResult ) )
-                this.window.DialogResult = dialogResult;
+            if ( modal && !Nullable.Equals( window.DialogResult, dialogResult ) )
+                window.DialogResult = dialogResult;
 
-            if ( !this.closing )
+            if ( !closing )
             {
-                this.closing = true;
-                this.window.Close();
-                this.closing = false;
+                closing = true;
+                window.Close();
+                closing = false;
             }
         }
 
         private void OnAssociatedObjectLoaded( object sender, RoutedEventArgs e )
         {
-            if ( this.window != null )
+            if ( window != null )
             {
-                this.window.Closing -= this.OnWindowClosing;
-                this.window.SourceInitialized -= this.OnWindowSourceInitialized;
+                window.Closing -= OnWindowClosing;
+                window.SourceInitialized -= OnWindowSourceInitialized;
             }
 
-            if ( ( this.window = Window.GetWindow( this.AssociatedObject ) ) == null )
+            if ( ( window = Window.GetWindow( AssociatedObject ) ) == null )
                 return;
 
-            this.window.Closing += this.OnWindowClosing;
-            this.window.SourceInitialized += this.OnWindowSourceInitialized;
-            this.OnCanExecuteChanged( this.CloseCommand, EventArgs.Empty );
+            window.Closing += OnWindowClosing;
+            window.SourceInitialized += OnWindowSourceInitialized;
+            OnCanExecuteChanged( CloseCommand, EventArgs.Empty );
         }
 
         private void OnWindowSourceInitialized( object sender, EventArgs e )
         {
-            this.OnCanExecuteChanged( this.CloseCommand, EventArgs.Empty );
+            OnCanExecuteChanged( CloseCommand, EventArgs.Empty );
         }
 
         private void OnWindowClosing( object sender, CancelEventArgs e )
         {
             // the window is closing or the dialog result has already been set (no need to re-invoke any commands)
-            if ( this.closing || this.window.DialogResult != null )
+            if ( closing || window.DialogResult != null )
                 return;
 
-            var command = this.CloseCommand;
+            var command = CloseCommand;
 
             if ( command == null )
                 return;
 
-            this.closing = true;
+            closing = true;
             e.Cancel = !command.CanExecute();
 
             if ( !e.Cancel )
@@ -170,7 +170,7 @@
                 command.Execute( e );
             }
 
-            this.closing = false;
+            closing = false;
         }
 
         /// <summary>
@@ -179,7 +179,7 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.AssociatedObject.Loaded += this.OnAssociatedObjectLoaded;
+            AssociatedObject.Loaded += OnAssociatedObjectLoaded;
         }
 
         /// <summary>
@@ -187,13 +187,13 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            this.AssociatedObject.Loaded -= this.OnAssociatedObjectLoaded;
+            AssociatedObject.Loaded -= OnAssociatedObjectLoaded;
 
-            if ( this.window != null )
+            if ( window != null )
             {
-                this.window.Closing -= this.OnWindowClosing;
-                this.window.SourceInitialized -= this.OnWindowSourceInitialized;
-                this.window = null;
+                window.Closing -= OnWindowClosing;
+                window.SourceInitialized -= OnWindowSourceInitialized;
+                window = null;
             }
 
             base.OnDetaching();

@@ -14,7 +14,7 @@
         /// </summary>
         public NewProjectTemplateWizard()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -24,7 +24,7 @@
         public NewProjectTemplateWizard( ProjectTemplateWizardViewModel model )
             : this()
         {
-            this.DataContext = model;
+            DataContext = model;
         }
 
         /// <summary>
@@ -35,11 +35,11 @@
         {
             get
             {
-                return this.DataContext as ProjectTemplateWizardViewModel;
+                return DataContext as ProjectTemplateWizardViewModel;
             }
             set
             {
-                this.DataContext = value;
+                DataContext = value;
             }
         }
     }

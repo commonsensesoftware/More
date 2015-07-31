@@ -1,11 +1,13 @@
 ﻿namespace System.ComponentModel.DataAnnotations
 {
     using global::System;
+    using Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Specifies that a data field value is required.
     /// </summary>
     /// <remarks>This class provides ported compatibility for System.ComponentModel.DataAnnotations.RequiredAttribute.</remarks>
+    [SuppressMessage( "Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "Ported from System.ComponentModel.DataAnnotations." )]
     [AttributeUsage( AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
     public class RequiredAttribute : ValidationAttribute
     {
@@ -39,7 +41,7 @@
             
             var str = value as string;
 
-            if ( ( str != null ) && !this.AllowEmptyStrings )
+            if ( ( str != null ) && !AllowEmptyStrings )
                 return ( str.Trim().Length != 0 );
 
             return true;

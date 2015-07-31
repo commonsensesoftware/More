@@ -27,19 +27,19 @@
         /// <param name="serviceProvider">The underlying <see cref="IServiceProvider">service provider</see> for the context.</param>
         public CodeGeneratorContext( string filePath, string fileContents, string defaultNamespace, IProgress<GeneratorProgress> progress, IServiceProvider serviceProvider )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( filePath ), "filePath" );
-            Contract.Requires<ArgumentNullException>( fileContents != null, "fileContents" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( defaultNamespace ), "defaultNamespace" );
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Arg.NotNullOrEmpty( filePath, nameof( filePath ) );
+            Arg.NotNull( fileContents, nameof( fileContents ) );
+            Arg.NotNullOrEmpty( defaultNamespace, nameof( defaultNamespace ) );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
 
             this.filePath = filePath;
             this.fileContents = fileContents;
             this.defaultNamespace = defaultNamespace;
             this.progress = progress;
             this.serviceProvider = serviceProvider;
-            this.dte = new Lazy<DTE>( this.serviceProvider.GetRequiredService<DTE> );
-            this.projectItem = new Lazy<ProjectItem>( () => this.DesignTimeEnvironment.Solution.FindProjectItem( this.FilePath ) );
+            dte = new Lazy<DTE>( this.serviceProvider.GetRequiredService<DTE> );
+            projectItem = new Lazy<ProjectItem>( () => DesignTimeEnvironment.Solution.FindProjectItem( FilePath ) );
         }
 
         /// <summary>
@@ -50,8 +50,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.filePath ) );
-                return this.filePath;
+                Contract.Ensures( !string.IsNullOrEmpty( filePath ) );
+                return filePath;
             }
         }
 
@@ -64,8 +64,8 @@
 
             get
             {
-                Contract.Ensures( this.fileContents != null );
-                return this.fileContents;
+                Contract.Ensures( fileContents != null );
+                return fileContents;
             }
         }
 
@@ -77,8 +77,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.defaultNamespace ) );
-                return this.defaultNamespace;
+                Contract.Ensures( !string.IsNullOrEmpty( defaultNamespace ) );
+                return defaultNamespace;
             }
         }
 
@@ -90,8 +90,8 @@
         {
             get
             {
-                Contract.Ensures( this.progress != null );
-                return this.progress;
+                Contract.Ensures( progress != null );
+                return progress;
             }
         }
 
@@ -104,7 +104,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<DTE>() != null );
-                return this.dte.Value;
+                return dte.Value;
             }
         }
 
@@ -117,7 +117,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Project>() != null );
-                return this.ProjectItem.ContainingProject;
+                return ProjectItem.ContainingProject;
             }
         }
 
@@ -130,7 +130,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ProjectItem>() != null );
-                return this.projectItem.Value;
+                return projectItem.Value;
             }
         }
 
@@ -144,7 +144,7 @@
             if ( serviceType == null )
                 throw new ArgumentNullException( "serviceType" );
 
-            return this.serviceProvider.GetService( serviceType );
+            return serviceProvider.GetService( serviceType );
         }
     }
 }

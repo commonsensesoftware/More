@@ -24,7 +24,7 @@
         /// <see cref="IServiceProvider"/>; otherwise, it returns <see langword="null"/>.</returns>
         public object GetService( Type serviceType )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
 
             if ( typeof( IServiceProvider ).Equals( serviceType ) )
                 return this;
@@ -68,7 +68,7 @@
         /// <param name="serviceLocator">The <see cref="IServiceProvider">service provider</see> to make the current service provider.</param>
         public static void SetCurrent( IServiceProvider serviceLocator )
         {
-            Arg.NotNull( serviceLocator, "serviceLocator" );
+            Arg.NotNull( serviceLocator, nameof( serviceLocator ) );
             var newCurrent = serviceLocator;
             SetCurrent( () => newCurrent );
         }
@@ -79,7 +79,7 @@
         /// <param name="serviceProviderActivator">The <see cref="Func{T}">function</see> used to activate the new, current <see cref="IServiceProvider">service provider</see>.</param>
         public static void SetCurrent( Func<IServiceProvider> serviceProviderActivator )
         {
-            Arg.NotNull( serviceProviderActivator, "serviceProviderActivator" );
+            Arg.NotNull( serviceProviderActivator, nameof( serviceProviderActivator ) );
             current = new Lazy<IServiceProvider>( serviceProviderActivator, LazyThreadSafetyMode.PublicationOnly );
         }
     }

@@ -22,8 +22,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         public static IRule<Property<TValue>, IValidationResult> GetPerInstance<TObject, TValue>( this IRule<Property<TValue>, IValidationResult> rule, TObject instance )
         {
-            Arg.NotNull( rule, "rule" );
-            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( rule, nameof( rule ) );
+            Arg.NotNull( instance, nameof( instance ) );
             Contract.Ensures( Contract.Result<IRule<Property<TValue>, IValidationResult>>() != null );
 
             var instanceRule = rule as IPerInstanceRule<TObject,TValue>;

@@ -37,50 +37,50 @@
             {
                 Contract.Requires( stack != null );
                 this.stack = stack;
-                this.version = this.stack.version;
-                this.index = -2;
-                this.currentElement = default( T );
+                version = this.stack.version;
+                index = -2;
+                currentElement = default( T );
             }
 
             public void Dispose()
             {
-                this.index = -1;
+                index = -1;
             }
 
             public bool MoveNext()
             {
-                if ( this.version != this.stack.version )
+                if ( version != stack.version )
                     throw new InvalidOperationException( ExceptionMessage.CollectionModified );
 
                 var flag = false;
 
-                if ( this.index == -2 )
+                if ( index == -2 )
                 {
-                    this.index = this.stack.size - 1;
-                    flag = this.index >= 0;
+                    index = stack.size - 1;
+                    flag = index >= 0;
 
                     if ( flag )
                     {
-                        Contract.Assume( this.stack.items != null );
-                        this.currentElement = this.stack.items[this.index];
+                        Contract.Assume( stack.items != null );
+                        currentElement = stack.items[index];
                     }
 
                     return flag;
                 }
 
-                if ( this.index == -1 )
+                if ( index == -1 )
                     return false;
 
-                flag = --this.index >= 0;
+                flag = --index >= 0;
 
                 if ( flag )
                 {
-                    Contract.Assume( this.stack.items != null );
-                    this.currentElement = this.stack.items[this.index];
+                    Contract.Assume( stack.items != null );
+                    currentElement = stack.items[index];
                     return true;
                 }
 
-                this.currentElement = default( T );
+                currentElement = default( T );
                 return false;
             }
 
@@ -88,29 +88,29 @@
             {
                 get
                 {
-                    return this.Current;
+                    return Current;
                 }
             }
 
             void IEnumerator.Reset()
             {
-                if ( this.version != this.stack.version )
+                if ( version != stack.version )
                     throw new InvalidOperationException( ExceptionMessage.CollectionModified );
 
-                this.index = -2;
-                this.currentElement = default( T );
+                index = -2;
+                currentElement = default( T );
             }
 
             public T Current
             {
                 get
                 {
-                    if ( this.index < 0 )
+                    if ( index < 0 )
                         throw new InvalidOperationException( ExceptionMessage.CollectionBeforeFirst );
-                    else if ( this.index >= this.stack.Count )
+                    else if ( index >= stack.Count )
                         throw new InvalidOperationException( ExceptionMessage.CollectionAfterLast );
 
-                    return this.currentElement;
+                    return currentElement;
                 }
             }
         }
@@ -159,17 +159,17 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         public ObservableStack( IEnumerable<T> sequence, IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( sequence, "sequence" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( sequence, nameof( sequence ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
             var list = sequence.ToList();
             var count = list.Count;
 
-            this.size = count;
+            size = count;
             this.comparer = comparer;
-            this.items = new T[count];
+            items = new T[count];
 
-            list.CopyTo( this.items, 0 );
+            list.CopyTo( items, 0 );
         }
 
         /// <summary>
@@ -189,10 +189,10 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare items in the collection.</param>
         public ObservableStack( int capacity, IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Arg.GreaterThanOrEqualTo( capacity, 0, "capacity" );
 
-            this.items = new T[capacity];
+            items = new T[capacity];
             this.comparer = comparer;
         }
 
@@ -205,7 +205,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<T>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -215,7 +215,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -224,12 +224,9 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -238,12 +235,9 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -259,14 +253,14 @@
         {
             Contract.Ensures( Contract.Result<int>() >= 0 );
 
-            if ( this.Count <= 0 )
+            if ( Count <= 0 )
                 throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
 
-            this.version++;
-            var index = --this.size;
-            Contract.Assume( index >= 0 && index < this.items.Length );
-            var local = this.items[index];
-            this.items[this.size] = default( T );
+            version++;
+            var index = --size;
+            Contract.Assume( index >= 0 && index < items.Length );
+            var local = items[index];
+            items[size] = default( T );
 
             result = local;
             return index;
@@ -283,18 +277,18 @@
         /// </remarks>
         protected int PushItem( T item )
         {
-            if ( this.size == this.items.Length )
+            if ( size == items.Length )
             {
-                var capacity = Math.Max( this.items.Length << 1, 4 );
+                var capacity = Math.Max( items.Length << 1, 4 );
                 var destinationArray = new T[capacity];
-                Array.Copy( this.items, 0, destinationArray, 0, this.size );
-                this.items = destinationArray;
+                Array.Copy( items, 0, destinationArray, 0, size );
+                items = destinationArray;
             }
 
-            var index = this.size++;
-            Contract.Assume( index >= 0 && index < this.items.Length );
-            this.items[index] = item;
-            this.version++;
+            var index = size++;
+            Contract.Assume( index >= 0 && index < items.Length );
+            items[index] = item;
+            version++;
 
             return index;
         }
@@ -324,11 +318,11 @@
         /// </remarks>
         public virtual T Peek()
         {
-            if ( this.Count <= 0 )
+            if ( Count <= 0 )
                 throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
 
             Contract.EndContractBlock();
-            return this.items[this.size - 1];
+            return items[size - 1];
         }
 
         /// <summary>
@@ -358,16 +352,16 @@
         /// </remarks>
         public virtual T Pop()
         {
-            if ( this.Count <= 0 )
+            if ( Count <= 0 )
                 throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
             
             Contract.EndContractBlock();
 
             T local;
-            var index = this.PopItem( out local );
+            var index = PopItem( out local );
 
-            this.OnPropertyChanged( "Count" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, local, index ) );
+            OnPropertyChanged( "Count" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, local, index ) );
 
             return local;
         }
@@ -402,10 +396,10 @@
         /// </remarks>
         public virtual void Push( T item )
         {
-            var index = this.PushItem( item );
+            var index = PushItem( item );
 
-            this.OnPropertyChanged( "Count" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
+            OnPropertyChanged( "Count" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
         }
 
         /// <summary>
@@ -414,16 +408,16 @@
         /// </summary>
         public void TrimExcess()
         {
-            int num = (int) ( this.items.Length * 0.9 );
+            int num = (int) ( items.Length * 0.9 );
 
-            if ( this.size >= num )
+            if ( size >= num )
                 return;
 
-            var destinationArray = new T[this.size];
-            Contract.Assume( destinationArray.Length <= this.items.GetLowerBound( 0 ) + this.items.Length ); 
-            Array.Copy( this.items, 0, destinationArray, 0, this.size );
-            this.items = destinationArray;
-            this.version++;
+            var destinationArray = new T[size];
+            Contract.Assume( destinationArray.Length <= items.GetLowerBound( 0 ) + items.Length ); 
+            Array.Copy( items, 0, destinationArray, 0, size );
+            items = destinationArray;
+            version++;
         }
 
         /// <summary>
@@ -440,11 +434,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public virtual void CopyTo( T[] array, int arrayIndex )
         {
-            Arg.NotNull( array, "array" );
-            Arg.InRange( arrayIndex, 0, array.Length + this.Count, "arrayIndex" );
+            Arg.NotNull( array, nameof( array ) );
+            Arg.InRange( arrayIndex, 0, array.Length + Count, "arrayIndex" );
 
-            Array.Copy( this.items, 0, array, arrayIndex, this.size );
-            Array.Reverse( array, arrayIndex, this.size );
+            Array.Copy( items, 0, array, arrayIndex, size );
+            Array.Reverse( array, arrayIndex, size );
         }
 
         /// <summary>
@@ -458,20 +452,20 @@
             if ( item == null )
                 return false;
 
-            var index = this.size;
+            var index = size;
 
             while ( index-- > 0 )
             {
                 if ( item == null )
                 {
-                    Contract.Assume( index >= 0 && index < this.items.Length ); 
-                    if ( this.items[index] == null )
+                    Contract.Assume( index >= 0 && index < items.Length ); 
+                    if ( items[index] == null )
                         return true;
                 }
                 else
                 {
-                    Contract.Assume( index >= 0 && index < this.items.Length ); 
-                    if ( this.items[index] != null && this.Comparer.Equals( this.items[index], item ) )
+                    Contract.Assume( index >= 0 && index < items.Length ); 
+                    if ( items[index] != null && Comparer.Equals( items[index], item ) )
                         return true;
                 }
             }
@@ -483,7 +477,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Required because IStack<T>.CopyTo has different code contract semantics." )]
         void ICollection<T>.CopyTo( T[] array, int arrayIndex )
         {
-            this.CopyTo( array, arrayIndex );
+            CopyTo( array, arrayIndex );
         }
 
         /// <summary>
@@ -508,26 +502,26 @@
         /// </remarks>
         public virtual void Clear()
         {
-            Contract.Assume( ( this.items.Length - this.items.GetLowerBound( 0 ) ) >= this.size );
-            Array.Clear( this.items, 0, this.size );
-            this.size = 0;
-            this.version++;
-            this.OnPropertyChanged( "Count" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+            Contract.Assume( ( items.Length - items.GetLowerBound( 0 ) ) >= size );
+            Array.Clear( items, 0, size );
+            size = 0;
+            version++;
+            OnPropertyChanged( "Count" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Supports ICollection<T>, but only the Push method should be exposed." )]
         void ICollection<T>.Add( T item )
         {
-            this.Push( item );
+            Push( item );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Not supported by a stack." )]
         bool ICollection<T>.Remove( T item )
         {
-            if ( this.Count > 0 && this.Comparer.Equals( item, this.Peek() ) )
+            if ( Count > 0 && Comparer.Equals( item, Peek() ) )
             {
-                this.Pop();
+                Pop();
                 return true;
             }
 
@@ -552,7 +546,7 @@
             if ( typedArray == null )
                 throw new ArrayTypeMismatchException( ExceptionMessage.ArrayMismatch );
 
-            this.CopyTo( typedArray, index );
+            CopyTo( typedArray, index );
         }
 
         /// <summary>
@@ -563,7 +557,7 @@
         {
             get
             {
-                return this.size;
+                return size;
             }
         }
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This class does not support synchronization." )]
@@ -583,7 +577,7 @@
         {
             get
             {
-                return this.syncRoot;
+                return syncRoot;
             }
         }
 
@@ -598,7 +592,7 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

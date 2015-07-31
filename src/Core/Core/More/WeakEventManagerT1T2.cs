@@ -39,8 +39,8 @@
         {
             if ( handler != null )
             {
-                lock ( this.syncRoot )
-                    this.handlers.Add( new WeakDelegate<THandler>( handler ) );
+                lock ( syncRoot )
+                    handlers.Add( new WeakDelegate<THandler>( handler ) );
             }
         }
 
@@ -54,12 +54,12 @@
             if ( handler == null )
                 return false;
 
-            lock ( this.syncRoot )
+            lock ( syncRoot )
             {
-                var item = this.handlers.FirstOrDefault( h => h.IsMatch( handler ) );
+                var item = handlers.FirstOrDefault( h => h.IsMatch( handler ) );
 
                 if ( item != null )
-                    return this.handlers.Remove( item );
+                    return handlers.Remove( item );
             }
 
             return false;
@@ -74,16 +74,16 @@
         [SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Raises an event using the weak event pattern." )]
         public void RaiseEvent( object source, TArgs e )
         {
-            lock ( this.syncRoot )
+            lock ( syncRoot )
             {
-                for ( var i = this.handlers.Count - 1; i > -1; i-- )
+                for ( var i = handlers.Count - 1; i > -1; i-- )
                 {
                     // create strong delegate from handler
-                    var handler = this.handlers[i].CreateDelegate();
+                    var handler = handlers[i].CreateDelegate();
 
                     // if the handler is dead, remove it; otherwise, invoke it
                     if ( handler == null )
-                        this.handlers.RemoveAt( i );
+                        handlers.RemoveAt( i );
                     else
                         handler.DynamicInvoke( source, e );
                 }

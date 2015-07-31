@@ -1,6 +1,7 @@
 ﻿namespace More.Build.Tasks
 {
     using Microsoft.CodeAnalysis;
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -16,6 +17,7 @@
         /// <param name="attributes">The <see cref="IEnumerable{T}">sequence</see> of <see cref="AttributeData">attributes</see> to search.</param>
         /// <param name="attributeName">The name of the attribute to find.</param>
         /// <returns>The single value from the attribute's constructor or <c>null</c> if no match is found.</returns>
+        [CLSCompliant( false )]
         public static string GetSingleAttributeValue( this IEnumerable<AttributeData> attributes, string attributeName )
         {
             Contract.Requires( attributes != null );
@@ -35,6 +37,7 @@
         /// </summary>
         /// <param name="attributes">The <see cref="IEnumerable{T}">sequence</see> of <see cref="AttributeData">attributes</see> to search.</param>
         /// <returns>The resolved assembly version or <c>null</c>.</returns>
+        [CLSCompliant( false )]
         public static string GetDescription( this IEnumerable<AttributeData> attributes )
         {
             Contract.Requires( attributes != null );
@@ -46,6 +49,7 @@
         /// </summary>
         /// <param name="attributes">The <see cref="IEnumerable{T}">sequence</see> of <see cref="AttributeData">attributes</see> to search.</param>
         /// <returns>The resolved assembly informational version or <c>null</c>.</returns>
+        [CLSCompliant( false )]
         public static string GetCompany( this IEnumerable<AttributeData> attributes )
         {
             Contract.Requires( attributes != null );
@@ -57,6 +61,7 @@
         /// </summary>
         /// <param name="attributes">The <see cref="IEnumerable{T}">sequence</see> of <see cref="AttributeData">attributes</see> to search.</param>
         /// <returns>The resolved semantic version or <c>null</c>.</returns>
+        [CLSCompliant( false )]
         public static string GetSemanticVersion( this IEnumerable<AttributeData> attributes )
         {
             Contract.Requires( attributes != null );

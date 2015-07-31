@@ -56,7 +56,7 @@
             get
             {
                 if ( !lazyAttributeReaders.IsValueCreated )
-                    this.OnAttributeReadersCreated( lazyAttributeReaders.Value );
+                    OnAttributeReadersCreated( lazyAttributeReaders.Value );
 
                 return lazyAttributeReaders.Value;
             }
@@ -67,7 +67,7 @@
             get
             {
                 if ( !lazyAttributeWriters.IsValueCreated )
-                    this.OnAttributeReadersCreated( lazyAttributeReaders.Value );
+                    OnAttributeReadersCreated( lazyAttributeReaders.Value );
 
                 return lazyAttributeWriters.Value;
             }
@@ -87,8 +87,8 @@
         {
             get
             {
-                Contract.Ensures( this.storageItem != null );
-                return this.storageItem;
+                Contract.Ensures( storageItem != null );
+                return storageItem;
             }
         }
 
@@ -96,7 +96,7 @@
         {
             get
             {
-                return this.storageItem.LastWriteTime;
+                return storageItem.LastWriteTime;
             }
         }
 
@@ -104,7 +104,7 @@
         {
             get
             {
-                return this.storageItem.LastAccessTime;
+                return storageItem.LastAccessTime;
             }
         }
 
@@ -119,7 +119,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IDictionary<string, object>> RetrievePropertiesAsync( IEnumerable<string> propertiesToRetrieve )
         {
-            Arg.NotNull( propertiesToRetrieve, "propertiesToRetrieve" );
+            Arg.NotNull( propertiesToRetrieve, nameof( propertiesToRetrieve ) );
 
             IDictionary<string, object> properties = new Dictionary<string, object>();
 
@@ -127,8 +127,8 @@
             {
                 Func<T, object> reader;
 
-                if ( this.AttributeReaders.TryGetValue( property, out reader ) )
-                    properties[property] = reader( this.StorageItem );
+                if ( AttributeReaders.TryGetValue( property, out reader ) )
+                    properties[property] = reader( StorageItem );
             }
 
             return Task.FromResult( properties );
@@ -143,14 +143,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )
         {
-            Arg.NotNull( propertiesToSave, "propertiesToSave" );
+            Arg.NotNull( propertiesToSave, nameof( propertiesToSave ) );
 
             foreach ( var property in propertiesToSave )
             {
                 Action<T, object> writer;
 
-                if ( this.AttributeWriters.TryGetValue( property.Key, out writer ) )
-                    writer( this.StorageItem, property.Value );
+                if ( AttributeWriters.TryGetValue( property.Key, out writer ) )
+                    writer( StorageItem, property.Value );
             }
 
             return Task.FromResult( 0 );

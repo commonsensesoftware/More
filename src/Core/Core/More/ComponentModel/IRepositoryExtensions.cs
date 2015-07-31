@@ -45,8 +45,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> GetAsync<T>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, IQueryable<T>> queryShaper ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
-            Arg.NotNull( queryShaper, "queryShaper" );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNull( queryShaper, nameof( queryShaper ) );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( queryShaper, CancellationToken.None );
         }
@@ -63,8 +63,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<TResult> GetAsync<T, TResult>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, TResult> queryShaper ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
-            Arg.NotNull( queryShaper, "queryShaper" );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNull( queryShaper, nameof( queryShaper ) );
             Contract.Ensures( Contract.Result<Task<TResult>>() != null );
             return repository.GetAsync( queryShaper, CancellationToken.None );
         }
@@ -97,7 +97,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> GetAllAsync<T>( this IReadOnlyRepository<T> repository ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( repository, nameof( repository ) );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q, CancellationToken.None );
         }
@@ -132,7 +132,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> GetAllAsync<T>( this IReadOnlyRepository<T> repository, CancellationToken cancellationToken ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( repository, nameof( repository ) );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q, cancellationToken );
         }
@@ -166,8 +166,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> FindByAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
-            Arg.NotNull( predicate, "predicate" );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNull( predicate, nameof( predicate ) );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q.Where( predicate ), CancellationToken.None );
         }
@@ -203,8 +203,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IEnumerable<T>> FindByAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
-            Arg.NotNull( predicate, "predicate" );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNull( predicate, nameof( predicate ) );
             Contract.Ensures( Contract.Result<Task<IEnumerable<T>>>() != null );
             return repository.GetAsync( q => q.Where( predicate ), cancellationToken );
         }
@@ -238,8 +238,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<T> GetSingleAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
-            Arg.NotNull( predicate, "predicate" );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNull( predicate, nameof( predicate ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
             return repository.GetSingleAsync( predicate, CancellationToken.None );
         }
@@ -274,8 +274,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static async Task<T> GetSingleAsync<T>( this IReadOnlyRepository<T> repository, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
-            Arg.NotNull( predicate, "predicate" );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNull( predicate, nameof( predicate ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
             var items = await repository.GetAsync( q => q.Where( predicate ), cancellationToken );
             return items.SingleOrDefault();
@@ -320,7 +320,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, int pageIndex, int pageSize ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( repository, nameof( repository ) );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
             Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
             Arg.GreaterThan( pageSize, 0, "pageSize" );
@@ -369,7 +369,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static async Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, int pageIndex, int pageSize, CancellationToken cancellationToken ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( repository, nameof( repository ) );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
             Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
             Arg.GreaterThan( pageSize, 0, "pageSize" );
@@ -425,7 +425,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, IQueryable<T>> queryShaper, int pageIndex, int pageSize ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( repository, nameof( repository ) );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
             Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
             Arg.GreaterThan( pageSize, 0, "pageSize" );
@@ -475,7 +475,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static async Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, Func<IQueryable<T>, IQueryable<T>> queryShaper, int pageIndex, int pageSize, CancellationToken cancellationToken ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( repository, nameof( repository ) );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
             Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
             Arg.GreaterThan( pageSize, 0, "pageSize" );
@@ -506,7 +506,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task SaveChangesAsync<T>( this IRepository<T> repository ) where T : class
         {
-            Arg.NotNull( repository, "repository" );
+            Arg.NotNull( repository, nameof( repository ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return repository.SaveChangesAsync( CancellationToken.None );
         }

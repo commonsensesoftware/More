@@ -69,11 +69,11 @@
         {
             get
             {
-                return this.saved;
+                return saved;
             }
             set
             {
-                this.SetProperty( ref this.saved, value );
+                SetProperty( ref saved, value );
             }
         }
 
@@ -85,11 +85,11 @@
         {
             get
             {
-                return this.shouldSave;
+                return shouldSave;
             }
             set
             {
-                this.SetProperty( ref this.shouldSave, value );
+                SetProperty( ref shouldSave, value );
             }
         }
 
@@ -102,12 +102,12 @@
         {
             get
             {
-                return this.credential == null ? null : (byte[]) this.credential.Clone();
+                return credential == null ? null : (byte[]) credential.Clone();
             }
             set
             {
                 var newValue = value == null ? value : (byte[]) value.Clone();
-                this.SetProperty( ref this.credential, newValue, BinaryComparer.Instance );
+                SetProperty( ref credential, newValue, BinaryComparer.Instance );
             }
         }
 
@@ -119,11 +119,11 @@
         {
             get
             {
-                return this.domain;
+                return domain;
             }
             set
             {
-                this.SetProperty( ref this.domain, value );
+                SetProperty( ref domain, value );
             }
         }
 
@@ -135,11 +135,11 @@
         {
             get
             {
-                return this.userName;
+                return userName;
             }
             set
             {
-                this.SetProperty( ref this.userName, value );
+                SetProperty( ref userName, value );
             }
         }
 
@@ -151,11 +151,11 @@
         {
             get
             {
-                return this.password;
+                return password;
             }
             set
             {
-                this.SetProperty( ref this.password, value );
+                SetProperty( ref password, value );
             }
         }
     }

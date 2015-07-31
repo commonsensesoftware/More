@@ -19,7 +19,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -28,12 +28,9 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -43,13 +40,13 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected void AttachModel( T model )
         {
-            Contract.Requires<ArgumentNullException>( model != null, "model" );
+            Arg.NotNull( model, nameof( model ) );
 
-            if ( object.Equals( this.DataContext, model ) )
+            if ( object.Equals( DataContext, model ) )
                 return;
 
-            this.DataContext = model;
-            this.OnPropertyChanged( "Model" );
+            DataContext = model;
+            OnPropertyChanged( "Model" );
         }
 
         /// <summary>
@@ -69,12 +66,13 @@
         public DialogView( bool loadComponent )
         {
             if ( loadComponent )
-                System.Windows.Application.LoadComponent( this, this.GetType().CreateXamlResourceUri() );
+                System.Windows.Application.LoadComponent( this, GetType().CreateXamlResourceUri() );
         }
 
         void IView<T, T>.AttachModel( T model )
         {
-            this.AttachModel( model );
+            Arg.NotNull( model, nameof( model ) );
+            AttachModel( model );
         }
 
         /// <summary>
@@ -85,11 +83,11 @@
         {
             get
             {
-                return (T) this.DataContext;
+                return (T) DataContext;
             }
             set
             {
-                this.AttachModel( (T) value );
+                AttachModel( (T) value );
             }
         }
 
@@ -100,10 +98,10 @@
         public void Close( bool? dialogResult )
         {
             // close is automatically triggered if the dialog result changes
-            if ( Nullable.Equals( this.DialogResult, dialogResult ) )
-                this.Close();
+            if ( Nullable.Equals( DialogResult, dialogResult ) )
+                Close();
             else
-                this.DialogResult = dialogResult;
+                DialogResult = dialogResult;
         }
 
         /// <summary>
@@ -113,7 +111,7 @@
         /// how a view was closed by the user.</returns>
         public Task<bool?> ShowDialogAsync()
         {
-            return Task.FromResult( this.ShowDialog() );
+            return Task.FromResult( ShowDialog() );
         }
 
         /// <summary>

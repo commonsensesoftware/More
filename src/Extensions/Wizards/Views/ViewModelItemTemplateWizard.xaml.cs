@@ -14,7 +14,7 @@
         /// </summary>
         public ViewModelItemTemplateWizard()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -24,7 +24,7 @@
         public ViewModelItemTemplateWizard( ViewModelItemTemplateWizardViewModel model )
             : this()
         {
-            this.DataContext = model;
+            DataContext = model;
         }
 
         /// <summary>
@@ -35,11 +35,11 @@
         {
             get
             {
-                return this.DataContext as ViewModelItemTemplateWizardViewModel;
+                return DataContext as ViewModelItemTemplateWizardViewModel;
             }
             set
             {
-                this.DataContext = value;
+                DataContext = value;
             }
         }
     }

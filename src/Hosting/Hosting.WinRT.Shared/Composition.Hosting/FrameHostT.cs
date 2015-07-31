@@ -27,7 +27,7 @@
         public FrameHost( ContainerConfiguration configuration )
             : base( configuration )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
+            Arg.NotNull( configuration, nameof( configuration ) );
         }
 
         partial void OnConfigure();
@@ -66,16 +66,16 @@
         /// </example>
         public virtual void Run( Application application, string language, string flowDirection )
         {
-            Contract.Requires<ArgumentNullException>( application != null, "application" );
+            Arg.NotNull( application, nameof( application ) );
 
             // setup export by convention
-            this.Configuration.WithPart<FrameShellView<T>>();
-            this.Configuration.WithPart<ShowShellView<FrameShellView<T>>>();
+            Configuration.WithPart<FrameShellView<T>>();
+            Configuration.WithPart<ShowShellView<FrameShellView<T>>>();
 
             // automatically register activities
             // note: use WithConfiguration to enable tolerance to the fact that the activity
             // could have already been registered and re-registering would throw an exception
-            var taskConfig = this.WithConfiguration<ShowShellView<FrameShellView<T>>>();
+            var taskConfig = WithConfiguration<ShowShellView<FrameShellView<T>>>();
 
             // configure language
             if ( !string.IsNullOrEmpty( language ) )
@@ -85,7 +85,7 @@
             if ( !string.IsNullOrEmpty( flowDirection ) )
                 taskConfig.Configure( t => t.FlowDirection = flowDirection );
 
-            this.OnConfigure();
+            OnConfigure();
             base.Run( application );
         }
 
@@ -95,7 +95,8 @@
         /// <param name="application">The <see cref="Application">application</see> associated with the host.</param>
         public sealed override void Run( Application application )
         {
-            this.Run( application, null, null );
+            Arg.NotNull( application, nameof( application ) );
+            Run( application, null, null );
         }
     }
 }

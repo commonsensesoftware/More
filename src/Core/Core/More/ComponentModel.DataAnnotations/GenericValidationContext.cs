@@ -10,12 +10,12 @@
 
         internal GenericValidationContext( object instance, IDictionary<object, object> items )
         {
-            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( instance, nameof( instance ) );
 
             var dict = items;
             this.items = new Lazy<IDictionary<object, object>>( () => dict ?? new Dictionary<object, object>() );
-            this.ObjectInstance = instance;
-            this.ObjectType = instance.GetType();
+            ObjectInstance = instance;
+            ObjectType = instance.GetType();
         }
 
         public string DisplayName
@@ -28,7 +28,7 @@
         {
             get
             {
-                return this.items.Value;
+                return items.Value;
             }
         }
 

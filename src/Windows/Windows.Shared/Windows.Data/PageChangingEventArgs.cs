@@ -14,7 +14,7 @@
         /// <param name="newPageIndex">The index of the requested page.</param>
         public PageChangingEventArgs( int newPageIndex )
         {
-            this.NewPageIndex = newPageIndex;
+            NewPageIndex = newPageIndex;
         }
 
         /// <summary>

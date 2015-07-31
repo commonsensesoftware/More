@@ -17,8 +17,8 @@
             Contract.Requires( definingClass != null );
             Contract.Requires( declaredInterface != null );
 
-            this.key = declaredInterface.Identifier.Text;
-            this.typeName = declaredInterface.ToString();
+            key = declaredInterface.Identifier.Text;
+            typeName = declaredInterface.ToString();
             this.definingClass = definingClass;
             this.declaredInterface = declaredInterface;
         }
@@ -29,17 +29,17 @@
             Contract.Requires( otherInterfaceDeclaration != null );
 
             this.key = key;
-            this.typeName = key + otherInterfaceDeclaration.DeclaredInterface.TypeArgumentList.ToString();
-            this.definingClass = otherInterfaceDeclaration.definingClass;
-            this.declaredInterface = otherInterfaceDeclaration.declaredInterface;
+            typeName = key + otherInterfaceDeclaration.DeclaredInterface.TypeArgumentList.ToString();
+            definingClass = otherInterfaceDeclaration.definingClass;
+            declaredInterface = otherInterfaceDeclaration.declaredInterface;
         }
 
         internal ClassDeclarationSyntax DefiningClass
         {
             get
             {
-                Contract.Ensures( this.definingClass != null );
-                return this.definingClass;
+                Contract.Ensures( definingClass != null );
+                return definingClass;
             }
         }
 
@@ -47,8 +47,8 @@
         {
             get
             {
-                Contract.Ensures( this.declaredInterface != null );
-                return this.declaredInterface;
+                Contract.Ensures( declaredInterface != null );
+                return declaredInterface;
             }
         }
 
@@ -56,8 +56,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.key ) );
-                return this.key;
+                Contract.Ensures( !string.IsNullOrEmpty( key ) );
+                return key;
             }
         }
 
@@ -65,8 +65,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.typeName ) );
-                return this.typeName;
+                Contract.Ensures( !string.IsNullOrEmpty( typeName ) );
+                return typeName;
             }
         }
 
@@ -75,7 +75,7 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return this.DeclaredInterface.TypeArgumentList.Arguments.OfType<IdentifierNameSyntax>().Single().Identifier.Text;
+                return DeclaredInterface.TypeArgumentList.Arguments.OfType<IdentifierNameSyntax>().Single().Identifier.Text;
             }
         }
     }

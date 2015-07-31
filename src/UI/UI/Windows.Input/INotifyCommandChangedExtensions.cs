@@ -18,7 +18,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void RaiseCanExecuteChanged( this IEnumerable<INotifyCommandChanged> commands ) 
         {
-            Arg.NotNull( commands, "commands" );
+            Arg.NotNull( commands, nameof( commands ) );
 
             foreach ( var command in commands )
                 command.RaiseCanExecuteChanged();

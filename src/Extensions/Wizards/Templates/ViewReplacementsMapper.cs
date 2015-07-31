@@ -25,9 +25,9 @@
             return new[]
             {
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_topLevel", ReadTopLevel ),
-                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_views", this.ReadViewOptions ),
-                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_interactions", ( m, s ) => this.ReadOptions( m.InteractionOptions, OptionStateMapping.Interactions, s ) ),
-                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_contracts", ( m, s ) => this.ReadOptions( m.ApplicationContractOptions, OptionStateMapping.ApplicationContracts, s ) ),
+                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_views", ReadViewOptions ),
+                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_interactions", ( m, s ) => ReadOptions( m.InteractionOptions, OptionStateMapping.Interactions, s ) ),
+                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_contracts", ( m, s ) => ReadOptions( m.ApplicationContractOptions, OptionStateMapping.ApplicationContracts, s ) ),
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "$showTips$", ( m, s ) => m.ShowTips = GetBoolean( s, true ) ),
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "$viewmodel$", ( m, s ) => m.ViewModelName = s ),
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "$interfaceoption$", ( m, s ) => m.ViewInterfaceOption = GetInt32( s, m.ViewOptions.Count - 1 ) )
@@ -53,7 +53,7 @@
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$hasviewmodel$", m => ( m.ViewModelOption > 0 ).ToString().ToLowerInvariant() ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$interfaceoption$", m => m.ViewInterfaceOption.ToString( CultureInfo.InvariantCulture ) ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$viewmodel$", GetViewModel ),
-                new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$viewmodelnamespace$", this.GetViewModelNamespace ),
+                new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$viewmodelnamespace$", GetViewModelNamespace ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$commands$", m => m.IsTopLevel ? "Commands" : "InteractionCommands" ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$dialogCommands$", m => m.IsTopLevel ? "DialogCommands" : "Commands" ),
             };
@@ -67,7 +67,7 @@
                 return;
 
             var views = GetStrings( value );
-            var options = this.StringsToTemplateOptions( views );
+            var options = StringsToTemplateOptions( views );
 
             model.ViewOptions.ReplaceAll( options );
         }
@@ -80,7 +80,7 @@
                 return;
 
             var names = GetStrings( value );
-            var options = this.StringsToTemplateOptions( names, states, OptionNameResKey, OptionDescResKey );
+            var options = StringsToTemplateOptions( names, states, OptionNameResKey, OptionDescResKey );
 
             viewModelOptions.ReplaceAll( options );
         }
@@ -127,12 +127,12 @@
                         string rootNamespace = null;
 
                         // get root namespace from project
-                        if ( this.Project != null )
-                            rootNamespace = this.Project.GetRootNamespace();
+                        if ( Project != null )
+                            rootNamespace = Project.GetRootNamespace();
 
                         // if empty or unset in the project, try getting the root namespace from replacement parameters
                         if ( string.IsNullOrEmpty( rootNamespace ) )
-                            rootNamespace = this.GetReplacement( "$rootnamespace$" );
+                            rootNamespace = GetReplacement( "$rootnamespace$" );
 
                         return ViewModelNamespace.FormatInvariant( rootNamespace );
                     }
@@ -148,8 +148,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         internal override void Map( IDictionary<string, string> replacements, ViewItemTemplateWizardViewModel model )
         {
-            if ( this.Project != null )
-                model.LocalAssemblyName = this.Project.GetQualifiedAssemblyName();
+            if ( Project != null )
+                model.LocalAssemblyName = Project.GetQualifiedAssemblyName();
 
             base.Map( replacements, model );
         }

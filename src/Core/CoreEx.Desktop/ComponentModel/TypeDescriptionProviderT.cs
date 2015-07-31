@@ -19,8 +19,8 @@
         /// <param name="typeDescriptorFactory">The <see cref="Func{T,TResult}">factory method</see> used to create type descriptors.</param>
         public TypeDescriptionProvider( Func<ICustomTypeDescriptor, ICustomTypeDescriptor> typeDescriptorFactory )
         {
-            Arg.NotNull( typeDescriptorFactory, "typeDescriptorFactory" );
-            this.factory = typeDescriptorFactory;
+            Arg.NotNull( typeDescriptorFactory, nameof( typeDescriptorFactory ) );
+            factory = typeDescriptorFactory;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@
         /// <returns>The constructed <see cref="ICustomTypeDescriptor">type descriptor</see>.</returns>
         public override ICustomTypeDescriptor GetTypeDescriptor( Type objectType, object instance )
         {
-            return this.factory( this.baseProvider.GetTypeDescriptor( objectType, instance ) );
+            return factory( baseProvider.GetTypeDescriptor( objectType, instance ) );
         }
     }
 }

@@ -19,9 +19,9 @@
         {
             internal ValidationError( ValidationAttribute validationAttribute, object value, ValidationResult validationResult )
             {
-                this.ValidationAttribute = validationAttribute;
-                this.ValidationResult = validationResult;
-                this.Value = value;
+                ValidationAttribute = validationAttribute;
+                ValidationResult = validationResult;
+                Value = value;
             }
 
             internal object Value
@@ -44,7 +44,7 @@
 
             internal void ThrowValidationException()
             {
-                throw new ValidationException( this.ValidationResult.ErrorMessage, this.ValidationAttribute, this.Value );
+                throw new ValidationException( ValidationResult.ErrorMessage, ValidationAttribute, Value );
             }
         }
 

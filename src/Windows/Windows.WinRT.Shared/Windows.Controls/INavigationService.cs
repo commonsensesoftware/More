@@ -1,6 +1,7 @@
 ﻿namespace More.Windows.Controls
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.UI.Xaml.Navigation;
 
     /// <summary>
@@ -65,21 +66,25 @@
         /// <summary>
         /// Occurs when the content that is being navigated to has been found and is available from the Content property, although it may not have completed loading.
         /// </summary>
+        [SuppressMessage( "Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly", Justification = "WinRT events do not inherit from EventArgs." )]
         event EventHandler<INavigationEventArgs> Navigated;
 
         /// <summary>
         /// Occurs when a new navigation is requested.
         /// </summary>
+        [SuppressMessage( "Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly", Justification = "WinRT events do not inherit from EventArgs." )]
         event EventHandler<INavigationStartingEventArgs> Navigating;
 
         /// <summary>
         /// Occurs when an error is raised while navigating to the requested content.
         /// </summary>
+        [SuppressMessage( "Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly", Justification = "WinRT events do not inherit from EventArgs." )]
         event EventHandler<INavigationEventArgs> NavigationFailed;
 
         /// <summary>
         /// Occurs when a new navigation is requested while a current navigation is in progress.
         /// </summary>
+        [SuppressMessage( "Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly", Justification = "WinRT events do not inherit from EventArgs." )]
         event EventHandler<INavigationEventArgs> NavigationStopped;
     }
 }

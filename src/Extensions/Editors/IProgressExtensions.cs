@@ -17,8 +17,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Start( this IProgress<GeneratorProgress> progress, int total )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( total >= 0, "total" );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.GreaterThanOrEqualTo( total, 0, nameof( total ) );
             progress.Report( new GeneratorProgress( 0, total ) );
         }
 
@@ -33,8 +33,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static void Increment( this IProgress<GeneratorProgress> progress, GeneratorProgress currentProgress )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( currentProgress != null, "currentProgress" );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNull( currentProgress, nameof( currentProgress ) );
             progress.Report( new GeneratorProgress( Math.Min( currentProgress.Completed + 1, currentProgress.Total ), currentProgress.Total ) );
         }
 
@@ -48,10 +48,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReportError( this IProgress<GeneratorProgress> progress, string message, int line, int column )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
-            Contract.Requires<ArgumentOutOfRangeException>( line >= 0, "line" );
-            Contract.Requires<ArgumentOutOfRangeException>( column >= 0, "column" );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
+            Arg.GreaterThanOrEqualTo( line, 0, nameof( line ) );
+            Arg.GreaterThanOrEqualTo( column, 0, nameof( column ) );
             progress.Report( new GeneratorProgress( new GeneratorError( message, line, column ) ) );
         }
 
@@ -64,9 +64,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReportError( this IProgress<GeneratorProgress> progress, string message, int line )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
-            Contract.Requires<ArgumentOutOfRangeException>( line >= 0, "line" );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
+            Arg.GreaterThanOrEqualTo( line, 0, nameof( line ) );
             progress.Report( new GeneratorProgress( new GeneratorError( message, line ) ) );
         }
 
@@ -78,8 +78,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReportError( this IProgress<GeneratorProgress> progress, string message )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
             progress.Report( new GeneratorProgress( new GeneratorError( message ) ) );
         }
 
@@ -93,10 +93,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReportWarning( this IProgress<GeneratorProgress> progress, string message, int line, int column )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
-            Contract.Requires<ArgumentOutOfRangeException>( line >= 0, "line" );
-            Contract.Requires<ArgumentOutOfRangeException>( column >= 0, "column" );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
+            Arg.GreaterThanOrEqualTo( line, 0, nameof( line ) );
+            Arg.GreaterThanOrEqualTo( column, 0, nameof( column ) );
 
             var error = new GeneratorError( message, line, column )
             {
@@ -116,10 +116,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReportWarning( this IProgress<GeneratorProgress> progress, string message, int line )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
-            Contract.Requires<ArgumentOutOfRangeException>( line >= 0, "line" );
-            
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
+            Arg.GreaterThanOrEqualTo( line, 0, nameof( line ) );
+
             var error = new GeneratorError( message, line )
             {
                 IsWarning = true
@@ -137,8 +137,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void ReportWarning( this IProgress<GeneratorProgress> progress, string message )
         {
-            Contract.Requires<ArgumentNullException>( progress != null, "progress" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
+            Arg.NotNull( progress, nameof( progress ) );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
 
             var error = new GeneratorError( message )
             {

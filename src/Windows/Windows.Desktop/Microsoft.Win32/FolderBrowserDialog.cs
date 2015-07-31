@@ -29,12 +29,12 @@
         {
             get
             {
-                Contract.Ensures( this.title != null );
-                return this.title;
+                Contract.Ensures( title != null );
+                return title;
             }
             set
             {
-                this.title = value ?? string.Empty;
+                title = value ?? string.Empty;
             }
         }
 
@@ -53,14 +53,14 @@
         {
             get
             {
-                return this.rootFolder;
+                return rootFolder;
             }
             set
             {
                 if ( !Enum.IsDefined( typeof( Environment.SpecialFolder ), value ) )
                     throw new InvalidEnumArgumentException( "value", (int) value, typeof( Environment.SpecialFolder ) );
 
-                this.rootFolder = value;
+                rootFolder = value;
             }
         }
 
@@ -80,12 +80,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.selectedPath;
+                return selectedPath;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.selectedPath = value;
+                Arg.NotNull( value, nameof( value ) );
+                selectedPath = value;
             }
         }
 
@@ -136,9 +136,9 @@
         /// </summary>
         public override void Reset()
         {
-            this.Title = string.Empty;
-            this.SelectedPath = string.Empty;
-            this.RootFolder = Environment.SpecialFolder.Desktop;
+            Title = string.Empty;
+            SelectedPath = string.Empty;
+            RootFolder = Environment.SpecialFolder.Desktop;
         }
 
         /// <summary>
@@ -148,10 +148,10 @@
         /// <see cref="FileIOPermission">permission</see>.</remarks>
         protected override void CheckPermissionsToShowDialog()
         {
-            var path = this.SelectedPath;
+            var path = SelectedPath;
 
             if ( string.IsNullOrEmpty( path ) )
-                path = Environment.GetFolderPath( this.RootFolder );
+                path = Environment.GetFolderPath( RootFolder );
 
             new FileIOPermission( FileIOPermissionAccess.PathDiscovery, path ).Demand();
         }
@@ -170,11 +170,11 @@
             try
             {
                 // create shell item for folder and create dialog
-                folder = GetFolder( this.RootFolder, this.SelectedPath );
+                folder = GetFolder( RootFolder, SelectedPath );
                 dialog = CreateDialog();
 
                 // configure dialog
-                dialog.SetTitle( this.Title );
+                dialog.SetTitle( Title );
                 dialog.SetFolder( folder );
                 dialog.SetFileName( string.Empty );
 
@@ -184,7 +184,7 @@
 
                 // update the selected path if the user didn't cancel
                 if ( result )
-                    this.SelectedPath = GetSelectedPath( dialog );
+                    SelectedPath = GetSelectedPath( dialog );
             }
             finally
             {

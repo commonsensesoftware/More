@@ -19,11 +19,11 @@
         {
             get
             {
-                return this.adapted.ErrorMessage;
+                return adapted.ErrorMessage;
             }
             set
             {
-                this.adapted.ErrorMessage = value;
+                adapted.ErrorMessage = value;
             }
         }
 
@@ -31,7 +31,7 @@
         {
             get
             {
-                return this.adapted.MemberNames;
+                return adapted.MemberNames;
             }
         }
     }

@@ -21,8 +21,8 @@
 
         ~MultiTargetingSupportService()
         {
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= this.OnReflectionOnlyAssemblyResolve;
-            WindowsRuntimeMetadata.ReflectionOnlyNamespaceResolve -= this.OnReflectionOnlyNamespaceResolve;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= OnReflectionOnlyAssemblyResolve;
+            WindowsRuntimeMetadata.ReflectionOnlyNamespaceResolve -= OnReflectionOnlyNamespaceResolve;
         }
 
         internal MultiTargetingSupportService( ILocalAssemblySource localAssemblySource )
@@ -33,27 +33,27 @@
             var referencedRule = new ReferencedAssemblyResolutionRule( localAssemblySource.LocalAssemblyReferences );
             var defaultRule = new DefaultAssemblyResolutionRule();
 
-            this.rules = new List<IRule<AssemblyName, Assembly>>()
+            rules = new List<IRule<AssemblyName, Assembly>>()
             {
                 new LocalAssemblyResolutionRule( localAssemblySource ),
                 preloadedRule,
                 referencedRule,
                 defaultRule
             };
-            this.resolveRules = new List<IRule<ResolveEventArgs, Assembly>>()
+            resolveRules = new List<IRule<ResolveEventArgs, Assembly>>()
             {
                 preloadedRule,
                 referencedRule,
                 new RelativeAssemblyResolutionRule(),
                 defaultRule
             };
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += this.OnReflectionOnlyAssemblyResolve;
-            WindowsRuntimeMetadata.ReflectionOnlyNamespaceResolve += this.OnReflectionOnlyNamespaceResolve;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += OnReflectionOnlyAssemblyResolve;
+            WindowsRuntimeMetadata.ReflectionOnlyNamespaceResolve += OnReflectionOnlyNamespaceResolve;
         }
 
         private Assembly OnReflectionOnlyAssemblyResolve( object sender, ResolveEventArgs e )
         {
-            var assembly = this.resolveRules.Select( r => r.Evaluate( e ) ).FirstOrDefault( a => a != null );
+            var assembly = resolveRules.Select( r => r.Evaluate( e ) ).FirstOrDefault( a => a != null );
             return assembly;
         }
 
@@ -77,7 +77,7 @@
 
         public Assembly GetReflectionAssembly( AssemblyName targetAssemblyName )
         {
-            var assembly = this.rules.Select( r => r.Evaluate( targetAssemblyName ) ).FirstOrDefault( a => a != null );
+            var assembly = rules.Select( r => r.Evaluate( targetAssemblyName ) ).FirstOrDefault( a => a != null );
             return assembly;
         }
 

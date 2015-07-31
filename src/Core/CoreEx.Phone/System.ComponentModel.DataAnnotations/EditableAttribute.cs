@@ -15,8 +15,8 @@
         /// <param name="allowEdit">True to specify that field is editable; otherwise, false.</param>
         public EditableAttribute( bool allowEdit )
         {
-            this.AllowEdit = allowEdit;
-            this.AllowInitialValue = allowEdit;
+            AllowEdit = allowEdit;
+            AllowInitialValue = allowEdit;
         }
 
         /// <summary>

@@ -20,7 +20,7 @@
         /// </summary>
         protected UnitOfWorkFactory()
         {
-            this.specification = new Specification<Type>( type => this.factories.ContainsKey( type ) );
+            specification = new Specification<Type>( type => factories.ContainsKey( type ) );
         }
 
         /// <summary>
@@ -31,8 +31,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics support." )]
         protected void RegisterFactoryMethod<TItem>( Func<IUnitOfWork<TItem>> factory ) where TItem : class
         {
-            Arg.NotNull( factory, "factory" );
-            this.factories[typeof( TItem )] = factory;
+            Arg.NotNull( factory, nameof( factory ) );
+            factories[typeof( TItem )] = factory;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ISpecification<Type>>() != null );
-                return this.specification;
+                return specification;
             }
         }
 
@@ -55,13 +55,13 @@
         /// <returns>A <see cref="IUnitOfWork{T}">unit of work</see>.</returns>
         public virtual IUnitOfWork<TItem> Create<TItem>() where TItem : class
         {
-            if ( !this.Specification.IsSatisfiedBy( typeof( TItem ) ) )
+            if ( !Specification.IsSatisfiedBy( typeof( TItem ) ) )
                 throw new InvalidOperationException();
 
             Contract.Ensures( Contract.Result<IUnitOfWork<TItem>>() != null );
 
             var type = typeof( TItem );
-            var factory = this.factories[type];
+            var factory = factories[type];
             var createUnitOfWork = (Func<IUnitOfWork<TItem>>) factory;
 
             return createUnitOfWork();
@@ -75,7 +75,7 @@
         [SuppressMessage( "Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "False positive. The variable 'current' is only cast once in each code path." )]
         public virtual IUnitOfWork<TItem> GetCurrent<TItem>() where TItem : class
         {
-            if ( !this.Specification.IsSatisfiedBy( typeof( TItem ) ) )
+            if ( !Specification.IsSatisfiedBy( typeof( TItem ) ) )
                 throw new InvalidOperationException();
 
             Contract.Ensures( Contract.Result<IUnitOfWork<TItem>>() != null );
@@ -83,18 +83,18 @@
             var type = typeof( TItem );
             object current;
 
-            if ( this.unitsOfWork.TryGetValue( type, out current ) )
+            if ( unitsOfWork.TryGetValue( type, out current ) )
                 return (IUnitOfWork<TItem>) current;
 
             IUnitOfWork<TItem> newItem;
 
-            lock ( this.syncRoot )
+            lock ( syncRoot )
             {
-                if ( this.unitsOfWork.TryGetValue( type, out current ) )
+                if ( unitsOfWork.TryGetValue( type, out current ) )
                     return (IUnitOfWork<TItem>) current;
 
-                newItem = this.Create<TItem>();
-                this.unitsOfWork[type] = newItem;
+                newItem = Create<TItem>();
+                unitsOfWork[type] = newItem;
             }
 
             return newItem;
@@ -107,15 +107,15 @@
         /// <param name="unitOfWork">The current <see cref="IUnitOfWork{T}">unit of work</see>.</param>
         public void SetCurrent<TItem>( IUnitOfWork<TItem> unitOfWork ) where TItem : class
         {
-            Arg.NotNull( unitOfWork, "unitOfWork" );
+            Arg.NotNull( unitOfWork, nameof( unitOfWork ) );
 
-            if ( !this.Specification.IsSatisfiedBy( typeof( TItem ) ) )
+            if ( !Specification.IsSatisfiedBy( typeof( TItem ) ) )
                 throw new InvalidOperationException();
 
             Contract.EndContractBlock();
 
-            lock ( this.syncRoot )
-                this.unitsOfWork[typeof( TItem )] = unitOfWork;
+            lock ( syncRoot )
+                unitsOfWork[typeof( TItem )] = unitOfWork;
         }
     }
 }

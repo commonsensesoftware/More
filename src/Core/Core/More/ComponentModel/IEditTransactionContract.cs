@@ -30,7 +30,7 @@
         {
             // savepoint must have been created by the current transaction
             Contract.Requires<ArgumentNullException>( savepoint != null, "savepoint" );
-            Contract.Requires<ArgumentException>( this.Equals( savepoint.Transaction ), "savepoint" );
+            Contract.Requires<ArgumentException>( Equals( savepoint.Transaction ), "savepoint" );
         }
     }
 }

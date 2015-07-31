@@ -1,10 +1,12 @@
-﻿namespace More.Composition.Hosting
+﻿using System.Diagnostics.Contracts;
+namespace More.Composition.Hosting
 {
     using More.ComponentModel;
     using More.Windows.Input;
     using More.Windows.Data;
     using System;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using global::Windows.ApplicationModel;
     using global::Windows.ApplicationModel.Activation;
@@ -28,7 +30,7 @@
         {
             get
             {
-                return this.host;
+                return host;
             }
         }
 
@@ -38,12 +40,8 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnInitialized( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.Initialized;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            Initialized?.Invoke( this, e );
         }
 
         /// <summary>
@@ -52,12 +50,8 @@
         /// <param name="e">The <see cref="ProgressChangedEventArgs"/> event data.</param>
         protected virtual void OnProgressChanged( ProgressChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.ProgressChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            ProgressChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -72,11 +66,11 @@
         /// <param name="args">The <see cref="LaunchActivatedEventArgs"/> event data.</param>
         protected override void OnLaunched( LaunchActivatedEventArgs args )
         {
-            this.Activation = args;
-            this.host = this.CreateHost();
-            this.host.AddService( typeof( IApplicationState ), this );
-            this.IsInitialized = true;
-            this.host.Run( this );
+            Activation = args;
+            host = CreateHost();
+            host.AddService( typeof( IApplicationState ), this );
+            IsInitialized = true;
+            host.Run( this );
         }
 
         /// <summary>
@@ -85,11 +79,13 @@
         /// <param name="args">The <see cref="SearchActivatedEventArgs"/> event data.</param>
         /// <remarks>This method publishes an application-wide "Search" event that can be subscribed
         /// to using the registered <see cref="IEventBroker">event broker</see>.</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "The platform will never pass null." )]
         protected override void OnSearchActivated( SearchActivatedEventArgs args )
         {
+            Contract.Assume( args != null );
             base.OnSearchActivated( args );
 
-            IServiceProvider serviceProvider = this.Host;
+            IServiceProvider serviceProvider = Host;
 
             if ( serviceProvider == null )
                 return;
@@ -110,11 +106,13 @@
         /// <param name="args">The <see cref="ShareTargetActivatedEventArgs"/> event data.</param>
         /// <remarks>This method publishes an application-wide "Share" event that can be subscribed
         /// to using the registered <see cref="IEventBroker">event broker</see>.</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "The platform will never pass null." )]
         protected override void OnShareTargetActivated( ShareTargetActivatedEventArgs args )
         {
+            Contract.Assume( args != null );
             base.OnShareTargetActivated( args );
 
-            IServiceProvider serviceProvider = this.Host;
+            IServiceProvider serviceProvider = Host;
 
             if ( serviceProvider == null )
                 return;
@@ -137,15 +135,15 @@
         {
             get
             {
-                return this.initialized;
+                return initialized;
             }
             protected set
             {
-                if ( this.initialized == value )
+                if ( initialized == value )
                     return;
 
-                if ( this.initialized = value )
-                    this.OnInitialized( EventArgs.Empty );
+                if ( initialized = value )
+                    OnInitialized( EventArgs.Empty );
             }
         }
 
@@ -169,15 +167,27 @@
             protected set;
         }
 
+        event EventHandler<object> IApplicationState.Resuming
+        {
+            add
+            {
+                Resuming += value;
+            }
+            remove
+            {
+                Resuming -= value;
+            }
+        }
+
         event EventHandler<SuspendingEventArgs> IApplicationState.Suspending
         {
             add
             {
-                this.Suspending += new SuspendingEventHandler( value );
+                Suspending += new SuspendingEventHandler( value );
             }
             remove
             {
-                this.Suspending -= new SuspendingEventHandler( value );
+                Suspending -= new SuspendingEventHandler( value );
             }
         }
 

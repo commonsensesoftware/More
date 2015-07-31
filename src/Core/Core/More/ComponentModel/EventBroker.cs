@@ -22,12 +22,12 @@
         /// <param name="eventArgs">The <typeparamref name="TEventArgs">event arguments</typeparamref>.</param>
         public virtual void Publish<TEventArgs>( string eventName, object eventSource, TEventArgs eventArgs ) where TEventArgs : class
         {
-            Arg.NotNullOrEmpty( eventName, "eventName" );
-            Arg.NotNull( eventArgs, "eventArgs" );
+            Arg.NotNullOrEmpty( eventName, nameof( eventName ) );
+            Arg.NotNull( eventArgs, nameof( eventArgs ) );
 
             List<WeakDelegate> list;
 
-            if ( !this.handlers.TryGetValue( eventName, out list ) )
+            if ( !handlers.TryGetValue( eventName, out list ) )
                 return;
 
             var eventArgsType = typeof( TEventArgs );
@@ -64,8 +64,8 @@
         /// <param name="context">The <see cref="SynchronizationContext">synchronization context</see> to subscribe on.</param>
         public virtual void Subscribe<TEventArgs>( string eventName, Action<string, object, TEventArgs> handler, SynchronizationContext context ) where TEventArgs : class
         {
-            Arg.NotNullOrEmpty( eventName, "eventName" );
-            Arg.NotNull( handler, "handler" );
+            Arg.NotNullOrEmpty( eventName, nameof( eventName ) );
+            Arg.NotNull( handler, nameof( handler ) );
 
             WeakDelegate item =
                 context == null ?
@@ -73,16 +73,16 @@
                 new SynchronizedWeakDelegate<TEventArgs>( handler, context );
             List<WeakDelegate> list;
 
-            if ( !this.handlers.TryGetValue( eventName, out list ) )
+            if ( !handlers.TryGetValue( eventName, out list ) )
             {
-                lock ( this.syncRoot )
+                lock ( syncRoot )
                 {
-                    if ( !this.handlers.TryGetValue( eventName, out list ) )
+                    if ( !handlers.TryGetValue( eventName, out list ) )
                     {
                         // since the list didn't exist, add the item here to avoid a second lock
                         list = new List<WeakDelegate>();
                         list.Add( item );
-                        this.handlers.Add( eventName, list );
+                        handlers.Add( eventName, list );
                         return;
                     }
                 }
@@ -100,14 +100,14 @@
         /// <param name="handler">The <see cref="Action{T1,T2,T3}">action</see> to perform when the evnet is raised.</param>
         public virtual void Unsubscribe<TEventArgs>( string eventName, Action<string, object, TEventArgs> handler ) where TEventArgs : class
         {
-            Arg.NotNullOrEmpty( eventName, "eventName" );
-            Arg.NotNull( handler, "handler" );
+            Arg.NotNullOrEmpty( eventName, nameof( eventName ) );
+            Arg.NotNull( handler, nameof( handler ) );
 
             List<WeakDelegate> list;
 
-            lock ( this.syncRoot )
+            lock ( syncRoot )
             {
-                if ( !this.handlers.TryGetValue( eventName, out list ) )
+                if ( !handlers.TryGetValue( eventName, out list ) )
                     return;
             }
 

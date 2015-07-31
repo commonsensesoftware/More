@@ -31,22 +31,22 @@
         public VariantObservableCollection( IEnumerable<TFrom> sequence )
             : base( sequence == null ? Enumerable.Empty<TTo>() : sequence.Cast<TTo>() )
         {
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
         }
 
         int IList<TFrom>.IndexOf( TFrom item )
         {
-            return this.IndexOf( (TTo) item );
+            return IndexOf( (TTo) item );
         }
 
         void IList<TFrom>.Insert( int index, TFrom item )
         {
-            this.InsertItem( index, (TTo) item );
+            InsertItem( index, (TTo) item );
         }
 
         void IList<TFrom>.RemoveAt( int index )
         {
-            this.RemoveAt( index );
+            RemoveAt( index );
         }
 
         TFrom IList<TFrom>.this[int index]
@@ -57,31 +57,31 @@
             }
             set
             {
-                this.SetItem( index, (TTo) value );
+                SetItem( index, (TTo) value );
             }
         }
 
         void ICollection<TFrom>.Add( TFrom item )
         {
-            this.InsertItem( this.Count, (TTo) item );
+            InsertItem( Count, (TTo) item );
         }
 
         void ICollection<TFrom>.Clear()
         {
-            this.ClearItems();
+            ClearItems();
         }
 
         bool ICollection<TFrom>.Contains( TFrom item )
         {
-            return this.Contains( (TTo) item );
+            return Contains( (TTo) item );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "False positive" )]
         void ICollection<TFrom>.CopyTo( TFrom[] array, int arrayIndex )
         {
-            Arg.NotNull( array, "array" );
+            Arg.NotNull( array, nameof( array ) );
             var other = new TTo[array.Length];
-            this.Items.CopyTo( other, arrayIndex );
+            Items.CopyTo( other, arrayIndex );
             other.Cast<TFrom>().ToList().CopyTo( array, arrayIndex );
         }
 
@@ -89,7 +89,7 @@
         {
             get
             {
-                return this.Count;
+                return Count;
             }
         }
 
@@ -104,12 +104,12 @@
 
         bool ICollection<TFrom>.Remove( TFrom item )
         {
-            return this.Remove( (TTo) item );
+            return Remove( (TTo) item );
         }
 
         IEnumerator<TFrom> IEnumerable<TFrom>.GetEnumerator()
         {
-            return this.Items.Cast<TFrom>().GetEnumerator();
+            return Items.Cast<TFrom>().GetEnumerator();
         }
     }
 }

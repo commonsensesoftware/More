@@ -14,7 +14,7 @@
 
         ~ProjectExecutionContextAdapter()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         public ProjectExecutionContextAdapter( T instance )
@@ -53,26 +53,26 @@
 
         private void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            if ( this.instance != null )
-                dispose( this.instance );
+            if ( instance != null )
+                dispose( instance );
         }
 
         public string GetProviderServices( string invariantName )
         {
-            return getProviderServices( this.instance, invariantName );
+            return getProviderServices( instance, invariantName );
         }
 
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

@@ -31,42 +31,42 @@
 
             public void InvokeOnPropertyChanged( string propertyName )
             {
-                this.OnPropertyChanged( propertyName );
+                OnPropertyChanged( propertyName );
             }
 
             public void InvokeOnPropertyChanged( PropertyChangedEventArgs e )
             {
-                this.OnPropertyChanged( e );
+                OnPropertyChanged( e );
             }
 
             public void InvokeOnAllPropertiesChanged()
             {
-                this.OnAllPropertiesChanged();
+                OnAllPropertiesChanged();
             }
 
             public void InvokeOnPropertyChanged<TValue>( string propertyName )
             {
-                this.OnPropertyChanged( propertyName );
+                OnPropertyChanged( propertyName );
             }
 
             public bool InvokeOnPropertyChanging<TValue>( string propertyName, TValue currentValue, TValue newValue )
             {
-                return this.OnPropertyChanging( currentValue, newValue, propertyName );
+                return OnPropertyChanging( currentValue, newValue, propertyName );
             }
 
             public bool InvokeOnPropertyChanging<TValue>( string propertyName, TValue currentValue, TValue newValue, IEqualityComparer<TValue> comparer )
             {
-                return this.OnPropertyChanging( currentValue, newValue, comparer, propertyName );
+                return OnPropertyChanging( currentValue, newValue, comparer, propertyName );
             }
 
             public void InvokeSetProperty<TValue>( string propertyName, ref TValue currentValue, TValue newValue )
             {
-                this.SetProperty( ref currentValue, newValue, propertyName );
+                SetProperty( ref currentValue, newValue, propertyName );
             }
 
             public void InvokeSetProperty<TValue>( string propertyName, ref TValue currentValue, TValue newValue, IEqualityComparer<TValue> comparer )
             {
-                this.SetProperty( ref currentValue, newValue, comparer, propertyName );
+                SetProperty( ref currentValue, newValue, comparer, propertyName );
             }
         }
 

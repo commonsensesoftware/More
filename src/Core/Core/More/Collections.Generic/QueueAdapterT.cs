@@ -21,8 +21,8 @@
         /// <param name="innerQueue">The <see cref="Queue{T}">queue</see> to adapt to.</param>
         public QueueAdapter( Queue<T> innerQueue )
         {
-            Arg.NotNull( innerQueue, "innerQueue" );
-            this.queue = innerQueue;
+            Arg.NotNull( innerQueue, nameof( innerQueue ) );
+            queue = innerQueue;
         }
 
         /// <summary>
@@ -31,11 +31,11 @@
         /// <returns>The object at the begining of the <see cref="QueueAdapter{T}">queue</see>.</returns>
         public T Peek()
         {
-            if ( this.Count <= 0 )
+            if ( Count <= 0 )
                 throw new InvalidOperationException( ExceptionMessage.QueueIsEmpty );
 
             Contract.EndContractBlock();
-            return this.queue.Peek();
+            return queue.Peek();
         }
 
         /// <summary>
@@ -44,11 +44,11 @@
         /// <returns>The object removed from the begining of the <see cref="IQueue{T}" />.</returns>
         public T Dequeue()
         {
-            if ( this.Count <= 0 )
+            if ( Count <= 0 )
                 throw new InvalidOperationException( ExceptionMessage.QueueIsEmpty );
             
             Contract.EndContractBlock();
-            return this.queue.Dequeue();
+            return queue.Dequeue();
         }
 
         /// <summary>
@@ -57,7 +57,7 @@
         /// <param name="item">The object to add to the <see cref="IQueue{T}">queue</see>.</param>
         public void Enqueue( T item )
         {
-            this.queue.Enqueue( item );
+            queue.Enqueue( item );
         }
 
         /// <summary>
@@ -65,7 +65,7 @@
         /// </summary>
         public void Clear()
         {
-            this.queue.Clear();
+            queue.Clear();
         }
 
         /// <summary>
@@ -82,10 +82,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public void CopyTo( T[] array, int arrayIndex )
         {
-            Arg.NotNull( array, "array" );
-            Arg.InRange( arrayIndex, 0, array.Length + this.Count, "arrayIndex" );
+            Arg.NotNull( array, nameof( array ) );
+            Arg.InRange( arrayIndex, 0, array.Length + Count, "arrayIndex" );
 
-            this.queue.CopyTo( array, arrayIndex );
+            queue.CopyTo( array, arrayIndex );
         }
 
         /// <summary>
@@ -97,7 +97,7 @@
         /// <see cref="QueueAdapter{T}">queue</see>; otherwise, <see langkeyword="false">false</see>.</returns>
         public bool Contains( T item )
         {
-            return this.queue.Contains( item );
+            return queue.Contains( item );
         }
 
         /// <summary>
@@ -106,18 +106,18 @@
         /// <returns>An <see cref="IEnumerator{T}">iterator</see> for the <see cref="QueueAdapter{T}">queue</see>.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.queue.GetEnumerator();
+            return queue.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Handled by the adapted object." )]
         void ICollection.CopyTo( Array array, int index )
         {
-            ( (ICollection) this.queue ).CopyTo( array, index );
+            ( (ICollection) queue ).CopyTo( array, index );
         }
 
         /// <summary>
@@ -128,7 +128,7 @@
         {
             get
             {
-                return this.queue.Count;
+                return queue.Count;
             }
         }
 
@@ -136,7 +136,7 @@
         {
             get
             {
-                return ( (ICollection) this.queue ).IsSynchronized;
+                return ( (ICollection) queue ).IsSynchronized;
             }
         }
 
@@ -144,7 +144,7 @@
         {
             get
             {
-                return ( (ICollection) this.queue ).SyncRoot;
+                return ( (ICollection) queue ).SyncRoot;
             }
         }
     }

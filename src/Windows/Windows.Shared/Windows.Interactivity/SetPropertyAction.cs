@@ -46,22 +46,25 @@
         /// Gets the target object dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty TargetObjectProperty =
-            DependencyProperty.Register( "TargetObject", typeof( object ), typeof( SetPropertyAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( TargetObject ), typeof( object ), typeof( SetPropertyAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the property name dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty PropertyNameProperty =
-            DependencyProperty.Register( "PropertyName", typeof( string ), typeof( SetPropertyAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( PropertyName ), typeof( string ), typeof( SetPropertyAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the property value dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty PropertyValueProperty =
-            DependencyProperty.Register( "PropertyValue", typeof( object ), typeof( SetPropertyAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( PropertyValue ), typeof( object ), typeof( SetPropertyAction ), new PropertyMetadata( (object) null ) );
 
         private Type targetObjectType;
         private PropertyDescriptor targetProperty;
@@ -74,11 +77,11 @@
         {
             get
             {
-                return this.GetValue( TargetObjectProperty );
+                return GetValue( TargetObjectProperty );
             }
             set
             {
-                this.SetValue( TargetObjectProperty, value );
+                SetValue( TargetObjectProperty, value );
             }
         }
 
@@ -90,11 +93,11 @@
         {
             get
             {
-                return (string) this.GetValue( PropertyNameProperty );
+                return (string) GetValue( PropertyNameProperty );
             }
             set
             {
-                this.SetValue( PropertyNameProperty, value );
+                SetValue( PropertyNameProperty, value );
             }
         }
 
@@ -106,11 +109,11 @@
         {
             get
             {
-                return this.GetValue( PropertyValueProperty );
+                return GetValue( PropertyValueProperty );
             }
             set
             {
-                this.SetValue( PropertyValueProperty, value );
+                SetValue( PropertyValueProperty, value );
             }
         }
     }

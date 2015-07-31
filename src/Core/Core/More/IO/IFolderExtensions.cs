@@ -18,8 +18,8 @@
         /// or <c>null</c> if the operation fails.</returns>
         public static async Task<IStorageItem> TryGetItemAsync( this IFolder folder, string name )
         {
-            Arg.NotNull( folder, "folder" );
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNull( folder, nameof( folder ) );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
             Contract.Ensures( Contract.Result<Task<IStorageItem>>() != null );
 
             try

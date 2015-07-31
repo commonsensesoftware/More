@@ -218,7 +218,7 @@
         /// ]]></code></example>
         public static IEnumerable<T> ApplySortDescription<T>( this IEnumerable<T> sequence, SortDescription sortDescription )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<IEnumerable<T>>() != null );
 
             var ordered = sequence is IOrderedEnumerable<T>;
@@ -313,7 +313,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static IQueryable<T> ApplySortDescription<T>( this IQueryable<T> sequence, SortDescription sortDescription )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<IQueryable<T>>() != null );
 
             var ordered = false;
@@ -386,8 +386,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IEnumerable<T> ApplySortDescriptions<T>( this IEnumerable<T> sequence, SortDescriptionCollection sortDescriptions )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( sortDescriptions != null, "sortDescriptions" );
+            Arg.NotNull( sequence, nameof( sequence ) );
+            Arg.NotNull( sortDescriptions, nameof( sortDescriptions ) );
             Contract.Ensures( Contract.Result<IEnumerable<T>>() != null );
 
             foreach ( var sortDescription in sortDescriptions )
@@ -460,8 +460,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IQueryable<T> ApplySortDescriptions<T>( this IQueryable<T> sequence, SortDescriptionCollection sortDescriptions )
         {
-            Contract.Requires<ArgumentNullException>( sequence != null, "sequence" );
-            Contract.Requires<ArgumentNullException>( sortDescriptions != null, "sortDescriptions" );
+            Arg.NotNull( sequence, nameof( sequence ) );
+            Arg.NotNull( sortDescriptions, nameof( sortDescriptions ) );
             Contract.Ensures( Contract.Result<IQueryable<T>>() != null );
 
             foreach ( var sortDescription in sortDescriptions )
@@ -480,8 +480,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static SortDescriptionCollection Translate( this SortDescriptionCollection sortDescriptions, Func<string, string> propertyNameTranslator )
         {
-            Contract.Requires<ArgumentNullException>( sortDescriptions != null, "sortDescriptions" );
-            Contract.Requires<ArgumentNullException>( propertyNameTranslator != null, "propertyNameTranslator" );
+            Arg.NotNull( sortDescriptions, nameof( sortDescriptions ) );
+            Arg.NotNull( propertyNameTranslator, nameof( propertyNameTranslator ) );
             Contract.Ensures( Contract.Result<SortDescriptionCollection>() != null );
 
             var translated = new SortDescriptionCollection();
@@ -506,8 +506,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static PagingArguments Translate( this PagingArguments pagingArgs, Func<string, string> propertyNameTranslator )
         {
-            Contract.Requires<ArgumentNullException>( pagingArgs != null, "pagingArgs" );
-            Contract.Requires<ArgumentNullException>( propertyNameTranslator != null, "propertyNameTranslator" );
+            Arg.NotNull( pagingArgs, nameof( pagingArgs ) );
+            Arg.NotNull( propertyNameTranslator, nameof( propertyNameTranslator ) );
             Contract.Ensures( Contract.Result<PagingArguments>() != null );
 
             return new PagingArguments( pagingArgs.PageIndex, pagingArgs.PageSize, pagingArgs.SortDescriptions.Translate( propertyNameTranslator ) );

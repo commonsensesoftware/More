@@ -46,7 +46,7 @@
         /// <returns>The <see cref="Task{T}">task</see> containing the <see cref="MediaTypeHeaderValue">content type</see> for the requested stream.</returns>
         protected virtual Task<MediaTypeHeaderValue> GetContentTypeAsync( TKey id )
         {
-            Contract.Requires<ArgumentNullException>( id != null, "id" );
+            Arg.NotNull( id, nameof( id ) );
             Contract.Ensures( Contract.Result<Task<MediaTypeHeaderValue>>() != null );
 
             var contentType = new MediaTypeHeaderValue( MediaTypeNames.Application.Octet );
@@ -70,7 +70,7 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Cannot dispose of response provided to the exception." )]
         protected virtual Task<Stream> ReadStreamAsync( TKey id )
         {
-            throw new HttpResponseException( this.Request.CreateResponse( HttpStatusCode.NotImplemented ) );
+            throw new HttpResponseException( Request.CreateResponse( HttpStatusCode.NotImplemented ) );
         }
 
         /// <summary>
@@ -82,7 +82,7 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Cannot dispose of response provided to the exception." )]
         protected virtual Task WriteStreamAsync( TKey id, Stream stream )
         {
-            throw new HttpResponseException( this.Request.CreateResponse( HttpStatusCode.NotImplemented ) );
+            throw new HttpResponseException( Request.CreateResponse( HttpStatusCode.NotImplemented ) );
         }
 
         /// <summary>
@@ -93,25 +93,25 @@
         [SuppressMessage( "Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Get", Justification = "By design. Maps to the HTTP GET verb." )]
         public async virtual Task<HttpResponseMessage> Get( TKey id )
         {
-            var stream = await this.ReadStreamAsync( id );
+            var stream = await ReadStreamAsync( id );
 
             if ( stream == null )
-                return this.Request.CreateResponse( HttpStatusCode.NotFound );
+                return Request.CreateResponse( HttpStatusCode.NotFound );
 
-            var contentType = await this.GetContentTypeAsync( id );
+            var contentType = await GetContentTypeAsync( id );
 
             // get the range and stream media type
-            var range = this.Request.Headers.Range;
+            var range = Request.Headers.Range;
             HttpResponseMessage response;
 
             if ( range == null )
             {
                 // if the range header is present but null, then the header value must be invalid
-                if ( this.Request.Headers.Contains( "Range" ) )
-                    throw new HttpResponseException( this.Request.CreateResponse( HttpStatusCode.RequestedRangeNotSatisfiable ) );
+                if ( Request.Headers.Contains( "Range" ) )
+                    throw new HttpResponseException( Request.CreateResponse( HttpStatusCode.RequestedRangeNotSatisfiable ) );
 
                 // if no range was requested, return the entire stream
-                response = this.Request.CreateResponse( HttpStatusCode.OK );
+                response = Request.CreateResponse( HttpStatusCode.OK );
 
                 response.Headers.AcceptRanges.Add( "bytes" );
                 response.Content = new StreamContent( stream );
@@ -122,7 +122,7 @@
 
             var partialStream = EnsureStreamCanSeek( stream );
 
-            response = this.Request.CreateResponse( HttpStatusCode.PartialContent );
+            response = Request.CreateResponse( HttpStatusCode.PartialContent );
             response.Headers.AcceptRanges.Add( "bytes" );
 
             try
@@ -133,7 +133,7 @@
             catch ( InvalidByteRangeException ex )
             {
                 response.Dispose();
-                return this.Request.CreateErrorResponse( ex );
+                return Request.CreateErrorResponse( ex );
             }
 
             // change status code if the entire stream was requested
@@ -147,12 +147,12 @@
         {
             Contract.Ensures( Contract.Result<Task<HttpResponseMessage>>() != null );
 
-            using ( var stream = await this.Request.Content.ReadAsStreamAsync() )
+            using ( var stream = await Request.Content.ReadAsStreamAsync() )
             {
-                await this.WriteStreamAsync( id, stream );
+                await WriteStreamAsync( id, stream );
             }
 
-            var response = this.Request.CreateResponse( statusCode );
+            var response = Request.CreateResponse( statusCode );
             return response;
         }
 
@@ -163,7 +163,7 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the <see cref="HttpResponseMessage">response</see> for the request.</returns>
         public virtual Task<HttpResponseMessage> Post( TKey id )
         {
-            return this.WriteStreamWithStatusCodeAsync( id, HttpStatusCode.Created );
+            return WriteStreamWithStatusCodeAsync( id, HttpStatusCode.Created );
         }
 
         /// <summary>
@@ -173,7 +173,7 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the <see cref="HttpResponseMessage">response</see> for the request.</returns>
         public virtual Task<HttpResponseMessage> Put( TKey id )
         {
-            return this.WriteStreamWithStatusCodeAsync( id, HttpStatusCode.OK );
+            return WriteStreamWithStatusCodeAsync( id, HttpStatusCode.OK );
         }
 
         /// <summary>
@@ -184,7 +184,7 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Cannot dispose of response provided to the exception." )]
         public virtual Task Delete( TKey id )
         {
-            throw new HttpResponseException( this.Request.CreateResponse( HttpStatusCode.NotImplemented ) );
+            throw new HttpResponseException( Request.CreateResponse( HttpStatusCode.NotImplemented ) );
         }
     }
 }

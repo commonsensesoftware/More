@@ -22,13 +22,13 @@
         {
             internal TreeNode()
             {
-                this.Children = new List<TreeNode<T>>();
+                Children = new List<TreeNode<T>>();
             }
 
             internal TreeNode( T value )
                 : this()
             {
-                this.Value = value;
+                Value = value;
             }
 
             internal T Value

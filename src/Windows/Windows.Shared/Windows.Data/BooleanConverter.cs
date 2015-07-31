@@ -25,7 +25,7 @@
         private bool ShouldNegate( object parameter, CultureInfo culture )
         {
             if ( parameter == null )
-                return this.Negate;
+                return Negate;
             else if ( parameter is bool )
                 return (bool) parameter;
 
@@ -68,16 +68,16 @@
             // handle null first
             if ( value == null )
             {
-                if ( string.IsNullOrEmpty( this.Format ) )
-                    return this.DefaultNullValue;
+                if ( string.IsNullOrEmpty( Format ) )
+                    return DefaultNullValue;
 
-                return string.Format( culture, this.Format, this.DefaultNullValue );
+                return string.Format( culture, Format, DefaultNullValue );
             }
 
             var val = (bool) value;
 
             // negate value if necessary
-            if ( this.ShouldNegate( parameter, culture ) )
+            if ( ShouldNegate( parameter, culture ) )
                 val = !val;
 
             // handle Boolean return values next
@@ -86,21 +86,21 @@
 
 #if NETFX_CORE
             // no format; use Boolean.ToString
-            if ( string.IsNullOrEmpty( this.Format ) )
+            if ( string.IsNullOrEmpty( Format ) )
                 return val.ToString();
 
-            var intValue = System.Convert.ToInt32( culture );
+            var intValue = System.Convert.ToInt32( val, culture );
 #else
             var convertible = (IConvertible) val;
 
             // no format; use Boolean.ToString
-            if ( string.IsNullOrEmpty( this.Format ) )
-                return convertible.ToString();
+            if ( string.IsNullOrEmpty( Format ) )
+                return convertible.ToString( culture );
 
             var intValue = convertible.ToInt32( culture );
 #endif
             // use integer equivalent in order to support conditional formatting
-            return string.Format( culture, this.Format, intValue );
+            return string.Format( culture, Format, intValue );
         }
 
 #if NETFX_CORE
@@ -126,7 +126,7 @@
 #endif
             var val = (bool) value;
 
-            return this.ShouldNegate( parameter, culture ) ? !val : val;
+            return ShouldNegate( parameter, culture ) ? !val : val;
         }
     }
 }

@@ -30,7 +30,7 @@
         /// <returns>True if the rule is satisified; otherwise, false.</returns>
         public override bool Evaluate( decimal? item )
         {
-            var val = this.Value;
+            var val = Value;
             return ( item.HasValue && val.HasValue && item.Value < val.Value ) || base.Evaluate( item );
         }
     }

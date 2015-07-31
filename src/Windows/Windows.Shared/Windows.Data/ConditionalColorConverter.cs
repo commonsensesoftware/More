@@ -19,7 +19,7 @@
     /// <summary>
     /// Represents a conditional color value converter.
     /// </summary>
-    /// <example>This example demonstrates how define a declarative to select a <see cref="Color"/> object.
+    /// <example>This example demonstrates how define a declarative to select a <see cref="T:Color"/> object.
     /// <code lang="Xaml"><![CDATA[
     /// <UserControl
     ///  x:Class="MyUserControl"
@@ -63,22 +63,22 @@
         /// </summary>
         public ConditionalColorConverter()
         {
-            this.DefaultColor = Colors.Black;
+            DefaultColor = Colors.Black;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConditionalColorConverter"/> class.
         /// </summary>
-        /// <param name="defaultColor">The default <see cref="Color">color</see> for the converter.</param>
+        /// <param name="defaultColor">The default <see cref="T:Color">color</see> for the converter.</param>
         public ConditionalColorConverter( Color defaultColor )
         {
-            this.DefaultColor = defaultColor;
+            DefaultColor = defaultColor;
         }
 
         /// <summary>
         /// Gets or sets the default color associated with the converter.
         /// </summary>
-        /// <value>A <see cref="Color"/> structure.  The default value is <see cref="P:Colors.Black">black</see>.</value>
+        /// <value>A <see cref="T:Color"/> structure.  The default value is <see cref="P:Colors.Black">black</see>.</value>
         public Color DefaultColor
         {
             get;
@@ -94,7 +94,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<ConditionalColorRule>>() != null );
-                return this.rules.Value;
+                return rules.Value;
             }
         }
 
@@ -131,14 +131,14 @@
             var item = value == null ? (decimal?) null : new decimal?( System.Convert.ToDecimal( value, culture ) );
 
             // select matching color from rule set
-            foreach ( var rule in this.Rules )
+            foreach ( var rule in Rules )
             {
                 if ( rule.Evaluate( item ) )
                     return ConvertToObject( rule.Color, targetType );
             }
 
             // if no rules are satisfied, use the default color
-            return ConvertToObject( this.DefaultColor, targetType );
+            return ConvertToObject( DefaultColor, targetType );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "All conversions performed by this type are one-way." )]

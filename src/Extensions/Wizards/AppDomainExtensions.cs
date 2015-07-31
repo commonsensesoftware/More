@@ -14,17 +14,17 @@
 
             public void SetResult( T result )
             {
-                this.source.SetResult( result );
+                source.SetResult( result );
             }
 
             public void SetException( Exception[] exception )
             {
-                this.source.SetException( exception );
+                source.SetException( exception );
             }
 
             public void SetCanceled()
             {
-                this.source.SetCanceled();
+                source.SetCanceled();
             }
 
             public Task<T> Task
@@ -32,7 +32,7 @@
                 get
                 {
                     Contract.Ensures( Contract.Result<Task<T>>() != null );
-                    return this.source.Task;
+                    return source.Task;
                 }
             }
         }

@@ -18,9 +18,8 @@
         /// <param name="total">The total number of steps to complete.</param>
         public GeneratorProgress( int completed, int total )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( completed >= 0, "completed" );
-            Contract.Requires<ArgumentOutOfRangeException>( total >= 0, "total" );
-            Contract.Requires<ArgumentOutOfRangeException>( completed <= total, "completed" );
+            Arg.GreaterThanOrEqualTo( total, 0, nameof( total ) );
+            Arg.InRange( completed, 0, total, nameof( completed ) );
 
             this.completed = completed;
             this.total = total;
@@ -32,8 +31,8 @@
         /// <param name="error">The <see cref="GeneratorError">error</see> that occurred.</param>
         public GeneratorProgress( GeneratorError error )
         {
-            Contract.Requires<ArgumentNullException>( error != null, "error" );
-            this.Error = error;
+            Arg.NotNull( error, nameof( error ) );
+            Error = error;
         }
 
         /// <summary>
@@ -45,9 +44,9 @@
         {
             get
             {
-                Contract.Ensures( this.completed >= 0 );
-                Contract.Ensures( this.completed <= this.Total );
-                return this.completed;
+                Contract.Ensures( completed >= 0 );
+                Contract.Ensures( completed <= Total );
+                return completed;
             }
         }
 
@@ -59,7 +58,7 @@
         {
             get
             {
-                return this.total;
+                return total;
             }
         }
 

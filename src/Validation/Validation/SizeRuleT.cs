@@ -27,7 +27,7 @@
             Arg.GreaterThanOrEqualTo( minimumCount, 0, "minimumCount" );
 
             this.minimumCount = minimumCount;
-            this.maximumCount = int.MaxValue;
+            maximumCount = int.MaxValue;
         }
 
         /// <summary>
@@ -38,11 +38,11 @@
         /// <remarks>The <see cref="P:Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
         public SizeRule( int minimumCount, string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Arg.GreaterThanOrEqualTo( minimumCount, 0, "minimumCount" );
 
             this.minimumCount = minimumCount;
-            this.maximumCount = int.MaxValue;
+            maximumCount = int.MaxValue;
             this.errorMessage = errorMessage;
         }
 
@@ -68,7 +68,7 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public SizeRule( int minimumCount, int maximumCount, string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Arg.GreaterThanOrEqualTo( minimumCount, 0, "minimumCount" );
             Arg.GreaterThanOrEqualTo( maximumCount, minimumCount, "maximumCount" );
 
@@ -85,8 +85,8 @@
         {
             get
             {
-                Contract.Ensures( this.minimumCount >= 0 );
-                return this.minimumCount;
+                Contract.Ensures( minimumCount >= 0 );
+                return minimumCount;
             }
         }
 
@@ -98,8 +98,8 @@
         {
             get
             {
-                Contract.Ensures( Contract.Result<int>() >= this.MinimumCount );
-                return this.maximumCount;
+                Contract.Ensures( Contract.Result<int>() >= MinimumCount );
+                return maximumCount;
             }
         }
 
@@ -116,18 +116,18 @@
             var count = item.Value.Count();
             string message;
 
-            if ( count < this.MinimumCount )
+            if ( count < MinimumCount )
             {
-                if ( this.MaximumCount == int.MaxValue )
-                    message = this.errorMessage ?? ValidationMessage.CountValidationError.FormatDefault( item.Name, this.MinimumCount );
+                if ( MaximumCount == int.MaxValue )
+                    message = errorMessage ?? ValidationMessage.CountValidationError.FormatDefault( item.Name, MinimumCount );
                 else
-                    message = this.errorMessage ?? ValidationMessage.CountValidationErrorIncludingMaximum.FormatDefault( item.Name, this.MinimumCount, this.MaximumCount );
+                    message = errorMessage ?? ValidationMessage.CountValidationErrorIncludingMaximum.FormatDefault( item.Name, MinimumCount, MaximumCount );
 
                 return new ValidationResult( message, item.Name );
             }
-            else if ( count > this.MaximumCount )
+            else if ( count > MaximumCount )
             {
-                message = this.errorMessage ?? ValidationMessage.CountValidationErrorIncludingMaximum.FormatDefault( item.Name, this.MinimumCount, this.MaximumCount );
+                message = errorMessage ?? ValidationMessage.CountValidationErrorIncludingMaximum.FormatDefault( item.Name, MinimumCount, MaximumCount );
                 return new ValidationResult( message, item.Name );
             }
 

@@ -9,6 +9,7 @@
     /// <summary>
     /// Represents a Microsoft Build <see cref="ITask">task</see> which gets metadata for a NuGet package from a source project.
     /// </summary>
+    [CLSCompliant( false )]
     public class GetPackageMetadata : AssemblyMetadataTask
     {
         /// <summary>
@@ -20,9 +21,9 @@
         {
             Contract.Assume( attributes != null );
 
-            this.SemanticVersion = attributes.GetSemanticVersion();
-            this.Author = attributes.GetCompany();
-            this.Description = attributes.GetDescription();
+            SemanticVersion = attributes.GetSemanticVersion();
+            Author = attributes.GetCompany();
+            Description = attributes.GetDescription();
         }
 
         /// <summary>

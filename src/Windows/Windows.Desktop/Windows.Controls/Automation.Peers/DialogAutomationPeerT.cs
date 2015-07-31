@@ -35,7 +35,7 @@
         {
             get
             {
-                return (T) this.Owner;
+                return (T) Owner;
             }
         }
 
@@ -60,7 +60,7 @@
         /// <param name="value">The state to set.</param>
         public virtual void SetValue( string value )
         {
-            this.Value = value;
+            Value = value;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@
         /// </summary>
         public virtual void Close()
         {
-            this.Window.Close();
+            Window.Close();
         }
 
         /// <summary>
@@ -137,7 +137,7 @@
         /// <param name="state">One of the <see cref="WindowVisualState"/> values.</param>
         public virtual void SetVisualState( WindowVisualState state )
         {
-            this.VisualState = state;
+            VisualState = state;
         }
 
         /// <summary>

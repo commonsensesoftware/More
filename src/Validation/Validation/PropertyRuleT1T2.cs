@@ -30,12 +30,12 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected PropertyRule( PropertyRule<TObject, TValue> other, TObject instance )
         {
-            Arg.NotNull( other, "other" );
+            Arg.NotNull( other, nameof( other ) );
 
-            this.getter = other.getter;
-            this.propertyName = other.propertyName;
-            this.ErrorMessage = other.ErrorMessage;
-            this.propertyInstance = instance;
+            getter = other.getter;
+            propertyName = other.propertyName;
+            ErrorMessage = other.ErrorMessage;
+            propertyInstance = instance;
         }
 
         /// <summary>
@@ -56,11 +56,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         protected PropertyRule( Expression<Func<TObject, TValue>> propertyExpression, string errorMessage )
         {
-            Arg.NotNull( propertyExpression, "propertyExpression" );
+            Arg.NotNull( propertyExpression, nameof( propertyExpression ) );
 
-            this.getter = new Lazy<Func<TObject, TValue>>( propertyExpression.Compile );
-            this.propertyName = new Lazy<string>( () => GetPropertyName( propertyExpression ) );
-            this.ErrorMessage = errorMessage;
+            getter = new Lazy<Func<TObject, TValue>>( propertyExpression.Compile );
+            propertyName = new Lazy<string>( () => GetPropertyName( propertyExpression ) );
+            ErrorMessage = errorMessage;
         }
 
         private static string GetPropertyName( Expression<Func<TObject, TValue>> propertyExpression )
@@ -104,11 +104,11 @@
         /// <returns>The <see cref="IValidationResult">validation result</see> of the evaluation.</returns>
         public IValidationResult Evaluate( Property<TValue> item )
         {
-            if ( item == null || this.propertyInstance == null )
+            if ( item == null || propertyInstance == null )
                 return ValidationResult.Success;
 
-            var other = new Property<TValue>( this.propertyName.Value, this.getter.Value( this.propertyInstance ) );
-            return this.Evaluate( item, other );
+            var other = new Property<TValue>( propertyName.Value, getter.Value( propertyInstance ) );
+            return Evaluate( item, other );
         }
 
         /// <summary>

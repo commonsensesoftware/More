@@ -23,13 +23,13 @@
         public WeakDelegate( Delegate strongDelegate )
             : base( GetTarget( strongDelegate ) )
         {
-            this.type = strongDelegate.GetType();
-            this.method = strongDelegate.GetMethodInfo();
+            type = strongDelegate.GetType();
+            method = strongDelegate.GetMethodInfo();
         }
 
         private static object GetTarget( Delegate strongDelegate )
         {
-            Arg.NotNull( strongDelegate, "strongDelegate" );
+            Arg.NotNull( strongDelegate, nameof( strongDelegate ) );
             return strongDelegate.Target;
         }
 
@@ -42,7 +42,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static bool IsDelegateType( Type type )
         {
-            Arg.NotNull( type, "type" );
+            Arg.NotNull( type, nameof( type ) );
             return DelegateType.IsAssignableFrom( type.GetTypeInfo() );
         }
 
@@ -56,10 +56,10 @@
             if ( strongDelegate == null )
                 return false;
 
-            if ( !object.Equals( strongDelegate.Target, this.Target ) )
+            if ( !object.Equals( strongDelegate.Target, Target ) )
                 return false;
 
-            if ( !strongDelegate.GetMethodInfo().Equals( this.method ) )
+            if ( !strongDelegate.GetMethodInfo().Equals( method ) )
                 return false;
 
             return true;
@@ -75,7 +75,7 @@
         /// signature; otherwise, false.</returns>
         public bool IsCovariantWithMethod( params Type[] parameterTypes )
         {
-            return this.IsCovariantWithFunction( typeof( void ), parameterTypes );
+            return IsCovariantWithFunction( typeof( void ), parameterTypes );
         }
 
         /// <summary>
@@ -89,15 +89,15 @@
         /// signature; otherwise, false.</returns>
         public bool IsCovariantWithFunction( Type returnType, params Type[] parameterTypes )
         {
-            Arg.NotNull( returnType, "returnType" );
+            Arg.NotNull( returnType, nameof( returnType ) );
 
-            if ( !this.method.ReturnType.GetTypeInfo().IsAssignableFrom( returnType.GetTypeInfo() ) )
+            if ( !method.ReturnType.GetTypeInfo().IsAssignableFrom( returnType.GetTypeInfo() ) )
                 return false;
 
             if ( parameterTypes == null )
                 parameterTypes = new Type[0];
 
-            var args = this.method.GetParameters();
+            var args = method.GetParameters();
 
             if ( args.Length != parameterTypes.Length )
                 return false;
@@ -120,13 +120,13 @@
         /// <returns>The <see cref="Delegate">delegate</see> created or null if the delegate cannot be created.</returns>
         public virtual Delegate CreateDelegate()
         {
-            object target = this.Target;
+            object target = Target;
 
             if ( target != null )
-                return this.method.CreateDelegate( this.type, target );
+                return method.CreateDelegate( type, target );
 
-            if ( this.method.IsStatic )
-                return this.method.CreateDelegate( this.type );
+            if ( method.IsStatic )
+                return method.CreateDelegate( type );
 
             return null;
         }

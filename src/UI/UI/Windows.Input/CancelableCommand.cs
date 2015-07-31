@@ -67,10 +67,10 @@
         {
             parameter = parameter ?? new CancelEventArgs();
 
-            this.executeMethod( parameter );
+            executeMethod( parameter );
 
             if ( !parameter.Cancel )
-                this.OnExecuted( parameter );
+                OnExecuted( parameter );
         }
     }
 }

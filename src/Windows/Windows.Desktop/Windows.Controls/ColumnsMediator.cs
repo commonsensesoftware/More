@@ -28,49 +28,49 @@
             Contract.Requires( sequence != null );
             Contract.Requires( columnEvents != null );
 
-            this.Key = CreateKey( dataGrid, sequence );
-            this.columns = sequence as ICollection<DataGridColumn>;
+            Key = CreateKey( dataGrid, sequence );
+            columns = sequence as ICollection<DataGridColumn>;
             this.columnEvents = columnEvents;
-            this.columnEvents.CollectionChanged += this.OnCollectionChanged;
+            this.columnEvents.CollectionChanged += OnCollectionChanged;
             this.dataGrid = dataGrid;
 
             // if the provided sequence isn't a collection, then mediation is one-way.
             // the sequence can notify the data grid, but not the other way around.
-            if ( this.columns != null )
-                this.dataGrid.Columns.CollectionChanged += this.OnColumnsChanged;
+            if ( columns != null )
+                this.dataGrid.Columns.CollectionChanged += OnColumnsChanged;
         }
 
         private bool IsSuppressingEvents
         {
             get
             {
-                return this.suppressColumnsChanged || this.suppressCollectionChanged;
+                return suppressColumnsChanged || suppressCollectionChanged;
             }
         }
 
         private void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            if ( this.dataGrid != null )
+            if ( dataGrid != null )
             {
-                this.dataGrid.Columns.CollectionChanged -= this.OnColumnsChanged;
-                this.dataGrid = null;
+                dataGrid.Columns.CollectionChanged -= OnColumnsChanged;
+                dataGrid = null;
             }
 
-            if ( this.columnEvents != null )
+            if ( columnEvents != null )
             {
-                this.columnEvents.CollectionChanged -= this.OnCollectionChanged;
-                this.columnEvents = null;
+                columnEvents.CollectionChanged -= OnCollectionChanged;
+                columnEvents = null;
             }
 
-            this.columns = null;
+            columns = null;
         }
 
         internal static long CreateKey( DataGrid dataGrid, object items )
@@ -138,36 +138,36 @@
         private void OnColumnsChanged( object sender, NotifyCollectionChangedEventArgs e )
         {
             // exit if events are suppressed
-            if ( this.IsSuppressingEvents )
+            if ( IsSuppressingEvents )
                 return;
 
             // suppress collection changed events
-            this.suppressCollectionChanged = true;
+            suppressCollectionChanged = true;
 
-            SynchronizeCollection( this.columns, e, true );
+            SynchronizeCollection( columns, e, true );
 
             // enable events
-            this.suppressCollectionChanged = false;
+            suppressCollectionChanged = false;
         }
 
         private void OnCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
         {
             // exit if events are suppressed
-            if ( this.IsSuppressingEvents )
+            if ( IsSuppressingEvents )
                 return;
 
             // suppress column changed events
-            this.suppressColumnsChanged = true;
+            suppressColumnsChanged = true;
 
-            SynchronizeCollection( this.dataGrid.Columns, e, false );
+            SynchronizeCollection( dataGrid.Columns, e, false );
 
             // enable events
-            this.suppressColumnsChanged = false;
+            suppressColumnsChanged = false;
         }
 
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

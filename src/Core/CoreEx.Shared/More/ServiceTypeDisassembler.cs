@@ -36,8 +36,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         protected static TypeInfo DisassembleServiceType( TypeInfo type, IStack<TypeInfo> closedTypes )
         {
-            Arg.NotNull( type, "type" );
-            Arg.NotNull( closedTypes, "closedTypes" );
+            Arg.NotNull( type, nameof( type ) );
+            Arg.NotNull( closedTypes, nameof( closedTypes ) );
             Contract.Ensures( Contract.Result<TypeInfo>() != null );
 
             while ( type.IsGenericType )
@@ -57,7 +57,7 @@
         /// <remarks>The value of the key is derived from the applied <see cref="ServiceKeyAttribute"/>.</remarks>
         public virtual string ExtractKey( Type serviceType )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
 
             // find true decorated service type and extract the key from any applied attribute
             var type = DisassembleServiceType( serviceType.GetTypeInfo() );
@@ -76,7 +76,7 @@
         /// then the original type is returned; otherwise, the returned type is assignable from <see cref="IEnumerable"/>.</remarks>
         public virtual Type ForMany( Type serviceType )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.Result<Type>() != null );
 
             if ( Enumerable.IsAssignableFrom( serviceType.GetTypeInfo() ) )
@@ -92,7 +92,7 @@
         /// <returns>True if the specified <paramref name="serviceType">service type</paramref> represents multiple service instances; otherwise, false.</returns>
         public virtual bool IsForMany( Type serviceType )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             return Enumerable.IsAssignableFrom( serviceType.GetTypeInfo() );
         }
 
@@ -107,7 +107,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Optimization for callers if they also want to know the matched service type." )]
         public virtual bool IsForMany( Type serviceType, out Type singleServiceType )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.ValueAtReturn( out singleServiceType ) != null );
 
             singleServiceType = serviceType;

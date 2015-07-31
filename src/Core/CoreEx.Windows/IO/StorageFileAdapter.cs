@@ -7,7 +7,7 @@
     {
         public async Task<IFolder> GetParentAsync()
         {
-            var parent = await this.file.GetParentAsync();
+            var parent = await file.GetParentAsync();
             return new StorageFolderAdapter( parent );
         }
     }

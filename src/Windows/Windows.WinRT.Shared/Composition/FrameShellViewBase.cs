@@ -4,12 +4,12 @@
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using global::Windows.ApplicationModel.Activation;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
-    
 
     /// <summary>
     /// Represents the base implemention for a <see cref="IShellView">shell view</see> using a <see cref="Frame">frame</see>.
@@ -18,7 +18,7 @@
     public partial class FrameShellViewBase : IShellView, INavigationService
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly Frame frame = new Frame();
+        private readonly Frame shellFrame = new Frame();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrameShellViewBase"/> class.
@@ -34,14 +34,14 @@
         /// <param name="serviceProvider">The <see cref="IServiceProvider">service provider</see> associated with the shell view.</param>
         public FrameShellViewBase( IServiceProvider serviceProvider )
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
 
             this.serviceProvider = serviceProvider;
-            this.frame.Navigated += ( s, e ) => this.OnNavigated( new NavigationEventArgsAdapter( e ) );
-            this.frame.Navigating += ( s, e ) => this.OnNavigating( new NavigatingCancelEventArgsAdapter( e ) );
-            this.frame.NavigationFailed += ( s, e ) => this.OnNavigationFailed( new NavigationEventArgsAdapter( e ) );
-            this.frame.NavigationStopped += ( s, e ) => this.OnNavigationStopped( new NavigationEventArgsAdapter( e ) );
-            this.SelfRegisterAsNavigationService();
+            shellFrame.Navigated += ( s, e ) => OnNavigated( new NavigationEventArgsAdapter( e ) );
+            shellFrame.Navigating += ( s, e ) => OnNavigating( new NavigatingCancelEventArgsAdapter( e ) );
+            shellFrame.NavigationFailed += ( s, e ) => OnNavigationFailed( new NavigationEventArgsAdapter( e ) );
+            shellFrame.NavigationStopped += ( s, e ) => OnNavigationStopped( new NavigationEventArgsAdapter( e ) );
+            SelfRegisterAsNavigationService();
         }
 
         private void SelfRegisterAsNavigationService()
@@ -51,7 +51,7 @@
             // should result in a single shell view.
             IServiceContainer container;
 
-            if ( this.serviceProvider.TryGetService( out container ) )
+            if ( serviceProvider.TryGetService( out container ) )
                 container.ReplaceService<INavigationService>( this, true );
         }
 
@@ -63,8 +63,8 @@
         {
             get
             {
-                Contract.Ensures( this.frame != null );
-                return this.frame;
+                Contract.Ensures( shellFrame != null );
+                return shellFrame;
             }
         }
 
@@ -76,8 +76,8 @@
         {
             get
             {
-                Contract.Ensures( this.serviceProvider != null );
-                return this.serviceProvider;
+                Contract.Ensures( serviceProvider != null );
+                return serviceProvider;
             }
         }
 
@@ -95,9 +95,11 @@
         /// Occurs when the content that is being navigated to has been found and is available.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void OnNavigated( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
             var args = e.SourceEventArgs as NavigationEventArgs;
 
@@ -110,56 +112,44 @@
 
             ICompositionService composer;
 
-            if ( this.ServiceProvider.TryGetService<ICompositionService>( out composer ) )
+            if ( ServiceProvider.TryGetService( out composer ) )
                 composer.Compose( args.Content );
 
         RaiseEventHandler:
-            var handler = this.Navigated;
-
-            if ( handler != null )
-                handler( this, e );
+            Navigated?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:Navigating"/> event.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigating( INavigationStartingEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.Navigating;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            Navigating?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:NavigationFailed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigationFailed( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.NavigationFailed;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            NavigationFailed?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="E:NavigationStopped"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnNavigationStopped( INavigationEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.NavigationStopped;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            NavigationStopped?.Invoke( this, e );
         }
 
         /// <summary>
@@ -169,7 +159,7 @@
         /// <remarks>Note to inheritors: The base implementation does not perform any action.</remarks>
         protected virtual void OnLoadState( IApplicationState applicationState )
         {
-            Contract.Requires<ArgumentNullException>( applicationState != null, "applicationState" );
+            Arg.NotNull( applicationState, nameof( applicationState ) );
         }
 
         /// <summary>
@@ -201,7 +191,7 @@
         {
             get
             {
-                return this.Frame.CanGoBack;
+                return Frame.CanGoBack;
             }
         }
 
@@ -214,25 +204,19 @@
         {
             get
             {
-                return this.Frame.CanGoForward;
+                return Frame.CanGoForward;
             }
         }
 
         /// <summary>
         /// Navigates to the most recent item in back navigation history, if a frame manages its own navigation history.
         /// </summary>
-        public void GoBack()
-        {
-            this.Frame.GoBack();
-        }
+        public void GoBack() => Frame.GoBack();
 
         /// <summary>
         /// Navigates to the most recent item in forward navigation history, if a frame manages its own navigation history.
         /// </summary>
-        public void GoForward()
-        {
-            this.Frame.GoForward();
-        }
+        public void GoForward() => Frame.GoForward();
 
         /// <summary>
         /// Occurs when the application is navigating to the initial start page.
@@ -241,24 +225,24 @@
         /// <remarks>If the <see cref="P:StartPage">start page</see> is null, the base implementation will not perform any action.</remarks>
         protected virtual void OnNavigateToStartPage( IApplicationState applicationState )
         {
-            Contract.Requires<ArgumentNullException>( applicationState != null, "applicationState" );
+            Arg.NotNull( applicationState, nameof( applicationState ) );
 
-            if ( this.StartPage == null )
+            if ( StartPage == null )
                 return;
 
             object parameter = applicationState == null ? null : applicationState.Activation.Arguments;
-            this.Frame.Navigate( this.StartPage, parameter );
+            Frame.Navigate( StartPage, parameter );
         }
 
         private void ConfigureRootElement( FrameworkElement element )
         {
             Contract.Requires( element != null );
 
-            if ( !string.IsNullOrEmpty( this.Language ) )
-                element.Language = this.Language;
+            if ( !string.IsNullOrEmpty( Language ) )
+                element.Language = Language;
 
-            if ( !string.IsNullOrEmpty( this.FlowDirection ) )
-                element.FlowDirection = (FlowDirection) Enum.Parse( typeof( FlowDirection ), this.FlowDirection, false );
+            if ( !string.IsNullOrEmpty( FlowDirection ) )
+                element.FlowDirection = (FlowDirection) Enum.Parse( typeof( FlowDirection ), FlowDirection, false );
         }
 
         partial void BeforeFirstNavigation( Frame frame );
@@ -270,7 +254,7 @@
         {
             IApplicationState state = null;
 
-            this.ServiceProvider.TryGetService<IApplicationState>( out state );
+            ServiceProvider.TryGetService<IApplicationState>( out state );
 
             // do not repeat app initialization when the window already has content
             if ( Window.Current.Content == null )
@@ -279,19 +263,19 @@
                 {
                     // load state from previously suspended application
                     if ( state.Activation.PreviousExecutionState == ApplicationExecutionState.Terminated )
-                        this.OnLoadState( state );
+                        OnLoadState( state );
                 }
 
-                this.ConfigureRootElement( this.Frame );
-                Window.Current.Content = this.Frame;
+                ConfigureRootElement( Frame );
+                Window.Current.Content = Frame;
             }
 
             // when the navigation stack isn't restored, navigate to the first page and configure
             // the new page by passing required information as a navigation parameter
-            if ( this.Frame.Content == null )
+            if ( Frame.Content == null )
             {
-                this.BeforeFirstNavigation( this.Frame );
-                this.OnNavigateToStartPage( state );
+                BeforeFirstNavigation( Frame );
+                OnNavigateToStartPage( state );
             }
 
             // ensure that the window is active
@@ -304,10 +288,7 @@
         /// <returns>True if the frame can navigate according to its settings; otherwise, false.</returns>
         /// <param name="sourcePageType">The data type of the content to load.</param>
         /// <param name="parameter">The object parameter to pass to the target.</param>
-        public bool Navigate( Type sourcePageType, object parameter )
-        {
-            return this.Frame.Navigate( sourcePageType, parameter );
-        }
+        public bool Navigate( Type sourcePageType, object parameter ) => Frame.Navigate( sourcePageType, parameter );
 
         /// <summary>
         /// Causes the service to load content that is specified by URI, also passing a parameter to be interpreted by the target of the navigation.
@@ -325,7 +306,7 @@
                 return false;
 
             // let navigation service do what it normally does
-            return this.Frame.Navigate( page, parameter );
+            return Frame.Navigate( page, parameter );
         }
 
         /// <summary>
@@ -335,8 +316,8 @@
         /// <returns>The previous navigation history cache size value.</returns>
         public int SetCacheSize( int cacheSize )
         {
-            var oldValue = this.Frame.CacheSize;
-            this.Frame.CacheSize = cacheSize;
+            var oldValue = Frame.CacheSize;
+            Frame.CacheSize = cacheSize;
             return oldValue;
         }
 

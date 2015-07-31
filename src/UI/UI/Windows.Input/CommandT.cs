@@ -33,8 +33,8 @@
         /// </summary>
         protected Command()
         {
-            this.executeMethod = DefaultAction.None;
-            this.canExecuteMethod = DefaultFunc.CanExecute;
+            executeMethod = DefaultAction.None;
+            canExecuteMethod = DefaultFunc.CanExecute;
         }
 
         /// <summary>
@@ -53,8 +53,8 @@
         /// <param name="canExecuteMethod">The <see cref="Func{T1,TResult}"/> representing the can execute method.</param>
         public Command( Action<T> executeMethod, Func<T, bool> canExecuteMethod )
         {
-            Arg.NotNull( executeMethod, "executeMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
+            Arg.NotNull( executeMethod, nameof( executeMethod ) );
+            Arg.NotNull( canExecuteMethod, nameof( canExecuteMethod ) );
 
             this.executeMethod = executeMethod;
             this.canExecuteMethod = canExecuteMethod;
@@ -66,12 +66,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExecuted( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Executed;
-
-            if ( handler != null )
-                handler( this, e );
+            Executed?.Invoke( this, e );
         }
 
         /// <summary>
@@ -81,7 +78,7 @@
         /// <returns>True if the command can be executed; otherwise, false.  The default implementation always returns true.</returns>
         public virtual bool CanExecute( T parameter )
         {
-            return this.canExecuteMethod( parameter );
+            return canExecuteMethod( parameter );
         }
 
         /// <summary>
@@ -90,8 +87,8 @@
         /// <param name="parameter">The associated parameter with the command.</param>
         public virtual void Execute( T parameter )
         {
-            this.executeMethod( parameter );
-            this.OnExecuted( EventArgs.Empty );
+            executeMethod( parameter );
+            OnExecuted( EventArgs.Empty );
         }
 
         /// <summary>
@@ -100,17 +97,14 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCanExecuteChanged( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CanExecuteChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CanExecuteChanged?.Invoke( this, e );
         }
 
         bool ICommand.CanExecute( object parameter )
         {
-            return this.CanExecute( Util.CastOrDefault<T>( parameter ) );
+            return CanExecute( Util.CastOrDefault<T>( parameter ) );
         }
 
         /// <summary>
@@ -120,7 +114,7 @@
 
         void ICommand.Execute( object parameter )
         {
-            this.Execute( Util.CastOrDefault<T>( parameter ) );
+            Execute( Util.CastOrDefault<T>( parameter ) );
         }
 
         /// <summary>
@@ -130,7 +124,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Allows the command to be forcibly re-evaluated from an external source." )]
         public virtual void RaiseCanExecuteChanged()
         {
-            this.OnCanExecuteChanged( EventArgs.Empty );
+            OnCanExecuteChanged( EventArgs.Empty );
         }
 
         /// <summary>

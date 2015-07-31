@@ -33,7 +33,7 @@
         public SettingAttribute( string key )
             : base( key )
         {
-            Arg.NotNullOrEmpty( key, "key" );
+            Arg.NotNullOrEmpty( key, nameof( key ) );
         }
 
         /// <summary>
@@ -45,7 +45,7 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return this.ContractName;
+                return ContractName;
             }
         }
 
@@ -57,13 +57,13 @@
         {
             get
             {
-                Contract.Ensures( this.defaultValue != null );
-                return this.defaultValue;
+                Contract.Ensures( defaultValue != null );
+                return defaultValue;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.defaultValue = value;
+                Arg.NotNull( value, nameof( value ) );
+                defaultValue = value;
             }
         }
 
@@ -91,7 +91,7 @@
         /// maps to <see cref="Object"/>, it will become the fallback converter for all conversions.</remarks>
         public static void SetConverter<TValue>( Func<object, Type, IFormatProvider, TValue> converter )
         {
-            Arg.NotNull( converter, "converter" );
+            Arg.NotNull( converter, nameof( converter ) );
 
             lock ( syncRoot )
                 mappedConverters.Value[typeof( TValue )] = new UserDefinedConverter<TValue>( converter );
@@ -109,7 +109,7 @@
         /// primitive types. To register additional conversion methods, use the <see cref="SetConverter{T}"/> method.</remarks>
         public static object Convert( object value, Type targetType, IFormatProvider formatProvider )
         {
-            Arg.NotNull( targetType, "targetType" );
+            Arg.NotNull( targetType, nameof( targetType ) );
 
             IDictionary<Type, ITypeConverter> converters;
             ITypeConverter converter;

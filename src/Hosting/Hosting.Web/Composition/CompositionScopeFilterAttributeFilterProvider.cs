@@ -20,11 +20,12 @@
         /// </summary>
         /// <param name="contextFactory">The factory <see cref="Func{T}">method</see> used to retrieve the
         /// current <see cref="CompositionContext">context</see> used by the resolver.</param>
+        [CLSCompliant( false )]
         public CompositionScopeFilterAttributeFilterProvider( Func<CompositionContext> contextFactory )
             : base( cacheAttributeInstances: false )
         {
-            Contract.Requires<ArgumentNullException>( contextFactory != null, "contextFactory" );
-            this.factory = contextFactory;
+            Arg.NotNull( contextFactory, nameof( contextFactory ) );
+            factory = contextFactory;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@
             Debug.Assert( actionDescriptor != null );
             
             var attributes = base.GetActionAttributes( controllerContext, actionDescriptor ).ToList();
-            attributes.ForEach( this.factory().SatisfyImports );
+            attributes.ForEach( factory().SatisfyImports );
             
             return attributes;
         }
@@ -56,7 +57,7 @@
             Debug.Assert( actionDescriptor != null );
             
             var attributes = base.GetControllerAttributes( controllerContext, actionDescriptor ).ToList();
-            attributes.ForEach( this.factory().SatisfyImports );
+            attributes.ForEach( factory().SatisfyImports );
             
             return attributes;
         }

@@ -18,25 +18,25 @@
         public override object Execute( object sender, object parameter )
         {
             // use target override or failover to associated object
-            var target = this.ReadLocalValue( TargetObjectProperty ) == DependencyProperty.UnsetValue ? sender : this.TargetObject;
+            var target = ReadLocalValue( TargetObjectProperty ) == DependencyProperty.UnsetValue ? sender : TargetObject;
 
             // ensure there is a valid method to execute
-            if ( target == null && string.IsNullOrEmpty( this.PropertyName ) )
+            if ( target == null && string.IsNullOrEmpty( PropertyName ) )
                 return null;
 
             var targetType = target.GetType();
-            var value = this.PropertyValue;
+            var value = PropertyValue;
 
             // set property and return set value
             // note: set and capture the property on the first execution. reuse the resolved property on subsequent executions.
-            if ( this.targetObjectType == targetType && this.targetProperty != null )
+            if ( targetObjectType == targetType && targetProperty != null )
             {
-                this.targetProperty.SetValue( target, value );
+                targetProperty.SetValue( target, value );
             }
             else
             {
-                this.targetProperty = ReflectHelper.SetProperty( target, this.PropertyName, value );
-                this.targetObjectType = targetType;
+                targetProperty = ReflectHelper.SetProperty( target, PropertyName, value );
+                targetObjectType = targetType;
             }
 
             return value;

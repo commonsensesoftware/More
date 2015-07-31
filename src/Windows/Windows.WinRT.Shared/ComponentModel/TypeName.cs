@@ -21,22 +21,22 @@
 
             var parts = Parse( typeName );
 
-            this.FullName = parts.Item1;
-            this.Name = parts.Item2;
-            this.AssemblyName = parts.Item3;
-            this.HasNamespace = parts.Item4;
-            this.IsAssemblyQualified = !string.IsNullOrEmpty( this.AssemblyName );
+            FullName = parts.Item1;
+            Name = parts.Item2;
+            AssemblyName = parts.Item3;
+            HasNamespace = parts.Item4;
+            IsAssemblyQualified = !string.IsNullOrEmpty( AssemblyName );
         }
 
         internal TypeName( Type type )
         {
             Contract.Requires( type != null );
 
-            this.Name = type.Name;
-            this.FullName = type.FullName;
-            this.AssemblyName = type.GetTypeInfo().Assembly.GetName().Name;
-            this.HasNamespace = true;
-            this.IsAssemblyQualified = true;
+            Name = type.Name;
+            FullName = type.FullName;
+            AssemblyName = type.GetTypeInfo().Assembly.GetName().Name;
+            HasNamespace = true;
+            IsAssemblyQualified = true;
         }
 
         private static Tuple<string, string, string, bool> Parse( string typeName )
@@ -57,10 +57,10 @@
             var comparer = StringComparer.Ordinal;
 
             // if this type name doesn't have a namespace, then we can only match on name.  if we do have a namespace, then match on full name
-            if ( ( !this.HasNamespace && comparer.Equals( this.Name, other.Name ) ) || comparer.Equals( this.FullName, other.FullName ) )
+            if ( ( !HasNamespace && comparer.Equals( Name, other.Name ) ) || comparer.Equals( FullName, other.FullName ) )
             {
                 // if either type name doesn't have an assembly name, then treat them equally because they can't be compared
-                if ( !this.IsAssemblyQualified || !other.IsAssemblyQualified || comparer.Equals( this.AssemblyName, other.AssemblyName ) )
+                if ( !IsAssemblyQualified || !other.IsAssemblyQualified || comparer.Equals( AssemblyName, other.AssemblyName ) )
                     return true;
             }
 

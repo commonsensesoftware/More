@@ -29,10 +29,10 @@
         /// <param name="serviceKey">The key associated with the registered service.</param>
         public ServiceRegistryKey( Type serviceType, string serviceKey )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
 
-            this.type = serviceType;
-            this.key = serviceKey;
+            type = serviceType;
+            key = serviceKey;
         }
 
         /// <summary>
@@ -43,8 +43,8 @@
         {
             get
             {
-                Contract.Ensures( this.type != null );
-                return this.type;
+                Contract.Ensures( type != null );
+                return type;
             }
         }
 
@@ -56,7 +56,7 @@
         {
             get
             {
-                return this.key;
+                return key;
             }
         }
 
@@ -67,9 +67,9 @@
         public override int GetHashCode()
         {
             // taken from System.Runtime.Numerics.Complex.GetHashCode
-            return this.Key == null ?
-                   this.ServiceType.GetHashCode() :
-                   ( StringComparer.Ordinal.GetHashCode( this.Key ) % Modulus ) ^ this.ServiceType.GetHashCode();
+            return Key == null ?
+                   ServiceType.GetHashCode() :
+                   ( StringComparer.Ordinal.GetHashCode( Key ) % Modulus ) ^ ServiceType.GetHashCode();
         }
 
         /// <summary>
@@ -79,7 +79,7 @@
         /// <returns>True if the <paramref name="obj">object</paramref> equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as ServiceRegistryKey );
+            return Equals( obj as ServiceRegistryKey );
         }
 
         /// <summary>
@@ -89,7 +89,7 @@
         /// <returns>True if the <paramref name="other"/> object equals the current instance; otherwise, false.</returns>
         public bool Equals( ServiceRegistryKey other )
         {
-            return other == null ? false : this.GetHashCode() == other.GetHashCode();
+            return other == null ? false : GetHashCode() == other.GetHashCode();
         }
 
         /// <summary>

@@ -6,7 +6,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Represents a base implementation of <see cref="IEditableObject"/> with support for two-way data binding.
@@ -26,7 +25,7 @@
         /// </summary>
         protected EditableObject()
         {
-            this.transaction = new Lazy<IEditTransaction>( this.CreateTransaction );
+            transaction = new Lazy<IEditTransaction>( CreateTransaction );
         }
 
         /// <summary>
@@ -36,7 +35,6 @@
         protected EditableObject( params string[] uneditableMembers )
             : this( (IEnumerable<string>) uneditableMembers )
         {
-            Arg.NotNull( uneditableMembers, "uneditableMembers" );
         }
 
         /// <summary>
@@ -45,10 +43,10 @@
         /// <param name="uneditableMembers">A <see cref="IEnumerable{T}">sequence</see> of uneditable member names.</param>
         protected EditableObject( IEnumerable<string> uneditableMembers )
         {
-            Arg.NotNull( uneditableMembers, "uneditableMembers" );
+            Arg.NotNull( uneditableMembers, nameof( uneditableMembers ) );
 
             this.uneditableMembers = new HashSet<string>( uneditableMembers, StringComparer.Ordinal );
-            this.transaction = new Lazy<IEditTransaction>( this.CreateTransaction );
+            transaction = new Lazy<IEditTransaction>( CreateTransaction );
         }
 
         private IEditTransaction Transaction
@@ -56,7 +54,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEditTransaction>() != null );
-                return this.transaction.Value;
+                return transaction.Value;
             }
         }
 
@@ -68,8 +66,8 @@
         {
             get
             {
-                Contract.Ensures( this.uneditableMembers != null );
-                return this.uneditableMembers;
+                Contract.Ensures( uneditableMembers != null );
+                return uneditableMembers;
             }
         }
 
@@ -81,15 +79,15 @@
         {
             get
             {
-                return this.editing;
+                return editing;
             }
             private set
             {
-                if ( this.editing == value )
+                if ( editing == value )
                     return;
 
-                this.editing = value;
-                this.OnPropertyChanged( "IsEditing", true );
+                editing = value;
+                OnPropertyChanged( nameof( IsEditing ), true );
             }
         }
 
@@ -102,15 +100,15 @@
         {
             get
             {
-                return this.recoveryModel;
+                return recoveryModel;
             }
             set
             {
-                if ( this.recoveryModel == value )
+                if ( recoveryModel == value )
                     return;
 
-                this.recoveryModel = value;
-                this.savepoint = value == EditRecoveryModel.Full ? this.Transaction.CreateSavepoint() : null;
+                recoveryModel = value;
+                savepoint = value == EditRecoveryModel.Full ? Transaction.CreateSavepoint() : null;
             }
         }
 
@@ -118,7 +116,7 @@
         {
             get
             {
-                return this.RecoveryModel == EditRecoveryModel.Full;
+                return RecoveryModel == EditRecoveryModel.Full;
             }
         }
 
@@ -130,17 +128,14 @@
         protected virtual IEditTransaction CreateTransaction()
         {
             Contract.Ensures( Contract.Result<IEditTransaction>() != null );
-            return new PropertyTransaction( this, p => !this.uneditableMembers.Contains( p.Name ) );
+            return new PropertyTransaction( this, p => !uneditableMembers.Contains( p.Name ) );
         }
 
         /// <summary>
         /// Occurs when when the changes to the object are about to be committed.
         /// </summary>
         /// <remarks>Note to inheritors: the default implementation validates the current instance.</remarks>
-        protected virtual void OnBeforeEndEdit()
-        {
-            this.changedState = this.IsChanged;
-        }
+        protected virtual void OnBeforeEndEdit() => changedState = IsChanged;
 
         /// <summary>
         /// Occurs after the changes to the object have been committed.
@@ -161,10 +156,7 @@
         /// <summary>
         /// Occurs after the changes to the object have been canceled.
         /// </summary>
-        protected virtual void OnAfterCancelEdit()
-        {
-            this.IsChanged = this.changedState;
-        }
+        protected virtual void OnAfterCancelEdit() => IsChanged = changedState;
 
         /// <summary>
         /// Occurs when the object is about to be edited.
@@ -188,10 +180,7 @@
         /// <param name="suppressStateChange">Indicates whether the property changed event should trigger state change.</param>
         /// <remarks>The <see cref="P:IsChanged"/> property is to true whenever a property change is detected.  This overload can be used to
         /// raise <see cref="E:PropertyChanged"/> without triggering a state change.</remarks>
-        protected void OnPropertyChanged( string propertyName, bool suppressStateChange )
-        {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ), suppressStateChange );
-        }
+        protected void OnPropertyChanged( string propertyName, bool suppressStateChange ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ), suppressStateChange );
 
         /// <summary>
         /// Returns a value indicating whether the specific property triggers a state change.
@@ -209,12 +198,12 @@
         {
             switch ( propertyName )
             {
-                case "IsChanged":       // IChangeTracking.IsChanged
-                case "IsEditing":       // EditableObject.IsEditing
-                case "RecoveryModel":   // EditableObject.IsEditing
-                case "IsValid":         // ValidatableObject.IsValid
-                case "Error":           // IDataErrorInfo.Error
-                case "HasErrors":       // INotifyDataErrorInfo.HasErrors
+                case nameof( IsChanged ):       // IChangeTracking.IsChanged
+                case nameof( IsEditing ):       // EditableObject.IsEditing
+                case nameof( RecoveryModel ):   // EditableObject.IsEditing
+                case nameof( IsValid ):         // ValidatableObject.IsValid
+                case nameof( HasErrors ):       // INotifyDataErrorInfo.HasErrors
+                case "Error":                   // IDataErrorInfo.Error
                     return false;
             }
 
@@ -226,8 +215,8 @@
             Contract.Requires( e != null );
 
             // if not suppressed, change the state
-            if ( this.TriggersStateChange( e.PropertyName ) && !suppressStateChange )
-                this.IsChanged = true;
+            if ( TriggersStateChange( e.PropertyName ) && !suppressStateChange )
+                IsChanged = true;
 
             base.OnPropertyChanged( e );
         }
@@ -238,8 +227,8 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected override void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
-            this.OnPropertyChanged( e, false );
+            Arg.NotNull( e, nameof( e ) );
+            OnPropertyChanged( e, false );
         }
 
         /// <summary>
@@ -248,13 +237,13 @@
         /// <remarks>If the object is already being edited, this method has no effect.</remarks>
         public void BeginEdit()
         {
-            if ( this.IsEditing )
+            if ( IsEditing )
                 return;
 
-            this.IsEditing = true;
-            this.OnBeforeBeginEdit();
-            this.Transaction.Begin();
-            this.OnAfterBeginEdit();
+            IsEditing = true;
+            OnBeforeBeginEdit();
+            Transaction.Begin();
+            OnAfterBeginEdit();
         }
 
         /// <summary>
@@ -263,13 +252,13 @@
         /// <remarks>If the object is not being edited, this method has no effect.</remarks>
         public void EndEdit()
         {
-            if ( !this.IsEditing )
+            if ( !IsEditing )
                 return;
 
-            this.OnBeforeEndEdit();
-            this.Transaction.Commit();
-            this.OnAfterEndEdit();
-            this.IsEditing = false;
+            OnBeforeEndEdit();
+            Transaction.Commit();
+            OnAfterEndEdit();
+            IsEditing = false;
         }
 
         /// <summary>
@@ -278,14 +267,14 @@
         /// <remarks>If the object is not being edited, this method has no effect.</remarks>
         public void CancelEdit()
         {
-            if ( !this.IsEditing )
+            if ( !IsEditing )
                 return;
 
-            this.OnBeforeCancelEdit();
-            this.Transaction.Rollback();
-            this.OnAfterCancelEdit();
-            this.IsEditing = false;
-            this.OnPropertyChanged( (string) null, true );
+            OnBeforeCancelEdit();
+            Transaction.Rollback();
+            OnAfterCancelEdit();
+            IsEditing = false;
+            OnPropertyChanged( (string) null, true );
         }
 
         /// <summary>
@@ -293,12 +282,12 @@
         /// </summary>
         public virtual void AcceptChanges()
         {
-            this.EndEdit();
+            EndEdit();
 
-            if ( this.UseFullRecovery )
-                this.savepoint = this.Transaction.CreateSavepoint();
+            if ( UseFullRecovery )
+                savepoint = Transaction.CreateSavepoint();
 
-            this.IsChanged = false;
+            IsChanged = false;
         }
 
         /// <summary>
@@ -309,11 +298,11 @@
         {
             get
             {
-                return this.changed;
+                return changed;
             }
             protected set
             {
-                this.SetProperty( ref this.changed, value );
+                SetProperty( ref changed, value );
             }
         }
 
@@ -324,13 +313,13 @@
         /// been called, then the state of the object reverts to its original initialization state.</remarks>
         public virtual void RejectChanges()
         {
-            this.CancelEdit();
+            CancelEdit();
 
-            if ( this.UseFullRecovery && this.savepoint != null )
-                this.Transaction.Rollback( this.savepoint );
+            if ( UseFullRecovery && savepoint != null )
+                Transaction.Rollback( savepoint );
 
-            this.IsChanged = false;
-            this.OnPropertyChanged( (string) null, true );
+            IsChanged = false;
+            OnPropertyChanged( (string) null, true );
         }
     }
 }

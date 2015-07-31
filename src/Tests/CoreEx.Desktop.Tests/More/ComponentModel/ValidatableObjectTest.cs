@@ -27,11 +27,11 @@
             {
                 get
                 {
-                    return this.id;
+                    return id;
                 }
                 set
                 {
-                    this.SetProperty( ref this.id, value );
+                    SetProperty( ref id, value );
                 }
             }
 
@@ -41,11 +41,11 @@
             {
                 get
                 {
-                    return this.name;
+                    return name;
                 }
                 set
                 {
-                    this.SetProperty( ref this.name, value );
+                    SetProperty( ref name, value );
                 }
             }
 
@@ -55,11 +55,11 @@
             {
                 get
                 {
-                    return this.address;
+                    return address;
                 }
                 set
                 {
-                    this.SetProperty( ref this.address, value );
+                    SetProperty( ref address, value );
                 }
             }
 
@@ -67,11 +67,11 @@
             {
                 get
                 {
-                    return this.hireDate;
+                    return hireDate;
                 }
                 set
                 {
-                    this.SetProperty( ref this.hireDate, value );
+                    SetProperty( ref hireDate, value );
                 }
             }
 
@@ -79,17 +79,17 @@
             {
                 get
                 {
-                    return this.separationDate;
+                    return separationDate;
                 }
                 set
                 {
-                    this.SetProperty( ref this.separationDate, value );
+                    SetProperty( ref separationDate, value );
                 }
             }
 
             public IEnumerable<ValidationResult> Validate( ValidationContext validationContext )
             {
-                if ( this.HireDate > this.SeparationDate )
+                if ( HireDate > SeparationDate )
                     yield return new ValidationResult( "Hire date must less than or equal to the separation date.", new[] { "HireDate", "SeparationDate" } );
             }
         }

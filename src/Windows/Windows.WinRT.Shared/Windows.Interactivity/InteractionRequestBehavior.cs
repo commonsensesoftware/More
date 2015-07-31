@@ -3,6 +3,7 @@
     using Microsoft.Xaml.Interactivity;
     using More.Windows.Input;
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Windows.Input;
@@ -21,15 +22,17 @@
         /// Gets the actions dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ActionsProperty =
-            DependencyProperty.Register( "Actions", typeof( ActionCollection ), typeof( InteractionRequestBehavior ), new PropertyMetadata( null ) );
+            DependencyProperty.Register( nameof( Actions ), typeof( ActionCollection ), typeof( InteractionRequestBehavior ), new PropertyMetadata( null ) );
 
         /// <summary>
         /// Gets the request dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty RequestProperty =
-            DependencyProperty.Register( "Request", typeof( object ), typeof( InteractionRequestBehavior ), new PropertyMetadata( null, OnRequestChanged ) );
+            DependencyProperty.Register( nameof( Request ), typeof( object ), typeof( InteractionRequestBehavior ), new PropertyMetadata( null, OnRequestChanged ) );
 
         private static void OnRequestChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e )
         {
@@ -51,9 +54,9 @@
             if ( DesignMode.DesignModeEnabled )
                 return;
 
-            var associatedObject = this.AssociatedObject;
+            var associatedObject = AssociatedObject;
 
-            foreach ( var action in this.Actions.OfType<IAction>() )
+            foreach ( var action in Actions.OfType<IAction>() )
             {
                 var actionWithAssociatedObject = action as IActionWithAssociatedObject;
 
@@ -72,12 +75,12 @@
         {
             get
             {
-                var actions = (ActionCollection) this.GetValue( ActionsProperty );
+                var actions = (ActionCollection) GetValue( ActionsProperty );
 
                 if ( actions == null )
                 {
                     actions = new ActionCollection();
-                    this.SetValue( ActionsProperty, actions );
+                    SetValue( ActionsProperty, actions );
                 }
 
                 return actions;
@@ -92,11 +95,11 @@
         {
             get
             {
-                return (IInteractionRequest) this.GetValue( RequestProperty );
+                return (IInteractionRequest) GetValue( RequestProperty );
             }
             set
             {
-                this.SetValue( RequestProperty, value );
+                SetValue( RequestProperty, value );
             }
         }
     }

@@ -18,7 +18,7 @@
         /// </summary>
         public ViewItemTemplateWizard()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -29,8 +29,8 @@
         public ViewItemTemplateWizard( ViewItemTemplateWizardViewModel model, ProjectInformation projectInformation )
             : this()
         {
-            this.Model = model;
-            this.projectInfo = projectInformation;
+            Model = model;
+            projectInfo = projectInformation;
         }
 
         /// <summary>
@@ -41,16 +41,16 @@
         {
             get
             {
-                return this.DataContext as ViewItemTemplateWizardViewModel;
+                return DataContext as ViewItemTemplateWizardViewModel;
             }
             set
             {
-                var oldValue = this.Model;
+                var oldValue = Model;
 
                 if ( oldValue != null )
                     oldValue.InteractionRequests["BrowseForViewModel"].Requested -= OnBrowseForViewModel;
 
-                if ( ( this.DataContext = value ) != null )
+                if ( ( DataContext = value ) != null )
                     value.InteractionRequests["BrowseForViewModel"].Requested += OnBrowseForViewModel;
             }
         }
@@ -63,8 +63,8 @@
             {
                 Title = e.Interaction.Title,
                 NameConvention = "ViewModel",
-                LocalAssemblyName = this.Model.LocalAssemblyName,
-                SourceProject = this.projectInfo,
+                LocalAssemblyName = Model.LocalAssemblyName,
+                SourceProject = projectInfo,
                 RestrictedBaseTypeNames =
                 {
                     "System.Windows.DependencyObject"
@@ -73,7 +73,7 @@
 
             if ( await picker.ShowDialogAsync( this ) ?? false )
             {
-                this.Model.ViewModelType = picker.SelectedType;
+                Model.ViewModelType = picker.SelectedType;
                 e.Interaction.ExecuteDefaultCommand();
             }
             else

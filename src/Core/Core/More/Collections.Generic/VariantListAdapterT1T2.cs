@@ -27,8 +27,8 @@
         /// <param name="list">The <see cref="IList{T}">list</see> to enable type variance for.</param>
         public VariantListAdapter( IList<TFrom> list )
         {
-            Arg.NotNull( list, "list" );
-            this.items = list;
+            Arg.NotNull( list, nameof( list ) );
+            items = list;
         }
 
         /// <summary>
@@ -39,8 +39,8 @@
         {
             get
             {
-                Contract.Ensures( this.items != null );
-                return this.items;
+                Contract.Ensures( items != null );
+                return items;
             }
         }
 
@@ -49,8 +49,8 @@
         /// </summary>
         protected virtual void ClearItems()
         {
-            Contract.Ensures( this.Items.Count == 0 ); 
-            this.Items.Clear();
+            Contract.Ensures( Items.Count == 0 );
+            Items.Clear();
         }
 
         /// <summary>
@@ -60,10 +60,10 @@
         /// <param name="item">The <typeparamref name="TFrom">item</typeparamref> to insert.</param>
         protected virtual void InsertItem( int index, TFrom item )
         {
-            Contract.Ensures( this.Count == Contract.OldValue( this.Count ) + 1 );
+            Contract.Ensures( Count == Contract.OldValue( Count ) + 1 );
             Arg.GreaterThanOrEqualTo( index, 0, "index" );
-            Arg.LessThanOrEqualTo( index, this.Items.Count, "index" );
-            this.Items.Insert( index, item );
+            Arg.LessThanOrEqualTo( index, Items.Count, "index" );
+            Items.Insert( index, item );
         }
 
         /// <summary>
@@ -72,10 +72,10 @@
         /// <param name="index">The zero-based index of the item to remove.</param>
         protected virtual void RemoveItem( int index )
         {
-            Contract.Ensures( this.Count == Contract.OldValue( this.Count ) - 1 );
+            Contract.Ensures( Count == Contract.OldValue( Count ) - 1 );
             Arg.GreaterThanOrEqualTo( index, 0, "index" );
-            Arg.LessThanOrEqualTo( index, this.Items.Count, "index" );
-            this.Items.RemoveAt( index );
+            Arg.LessThanOrEqualTo( index, Items.Count, "index" );
+            Items.RemoveAt( index );
         }
 
         /// <summary>
@@ -85,10 +85,10 @@
         /// <param name="item">The replacement <typeparamref name="TFrom">item</typeparamref> to set.</param>
         protected virtual void SetItem( int index, TFrom item )
         {
-            Contract.Ensures( this.Count == Contract.OldValue( this.Count ) );
+            Contract.Ensures( Count == Contract.OldValue( Count ) );
             Arg.GreaterThanOrEqualTo( index, 0, "index" );
-            Arg.LessThanOrEqualTo( index, this.Items.Count, "index" );
-            this.Items[index] = item;
+            Arg.LessThanOrEqualTo( index, Items.Count, "index" );
+            Items[index] = item;
         }
 
         /// <summary>
@@ -99,13 +99,13 @@
         protected virtual void MoveItem( int oldIndex, int newIndex )
         {
             Arg.GreaterThanOrEqualTo( oldIndex, 0, "oldIndex" );
-            Arg.LessThan( oldIndex, this.Items.Count, "oldIndex" );
+            Arg.LessThan( oldIndex, Items.Count, "oldIndex" );
             Arg.GreaterThanOrEqualTo( newIndex, 0, "newIndex" );
-            Arg.LessThan( newIndex, this.Items.Count, "newIndex" );
+            Arg.LessThan( newIndex, Items.Count, "newIndex" );
 
-            var item = this.Items[oldIndex];
-            this.RemoveItem( oldIndex );
-            this.InsertItem( newIndex, item );
+            var item = Items[oldIndex];
+            RemoveItem( oldIndex );
+            InsertItem( newIndex, item );
         }
 
         /// <summary>
@@ -115,7 +115,7 @@
         /// <returns>The zero-based index of the specified <paramref name="item"/> or -1 if no match is found.</returns>
         public int IndexOf( TTo item )
         {
-            return this.Items.IndexOf( (TFrom) item );
+            return Items.IndexOf( (TFrom) item );
         }
 
         /// <summary>
@@ -125,7 +125,7 @@
         /// <param name="item">The <typeparamref name="TTo">item</typeparamref> to insert.</param>
         public void Insert( int index, TTo item )
         {
-            this.InsertItem( index, (TFrom) item );
+            InsertItem( index, (TFrom) item );
         }
 
         /// <summary>
@@ -134,7 +134,7 @@
         /// <param name="index">The zero-based index of the item to remove.</param>
         public void RemoveAt( int index )
         {
-            this.RemoveItem( index );
+            RemoveItem( index );
         }
 
         /// <summary>
@@ -146,11 +146,11 @@
         {
             get
             {
-                return (TTo) this.Items[index];
+                return (TTo) Items[index];
             }
             set
             {
-                this.SetItem( index, (TFrom) value );
+                SetItem( index, (TFrom) value );
             }
         }
 
@@ -160,7 +160,7 @@
         /// <param name="item">The <typeparamref name="TTo">item</typeparamref> to add.</param>
         public void Add( TTo item )
         {
-            this.InsertItem( this.Items.Count, (TFrom) item );
+            InsertItem( Items.Count, (TFrom) item );
         }
 
         /// <summary>
@@ -168,7 +168,7 @@
         /// </summary>
         public void Clear()
         {
-            this.ClearItems();
+            ClearItems();
         }
 
         /// <summary>
@@ -178,7 +178,7 @@
         /// <returns>True if the list contains the specified <paramref name="item"/>; otherwise, false.</returns>
         public bool Contains( TTo item )
         {
-            return this.Items.Contains( (TFrom) item );
+            return Items.Contains( (TFrom) item );
         }
 
         /// <summary>
@@ -190,9 +190,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "False positive" )]
         public void CopyTo( TTo[] array, int arrayIndex )
         {
-            Arg.NotNull( array, "array" );
+            Arg.NotNull( array, nameof( array ) );
             var other = new TFrom[array.Length];
-            this.Items.CopyTo( other, arrayIndex );
+            Items.CopyTo( other, arrayIndex );
             other.Cast<TTo>().ToArray().CopyTo( array, arrayIndex );
         }
 
@@ -204,7 +204,7 @@
         {
             get
             {
-                return this.Items.Count;
+                return Items.Count;
             }
         }
 
@@ -216,7 +216,7 @@
         {
             get
             {
-                return this.Items.IsReadOnly;
+                return Items.IsReadOnly;
             }
         }
 
@@ -227,12 +227,12 @@
         /// <returns>True if the <paramref name="item"/> was removed; otherwise, false.</returns>
         public bool Remove( TTo item )
         {
-            var index = this.IndexOf( item );
+            var index = IndexOf( item );
 
             if ( index < 0 )
                 return false;
 
-            this.RemoveItem( index );
+            RemoveItem( index );
             return true;
         }
 
@@ -242,12 +242,12 @@
         /// <returns>An <see cref="IEnumerator{T}">iterator</see> for the list.</returns>
         public virtual IEnumerator<TTo> GetEnumerator()
         {
-            return this.Items.Cast<TTo>().GetEnumerator();
+            return Items.Cast<TTo>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

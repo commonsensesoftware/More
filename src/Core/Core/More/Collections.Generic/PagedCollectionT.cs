@@ -53,7 +53,7 @@
         public PagedCollection( ObservableCollection<T> collection, long totalCount )
             : base( collection )
         {
-            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( collection, nameof( collection ) );
             Arg.GreaterThanOrEqualTo( totalCount, collection.Count, "totalCount" );
             this.totalCount = totalCount;
         }
@@ -67,12 +67,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<long>() >= 0L );
-                return this.totalCount;
+                return totalCount;
             }
             protected set
             {
                 Arg.GreaterThanOrEqualTo( value, 0L, "value" );
-                this.totalCount = value;
+                totalCount = value;
             }
         }
     }

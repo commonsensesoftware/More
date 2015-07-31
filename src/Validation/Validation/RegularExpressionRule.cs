@@ -19,7 +19,7 @@
         /// <param name="pattern">The pattern to match.</param>
         public RegularExpressionRule( string pattern )
         {
-            Arg.NotNullOrEmpty( pattern, "pattern" );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
 
             this.pattern = pattern;
         }
@@ -31,8 +31,8 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public RegularExpressionRule( string pattern, string errorMessage )
         {
-            Arg.NotNullOrEmpty( pattern, "pattern" );
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( pattern, nameof( pattern ) );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
 
             this.pattern = pattern;
             this.errorMessage = errorMessage;
@@ -46,8 +46,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.pattern ) );
-                return this.pattern;
+                Contract.Ensures( !string.IsNullOrEmpty( pattern ) );
+                return pattern;
             }
         }
 
@@ -61,10 +61,10 @@
             if ( item == null || item.Value == null )
                 return ValidationResult.Success;
 
-            if ( Regex.IsMatch( item.Value, this.Pattern ) )
+            if ( Regex.IsMatch( item.Value, Pattern ) )
                 return ValidationResult.Success;
 
-            var message = this.errorMessage ?? ValidationMessage.RegexValidationError.FormatDefault( item.Name, this.Pattern );
+            var message = errorMessage ?? ValidationMessage.RegexValidationError.FormatDefault( item.Name, Pattern );
             return new ValidationResult( message, item.Name );
         }
     }

@@ -18,7 +18,7 @@
         /// <returns>An <see cref="IStack{T}"/> object.</returns>
         public static IStack<T> Adapt<T>( this Stack<T> stack )
         {
-            Arg.NotNull( stack, "stack" );
+            Arg.NotNull( stack, nameof( stack ) );
             Contract.Ensures( Contract.Result<IStack<T>>() != null );
             return new StackAdapter<T>( stack );
         }
@@ -31,7 +31,7 @@
         /// <returns>An <see cref="IQueue{T}"/> object.</returns>
         public static IQueue<T> Adapt<T>( this Queue<T> queue )
         {
-            Arg.NotNull( queue, "queue" );
+            Arg.NotNull( queue, nameof( queue ) );
             Contract.Ensures( Contract.Result<IQueue<T>>() != null );
             return new QueueAdapter<T>( queue );
         }

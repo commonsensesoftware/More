@@ -1,7 +1,8 @@
 ﻿namespace More.Windows.Data
 {
-    using global::System;
-    using global::System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.ApplicationModel.DataTransfer;
     using global::Windows.Foundation.Metadata;
     using global::Windows.Storage.Streams;
@@ -11,6 +12,7 @@
     /// Defines the behavior of a set of properties to use with an <see cref="IDataPackage"/>.
     /// </summary>
     [CLSCompliant( false )]
+    [SuppressMessage( "Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Matches the WinRT type name." )]
     public interface IDataPackagePropertySet : IDictionary<string, object>, IEnumerable<KeyValuePair<string, object>>
     {
         /// <summary>
@@ -75,7 +77,7 @@
         /// <summary>
         /// Gets or sets a background color for the sharing applications's logo.
         /// </summary>
-        /// <value>The <see cref="Color">color</see> of the <see cref="P:Square30x30Logo">logo's</see> background.</value>
+        /// <value>The <see cref="T:Color">color</see> of the <see cref="P:Square30x30Logo">logo's</see> background.</value>
         Color LogoBackgroundColor
         {
             get;
@@ -96,6 +98,7 @@
         /// Gets or sets the source application's logo.
         /// </summary>
         /// <value>The logo's bitmap as a <see cref="IRandomAccessStreamReference">stream</see>.</value>
+        [SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "x", Justification = "Matches the WinRT member name for which this property abstracts." )]
         IRandomAccessStreamReference Square30x30Logo
         {
             get;

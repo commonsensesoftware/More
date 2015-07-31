@@ -18,7 +18,7 @@
         {
             get
             {
-                return this.StorageItem.Length;
+                return StorageItem.Length;
             }
         }
 

@@ -21,32 +21,34 @@
         {
             get
             {
-                return this.printDocument.Value;
+                return printDocument.Value;
             }
         }
 
         public void Clear()
         {
-            this.canvas.Children.Clear();
+            canvas.Children.Clear();
         }
 
         public void Add( object content )
         {
+            Arg.NotNull( content, nameof( content ) );
+
             var page = content as UIElement;
 
             if ( page == null )
                 return;
 
-            this.canvas.Children.Add( page );
-            this.canvas.InvalidateMeasure();
-            this.canvas.UpdateLayout();
+            canvas.Children.Add( page );
+            canvas.InvalidateMeasure();
+            canvas.UpdateLayout();
         }
 
         public void Refresh()
         {
-            this.canvas.InvalidateArrange();
-            this.canvas.InvalidateMeasure();
-            this.canvas.UpdateLayout();
+            canvas.InvalidateArrange();
+            canvas.InvalidateMeasure();
+            canvas.UpdateLayout();
         }
     }
 }

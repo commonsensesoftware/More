@@ -22,8 +22,8 @@
         /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}"/> instance to debug.</param>
         public DictionaryDebugView( IDictionary<TKey, TValue> dictionary )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            this.source = dictionary;
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            source = dictionary;
         }
 
         /// <summary>
@@ -36,8 +36,8 @@
         {
             get
             {
-                Contract.Ensures( this.source != null );
-                return this.source.ToArray();
+                Contract.Ensures( source != null );
+                return source.ToArray();
             }
         }
     }

@@ -282,6 +282,9 @@
   <data name="ValidationAttribute_Cannot_Set_ErrorMessage_And_Resource" xml:space="preserve">
     <value>Either ErrorMessageString or ErrorMessageResourceName must be set, but not both.</value>
   </data>
+  <data name="ValidationAttribute_InvalidValue" xml:space="preserve">
+    <value>The specified value is invalid.</value>
+  </data>
   <data name="ValidationAttribute_IsValid_NotImplemented" xml:space="preserve">
     <value>IsValid(object value) has not been implemented by this class.  The preferred entry point is GetValidationResult() and classes should override IsValid(object value, ValidationContext context).</value>
   </data>

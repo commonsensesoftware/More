@@ -37,7 +37,7 @@
         public WindowCloseInteraction( string title, object content, bool canceled )
             : base( title, content )
         {
-            Arg.NotNull( title, "title" );
+            Arg.NotNull( title, nameof( title ) );
             this.canceled = canceled;
         }
 
@@ -49,11 +49,11 @@
         {
             get
             {
-                return this.canceled;
+                return canceled;
             }
             set
             {
-                this.SetProperty( ref this.canceled, value );
+                SetProperty( ref canceled, value );
             }
         }
     }

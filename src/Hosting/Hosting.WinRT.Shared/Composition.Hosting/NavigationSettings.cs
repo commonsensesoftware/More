@@ -20,13 +20,13 @@
         {
             get
             {
-                Contract.Ensures( this.cacheSize >= 0 );
-                return this.cacheSize;
+                Contract.Ensures( cacheSize >= 0 );
+                return cacheSize;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0, "value" );
-                this.cacheSize = value;
+                Arg.GreaterThanOrEqualTo( value, 0, nameof( value ) );
+                cacheSize = value;
             }
         }
 
@@ -36,10 +36,12 @@
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> associated with the task.</param>
         protected override void OnExecute( IServiceProvider serviceProvider )
         {
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+
             INavigationService navigation;
 
             if ( serviceProvider.TryGetService( out navigation ) )
-                navigation.SetCacheSize( this.CacheSize );
+                navigation.SetCacheSize( CacheSize );
         }
     }
 }

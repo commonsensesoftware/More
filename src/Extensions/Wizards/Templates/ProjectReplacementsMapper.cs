@@ -18,8 +18,8 @@
         {
             return new[]
             {
-                new Tuple<string, Action<ProjectTemplateWizardViewModel, string>>( "_interactions", ( m, s ) => this.ReadOptions( m.InteractionOptions, OptionStateMapping.Interactions,  s ) ),
-                new Tuple<string, Action<ProjectTemplateWizardViewModel, string>>( "_contracts", ( m, s ) => this.ReadOptions( m.ApplicationContractOptions, OptionStateMapping.ApplicationContracts, s ) ),
+                new Tuple<string, Action<ProjectTemplateWizardViewModel, string>>( "_interactions", ( m, s ) => ReadOptions( m.InteractionOptions, OptionStateMapping.Interactions,  s ) ),
+                new Tuple<string, Action<ProjectTemplateWizardViewModel, string>>( "_contracts", ( m, s ) => ReadOptions( m.ApplicationContractOptions, OptionStateMapping.ApplicationContracts, s ) ),
                 new Tuple<string, Action<ProjectTemplateWizardViewModel, string>>( "$showTips$", ( m, s ) => m.ShowTips = GetBoolean( s, true ) ),
             };
         }
@@ -50,7 +50,7 @@
                 return;
 
             var names = GetStrings( value );
-            var options = this.StringsToTemplateOptions( names, states, OptionNameResKey, OptionDescResKey );
+            var options = StringsToTemplateOptions( names, states, OptionNameResKey, OptionDescResKey );
 
             viewModelOptions.ReplaceAll( options );
         }

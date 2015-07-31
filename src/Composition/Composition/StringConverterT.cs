@@ -11,7 +11,7 @@
         {
             Debug.Assert( typeof( T ).Equals( targetType ), "The specified conversion type is not supported by the converter." );
             var input = value as string;
-            return input == null ? System.Convert.ChangeType( value, typeof( T ), formatProvider ) : this.Convert( input, targetType, formatProvider );
+            return input == null ? System.Convert.ChangeType( value, typeof( T ), formatProvider ) : Convert( input, targetType, formatProvider );
         }
     }
 }

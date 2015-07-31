@@ -22,12 +22,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<decimal>() > 0m );
-                return this.denomination;
+                return denomination;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value > 0m, "value" );
-                this.denomination = value;
+                Arg.GreaterThan( value, 0m, nameof( value ) );
+                denomination = value;
             }
         }
 
@@ -48,7 +48,7 @@
         /// <returns>True if the rule is satisified; otherwise, false.</returns>
         public virtual bool Evaluate( string item )
         {
-            return !string.IsNullOrEmpty( this.RegexPattern ) && Regex.IsMatch( item, this.RegexPattern, RegexOptions.Singleline );
+            return !string.IsNullOrEmpty( RegexPattern ) && Regex.IsMatch( item, RegexPattern, RegexOptions.Singleline );
         }
     }
 }

@@ -23,8 +23,8 @@
         /// <param name="pageSize">The size of the requested data page.</param>
         public PagingArguments( int pageIndex, int pageSize )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( pageIndex >= 0, "pageIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize > 0, "pageSize" );
+            Arg.GreaterThanOrEqualTo( pageIndex, 0, nameof( pageIndex ) );
+            Arg.GreaterThan( pageSize, 0, nameof( pageSize ) );
 
             this.pageIndex = pageIndex;
             this.pageSize = pageSize;

@@ -25,18 +25,18 @@
         public MockEditableObject()
             : base( "LastModified", "Id" )
         {
-            this.editTransaction = base.CreateTransaction();
+            editTransaction = base.CreateTransaction();
         }
 
         public MockEditableObject( Func<object, IEnumerable<string>, IEditTransaction> transactionFactory )
             : base( "LastModified", "Id" )
         {
-            this.editTransaction = transactionFactory( this, this.UneditableMembers );
+            editTransaction = transactionFactory( this, UneditableMembers );
         }
 
         protected override IEditTransaction CreateTransaction()
         {
-            return this.editTransaction;
+            return editTransaction;
         }
 
         public DateTime LastModified = DateTime.Now;
@@ -45,11 +45,11 @@
         {
             get
             {
-                return this.id;
+                return id;
             }
             set
             {
-                this.SetProperty( ref this.id, value );
+                SetProperty( ref id, value );
             }
         }
 
@@ -57,11 +57,11 @@
         {
             get
             {
-                return this.firstName;
+                return firstName;
             }
             set
             {
-                this.SetProperty( ref this.firstName, value );
+                SetProperty( ref firstName, value );
             }
         }
 
@@ -69,11 +69,11 @@
         {
             get
             {
-                return this.lastName;
+                return lastName;
             }
             set
             {
-                this.SetProperty( ref this.lastName, value );
+                SetProperty( ref lastName, value );
             }
         }
 
@@ -81,38 +81,38 @@
         {
             get
             {
-                return this.createdDate;
+                return createdDate;
             }
         }
 
         public void InvokeOnBeforeEndEdit()
         {
-            this.OnBeforeEndEdit();
+            OnBeforeEndEdit();
         }
 
         public void InvokeOnBeforeBeginEdit()
         {
-            this.OnBeforeBeginEdit();
+            OnBeforeBeginEdit();
         }
 
         public void InvokeOnPropertyChanged( PropertyChangedEventArgs e )
         {
-            this.OnPropertyChanged( e );
+            OnPropertyChanged( e );
         }
 
         public void InvokeOnPropertyChanged( string propertyName, bool suppressStateChanged )
         {
-            this.OnPropertyChanged( propertyName, suppressStateChanged );
+            OnPropertyChanged( propertyName, suppressStateChanged );
         }
 
         public void InvokeSetProperty<TValue>( TValue backingField, TValue newValue, string propertyName, IEqualityComparer<TValue> comparer )
         {
-            this.SetProperty( ref backingField, newValue, comparer, propertyName );
+            SetProperty( ref backingField, newValue, comparer, propertyName );
         }
 
         public void InvokeIsChangedSet( bool value )
         {
-            this.IsChanged = value;
+            IsChanged = value;
         }
     }
 }

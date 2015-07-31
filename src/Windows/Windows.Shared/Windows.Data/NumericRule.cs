@@ -42,7 +42,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<IRule<decimal?, bool>>>() != null );
-                return this.rules.Value;
+                return rules.Value;
             }
         }
 
@@ -53,7 +53,7 @@
         /// <returns>True if the rule is satisified; otherwise, false.</returns>
         public virtual bool Evaluate( decimal? item )
         {
-            return this.Rules.Any() && this.Rules.All( rule => rule.Evaluate( item ) );
+            return Rules.Any() && Rules.All( rule => rule.Evaluate( item ) );
         }
     }
 }

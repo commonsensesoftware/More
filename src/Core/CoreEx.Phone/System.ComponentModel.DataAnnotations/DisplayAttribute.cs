@@ -30,11 +30,11 @@
         {
             get
             {
-                return this.shortName.Value;
+                return shortName.Value;
             }
             set
             {
-                this.shortName.Value = value;
+                shortName.Value = value;
             }
         }
 
@@ -47,11 +47,11 @@
         {
             get
             {
-                return this.name.Value;
+                return name.Value;
             }
             set
             {
-                this.name.Value = value;
+                name.Value = value;
             }
         }
 
@@ -64,11 +64,11 @@
         {
             get
             {
-                return this.description.Value;
+                return description.Value;
             }
             set
             {
-                this.description.Value = value;
+                description.Value = value;
             }
         }
 
@@ -81,11 +81,11 @@
         {
             get
             {
-                return this.prompt.Value;
+                return prompt.Value;
             }
             set
             {
-                this.prompt.Value = value;
+                prompt.Value = value;
             }
         }
 
@@ -98,11 +98,11 @@
         {
             get
             {
-                return this.groupName.Value;
+                return groupName.Value;
             }
             set
             {
-                this.groupName.Value = value;
+                groupName.Value = value;
             }
         }
 
@@ -115,19 +115,19 @@
         {
             get
             {
-                return this.resourceType;
+                return resourceType;
             }
             set
             {
-                if ( this.resourceType == value )
+                if ( resourceType == value )
                     return;
 
-                this.resourceType = value;
-                this.shortName.ResourceType = value;
-                this.name.ResourceType = value;
-                this.description.ResourceType = value;
-                this.prompt.ResourceType = value;
-                this.groupName.ResourceType = value;
+                resourceType = value;
+                shortName.ResourceType = value;
+                name.ResourceType = value;
+                description.ResourceType = value;
+                prompt.ResourceType = value;
+                groupName.ResourceType = value;
             }
         }
 
@@ -141,17 +141,17 @@
         {
             get
             {
-                if ( !this.autoGenerateField.HasValue )
+                if ( !autoGenerateField.HasValue )
                 {
                     var message = DataAnnotationsResources.PropertyNotSet.FormatDefault( "AutoGenerateField", "GetAutoGenerateField" );
                     throw new InvalidOperationException( message );
                 }
 
-                return this.autoGenerateField.Value;
+                return autoGenerateField.Value;
             }
             set
             {
-                this.autoGenerateField = value;
+                autoGenerateField = value;
             }
         }
 
@@ -165,17 +165,17 @@
         {
             get
             {
-                if ( !this.autoGenerateFilter.HasValue )
+                if ( !autoGenerateFilter.HasValue )
                 {
                     var message = DataAnnotationsResources.PropertyNotSet.FormatDefault( "AutoGenerateFilter", "GetAutoGenerateFilter" );
                     throw new InvalidOperationException( message );
                 }
 
-                return this.autoGenerateFilter.Value;
+                return autoGenerateFilter.Value;
             }
             set
             {
-                this.autoGenerateFilter = value;
+                autoGenerateFilter = value;
             }
         }
 
@@ -188,17 +188,17 @@
         {
             get
             {
-                if ( !this.order.HasValue )
+                if ( !order.HasValue )
                 {
                     var message = DataAnnotationsResources.PropertyNotSet.FormatDefault( "Order", "GetOrder" );
                     throw new InvalidOperationException( message );
                 }
 
-                return this.order.Value;
+                return order.Value;
             }
             set
             {
-                this.order = value;
+                order = value;
             }
         }
 
@@ -211,7 +211,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public string GetShortName()
         {
-            return this.shortName.GetLocalizableValue() ?? this.GetName();
+            return shortName.GetLocalizableValue() ?? GetName();
         }
 
         /// <summary>
@@ -226,7 +226,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public string GetName()
         {
-            return this.name.GetLocalizableValue();
+            return name.GetLocalizableValue();
         }
 
         /// <summary>
@@ -241,7 +241,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public string GetDescription()
         {
-            return this.description.GetLocalizableValue();
+            return description.GetLocalizableValue();
         }
 
         /// <summary>
@@ -253,7 +253,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public string GetPrompt()
         {
-            return this.prompt.GetLocalizableValue();
+            return prompt.GetLocalizableValue();
         }
 
         /// <summary>
@@ -265,7 +265,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public string GetGroupName()
         {
-            return this.groupName.GetLocalizableValue();
+            return groupName.GetLocalizableValue();
         }
 
         /// <summary>
@@ -275,7 +275,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public bool? GetAutoGenerateField()
         {
-            return this.autoGenerateField;
+            return autoGenerateField;
         }
 
         /// <summary>
@@ -285,7 +285,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public bool? GetAutoGenerateFilter()
         {
-            return this.autoGenerateFilter;
+            return autoGenerateFilter;
         }
 
         /// <summary>
@@ -295,7 +295,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Maintains consistency with .NET 4.0 implementation." )]
         public int? GetOrder()
         {
-            return this.order;
+            return order;
         }
     }
 }

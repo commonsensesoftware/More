@@ -5,4 +5,4 @@ using System.Reflection;
 [assembly: AssemblyProduct( "More.UI.Presentation" )]
 [assembly: AssemblyDescription( "The presentation user interface library for the \"More\" framework." )]
 [assembly: AssemblyVersion( "1.0.0.0" )]
-[assembly: AssemblyInformationalVersion( "1.0.0" )]
+[assembly: AssemblyInformationalVersion( "1.0.1" )]

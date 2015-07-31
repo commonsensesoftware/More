@@ -3,9 +3,11 @@
     using System;
     using System.ComponentModel;
 #if NETFX_CORE
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.UI.Xaml;
 #else
     using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
 #endif
 
@@ -21,15 +23,17 @@
         /// Gets the parameter type dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ParameterTypeProperty =
-            DependencyProperty.Register( "ParameterType", typeof( Type ), typeof( MethodParameter ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ParameterType ), typeof( Type ), typeof( MethodParameter ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the parameter value dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ParameterValueProperty =
-            DependencyProperty.Register( "ParameterValue", typeof( object ), typeof( MethodParameter ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ParameterValue ), typeof( object ), typeof( MethodParameter ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets the parameter type.
@@ -42,11 +46,11 @@
         {
             get
             {
-                return (Type) this.GetValue( ParameterTypeProperty );
+                return (Type) GetValue( ParameterTypeProperty );
             }
             set
             {
-                this.SetValue( ParameterTypeProperty, value );
+                SetValue( ParameterTypeProperty, value );
             }
         }
 
@@ -58,11 +62,11 @@
         {
             get
             {
-                return this.GetValue( ParameterValueProperty );
+                return GetValue( ParameterValueProperty );
             }
             set
             {
-                this.SetValue( ParameterValueProperty, value );
+                SetValue( ParameterValueProperty, value );
             }
         }
     }

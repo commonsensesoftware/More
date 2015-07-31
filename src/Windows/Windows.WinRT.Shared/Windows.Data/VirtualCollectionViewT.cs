@@ -35,23 +35,23 @@
                 switch ( args.Action )
                 {
                     case NotifyCollectionChangedAction.Add:
-                        this.CollectionChange = CollectionChange.ItemInserted;
-                        this.Index = (uint) Math.Max( args.NewStartingIndex, 0 );
+                        CollectionChange = CollectionChange.ItemInserted;
+                        Index = (uint) Math.Max( args.NewStartingIndex, 0 );
                         break;
                     case NotifyCollectionChangedAction.Move:
-                        this.CollectionChange = CollectionChange.ItemChanged;
-                        this.Index = (uint) Math.Max( args.NewStartingIndex, 0 );
+                        CollectionChange = CollectionChange.ItemChanged;
+                        Index = (uint) Math.Max( args.NewStartingIndex, 0 );
                         break;
                     case NotifyCollectionChangedAction.Remove:
-                        this.CollectionChange = CollectionChange.ItemRemoved;
-                        this.Index = (uint) Math.Max( args.OldStartingIndex, 0 );
+                        CollectionChange = CollectionChange.ItemRemoved;
+                        Index = (uint) Math.Max( args.OldStartingIndex, 0 );
                         break;
                     case NotifyCollectionChangedAction.Replace:
-                        this.CollectionChange = CollectionChange.ItemChanged;
-                        this.Index = (uint) Math.Max( args.NewStartingIndex, 0 );
+                        CollectionChange = CollectionChange.ItemChanged;
+                        Index = (uint) Math.Max( args.NewStartingIndex, 0 );
                         break;
                     case NotifyCollectionChangedAction.Reset:
-                        this.CollectionChange = CollectionChange.Reset;
+                        CollectionChange = CollectionChange.Reset;
                         break;
                 }
             }
@@ -85,7 +85,7 @@
             {
                 base.OnCollectionChanged( e );
 
-                var handler = this.VectorChanged;
+                var handler = VectorChanged;
 
                 if ( handler != null )
                     handler( this, new VectorChangedEventArgs( e ) );
@@ -116,8 +116,8 @@
         /// </summary>
         ~VirtualCollectionView()
         {
-            if ( this.items != null )
-                this.items.FrozenItems.CollectionChanged -= this.OnFrozenItemsChanged;
+            if ( items != null )
+                items.FrozenItems.CollectionChanged -= OnFrozenItemsChanged;
         }
 
         /// <summary>
@@ -128,7 +128,6 @@
         public VirtualCollectionView( Func<PagingArguments, Task<PagedCollection<T>>> pagingMethod )
             : this( pagingMethod, EqualityComparer<T>.Default )
         {
-            Contract.Requires<ArgumentNullException>( pagingMethod != null, "pagingMethod" );
         }
 
         /// <summary>
@@ -140,11 +139,11 @@
         public VirtualCollectionView( Func<PagingArguments, Task<PagedCollection<T>>> pagingMethod, IEqualityComparer<T> comparer )
             : base( new FrozenItemCollection<T>() )
         {
-            Contract.Requires<ArgumentNullException>( pagingMethod != null, "pagingMethod" );
-            Contract.Requires<ArgumentNullException>( comparer != null, "comparer" );
+            Arg.NotNull( pagingMethod, nameof( pagingMethod ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
-            this.items = (FrozenItemCollection<T>) this.Items;
-            this.items.FrozenItems.CollectionChanged += this.OnFrozenItemsChanged;
+            items = (FrozenItemCollection<T>) Items;
+            items.FrozenItems.CollectionChanged += OnFrozenItemsChanged;
             this.pagingMethod = pagingMethod;
             this.comparer = comparer;
         }
@@ -153,7 +152,7 @@
         {
             get
             {
-                var value = this.deferLevel > 0;
+                var value = deferLevel > 0;
                 return value;
             }
         }
@@ -167,7 +166,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<T>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -179,7 +178,7 @@
         {
             get
             {
-                var value = this.TotalItemCount > -1;
+                var value = TotalItemCount > -1;
                 return value;
             }
         }
@@ -193,7 +192,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                var value = (int) Math.Ceiling( (double) this.ItemCount / (double) this.PageSize );
+                var value = (int) Math.Ceiling( (double) ItemCount / (double) PageSize );
                 return value;
             }
         }
@@ -207,7 +206,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= -1 );
-                var value = this.PageCount - 1;
+                var value = PageCount - 1;
                 return value;
             }
         }
@@ -220,13 +219,13 @@
         {
             get
             {
-                return this.currentItem;
+                return currentItem;
             }
             private set
             {
-                this.currentItem = value;
-                this.OnCurrentChanged( EventArgs.Empty );
-                this.OnPropertyChanged( "CurrentItem" );
+                currentItem = value;
+                OnCurrentChanged( EventArgs.Empty );
+                OnPropertyChanged( nameof( CurrentItem ) );
             }
         }
 
@@ -238,7 +237,7 @@
         {
             get
             {
-                return this.Items;
+                return Items;
             }
         }
 
@@ -250,15 +249,15 @@
         {
             get
             {
-                return this.items.FrozenItemPosition;
+                return items.FrozenItemPosition;
             }
             set
             {
-                if ( this.items.FrozenItemPosition == value )
+                if ( items.FrozenItemPosition == value )
                     return;
 
-                this.items.FrozenItemPosition = value;
-                this.OnPropertyChanged( "FrozenItemPosition" );
+                items.FrozenItemPosition = value;
+                OnPropertyChanged( nameof( FrozenItemPosition ) );
             }
         }
 
@@ -266,7 +265,7 @@
         {
             get
             {
-                return this.FrozenItems;
+                return FrozenItems;
             }
         }
 
@@ -274,7 +273,7 @@
         {
             get
             {
-                return this.UnfrozenItems;
+                return UnfrozenItems;
             }
         }
 
@@ -287,7 +286,7 @@
         {
             get
             {
-                return this.items.FrozenItems;
+                return items.FrozenItems;
             }
         }
 
@@ -297,12 +296,12 @@
         /// <value>A read-only, <see cref="IList{T}">observable collection</see> of unfrozen
         /// <typeparamref name="T">items</typeparamref>.</value>
         /// <remarks>The default <see cref="IList{T}">list</see> implementation also implements
-        /// <see cref="INotifyCollectionChanged"/> and <see cref="INotifyPropertyChanged"/>.</remarks>
+        /// <see cref="INotifyCollectionChanged"/> and <see cref="T:INotifyPropertyChanged"/>.</remarks>
         public IList<T> UnfrozenItems
         {
             get
             {
-                return this.items.UnfrozenItems;
+                return items.UnfrozenItems;
             }
         }
 
@@ -315,7 +314,7 @@
         {
             get
             {
-                return this.groups.Value;
+                return groups.Value;
             }
         }
 
@@ -334,7 +333,7 @@
         {
             get
             {
-                return this.CurrentItem;
+                return CurrentItem;
             }
         }
 
@@ -346,17 +345,17 @@
         {
             get
             {
-                return this.currentPosition;
+                return currentPosition;
             }
             private set
             {
-                if ( this.currentPosition == value )
+                if ( currentPosition == value )
                     return;
 
-                this.currentPosition = value;
-                this.OnPropertyChanged( "CurrentPosition" );
-                this.OnPropertyChanged( "IsCurrentBeforeFirst" );
-                this.OnPropertyChanged( "IsCurrentAfterLast" );
+                currentPosition = value;
+                OnPropertyChanged( nameof( CurrentPosition ) );
+                OnPropertyChanged( nameof( IsCurrentBeforeFirst ) );
+                OnPropertyChanged( nameof( IsCurrentAfterLast ) );
             }
         }
 
@@ -364,10 +363,7 @@
         /// Returns an object that can be used to defer loaded operations to the collection.
         /// </summary>
         /// <returns>An <see cref="IDisposable"/> object.</returns>
-        public virtual IDisposable DeferLoad()
-        {
-            return new DeferManager( this );
-        }
+        public virtual IDisposable DeferLoad() => new DeferManager( this );
 
         /// <summary>
         /// Gets a value indicating whether the view has more, unloaded items.
@@ -377,7 +373,7 @@
         {
             get
             {
-                return this.HasBeenLoaded && !this.IsEmpty;
+                return HasBeenLoaded && !IsEmpty;
             }
         }
 
@@ -389,7 +385,7 @@
         {
             get
             {
-                return this.CurrentPosition >= this.Count;
+                return CurrentPosition >= Count;
             }
         }
 
@@ -401,7 +397,7 @@
         {
             get
             {
-                return this.CurrentPosition < 0;
+                return CurrentPosition < 0;
             }
         }
 
@@ -413,7 +409,7 @@
         {
             get
             {
-                return this.Count == 0;
+                return Count == 0;
             }
         }
 
@@ -422,10 +418,8 @@
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the <see cref="LoadMoreItemsResult">results</see>.</returns>
         /// <remarks>The number of items loaded is based on the <see cref="P:PageSize">page size</see>.</remarks>
-        public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync()
-        {
-            return this.LoadMoreItemsAsync( (uint) this.PageSize );
-        }
+        [CLSCompliant( false )]
+        public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync() => LoadMoreItemsAsync( (uint) PageSize );
 
         /// <summary>
         /// Initializes incremental loading from the view.
@@ -435,39 +429,35 @@
         [CLSCompliant( false )]
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync( uint count )
         {
-            if ( count > int.MaxValue )
-                throw new ArgumentOutOfRangeException( "count" );
+            Arg.LessThanOrEqualTo( count, (uint) int.MaxValue, nameof( count ) );
 
             // update the page size to reflect how many items should be received
-            this.PageSize = (int) count;
+            PageSize = (int) count;
 
             // loading is deferred, there is nothing to do
-            if ( this.IsLoadDeferred )
+            if ( IsLoadDeferred )
                 return Task.FromResult( new LoadMoreItemsResult() ).AsAsyncOperation();
 
-            var pageIndex = this.PageIndex;
+            var pageIndex = PageIndex;
 
             // is this a callback from a deferred load?
-            if ( this.deferredPageIndex > -1 )
+            if ( deferredPageIndex > -1 )
             {
                 // load the last deferred page index instead of the current page index
-                pageIndex = this.deferredPageIndex;
-                this.deferredPageIndex = -1;
+                pageIndex = deferredPageIndex;
+                deferredPageIndex = -1;
             }
 
             // if the page index is unset, trigger moving to the first page and
             // return the current count
             if ( pageIndex < 0 )
             {
-                this.MoveToFirstPageAsync();
-                var result = new LoadMoreItemsResult() {
-                    Count = (uint) this.Items.Count
-                };
+                MoveToFirstPageAsync();
+                var result = new LoadMoreItemsResult() { Count = (uint) Items.Count };
                 return Task.FromResult( result ).AsAsyncOperation();
             }
 
-            return this.LoadPageAsync( pageIndex ).AsAsyncOperation();
-
+            return LoadPageAsync( pageIndex ).AsAsyncOperation();
         }
 
         private async Task<LoadMoreItemsResult> LoadPageAsync( int pageIndex )
@@ -475,65 +465,65 @@
             var result = new LoadMoreItemsResult();
 
             // make sure the page is actually changing
-            if ( this.PageIndex != pageIndex )
+            if ( PageIndex != pageIndex )
             {
                 var args = new PageChangingEventArgs( pageIndex );
-                this.IsPageChanging = true;
-                this.OnPageChanging( args );
+                IsPageChanging = true;
+                OnPageChanging( args );
 
                 // allow the operation to be canceled
                 if ( args.Cancel )
                 {
-                    this.IsPageChanging = false;
-                    result.Count = (uint) this.Items.Count;
+                    IsPageChanging = false;
+                    result.Count = (uint) Items.Count;
                     return result;
                 }
             }
 
             // if a load is queued while we're deferring, keep track of the last index.
             // this could triggered by actions other than the LoadMoreItemsAsync method (ex: grouping)
-            if ( this.IsLoadDeferred )
+            if ( IsLoadDeferred )
             {
-                this.deferredPageIndex = pageIndex;
-                result.Count = (uint) this.Items.Count;
+                deferredPageIndex = pageIndex;
+                result.Count = (uint) Items.Count;
                 return result;
             }
 
             // subscribe to paged operation
-            var actualPageSize = Math.Max( this.PageSize - this.FrozenItems.Count, 1 );
+            var actualPageSize = Math.Max( PageSize - FrozenItems.Count, 1 );
             var arguments = new PagingArguments( pageIndex, actualPageSize );
-            var pagedItems = await this.pagingMethod( arguments );
+            var pagedItems = await pagingMethod( arguments );
 
-            result.Count = this.OnLoaded( pagedItems );
-            this.OnLoadComplete( pageIndex );
+            result.Count = OnLoaded( pagedItems );
+            OnLoadComplete( pageIndex );
 
             return result;
         }
 
         private uint OnLoaded( PagedCollection<T> pagedItems )
         {
-            Contract.Requires( pagedItems != null, "pagedItems" );
+            Contract.Requires( pagedItems != null );
 
             // replace all items from the provided collection
-            this.Items.ReplaceAll( pagedItems );
+            Items.ReplaceAll( pagedItems );
 
             // update collection view
-            this.ItemCount = (int) pagedItems.TotalCount;
-            this.TotalItemCount = this.ItemCount + this.FrozenItems.Count;
-            this.MoveCurrentToPosition( -1, false );
+            ItemCount = (int) pagedItems.TotalCount;
+            TotalItemCount = ItemCount + FrozenItems.Count;
+            MoveCurrentToPosition( -1, false );
 
-            return (uint) this.Items.Count;
+            return (uint) Items.Count;
         }
 
         private void OnLoadComplete( int pageIndex )
         {
-            if ( !this.IsPageChanging )
+            if ( !IsPageChanging )
                 return;
 
             // update page index when the operation is complete
-            this.IsPageChanging = false;
-            this.PageIndex = pageIndex;
-            this.OnPageChanged( EventArgs.Empty );
+            IsPageChanging = false;
+            PageIndex = pageIndex;
+            OnPageChanged( EventArgs.Empty );
         }
 
         /// <summary>
@@ -543,39 +533,31 @@
         protected override void OnCollectionChanged( NotifyCollectionChangedEventArgs args )
         {
             base.OnCollectionChanged( args );
-
-            var handler = this.vectorChanged.InvocationList;
-
-            if ( handler != null )
-                handler( this, new VectorChangedEventArgs( args ) );
+            vectorChanged.InvocationList?.Invoke( this, new VectorChangedEventArgs( args ) );
         }
 
         /// <summary>
         /// Raises the <see cref="E:PropertyChanged"/> event.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
-        protected void OnPropertyChanged( string propertyName )
-        {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
-        }
+        protected void OnPropertyChanged( string propertyName ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
 
         /// <summary>
         /// Raises the <see cref="E:PropertyChanged"/> event.
         /// </summary>
-        /// <param name="args">The <see cref="PropertyChangedEventArgs"/> event data.</param>
+        /// <param name="args">The <see cref="T:PropertyChangedEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected override void OnPropertyChanged( PropertyChangedEventArgs args )
         {
-            // LEGACY: the base class doesn't have a code contract
-            if ( args == null )
-                throw new ArgumentNullException( "args" );
+            Arg.NotNull( args, nameof( args ) );
 
             base.OnPropertyChanged( args );
 
             switch ( args.PropertyName )
             {
-                case "Count":
+                case nameof( Count ):
                     {
-                        this.OnPropertyChanged( "IsEmpty" );
+                        OnPropertyChanged( nameof( IsEmpty ) );
                         break;
                     }
             }
@@ -587,12 +569,8 @@
         /// <param name="e">The <see cref="PageChangingEventArgs"/> event data.</param>
         protected virtual void OnPageChanging( PageChangingEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.PageChanging;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            PageChanging?.Invoke( this, e );
         }
 
         /// <summary>
@@ -601,12 +579,8 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnPageChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.PageChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            PageChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -614,28 +588,22 @@
         /// </summary>
         /// <param name="e">The <see cref="CurrentChangingEventArgs"/> event data.</param>
         [CLSCompliant( false )]
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnCurrentChanging( CurrentChangingEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.CurrentChanging;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            CurrentChanging?.Invoke( this, e );
         }
 
         /// <summary>
         /// Raises the <see cref="CurrentChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnCurrentChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.CurrentChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            CurrentChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -647,33 +615,30 @@
         protected virtual bool MoveCurrentToPosition( int position, bool cancelable )
         {
             // succeeded, but we're already on this index
-            if ( this.CurrentPosition == position && !this.IsPageChanging )
+            if ( CurrentPosition == position && !IsPageChanging )
                 return false;
 
             var args = new CurrentChangingEventArgs( cancelable );
-            this.OnCurrentChanging( args );
+            OnCurrentChanging( args );
 
             if ( args.IsCancelable && args.Cancel )
                 return false;
 
             // out of range
-            if ( position < 0 || position >= this.Count )
+            if ( position < 0 || position >= Count )
             {
-                this.CurrentPosition = position < 0 ? -1 : this.Count;
-                this.CurrentItem = default( T );
+                CurrentPosition = position < 0 ? -1 : Count;
+                CurrentItem = default( T );
                 return false;
             }
 
             // update current item
-            this.CurrentItem = this.Items[position];
-            this.CurrentPosition = position;
+            CurrentItem = Items[position];
+            CurrentPosition = position;
             return true;
         }
 
-        bool ICollectionView.MoveCurrentTo( object item )
-        {
-            return this.MoveCurrentTo( (T) item );
-        }
+        bool ICollectionView.MoveCurrentTo( object item ) => MoveCurrentTo( (T) item );
 
         /// <summary>
         /// Moves the current position in the collection to the specified item.
@@ -683,15 +648,15 @@
         public bool MoveCurrentTo( T item )
         {
             // not in collection
-            if ( !this.Contains( item ) )
+            if ( !Contains( item ) )
                 return false;
 
             // succeeded, but this is already the current item
-            if ( this.Comparer.Equals( this.CurrentItem, item ) )
+            if ( Comparer.Equals( CurrentItem, item ) )
                 return false;
 
             var args = new CurrentChangingEventArgs( true );
-            this.OnCurrentChanging( args );
+            OnCurrentChanging( args );
 
             if ( args.Cancel )
                 return false;
@@ -699,13 +664,13 @@
             var position = 0;
 
             // update current position
-            using ( var iterator = this.Items.GetEnumerator() )
+            using ( var iterator = Items.GetEnumerator() )
             {
                 while ( iterator.MoveNext() )
                 {
-                    if ( this.Comparer.Equals( iterator.Current, item ) )
+                    if ( Comparer.Equals( iterator.Current, item ) )
                     {
-                        this.CurrentPosition = position;
+                        CurrentPosition = position;
                         break;
                     }
 
@@ -713,7 +678,7 @@
                 }
             }
 
-            this.CurrentItem = item;
+            CurrentItem = item;
             return true;
         }
 
@@ -721,47 +686,32 @@
         /// Moves the current position in the collection to the first item.
         /// </summary>
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
-        public bool MoveCurrentToFirst()
-        {
-            return this.MoveCurrentToPosition( 0 );
-        }
+        public bool MoveCurrentToFirst() => MoveCurrentToPosition( 0 );
 
         /// <summary>
         /// Moves the current position in the collection to the last item.
         /// </summary>
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
-        public bool MoveCurrentToLast()
-        {
-            return this.MoveCurrentToPosition( this.Count - 1 );
-        }
+        public bool MoveCurrentToLast() => MoveCurrentToPosition( Count - 1 );
 
         /// <summary>
         /// Moves the current position in the collection to the next item.
         /// </summary>
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
-        public bool MoveCurrentToNext()
-        {
-            return this.MoveCurrentToPosition( this.CurrentPosition + 1 );
-        }
+        public bool MoveCurrentToNext() => MoveCurrentToPosition( CurrentPosition + 1 );
 
         /// <summary>
         /// Moves the current position in the collection to the item at the specified index.
         /// </summary>
-        /// <param name="position">The zero-based index in the collection set as the current position.</param>
+        /// <param name="index">The zero-based index in the collection set as the current position.</param>
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
-        public bool MoveCurrentToPosition( int position )
-        {
-            return this.MoveCurrentToPosition( position, true );
-        }
+        public bool MoveCurrentToPosition( int index ) => MoveCurrentToPosition( index, true );
 
         /// <summary>
         /// Moves the current position in the collection to the previous item.
         /// </summary>
         /// <returns>True if the operation succeeded; otherwise, false.</returns>
-        public bool MoveCurrentToPrevious()
-        {
-            return this.MoveCurrentToPosition( this.CurrentPosition - 1 );
-        }
+        public bool MoveCurrentToPrevious() => MoveCurrentToPosition( CurrentPosition - 1 );
 
         /// <summary>
         /// Gets or sets a value indicating whether the collection can change pages.
@@ -771,15 +721,15 @@
         {
             get
             {
-                return this.flags[CanChangePageFlag];
+                return flags[CanChangePageFlag];
             }
             protected set
             {
-                if ( this.flags[CanChangePageFlag] == value )
+                if ( flags[CanChangePageFlag] == value )
                     return;
 
-                this.flags[CanChangePageFlag] = value;
-                this.OnPropertyChanged( "CanChangePage" );
+                flags[CanChangePageFlag] = value;
+                OnPropertyChanged( nameof( CanChangePage ) );
             }
         }
 
@@ -791,15 +741,15 @@
         {
             get
             {
-                return this.flags[IsPageChangingFlag];
+                return flags[IsPageChangingFlag];
             }
             protected set
             {
-                if ( this.flags[IsPageChangingFlag] == value )
+                if ( flags[IsPageChangingFlag] == value )
                     return;
 
-                this.flags[IsPageChangingFlag] = value;
-                this.OnPropertyChanged( "IsPageChanging" );
+                flags[IsPageChangingFlag] = value;
+                OnPropertyChanged( nameof( IsPageChanging ) );
             }
         }
 
@@ -811,17 +761,17 @@
         {
             get
             {
-                return this.itemCount;
+                return itemCount;
             }
             private set
             {
-                if ( this.itemCount == value )
+                if ( itemCount == value )
                     return;
 
-                this.itemCount = value;
-                this.OnPropertyChanged( "ItemCount" );
-                this.OnPropertyChanged( "PageCount" );
-                this.CanChangePage = this.PageCount > 1;
+                itemCount = value;
+                OnPropertyChanged( nameof( ItemCount ) );
+                OnPropertyChanged( nameof( PageCount ) );
+                CanChangePage = PageCount > 1;
             }
         }
 
@@ -831,29 +781,20 @@
         /// <returns>A <see cref="Task{T}">task</see> containing true if the operation succeeds; otherwise, false.</returns>
         public Task<bool> MoveToFirstPageAsync()
         {
-            return this.MoveToPageAsync( 0 );
+            return MoveToPageAsync( 0 );
         }
 
         /// <summary>
         /// Moves the collection to the last data page.
         /// </summary>
         /// <returns>A <see cref="Task{T}">task</see> containing true if the operation succeeds; otherwise, false.</returns>
-        public Task<bool> MoveToLastPageAsync()
-        {
-            if ( this.Count == 0 )
-                return Task.FromResult( false );
-
-            return this.MoveToPageAsync( this.LastPageIndex );
-        }
+        public Task<bool> MoveToLastPageAsync() => Count == 0 ? Task.FromResult( false ) : MoveToPageAsync( LastPageIndex );
 
         /// <summary>
         /// Moves the collection to the next data page.
         /// </summary>
         /// <returns>A <see cref="Task{T}">task</see> containing true if the operation succeeds; otherwise, false.</returns>
-        public Task<bool> MoveToNextPageAsync()
-        {
-            return this.MoveToPageAsync( this.PageIndex + 1 );
-        }
+        public Task<bool> MoveToNextPageAsync() => MoveToPageAsync( PageIndex + 1 );
 
         /// <summary>
         /// Moves the collection to the data page at the specified page index.
@@ -863,11 +804,11 @@
         public virtual async Task<bool> MoveToPageAsync( int pageIndex )
         {
             // page index is out of range (note: TotalItemCount = -1 until the collection is loaded at least once)
-            if ( pageIndex < 0 || ( this.HasBeenLoaded && pageIndex > this.LastPageIndex ) )
+            if ( pageIndex < 0 || ( HasBeenLoaded && pageIndex > LastPageIndex ) )
                 return false;
 
             // note: load even if this is the same page index because external conditions may have changed
-            await this.LoadPageAsync( pageIndex );
+            await LoadPageAsync( pageIndex );
             return true;
         }
 
@@ -875,10 +816,7 @@
         /// Moves the collection to the previous data page.
         /// </summary>
         /// <returns>A <see cref="Task{T}">task</see> containing true if the operation succeeds; otherwise, false.</returns>
-        public Task<bool> MoveToPreviousPage()
-        {
-            return this.MoveToPageAsync( this.PageIndex - 1 );
-        }
+        public Task<bool> MoveToPreviousPage() => MoveToPageAsync( PageIndex - 1 );
 
         /// <summary>
         /// Occurs when the current data page has changed.
@@ -898,16 +836,16 @@
         {
             get
             {
-                return this.currentPageIndex;
+                return currentPageIndex;
             }
             private set
             {
-                if ( this.currentPageIndex == value )
+                if ( currentPageIndex == value )
                     return;
 
-                this.currentPageIndex = value;
-                this.OnPropertyChanged( "PageIndex" );
-                this.CanChangePage = this.PageCount > 1;
+                currentPageIndex = value;
+                OnPropertyChanged( nameof( PageIndex ) );
+                CanChangePage = PageCount > 1;
             }
         }
 
@@ -919,33 +857,35 @@
         {
             get
             {
-                return this.pageSize;
+                return pageSize;
             }
             set
             {
-                // LEGACY: IPagedCollectionView doesn't have a code contract
-                if ( value < 1 )
-                    throw new ArgumentOutOfRangeException( "value" );
+                Arg.GreaterThan( value, 0, nameof( value ) );
 
-                if ( this.pageSize == value )
+                if ( pageSize == value )
                     return;
 
-                this.pageSize = value;
-                this.OnPropertyChanged( "PageSize" );
+                pageSize = value;
+                OnPropertyChanged( nameof( PageSize ) );
 
-                if ( !this.HasBeenLoaded )
+                if ( !HasBeenLoaded )
                     return;
 
-                this.OnPropertyChanged( "PageCount" );
-                this.CanChangePage = this.PageCount > 1;
+                OnPropertyChanged( nameof( PageCount ) );
+                CanChangePage = PageCount > 1;
 
-                if ( this.PageIndex > this.LastPageIndex )
+                if ( PageIndex > LastPageIndex )
                 {
-                    var succeeded = this.MoveToLastPageAsync();
+                    MoveToLastPageAsync();
                 }
                 else
                 {
-                    var result = this.LoadPageAsync( this.PageIndex );
+#pragma warning disable 4014
+                    // this operation triggers an async operation. async operations cannot be
+                    // awaited within properties
+                    LoadPageAsync( PageIndex );
+#pragma warning restore 4014
                 }
             }
         }
@@ -959,46 +899,43 @@
         {
             get
             {
-                return this.totalCount;
+                return totalCount;
             }
             private set
             {
-                if ( this.totalCount == value )
+                if ( totalCount == value )
                     return;
 
-                this.totalCount = value;
-                this.OnPropertyChanged( "TotalItemCount" );
+                totalCount = value;
+                OnPropertyChanged( nameof( TotalItemCount ) );
             }
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is not meant to be publicly visible." )]
-        void IDeferrable.BeginDefer()
-        {
-            Interlocked.Increment( ref this.deferLevel );
-        }
+        void IDeferrable.BeginDefer() => Interlocked.Increment( ref deferLevel );
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is not meant to be publicly visible." )]
         async void IDeferrable.EndDefer()
         {
-            if ( Interlocked.Decrement( ref this.deferLevel ) == 0 )
-                await this.LoadMoreItemsAsync();
+            if ( Interlocked.Decrement( ref deferLevel ) == 0 )
+                await LoadMoreItemsAsync();
         }
 
         private async void OnFrozenItemsChanged( object sender, NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires( e != null, "e" );
+            Contract.Requires( e != null );
 
             // NOTE: NotifyCollectionChangedAction.Replace does not trigger any changes
             switch ( e.Action )
             {
                 case NotifyCollectionChangedAction.Add:
                     {
-                        if ( e.NewItems == null || e.NewItems.Count == 0 || this.Items.Count <= this.PageSize )
+                        if ( e.NewItems == null || e.NewItems.Count == 0 || Items.Count <= PageSize )
                             return;
 
                         // if we're not at the end, then we need to load the page
-                        if ( this.PageIndex != this.LastPageIndex )
-                            await this.LoadPageAsync( this.PageIndex );
+                        if ( PageIndex != LastPageIndex )
+                            await LoadPageAsync( PageIndex );
 
                         break;
                     }
@@ -1008,22 +945,23 @@
                             return;
 
                         // if we're not at the end, then we need to load the page
-                        if ( this.Items.Count < this.PageSize && this.PageIndex != this.LastPageIndex )
-                            await this.LoadPageAsync( this.PageIndex );
+                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
+                            await LoadPageAsync( PageIndex );
 
                         break;
                     }
                 case NotifyCollectionChangedAction.Reset:
                     {
                         // if we're not at the end, then we need to load the page
-                        if ( this.Items.Count < this.PageSize && this.PageIndex != this.LastPageIndex )
-                            await this.LoadPageAsync( this.PageIndex );
+                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
+                            await LoadPageAsync( PageIndex );
 
                         break;
                     }
             }
         }
 
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use INotifyCollectionChanged." )]
         event VectorChangedEventHandler<object> IObservableVector<object>.VectorChanged
         {
             add
@@ -1036,16 +974,13 @@
             }
         }
 
-        int IList<object>.IndexOf( object item )
-        {
-            return ( (IList<T>) this ).IndexOf( (T) item );
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
+        int IList<object>.IndexOf( object item ) => ( (IList<T>) this ).IndexOf( (T) item );
 
-        void IList<object>.Insert( int index, object item )
-        {
-            ( (IList<T>) this ).Insert( index, (T) item );
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
+        void IList<object>.Insert( int index, object item ) => ( (IList<T>) this ).Insert( index, (T) item );
 
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
         object IList<object>.this[int index]
         {
             get
@@ -1058,41 +993,31 @@
             }
         }
 
-        void ICollection<object>.Add( object item )
-        {
-            ( (IList<T>) this ).Add( (T) item );
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
+        void ICollection<object>.Add( object item ) => ( (IList<T>) this ).Add( (T) item );
 
-        bool ICollection<object>.Contains( object item )
-        {
-            return this.Contains( (T) item );
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
+        bool ICollection<object>.Contains( object item ) => Contains( (T) item );
 
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         void ICollection<object>.CopyTo( object[] array, int arrayIndex )
         {
-            if ( array == null )
-                throw new ArgumentNullException( "array" );
-
+            Arg.NotNull( array, nameof( array ) );
             var temp = new T[array.Length];
-            this.CopyTo( temp, arrayIndex );
+            CopyTo( temp, arrayIndex );
             temp.Cast<object>().ToArray().CopyTo( array, arrayIndex );
         }
 
-        bool ICollection<object>.Remove( object item )
-        {
-            return ( (IList<T>) this ).Remove( (T) item );
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
+        bool ICollection<object>.Remove( object item ) => ( (IList<T>) this ).Remove( (T) item );
 
-        void IList<object>.RemoveAt( int index )
-        {
-            ( (IList<T>) this ).RemoveAt( index );
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
+        void IList<object>.RemoveAt( int index ) => ( (IList<T>) this ).RemoveAt( index );
 
-        void ICollection<object>.Clear()
-        {
-            ( (IList<T>) this ).Clear();
-        }
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
+        void ICollection<object>.Clear() => ( (IList<T>) this ).Clear();
 
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should use the typed overload." )]
         bool ICollection<object>.IsReadOnly
         {
             get

@@ -5,7 +5,6 @@
     using Microsoft.VisualStudio.Data.Services;
     using Microsoft.VisualStudio.DataTools.Interop;
     using Microsoft.VSDesigner.VSDesignerPackage;
-    using More.VisualStudio.ViewModels;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -15,6 +14,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Text;
+    using ViewModels;
 
     internal sealed class DbContextReplacementsMapper : ReplacementsMapper<DbContextItemTemplateWizardViewModel>
     {
@@ -29,27 +29,29 @@
                 Contract.Requires( other != null );
 
                 this.other = other;
-                this.IsEnabled = original.IsEnabled;
-                this.IsOptional = original.IsOptional;
+                IsEnabled = original.IsEnabled;
+                IsOptional = original.IsOptional;
 
-                if ( this.IsEnabled )
+                if ( IsEnabled )
                     other.IsEnabled = true;
 
-                other.IsOptional = !this.IsEnabled;
+                other.IsOptional = !IsEnabled;
             }
 
             [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
             protected override void OnPropertyChanged( PropertyChangedEventArgs e )
             {
+                Arg.NotNull( e, nameof( e ) );
+
                 base.OnPropertyChanged( e );
 
-                if ( !string.IsNullOrEmpty( e.PropertyName ) && e.PropertyName != "IsEnabled" )
+                if ( !string.IsNullOrEmpty( e.PropertyName ) && e.PropertyName != nameof( IsEnabled ) )
                     return;
 
-                if ( this.IsEnabled )
+                if ( IsEnabled )
                     other.IsEnabled = true;
 
-                other.IsOptional = !this.IsEnabled;
+                other.IsOptional = !IsEnabled;
             }
         }
 
@@ -89,7 +91,7 @@
         {
             return new[]
             {
-                new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "_EFVersions", this.ReadEntityFrameworkVersions ),
+                new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "_EFVersions", ReadEntityFrameworkVersions ),
                 new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "$showTips$", ( m, s ) => m.ShowTips = GetBoolean( s, true ) ),
                 new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "$compose$", ( m, s ) => m.UseComposition = GetBoolean( s ) )
             };
@@ -103,12 +105,12 @@
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "_SelectedEFVersion", m => m.SelectedEntityFrameworkVersion == null ? string.Empty : m.SelectedEntityFrameworkVersion.Id ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$showTips$", m => m.ShowTips.ToString().ToLowerInvariant() ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$compose$", m => m.UseComposition.ToString().ToLowerInvariant() ),
-                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$implementedInterfaces$", this.BuildImplementedInterfaces ),
-                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$modelNamespaceRequired$", m => ( m.ModelType.Namespace != this.GetReplacement( "$rootnamespace$" ) ).ToString().ToLowerInvariant() ),
+                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$implementedInterfaces$", BuildImplementedInterfaces ),
+                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$modelNamespaceRequired$", m => ( m.ModelType.Namespace != GetReplacement( "$rootnamespace$" ) ).ToString().ToLowerInvariant() ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$modelNamespace$", m => m.ModelType.Namespace ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$connectionString$", m => m.SelectedDataSource == null || !m.SaveToConfigurationFile ? string.Empty : m.SelectedDataSource.ConnectionString ),
-                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$connectionStringKey$", m => m.SelectedDataSource == null || !m.SaveToConfigurationFile ? this.GetReplacement( "$safeitemname$" ) : m.ConnectionStringName ),
-                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$providerName$", m => m.SelectedDataSource == null || !m.SaveToConfigurationFile ? string.Empty : m.SelectedDataSource.Connection.GetInvariantProviderName( this.providerMapper.Value ) )
+                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$connectionStringKey$", m => m.SelectedDataSource == null || !m.SaveToConfigurationFile ? GetReplacement( "$safeitemname$" ) : m.ConnectionStringName ),
+                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$providerName$", m => m.SelectedDataSource == null || !m.SaveToConfigurationFile ? string.Empty : m.SelectedDataSource.Connection.GetInvariantProviderName( providerMapper.Value ) )
             };
         }
 
@@ -116,14 +118,14 @@
         internal override void Map( IDictionary<string, string> replacements, DbContextItemTemplateWizardViewModel model )
         {
             base.Map( replacements, model );
-            this.AddInterfaceOptions( model );
-            this.AddDataSources( model );
+            AddInterfaceOptions( model );
+            AddDataSources( model );
 
-            if ( this.Project == null )
+            if ( Project == null )
                 return;
 
-            model.LocalAssemblyName = this.Project.GetQualifiedAssemblyName();
-            model.SaveToConfigurationCaption = SR.SaveToConfigurationCaption.FormatDefault( this.Project.GetConfigurationFileName() );
+            model.LocalAssemblyName = Project.GetQualifiedAssemblyName();
+            model.SaveToConfigurationCaption = SR.SaveToConfigurationCaption.FormatDefault( Project.GetConfigurationFileName() );
         }
 
         private void AddInterfaceOptions( DbContextItemTemplateWizardViewModel model )
@@ -131,7 +133,7 @@
             Contract.Requires( model != null );
 
             var ids = new[] { "ImplementIReadOnlyRepositoryT", "ImplementIRepositoryT", "ImplementIUnitOfWorkT" };
-            var options = this.StringsToTemplateOptions( ids ).ToArray();
+            var options = StringsToTemplateOptions( ids ).ToArray();
 
             // if IRepository<T> is implemented, IReadOnlyRepository<T> is automatically implemented and is required
             options[1] = new MutuallyExclusiveTemplateOption( options[1], options[0] );
@@ -144,7 +146,7 @@
             Contract.Requires( model != null );
 
             var versions = GetStrings( value );
-            var options = this.StringsToTemplateOptions( versions );
+            var options = StringsToTemplateOptions( versions );
 
             model.EntityFrameworkVersions.ReplaceAll( options );
             model.SelectedEntityFrameworkVersion = model.EntityFrameworkVersions.FirstOrDefault();
@@ -178,7 +180,7 @@
             Contract.Requires( model != null );
 
             var keys = new HashSet<string>();
-            var dataSources = this.GetConnections( keys ).Union( this.GetDataExplorerConnections( keys ) );
+            var dataSources = GetConnections( keys ).Union( GetDataExplorerConnections( keys ) );
 
             model.DataSources.AddRange( dataSources );
             model.SelectedDataSource = model.DataSources.FirstOrDefault();
@@ -189,15 +191,15 @@
             Contract.Requires( keys != null );
             Contract.Ensures( Contract.Result<IEnumerable<DataSource>>() != null );
 
-            if ( this.globalConnectionService == null )
+            if ( globalConnectionService == null )
                 yield break;
 
-            var project = this.Project;
+            var project = Project;
             DataConnection[] connections;
 
             try
             {
-                connections = this.globalConnectionService.GetConnections( this.serviceProvider, project );
+                connections = globalConnectionService.GetConnections( serviceProvider, project );
             }
             catch
             {
@@ -213,19 +215,19 @@
 
                 try
                 {
-                    provider = this.providerMapper.Value.MapInvariantNameToGuid( connection.ProviderName, connection.DesignTimeConnectionString, false );
+                    provider = providerMapper.Value.MapInvariantNameToGuid( connection.ProviderName, connection.DesignTimeConnectionString, false );
                 }
                 catch
                 {
                     continue;
                 }
 
-                if ( !this.dataProviderManager.HasEntityFrameworkProvider( provider, project, this.serviceProvider ) && !this.dataProviderManager.IsProjectSupported( provider, this.serviceProvider ) )
+                if ( !dataProviderManager.HasEntityFrameworkProvider( provider, project, serviceProvider ) && !dataProviderManager.IsProjectSupported( provider, serviceProvider ) )
                     continue;
 
                 var displayName = SR.DataConnectionDisplayName.FormatDefault( connection.Name );
                 var connectionString = connection.DesignTimeConnectionString;
-                var dataConnection = new Lazy<IVsDataConnection>( () => this.dataConnectionManagerFactory().GetConnection( provider, connectionString, false ) );
+                var dataConnection = new Lazy<IVsDataConnection>( () => dataConnectionManagerFactory().GetConnection( provider, connectionString, false ) );
 
                 keys.Add( connection.DesignTimeConnectionString );
                 yield return new DataSource( displayName, dataConnection );
@@ -238,11 +240,11 @@
             Contract.Requires( keys != null );
             Contract.Ensures( Contract.Result<IEnumerable<DataSource>>() != null );
 
-            foreach ( var connection in this.dataExplorerConnectionManager.Connections.Values )
+            foreach ( var connection in dataExplorerConnectionManager.Connections.Values )
             {
                 var provider = connection.Provider;
 
-                if ( dataProviderManager.HasEntityFrameworkProvider( provider, this.Project, this.serviceProvider ) && dataProviderManager.IsProjectSupported( provider, this.serviceProvider ) && !keys.Contains( connection.Connection.DecryptedConnectionString() ) )
+                if ( dataProviderManager.HasEntityFrameworkProvider( provider, Project, serviceProvider ) && dataProviderManager.IsProjectSupported( provider, serviceProvider ) && !keys.Contains( connection.Connection.DecryptedConnectionString() ) )
                     yield return new DataSource( connection.DisplayName, connection.Connection );
             }
         }

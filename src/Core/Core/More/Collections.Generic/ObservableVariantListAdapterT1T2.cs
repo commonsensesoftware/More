@@ -28,23 +28,23 @@
         public ObservableVariantListAdapter( IList<TFrom> list )
             : base( list )
         {
-            Arg.NotNull( list, "list" );
+            Arg.NotNull( list, nameof( list ) );
 
             var notifyProperty = list as INotifyPropertyChanged;
             var notifyCollection = list as INotifyCollectionChanged;
 
             if ( notifyProperty != null )
-                notifyProperty.PropertyChanged += this.OnSourcePropertyChanged;
+                notifyProperty.PropertyChanged += OnSourcePropertyChanged;
 
             if ( notifyCollection != null )
-                notifyCollection.CollectionChanged += this.OnSourceCollectionChanged;
+                notifyCollection.CollectionChanged += OnSourceCollectionChanged;
         }
 
         private bool SuppressEvents
         {
             get
             {
-                return this.suppressions > 0;
+                return suppressions > 0;
             }
         }
 
@@ -53,7 +53,7 @@
             Contract.Requires( sender != null );
             Contract.Requires( e != null );
 
-            if ( this.SuppressEvents )
+            if ( SuppressEvents )
                 return;
 
             switch ( e.PropertyName )
@@ -61,7 +61,7 @@
                 case "Count":
                 case "Item[]":
                     {
-                        this.OnPropertyChanged( e );
+                        OnPropertyChanged( e );
                         break;
                     }
             }
@@ -72,8 +72,8 @@
             Contract.Requires( sender != null );
             Contract.Requires( e != null );
 
-            if ( !this.SuppressEvents )
-                this.OnCollectionChanged( e );
+            if ( !SuppressEvents )
+                OnCollectionChanged( e );
         }
 
         /// <summary>
@@ -82,7 +82,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -91,12 +91,9 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -106,12 +103,9 @@
         /// <exception cref="ArgumentNullException"><paramref name="e"/> is <see langkeyword="null">null</see>.</exception>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -139,17 +133,17 @@
         /// </remarks>
         protected override void ClearItems()
         {
-            this.suppressions++;
+            suppressions++;
             try
             {
                 base.ClearItems();
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
             }
             finally
             {
-                this.suppressions--;
+                suppressions--;
             }
         }
 
@@ -180,17 +174,17 @@
         /// </remarks>
         protected override void InsertItem( int index, TFrom item )
         {
-            this.suppressions++;
+            suppressions++;
             try
             {
                 base.InsertItem( index, item );
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
             }
             finally
             {
-                this.suppressions--;
+                suppressions--;
             }
         }
 
@@ -220,18 +214,18 @@
         /// </remarks>
         protected override void RemoveItem( int index )
         {
-            this.suppressions++;
+            suppressions++;
             try
             {
-                var item = this.Items[index];
+                var item = Items[index];
                 base.RemoveItem( index );
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, item, index ) );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, item, index ) );
             }
             finally
             {
-                this.suppressions--;
+                suppressions--;
             }
         }
 
@@ -258,17 +252,17 @@
         /// </remarks>
         protected override void SetItem( int index, TFrom item )
         {
-            this.suppressions++;
+            suppressions++;
             try
             {
-                var oldItem = this.Items[index];
+                var oldItem = Items[index];
                 base.SetItem( index, item );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, item, oldItem, index ) );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, item, oldItem, index ) );
             }
             finally
             {
-                this.suppressions--;
+                suppressions--;
             }
         }
 
@@ -295,18 +289,18 @@
         /// </remarks>
         protected override void MoveItem( int oldIndex, int newIndex )
         {
-            this.suppressions++;
+            suppressions++;
             try
             {
-                var item = this.Items[oldIndex];
+                var item = Items[oldIndex];
                 base.RemoveItem( oldIndex );
                 base.InsertItem( newIndex, item );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Move, item, newIndex, oldIndex ) );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Move, item, newIndex, oldIndex ) );
             }
             finally
             {
-                this.suppressions--;
+                suppressions--;
             }
         }
 

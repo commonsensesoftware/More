@@ -20,10 +20,10 @@
         /// <param name="value">The property value.</param>
         public Property( string name, T value )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
 
             this.name = name;
-            this.Value = value;
+            Value = value;
         }
 
         /// <summary>
@@ -34,8 +34,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
-                return this.name;
+                Contract.Ensures( !string.IsNullOrEmpty( name ) );
+                return name;
             }
         }
 

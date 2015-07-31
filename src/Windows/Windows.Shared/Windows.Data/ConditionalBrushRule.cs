@@ -29,12 +29,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<Brush>() != null ); 
-                return this.brush;
+                return brush;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.brush = value;
+                Arg.NotNull( value, nameof( value ) );
+                brush = value;
             }
         }
     }

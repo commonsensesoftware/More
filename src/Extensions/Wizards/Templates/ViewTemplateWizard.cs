@@ -21,16 +21,16 @@
         /// <param name="projectItem">The generated <see cref="ProjectItem">project item</see>.</param>
         public override void ProjectItemFinishedGenerating( ProjectItem projectItem )
         {
-            if ( !this.createNewViewModel || this.viewModelAdded || projectItem == null )
+            if ( !createNewViewModel || viewModelAdded || projectItem == null )
                 return;
 
-            this.viewModelAdded = true;
+            viewModelAdded = true;
 
-            var viewModelName = this.GetString( "$viewmodel$" );
-            var viewModelTemplate = this.GetString( this.viewModelTemplateKey );
+            var viewModelName = GetString( "$viewmodel$" );
+            var viewModelTemplate = GetString( viewModelTemplateKey );
 
             if ( !string.IsNullOrEmpty( viewModelName ) && !string.IsNullOrEmpty( viewModelTemplate ) )
-                this.AddFromTemplate( "ViewModels", viewModelTemplate, viewModelName, "CSharp" );
+                AddFromTemplate( "ViewModels", viewModelTemplate, viewModelName, "CSharp" );
         }
 
         /// <summary>
@@ -40,18 +40,20 @@
         /// <returns>True if the wizard completed successfully; otherwise, false if the wizard was canceled.</returns>
         protected override bool TryRunWizard( IVsUIShell shell )
         {
-            this.createNewViewModel = false;
+            Arg.NotNull( shell, nameof( shell ) );
 
-            var mapper = new ViewReplacementsMapper( this.Project );
+            createNewViewModel = false;
+
+            var mapper = new ViewReplacementsMapper( Project );
             var model = new ViewItemTemplateWizardViewModel();
 
             // map replacements to model
-            mapper.Map( this.Context.Replacements, model );
+            mapper.Map( Context.Replacements, model );
 
             // only show the dialog if the context is interactive
-            if ( this.Context.IsInteractive )
+            if ( Context.IsInteractive )
             {
-                var projectInfo = new ProjectInformation( this.Project );
+                var projectInfo = new ProjectInformation( Project );
                 var view = new ViewItemTemplateWizard( model, projectInfo );
 
                 // show the wizard
@@ -60,11 +62,11 @@
             }
 
             // map model back to replacements
-            mapper.Map( model, this.Context.Replacements );
+            mapper.Map( model, Context.Replacements );
 
             // store information for view model template, which typically follows
-            this.createNewViewModel = model.ViewModelOption == 1;
-            this.viewModelTemplateKey = model.IsTopLevelSupported && model.IsTopLevel ? "_topLevelViewModelTemplateName" : "_viewModelTemplateName";
+            createNewViewModel = model.ViewModelOption == 1;
+            viewModelTemplateKey = model.IsTopLevelSupported && model.IsTopLevel ? "_topLevelViewModelTemplateName" : "_viewModelTemplateName";
 
             return true;
         }

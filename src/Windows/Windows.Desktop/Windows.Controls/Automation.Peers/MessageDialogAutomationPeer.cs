@@ -15,14 +15,14 @@
         public MessageDialogAutomationPeer( MessageDialog owner )
             : base( owner )
         {
-            this.IsReadOnly = true;
-            this.IsModal = true;
-            this.IsTopmost = true;
-            this.Maximizable = false;
-            this.Minimizable = false;
-            this.InteractionState = this.Window.IsOpen ? WindowInteractionState.ReadyForUserInteraction : WindowInteractionState.Running;
-            this.Window.Opened += ( s, e ) => this.InteractionState = WindowInteractionState.ReadyForUserInteraction;
-            this.Window.Closing += ( s, e ) => this.InteractionState = WindowInteractionState.Closing;
+            IsReadOnly = true;
+            IsModal = true;
+            IsTopmost = true;
+            Maximizable = false;
+            Minimizable = false;
+            InteractionState = Window.IsOpen ? WindowInteractionState.ReadyForUserInteraction : WindowInteractionState.Running;
+            Window.Opened += ( s, e ) => InteractionState = WindowInteractionState.ReadyForUserInteraction;
+            Window.Closing += ( s, e ) => InteractionState = WindowInteractionState.Closing;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@
         /// </summary>
         public override void Invoke()
         {
-            this.Close();
+            Close();
         }
 
         /// <summary>
@@ -41,14 +41,14 @@
         {
             get
             {
-                if ( this.Window.Content == null )
+                if ( Window.Content == null )
                     return null;
 
-                return this.Window.Content.ToString();
+                return Window.Content.ToString();
             }
             protected set
             {
-                this.Window.Content = value;
+                Window.Content = value;
             }
         }
 

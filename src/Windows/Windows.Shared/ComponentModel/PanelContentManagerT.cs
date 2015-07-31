@@ -38,7 +38,7 @@
         /// <param name="panel">The underlying panel of type <typeparamref name="T"/> for the content manager.</param>
         public PanelContentManager( T panel )
         {
-            Contract.Requires<ArgumentNullException>( panel != null, "panel" );
+            Arg.NotNull( panel, nameof( panel ) );
             this.panel = panel;
         }
 
@@ -51,7 +51,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<T>() != null );
-                return this.panel;
+                return panel;
             }
         }
 
@@ -61,12 +61,9 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -77,7 +74,7 @@
         {
             get
             {
-                return this.Panel.Children.Cast<object>();
+                return Panel.Children.Cast<object>();
             }
         }
 
@@ -87,12 +84,14 @@
         /// <param name="content">The <see cref="Object">object</see> representing the content to set.</param>
         public virtual void SetContent( object content )
         {
+            Arg.NotNull( content, nameof( content ) );
+
             // exit if there's nothing to do
-            if ( this.Panel.Children.Count == 1 && object.Equals( this.Panel.Children[0], content ) )
+            if ( Panel.Children.Count == 1 && object.Equals( Panel.Children[0], content ) )
                 return;
 
-            this.ClearContent();
-            this.AddToContent( content );
+            ClearContent();
+            AddToContent( content );
         }
 
         /// <summary>
@@ -101,14 +100,15 @@
         /// <param name="content">The <see cref="Object">object</see> representing the content to add.</param>
         public virtual void AddToContent( object content )
         {
+            Arg.NotNull( content, nameof( content ) );
 #if NETFX_CORE
             var element = (UIElement) content;
-            this.Panel.Children.Add( element );
-            var index = this.Panel.Children.IndexOf( element );
+            Panel.Children.Add( element );
+            var index = Panel.Children.IndexOf( element );
 #else
-            var index = this.Panel.Children.Add( (UIElement) content );
+            var index = Panel.Children.Add( (UIElement) content );
 #endif
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, content, index ) );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, content, index ) );
         }
 
         /// <summary>
@@ -117,13 +117,15 @@
         /// <param name="content">The <see cref="Object">object</see> representing the content to remove.</param>
         public virtual void RemoveFromContent( object content )
         {
-            var index = this.Panel.Children.IndexOf( (UIElement) content );
+            Arg.NotNull( content, nameof( content ) );
+
+            var index = Panel.Children.IndexOf( (UIElement) content );
 
             if ( index < 0 )
                 return;
 
-            this.Panel.Children.RemoveAt( index );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, content, index ) );
+            Panel.Children.RemoveAt( index );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, content, index ) );
         }
 
         /// <summary>
@@ -131,8 +133,8 @@
         /// </summary>
         public virtual void ClearContent()
         {
-            this.Panel.Children.Clear();
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+            Panel.Children.Clear();
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 
         /// <summary>

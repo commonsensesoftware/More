@@ -21,7 +21,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                return this.pageIndex;
+                return pageIndex;
             }
         }
 
@@ -34,7 +34,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() > 0 );
-                return this.pageSize;
+                return pageSize;
             }
         }
 
@@ -47,7 +47,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                return this.PageIndex * this.PageSize;
+                return PageIndex * PageSize;
             }
         }
     }

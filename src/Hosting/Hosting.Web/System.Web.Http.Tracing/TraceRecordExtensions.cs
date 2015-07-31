@@ -19,7 +19,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static TraceRecord SetMessage( this TraceRecord traceRecord, string message )
         {
-            Contract.Requires<ArgumentNullException>( traceRecord != null, "traceRecord" );
+            Arg.NotNull( traceRecord, nameof( traceRecord ) );
             traceRecord.Message = message;
             return traceRecord;
         }
@@ -33,7 +33,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static TimeSpan? GetDuration( this TraceRecord traceRecord )
         {
-            Contract.Requires<ArgumentNullException>( traceRecord != null, "traceRecord" );
+            Arg.NotNull( traceRecord, nameof( traceRecord ) );
 
             object value;
 
@@ -52,8 +52,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static TraceRecord SetDuration( this TraceRecord traceRecord, TimeSpan duration )
         {
-            Contract.Requires<ArgumentNullException>( traceRecord != null, "traceRecord" );
-            Contract.Requires<ArgumentOutOfRangeException>( duration >= TimeSpan.Zero, "duration" );
+            Arg.NotNull( traceRecord, nameof( traceRecord ) );
+            Arg.GreaterThanOrEqualTo( duration, TimeSpan.Zero, nameof( duration ) );
             traceRecord.Properties[TracePropertyKeys.Duration] = duration;
             return traceRecord;
         }

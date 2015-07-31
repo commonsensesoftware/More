@@ -30,7 +30,7 @@
                 return false;
 
             // match an assembly that has the same public key token
-            return this.publicKeyToken.Value.SequenceEqual( otherPublicKeyToken );
+            return publicKeyToken.Value.SequenceEqual( otherPublicKeyToken );
         }
     }
 }

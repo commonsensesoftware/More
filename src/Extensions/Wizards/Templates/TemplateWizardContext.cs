@@ -40,31 +40,31 @@
         public TemplateWizardContext( IOleServiceProvider serviceProvider, IDictionary<string, string> replacements )
             : base( CreateParentContainer( serviceProvider ) )
         {
-            Contract.Requires<ArgumentNullException>( serviceProvider != null, "serviceProvider" );
-            Contract.Requires<ArgumentNullException>( replacements != null, "replacements" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+            Arg.NotNull( replacements, nameof( replacements ) );
 
             // get previous context, if any; expected to be the first item on the stack
             var parent = contextStack.Any() ? contextStack.Peek() : null;
 
-            this.currentReplacements = replacements;
+            currentReplacements = replacements;
 
             if ( parent == null )
             {
                 // there is no previous context so make sure to reset values to defaults
-                this.IsInteractive = true;
-                this.sharedState = new Dictionary<string, object>();
+                IsInteractive = true;
+                sharedState = new Dictionary<string, object>();
             }
             else
             {
                 // copy values from the parent context
-                this.IsInteractive = parent.IsInteractive;
-                this.sharedState = parent.sharedState;
+                IsInteractive = parent.IsInteractive;
+                sharedState = parent.sharedState;
 
                 // override any non-reserved replacements that also defined by the parent context (e.g. pass them forward)
                 foreach ( var replacement in parent.Replacements )
                 {
                     if ( !reserved.Contains( replacement.Key ) )
-                        this.currentReplacements[replacement.Key] = replacement.Value;
+                        currentReplacements[replacement.Key] = replacement.Value;
                 }
             }
 
@@ -91,24 +91,24 @@
         /// <param name="disposing">Indicates whether the object is being disposed.</param>
         protected override void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
             base.Dispose( disposing );
 
             if ( !disposing )
                 return;
 
-            var parent = this.Parent as IDisposable;
+            var parent = Parent as IDisposable;
 
             if ( parent != null )
                 parent.Dispose();
 
-            if ( this.currentReplacements != null )
-                this.currentReplacements.Clear();
+            if ( currentReplacements != null )
+                currentReplacements.Clear();
 
-            this.Abandon();
+            Abandon();
         }
 
         /// <summary>
@@ -116,10 +116,10 @@
         /// </summary>
         public void Abandon()
         {
-            if ( this.abandoned )
+            if ( abandoned )
                 return;
 
-            this.abandoned = true;
+            abandoned = true;
 
             // unwind stack until this context is reached
             // note: safeguard; this should typically be the first item in the stack
@@ -137,7 +137,7 @@
             else
             {
                 // clear state and reset service provider when the last context is abandoned
-                this.SharedState.Clear();
+                SharedState.Clear();
                 ServiceProvider.SetCurrent( ServiceProvider.Default );
             }
         }
@@ -155,12 +155,12 @@
         {
             get
             {
-                return this.interactive;
+                return interactive;
             }
             private set
             {
-                this.interactive = value;
-                this.currentReplacements["$runsilent$"] = ( !value ).ToString().ToLowerInvariant();
+                interactive = value;
+                currentReplacements["$runsilent$"] = ( !value ).ToString().ToLowerInvariant();
             }
         }
 
@@ -182,8 +182,8 @@
         {
             get
             {
-                Contract.Ensures( this.currentReplacements != null );
-                return this.currentReplacements;
+                Contract.Ensures( currentReplacements != null );
+                return currentReplacements;
             }
         }
 
@@ -195,8 +195,8 @@
         {
             get
             {
-                Contract.Ensures( this.sharedState != null );
-                return this.sharedState;
+                Contract.Ensures( sharedState != null );
+                return sharedState;
             }
         }
     }

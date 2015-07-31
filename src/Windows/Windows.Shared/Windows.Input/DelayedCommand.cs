@@ -17,7 +17,7 @@
         {
             Contract.Requires( command != null );
             this.command = command;
-            this.WireEvents();
+            WireEvents();
         }
 
         internal bool HasExecuted
@@ -28,75 +28,66 @@
 
         private void WireEvents()
         {
-            this.command.CanExecuteChanged += this.OnSourceCanExecuteChanged;
-            this.command.PropertyChanged += this.OnSourcePropertyChanged;
-            this.command.Executed += this.OnSourceExecuted;
+            command.CanExecuteChanged += OnSourceCanExecuteChanged;
+            command.PropertyChanged += OnSourcePropertyChanged;
+            command.Executed += OnSourceExecuted;
         }
 
         private void UnwireEvents()
         {
-            this.command.CanExecuteChanged -= this.OnSourceCanExecuteChanged;
-            this.command.PropertyChanged -= this.OnSourcePropertyChanged;
-            this.command.Executed -= this.OnSourceExecuted;
+            command.CanExecuteChanged -= OnSourceCanExecuteChanged;
+            command.PropertyChanged -= OnSourcePropertyChanged;
+            command.Executed -= OnSourceExecuted;
         }
 
         private void OnSourceCanExecuteChanged( object sender, EventArgs e )
         {
-            this.OnCanExecuteChanged( e );
+            OnCanExecuteChanged( e );
         }
 
         private void OnSourceExecuted( object sender, EventArgs e )
         {
-            this.OnExecuted( e );
+            OnExecuted( e );
         }
 
         private void OnSourcePropertyChanged( object sender, PropertyChangedEventArgs e )
         {
-            this.OnPropertyChanged( e );
+            OnPropertyChanged( e );
         }
 
         private void OnCanExecuteChanged( EventArgs e )
         {
             Contract.Requires( e != null );
 
-            var handler = this.CanExecuteChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CanExecuteChanged?.Invoke( this, e );
         }
 
         private void OnExecuted( EventArgs e )
         {
             Contract.Requires( e != null );
 
-            this.HasExecuted = true;
+            HasExecuted = true;
 
-            var handler = this.Executed;
-
-            if ( handler != null )
-                handler( this, e );
+            Executed?.Invoke( this, e );
         }
 
         private void OnPropertyChanged( PropertyChangedEventArgs e )
         {
             Contract.Requires( e != null );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         internal void Invoke()
         {
-            this.UnwireEvents();
-            this.command.Execute( this.lastParameter );
-            this.WireEvents();
+            UnwireEvents();
+            command.Execute( lastParameter );
+            WireEvents();
         }
 
         public bool CanExecute( object parameter )
         {
-            return this.command.CanExecute( parameter );
+            return command.CanExecute( parameter );
         }
 
         public event EventHandler CanExecuteChanged;
@@ -106,13 +97,13 @@
             // do nothing (e.g. delay the execution).
             // use the Invoke method to execute the underlying
             // command when appropriate
-            this.lastParameter = parameter;
-            this.OnExecuted( EventArgs.Empty );
+            lastParameter = parameter;
+            OnExecuted( EventArgs.Empty );
         }
 
         public void RaiseCanExecuteChanged()
         {
-            this.command.RaiseCanExecuteChanged();
+            command.RaiseCanExecuteChanged();
         }
 
         public event EventHandler<EventArgs> Executed;
@@ -121,11 +112,12 @@
         {
             get
             {
-                return this.command.Name;
+                return command.Name;
             }
             set
             {
-                this.command.Name = value;
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                command.Name = value;
             }
         }
 
@@ -133,11 +125,12 @@
         {
             get
             {
-                return this.command.Description;
+                return command.Description;
             }
             set
             {
-                this.command.Description = value;
+                Arg.NotNull( value, nameof( value ) );
+                command.Description = value;
             }
         }
 
@@ -145,11 +138,12 @@
         {
             get
             {
-                return this.command.Id;
+                return command.Id;
             }
             set
             {
-                this.command.Id = value;
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                command.Id = value;
             }
         }
 

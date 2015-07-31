@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Composition", "Composition", "{E767E08F-678B-408D-8378-8449A0F7887C}"
 EndProject
@@ -33,6 +33,76 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{84FB0D74-8118-4337-9E8D-7EA8C2085A11}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\StubExtensions.cs = Tests\StubExtensions.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{4E2A3B5D-8D0E-4873-96E0-B6299631039A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{A45A53D5-4A0F-4E54-B37B-23E625C6736A}"
+	ProjectSection(SolutionItems) = preProject
+		Extensions\Templates\Desktop\template.targets = Extensions\Templates\Desktop\template.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phone", "Phone", "{A2FA32E3-B962-41CF-80CA-BFD7630CB557}"
+	ProjectSection(SolutionItems) = preProject
+		Extensions\Templates\Phone\template.targets = Extensions\Templates\Phone\template.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Store", "Store", "{A991476E-005C-45CF-8F70-A7645F8FCDFB}"
+	ProjectSection(SolutionItems) = preProject
+		Extensions\Templates\Store\template.targets = Extensions\Templates\Store\template.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{94306C20-3D5F-4AD0-93EF-F1FB87BB30C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{AB5116E6-F29A-4487-A075-7D84134C34D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{718F917C-13E1-4AF7-8B1C-B4677F39CCC9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{96AADAAC-285A-427B-8587-92DA4F5D34D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{E8115C6F-A17B-4551-9D61-7274E6D6CF84}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{0C95B5A6-04B7-41A2-BC68-446E0381C663}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D1E261E9-81BB-4447-B94D-796FE9E46F2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin", "bin", "{CA19159A-9E56-4140-B33D-74F715BCB457}"
+	ProjectSection(SolutionItems) = preProject
+		Build\bin\Microsoft.Build.Engine.dll = Build\bin\Microsoft.Build.Engine.dll
+		Build\bin\Microsoft.Build.Tasks.Core.dll = Build\bin\Microsoft.Build.Tasks.Core.dll
+		Build\bin\Microsoft.Build.Utilities.Core.dll = Build\bin\Microsoft.Build.Utilities.Core.dll
+		Build\bin\Microsoft.CodeAnalysis.CSharp.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.dll
+		Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+		Build\bin\Microsoft.CodeAnalysis.dll = Build\bin\Microsoft.CodeAnalysis.dll
+		Build\bin\Microsoft.CodeAnalysis.Workspaces.Desktop.dll = Build\bin\Microsoft.CodeAnalysis.Workspaces.Desktop.dll
+		Build\bin\Microsoft.CodeAnalysis.Workspaces.dll = Build\bin\Microsoft.CodeAnalysis.Workspaces.dll
+		Build\bin\More.Build.Tasks.dll = Build\bin\More.Build.Tasks.dll
+		Build\bin\System.Collections.Immutable.dll = Build\bin\System.Collections.Immutable.dll
+		Build\bin\System.Composition.AttributedModel.dll = Build\bin\System.Composition.AttributedModel.dll
+		Build\bin\System.Composition.Convention.dll = Build\bin\System.Composition.Convention.dll
+		Build\bin\System.Composition.Hosting.dll = Build\bin\System.Composition.Hosting.dll
+		Build\bin\System.Composition.Runtime.dll = Build\bin\System.Composition.Runtime.dll
+		Build\bin\System.Composition.TypedParts.dll = Build\bin\System.Composition.TypedParts.dll
+		Build\bin\System.Reflection.Metadata.dll = Build\bin\System.Reflection.Metadata.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Validation", "Validation", "{AF0C694D-5FC1-4030-AFC4-420C94DCD3AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{B4330822-D429-4C71-9247-6DA637202669}"
+	ProjectSection(SolutionItems) = preProject
+		UI\AssemblyInfo.cs = UI\AssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{F9EE420F-AD78-47C1-987D-DC7B05328369}"
+	ProjectSection(SolutionItems) = preProject
+		Extensions\Templates\Portable\template.targets = Extensions\Templates\Portable\template.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{887859D3-27D3-4529-A4F5-BAA954599EA7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composition", "Composition\Composition\Composition.csproj", "{4C62C756-3D31-4012-AA79-711DBBD55B9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core\Core.csproj", "{1A3F1BC7-4EFE-4442-868F-FB1EF9D5F23D}"
@@ -52,11 +122,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreEx.Phone", "Core\CoreEx.Phone\CoreEx.Phone.csproj", "{05F3A2A4-A860-43B3-9BF5-984E326474AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreEx.Windows", "Core\CoreEx.Windows\CoreEx.Windows.csproj", "{F2A140C5-8779-47D5-9C44-DCF136193727}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{84FB0D74-8118-4337-9E8D-7EA8C2085A11}"
-	ProjectSection(SolutionItems) = preProject
-		Tests\StubExtensions.cs = Tests\StubExtensions.cs
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Tests\Core.Tests\Core.Tests.csproj", "{92F91B0C-F00D-4CD5-920F-551EE938DAF1}"
 EndProject
@@ -96,38 +161,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Store", "Hosting\Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Web", "Hosting\Hosting.Web\Hosting.Web.csproj", "{3C56D5DC-4806-42BB-A777-7D0BFE36A57E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{4E2A3B5D-8D0E-4873-96E0-B6299631039A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editors", "Extensions\Editors\Editors.csproj", "{4A4B2737-1171-4378-A02A-F977F049CE82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wizards", "Extensions\Wizards\Wizards.csproj", "{C309BD97-17E7-4539-9AF6-9F01E2E13D6F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{A45A53D5-4A0F-4E54-B37B-23E625C6736A}"
-	ProjectSection(SolutionItems) = preProject
-		Extensions\Templates\Desktop\template.targets = Extensions\Templates\Desktop\template.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phone", "Phone", "{A2FA32E3-B962-41CF-80CA-BFD7630CB557}"
-	ProjectSection(SolutionItems) = preProject
-		Extensions\Templates\Phone\template.targets = Extensions\Templates\Phone\template.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Store", "Store", "{A991476E-005C-45CF-8F70-A7645F8FCDFB}"
-	ProjectSection(SolutionItems) = preProject
-		Extensions\Templates\Store\template.targets = Extensions\Templates\Store\template.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{94306C20-3D5F-4AD0-93EF-F1FB87BB30C7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{AB5116E6-F29A-4487-A075-7D84134C34D5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{718F917C-13E1-4AF7-8B1C-B4677F39CCC9}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{96AADAAC-285A-427B-8587-92DA4F5D34D5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{E8115C6F-A17B-4551-9D61-7274E6D6CF84}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{0C95B5A6-04B7-41A2-BC68-446E0381C663}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfDbContext", "Extensions\Templates\Desktop\Items\EfDbContext\EfDbContext.csproj", "{43630AD0-73D0-40F0-A083-5E2C2FEBC326}"
 EndProject
@@ -165,41 +201,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WsBlankApplication", "Exten
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vsix", "Extensions\Vsix\Vsix.csproj", "{4DAC9CAF-5504-4C51-8D80-7003D6429BDA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{55EA8494-5543-461A-9FC5-B6CBEE3E08D1}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D1E261E9-81BB-4447-B94D-796FE9E46F2F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTasks", "Build\CustomTasks\CustomTasks.csproj", "{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin", "bin", "{CA19159A-9E56-4140-B33D-74F715BCB457}"
-	ProjectSection(SolutionItems) = preProject
-		Build\bin\Microsoft.CodeAnalysis.CSharp.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.dll
-		Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll = Build\bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
-		Build\bin\Microsoft.CodeAnalysis.dll = Build\bin\Microsoft.CodeAnalysis.dll
-		Build\bin\Microsoft.CodeAnalysis.Workspaces.dll = Build\bin\Microsoft.CodeAnalysis.Workspaces.dll
-		Build\bin\More.Build.Tasks.dll = Build\bin\More.Build.Tasks.dll
-		Build\bin\System.Collections.Immutable.dll = Build\bin\System.Collections.Immutable.dll
-		Build\bin\System.Composition.AttributedModel.dll = Build\bin\System.Composition.AttributedModel.dll
-		Build\bin\System.Composition.Convention.dll = Build\bin\System.Composition.Convention.dll
-		Build\bin\System.Composition.Hosting.dll = Build\bin\System.Composition.Hosting.dll
-		Build\bin\System.Composition.Runtime.dll = Build\bin\System.Composition.Runtime.dll
-		Build\bin\System.Composition.TypedParts.dll = Build\bin\System.Composition.TypedParts.dll
-		Build\bin\System.Reflection.Metadata.dll = Build\bin\System.Reflection.Metadata.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Validation", "Validation", "{AF0C694D-5FC1-4030-AFC4-420C94DCD3AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Validation\Validation.csproj", "{4F0F13EC-953B-49D6-903B-6EC1D5B98174}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation.Tests", "Tests\Validation.Tests\Validation.Tests.csproj", "{7EDB71F1-2232-4D9D-A9CF-AB1EC906A765}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{B4330822-D429-4C71-9247-6DA637202669}"
-	ProjectSection(SolutionItems) = preProject
-		UI\AssemblyInfo.cs = UI\AssemblyInfo.cs
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI\UI.csproj", "{9ACA8E82-303B-4114-9E0A-84A3AD67F766}"
 EndProject
@@ -214,13 +220,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIEx.Phone", "UI\UIEx.Phone
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreEx.Desktop.Tests", "Tests\CoreEx.Desktop.Tests\CoreEx.Desktop.Tests.csproj", "{61CF36F3-E0D5-462C-B9A9-74DBCDD9EA8E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{F9EE420F-AD78-47C1-987D-DC7B05328369}"
-	ProjectSection(SolutionItems) = preProject
-		Extensions\Templates\Portable\template.targets = Extensions\Templates\Portable\template.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{887859D3-27D3-4529-A4F5-BAA954599EA7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UaViewModel", "Extensions\Templates\Portable\Items\UaViewModel\UaViewModel.csproj", "{B8962100-BF81-46F5-BA50-0FFD89314A11}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UaInteractionViewModel", "Extensions\Templates\Portable\Items\UaInteractionViewModel\UaInteractionViewModel.csproj", "{1D8DF605-17E2-40A0-AAED-2BB8E753C101}"
@@ -231,34 +230,34 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{75d2e396-dbcd-4ad4-988b-2b5438e9c71b}*SharedItemsImports = 13
 		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{71f53d96-49e0-48b8-b959-be14d6ea2fdf}*SharedItemsImports = 13
-		Windows\Windows.Shared\Windows.Shared.projitems*{bfc50995-6e56-4bdf-b4df-41be95c2cf56}*SharedItemsImports = 4
 		Windows\Windows.WinRT.Shared\Windows.WinRT.Shared.projitems*{bfc50995-6e56-4bdf-b4df-41be95c2cf56}*SharedItemsImports = 4
-		Hosting\Hosting.Shared\Hosting.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
-		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
+		Windows\Windows.Shared\Windows.Shared.projitems*{bfc50995-6e56-4bdf-b4df-41be95c2cf56}*SharedItemsImports = 4
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
-		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
+		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
+		Hosting\Hosting.Shared\Hosting.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
+		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{abff6d49-1c8f-4da5-86ed-07033105981b}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{abff6d49-1c8f-4da5-86ed-07033105981b}*SharedItemsImports = 4
 		Windows\Windows.Shared\Windows.Shared.projitems*{7bac15c3-94f3-4630-a109-56e6872d6e8f}*SharedItemsImports = 13
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{5dcf739c-ca14-4d47-99d8-2896f8fd700c}*SharedItemsImports = 13
-		Hosting\Hosting.Shared\Hosting.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
-		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
+		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
+		Hosting\Hosting.Shared\Hosting.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
 		Hosting\Hosting.Shared\Hosting.Shared.projitems*{4c20fcb1-70cf-4962-848b-f0f779b1666a}*SharedItemsImports = 13
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{84ebe0d1-cc3d-49cf-80e8-86ce39f72430}*SharedItemsImports = 13
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{8d2a422e-0776-4b58-8fa4-6c4ec569aaef}*SharedItemsImports = 13
-		Windows\Windows.Shared\Windows.Shared.projitems*{f99d0f2d-5daa-4040-a2ea-4aa7cbf90043}*SharedItemsImports = 4
 		Windows\Windows.WinRT.Shared\Windows.WinRT.Shared.projitems*{f99d0f2d-5daa-4040-a2ea-4aa7cbf90043}*SharedItemsImports = 4
+		Windows\Windows.Shared\Windows.Shared.projitems*{f99d0f2d-5daa-4040-a2ea-4aa7cbf90043}*SharedItemsImports = 4
 		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{3c56d5dc-4806-42bb-a777-7d0bfe36a57e}*SharedItemsImports = 4
 		Windows\Windows.WinRT.Shared\Windows.WinRT.Shared.projitems*{b8e8a033-154f-4866-82f6-a28adcf460d6}*SharedItemsImports = 13
 		Windows\Windows.Shared\Windows.Shared.projitems*{116fcd14-4c55-418b-b925-7b1600b2b667}*SharedItemsImports = 4
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{05f3a2a4-a860-43b3-9bf5-984e326474ad}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{05f3a2a4-a860-43b3-9bf5-984e326474ad}*SharedItemsImports = 4
-		Hosting\Hosting.Shared\Hosting.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
 		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
+		Hosting\Hosting.Shared\Hosting.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
 		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{949bd34b-b986-4a75-8ec4-48e4c909da84}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -757,6 +756,19 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{4E2A3B5D-8D0E-4873-96E0-B6299631039A} = {F9D50036-2BE6-49F9-915E-0DB2A7A02076}
+		{A45A53D5-4A0F-4E54-B37B-23E625C6736A} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
+		{A2FA32E3-B962-41CF-80CA-BFD7630CB557} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
+		{A991476E-005C-45CF-8F70-A7645F8FCDFB} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
+		{94306C20-3D5F-4AD0-93EF-F1FB87BB30C7} = {A45A53D5-4A0F-4E54-B37B-23E625C6736A}
+		{AB5116E6-F29A-4487-A075-7D84134C34D5} = {A45A53D5-4A0F-4E54-B37B-23E625C6736A}
+		{718F917C-13E1-4AF7-8B1C-B4677F39CCC9} = {A2FA32E3-B962-41CF-80CA-BFD7630CB557}
+		{96AADAAC-285A-427B-8587-92DA4F5D34D5} = {A2FA32E3-B962-41CF-80CA-BFD7630CB557}
+		{E8115C6F-A17B-4551-9D61-7274E6D6CF84} = {A991476E-005C-45CF-8F70-A7645F8FCDFB}
+		{0C95B5A6-04B7-41A2-BC68-446E0381C663} = {A991476E-005C-45CF-8F70-A7645F8FCDFB}
+		{CA19159A-9E56-4140-B33D-74F715BCB457} = {D1E261E9-81BB-4447-B94D-796FE9E46F2F}
+		{F9EE420F-AD78-47C1-987D-DC7B05328369} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
+		{887859D3-27D3-4529-A4F5-BAA954599EA7} = {F9EE420F-AD78-47C1-987D-DC7B05328369}
 		{4C62C756-3D31-4012-AA79-711DBBD55B9A} = {E767E08F-678B-408D-8378-8449A0F7887C}
 		{1A3F1BC7-4EFE-4442-868F-FB1EF9D5F23D} = {C6F9BDA8-CB7A-4107-B24F-A8BD904DE56D}
 		{949BD34B-B986-4A75-8EC4-48E4C909DA84} = {C6F9BDA8-CB7A-4107-B24F-A8BD904DE56D}
@@ -780,18 +792,8 @@ Global
 		{F6D310CE-339C-4B5A-98CE-5D4B28BF7013} = {CA4E9069-E302-494A-8745-D3BE792403E0}
 		{18A0EFD5-519B-44AB-A84F-80E667B756A9} = {CA4E9069-E302-494A-8745-D3BE792403E0}
 		{3C56D5DC-4806-42BB-A777-7D0BFE36A57E} = {CA4E9069-E302-494A-8745-D3BE792403E0}
-		{4E2A3B5D-8D0E-4873-96E0-B6299631039A} = {F9D50036-2BE6-49F9-915E-0DB2A7A02076}
 		{4A4B2737-1171-4378-A02A-F977F049CE82} = {F9D50036-2BE6-49F9-915E-0DB2A7A02076}
 		{C309BD97-17E7-4539-9AF6-9F01E2E13D6F} = {F9D50036-2BE6-49F9-915E-0DB2A7A02076}
-		{A45A53D5-4A0F-4E54-B37B-23E625C6736A} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
-		{A2FA32E3-B962-41CF-80CA-BFD7630CB557} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
-		{A991476E-005C-45CF-8F70-A7645F8FCDFB} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
-		{94306C20-3D5F-4AD0-93EF-F1FB87BB30C7} = {A45A53D5-4A0F-4E54-B37B-23E625C6736A}
-		{AB5116E6-F29A-4487-A075-7D84134C34D5} = {A45A53D5-4A0F-4E54-B37B-23E625C6736A}
-		{718F917C-13E1-4AF7-8B1C-B4677F39CCC9} = {A2FA32E3-B962-41CF-80CA-BFD7630CB557}
-		{96AADAAC-285A-427B-8587-92DA4F5D34D5} = {A2FA32E3-B962-41CF-80CA-BFD7630CB557}
-		{E8115C6F-A17B-4551-9D61-7274E6D6CF84} = {A991476E-005C-45CF-8F70-A7645F8FCDFB}
-		{0C95B5A6-04B7-41A2-BC68-446E0381C663} = {A991476E-005C-45CF-8F70-A7645F8FCDFB}
 		{43630AD0-73D0-40F0-A083-5E2C2FEBC326} = {94306C20-3D5F-4AD0-93EF-F1FB87BB30C7}
 		{1FA7DA2D-F0DF-4655-80D1-0C01B66B35A8} = {94306C20-3D5F-4AD0-93EF-F1FB87BB30C7}
 		{8C08AE5A-3809-45AD-8118-AE256419ECE2} = {94306C20-3D5F-4AD0-93EF-F1FB87BB30C7}
@@ -811,7 +813,6 @@ Global
 		{9776E03C-DA9A-49C9-A8BE-7542DA645896} = {0C95B5A6-04B7-41A2-BC68-446E0381C663}
 		{4DAC9CAF-5504-4C51-8D80-7003D6429BDA} = {F9D50036-2BE6-49F9-915E-0DB2A7A02076}
 		{AC247DC9-7E7C-4DDE-80E2-7384A64D79F0} = {D1E261E9-81BB-4447-B94D-796FE9E46F2F}
-		{CA19159A-9E56-4140-B33D-74F715BCB457} = {D1E261E9-81BB-4447-B94D-796FE9E46F2F}
 		{4F0F13EC-953B-49D6-903B-6EC1D5B98174} = {AF0C694D-5FC1-4030-AFC4-420C94DCD3AA}
 		{7EDB71F1-2232-4D9D-A9CF-AB1EC906A765} = {84FB0D74-8118-4337-9E8D-7EA8C2085A11}
 		{9ACA8E82-303B-4114-9E0A-84A3AD67F766} = {B4330822-D429-4C71-9247-6DA637202669}
@@ -819,8 +820,6 @@ Global
 		{26D1AA58-1623-454E-87C9-0E46DC31CF27} = {B4330822-D429-4C71-9247-6DA637202669}
 		{71A0B4A1-D246-4C22-8F6C-06A1DB3CA94C} = {B4330822-D429-4C71-9247-6DA637202669}
 		{61CF36F3-E0D5-462C-B9A9-74DBCDD9EA8E} = {84FB0D74-8118-4337-9E8D-7EA8C2085A11}
-		{F9EE420F-AD78-47C1-987D-DC7B05328369} = {4E2A3B5D-8D0E-4873-96E0-B6299631039A}
-		{887859D3-27D3-4529-A4F5-BAA954599EA7} = {F9EE420F-AD78-47C1-987D-DC7B05328369}
 		{B8962100-BF81-46F5-BA50-0FFD89314A11} = {887859D3-27D3-4529-A4F5-BAA954599EA7}
 		{1D8DF605-17E2-40A0-AAED-2BB8E753C101} = {887859D3-27D3-4529-A4F5-BAA954599EA7}
 		{62AC5515-17DC-412B-BA7B-F96AEF78AFF3} = {718F917C-13E1-4AF7-8B1C-B4677F39CCC9}

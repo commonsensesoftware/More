@@ -38,9 +38,9 @@
         public ObservableKeyedCollection( Func<TItem, TKey> getKeyMethod, IEqualityComparer<TKey> comparer )
             : base( comparer )
         {
-            Arg.NotNull( getKeyMethod, "getKeyMethod" );
-            Arg.NotNull( comparer, "comparer" );
-            this.keyMethod = getKeyMethod;
+            Arg.NotNull( getKeyMethod, nameof( getKeyMethod ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
+            keyMethod = getKeyMethod;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -58,12 +58,9 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -73,12 +70,9 @@
         /// <exception cref="ArgumentNullException"><paramref name="e"/> is <see langkeyword="null">null</see>.</exception>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -108,9 +102,9 @@
         protected override void ClearItems()
         {
             base.ClearItems();
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 
         /// <summary>
@@ -142,9 +136,9 @@
         protected override void InsertItem( int index, TItem item )
         {
             base.InsertItem( index, item );
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
         }
 
         /// <summary>
@@ -174,12 +168,12 @@
         /// </remarks>
         protected override void RemoveItem( int index )
         {
-            Contract.Assume( index >= 0 && index < this.Count );
+            Contract.Assume( index >= 0 && index < Count );
             var item = this[index];
             base.RemoveItem( index );
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, item, index ) );
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, item, index ) );
         }
 
         /// <summary>
@@ -206,11 +200,11 @@
         /// </remarks>
         protected override void SetItem( int index, TItem item )
         {
-            Contract.Assume( index >= 0 && index < this.Count );
+            Contract.Assume( index >= 0 && index < Count );
             var oldItem = this[index];
             base.SetItem( index, item );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, item, oldItem, index ) );
+            OnPropertyChanged( "Item[]" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, item, oldItem, index ) );
         }
 
         /// <summary>
@@ -220,8 +214,8 @@
         /// <returns>A <typeparamref name="TKey"/> object.</returns>
         protected override TKey GetKeyForItem( TItem item )
         {
-            Contract.Assume( this.keyMethod != null );
-            return this.keyMethod( item );
+            Contract.Assume( keyMethod != null );
+            return keyMethod( item );
         }
 
         /// <summary>

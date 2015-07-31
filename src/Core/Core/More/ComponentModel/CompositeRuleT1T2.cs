@@ -33,7 +33,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generic support." )]
         protected CompositeRule( IEnumerable<IRule<TInput, TOutput>> rules )
         {
-            Arg.NotNull( rules, "rules" );
+            Arg.NotNull( rules, nameof( rules ) );
             this.rules = rules.ToList();
         }
 
@@ -47,8 +47,8 @@
         {
             get
             {
-                Contract.Ensures( this.rules != null );
-                return this.rules;
+                Contract.Ensures( rules != null );
+                return rules;
             }
         }
 
@@ -57,8 +57,8 @@
         /// </summary>
         protected virtual void ClearItems()
         {
-            Contract.Ensures( this.Count == 0 ); 
-            this.rules.Clear();
+            Contract.Ensures( Count == 0 );
+            rules.Clear();
         }
 
         /// <summary>
@@ -68,11 +68,11 @@
         /// <param name="item">The <see cref="IRule{TInput,TOutput}">item</see> to insert.</param>
         protected virtual void InsertItem( int index, IRule<TInput, TOutput> item )
         {
-            Arg.NotNull( item, "item" );
-            Contract.Ensures( this.Count == Contract.OldValue( this.Count ) + 1 );
+            Arg.NotNull( item, nameof( item ) );
+            Contract.Ensures( Count == Contract.OldValue( Count ) + 1 );
             Arg.GreaterThanOrEqualTo( index, 0, "index" );
-            Arg.LessThanOrEqualTo( index, this.Count, "index" );
-            this.rules.Add( item );
+            Arg.LessThanOrEqualTo( index, Count, "index" );
+            rules.Add( item );
         }
 
         /// <summary>
@@ -81,10 +81,10 @@
         /// <param name="index">The zero-based index of the element to remove.</param>
         protected virtual void RemoveItem( int index )
         {
-            Contract.Ensures( this.Count == Contract.OldValue( this.Count ) - 1 );
+            Contract.Ensures( Count == Contract.OldValue( Count ) - 1 );
             Arg.GreaterThanOrEqualTo( index, 0, "index" );
-            Arg.LessThanOrEqualTo( index, this.Count, "index" );
-            this.rules.RemoveAt( index );
+            Arg.LessThanOrEqualTo( index, Count, "index" );
+            rules.RemoveAt( index );
         }
 
         /// <summary>
@@ -93,7 +93,7 @@
         /// <param name="item">The <see cref="IRule{T, T}"/> to add.</param>
         public void Add( IRule<TInput, TOutput> item )
         {
-            this.InsertItem( this.rules.Count, item );
+            InsertItem( rules.Count, item );
         }
 
         /// <summary>
@@ -101,7 +101,7 @@
         /// </summary>
         public void Clear()
         {
-            this.ClearItems();
+            ClearItems();
         }
 
         /// <summary>
@@ -111,7 +111,7 @@
         /// <returns><see langkeyword="true">true</see> if the rule set contains the rule; otherwise, <see langkeyword="false">false</see>.</returns>
         public bool Contains( IRule<TInput, TOutput> item )
         {
-            return this.rules.Contains( item );
+            return rules.Contains( item );
         }
 
         /// <summary>
@@ -122,7 +122,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract" )]
         public void CopyTo( IRule<TInput, TOutput>[] array, int arrayIndex )
         {
-            this.rules.CopyTo( array, arrayIndex );
+            rules.CopyTo( array, arrayIndex );
         }
 
         /// <summary>
@@ -133,7 +133,7 @@
         {
             get
             {
-                return this.rules.Count;
+                return rules.Count;
             }
         }
 
@@ -143,7 +143,7 @@
         {
             get
             {
-                return this.rules.IsReadOnly;
+                return rules.IsReadOnly;
             }
         }
 
@@ -154,15 +154,15 @@
         /// <returns>True if the rule is removed; otherwise, false.</returns>
         public bool Remove( IRule<TInput, TOutput> item )
         {
-            var index = this.rules.IndexOf( item );
+            var index = rules.IndexOf( item );
 
             if ( index < 0 )
                 return false;
 
-            var count = this.rules.Count;
-            this.RemoveItem( index );
+            var count = rules.Count;
+            RemoveItem( index );
 
-            return count > this.rules.Count;
+            return count > rules.Count;
         }
 
         /// <summary>
@@ -171,12 +171,12 @@
         /// <returns>An <see cref="IEnumerable{T}"/> object.</returns>
         public virtual IEnumerator<IRule<TInput, TOutput>> GetEnumerator()
         {
-            return this.rules.GetEnumerator();
+            return rules.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         /// <summary>

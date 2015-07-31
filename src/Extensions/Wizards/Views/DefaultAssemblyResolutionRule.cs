@@ -11,7 +11,7 @@
     {
         public Assembly Evaluate( ResolveEventArgs item )
         {
-            return item == null ? null : this.Evaluate( new AssemblyName( item.Name ) );
+            return item == null ? null : Evaluate( new AssemblyName( item.Name ) );
         }
 
         public Assembly Evaluate( AssemblyName item )

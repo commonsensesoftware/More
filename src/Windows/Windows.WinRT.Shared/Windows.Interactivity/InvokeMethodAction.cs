@@ -21,26 +21,26 @@
         public override object Execute( object sender, object parameter )
         {
             // ensure there is a valid method to execute
-            if ( string.IsNullOrEmpty( this.MethodName ) )
-                return ( this.ReturnValue = null );
+            if ( string.IsNullOrEmpty( MethodName ) )
+                return ( ReturnValue = null );
 
-            this.EnsureDataBinding( sender );
+            EnsureDataBinding( sender );
 
             // use target override or failover to associated object
-            var target = this.ReadLocalValue( TargetObjectProperty ) == DependencyProperty.UnsetValue ? sender : this.TargetObject;
+            var target = ReadLocalValue( TargetObjectProperty ) == DependencyProperty.UnsetValue ? sender : TargetObject;
 
             if ( target == null )
-                return ( this.ReturnValue = null );
+                return ( ReturnValue = null );
 
             // get resolved method or resolve it now
-            var method = this.GetOrResolveMethod( target.GetType() );
+            var method = GetOrResolveMethod( target.GetType() );
 
             // method binding failed
             if ( method == null )
-                return ( this.ReturnValue = null );
+                return ( ReturnValue = null );
 
             // invoke method and capture return value
-            return ( this.ReturnValue = method.Invoke( target, this.Parameters ) );
+            return ( ReturnValue = method.Invoke( target, Parameters ) );
         }
     }
 }

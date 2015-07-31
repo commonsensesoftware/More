@@ -39,8 +39,8 @@
         /// </example>
         public static string ToString<TFormattable>( this TFormattable value, IFormatProvider formatProvider, string format ) where TFormattable : IFormattable
         {
-            Arg.NotNull( value, "value" );
-            Arg.NotNullOrEmpty( format, "format" );
+            Arg.NotNull( value, nameof( value ) );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
             Contract.Ensures( Contract.Result<string>() != null ); 
 
             if ( formatProvider == null )

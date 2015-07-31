@@ -56,10 +56,10 @@
         /// <param name="comparer">An <see cref="IComparer{T}"/> used to evaluate item values.</param>
         public Node( T value, IComparer<T> comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
-            this.valueComparer = comparer;
-            this.itemComparer = new ComparerAdapter<Node<T>, T>( comparer, i => i.Value );
-            this.currentValue = value;
+            Arg.NotNull( comparer, nameof( comparer ) );
+            valueComparer = comparer;
+            itemComparer = new ComparerAdapter<Node<T>, T>( comparer, i => i.Value );
+            currentValue = value;
         }
 
         /// <summary>
@@ -70,8 +70,8 @@
         {
             get
             {
-                Contract.Ensures( this.valueComparer != null );
-                return this.valueComparer;
+                Contract.Ensures( valueComparer != null );
+                return valueComparer;
             }
         }
 
@@ -85,7 +85,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<Node<T>>>() != null );
-                return this.itemComparer;
+                return itemComparer;
             }
         }
 
@@ -97,15 +97,15 @@
         {
             get
             {
-                return this.currentValue;
+                return currentValue;
             }
             set
             {
-                if ( this.ValueComparer.Compare( this.currentValue, value ) == 0 )
+                if ( ValueComparer.Compare( currentValue, value ) == 0 )
                     return;
 
-                this.currentValue = value;
-                this.OnPropertyChanged( "Value" );
+                currentValue = value;
+                OnPropertyChanged( "Value" );
             }
         }
 
@@ -118,17 +118,17 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                return this.depth;
+                return depth;
             }
             private set
             {
                 Contract.Requires( value >= 0 );
 
-                if ( this.depth == value )
+                if ( depth == value )
                     return;
 
-                this.depth = value;
-                this.OnPropertyChanged( "Depth" );
+                depth = value;
+                OnPropertyChanged( "Depth" );
             }
         }
 
@@ -140,15 +140,15 @@
         {
             get
             {
-                return this.parent;
+                return parent;
             }
             private set
             {
-                if ( this.ItemComparer.Equals( this.parent, value ) )
+                if ( ItemComparer.Equals( parent, value ) )
                     return;
 
-                this.parent = value;
-                this.OnPropertyChanged( "Parent" );
+                parent = value;
+                OnPropertyChanged( "Parent" );
                 UpdateDepth( this );
             }
         }
@@ -175,7 +175,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected virtual void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -185,7 +185,7 @@
         /// <param name="value">The value of type <typeparamref name="T"/> to insert.</param>
         public virtual void Insert( int index, T value )
         {
-            this.Insert( index, new Node<T>( value, this.ValueComparer ) );
+            Insert( index, new Node<T>( value, ValueComparer ) );
         }
 
         /// <summary>
@@ -194,7 +194,7 @@
         /// <param name="value">The value of type <typeparamref name="T"/> to add.</param>
         public virtual void Add( T value )
         {
-            this.Add( new Node<T>( value, this.ValueComparer ) );
+            Add( new Node<T>( value, ValueComparer ) );
         }
 
         /// <summary>
@@ -204,8 +204,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public void AddRange( IEnumerable<T> values )
         {
-            Arg.NotNull( values, "values" );
-            this.AddRange( values.ToList().Select( value => new Node<T>( value, this.ValueComparer ) ) );
+            Arg.NotNull( values, nameof( values ) );
+            this.AddRange( values.ToList().Select( value => new Node<T>( value, ValueComparer ) ) );
         }
 
         /// <summary>
@@ -215,12 +215,12 @@
         /// <returns>True if the value is removed; otherwise, false.</returns>
         public virtual bool Remove( T value )
         {
-            var index = this.FindIndex( item => this.ValueComparer.Compare( item.Value, value ) == 0 );
+            var index = this.FindIndex( item => ValueComparer.Compare( item.Value, value ) == 0 );
 
             if ( index < 0 )
                 return false;
 
-            this.RemoveAt( index );
+            RemoveAt( index );
             return true;
         }
 
@@ -230,7 +230,7 @@
         /// <param name="index">The zero-based index where the removal takes place.</param>
         protected override void RemoveItem( int index )
         {
-            Contract.Assume( index >= 0 && index < this.Count );
+            Contract.Assume( index >= 0 && index < Count );
             var item = this[index];
             base.RemoveItem( index );
 

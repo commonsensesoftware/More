@@ -34,7 +34,7 @@
         /// <remarks>The <see cref="P:Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
         public NullableRangeRule( T maximum, string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Arg.GreaterThanOrEqualTo( maximum, default( T ), "maximum" );
 
             this.maximum = maximum;
@@ -62,7 +62,7 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public NullableRangeRule( T minimum, T maximum, string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             Arg.GreaterThanOrEqualTo( maximum, minimum, "maximum" );
 
             this.minimum = minimum;
@@ -78,7 +78,7 @@
         {
             get
             {
-                return this.minimum;
+                return minimum;
             }
         }
 
@@ -90,8 +90,8 @@
         {
             get
             {
-                Contract.Ensures( Contract.Result<T>().CompareTo( this.Minimum ) >= 0 );
-                return this.maximum;
+                Contract.Ensures( Contract.Result<T>().CompareTo( Minimum ) >= 0 );
+                return maximum;
             }
         }
 
@@ -107,9 +107,9 @@
 
             var value = item.Value.Value;
 
-            if ( value.CompareTo( this.Minimum ) < 0 || value.CompareTo( this.Maximum ) > 0 )
+            if ( value.CompareTo( Minimum ) < 0 || value.CompareTo( Maximum ) > 0 )
             {
-                var message = this.errorMessage ?? ValidationMessage.RangeValidationError.FormatDefault( item.Name, this.Minimum, this.Maximum );
+                var message = errorMessage ?? ValidationMessage.RangeValidationError.FormatDefault( item.Name, Minimum, Maximum );
                 return new ValidationResult( message, item.Name );
             }
 

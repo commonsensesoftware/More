@@ -3,6 +3,7 @@
     using More.Windows.Input;
     using System;
     using System.Collections.Concurrent;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Windows.Input;
@@ -25,16 +26,19 @@
         /// <param name="id">The identifier of the created interaction request.</param>
         /// <param name="continuation">The continuation <see cref="Action{T}">action</see>.</param>
         /// <returns>A new <see cref="InteractionRequest{T}">interaction request</see> with support for continuations.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public InteractionRequest<TInteraction> CreateInteractionRequest<TInteraction, TEventArgs>( string id, Action<TEventArgs> continuation )
             where TInteraction : Interaction
             where TEventArgs : IContinuationActivatedEventArgs
         {
+            Arg.NotNull( continuation, nameof( continuation ) );
+
             var typeHashCode = (long) ( continuation.Target != null ? continuation.Target.GetType() : continuation.GetMethodInfo().DeclaringType ).GetHashCode();
             var argsHashCode = (long) typeof( TEventArgs ).GetHashCode();
             var key = ( typeHashCode << 4 ) | argsHashCode;
             Delegate addValue = continuation;
-            this.continuations.AddOrUpdate( key, addValue, ( t, d ) => d );
-            return new ContinuableInterationRequest<TInteraction>( id, key );
+            continuations.AddOrUpdate( key, addValue, ( t, d ) => d );
+            return new ContinuableInteractionRequest<TInteraction>( id, key );
         }
 
         /// <summary>
@@ -45,8 +49,11 @@
         /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
         /// <remarks>The default implementation assumes that the specified <paramref name="eventArgs">event arguments</paramref> has the key "ContinuationId"
         /// in its <see cref="P:IContinuationActivatedEventArgs.ContinuationData"/> and the value is of type <see cref="Int64"/>.</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public void Continue<TEventArgs>( TEventArgs eventArgs ) where TEventArgs : IContinuationActivatedEventArgs
         {
+            Arg.NotNull( eventArgs, nameof( eventArgs ) );
+
             object hashCode;
 
             if ( !eventArgs.ContinuationData.TryGetValue( "ContinuationId", out hashCode ) || !( hashCode is long ) )
@@ -58,7 +65,7 @@
             // note: the registered event argument type could be the interface or concrete type; therefore, we cannot
             // safely cast to a stronger delegate type without a lot of work. since continuations are infrequent and
             // we'll just rely on the intrinsic capabilities of DynamicInvoke.
-            if ( this.continuations.TryGetValue( key, out continuation ) && continuation != null )
+            if ( continuations.TryGetValue( key, out continuation ) && continuation != null )
                 continuation.DynamicInvoke( eventArgs );
         }
     }

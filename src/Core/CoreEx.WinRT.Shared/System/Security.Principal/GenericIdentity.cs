@@ -38,12 +38,12 @@
         /// <param name="authenticated">Indicates whether the identity is authenticated.</param>
         public GenericIdentity( string name, string authenticationType, bool authenticated )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( authenticationType, "authenticationType" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            Arg.NotNull( authenticationType, nameof( authenticationType ) );
 
-            this.Name = name;
-            this.AuthenticationType = authenticationType;
-            this.IsAuthenticated = authenticated;
+            Name = name;
+            AuthenticationType = authenticationType;
+            IsAuthenticated = authenticated;
         }
 
         /// <summary>

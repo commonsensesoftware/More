@@ -132,7 +132,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract" )]
         public static Uri CreateXamlResourceUri( this Type type )
         {
-            Contract.Requires<ArgumentNullException>( type != null, "type" );
+            Arg.NotNull( type, nameof( type ) );
             Contract.Ensures( Contract.Result<Uri>() != null );
 
             var resourceName = XamlResourceNameFormat.FormatInvariant( type.FullName.Replace( '.', '/' ) );
@@ -154,8 +154,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract" )]
         public static Uri CreatePackUri( this Type type, string resourceName )
         {
-            Contract.Requires<ArgumentNullException>( type != null, "type" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
+            Arg.NotNull( type, nameof( type ) );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
             Contract.Ensures( Contract.Result<Uri>() != null );
             return type.Assembly.CreatePackUri( resourceName );
         }
@@ -172,8 +172,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract" )]
         public static Uri CreatePackUri( this Assembly assembly, string resourceName )
         {
-            Contract.Requires<ArgumentNullException>( assembly != null, "assembly" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
+            Arg.NotNull( assembly, nameof( assembly ) );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
             Contract.Ensures( Contract.Result<Uri>() != null );
             var componentPath = ResolveResourceName( assembly, resourceName );
             var uri = new Uri( PackUriFormat.FormatInvariant( assembly.GetAssemblyName(), componentPath ), UriKind.Relative );

@@ -31,11 +31,11 @@
         {
             get
             {
-                return (SecureString) this.GetValue( PasswordProperty );
+                return (SecureString) GetValue( PasswordProperty );
             }
             set
             {
-                this.SetValue( PasswordProperty, value );
+                SetValue( PasswordProperty, value );
             }
         }
 
@@ -74,9 +74,9 @@
 
         private void OnPasswordChanged( object sender, RoutedEventArgs e )
         {
-            this.updatedByControl = true;
-            this.Password = this.AssociatedObject.SecurePassword;
-            this.updatedByControl = false;
+            updatedByControl = true;
+            Password = AssociatedObject.SecurePassword;
+            updatedByControl = false;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.AssociatedObject.PasswordChanged += this.OnPasswordChanged;
+            AssociatedObject.PasswordChanged += OnPasswordChanged;
         }
 
         /// <summary>
@@ -93,7 +93,7 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            this.AssociatedObject.PasswordChanged -= this.OnPasswordChanged;
+            AssociatedObject.PasswordChanged -= OnPasswordChanged;
             base.OnDetaching();
         }
     }

@@ -25,16 +25,16 @@
         {
             get
             {
-                return this.oneItemEnabled;
+                return oneItemEnabled;
             }
             protected set
             {
-                if ( this.oneItemEnabled == value )
+                if ( oneItemEnabled == value )
                     return;
 
-                this.oneItemEnabled = value;
-                this.OnPropertyChanged( new PropertyChangedEventArgs( "AtLeastOneItemEnabled" ) );
-                this.OnErrorsChanged( new DataErrorsChangedEventArgs( "AtLeastOneItemEnabled" ) );
+                oneItemEnabled = value;
+                OnPropertyChanged( new PropertyChangedEventArgs( "AtLeastOneItemEnabled" ) );
+                OnErrorsChanged( new DataErrorsChangedEventArgs( "AtLeastOneItemEnabled" ) );
             }
         }
 
@@ -47,7 +47,7 @@
                 return;
 
             var item = (TemplateOption) sender;
-            this.AtLeastOneItemEnabled = item.IsEnabled ? true : this.Items.Any( i => i.IsEnabled );
+            AtLeastOneItemEnabled = item.IsEnabled ? true : Items.Any( i => i.IsEnabled );
         }
 
         /// <summary>
@@ -55,9 +55,9 @@
         /// </summary>
         protected override void ClearItems()
         {
-            this.Items.ForEach( i => i.PropertyChanged -= this.OnItemPropertyChanged );
+            Items.ForEach( i => i.PropertyChanged -= OnItemPropertyChanged );
             base.ClearItems();
-            this.AtLeastOneItemEnabled = false;
+            AtLeastOneItemEnabled = false;
         }
 
         /// <summary>
@@ -71,8 +71,8 @@
                 throw new ArgumentNullException( "item" );
 
             base.InsertItem( index, item );
-            item.PropertyChanged += this.OnItemPropertyChanged;
-            this.AtLeastOneItemEnabled = item.IsEnabled ? true : this.Items.Any( i => i.IsEnabled );
+            item.PropertyChanged += OnItemPropertyChanged;
+            AtLeastOneItemEnabled = item.IsEnabled ? true : Items.Any( i => i.IsEnabled );
         }
 
         /// <summary>
@@ -81,10 +81,10 @@
         /// <param name="index">The zero-based index of the item to be removed.</param>
         protected override void RemoveItem( int index )
         {
-            var oldItem = this.Items[index];
+            var oldItem = Items[index];
             base.RemoveItem( index );
-            oldItem.PropertyChanged -= this.OnItemPropertyChanged;
-            this.AtLeastOneItemEnabled = oldItem.IsEnabled ? this.Items.Any( i => i.IsEnabled ) : this.AtLeastOneItemEnabled;
+            oldItem.PropertyChanged -= OnItemPropertyChanged;
+            AtLeastOneItemEnabled = oldItem.IsEnabled ? Items.Any( i => i.IsEnabled ) : AtLeastOneItemEnabled;
         }
 
         /// <summary>
@@ -97,11 +97,11 @@
             if ( item == null )
                 throw new ArgumentNullException( "item" );
 
-            var oldItem = this.Items[index];
+            var oldItem = Items[index];
             base.SetItem( index, item );
-            oldItem.PropertyChanged -= this.OnItemPropertyChanged;
-            item.PropertyChanged += this.OnItemPropertyChanged;
-            this.AtLeastOneItemEnabled = item.IsEnabled ? true : this.Items.Any( i => i.IsEnabled );
+            oldItem.PropertyChanged -= OnItemPropertyChanged;
+            item.PropertyChanged += OnItemPropertyChanged;
+            AtLeastOneItemEnabled = item.IsEnabled ? true : Items.Any( i => i.IsEnabled );
         }
 
         /// <summary>
@@ -110,12 +110,9 @@
         /// <param name="e">The <see cref="DataErrorsChangedEventArgs"/> event data.</param>
         protected virtual void OnErrorsChanged( DataErrorsChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.ErrorsChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            ErrorsChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -145,7 +142,7 @@
         {
             get
             {
-                return !this.AtLeastOneItemEnabled;
+                return !AtLeastOneItemEnabled;
             }
         }
     }

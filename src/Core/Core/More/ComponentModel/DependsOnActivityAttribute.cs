@@ -16,8 +16,8 @@
         /// <param name="activityType">The dependent activity <see cref="Type">type</see>.</param>
         public DependsOnActivityAttribute( Type activityType )
         {
-            Arg.NotNull( activityType, "activityType" );
-            this.ActivityType = activityType;
+            Arg.NotNull( activityType, nameof( activityType ) );
+            ActivityType = activityType;
         }
 
         /// <summary>

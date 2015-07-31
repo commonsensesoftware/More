@@ -26,11 +26,11 @@
         /// <param name="validatorType">The type that contains the method that performs custom validation.</param>
         /// <param name="method">The method that performs custom validation.</param>
         public CustomValidationAttribute( Type validatorType, string method )
-            : base( (Func<string>) ( () => DataAnnotationsResources.CustomValidationAttribute_ValidationError ) )
+            : base( () => DataAnnotationsResources.CustomValidationAttribute_ValidationError )
         {
             this.validatorType = validatorType;
             this.method = method;
-            this.malformedErrorMessage = new Lazy<string>( new Func<string>( this.CheckAttributeWellFormed ) );
+            malformedErrorMessage = new Lazy<string>( new Func<string>( CheckAttributeWellFormed ) );
         }
 
         /// <summary>
@@ -41,7 +41,7 @@
         {
             get
             {
-                return this.method;
+                return method;
             }
         }
 
@@ -53,18 +53,18 @@
         {
             get
             {
-                return this.validatorType;
+                return validatorType;
             }
         }
 
         private string CheckAttributeWellFormed()
         {
-            return ( this.ValidateValidatorTypeParameter() ?? this.ValidateMethodParameter() );
+            return ( ValidateValidatorTypeParameter() ?? ValidateMethodParameter() );
         }
 
         private void ThrowIfAttributeNotWellFormed()
         {
-            string message = this.malformedErrorMessage.Value;
+            string message = malformedErrorMessage.Value;
             if ( message != null )
             {
                 throw new InvalidOperationException( message );
@@ -74,7 +74,7 @@
         private bool TryConvertValue( object value, out object convertedValue )
         {
             convertedValue = null;
-            var conversionType = this.valuesType;
+            var conversionType = valuesType;
             var conversionTypeInfo = conversionType.GetTypeInfo();
 
             if ( value == null )
@@ -109,13 +109,13 @@
 
         private string ValidateMethodParameter()
         {
-            if ( string.IsNullOrEmpty( this.method ) )
+            if ( string.IsNullOrEmpty( method ) )
             {
                 return DataAnnotationsResources.CustomValidationAttribute_Method_Required;
             }
 
-            var validationMethod = ( from runtimeMethod in this.validatorType.GetRuntimeMethods()
-                                     where runtimeMethod.Name == this.method &&
+            var validationMethod = ( from runtimeMethod in validatorType.GetRuntimeMethods()
+                                     where runtimeMethod.Name == method &&
                                            runtimeMethod.ReturnType == typeof( ValidationResult )
                                      let args = runtimeMethod.GetParameters()
                                      where args.Length > 0 && args.Length <= 2
@@ -123,43 +123,43 @@
 
             if ( validationMethod == null )
             {
-                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Not_Found, new object[] { this.method, this.validatorType.Name } );
+                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Not_Found, new object[] { method, validatorType.Name } );
             }
 
             if ( validationMethod.ReturnType != typeof( ValidationResult ) )
             {
-                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Must_Return_ValidationResult, new object[] { this.method, this.validatorType.Name } );
+                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Must_Return_ValidationResult, new object[] { method, validatorType.Name } );
             }
 
             ParameterInfo[] parameters = validationMethod.GetParameters();
 
             if ( ( parameters.Length == 0 ) || parameters[0].ParameterType.IsByRef )
             {
-                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Signature, new object[] { this.method, this.validatorType.Name } );
+                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Signature, new object[] { method, validatorType.Name } );
             }
 
-            this.isSingleArgumentMethod = parameters.Length == 1;
+            isSingleArgumentMethod = parameters.Length == 1;
 
-            if ( !this.isSingleArgumentMethod && ( ( parameters.Length != 2 ) || ( parameters[1].ParameterType != typeof( ValidationContext ) ) ) )
+            if ( !isSingleArgumentMethod && ( ( parameters.Length != 2 ) || ( parameters[1].ParameterType != typeof( ValidationContext ) ) ) )
             {
-                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Signature, new object[] { this.method, this.validatorType.Name } );
+                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Method_Signature, new object[] { method, validatorType.Name } );
             }
 
-            this.methodInfo = validationMethod;
-            this.valuesType = parameters[0].ParameterType;
+            methodInfo = validationMethod;
+            valuesType = parameters[0].ParameterType;
             return null;
         }
 
         private string ValidateValidatorTypeParameter()
         {
-            if ( this.validatorType == null )
+            if ( validatorType == null )
             {
                 return DataAnnotationsResources.CustomValidationAttribute_ValidatorType_Required;
             }
 
-            if ( !this.validatorType.GetTypeInfo().IsVisible )
+            if ( !validatorType.GetTypeInfo().IsVisible )
             {
-                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Type_Must_Be_Public, new object[] { this.validatorType.Name } );
+                return string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Type_Must_Be_Public, new object[] { validatorType.Name } );
             }
 
             return null;
@@ -172,11 +172,11 @@
         /// <returns>An instance of the formatted error message.</returns>
         public override string FormatErrorMessage( string name )
         {
-            this.ThrowIfAttributeNotWellFormed();
+            ThrowIfAttributeNotWellFormed();
 
-            if ( !string.IsNullOrEmpty( this.lastMessage ) )
+            if ( !string.IsNullOrEmpty( lastMessage ) )
             {
-                return string.Format( CultureInfo.CurrentCulture, this.lastMessage, new object[] { name } );
+                return string.Format( CultureInfo.CurrentCulture, lastMessage, new object[] { name } );
             }
 
             return base.FormatErrorMessage( name );
@@ -192,22 +192,22 @@
         {
             object obj2;
             ValidationResult result2;
-            this.ThrowIfAttributeNotWellFormed();
-            MethodInfo info = this.methodInfo;
+            ThrowIfAttributeNotWellFormed();
+            MethodInfo info = methodInfo;
 
-            if ( !this.TryConvertValue( value, out obj2 ) )
+            if ( !TryConvertValue( value, out obj2 ) )
             {
-                return new ValidationResult( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Type_Conversion_Failed, new object[] { ( value != null ) ? value.GetType().ToString() : "null", this.valuesType, this.validatorType, this.method } ) );
+                return new ValidationResult( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.CustomValidationAttribute_Type_Conversion_Failed, new object[] { ( value != null ) ? value.GetType().ToString() : "null", valuesType, validatorType, method } ) );
             }
 
             try
             {
-                object[] parameters = this.isSingleArgumentMethod ? new object[] { obj2 } : new object[] { obj2, validationContext };
+                object[] parameters = isSingleArgumentMethod ? new object[] { obj2 } : new object[] { obj2, validationContext };
                 ValidationResult result = (ValidationResult) info.Invoke( null, parameters );
-                this.lastMessage = null;
+                lastMessage = null;
                 if ( result != null )
                 {
-                    this.lastMessage = result.ErrorMessage;
+                    lastMessage = result.ErrorMessage;
                 }
                 result2 = result;
             }

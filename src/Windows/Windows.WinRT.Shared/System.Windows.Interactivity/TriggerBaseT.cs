@@ -27,7 +27,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ActionCollection>() != null );
-                return this.actions.Value;
+                return actions.Value;
             }
         }
 
@@ -39,7 +39,7 @@
         /// is typically the relevant event arguments.</param>
         protected virtual void Execute( object sender, object parameter )
         {
-            Interaction.ExecuteActions( sender, this.Actions, parameter );
+            Interaction.ExecuteActions( sender, Actions, parameter );
         }
     }
 }

@@ -23,8 +23,8 @@
         /// </summary>
         protected AsyncDataItemCommand()
         {
-            this.canExecuteMethod = DefaultFunc.CanExecute;
-            this.executeAsyncMethod = DefaultFunc.ExecuteAsync;
+            canExecuteMethod = DefaultFunc.CanExecute;
+            executeAsyncMethod = DefaultFunc.ExecuteAsync;
         }
 
         /// <summary>
@@ -45,12 +45,12 @@
         /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
         public AsyncDataItemCommand( Func<TItem, TParameter, Task> executeAsyncMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
         {
-            Arg.NotNull( executeAsyncMethod, "executeAsyncMethod" );
-            Arg.NotNull( canExecuteMethod, "canExecuteMethod" );
+            Arg.NotNull( executeAsyncMethod, nameof( executeAsyncMethod ) );
+            Arg.NotNull( canExecuteMethod, nameof( canExecuteMethod ) );
 
             this.executeAsyncMethod = executeAsyncMethod;
             this.canExecuteMethod = canExecuteMethod;
-            this.item = dataItem;
+            item = dataItem;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<TItem>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -74,11 +74,11 @@
         {
             get
             {
-                return this.item;
+                return item;
             }
             protected set
             {
-                this.SetProperty( ref this.item, value, this.Comparer );
+                SetProperty( ref item, value, Comparer );
             }
         }
 
@@ -89,7 +89,7 @@
         /// <returns>True if the command can be executed; otherwise, false.  The default implementation always returns true.</returns>
         public override bool CanExecute( TParameter parameter )
         {
-            return this.canExecuteMethod( this.Item, parameter );
+            return canExecuteMethod( Item, parameter );
         }
 
         /// <summary>
@@ -98,8 +98,8 @@
         /// <param name="parameter">The associated parameter with the command.</param>
         public override async void Execute( TParameter parameter )
         {
-            await this.executeAsyncMethod( this.Item, parameter );
-            this.OnExecuted( EventArgs.Empty );
+            await executeAsyncMethod( Item, parameter );
+            OnExecuted( EventArgs.Empty );
         }
     }
 }

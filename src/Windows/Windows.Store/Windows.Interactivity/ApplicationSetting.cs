@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.UI.Xaml;
 
     /// <summary>
@@ -15,22 +16,25 @@
         /// Gets the dependency property of the setting identifier.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty IdProperty =
-            DependencyProperty.Register( "Id", typeof( string ), typeof( ApplicationSetting ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( Id ), typeof( string ), typeof( ApplicationSetting ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property of the setting name.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty NameProperty =
-            DependencyProperty.Register( "Name", typeof( string ), typeof( ApplicationSetting ), new PropertyMetadata( null, OnNamePropertyChanged ) );
+            DependencyProperty.Register( nameof( Name ), typeof( string ), typeof( ApplicationSetting ), new PropertyMetadata( null, OnNamePropertyChanged ) );
 
         /// <summary>
         /// Gets the dependency property of the view <see cref="Type">type</see> name.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ViewTypeNameProperty =
-            DependencyProperty.Register( "ViewTypeName", typeof( string ), typeof( ApplicationSetting ), new PropertyMetadata( null, OnViewTypeNamePropertyChanged ) );
+            DependencyProperty.Register( nameof( ViewTypeName ), typeof( string ), typeof( ApplicationSetting ), new PropertyMetadata( null, OnViewTypeNamePropertyChanged ) );
 
         private bool identifierSet;
 
@@ -43,12 +47,12 @@
         {
             get
             {
-                return (string) this.GetValue( IdProperty );
+                return (string) GetValue( IdProperty );
             }
             set
             {
-                this.SetValue( IdProperty, value );
-                this.identifierSet = true;
+                SetValue( IdProperty, value );
+                identifierSet = true;
             }
         }
 
@@ -60,11 +64,11 @@
         {
             get
             {
-                return (string) this.GetValue( NameProperty );
+                return (string) GetValue( NameProperty );
             }
             set
             {
-                this.SetValue( NameProperty, value );
+                SetValue( NameProperty, value );
             }
         }
 
@@ -76,11 +80,11 @@
         {
             get
             {
-                return (string) this.GetValue( ViewTypeNameProperty );
+                return (string) GetValue( ViewTypeNameProperty );
             }
             set
             {
-                this.SetValue( ViewTypeNameProperty, value );
+                SetValue( ViewTypeNameProperty, value );
             }
         }
 

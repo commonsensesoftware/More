@@ -3,11 +3,13 @@
     using global::System;
     using global::System.Globalization;
     using global::System.Text.RegularExpressions;
+    using Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Specifies that a data field value must match the specified regular expression.
     /// </summary>
     /// <remarks>This class provides ported compatibility for System.ComponentModel.DataAnnotations.RegularExpressionAttribute.</remarks>
+    [SuppressMessage( "Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "Ported from System.ComponentModel.DataAnnotations." )]
     [AttributeUsage( AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
     public class RegularExpressionAttribute : ValidationAttribute
     {
@@ -18,7 +20,7 @@
         public RegularExpressionAttribute( string pattern )
             : base( (Func<string>) ( () => DataAnnotationsResources.RegexAttribute_ValidationError ) )
         {
-            this.Pattern = pattern;
+            Pattern = pattern;
         }
 
         /// <summary>
@@ -39,13 +41,13 @@
 
         private void SetupRegex()
         {
-            if ( this.Regex == null )
+            if ( Regex == null )
             {
-                if ( string.IsNullOrEmpty( this.Pattern ) )
+                if ( string.IsNullOrEmpty( Pattern ) )
                 {
                     throw new InvalidOperationException( DataAnnotationsResources.RegularExpressionAttribute_Empty_Pattern );
                 }
-                this.Regex = new Regex( this.Pattern );
+                Regex = new Regex( Pattern );
             }
         }
 
@@ -56,8 +58,8 @@
         /// <returns>The formatted error message.</returns>
         public override string FormatErrorMessage( string name )
         {
-            this.SetupRegex();
-            return string.Format( CultureInfo.CurrentCulture, base.ErrorMessageString, new object[] { name, this.Pattern } );
+            SetupRegex();
+            return string.Format( CultureInfo.CurrentCulture, base.ErrorMessageString, new object[] { name, Pattern } );
         }
 
         /// <summary>
@@ -67,7 +69,7 @@
         /// <returns>True if validation is successful; otherwise, false.</returns>
         public override bool IsValid( object value )
         {
-            this.SetupRegex();
+            SetupRegex();
             var str = Convert.ToString( value, CultureInfo.CurrentCulture );
 
             if ( string.IsNullOrEmpty( str ) )
@@ -75,7 +77,7 @@
                 return true;
             }
 
-            var match = this.Regex.Match( str );
+            var match = Regex.Match( str );
             return ( ( match.Success && ( match.Index == 0 ) ) && ( match.Length == str.Length ) );
         }
     }

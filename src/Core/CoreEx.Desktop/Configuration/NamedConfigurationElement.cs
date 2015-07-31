@@ -25,7 +25,7 @@
         {
             // failsafe to ensure the property is correctly set.
             // this has the same behavior as the DefaultValue.
-            this.Name = "Name";
+            Name = "Name";
         }
 
         /// <summary>
@@ -34,8 +34,8 @@
         /// <param name="name">The name of the element.</param>
         protected NamedConfigurationElement( string name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            this.Name = name;
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            Name = name;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
                 base[NameProperty] = value;
             }
         }

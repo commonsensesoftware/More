@@ -43,7 +43,7 @@
         public OpenFileInteraction( string title, bool multiselect, params string[] fileTypeFilter )
             : base( title )
         {
-            Arg.NotNull( fileTypeFilter, "fileTypeFilter" );
+            Arg.NotNull( fileTypeFilter, nameof( fileTypeFilter ) );
 
             this.multiselect = multiselect;
             this.fileTypeFilter.AddRange( fileTypeFilter );
@@ -57,11 +57,11 @@
         {
             get
             {
-                return this.multiselect;
+                return multiselect;
             }
             set
             {
-                this.SetProperty( ref this.multiselect, value );
+                SetProperty( ref multiselect, value );
             }
         }
 
@@ -74,7 +74,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IList<IFile>>() != null );
-                return this.files;
+                return files;
             }
         }
 
@@ -87,7 +87,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IList<string>>() != null );
-                return this.fileTypeFilter;
+                return fileTypeFilter;
             }
         }
     }

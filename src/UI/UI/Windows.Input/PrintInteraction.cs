@@ -34,11 +34,11 @@
         {
             get
             {
-                return this.printPreview;
+                return printPreview;
             }
             set
             {
-                this.SetProperty( ref this.printPreview, value );
+                SetProperty( ref printPreview, value );
             }
         }
     }

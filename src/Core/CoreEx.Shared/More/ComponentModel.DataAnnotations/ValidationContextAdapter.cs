@@ -19,11 +19,11 @@
         {
             get
             {
-                return this.adapted.DisplayName;
+                return adapted.DisplayName;
             }
             set
             {
-                this.adapted.DisplayName = value;
+                adapted.DisplayName = value;
             }
         }
 
@@ -31,7 +31,7 @@
         {
             get
             {
-                return this.adapted.Items;
+                return adapted.Items;
             }
         }
 
@@ -39,11 +39,11 @@
         {
             get
             {
-                return this.adapted.MemberName;
+                return adapted.MemberName;
             }
             set
             {
-                this.adapted.MemberName = value;
+                adapted.MemberName = value;
             }
         }
 
@@ -51,7 +51,7 @@
         {
             get
             {
-                return this.adapted.ObjectInstance;
+                return adapted.ObjectInstance;
             }
         }
 
@@ -59,16 +59,16 @@
         {
             get
             {
-                return this.adapted.ObjectType;
+                return adapted.ObjectType;
             }
         }
 
         public object GetService( Type serviceType )
         {
             if ( typeof( ValidationContext ).Equals( serviceType ) )
-                return this.adapted;
+                return adapted;
 
-            return this.adapted.GetService( serviceType );
+            return adapted.GetService( serviceType );
         }
     }
 }

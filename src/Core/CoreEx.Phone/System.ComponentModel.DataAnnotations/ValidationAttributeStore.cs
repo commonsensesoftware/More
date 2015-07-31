@@ -16,15 +16,15 @@
 
             internal StoreItem( IEnumerable<Attribute> attributes )
             {
-                this.validationAttributes = attributes.OfType<ValidationAttribute>();
-                this.DisplayAttribute = attributes.OfType<DisplayAttribute>().SingleOrDefault<DisplayAttribute>();
+                validationAttributes = attributes.OfType<ValidationAttribute>();
+                DisplayAttribute = attributes.OfType<DisplayAttribute>().SingleOrDefault<DisplayAttribute>();
             }
 
             internal IEnumerable<ValidationAttribute> ValidationAttributes
             {
                 get
                 {
-                    return this.validationAttributes;
+                    return validationAttributes;
                 }
             }
 
@@ -54,9 +54,9 @@
             {
                 PropertyStoreItem result = null;
 
-                if ( !this.TryGetPropertyStoreItem( propertyName, out result ) )
+                if ( !TryGetPropertyStoreItem( propertyName, out result ) )
                 {
-                    var message = DataAnnotationsResources.UnknownProperty.FormatDefault( this.type.Name, propertyName );
+                    var message = DataAnnotationsResources.UnknownProperty.FormatDefault( type.Name, propertyName );
                     throw new ArgumentException( message, "propertyName" );
                 }
 
@@ -68,15 +68,15 @@
                 if ( string.IsNullOrEmpty( propertyName ) )
                     throw new ArgumentNullException( "propertyName" );
 
-                if ( this.propertyStoreItems == null )
+                if ( propertyStoreItems == null )
                 {
-                    lock ( this.syncRoot )
+                    lock ( syncRoot )
                     {
-                        if ( this.propertyStoreItems == null )
-                            this.propertyStoreItems = this.CreatePropertyStoreItems();
+                        if ( propertyStoreItems == null )
+                            propertyStoreItems = CreatePropertyStoreItems();
                     }
                 }
-                return this.propertyStoreItems.TryGetValue( propertyName, out item );
+                return propertyStoreItems.TryGetValue( propertyName, out item );
             }
 
             internal static IEnumerable<Attribute> GetExplicitAttributes( PropertyInfo propertyDescriptor )
@@ -101,7 +101,7 @@
             private Dictionary<string, PropertyStoreItem> CreatePropertyStoreItems()
             {
                 var dictionary = new Dictionary<string, PropertyStoreItem>();
-                var properties = this.type.GetRuntimeProperties();
+                var properties = type.GetRuntimeProperties();
 
                 foreach ( var propertyDescriptor in properties )
                 {
@@ -128,7 +128,7 @@
             {
                 get
                 {
-                    return this.propertyType;
+                    return propertyType;
                 }
             }
         }
@@ -151,15 +151,15 @@
 
             TypeStoreItem result;
 
-            lock ( this.typeStoreItems )
+            lock ( typeStoreItems )
             {
                 TypeStoreItem typeStoreItem = null;
 
-                if ( !this.typeStoreItems.TryGetValue( type, out typeStoreItem ) )
+                if ( !typeStoreItems.TryGetValue( type, out typeStoreItem ) )
                 {
                     var attributes = type.GetTypeInfo().GetCustomAttributes<Attribute>();
                     typeStoreItem = new TypeStoreItem( type, attributes );
-                    this.typeStoreItems[type] = typeStoreItem;
+                    typeStoreItems[type] = typeStoreItem;
                 }
 
                 result = typeStoreItem;
@@ -173,7 +173,7 @@
             if ( validationContext == null )
                 throw new ArgumentNullException( "validationContext" );
 
-            var typeStoreItem = this.GetTypeStoreItem( validationContext.ObjectType );
+            var typeStoreItem = GetTypeStoreItem( validationContext.ObjectType );
             return typeStoreItem.ValidationAttributes;
         }
 
@@ -182,7 +182,7 @@
             if ( validationContext == null )
                 throw new ArgumentNullException( "validationContext" );
 
-            var typeStoreItem = this.GetTypeStoreItem( validationContext.ObjectType );
+            var typeStoreItem = GetTypeStoreItem( validationContext.ObjectType );
             return typeStoreItem.DisplayAttribute;
         }
 
@@ -191,7 +191,7 @@
             if ( validationContext == null )
                 throw new ArgumentNullException( "validationContext" );
 
-            var typeStoreItem = this.GetTypeStoreItem( validationContext.ObjectType );
+            var typeStoreItem = GetTypeStoreItem( validationContext.ObjectType );
             var propertyStoreItem = typeStoreItem.GetPropertyStoreItem( validationContext.MemberName );
             return propertyStoreItem.ValidationAttributes;
         }
@@ -201,7 +201,7 @@
             if ( validationContext == null )
                 throw new ArgumentNullException( "validationContext" );
 
-            var typeStoreItem = this.GetTypeStoreItem( validationContext.ObjectType );
+            var typeStoreItem = GetTypeStoreItem( validationContext.ObjectType );
             var propertyStoreItem = typeStoreItem.GetPropertyStoreItem( validationContext.MemberName );
             return propertyStoreItem.DisplayAttribute;
         }
@@ -211,7 +211,7 @@
             if ( validationContext == null )
                 throw new ArgumentNullException( "validationContext" );
 
-            var typeStoreItem = this.GetTypeStoreItem( validationContext.ObjectType );
+            var typeStoreItem = GetTypeStoreItem( validationContext.ObjectType );
             var propertyStoreItem = typeStoreItem.GetPropertyStoreItem( validationContext.MemberName );
             return propertyStoreItem.PropertyType;
         }
@@ -221,7 +221,7 @@
             if ( validationContext == null )
                 throw new ArgumentNullException( "validationContext" );
 
-            var typeStoreItem = this.GetTypeStoreItem( validationContext.ObjectType );
+            var typeStoreItem = GetTypeStoreItem( validationContext.ObjectType );
             PropertyStoreItem propertyStoreItem = null;
             return typeStoreItem.TryGetPropertyStoreItem( validationContext.MemberName, out propertyStoreItem );
         }

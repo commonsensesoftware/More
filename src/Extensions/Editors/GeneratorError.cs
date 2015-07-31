@@ -26,7 +26,6 @@
         public GeneratorError( string message )
             : this( message, null, null )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
         }
 
         /// <summary>
@@ -37,8 +36,6 @@
         public GeneratorError( string message, int line )
             : this( message, new int?( line ), null )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
-            Contract.Requires<ArgumentOutOfRangeException>( line >= 0, "line" );
         }
 
         /// <summary>
@@ -50,9 +47,9 @@
         public GeneratorError( string message, int line, int column )
             : this( message, new int?( line ), new int?( column ) )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( message ), "message" );
-            Contract.Requires<ArgumentOutOfRangeException>( line >= 0, "line" );
-            Contract.Requires<ArgumentOutOfRangeException>( column >= 0, "column" );
+            Arg.NotNullOrEmpty( message, nameof( message ) );
+            Arg.GreaterThanOrEqualTo( line, 0, nameof( line ) );
+            Arg.GreaterThanOrEqualTo( column, 0, nameof( column ) );
         }
 
         /// <summary>
@@ -73,8 +70,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.message ) );
-                return this.message;
+                Contract.Ensures( !string.IsNullOrEmpty( message ) );
+                return message;
             }
         }
 
@@ -86,8 +83,8 @@
         {
             get
             {
-                Contract.Ensures( this.line == null || this.line.Value >= 0 );
-                return this.line;
+                Contract.Ensures( line == null || line.Value >= 0 );
+                return line;
             }
         }
 
@@ -99,8 +96,8 @@
         {
             get
             {
-                Contract.Ensures( this.column == null || this.column.Value >= 0 );
-                return this.column;
+                Contract.Ensures( column == null || column.Value >= 0 );
+                return column;
             }
         }
     }

@@ -27,7 +27,7 @@
         public UrlRule( string errorMessage )
             : this()
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             this.errorMessage = errorMessage;
         }
 
@@ -37,7 +37,7 @@
         /// <param name="kind">The <see cref="UriKind">kind</see> of URL to evaluate.</param>
         public UrlRule( UriKind kind )
         {
-            this.Kind = kind;
+            Kind = kind;
         }
 
         /// <summary>
@@ -47,9 +47,9 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public UrlRule( UriKind kind, string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
 
-            this.Kind = kind;
+            Kind = kind;
             this.errorMessage = errorMessage;
 
         }
@@ -73,10 +73,10 @@
         {
             Uri result;
 
-            if ( item == null || item.Value == null || Uri.TryCreate( item.Value, this.Kind, out result ) )
+            if ( item == null || item.Value == null || Uri.TryCreate( item.Value, Kind, out result ) )
                 return ValidationResult.Success;
 
-            var message = this.errorMessage ?? ValidationMessage.UrlInvalid.FormatDefault( item.Name );
+            var message = errorMessage ?? ValidationMessage.UrlInvalid.FormatDefault( item.Name );
             return new ValidationResult( message, item.Name );
         }
     }

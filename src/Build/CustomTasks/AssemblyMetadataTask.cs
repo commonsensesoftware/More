@@ -13,6 +13,7 @@
     /// <summary>
     /// Represents the base implemenation for a Microsoft Build <see cref="ITask">task</see> which gets metadata from a source project.
     /// </summary>
+    [CLSCompliant( false )]
     public abstract class AssemblyMetadataTask : ITask
     {
         /// <summary>
@@ -66,7 +67,7 @@
         /// <returns>True if the task executed successfully; otherwise, false.</returns>
         public bool Execute()
         {
-            var fullPath = this.SourceProjectPath;
+            var fullPath = SourceProjectPath;
             var basePath = Path.GetDirectoryName( fullPath );
             var project = ProjectCollection.GlobalProjectCollection.LoadProject( fullPath );
 
@@ -82,15 +83,15 @@
                 var compilation = CSharpCompilation.Create( project.GetPropertyValue( "AssemblyName" ), assemblyInfos, references );
                 var attributes = compilation.Assembly.GetAttributes().ToArray();
 
-                this.IsValid = true;
-                this.PopulateMetadataFromAttributes( attributes );
+                IsValid = true;
+                PopulateMetadataFromAttributes( attributes );
             }
             finally
             {
                 ProjectCollection.GlobalProjectCollection.UnloadProject( project );
             }
 
-            return this.IsValid;
+            return IsValid;
         }
 
         /// <summary>

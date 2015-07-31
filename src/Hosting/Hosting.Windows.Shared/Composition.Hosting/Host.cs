@@ -9,7 +9,7 @@
     /// </content>
     public partial class Host
     {
-        partial void AddUISpecificConventions( ConventionBuilder builder )
+        static partial void AddUISpecificConventions( ConventionBuilder builder )
         {
             var viewModel = new ViewModelSpecification();
 

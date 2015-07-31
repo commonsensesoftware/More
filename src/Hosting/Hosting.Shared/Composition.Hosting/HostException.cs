@@ -23,7 +23,6 @@
         public HostException( string message )
             : this( message, null )
         {
-            Contract.Requires<ArgumentNullException>( message != null, "message" );
         }
 
         /// <summary>
@@ -36,7 +35,7 @@
         public HostException( string message, Exception innerException )
             : base( message, innerException )
         {
-            Contract.Requires<ArgumentNullException>( message != null, "message" );
+            Arg.NotNull( message, nameof( message ) );
         }
     }
 }

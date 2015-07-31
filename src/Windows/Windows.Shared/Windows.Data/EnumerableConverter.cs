@@ -51,14 +51,14 @@
             object itemValue = item;
 
             // get value of item, if defined
-            if ( !string.IsNullOrEmpty( this.DisplayMemberPath ) )
-                itemValue = ReflectHelper.InvokePath( item, this.DisplayMemberPath );
+            if ( !string.IsNullOrEmpty( DisplayMemberPath ) )
+                itemValue = ReflectHelper.InvokePath( item, DisplayMemberPath );
 
             // use format for one item, if defined
-            if ( string.IsNullOrEmpty( this.SingleItemFormat ) )
+            if ( string.IsNullOrEmpty( SingleItemFormat ) )
                 return itemValue == null ? null : itemValue.ToString();
 
-            return string.Format( culture, this.SingleItemFormat, itemValue );
+            return string.Format( culture, SingleItemFormat, itemValue );
         }
 
 #if NETFX_CORE
@@ -95,7 +95,7 @@
                 throw new ArgumentException( ExceptionMessage.UnsupportedConversionType.FormatDefault( targetType ), "targetType" );
 
             if ( value == null )
-                return this.DefaultNullValue;
+                return DefaultNullValue;
 
             var sourceType = value.GetType();
 
@@ -115,18 +115,18 @@
             {
                 case 0:
                     {
-                        return this.EmptyFormat;
+                        return EmptyFormat;
                     }
                 case 1:
                     {
-                        return this.FormatItem( sequence.ElementAt( 0 ), culture );
+                        return FormatItem( sequence.ElementAt( 0 ), culture );
                     }
                 default:
                     {
-                        if ( string.IsNullOrEmpty( this.Format ) )
+                        if ( string.IsNullOrEmpty( Format ) )
                             return count.ToString( culture );
 
-                        return string.Format( culture, this.Format, count );
+                        return string.Format( culture, Format, count );
                     }
             }
         }

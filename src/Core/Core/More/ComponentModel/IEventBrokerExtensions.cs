@@ -20,9 +20,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Subscribe<TEventArgs>( this IEventBroker eventBroker, string eventName, Action<string, object, TEventArgs> handler ) where TEventArgs : class
         {
-            Arg.NotNull( eventBroker, "eventBroker" );
-            Arg.NotNullOrEmpty( eventName, "eventName" );
-            Arg.NotNull( handler, "handler" );
+            Arg.NotNull( eventBroker, nameof( eventBroker ) );
+            Arg.NotNullOrEmpty( eventName, nameof( eventName ) );
+            Arg.NotNull( handler, nameof( handler ) );
 
             eventBroker.Subscribe<TEventArgs>( eventName, handler, SynchronizationContext.Current );
         }

@@ -57,7 +57,7 @@
         public NamedCommand( string id, string name, Action<T> executeMethod, Func<T, bool> canExecuteMethod )
             : base( executeMethod, canExecuteMethod )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
 
             this.id = id;
             this.name = name;
@@ -71,13 +71,13 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
-                return this.name;
+                Contract.Ensures( !string.IsNullOrEmpty( name ) );
+                return name;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
-                this.SetProperty( ref this.name, value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                SetProperty( ref name, value );
             }
         }
 
@@ -89,13 +89,13 @@
         {
             get
             {
-                Contract.Ensures( this.desc != null );
-                return this.desc;
+                Contract.Ensures( desc != null );
+                return desc;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.desc, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref desc, value );
             }
         }
 
@@ -109,12 +109,12 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return string.IsNullOrEmpty( this.id ) ? this.Name : this.id;
+                return string.IsNullOrEmpty( id ) ? Name : id;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
-                this.SetProperty( ref this.id, value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                SetProperty( ref id, value );
             }
         }
     }

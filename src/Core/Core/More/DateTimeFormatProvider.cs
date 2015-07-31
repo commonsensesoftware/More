@@ -137,9 +137,9 @@
             internal DateTimeFormatToken( string format, bool literal, bool invalid )
             {
                 Contract.Requires( format != null );
-                this.Format = format;
-                this.IsLiteral = literal;
-                this.IsInvalid = invalid;
+                Format = format;
+                IsLiteral = literal;
+                IsInvalid = invalid;
             }
         }
 
@@ -178,6 +178,7 @@
                 return false;
             }
 
+            [SuppressMessage( "Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "False positive due to the switch statement." )]
             private static bool IsEscapeSequence( string sequence )
             {
                 Contract.Requires( sequence != null );
@@ -208,6 +209,7 @@
                 return false;
             }
 
+            [SuppressMessage( "Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "False positive due to the switch statement." )]
             private static bool IsSingleCustomFormatSpecifier( string sequence )
             {
                 Contract.Requires( sequence != null );
@@ -348,7 +350,7 @@
         public DateTimeFormatProvider( Calendar calendar )
             : this( DateTimeFormatInfo.CurrentInfo, calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
         }
 
         /// <summary>
@@ -358,8 +360,8 @@
         /// <param name="calendar">The <see cref="Calendar"/> used by the format provider.</param>
         public DateTimeFormatProvider( DateTimeFormatInfo dateTimeFormat, Calendar calendar )
         {
-            Arg.NotNull( dateTimeFormat, "dateTimeFormat" );
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( dateTimeFormat, nameof( dateTimeFormat ) );
+            Arg.NotNull( calendar, nameof( calendar ) );
             this.dateTimeFormat = dateTimeFormat;
             this.calendar = calendar;
         }
@@ -372,8 +374,8 @@
         {
             get
             {
-                Contract.Ensures( this.dateTimeFormat != null );
-                return this.dateTimeFormat;
+                Contract.Ensures( dateTimeFormat != null );
+                return dateTimeFormat;
             }
         }
 
@@ -387,8 +389,8 @@
         {
             get
             {
-                Contract.Ensures( this.calendar != null );
-                return this.calendar;
+                Contract.Ensures( calendar != null );
+                return calendar;
             }
         }
 
@@ -417,16 +419,16 @@
             switch ( format[0] )
             {
                 case 'M':
-                    return this.FormatMonthPart( value, format, formatProvider );
+                    return FormatMonthPart( value, format, formatProvider );
                 case 'S':
-                    return this.FormatSemesterPart( value, format, formatProvider );
+                    return FormatSemesterPart( value, format, formatProvider );
                 case 'q':
-                    return this.FormatQuarterPart( value, format, formatProvider );
+                    return FormatQuarterPart( value, format, formatProvider );
                 case 'y':
-                    return this.FormatYearPart( value, format, formatProvider );
+                    return FormatYearPart( value, format, formatProvider );
             }
 
-            return this.FormatDatePart( value, format, formatProvider );
+            return FormatDatePart( value, format, formatProvider );
         }
 
         private static int ToDateTimeMonth( Calendar calendar, DateTime value )
@@ -451,21 +453,21 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatYearPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Arg.NotNullOrEmpty( format, "format" );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             switch ( format.Length )
             {
                 case 1: // y
-                    return ( this.Calendar.Year( value ) % 100 ).ToString( formatProvider );
+                    return ( Calendar.Year( value ) % 100 ).ToString( formatProvider );
                 case 2: // yy
-                    return ( this.Calendar.Year( value ) % 100 ).ToString( "00", formatProvider );
+                    return ( Calendar.Year( value ) % 100 ).ToString( "00", formatProvider );
                 case 3: // yyy
-                    return this.Calendar.Year( value ).ToString( "000", formatProvider );
+                    return Calendar.Year( value ).ToString( "000", formatProvider );
             }
 
             // yyyy*
-            return this.Calendar.Year( value ).ToString( formatProvider );
+            return Calendar.Year( value ).ToString( formatProvider );
         }
 
         /// <summary>
@@ -478,21 +480,21 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatSemesterPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Arg.NotNullOrEmpty( format, "format" );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             switch ( format.Length )
             {
                 case 1: // S
-                    return value.Semester( this.Calendar ).ToString( formatProvider );
+                    return value.Semester( Calendar ).ToString( formatProvider );
                 case 2: // SS
-                    return value.Semester( this.Calendar ).ToString( "00", formatProvider );
+                    return value.Semester( Calendar ).ToString( "00", formatProvider );
                 case 3: // SSS
-                    return string.Format( formatProvider, SR.ShortSemesterFormat, value.Semester( this.Calendar ) );
+                    return string.Format( formatProvider, SR.ShortSemesterFormat, value.Semester( Calendar ) );
             }
 
             // SSSS*
-            return string.Format( formatProvider, SR.SemesterFormat, value.Semester( this.Calendar ) );
+            return string.Format( formatProvider, SR.SemesterFormat, value.Semester( Calendar ) );
         }
 
         /// <summary>
@@ -505,21 +507,21 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatQuarterPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Arg.NotNullOrEmpty( format, "format" );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             switch ( format.Length )
             {
                 case 1: // q
-                    return value.Quarter( this.Calendar ).ToString( formatProvider );
+                    return value.Quarter( Calendar ).ToString( formatProvider );
                 case 2: // qq
-                    return value.Quarter( this.Calendar ).ToString( "00", formatProvider );
+                    return value.Quarter( Calendar ).ToString( "00", formatProvider );
                 case 3: // qqq
-                    return string.Format( formatProvider, SR.ShortQuarterFormat, value.Quarter( this.Calendar ) );
+                    return string.Format( formatProvider, SR.ShortQuarterFormat, value.Quarter( Calendar ) );
             }
 
             // qqqq*
-            return string.Format( formatProvider, SR.QuarterFormat, value.Quarter( this.Calendar ) );
+            return string.Format( formatProvider, SR.QuarterFormat, value.Quarter( Calendar ) );
         }
 
         /// <summary>
@@ -532,7 +534,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatMonthPart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Arg.NotNullOrEmpty( format, "format" );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
 
             // NOTE: the DateTimeFormatInfo cannot be overridden or supplied an alternate calendar.
@@ -543,15 +545,15 @@
             switch ( format.Length )
             {
                 case 1: // M
-                    return this.Calendar.GetMonth( value ).ToString( formatProvider );
+                    return Calendar.GetMonth( value ).ToString( formatProvider );
                 case 2: // MM
-                    return this.Calendar.GetMonth( value ).ToString( "00", formatProvider );
+                    return Calendar.GetMonth( value ).ToString( "00", formatProvider );
                 case 3: // MMM
-                    return this.DateTimeFormat.GetAbbreviatedMonthName( ToDateTimeMonth( this.Calendar, value ) );
+                    return DateTimeFormat.GetAbbreviatedMonthName( ToDateTimeMonth( Calendar, value ) );
             }
 
             // MMMM*
-            return this.DateTimeFormat.GetMonthName( ToDateTimeMonth( this.Calendar, value ) );
+            return DateTimeFormat.GetMonthName( ToDateTimeMonth( Calendar, value ) );
         }
 
         /// <summary>
@@ -565,7 +567,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatDatePart( DateTime value, string format, IFormatProvider formatProvider )
         {
-            Arg.NotNullOrEmpty( format, "format" );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
             Contract.Ensures( Contract.Result<string>() != null );
 
             // since we're going to let the DateTime do its normal thing, we need to prepend the %
@@ -575,7 +577,7 @@
                 format = "%" + format;
 
             // everything else; use the DateTimeFormatInfo supplied to the format provider
-            return value.ToString( format, this.DateTimeFormat ) ?? string.Empty;
+            return value.ToString( format, DateTimeFormat ) ?? string.Empty;
         }
 
         /// <summary>
@@ -586,7 +588,7 @@
         public object GetFormat( Type formatType )
         {
             if ( typeof( DateTimeFormatInfo ).Equals( formatType ) )
-                return this.DateTimeFormat;
+                return DateTimeFormat;
             else if ( typeof( ICustomFormatter ).Equals( formatType ) )
                 return this;
 
@@ -618,7 +620,7 @@
             formatProvider = formatProvider == null || object.ReferenceEquals( this, formatProvider ) ? CultureInfo.CurrentCulture : formatProvider;
 
             foreach ( var token in tokens )
-                text.Append( token.IsLiteral ? token.Format : this.GetCustomFormat( date, token.Format, formatProvider ) );
+                text.Append( token.IsLiteral ? token.Format : GetCustomFormat( date, token.Format, formatProvider ) );
 
             return text.ToString();
         }

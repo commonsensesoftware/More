@@ -29,69 +29,69 @@
 
             public void AddService( Type serviceType, ServiceCreatorCallback callback, bool promote )
             {
-                if ( promote && this.parentContainer != null )
+                if ( promote && parentContainer != null )
                 {
-                    this.parentContainer.AddService( serviceType, callback, promote );
+                    parentContainer.AddService( serviceType, callback, promote );
                     return;
                 }
 
-                lock ( this.syncRoot )
+                lock ( syncRoot )
                 {
-                    if ( this.services.ContainsKey( serviceType ) )
+                    if ( services.ContainsKey( serviceType ) )
                     {
                         var message = DataAnnotationsResources.ServiceAlreadyExists.FormatDefault( serviceType );
                         throw new ArgumentException( message, "serviceType" );
                     }
 
-                    this.services.Add( serviceType, callback );
+                    services.Add( serviceType, callback );
                 }
             }
 
             public void AddService( Type serviceType, ServiceCreatorCallback callback )
             {
-                this.AddService( serviceType, callback, true );
+                AddService( serviceType, callback, true );
             }
 
             public void AddService( Type serviceType, object serviceInstance, bool promote )
             {
-                if ( promote && this.parentContainer != null )
+                if ( promote && parentContainer != null )
                 {
-                    this.parentContainer.AddService( serviceType, serviceInstance, promote );
+                    parentContainer.AddService( serviceType, serviceInstance, promote );
                     return;
                 }
 
-                lock ( this.syncRoot )
+                lock ( syncRoot )
                 {
-                    if ( this.services.ContainsKey( serviceType ) )
+                    if ( services.ContainsKey( serviceType ) )
                     {
                         var message = DataAnnotationsResources.ServiceAlreadyExists.FormatDefault( serviceType );
                         throw new ArgumentException( message, "serviceType" );
                     }
 
-                    this.services.Add( serviceType, serviceInstance );
+                    services.Add( serviceType, serviceInstance );
                 }
             }
 
             public void AddService( Type serviceType, object serviceInstance )
             {
-                this.AddService( serviceType, serviceInstance, true );
+                AddService( serviceType, serviceInstance, true );
             }
 
             public void RemoveService( Type serviceType, bool promote )
             {
-                lock ( this.syncRoot )
+                lock ( syncRoot )
                 {
-                    if ( this.services.ContainsKey( serviceType ) )
-                        this.services.Remove( serviceType );
+                    if ( services.ContainsKey( serviceType ) )
+                        services.Remove( serviceType );
                 }
 
-                if ( promote && this.parentContainer != null )
-                    this.parentContainer.RemoveService( serviceType );
+                if ( promote && parentContainer != null )
+                    parentContainer.RemoveService( serviceType );
             }
 
             public void RemoveService( Type serviceType )
             {
-                this.RemoveService( serviceType, true );
+                RemoveService( serviceType, true );
             }
 
             public object GetService( Type serviceType )
@@ -101,10 +101,10 @@
 
                 object obj = null;
 
-                this.services.TryGetValue( serviceType, out obj );
+                services.TryGetValue( serviceType, out obj );
 
-                if ( obj == null && this.parentContainer != null )
-                    obj = this.parentContainer.GetService( serviceType );
+                if ( obj == null && parentContainer != null )
+                    obj = parentContainer.GetService( serviceType );
 
                 var serviceCreatorCallback = obj as ServiceCreatorCallback;
 
@@ -146,16 +146,16 @@
             var container = serviceProvider as IServiceContainer;
 
             if ( container != null )
-                this.serviceContainer = new ValidationContextServiceContainer( container );
+                serviceContainer = new ValidationContextServiceContainer( container );
             else
-                this.serviceContainer = new ValidationContextServiceContainer();
+                serviceContainer = new ValidationContextServiceContainer();
 
             if ( items != null )
                 this.items = new Dictionary<object, object>( items );
             else
                 this.items = new Dictionary<object, object>();
 
-            this.objectInstance = instance;
+            objectInstance = instance;
         }
 
         /// <summary>
@@ -166,7 +166,7 @@
         {
             get
             {
-                return this.objectInstance;
+                return objectInstance;
             }
         }
 
@@ -178,7 +178,7 @@
         {
             get
             {
-                return this.ObjectInstance.GetType();
+                return ObjectInstance.GetType();
             }
         }
 
@@ -190,23 +190,23 @@
         {
             get
             {
-                if ( string.IsNullOrEmpty( this.displayName ) )
+                if ( string.IsNullOrEmpty( displayName ) )
                 {
-                    if ( string.IsNullOrEmpty( this.displayName = this.GetDisplayName() ) )
+                    if ( string.IsNullOrEmpty( displayName = GetDisplayName() ) )
                     {
-                        if ( string.IsNullOrEmpty( this.displayName = this.MemberName ) )
-                            this.displayName = this.ObjectType.Name;
+                        if ( string.IsNullOrEmpty( displayName = MemberName ) )
+                            displayName = ObjectType.Name;
                     }
                 }
 
-                return this.displayName;
+                return displayName;
             }
             set
             {
                 if ( string.IsNullOrEmpty( value ) )
                     throw new ArgumentNullException( "value" );
 
-                this.displayName = value;
+                displayName = value;
             }
         }
 
@@ -228,7 +228,7 @@
         {
             get
             {
-                return this.items;
+                return items;
             }
         }
 
@@ -240,7 +240,7 @@
         {
             get
             {
-                return this.serviceContainer;
+                return serviceContainer;
             }
         }
 
@@ -250,7 +250,7 @@
             var instance = ValidationAttributeStore.Instance;
             DisplayAttribute displayAttribute = null;
 
-            if ( string.IsNullOrEmpty( this.MemberName ) )
+            if ( string.IsNullOrEmpty( MemberName ) )
             {
                 displayAttribute = instance.GetTypeDisplayAttribute( this );
             }
@@ -263,7 +263,7 @@
             if ( displayAttribute != null )
                 text = displayAttribute.GetName();
 
-            return text ?? this.MemberName;
+            return text ?? MemberName;
         }
 
         /// <summary>
@@ -275,11 +275,11 @@
         {
             object obj = null;
 
-            if ( this.serviceContainer != null )
-                obj = this.serviceContainer.GetService( serviceType );
+            if ( serviceContainer != null )
+                obj = serviceContainer.GetService( serviceType );
 
-            if ( obj == null && this.serviceProvider != null )
-                obj = this.serviceProvider.GetService( serviceType );
+            if ( obj == null && serviceProvider != null )
+                obj = serviceProvider.GetService( serviceType );
 
             return obj;
         }

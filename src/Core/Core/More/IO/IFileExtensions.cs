@@ -19,8 +19,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task<IFile> CopyAsync( this IFile file, IFolder destinationFolder )
         {
-            Arg.NotNull( file, "file" );
-            Arg.NotNull( destinationFolder, "destinationFolder" );
+            Arg.NotNull( file, nameof( file ) );
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
             Contract.Ensures( Contract.Result<Task<IFile>>() != null );
             return file.CopyAsync( destinationFolder, file.Name );
         }
@@ -34,8 +34,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static Task MoveAsync( this IFile file, IFolder destinationFolder )
         {
-            Arg.NotNull( file, "file" );
-            Arg.NotNull( destinationFolder, "destinationFolder" );
+            Arg.NotNull( file, nameof( file ) );
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
             Contract.Ensures( Contract.Result<Task>() != null );
             return file.MoveAsync( destinationFolder, file.Name );
         }

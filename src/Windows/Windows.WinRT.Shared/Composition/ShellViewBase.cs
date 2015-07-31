@@ -1,6 +1,7 @@
 ﻿namespace More.Composition
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
@@ -21,18 +22,19 @@
             window.Activate();
         }
 
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Intentionally hidden. Inheritors should used typed FlowDirection property." )]
         string IShellView.FlowDirection
         {
             get
             {
-                return this.FlowDirection.ToString();
+                return FlowDirection.ToString();
             }
             set
             {
                 if ( string.IsNullOrEmpty( value ) )
-                    this.FlowDirection = new FlowDirection();
+                    FlowDirection = new FlowDirection();
                 else
-                    this.FlowDirection = (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
+                    FlowDirection = (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
             }
         }
     }

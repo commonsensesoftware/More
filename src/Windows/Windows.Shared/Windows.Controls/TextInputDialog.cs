@@ -27,8 +27,9 @@
         /// Gets or sets the default response dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty DefaultResponseProperty =
-            DependencyProperty.Register( "DefaultResponse", typeof( string ), typeof( TextInputDialog ), new PropertyMetadata( null ) );
+            DependencyProperty.Register( nameof( DefaultResponse ), typeof( string ), typeof( TextInputDialog ), new PropertyMetadata( null ) );
 
         private TextBox input;
 
@@ -37,20 +38,14 @@
         /// </summary>
         public TextInputDialog()
         {
-            this.DefaultStyleKey = typeof( TextInputDialog );
+            DefaultStyleKey = typeof( TextInputDialog );
         }
 
         [SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "sender", Justification = "Required event handler signature." )]
-        private static void OnDefaultCommandIndexChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e )
-        {
-            OnCommandIndexChanged( "DefaultCommandIndex", e );
-        }
+        private static void OnDefaultCommandIndexChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e ) => OnCommandIndexChanged( nameof( DefaultCommandIndex ), e );
 
         [SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "sender", Justification = "Required event handler signature." )]
-        private static void OnCancelCommandIndexChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e )
-        {
-            OnCommandIndexChanged( "CancelCommandIndex", e );
-        }
+        private static void OnCancelCommandIndexChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e ) => OnCommandIndexChanged( nameof( CancelCommandIndex ), e );
 
         private static void OnCommandIndexChanged( string propertyName, DependencyPropertyChangedEventArgs e )
         {
@@ -66,7 +61,7 @@
                 return;
 
             e.Handled = true;
-            this.ExecuteCommand( this.DefaultCommandIndex );
+            ExecuteCommand( DefaultCommandIndex );
         }
 
         /// <summary>
@@ -77,11 +72,11 @@
         {
             get
             {
-                return (string) this.GetValue( DefaultResponseProperty );
+                return (string) GetValue( DefaultResponseProperty );
             }
             set
             {
-                this.SetValue( DefaultResponseProperty, value );
+                SetValue( DefaultResponseProperty, value );
             }
         }
 
@@ -91,8 +86,8 @@
         /// <param name="commandIndex">The zero-based index of the command that was executed.</param>
         protected override void OnCommandExecuted( int commandIndex )
         {
-            if ( commandIndex == this.DefaultCommandIndex && this.input != null )
-                this.Response = this.input.Text;
+            if ( commandIndex == DefaultCommandIndex && input != null )
+                Response = input.Text;
 
             base.OnCommandExecuted( commandIndex );
         }

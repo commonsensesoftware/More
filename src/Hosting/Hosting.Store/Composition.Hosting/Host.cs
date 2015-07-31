@@ -10,7 +10,7 @@
     /// </content>
     public partial class Host
     {
-        partial void AddWinRTSpecificConventions( ConventionBuilder builder )
+        static partial void AddWinRTSpecificConventions( ConventionBuilder builder )
         {
             var assembly = new HostAssemblySpecification();
             var settingsFlyout = new SettingsFlyoutSpecification();

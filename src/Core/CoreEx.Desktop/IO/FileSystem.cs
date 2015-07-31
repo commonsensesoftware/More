@@ -17,7 +17,7 @@
         /// <returns>A <see cref="Task{T}">task</see> containing the retreived <see cref="IFolder">folder</see>.</returns>
         public Task<IFolder> GetFolderAsync( string path )
         {
-            Arg.NotNullOrEmpty( path, "path" );
+            Arg.NotNullOrEmpty( path, nameof( path ) );
 
             var directory = new DirectoryInfo( path );
             return Task.FromResult( directory.AsFolder() );
@@ -31,7 +31,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "The path may not be convertible to a URI." )]
         public Task<IFile> GetFileAsync( string path )
         {
-            Arg.NotNullOrEmpty( path, "path" );
+            Arg.NotNullOrEmpty( path, nameof( path ) );
 
             var file = new FileInfo( path );
             return Task.FromResult( file.AsFile() );
@@ -45,7 +45,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IFile> GetFileAsync( Uri uri )
         {
-            Arg.NotNull( uri, "uri" );
+            Arg.NotNull( uri, nameof( uri ) );
 
             if ( !uri.IsFile )
                 throw new FileNotFoundException( SR.InvalidFileUri );

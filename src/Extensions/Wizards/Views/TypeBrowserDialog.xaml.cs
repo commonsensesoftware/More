@@ -15,7 +15,7 @@
 
         ~TypeBrowserDialog()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         /// <summary>
@@ -23,7 +23,7 @@
         /// </summary>
         public TypeBrowserDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@
         public TypeBrowserDialog( TypeBrowserViewModel model )
             : this()
         {
-            this.DataContext = model;
+            DataContext = model;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
         {
             get
             {
-                return this.DataContext as TypeBrowserViewModel;
+                return DataContext as TypeBrowserViewModel;
             }
         }
 
@@ -55,15 +55,15 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.GC.Collect", Justification = "Required to resolve a known WPF bug." )]
         protected virtual void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            var dispatcher = this.Dispatcher;
+            var dispatcher = Dispatcher;
 
             if ( dispatcher == null )
                 return;
@@ -79,7 +79,7 @@
         /// </summary>
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

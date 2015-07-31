@@ -14,7 +14,7 @@
         /// </summary>
         protected InputDialog()
         {
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         /// <summary>

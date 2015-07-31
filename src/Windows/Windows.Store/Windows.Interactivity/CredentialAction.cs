@@ -86,20 +86,20 @@
             var content = interaction == null ? string.Empty : interaction.Content.ToString();
             var options = new CredentialPickerOptions()
             {
-                AlwaysDisplayDialog = this.AlwaysDisplayDialog,
-                AuthenticationProtocol = this.AuthenticationProtocol,
-                CallerSavesCredential = this.CallerSavesCredential,
-                CredentialSaveOption = this.CredentialSaveOption,
+                AlwaysDisplayDialog = AlwaysDisplayDialog,
+                AuthenticationProtocol = AuthenticationProtocol,
+                CallerSavesCredential = CallerSavesCredential,
+                CredentialSaveOption = CredentialSaveOption,
                 Caption = interaction.Title,
                 Message = content,
                 PreviousCredential = interaction.Credential.AsBuffer(),
             };
 
-            if ( !string.IsNullOrEmpty( this.CustomAuthenticationProtocol ) )
-                options.CustomAuthenticationProtocol = this.CustomAuthenticationProtocol;
+            if ( !string.IsNullOrEmpty( CustomAuthenticationProtocol ) )
+                options.CustomAuthenticationProtocol = CustomAuthenticationProtocol;
 
-            if ( !string.IsNullOrEmpty( this.TargetName ) )
-                options.TargetName = this.TargetName;
+            if ( !string.IsNullOrEmpty( TargetName ) )
+                options.TargetName = TargetName;
 
             return CredentialPicker.PickAsync( options );
         }
@@ -148,7 +148,7 @@
             if ( interaction == null )
                 return;
 
-            var result = await this.SelectCredentialAsync( interaction );
+            var result = await SelectCredentialAsync( interaction );
             InvokeCallbackCommand( interaction, result );
         }
     }

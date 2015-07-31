@@ -20,8 +20,8 @@
             if ( projectItem == null )
                 return;
 
-            var writer = new ManifestExtensionWriter( this.Context );
-            writer.ApplyExtensions( projectItem.ContainingProject, key => this.GetBoolean( key, false ) );
+            var writer = new ManifestExtensionWriter( Context );
+            writer.ApplyExtensions( projectItem.ContainingProject, key => GetBoolean( key, false ) );
         }
 
         /// <summary>
@@ -31,14 +31,16 @@
         /// <returns>True if the wizard completed successfully; otherwise, false if the wizard was canceled.</returns>
         protected override bool TryRunWizard( IVsUIShell shell )
         {
-            var mapper = new ViewModelReplacementsMapper( this.Project );
+            Arg.NotNull( shell, nameof( shell ) );
+
+            var mapper = new ViewModelReplacementsMapper( Project );
             var model = new ViewModelItemTemplateWizardViewModel();
 
             // map replacements to model
-            mapper.Map( this.Context.Replacements, model );
+            mapper.Map( Context.Replacements, model );
 
             // only show the dialog if the context is interactive
-            if ( this.Context.IsInteractive )
+            if ( Context.IsInteractive )
             {
                 var view = new ViewModelItemTemplateWizard( model );
 
@@ -48,7 +50,7 @@
             }
 
             // map model back to replacements
-            mapper.Map( model, this.Context.Replacements );
+            mapper.Map( model, Context.Replacements );
             return true;
         }
     }

@@ -20,12 +20,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<decimal>() > 0m );
-                return this.denomination;
+                return denomination;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value > 0m, "value" );
-                this.denomination = value;
+                Arg.GreaterThan( value, 0m, nameof( value ) );
+                denomination = value;
             }
         }
 

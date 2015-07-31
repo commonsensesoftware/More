@@ -27,8 +27,6 @@
         public PagingArguments( int pageIndex, int pageSize )
             : this( pageIndex, pageSize, new SortDescriptionCollection() )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( pageIndex >= 0, "pageIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize > 0, "pageSize" );
         }
 
         /// <summary>
@@ -39,9 +37,9 @@
         /// <param name="sortDescriptions">The <see cref="SortDescriptionCollection"/> associated with the request.</param>
         public PagingArguments( int pageIndex, int pageSize, SortDescriptionCollection sortDescriptions )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( pageIndex >= 0, "pageIndex" );
-            Contract.Requires<ArgumentOutOfRangeException>( pageSize > 0, "pageSize" );
-            Contract.Requires<ArgumentNullException>( sortDescriptions != null, "sortDescriptions" );
+            Arg.NotNull( sortDescriptions, nameof( sortDescriptions ) );
+            Arg.GreaterThanOrEqualTo( pageIndex, 0, nameof( pageIndex ) );
+            Arg.GreaterThan( pageSize, 0, nameof( pageSize ) );
 
             this.pageIndex = pageIndex;
             this.pageSize = pageSize;
@@ -57,7 +55,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<SortDescriptionCollection>() != null );
-                return this.sortDescriptions;
+                return sortDescriptions;
             }
         }
     }

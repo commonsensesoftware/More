@@ -28,7 +28,7 @@
         private bool ShouldNegate( object parameter, CultureInfo culture )
         {
             if ( parameter == null )
-                return this.Negate;
+                return Negate;
             else if ( parameter is bool )
                 return (bool) parameter;
 
@@ -76,7 +76,7 @@
 #if NETFX_CORE
             var culture = Util.GetCultureFromLanguage( language );
 #endif
-            var negate = this.ShouldNegate( parameter, culture );
+            var negate = ShouldNegate( parameter, culture );
 
             // convert to appropriate Boolean or Visibility
             if ( ( value is bool || value is bool? ) && typeof( Visibility ).Equals( targetType ) )
@@ -101,13 +101,13 @@
         /// <include file='IValueConverter.xml' path='//member[@name="Convert" and @platform="netfx_core"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, string language )
         {
-            return this.Convert( value, targetType, parameter, language );
+            return Convert( value, targetType, parameter, language );
         }
 #else
         /// <include file='IValueConverter.xml' path='//member[@name="Convert" and @platform="netfx"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
         {
-            return this.Convert( value, targetType, parameter, culture );
+            return Convert( value, targetType, parameter, culture );
         }
 #endif
     }

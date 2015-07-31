@@ -41,7 +41,7 @@
         {
             get
             {
-                return this.language;
+                return language;
             }
         }
 
@@ -53,7 +53,7 @@
         {
             get
             {
-                return this.query;
+                return query;
             }
         }
     }

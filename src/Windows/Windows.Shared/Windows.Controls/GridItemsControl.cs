@@ -1,6 +1,7 @@
 ﻿namespace More.Windows.Controls
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
 #if NETFX_CORE
@@ -24,21 +25,22 @@
         /// Gets the last child fill dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty LastChildFillProperty =
-            DependencyProperty.Register( "LastChildFill", typeof( bool ), typeof( GridItemsControl ), new PropertyMetadata( false, OnLastChildFillPropertyChanged ) );
+            DependencyProperty.Register( nameof( LastChildFill ), typeof( bool ), typeof( GridItemsControl ), new PropertyMetadata( false, OnLastChildFillPropertyChanged ) );
 
         private Grid grid;
 
         /// <summary>
         /// Gets the height of a row that that uses star (*) or fill height behavior.
         /// </summary>
-        /// <value>A <see cref="GridLength"/> structure.</value>
+        /// <value>A <see cref="T:GridLength"/> structure.</value>
         protected static readonly GridLength StarRowHeight = new GridLength( 1.0, GridUnitType.Star );
 
         /// <summary>
         /// Gets the height of a row that that automatic height behavior.
         /// </summary>
-        /// <value>A <see cref="GridLength"/> structure.</value>
+        /// <value>A <see cref="T:GridLength"/> structure.</value>
         protected static readonly GridLength AutoRowHeight = GridLength.Auto;
 
         /// <summary>
@@ -46,8 +48,8 @@
         /// </summary>
         public GridItemsControl()
         {
-            this.DefaultStyleKey = typeof( GridItemsControl );
-            this.Loaded += ( s, e ) => this.OnLoaded();
+            DefaultStyleKey = typeof( GridItemsControl );
+            Loaded += ( s, e ) => OnLoaded();
         }
 
         /// <summary>
@@ -58,7 +60,7 @@
         {
             get
             {
-                return this.grid;
+                return grid;
             }
         }
 
@@ -70,11 +72,11 @@
         {
             get
             {
-                return (bool) this.GetValue( LastChildFillProperty );
+                return (bool) GetValue( LastChildFillProperty );
             }
             set
             {
-                this.SetValue( LastChildFillProperty, value );
+                SetValue( LastChildFillProperty, value );
             }
         }
 
@@ -86,20 +88,20 @@
 
         private void ResetRows()
         {
-            if ( !this.Grid.RowDefinitions.Any() )
+            if ( !Grid.RowDefinitions.Any() )
                 return;
 
             // set row heights
-            for ( var i = 0; i < this.Grid.RowDefinitions.Count; i++ )
-                this.Grid.RowDefinitions[i].Height = this.GetRowHeight( i );
+            for ( var i = 0; i < Grid.RowDefinitions.Count; i++ )
+                Grid.RowDefinitions[i].Height = GetRowHeight( i );
 
             // set row indexes
-            for ( var i = 0; i < this.Items.Count; i++ )
+            for ( var i = 0; i < Items.Count; i++ )
             {
 #if NETFX_CORE
-                var element = (FrameworkElement) this.ContainerFromIndex( i );
+                var element = (FrameworkElement) ContainerFromIndex( i );
 #else
-                var element = (FrameworkElement) this.ItemContainerGenerator.ContainerFromIndex( i );
+                var element = (FrameworkElement) ItemContainerGenerator.ContainerFromIndex( i );
 #endif
                 if ( element != null )
                     Grid.SetRow( element, i );
@@ -110,13 +112,13 @@
         /// Returns the height for the specified row.
         /// </summary>
         /// <param name="row">The zero-based row to return the height for.</param>
-        /// <returns>A <see cref="GridLength"/> structure.</returns>
+        /// <returns>A <see cref="T:GridLength"/> structure.</returns>
         protected virtual GridLength GetRowHeight( int row )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( row >= 0, "row" );
+            Arg.GreaterThanOrEqualTo( row, 0, nameof( row ) );
 
-            if ( this.LastChildFill )
-                return ( this.Grid == null || row == this.Grid.RowDefinitions.Count - 1 ) ? StarRowHeight : AutoRowHeight;
+            if ( LastChildFill )
+                return ( Grid == null || row == Grid.RowDefinitions.Count - 1 ) ? StarRowHeight : AutoRowHeight;
 
             return row == 0 ? StarRowHeight : AutoRowHeight;
         }
@@ -126,7 +128,7 @@
         /// </summary>
         protected virtual void OnLoaded()
         {
-            this.grid = this.GetItemsPanel<Grid>();
+            grid = this.GetItemsPanel<Grid>();
         }
 
         /// <summary>
@@ -134,12 +136,12 @@
         /// </summary>
         protected virtual void OnLastChildFillChanged()
         {
-            if ( this.Grid == null || !this.Grid.RowDefinitions.Any() )
+            if ( Grid == null || !Grid.RowDefinitions.Any() )
                 return;
 
             // update the heights for the first and last row
-            this.Grid.RowDefinitions.First().Height = this.GetRowHeight( 0 );
-            this.Grid.RowDefinitions.Last().Height = this.GetRowHeight( this.Grid.RowDefinitions.Count - 1 );
+            Grid.RowDefinitions.First().Height = GetRowHeight( 0 );
+            Grid.RowDefinitions.Last().Height = GetRowHeight( Grid.RowDefinitions.Count - 1 );
         }
 
         /// <summary>
@@ -151,11 +153,11 @@
         {
             base.PrepareContainerForItemOverride( element, item );
 
-            if ( this.Grid == null )
+            if ( Grid == null )
                 return;
 
-            this.Grid.RowDefinitions.Add( new RowDefinition() );
-            this.ResetRows();
+            Grid.RowDefinitions.Add( new RowDefinition() );
+            ResetRows();
         }
 
         /// <summary>
@@ -167,11 +169,11 @@
         {
             base.ClearContainerForItemOverride( element, item );
 
-            if ( this.Grid == null || !this.Grid.RowDefinitions.Any() )
+            if ( Grid == null || !Grid.RowDefinitions.Any() )
                 return;
 
-            this.Grid.RowDefinitions.RemoveAt( this.Grid.RowDefinitions.Count - 1 );
-            this.ResetRows();
+            Grid.RowDefinitions.RemoveAt( Grid.RowDefinitions.Count - 1 );
+            ResetRows();
         }
     }
 }

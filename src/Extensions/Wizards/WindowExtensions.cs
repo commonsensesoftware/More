@@ -23,7 +23,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void Close( this Window window, bool? dialogResult )
         {
-            Contract.Requires<ArgumentNullException>( window != null, "window" );
+            Arg.NotNull( window, nameof( window ) );
 
             try
             {
@@ -49,7 +49,7 @@
         [SuppressMessage( "Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.VisualStudio.Shell.Interop.IVsUIShell.EnableModeless(System.Int32)", Justification = "Nothing to do if modal mode cannot be exited." )]
         public static bool? ShowDialog( this Window window, IVsUIShell shell )
         {
-            Contract.Requires<ArgumentNullException>( window != null, "window" );
+            Arg.NotNull( window, nameof( window ) );
 
             IntPtr owner;
 

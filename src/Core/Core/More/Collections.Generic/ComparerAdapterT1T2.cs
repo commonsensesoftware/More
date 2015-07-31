@@ -60,9 +60,9 @@
         /// <param name="getHashCode">The <see cref="Func{T1,TResult}"/> used to get the hash code for a compared value.</param>
         public ComparerAdapter( IComparer<TValue> comparer, Func<TItem, TValue> selector, Func<TValue, int> getHashCode )
         {
-            Arg.NotNull( comparer, "comparer" );
-            Arg.NotNull( selector, "selector" );
-            Arg.NotNull( getHashCode, "getHashCode" );
+            Arg.NotNull( comparer, nameof( comparer ) );
+            Arg.NotNull( selector, nameof( selector ) );
+            Arg.NotNull( getHashCode, nameof( getHashCode ) );
             this.comparer = new DynamicComparer<TItem>( ( x, y ) => comparer.Compare( selector( x ), selector( y ) ), o => getHashCode( selector( o ) ) );
         }
 
@@ -75,7 +75,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IComparer<TItem>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -88,7 +88,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<TItem>>() != null );
-                return this.comparer;
+                return comparer;
             }
         }
 
@@ -102,14 +102,14 @@
         public int Compare( TItem x, TItem y )
         {
             if ( default( TItem ) != null )
-                return this.Comparer.Compare( x, y );
+                return Comparer.Compare( x, y );
 
             if ( x == null )
                 return y == null ? 0 : -1;
             else if ( y == null )
                 return 1;
 
-            return this.Comparer.Compare( x, y );
+            return Comparer.Compare( x, y );
         }
 
         /// <summary>
@@ -121,14 +121,14 @@
         public virtual bool Equals( TItem x, TItem y )
         {
             if ( default( TItem ) != null )
-                return this.EqualityComparer.Equals( x, y );
+                return EqualityComparer.Equals( x, y );
 
             if ( x == null )
                 return y == null;
             else if ( y == null )
                 return false;
 
-            return this.EqualityComparer.Equals( x, y );
+            return EqualityComparer.Equals( x, y );
         }
 
         /// <summary>
@@ -139,22 +139,22 @@
         /// <remarks>This method returns the default implementation of <see cref="M:Object.GetHashCode"/>.</remarks>
         public virtual int GetHashCode( TItem obj )
         {
-            return obj == null ? 0 : this.EqualityComparer.GetHashCode( obj );
+            return obj == null ? 0 : EqualityComparer.GetHashCode( obj );
         }
 
         int IComparer.Compare( object x, object y )
         {
-            return this.Compare( (TItem) x, (TItem) y );
+            return Compare( (TItem) x, (TItem) y );
         }
 
         bool IEqualityComparer.Equals( object x, object y )
         {
-            return this.Equals( (TItem) x, (TItem) y );
+            return Equals( (TItem) x, (TItem) y );
         }
 
         int IEqualityComparer.GetHashCode( object obj )
         {
-            return this.GetHashCode( (TItem) obj );
+            return GetHashCode( (TItem) obj );
         }
     }
 }

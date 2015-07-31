@@ -61,10 +61,10 @@
         {
             get
             {
-                Contract.Ensures( this.FirstDay >= DateTime.MinValue );
-                Contract.Ensures( this.FirstDay <= DateTime.MaxValue.AddDays( -6d ) );
-                Contract.Ensures( this.FirstDay < this.LastDay );
-                return this.firstDay;
+                Contract.Ensures( FirstDay >= DateTime.MinValue );
+                Contract.Ensures( FirstDay <= DateTime.MaxValue.AddDays( -6d ) );
+                Contract.Ensures( FirstDay < LastDay );
+                return firstDay;
             }
         }
 
@@ -76,10 +76,10 @@
         {
             get
             {
-                Contract.Ensures( this.LastDay > DateTime.MinValue );
-                Contract.Ensures( this.LastDay <= DateTime.MaxValue );
-                Contract.Ensures( this.LastDay > this.FirstDay );
-                return this.lastDay;
+                Contract.Ensures( LastDay > DateTime.MinValue );
+                Contract.Ensures( LastDay <= DateTime.MaxValue );
+                Contract.Ensures( LastDay > FirstDay );
+                return lastDay;
             }
         }
 
@@ -89,7 +89,7 @@
         /// <returns>A <see cref="String"/> object.</returns>
         public override string ToString()
         {
-            return string.Format( CultureInfo.CurrentCulture, "FirstDay = {0:d}, LastDay = {1:d}", this.FirstDay, this.LastDay );
+            return string.Format( CultureInfo.CurrentCulture, "FirstDay = {0:d}, LastDay = {1:d}", FirstDay, LastDay );
         }
     }
 }

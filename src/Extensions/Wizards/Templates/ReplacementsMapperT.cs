@@ -28,16 +28,16 @@
         protected ReplacementsMapper( Project project )
         {
             this.project = project;
-            this.readers = new Lazy<IReadOnlyList<Tuple<string, Action<T, string>>>>( this.CreateReaders );
-            this.writers = new Lazy<IReadOnlyList<Tuple<string, Func<T, string>>>>( this.CreateWriters );
-            this.windowPhoneApp = this.project == null ? new Lazy<bool>( () => false ) : new Lazy<bool>( this.project.IsWindowsPhoneApp );
+            readers = new Lazy<IReadOnlyList<Tuple<string, Action<T, string>>>>( CreateReaders );
+            writers = new Lazy<IReadOnlyList<Tuple<string, Func<T, string>>>>( CreateWriters );
+            windowPhoneApp = this.project == null ? new Lazy<bool>( () => false ) : new Lazy<bool>( this.project.IsWindowsPhoneApp );
         }
 
         protected Project Project
         {
             get
             {
-                return this.project;
+                return project;
             }
         }
 
@@ -45,7 +45,7 @@
         {
             get
             {
-                return this.windowPhoneApp.Value;
+                return windowPhoneApp.Value;
             }
         }
 
@@ -58,7 +58,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IReadOnlyList<Tuple<string, Action<T, string>>>>() != null );
-                return this.readers.Value;
+                return readers.Value;
             }
         }
 
@@ -67,7 +67,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IReadOnlyList<Tuple<string, Func<T, string>>>>() != null );
-                return this.writers.Value;
+                return writers.Value;
             }
         }
 
@@ -107,7 +107,7 @@
             Contract.Requires( !string.IsNullOrEmpty( nameFormat ) );
             Contract.Requires( !string.IsNullOrEmpty( descriptionFormat ) );
             Contract.Ensures( Contract.Result<IEnumerable<TemplateOption>>() != null );
-            return this.StringsToTemplateOptions( ids, new Dictionary<string, string>(), nameFormat, descriptionFormat );
+            return StringsToTemplateOptions( ids, new Dictionary<string, string>(), nameFormat, descriptionFormat );
         }
 
         private Tuple<bool, bool> GetOptionStates( string id, IReadOnlyDictionary<string, string> states )
@@ -122,7 +122,7 @@
             string state;
 
             // get the key of the replacement from the state map or short-circuit if there is no mapping
-            if ( !states.TryGetValue( id, out key ) || !this.currentReplacements.TryGetValue( key, out state ) )
+            if ( !states.TryGetValue( id, out key ) || !currentReplacements.TryGetValue( key, out state ) )
                 return new Tuple<bool, bool>( enabled, optional );
 
             // if the value parses and is enabled, make the option required
@@ -158,7 +158,7 @@
                 key = descriptionFormat.FormatInvariant( id );
 
                 var description = res.GetString( key, culture ) ?? string.Empty;
-                var bools = this.GetOptionStates( id, states );
+                var bools = GetOptionStates( id, states );
                 var option = new TemplateOption( id, name, description )
                 {
                     IsEnabled = bools.Item1,
@@ -197,7 +197,7 @@
 
             string value;
 
-            if ( this.currentReplacements != null && this.currentReplacements.TryGetValue( key, out value ) )
+            if ( currentReplacements != null && currentReplacements.TryGetValue( key, out value ) )
                 return value ?? string.Empty;
 
             return string.Empty;
@@ -226,10 +226,10 @@
             Contract.Requires( replacements != null );
             Contract.Requires( model != null );
 
-            this.currentReplacements = replacements;
+            currentReplacements = replacements;
 
             // enumerate readers to control processing order
-            foreach ( var reader in this.Readers )
+            foreach ( var reader in Readers )
             {
                 string value;
 
@@ -237,7 +237,7 @@
                     reader.Item2( model, value );
             }
 
-            this.currentReplacements = null;
+            currentReplacements = null;
         }
 
         internal virtual void Map( T model, IDictionary<string, string> replacements )
@@ -245,16 +245,16 @@
             Contract.Requires( replacements != null );
             Contract.Requires( model != null );
 
-            this.currentReplacements = replacements;
+            currentReplacements = replacements;
 
             // enumerate writers to control processing order
-            foreach ( var writer in this.Writers )
+            foreach ( var writer in Writers )
             {
                 if ( replacements.ContainsKey( writer.Item1 ) )
                     replacements[writer.Item1] = writer.Item2( model );
             }
 
-            this.currentReplacements = null;
+            currentReplacements = null;
         }
     }
 }

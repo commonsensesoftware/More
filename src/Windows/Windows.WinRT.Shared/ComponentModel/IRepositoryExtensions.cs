@@ -27,8 +27,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static Task<PagedCollection<T>> PaginateAsync<T>( this IReadOnlyRepository<T> repository, PagingArguments pagingArgs ) where T : class
         {
-            Contract.Requires<ArgumentNullException>( repository != null, "repository" );
-            Contract.Requires<ArgumentNullException>( pagingArgs != null, "pagingArgs" );
+            Arg.NotNull( repository, nameof( repository ) );
+            Arg.NotNull( pagingArgs, nameof( pagingArgs ) );
             Contract.Ensures( Contract.Result<Task<PagedCollection<T>>>() != null );
 
             var pageIndex = pagingArgs.PageIndex;

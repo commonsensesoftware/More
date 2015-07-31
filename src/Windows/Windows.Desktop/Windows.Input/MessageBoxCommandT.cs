@@ -73,8 +73,7 @@
         public MessageBoxCommand( MessageBoxResult button, Action<T> executeMethod )
             : base( executeMethod )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( button != MessageBoxResult.None, "button" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
+            Arg.NotNull( executeMethod, nameof( executeMethod ) );
 
             this.button = button;
         }
@@ -88,9 +87,8 @@
         public MessageBoxCommand( MessageBoxResult button, Action<T> executeMethod, Func<T, bool> canExecuteMethod )
             : base( executeMethod, canExecuteMethod )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( button != MessageBoxResult.None, "button" );
-            Contract.Requires<ArgumentNullException>( executeMethod != null, "executeMethod" );
-            Contract.Requires<ArgumentNullException>( canExecuteMethod != null, "canExecuteMethod" );
+            Arg.NotNull( executeMethod, nameof( executeMethod ) );
+            Arg.NotNull( canExecuteMethod, nameof( canExecuteMethod ) );
 
             this.button = button;
         }
@@ -104,7 +102,7 @@
         {
             get
             {
-                return this.Button.ToString();
+                return Button.ToString();
             }
         }
 
@@ -116,8 +114,7 @@
         {
             get
             {
-                Contract.Ensures( this.button != MessageBoxResult.None );
-                return this.button;
+                return button;
             }
         }
 
@@ -126,16 +123,18 @@
         {
             get
             {
-                return this.Name;
+                return Name;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+
                 MessageBoxResult result;
 
-                if ( !Enum.TryParse<MessageBoxResult>( value, true, out result ) || result == MessageBoxResult.None )
+                if ( !Enum.TryParse( value, true, out result ) || result == MessageBoxResult.None )
                     throw new ArgumentOutOfRangeException( "value" );
 
-                this.button = result;
+                button = result;
             }
         }
 
@@ -144,11 +143,12 @@
         {
             get
             {
-                return this.description;
+                return description;
             }
             set
             {
-                this.description = value ?? string.Empty;
+                Arg.NotNull( value, nameof( value ) );
+                description = value ?? string.Empty;
             }
         }
 
@@ -157,10 +157,11 @@
         {
             get
             {
-                return this.Name;
+                return Name;
             }
             set
             {
+                Arg.NotNullOrEmpty( value, nameof( value ) );
                 ( (INamedCommand) this ).Name = value;
             }
         }

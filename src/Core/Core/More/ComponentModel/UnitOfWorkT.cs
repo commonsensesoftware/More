@@ -33,12 +33,12 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to comparer item equality.</param>
         protected UnitOfWork( IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
             this.comparer = comparer;
-            this.inserted = new HashSet<T>( comparer );
-            this.updated = new HashSet<T>( comparer );
-            this.deleted = new HashSet<T>( comparer );
+            inserted = new HashSet<T>( comparer );
+            updated = new HashSet<T>( comparer );
+            deleted = new HashSet<T>( comparer );
         }
 
         /// <summary>
@@ -49,8 +49,8 @@
         {
             get
             {
-                Contract.Ensures( this.comparer != null );
-                return this.comparer;
+                Contract.Ensures( comparer != null );
+                return comparer;
             }
         }
 
@@ -63,7 +63,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ICollection<T>>() != null );
-                return this.inserted;
+                return inserted;
             }
         }
 
@@ -76,7 +76,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ICollection<T>>() != null );
-                return this.updated;
+                return updated;
             }
         }
 
@@ -89,7 +89,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ICollection<T>>() != null );
-                return this.deleted;
+                return deleted;
             }
         }
 
@@ -98,14 +98,14 @@
         /// </summary>
         protected virtual void AcceptChanges()
         {
-            var hasChanges = this.HasPendingChanges;
+            var hasChanges = HasPendingChanges;
 
-            this.InsertedItems.Clear();
-            this.UpdatedItems.Clear();
-            this.DeletedItems.Clear();
+            InsertedItems.Clear();
+            UpdatedItems.Clear();
+            DeletedItems.Clear();
 
-            if ( this.HasPendingChanges != hasChanges )
-                this.OnPropertyChanged( "HasPendingChanges" );
+            if ( HasPendingChanges != hasChanges )
+                OnPropertyChanged( "HasPendingChanges" );
         }
 
         /// <summary>
@@ -123,7 +123,7 @@
         {
             get
             {
-                return this.InsertedItems.Any() || this.UpdatedItems.Any() || this.DeletedItems.Any();
+                return InsertedItems.Any() || UpdatedItems.Any() || DeletedItems.Any();
             }
         }
 
@@ -133,19 +133,19 @@
         /// <param name="item">The new  to register.</param>
         public virtual void RegisterNew( T item )
         {
-            Arg.NotNull( item, "item" );
+            Arg.NotNull( item, nameof( item ) );
 
-            var hasChanges = this.HasPendingChanges;
+            var hasChanges = HasPendingChanges;
 
-            if ( this.DeletedItems.Contains( item ) )
+            if ( DeletedItems.Contains( item ) )
                 throw new InvalidOperationException( ExceptionMessage.CannotRegisterRemovedItemAsNew );
-            else if ( this.UpdatedItems.Contains( item ) )
+            else if ( UpdatedItems.Contains( item ) )
                 throw new InvalidOperationException( ExceptionMessage.CannotRegisterExistingItemAsNew );
 
-            this.InsertedItems.Add( item );
+            InsertedItems.Add( item );
 
-            if ( this.HasPendingChanges != hasChanges )
-                this.OnPropertyChanged( "HasPendingChanges" );
+            if ( HasPendingChanges != hasChanges )
+                OnPropertyChanged( "HasPendingChanges" );
         }
 
         /// <summary>
@@ -154,15 +154,15 @@
         /// <param name="item">The changed <typeparamref name="T">item</typeparamref> to register.</param>
         public virtual void RegisterChanged( T item )
         {
-            Arg.NotNull( item, "item" );
+            Arg.NotNull( item, nameof( item ) );
 
-            var hasChanges = this.HasPendingChanges;
+            var hasChanges = HasPendingChanges;
 
-            if ( !this.InsertedItems.Contains( item ) && !this.DeletedItems.Contains( item ) )
-                this.UpdatedItems.Add( item );
+            if ( !InsertedItems.Contains( item ) && !DeletedItems.Contains( item ) )
+                UpdatedItems.Add( item );
 
-            if ( this.HasPendingChanges != hasChanges )
-                this.OnPropertyChanged( "HasPendingChanges" );
+            if ( HasPendingChanges != hasChanges )
+                OnPropertyChanged( "HasPendingChanges" );
         }
 
         /// <summary>
@@ -171,18 +171,18 @@
         /// <param name="item">The removed <typeparamref name="T">item</typeparamref> to register.</param>
         public virtual void RegisterRemoved( T item )
         {
-            Arg.NotNull( item, "item" );
+            Arg.NotNull( item, nameof( item ) );
 
-            var hasChanges = this.HasPendingChanges;
-            var added = this.InsertedItems.Remove( item );
+            var hasChanges = HasPendingChanges;
+            var added = InsertedItems.Remove( item );
 
-            this.UpdatedItems.Remove( item );
+            UpdatedItems.Remove( item );
 
-            if ( !added && !this.IsNew( item ) )
-                this.DeletedItems.Add( item );
+            if ( !added && !IsNew( item ) )
+                DeletedItems.Add( item );
 
-            if ( this.HasPendingChanges != hasChanges )
-                this.OnPropertyChanged( "HasPendingChanges" );
+            if ( HasPendingChanges != hasChanges )
+                OnPropertyChanged( "HasPendingChanges" );
         }
 
         /// <summary>
@@ -191,16 +191,16 @@
         /// <param name="item">The <typeparamref name="T">item</typeparamref> to unregister.</param>
         public virtual void Unregister( T item )
         {
-            Arg.NotNull( item, "item" );
+            Arg.NotNull( item, nameof( item ) );
 
-            var hasChanges = this.HasPendingChanges;
+            var hasChanges = HasPendingChanges;
 
-            this.InsertedItems.Remove( item );
-            this.UpdatedItems.Remove( item );
-            this.DeletedItems.Remove( item );
+            InsertedItems.Remove( item );
+            UpdatedItems.Remove( item );
+            DeletedItems.Remove( item );
 
-            if ( this.HasPendingChanges != hasChanges )
-                this.OnPropertyChanged( "HasPendingChanges" );
+            if ( HasPendingChanges != hasChanges )
+                OnPropertyChanged( "HasPendingChanges" );
         }
 
         /// <summary>
@@ -208,7 +208,7 @@
         /// </summary>
         public virtual void Rollback()
         {
-            this.AcceptChanges();
+            AcceptChanges();
         }
 
         /// <summary>

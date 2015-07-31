@@ -54,7 +54,7 @@
         /// this parameter is null or empty, then the <typeparamref name="T">default shell view type</typeparamref> is assumed.</param>
         protected ShowShellView( string shellViewTypeName )
         {
-            this.ShellViewTypeName = shellViewTypeName;
+            ShellViewTypeName = shellViewTypeName;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@
             Contract.Requires( serviceProvider != null );
             Contract.Ensures( Contract.Result<Type>() != null );
 
-            var candidateType = this.ShellViewTypeName;
+            var candidateType = ShellViewTypeName;
             Type shellViewType = null;
 
             // determine whether a specific shell is being specified
@@ -145,11 +145,11 @@
             if ( shell == null )
                 throw new HostException( ExceptionMessage.ShellViewResolutionFailed.FormatDefault( shellViewType ) );
 
-            if ( !string.IsNullOrEmpty( this.Language ) )
-                shell.Language = this.Language;
+            if ( !string.IsNullOrEmpty( Language ) )
+                shell.Language = Language;
 
-            if ( !string.IsNullOrEmpty( this.FlowDirection ) )
-                shell.FlowDirection = this.FlowDirection;
+            if ( !string.IsNullOrEmpty( FlowDirection ) )
+                shell.FlowDirection = FlowDirection;
 
             shell.Show();
         }
@@ -200,19 +200,21 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected override void OnExecute( IServiceProvider serviceProvider )
         {
-            var shellViewType = this.GetShellViewType( serviceProvider );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+
+            var shellViewType = GetShellViewType( serviceProvider );
 
             try
             {
-                this.Show( serviceProvider, shellViewType );
+                Show( serviceProvider, shellViewType );
             }
             catch ( Exception ex )
             {
-                this.OnUnhandledException( serviceProvider, ex );
+                OnUnhandledException( serviceProvider, ex );
                 return;
             }
 
-            this.IsCompleted = true;
+            IsCompleted = true;
         }
     }
 }

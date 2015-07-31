@@ -22,7 +22,7 @@
         public NavigateInteraction( string title )
             : base( title )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, nameof( title ) );
         }
 
         /// <summary>
@@ -33,7 +33,7 @@
         public NavigateInteraction( string title, object content )
             : base( title, content )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, nameof( title ) );
         }
 
         /// <summary>

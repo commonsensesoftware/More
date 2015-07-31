@@ -24,7 +24,7 @@
             if ( handler == null )
                 return null;
 
-            return ( n, s, e ) => this.context.Post( state => handler( n, s, e ), null );
+            return ( n, s, e ) => context.Post( state => handler( n, s, e ), null );
         }
     }
 }

@@ -40,7 +40,7 @@
 
         public override bool IsSatisfiedBy( Type item )
         {
-            return item == null ? false : ImplementsInterface( item, this.type );
+            return item == null ? false : ImplementsInterface( item, type );
         }
     }
 }

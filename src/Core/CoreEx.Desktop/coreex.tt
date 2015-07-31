@@ -34,14 +34,14 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
+  <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
 
-  <file src="..\CoreEx.Windows\$bin$\$id$.dll" target="lib\win81" />
-  <file src="..\CoreEx.Windows\$bin$\$id$.xml" target="lib\win81" />
-  <file src="..\CoreEx.Windows\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
+  <file src="..\CoreEx.Windows\bin\$configuration$\$id$.dll" target="lib\win81" />
+  <file src="..\CoreEx.Windows\bin\$configuration$\$id$.xml" target="lib\win81" />
+  <file src="..\CoreEx.Windows\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
 
-  <file src="..\CoreEx.Phone\$bin$\$id$.dll" target="lib\portable-wp81+wpa81" />
-  <file src="..\CoreEx.Phone\$bin$\$id$.xml" target="lib\portable-wp81+wpa81" />
-  <file src="..\CoreEx.Phone\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
+  <file src="..\CoreEx.Phone\bin\$configuration$\$id$.dll" target="lib\portable-wp81+wpa81" />
+  <file src="..\CoreEx.Phone\bin\$configuration$\$id$.xml" target="lib\portable-wp81+wpa81" />
+  <file src="..\CoreEx.Phone\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
  </files>
 </package>

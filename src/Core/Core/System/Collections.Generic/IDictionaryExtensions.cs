@@ -23,7 +23,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static IReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>( this IDictionary<TKey, TValue> dictionary )
         {
-            Arg.NotNull( dictionary, "dictionary" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
             Contract.Ensures( Contract.Result<IReadOnlyDictionary<TKey, TValue>>() != null );
 
             var readOnlyDictionary = dictionary as IReadOnlyDictionary<TKey, TValue>;
@@ -61,8 +61,8 @@
         [SuppressMessage( "Microsoft.StyleCop.CSharp.DocumentationRules", "SA1644:DocumentationHeadersMustNotContainBlankLines", Justification = "Example code often has blank lines." )]
         public static TValue GetOrAdd<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> newValue )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( newValue, "newValue" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( newValue, nameof( newValue ) );
 
             TValue value;
 
@@ -105,8 +105,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Skip<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, params TKey[] keys )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( keys, "keys" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( keys, nameof( keys ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Skip( keys, EqualityComparer<TKey>.Default );
         }
@@ -143,9 +143,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Skip<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer, params TKey[] keys )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( comparer, "comparer" );
-            Arg.NotNull( keys, "keys" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
+            Arg.NotNull( keys, nameof( keys ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Skip( keys, comparer );
         }
@@ -180,8 +180,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Skip<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IEnumerable<TKey> keys )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( keys, "keys" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( keys, nameof( keys ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Skip( keys, EqualityComparer<TKey>.Default );
         }
@@ -218,9 +218,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Skip<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IEnumerable<TKey> keys, IEqualityComparer<TKey> comparer )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( keys, "keys" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( keys, nameof( keys ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
 
             var keyList = keys.ToArray();
@@ -270,8 +270,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Take<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, params TKey[] keys )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( keys, "keys" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( keys, nameof( keys ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Take( keys, EqualityComparer<TKey>.Default );
         }
@@ -308,9 +308,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Take<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer, params TKey[] keys )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( keys, "keys" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( keys, nameof( keys ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Take( keys, comparer );
         }
@@ -345,8 +345,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Take<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IEnumerable<TKey> keys )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( keys, "keys" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( keys, nameof( keys ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Take( keys, EqualityComparer<TKey>.Default );
         }
@@ -383,9 +383,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Take<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IEnumerable<TKey> keys, IEqualityComparer<TKey> comparer )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( keys, "keys" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( keys, nameof( keys ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
 
             var taken = new Dictionary<TKey, TValue>( comparer );
@@ -439,8 +439,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Union<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IDictionary<TKey, TValue> otherDictionary )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( otherDictionary, "otherDictionary" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( otherDictionary, nameof( otherDictionary ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Union( otherDictionary, EqualityComparer<TKey>.Default );
         }
@@ -485,9 +485,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public static IDictionary<TKey, TValue> Union<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, IDictionary<TKey, TValue> otherDictionary, IEqualityComparer<TKey> comparer )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( otherDictionary, "otherDictionary" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( otherDictionary, nameof( otherDictionary ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
 
             var union = new Dictionary<TKey, TValue>( dictionary, comparer );
@@ -534,10 +534,10 @@
         [SuppressMessage( "Microsoft.StyleCop.CSharp.DocumentationRules", "SA1644:DocumentationHeadersMustNotContainBlankLines", Justification = "Example code often has blank lines." )]
         public static IDictionary<TKey, TValue> Reduce<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, TKey key1, TKey key2, TKey newKey )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( key1, "key1" );
-            Arg.NotNull( key2, "key2" );
-            Arg.NotNull( newKey, "newKey" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( key1, nameof( key1 ) );
+            Arg.NotNull( key2, nameof( key2 ) );
+            Arg.NotNull( newKey, nameof( newKey ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
             return dictionary.Reduce( key1, key2, newKey, ( v1, v2 ) => v1 );
         }
@@ -576,11 +576,11 @@
         [SuppressMessage( "Microsoft.StyleCop.CSharp.DocumentationRules", "SA1644:DocumentationHeadersMustNotContainBlankLines", Justification = "Example code often has blank lines." )]
         public static IDictionary<TKey, TValue> Reduce<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, TKey key1, TKey key2, TKey newKey, Func<TValue, TValue, TValue> selector )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            Arg.NotNull( key1, "key1" );
-            Arg.NotNull( key2, "key2" );
-            Arg.NotNull( newKey, "newKey" );
-            Arg.NotNull( selector, "selector" );
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            Arg.NotNull( key1, nameof( key1 ) );
+            Arg.NotNull( key2, nameof( key2 ) );
+            Arg.NotNull( newKey, nameof( newKey ) );
+            Arg.NotNull( selector, nameof( selector ) );
             Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
 
             // capture new value

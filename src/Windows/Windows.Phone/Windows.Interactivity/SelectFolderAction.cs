@@ -22,14 +22,14 @@
 
             dialog.ContinuationData.AddRange( selectFolder.ContinuationData );
             dialog.FileTypeFilter.AddRange( selectFolder.FileTypeFilter );
-            dialog.SuggestedStartLocation = this.SuggestedStartLocation;
-            dialog.ViewMode = this.ViewMode;
+            dialog.SuggestedStartLocation = SuggestedStartLocation;
+            dialog.ViewMode = ViewMode;
 
             if ( dialog.FileTypeFilter.Count == 0 )
                 dialog.FileTypeFilter.Add( "*" );
 
-            if ( !string.IsNullOrEmpty( this.SettingsIdentifier ) )
-                dialog.SettingsIdentifier = this.SettingsIdentifier;
+            if ( !string.IsNullOrEmpty( SettingsIdentifier ) )
+                dialog.SettingsIdentifier = SettingsIdentifier;
 
             if ( commitButton != null )
                 dialog.CommitButtonText = commitButton.Name;

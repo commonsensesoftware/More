@@ -26,7 +26,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated with a code contract" )]
         public virtual IValidationBuilder<T, TValue> Property<TValue>( Expression<Func<T, TValue>> propertyExpression )
         {
-            Arg.NotNull( propertyExpression, "propertyExpression" );
+            Arg.NotNull( propertyExpression, nameof( propertyExpression ) );
 
             var expression = propertyExpression.Body as MemberExpression;
 
@@ -38,26 +38,26 @@
 
             var name = expression.Member.Name;
 
-            if ( this.validators.Contains( name ) )
-                return (IValidationBuilder<T, TValue>) this.validators[name];
+            if ( validators.Contains( name ) )
+                return (IValidationBuilder<T, TValue>) validators[name];
 
             var validator = new PropertyValidator<T, TValue>( propertyExpression, name );
 
-            this.validators.Add( validator );
+            validators.Add( validator );
 
             return validator;
         }
 
         IReadOnlyList<IValidationResult> IObjectValidator.ValidateObject( object instance )
         {
-            Arg.NotNull( instance, "instance" );
-            return this.ValidateObject( (T) instance );
+            Arg.NotNull( instance, nameof( instance ) );
+            return ValidateObject( (T) instance );
         }
 
         IReadOnlyList<IValidationResult> IObjectValidator.ValidateObject( object instance, IEnumerable<string> propertyNames )
         {
-            Arg.NotNull( instance, "instance" );
-            return this.ValidateObject( (T) instance, propertyNames );
+            Arg.NotNull( instance, nameof( instance ) );
+            return ValidateObject( (T) instance, propertyNames );
         }
 
         /// <summary>
@@ -67,8 +67,8 @@
         /// <returns>A <see cref="IReadOnlyList{T}">read-only list</see> of <see cref="IValidationResult">validation results</see>.</returns>
         public virtual IReadOnlyList<IValidationResult> ValidateObject( T instance )
         {
-            Arg.NotNull( instance, "instance" );
-            return this.validators.SelectMany( v => v.ValidateObject( instance ) ).ToArray();
+            Arg.NotNull( instance, nameof( instance ) );
+            return validators.SelectMany( v => v.ValidateObject( instance ) ).ToArray();
         }
 
         /// <summary>
@@ -80,17 +80,17 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated with a code contract" )]
         public virtual IReadOnlyList<IValidationResult> ValidateObject( T instance, IEnumerable<string> propertyNames )
         {
-            Arg.NotNull( instance, "instance" );
-            Arg.NotNull( propertyNames, "propertyNames" );
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( propertyNames, nameof( propertyNames ) );
 
             var results = new List<IValidationResult>();
 
             foreach ( var propertyName in propertyNames )
             {
-                if ( !this.validators.Contains( propertyName ) )
+                if ( !validators.Contains( propertyName ) )
                     continue;
 
-                var validator = this.validators[propertyName];
+                var validator = validators[propertyName];
                 results.AddRange( validator.ValidateObject( instance ) );
             }
 
@@ -106,12 +106,12 @@
         /// <returns>A <see cref="IReadOnlyList{T}">read-only list</see> of <see cref="IValidationResult">validation results</see>.</returns>
         public virtual IReadOnlyList<IValidationResult> ValidateProperty( string propertyName, object value )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
-            if ( !this.validators.Contains( propertyName ) )
+            if ( !validators.Contains( propertyName ) )
                 return new IValidationResult[0];
 
-            var validator = this.validators[propertyName];
+            var validator = validators[propertyName];
             return validator.ValidateValue( value );
         }
     }

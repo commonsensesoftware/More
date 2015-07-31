@@ -10,6 +10,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Stream Generate( CodeGeneratorContext context )
         {
+            Arg.NotNull( context, nameof( context ) );
+
             var extension = Path.GetExtension( context.FilePath );
             var message = SR.CodeGeneratorFileTypeNotSupported.FormatDefault( extension );
             context.Progress.ReportWarning( message );

@@ -28,7 +28,7 @@
         /// in the year.</param>
         public FiscalYear( IDictionary<int, FiscalMonth> months )
         {
-            Arg.NotNull( months, "months" );
+            Arg.NotNull( months, nameof( months ) );
             this.months.AddRange( months );
         }
 
@@ -40,7 +40,7 @@
         {
             get
             {
-                return !this.Months.ContainsKey( 1 ) ? DateTime.Today : this.Months[1].FirstDay;
+                return !Months.ContainsKey( 1 ) ? DateTime.Today : Months[1].FirstDay;
             }
         }
 
@@ -53,8 +53,8 @@
             get
             {
                 // the key should be 12 
-                var key = this.months.Count;
-                return !this.Months.ContainsKey( key ) ? DateTime.Today : this.Months[key].LastDay;
+                var key = months.Count;
+                return !Months.ContainsKey( key ) ? DateTime.Today : Months[key].LastDay;
             }
         }
 
@@ -67,7 +67,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                return ( (int) Math.Floor( this.LastDay.Subtract( this.FirstDay ).TotalDays ) ) + 1;
+                return ( (int) Math.Floor( LastDay.Subtract( FirstDay ).TotalDays ) ) + 1;
             }
         }
 
@@ -80,7 +80,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IDictionary<int, FiscalMonth>>() != null );
-                return this.months;
+                return months;
             }
         }
 
@@ -90,7 +90,7 @@
         /// <returns>A <see cref="String"/> object.</returns>
         public override string ToString()
         {
-            return string.Format( CultureInfo.CurrentCulture, "FirstDay = {0:d}, LastDay = {1:d}", this.FirstDay, this.LastDay );
+            return string.Format( CultureInfo.CurrentCulture, "FirstDay = {0:d}, LastDay = {1:d}", FirstDay, LastDay );
         }
     }
 }

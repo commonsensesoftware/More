@@ -46,20 +46,20 @@
 #endif
             if ( value == null )
             {
-                if ( ( value = this.DefaultNullValue ) == null )
+                if ( ( value = DefaultNullValue ) == null )
                     return null;
             }
 
             var formattable = value as IFormattable;
 
             if ( formattable != null )
-                return formattable.ToString( this.Format, culture );
+                return formattable.ToString( Format, culture );
             
             if ( value.GetType() == targetType )
                 return value;
             
-            if ( !string.IsNullOrEmpty( this.Format ) )
-                return string.Format( culture, this.Format, value );
+            if ( !string.IsNullOrEmpty( Format ) )
+                return string.Format( culture, Format, value );
 
             return ( value ?? string.Empty ).ToString();
         }

@@ -23,8 +23,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static void MergeContent( this IContentManager contentManager, object content )
         {
-            Arg.NotNull( contentManager, "contentManager" );
-            Arg.NotNull( content, "content" );
+            Arg.NotNull( contentManager, nameof( contentManager ) );
+            Arg.NotNull( content, nameof( content ) );
 
             if ( !contentManager.Content.Contains( content ) )
                 contentManager.AddToContent( content );

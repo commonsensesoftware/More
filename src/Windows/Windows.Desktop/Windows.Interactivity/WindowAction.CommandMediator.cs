@@ -25,13 +25,13 @@
                 Contract.Requires( window != null );
 
                 this.window = window;
-                this.window.Closing += this.OnWindowClosing;
+                this.window.Closing += OnWindowClosing;
 
                 if ( interaction == null )
                     return;
 
-                this.commands = interaction.Commands;
-                this.commands.ForEach( c => c.Executed += this.OnExecuted );
+                commands = interaction.Commands;
+                commands.ForEach( c => c.Executed += OnExecuted );
 
                 if ( !bindCancelToClose )
                     return;
@@ -52,29 +52,29 @@
 
             private void OnWindowClosing( object sender, CancelEventArgs e )
             {
-                this.closing = !e.Cancel;
+                closing = !e.Cancel;
             }
 
             private void OnExecuted( object sender, EventArgs e )
             {
-                if ( this.closing )
+                if ( closing )
                     return;
 
-                this.closing = true;
-                this.window.Close();
-                this.closing = false;
+                closing = true;
+                window.Close();
+                closing = false;
             }
 
             public void Dispose()
             {
-                if ( this.commands != null )
-                    this.commands.ForEach( c => c.Executed -= this.OnExecuted );
+                if ( commands != null )
+                    commands.ForEach( c => c.Executed -= OnExecuted );
 
-                if ( this.window != null )
-                    this.window.Closing -= this.OnWindowClosing;
+                if ( window != null )
+                    window.Closing -= OnWindowClosing;
 
-                this.commands = null;
-                this.window = null;
+                commands = null;
+                window = null;
                 GC.SuppressFinalize( this );
             }
         }

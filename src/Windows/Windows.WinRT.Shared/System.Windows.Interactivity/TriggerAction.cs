@@ -41,7 +41,7 @@
 
         private async void ExecuteAsFireAndForget( object sender, object parameter )
         {
-            await this.ExecuteAsync( sender, parameter );
+            await ExecuteAsync( sender, parameter );
         }
 
         /// <summary>
@@ -53,7 +53,7 @@
         public virtual object Execute( object sender, object parameter )
         {
             // because IAction.Execute has a return value, but is not designed for async; just return null
-            this.ExecuteAsFireAndForget( sender, parameter );
+            ExecuteAsFireAndForget( sender, parameter );
             return null;
         }
     }

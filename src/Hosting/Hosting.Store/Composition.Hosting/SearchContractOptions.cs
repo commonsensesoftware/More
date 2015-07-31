@@ -12,9 +12,9 @@
         /// </summary>
         public SearchContractOptions()
         {
-            this.PlaceholderText = string.Empty;
-            this.SearchHistoryContext = string.Empty;
-            this.SearchHistoryEnabled = true;
+            PlaceholderText = string.Empty;
+            SearchHistoryContext = string.Empty;
+            SearchHistoryEnabled = true;
         }
 
         /// <summary>

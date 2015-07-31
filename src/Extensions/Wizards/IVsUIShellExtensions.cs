@@ -33,9 +33,9 @@
         /// <param name="text">The message box text.</param>
         public static void Show( this IVsUIShell shell, string title, string text )
         {
-            Contract.Requires<ArgumentNullException>( shell != null, "shell" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( title ), "title" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( text ), "text" );
+            Arg.NotNull( shell, nameof( shell ) );
+            Arg.NotNullOrEmpty( title, nameof( title ) );
+            Arg.NotNullOrEmpty( text, nameof( text ) );
             shell.ShowMessageBox( title, text, OLEMSGICON.OLEMSGICON_NOICON );
         }
 
@@ -47,9 +47,9 @@
         /// <param name="text">The message box text.</param>
         public static void ShowInformation( this IVsUIShell shell, string title, string text )
         {
-            Contract.Requires<ArgumentNullException>( shell != null, "shell" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( title ), "title" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( text ), "text" );
+            Arg.NotNull( shell, nameof( shell ) );
+            Arg.NotNullOrEmpty( title, nameof( title ) );
+            Arg.NotNullOrEmpty( text, nameof( text ) );
             shell.ShowMessageBox( title, text, OLEMSGICON.OLEMSGICON_INFO );
         }
 
@@ -61,9 +61,9 @@
         /// <param name="text">The message box text.</param>
         public static void ShowError( this IVsUIShell shell, string title, string text )
         {
-            Contract.Requires<ArgumentNullException>( shell != null, "shell" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( title ), "title" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( text ), "text" );
+            Arg.NotNull( shell, nameof( shell ) );
+            Arg.NotNullOrEmpty( title, nameof( title ) );
+            Arg.NotNullOrEmpty( text, nameof( text ) );
             shell.ShowMessageBox( title, text, OLEMSGICON.OLEMSGICON_CRITICAL );
         }
     }

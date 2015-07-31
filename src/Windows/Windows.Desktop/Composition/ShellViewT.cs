@@ -40,17 +40,17 @@
         {
             get
             {
-                if ( this.Language == null )
+                if ( Language == null )
                     return null;
 
-                return this.Language.IetfLanguageTag;
+                return Language.IetfLanguageTag;
             }
             set
             {
                 if ( string.IsNullOrEmpty( value ) )
-                    this.Language = null;
+                    Language = null;
                 else
-                    this.Language = XmlLanguage.GetLanguage( value );
+                    Language = XmlLanguage.GetLanguage( value );
             }
         }
 
@@ -58,14 +58,14 @@
         {
             get
             {
-                return this.FlowDirection.ToString();
+                return FlowDirection.ToString();
             }
             set
             {
                 if ( string.IsNullOrEmpty( value ) )
-                    this.FlowDirection = new FlowDirection();
+                    FlowDirection = new FlowDirection();
                 else
-                    this.FlowDirection = (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
+                    FlowDirection = (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
             }
         }
     }

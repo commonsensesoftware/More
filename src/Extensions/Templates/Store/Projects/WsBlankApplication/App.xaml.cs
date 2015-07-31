@@ -23,11 +23,11 @@
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 #if DEBUG
             if ( Debugger.IsAttached )
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
         }

@@ -21,7 +21,7 @@
         {
             get
             {
-                return this.file;
+                return file;
             }
         }
 
@@ -29,7 +29,7 @@
         {
             get
             {
-                return this.file.ContentType;
+                return file.ContentType;
             }
         }
 
@@ -37,56 +37,56 @@
         {
             get
             {
-                return this.file.FileType;
+                return file.FileType;
             }
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
         {
-            Arg.NotNull( fileToReplace, "fileToReplace" );
-            return this.file.CopyAndReplaceAsync( fileToReplace.AsFile() ).AsTask();
+            Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
+            return file.CopyAndReplaceAsync( fileToReplace.AsFile() ).AsTask();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public async Task<IFile> CopyAsync( IFolder destinationFolder, string desiredNewName )
         {
-            Arg.NotNull( destinationFolder, "destinationFolder" );
-            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
-            var copy = await this.file.CopyAsync( destinationFolder.AsFolder(), desiredNewName );
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
+            Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
+            var copy = await file.CopyAsync( destinationFolder.AsFolder(), desiredNewName );
             return new StorageFileAdapter( copy );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task MoveAndReplaceAsync( IFile fileToReplace )
         {
-            Arg.NotNull( fileToReplace, "fileToReplace" );
-            return this.file.MoveAndReplaceAsync( fileToReplace.AsFile() ).AsTask();
+            Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
+            return file.MoveAndReplaceAsync( fileToReplace.AsFile() ).AsTask();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task MoveAsync( IFolder destinationFolder, string desiredNewName )
         {
-            Arg.NotNull( destinationFolder, "destinationFolder" );
-            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
-            return this.file.MoveAsync( destinationFolder.AsFolder(), desiredNewName ).AsTask();
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
+            Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
+            return file.MoveAsync( destinationFolder.AsFolder(), desiredNewName ).AsTask();
         }
 
         public Task<Stream> OpenReadAsync()
         {
-            return this.file.OpenStreamForReadAsync();
+            return file.OpenStreamForReadAsync();
         }
 
         public Task<Stream> OpenReadWriteAsync()
         {
-            return this.file.OpenStreamForWriteAsync();
+            return file.OpenStreamForWriteAsync();
         }
 
         public DateTimeOffset DateCreated
         {
             get
             {
-                return this.file.DateCreated;
+                return file.DateCreated;
             }
         }
 
@@ -94,7 +94,7 @@
         {
             get
             {
-                return this.file.Name;
+                return file.Name;
             }
         }
 
@@ -102,45 +102,45 @@
         {
             get
             {
-                return this.file.Path;
+                return file.Path;
             }
         }
 
         public Task DeleteAsync()
         {
-            return this.file.DeleteAsync().AsTask();
+            return file.DeleteAsync().AsTask();
         }
 
         public async Task<IBasicProperties> GetBasicPropertiesAsync()
         {
-            var properties = await this.file.GetBasicPropertiesAsync();
+            var properties = await file.GetBasicPropertiesAsync();
             return new BasicPropertiesAdapter( properties );
         }
 
         public Task RenameAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
-            return this.file.RenameAsync( desiredName ).AsTask();
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
+            return file.RenameAsync( desiredName ).AsTask();
         }
 
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IPlatformStorageItem<StorageFile> );
+            return Equals( obj as IPlatformStorageItem<StorageFile> );
         }
 
         public bool Equals( IStorageItem other )
         {
-            return this.Equals( other as IPlatformStorageItem<StorageFile> );
+            return Equals( other as IPlatformStorageItem<StorageFile> );
         }
 
         private bool Equals( IPlatformStorageItem<StorageFile> other )
         {
-            return other == null ? false : this.file.Equals( other.NativeStorageItem );
+            return other == null ? false : file.Equals( other.NativeStorageItem );
         }
 
         public override int GetHashCode()
         {
-            return this.file.GetHashCode();
+            return file.GetHashCode();
         }
     }
 }

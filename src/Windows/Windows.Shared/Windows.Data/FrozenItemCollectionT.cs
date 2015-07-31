@@ -22,8 +22,8 @@
 
             ~NonFrozenItemList()
             {
-                if ( this.owner != null )
-                    this.owner.CollectionChanged -= this.OnBubbleCollectionChanged;
+                if ( owner != null )
+                    owner.CollectionChanged -= OnBubbleCollectionChanged;
             }
 
             internal NonFrozenItemList( FrozenItemCollection<T> owner )
@@ -31,18 +31,18 @@
                 Contract.Requires( owner != null, "owner" );
 
                 this.owner = owner;
-                this.owner.CollectionChanged += this.OnBubbleCollectionChanged;
+                this.owner.CollectionChanged += OnBubbleCollectionChanged;
             }
             private int ToActualIndex( int index )
             {
                 // index can equal count during an insert
                 Contract.Requires( index >= 0, "index" );
-                Contract.Requires( index <= this.Count, "index" );
+                Contract.Requires( index <= Count, "index" );
                 Contract.Ensures( index >= 0 );
-                Contract.Ensures( index <= this.Count );
+                Contract.Ensures( index <= Count );
 
-                if ( this.owner.FrozenItemPosition == FrozenItemPosition.Beginning )
-                    return index + this.owner.FrozenItems.Count;
+                if ( owner.FrozenItemPosition == FrozenItemPosition.Beginning )
+                    return index + owner.FrozenItems.Count;
 
                 return index;
             }
@@ -51,19 +51,19 @@
             {
                 // index can equal count during an insert
                 Contract.Requires( index >= 0, "index" );
-                Contract.Requires( index <= this.owner.Count, "index" );
+                Contract.Requires( index <= owner.Count, "index" );
                 Contract.Ensures( index >= 0 );
-                Contract.Ensures( index <= this.owner.Count );
+                Contract.Ensures( index <= owner.Count );
 
-                if ( this.owner.FrozenItemPosition == FrozenItemPosition.Beginning )
-                    return Math.Max( index - this.owner.FrozenItems.Count, 0 );
+                if ( owner.FrozenItemPosition == FrozenItemPosition.Beginning )
+                    return Math.Max( index - owner.FrozenItems.Count, 0 );
 
                 return index;
             }
 
             private void OnPropertyChanged( string propertyName )
             {
-                var handler = this.PropertyChanged;
+                var handler = PropertyChanged;
 
                 if ( handler != null )
                     handler( this, new PropertyChangedEventArgs( propertyName ) );
@@ -71,14 +71,14 @@
 
             private void OnCollectionChanged( NotifyCollectionChangedAction action )
             {
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( action ) );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( action ) );
             }
 
             private void OnCollectionChanged( NotifyCollectionChangedAction action, T item, int index )
             {
                 Contract.Requires( item != null, "item" );
                 Contract.Requires( index >= 0, "index" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( action, item, index ) );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( action, item, index ) );
             }
 
             [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "newItem", Justification = "False positive" )]
@@ -88,61 +88,58 @@
                 Contract.Requires( newItem != null, "newItem" );
                 Contract.Requires( oldItem != null, "oldItem" );
                 Contract.Requires( index >= 0, "index" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( action, newItem, oldItem, index ) );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( action, newItem, oldItem, index ) );
             }
 
             private void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
             {
                 Contract.Requires( e != null, "e" );
 
-                var handler = this.CollectionChanged;
-
-                if ( handler != null )
-                    handler( this, e );
+                CollectionChanged?.Invoke( this, e );
             }
 
             private void OnOwnerItemsAdded( NotifyCollectionChangedEventArgs e )
             {
                 Contract.Requires( e != null );
 
-                var index = this.ToRelativeIndex( e.NewStartingIndex );
+                var index = ToRelativeIndex( e.NewStartingIndex );
 
-                if ( index >= this.Count || e.NewItems == null )
+                if ( index >= Count || e.NewItems == null )
                     return;
 
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
                 var args = new NotifyCollectionChangedEventArgs( e.Action, e.NewItems, index );
-                this.OnCollectionChanged( args );
+                OnCollectionChanged( args );
             }
 
             private void OnOwnerItemsRemoved( NotifyCollectionChangedEventArgs e )
             {
                 Contract.Requires( e != null );
 
-                var index = this.ToRelativeIndex( e.OldStartingIndex );
+                var index = ToRelativeIndex( e.OldStartingIndex );
 
-                if ( e.OldItems == null || index > ( this.Count + e.OldItems.Count ) )
+                if ( e.OldItems == null || index > ( Count + e.OldItems.Count ) )
                     return;
 
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
                 var args = new NotifyCollectionChangedEventArgs( e.Action, e.OldItems, index );
-                this.OnCollectionChanged( args );
+                OnCollectionChanged( args );
             }
 
             private void OnOwnerItemsReplaced( NotifyCollectionChangedEventArgs e )
             {
                 Contract.Requires( e != null );
 
-                var index = this.ToRelativeIndex( e.NewStartingIndex );
+                var index = ToRelativeIndex( e.NewStartingIndex );
 
-                if ( index > this.Count || e.NewItems == null || e.OldItems == null || e.NewItems.Count != e.OldItems.Count )
+                if ( index > Count || e.NewItems == null || e.OldItems == null || e.NewItems.Count != e.OldItems.Count )
                     return;
 
-                this.OnPropertyChanged( "Item[]" );
+                OnPropertyChanged( "Item[]" );
                 var args = new NotifyCollectionChangedEventArgs( e.Action, e.NewItems, e.OldItems, index );
-                this.OnCollectionChanged( args );
+                OnCollectionChanged( args );
             }
 
             private void OnBubbleCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -153,39 +150,39 @@
                 {
                     case NotifyCollectionChangedAction.Add:
                         {
-                            this.OnOwnerItemsAdded( e );
+                            OnOwnerItemsAdded( e );
                             break;
                         }
                     case NotifyCollectionChangedAction.Move:
                         {
-                            this.OnPropertyChanged( "Item[]" );
-                            this.OnCollectionChanged( e );
+                            OnPropertyChanged( "Item[]" );
+                            OnCollectionChanged( e );
                             break;
                         }
                     case NotifyCollectionChangedAction.Remove:
                         {
-                            this.OnOwnerItemsRemoved( e );
+                            OnOwnerItemsRemoved( e );
                             break;
                         }
 
                     case NotifyCollectionChangedAction.Replace:
                         {
-                            this.OnOwnerItemsReplaced( e );
+                            OnOwnerItemsReplaced( e );
                             break;
                         }
                     case NotifyCollectionChangedAction.Reset:
                         {
-                            this.OnPropertyChanged( "Count" );
-                            this.OnPropertyChanged( "Item[]" );
-                            this.OnCollectionChanged( e );
+                            OnPropertyChanged( "Count" );
+                            OnPropertyChanged( "Item[]" );
+                            OnCollectionChanged( e );
                             break;
                         }
                 }
             }
             public int IndexOf( T item )
             {
-                var ordinalIndex = this.owner.IndexOf( item );
-                var index = ordinalIndex < 0 ? ordinalIndex : this.ToRelativeIndex( ordinalIndex );
+                var ordinalIndex = owner.IndexOf( item );
+                var index = ordinalIndex < 0 ? ordinalIndex : ToRelativeIndex( ordinalIndex );
                 return index;
             }
 
@@ -203,8 +200,8 @@
             {
                 get
                 {
-                    var actualIndex = this.ToActualIndex( index );
-                    return this.owner[actualIndex];
+                    var actualIndex = ToActualIndex( index );
+                    return owner[actualIndex];
                 }
                 set
                 {
@@ -232,8 +229,8 @@
 
             public bool Contains( T item )
             {
-                var index = this.IndexOf( item );
-                var found = index >= 0 && index < this.Count;
+                var index = IndexOf( item );
+                var found = index >= 0 && index < Count;
                 return found;
             }
 
@@ -247,7 +244,7 @@
             {
                 get
                 {
-                    return Math.Max( this.owner.Count - this.owner.FrozenItems.Count, 0 );
+                    return Math.Max( owner.Count - owner.FrozenItems.Count, 0 );
                 }
             }
 
@@ -265,14 +262,14 @@
             }
             public IEnumerator<T> GetEnumerator()
             {
-                if ( this.owner.FrozenItemPosition == FrozenItemPosition.End )
-                    return this.owner.Take( this.Count ).GetEnumerator();
+                if ( owner.FrozenItemPosition == FrozenItemPosition.End )
+                    return owner.Take( Count ).GetEnumerator();
 
-                return this.owner.Skip( this.owner.FrozenItems.Count ).GetEnumerator();
+                return owner.Skip( owner.FrozenItems.Count ).GetEnumerator();
             }
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.GetEnumerator();
+                return GetEnumerator();
             }
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -289,8 +286,8 @@
         /// </summary>
         ~FrozenItemCollection()
         {
-            if ( this.frozenItems != null )
-                this.frozenItems.CollectionChanged -= this.OnFrozenItemsChanged;
+            if ( frozenItems != null )
+                frozenItems.CollectionChanged -= OnFrozenItemsChanged;
         }
 
         /// <summary>
@@ -298,8 +295,8 @@
         /// </summary>
         public FrozenItemCollection()
         {
-            this.frozenItems.CollectionChanged += this.OnFrozenItemsChanged;
-            this.unfrozenItems = new NonFrozenItemList( this );
+            frozenItems.CollectionChanged += OnFrozenItemsChanged;
+            unfrozenItems = new NonFrozenItemList( this );
         }
 
         /// <summary>
@@ -310,16 +307,16 @@
         {
             get
             {
-                return this.frozenItemPosition;
+                return frozenItemPosition;
             }
             set
             {
-                if ( this.frozenItemPosition == value )
+                if ( frozenItemPosition == value )
                     return;
 
-                this.frozenItemPosition = value;
-                this.OnPropertyChanged( "FrozenItemPosition" );
-                this.RebuildCollection();
+                frozenItemPosition = value;
+                OnPropertyChanged( "FrozenItemPosition" );
+                RebuildCollection();
             }
         }
 
@@ -332,8 +329,8 @@
         {
             get
             {
-                Contract.Ensures( this.frozenItems != null );
-                return this.frozenItems;
+                Contract.Ensures( frozenItems != null );
+                return frozenItems;
             }
         }
 
@@ -348,8 +345,8 @@
         {
             get
             {
-                Contract.Ensures( this.unfrozenItems != null );
-                return this.unfrozenItems;
+                Contract.Ensures( unfrozenItems != null );
+                return unfrozenItems;
             }
         }
 
@@ -359,7 +356,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -370,13 +367,12 @@
         protected int AdjustIndex( int index )
         {
             // index can equal count during an insert
-            Contract.Requires<ArgumentOutOfRangeException>( index >= 0, "index" );
-            Contract.Requires<ArgumentOutOfRangeException>( index <= this.Count, "index" );
             Contract.Ensures( index >= 0 );
-            Contract.Ensures( index <= this.Count );
+            Contract.Ensures( index <= Count );
+            Arg.InRange( index, index, Count, nameof( index ) );
 
-            if ( this.FrozenItemPosition == FrozenItemPosition.End )
-                return index - this.FrozenItems.Count;
+            if ( FrozenItemPosition == FrozenItemPosition.End )
+                return index - FrozenItems.Count;
 
             return index;
         }
@@ -404,8 +400,8 @@
                     }
                 case NotifyCollectionChangedAction.Reset:
                     {
-                        while ( this.Count > this.UnfrozenItems.Count )
-                            this.RemoveAt( 0 );
+                        while ( Count > UnfrozenItems.Count )
+                            RemoveAt( 0 );
 
                         break;
                     }
@@ -416,7 +412,7 @@
         {
             Contract.Requires( e != null, "e" );
 
-            var offset = Math.Max( this.Count - this.FrozenItems.Count, 0 );
+            var offset = Math.Max( Count - FrozenItems.Count, 0 );
 
             switch ( e.Action )
             {
@@ -452,8 +448,8 @@
                     }
                 case NotifyCollectionChangedAction.Reset:
                     {
-                        while ( this.Count > this.UnfrozenItems.Count )
-                            this.RemoveAt( this.Count - 1 );
+                        while ( Count > UnfrozenItems.Count )
+                            RemoveAt( Count - 1 );
 
                         break;
                     }
@@ -464,44 +460,44 @@
         {
             IEnumerable<T> items;
 
-            switch ( this.FrozenItemPosition )
+            switch ( FrozenItemPosition )
             {
                 case FrozenItemPosition.Beginning:
                     {
-                        items = this.FrozenItems.Union( this.Take( this.Count ) ).ToList();
+                        items = FrozenItems.Union( this.Take( Count ) ).ToList();
                         break;
                     }
                 case FrozenItemPosition.End:
                     {
-                        items = this.Skip( this.FrozenItems.Count ).Union( this.FrozenItems ).ToList();
+                        items = this.Skip( FrozenItems.Count ).Union( FrozenItems ).ToList();
                         break;
                     }
                 default:
                     {
-                        items = this.Items.ToList();
+                        items = Items.ToList();
                         break;
                     }
             }
 
             base.ClearItems();
-            items.ForEach( i => base.InsertItem( this.Count, i ) );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+            items.ForEach( i => base.InsertItem( Count, i ) );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 
         private void OnFrozenItemsChanged( object sender, NotifyCollectionChangedEventArgs e )
         {
             Contract.Requires( e != null, "e" );
 
-            switch ( this.FrozenItemPosition )
+            switch ( FrozenItemPosition )
             {
                 case FrozenItemPosition.Beginning:
                     {
-                        this.ProcessFrozenItemsFromBeginning( e );
+                        ProcessFrozenItemsFromBeginning( e );
                         break;
                     }
                 case FrozenItemPosition.End:
                     {
-                        this.ProcessFrozenItemsFromEnd( e );
+                        ProcessFrozenItemsFromEnd( e );
                         break;
                     }
             }
@@ -513,7 +509,7 @@
         protected override void ClearItems()
         {
             base.ClearItems();
-            this.FrozenItems.ForEach( i => base.InsertItem( this.Count, i ) );
+            FrozenItems.ForEach( i => base.InsertItem( Count, i ) );
         }
 
         /// <summary>
@@ -523,7 +519,7 @@
         /// <param name="item">The <typeparamref name="T">item</typeparamref> to insert.</param>
         protected override void InsertItem( int index, T item )
         {
-            var adjustedIndex = this.AdjustIndex( index );
+            var adjustedIndex = AdjustIndex( index );
             base.InsertItem( adjustedIndex, item );
         }
 
@@ -533,7 +529,7 @@
         /// <param name="index">The zero-based index of the item to remove.</param>
         protected override void RemoveItem( int index )
         {
-            var adjustedIndex = this.AdjustIndex( index );
+            var adjustedIndex = AdjustIndex( index );
             base.RemoveItem( adjustedIndex );
         }
 
@@ -544,7 +540,7 @@
         /// <param name="item">The replacement <typeparamref name="T">item</typeparamref>.</param>
         protected override void SetItem( int index, T item )
         {
-            var adjustedIndex = this.AdjustIndex( index );
+            var adjustedIndex = AdjustIndex( index );
             base.SetItem( adjustedIndex, item );
         }
     }

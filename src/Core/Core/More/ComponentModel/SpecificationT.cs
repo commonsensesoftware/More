@@ -31,7 +31,7 @@
         /// <param name="evaluate">The <see cref="Func{T1,TResult}">function</see> representing the evaluation of the specification.</param>
         public Specification( Func<T, bool> evaluate )
         {
-            Arg.NotNull( evaluate, "evaluate" );
+            Arg.NotNull( evaluate, nameof( evaluate ) );
             this.evaluate = evaluate;
         }
 
@@ -42,7 +42,7 @@
         /// <returns>True if the <paramref name="item"/> satisfies the specification; otherwise, false.</returns>
         public override bool IsSatisfiedBy( T item )
         {
-            return this.evaluate( item );
+            return evaluate( item );
         }
     }
 }

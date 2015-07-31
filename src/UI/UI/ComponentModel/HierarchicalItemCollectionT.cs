@@ -146,7 +146,7 @@
             protected override void ClearItems()
             {
                 foreach ( var item in this )
-                    this.owner.SelectWithoutEvents( item, false );
+                    owner.SelectWithoutEvents( item, false );
 
                 base.ClearItems();
             }
@@ -156,34 +156,34 @@
             {
                 base.InsertItem( index, item );
                 Contract.Assume( item != null );
-                this.owner.SelectWithoutEvents( item, true );
+                owner.SelectWithoutEvents( item, true );
             }
 
             protected override void RemoveItem( int index )
             {
-                Contract.Assume( index >= 0 && index < this.Count );
+                Contract.Assume( index >= 0 && index < Count );
                 var item = this[index];
 
                 base.RemoveItem( index );
 
                 Contract.Assume( item != null );
                 if ( item.IsSelected ?? false )
-                    this.owner.SelectWithoutEvents( item, false );
+                    owner.SelectWithoutEvents( item, false );
             }
 
             [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Handled by base type. Null items are not allowed" )]
             protected override void SetItem( int index, HierarchicalItem<TItem> item )
             {
-                Contract.Assume( index >= 0 && index < this.Count );
+                Contract.Assume( index >= 0 && index < Count );
                 var oldItem = this[index];
                 base.SetItem( index, item );
 
                 Contract.Assume( oldItem != null );
                 if ( oldItem.IsSelected ?? false )
-                    this.owner.SelectWithoutEvents( oldItem, false );
+                    owner.SelectWithoutEvents( oldItem, false );
 
                 Contract.Assume( item != null );
-                this.owner.SelectWithoutEvents( item, true );
+                owner.SelectWithoutEvents( item, true );
             }
 
         }
@@ -240,7 +240,7 @@
         public HierarchicalItemCollection( Node<T> rootNode )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), rootNode == null ? EmptyNodes : new Node<T>[] { rootNode }, EqualityComparer<T>.Default )
         {
-            Arg.NotNull( rootNode, "rootNode" );
+            Arg.NotNull( rootNode, nameof( rootNode ) );
         }
 
         /// <summary>
@@ -251,7 +251,7 @@
         public HierarchicalItemCollection( Node<T> rootNode, IEqualityComparer<T> comparer )
             : this( ( n, c ) => new HierarchicalItem<T>( n.Value, false, c ), rootNode == null ? EmptyNodes : new Node<T>[] { rootNode }, comparer )
         {
-            Arg.NotNull( rootNode, "rootNode" );
+            Arg.NotNull( rootNode, nameof( rootNode ) );
         }
 
         /// <summary>
@@ -277,26 +277,26 @@
 
         private HierarchicalItemCollection( Func<Node<T>, IEqualityComparer<T>, HierarchicalItem<T>> factory, IEnumerable<Node<T>> nodes, IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( nodes, "nodes" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( nodes, nameof( nodes ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
             this.factory = factory;
-            this.valueComparer = comparer;
-            this.itemComparer = new DynamicComparer<HierarchicalItem<T>>( ( i1, i2 ) => comparer.Equals( i1.Value, i2.Value ) ? 0 : -1, i => comparer.GetHashCode( i.Value ) );
-            this.selectedItems = new SelectedItemCollection<T>( this );
-            this.Items.AddRange( nodes.Select( n => this.CreateItem( n ) ) );
+            valueComparer = comparer;
+            itemComparer = new DynamicComparer<HierarchicalItem<T>>( ( i1, i2 ) => comparer.Equals( i1.Value, i2.Value ) ? 0 : -1, i => comparer.GetHashCode( i.Value ) );
+            selectedItems = new SelectedItemCollection<T>( this );
+            Items.AddRange( nodes.Select( n => CreateItem( n ) ) );
 
             var notify = nodes as INotifyCollectionChanged;
 
             if ( notify != null )
-                notify.CollectionChanged += this.OnSourceCollectionChanged;
+                notify.CollectionChanged += OnSourceCollectionChanged;
         }
 
         private bool SelectLeavesOnly
         {
             get
             {
-                return ( this.SelectionMode & HierarchicalItemSelectionModes.Leaf ) == HierarchicalItemSelectionModes.Leaf;
+                return ( SelectionMode & HierarchicalItemSelectionModes.Leaf ) == HierarchicalItemSelectionModes.Leaf;
             }
         }
 
@@ -304,7 +304,7 @@
         {
             get
             {
-                return ( this.SelectionMode & HierarchicalItemSelectionModes.Synchronize ) == HierarchicalItemSelectionModes.Synchronize;
+                return ( SelectionMode & HierarchicalItemSelectionModes.Synchronize ) == HierarchicalItemSelectionModes.Synchronize;
             }
         }
 
@@ -317,7 +317,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<T>>() != null );
-                return this.valueComparer;
+                return valueComparer;
             }
         }
 
@@ -331,7 +331,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<HierarchicalItem<T>>>() != null );
-                return this.itemComparer;
+                return itemComparer;
             }
         }
 
@@ -345,7 +345,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ObservableCollection<HierarchicalItem<T>>>() != null );
-                return this.selectedItems;
+                return selectedItems;
             }
         }
 
@@ -357,16 +357,16 @@
         {
             get
             {
-                return this.selectionModes;
+                return selectionModes;
             }
             set
             {
-                if ( this.selectionModes == value )
+                if ( selectionModes == value )
                     return;
 
-                this.selectionModes = value;
-                this.OnPropertyChanged( new PropertyChangedEventArgs( "SelectionMode" ) );
-                this.SynchronizeItemsToSelectionMode();
+                selectionModes = value;
+                OnPropertyChanged( new PropertyChangedEventArgs( "SelectionMode" ) );
+                SynchronizeItemsToSelectionMode();
             }
         }
 
@@ -374,48 +374,48 @@
         {
             Contract.Requires( item != null );
 
-            ( (INotifyPropertyChanged) item ).PropertyChanged -= this.OnItemPropertyChanged;
+            ( (INotifyPropertyChanged) item ).PropertyChanged -= OnItemPropertyChanged;
 
             // change state
             item.IsSelected = selected;
 
-            if ( this.SelectLeavesOnly )
+            if ( SelectLeavesOnly )
             {
                 // add or remove from selected items
-                if ( item.IsLeaf && ( selected ?? false ) && !this.SelectedItems.Contains( item, this.ItemComparer ) )
-                    this.SelectedItems.Add( item );
-                else if ( !item.IsLeaf || ( !( selected ?? false ) && this.SelectedItems.Contains( item, this.ItemComparer ) ) )
-                    this.SelectedItems.Remove( item, this.ItemComparer );
+                if ( item.IsLeaf && ( selected ?? false ) && !SelectedItems.Contains( item, ItemComparer ) )
+                    SelectedItems.Add( item );
+                else if ( !item.IsLeaf || ( !( selected ?? false ) && SelectedItems.Contains( item, ItemComparer ) ) )
+                    SelectedItems.Remove( item, ItemComparer );
             }
             else
             {
                 // add or remove from selected items
-                if ( ( selected ?? false ) && !this.SelectedItems.Contains( item, this.ItemComparer ) )
-                    this.SelectedItems.Add( item );
-                else if ( !( selected ?? false ) && this.SelectedItems.Contains( item, this.ItemComparer ) )
-                    this.SelectedItems.Remove( item, this.ItemComparer );
+                if ( ( selected ?? false ) && !SelectedItems.Contains( item, ItemComparer ) )
+                    SelectedItems.Add( item );
+                else if ( !( selected ?? false ) && SelectedItems.Contains( item, ItemComparer ) )
+                    SelectedItems.Remove( item, ItemComparer );
             }
 
-            ( (INotifyPropertyChanged) item ).PropertyChanged += this.OnItemPropertyChanged;
+            ( (INotifyPropertyChanged) item ).PropertyChanged += OnItemPropertyChanged;
         }
 
         private void SynchronizeItemsToSelectionMode()
         {
-            if ( this.SelectLeavesOnly )
+            if ( SelectLeavesOnly )
             {
-                var selections = this.SelectedItems.Where( i => !i.IsLeaf ).ToList();
+                var selections = SelectedItems.Where( i => !i.IsLeaf ).ToList();
 
                 // remove all selections that are not leaves
                 foreach ( var selection in selections )
-                    this.SelectedItems.Remove( selection, this.ItemComparer );
+                    SelectedItems.Remove( selection, ItemComparer );
             }
             else
             {
                 // add selected items that are not currently in the collection
                 foreach ( var item in this.Flatten() )
                 {
-                    if ( ( item.IsSelected ?? false ) && !this.SelectedItems.Contains( item, this.ItemComparer ) )
-                        this.SelectedItems.Add( item );
+                    if ( ( item.IsSelected ?? false ) && !SelectedItems.Contains( item, ItemComparer ) )
+                        SelectedItems.Add( item );
                 }
             }
         }
@@ -457,44 +457,44 @@
             if ( selected ?? false )
             {
                 // do not select non-leaf items when appropriate and do not add the item more than once
-                if ( ( !this.SelectLeavesOnly || item.IsLeaf ) && !this.SelectedItems.Contains( item, this.ItemComparer ) )
+                if ( ( !SelectLeavesOnly || item.IsLeaf ) && !SelectedItems.Contains( item, ItemComparer ) )
                 {
-                    this.SelectedItems.Add( item );
+                    SelectedItems.Add( item );
                 }
             }
             else
             {
-                this.SelectedItems.Remove( item, this.ItemComparer );
+                SelectedItems.Remove( item, ItemComparer );
             }
 
-            if ( !this.SynchronizeSelections )
+            if ( !SynchronizeSelections )
                 return;
 
             // walk down the hierarchy and update children
             if ( selected != null )
-                item.Flatten().ForEach( i => this.SelectWithoutEvents( i, selected ) );
+                item.Flatten().ForEach( i => SelectWithoutEvents( i, selected ) );
 
             // walk up the hierarchy and update parents
-            EnumerateParents( item ).ForEach( p => this.SelectWithoutEvents( p, GetSelectedState( item, p ) ) );
+            EnumerateParents( item ).ForEach( p => SelectWithoutEvents( p, GetSelectedState( item, p ) ) );
         }
 
         private void OnItemIsLeafChanged( HierarchicalItem<T> item )
         {
             Contract.Requires( item != null );
 
-            if ( this.SelectLeavesOnly )
+            if ( SelectLeavesOnly )
             {
                 // the selection of an item should change when its status as a leaf changes
-                if ( item.IsLeaf && ( item.IsSelected ?? false ) && !this.SelectedItems.Contains( item, this.ItemComparer ) )
-                    this.SelectedItems.Add( item );
-                else if ( !item.IsLeaf && this.SelectedItems.Contains( item, this.ItemComparer ) )
-                    this.SelectedItems.Remove( item, this.ItemComparer );
+                if ( item.IsLeaf && ( item.IsSelected ?? false ) && !SelectedItems.Contains( item, ItemComparer ) )
+                    SelectedItems.Add( item );
+                else if ( !item.IsLeaf && SelectedItems.Contains( item, ItemComparer ) )
+                    SelectedItems.Remove( item, ItemComparer );
             }
             else
             {
                 // this is unlikely, but ensure the item is selected
-                if ( ( item.IsSelected ?? false ) && !this.SelectedItems.Contains( item, this.ItemComparer ) )
-                    this.SelectedItems.Add( item );
+                if ( ( item.IsSelected ?? false ) && !SelectedItems.Contains( item, ItemComparer ) )
+                    SelectedItems.Add( item );
             }
         }
 
@@ -503,12 +503,12 @@
             Contract.Requires( parent != null );
             Contract.Requires( newItems != null );
 
-            if ( this.SynchronizeSelections )
+            if ( SynchronizeSelections )
             {
                 // this branch re-evaluates parent.IsSelected for every item added
                 foreach ( var newItem in newItems )
                 {
-                    var item = this.CreateItem( newItem );
+                    var item = CreateItem( newItem );
                     parent.Add( item );
                     parent.IsSelected = GetSelectedState( item, parent );
                 }
@@ -518,7 +518,7 @@
 
             // this branch adds the items without synchronizing the parent selection
             foreach ( var newItem in newItems )
-                parent.Add( this.CreateItem( newItem ) );
+                parent.Add( CreateItem( newItem ) );
         }
 
         private void RemoveItemsForNodes( HierarchicalItem<T> parent, IEnumerable<Node<T>> oldItems )
@@ -529,10 +529,10 @@
             // find all removed items from nodes
             var removedItems = ( from oldItem in oldItems
                                  from item in parent
-                                 where this.ValueComparer.Equals( item.Value, oldItem.Value )
+                                 where ValueComparer.Equals( item.Value, oldItem.Value )
                                  select item ).ToList();
 
-            if ( this.SynchronizeSelections )
+            if ( SynchronizeSelections )
             {
                 // this branch re-evaluates parent.IsSelected for every item removed
                 foreach ( var removedItem in removedItems )
@@ -541,7 +541,7 @@
                     parent.IsSelected = GetSelectedState( parent, parent );
 
                     if ( removedItem.IsSelected ?? false )
-                        this.SelectedItems.Remove( removedItem, this.ItemComparer );
+                        SelectedItems.Remove( removedItem, ItemComparer );
                 }
 
                 return;
@@ -553,7 +553,7 @@
                 parent.Remove( removedItem );
 
                 if ( removedItem.IsSelected ?? false )
-                    this.SelectedItems.Remove( removedItem, this.ItemComparer );
+                    SelectedItems.Remove( removedItem, ItemComparer );
             }
         }
 
@@ -562,16 +562,16 @@
             Contract.Requires( parent != null );
             Contract.Requires( newItems != null );
 
-            if ( this.SynchronizeSelections )
+            if ( SynchronizeSelections )
             {
                 // this branch re-evaluates parent.IsSelected for every item replaced
                 foreach ( var newItem in newItems )
                 {
                     var oldItem = parent[index];
-                    var replacement = this.CreateItem( newItem );
+                    var replacement = CreateItem( newItem );
 
                     if ( oldItem.IsSelected ?? false )
-                        this.SelectedItems.Remove( oldItem, this.ItemComparer );
+                        SelectedItems.Remove( oldItem, ItemComparer );
 
                     parent[index++] = replacement;
                     parent.IsSelected = GetSelectedState( parent, parent );
@@ -584,10 +584,10 @@
             foreach ( var newItem in newItems )
             {
                 var oldItem = parent[index];
-                var replacement = this.CreateItem( newItem );
+                var replacement = CreateItem( newItem );
 
                 if ( oldItem.IsSelected ?? false )
-                    this.SelectedItems.Remove( oldItem, this.ItemComparer );
+                    SelectedItems.Remove( oldItem, ItemComparer );
 
                 parent[index++] = replacement;
             }
@@ -603,21 +603,21 @@
                 case NotifyCollectionChangedAction.Add:
                     {
                         if ( e.NewItems != null )
-                            this.AddItemsForNodes( parent, e.NewItems.OfType<Node<T>>() );
+                            AddItemsForNodes( parent, e.NewItems.OfType<Node<T>>() );
 
                         break;
                     }
                 case NotifyCollectionChangedAction.Remove:
                     {
                         if ( e.OldItems != null )
-                            this.RemoveItemsForNodes( parent, e.OldItems.OfType<Node<T>>() );
+                            RemoveItemsForNodes( parent, e.OldItems.OfType<Node<T>>() );
 
                         break;
                     }
                 case NotifyCollectionChangedAction.Replace:
                     {
                         if ( e.OldItems != null && e.NewItems != null )
-                            this.SetItemsForNodes( parent, e.NewStartingIndex, e.NewItems.OfType<Node<T>>() );
+                            SetItemsForNodes( parent, e.NewStartingIndex, e.NewItems.OfType<Node<T>>() );
 
                         break;
                     }
@@ -625,7 +625,7 @@
                     {
                         parent.Clear();
 
-                        if ( this.SynchronizeSelections )
+                        if ( SynchronizeSelections )
                             parent.IsSelected = parent.IsSelected ?? false;
 
                         break;
@@ -644,7 +644,7 @@
                 case NotifyCollectionChangedAction.Add:
                     {
                         if ( e.NewItems != null )
-                            e.NewItems.OfType<Node<T>>().ForEach( n => this.Add( this.CreateItem( n ) ) );
+                            e.NewItems.OfType<Node<T>>().ForEach( n => Add( CreateItem( n ) ) );
 
                         break;
                     }
@@ -654,30 +654,30 @@
                             break;
 
                         var items = from node in e.OldItems.OfType<Node<T>>()
-                                    from item in this.Items
+                                    from item in Items
                                     where object.Equals( node.Value, item.Value )
                                     select item;
 
-                        items.ToList().ForEach( i => this.Remove( i ) );
+                        items.ToList().ForEach( i => Remove( i ) );
                         break;
                     }
                 case NotifyCollectionChangedAction.Replace:
                     {
                         var items = from node in e.OldItems.OfType<Node<T>>()
-                                    from item in this.Items
+                                    from item in Items
                                     where object.Equals( node.Value, item.Value )
                                     select item;
 
-                        items.ToList().ForEach( i => this.Remove( i ) );
+                        items.ToList().ForEach( i => Remove( i ) );
 
                         if ( e.NewItems != null )
-                            e.NewItems.OfType<Node<T>>().ForEach( n => this.Add( this.CreateItem( n ) ) );
+                            e.NewItems.OfType<Node<T>>().ForEach( n => Add( CreateItem( n ) ) );
 
                         break;
                     }
                 case NotifyCollectionChangedAction.Reset:
                     {
-                        this.Clear();
+                        Clear();
                         break;
                     }
             }
@@ -694,12 +694,12 @@
             {
                 case "IsLeaf":
                     {
-                        this.OnItemIsLeafChanged( item );
+                        OnItemIsLeafChanged( item );
                         break;
                     }
                 case "IsSelected":
                     {
-                        this.OnItemIsSelectedChanged( item );
+                        OnItemIsSelectedChanged( item );
                         break;
                     }
             }
@@ -714,14 +714,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected HierarchicalItem<T> CreateItem( Node<T> node )
         {
-            Arg.NotNull( node, "node" );
+            Arg.NotNull( node, nameof( node ) );
             Contract.Ensures( Contract.Result<HierarchicalItem<T>>() != null );
 
-            var item = this.factory( node, this.ValueComparer );
+            var item = factory( node, ValueComparer );
 
-            item.AddRange( node.Select( n => this.CreateItem( n ) ) );
-            node.CollectionChanged += ( s, e ) => this.OnSourceNodeChanged( item, e );
-            ( (INotifyPropertyChanged) item ).PropertyChanged += this.OnItemPropertyChanged;
+            item.AddRange( node.Select( n => CreateItem( n ) ) );
+            node.CollectionChanged += ( s, e ) => OnSourceNodeChanged( item, e );
+            ( (INotifyPropertyChanged) item ).PropertyChanged += OnItemPropertyChanged;
 
             return item;
         }
@@ -735,7 +735,7 @@
         protected HierarchicalItem<T> CreateItem( T value )
         {
             Contract.Ensures( Contract.Result<HierarchicalItem<T>>() != null );
-            return this.CreateItem( new Node<T>( value ) );
+            return CreateItem( new Node<T>( value ) );
         }
     }
 }

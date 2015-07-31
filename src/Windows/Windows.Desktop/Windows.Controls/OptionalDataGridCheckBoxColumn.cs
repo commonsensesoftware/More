@@ -13,7 +13,7 @@
         /// </summary>
         public OptionalDataGridCheckBoxColumn()
         {
-            this.IsOptional = true;
+            IsOptional = true;
         }
 
         /// <summary>

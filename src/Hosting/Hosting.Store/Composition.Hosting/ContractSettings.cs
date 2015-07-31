@@ -28,7 +28,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<SearchContractOptions>() != null );
-                return this.searchOptions.Value;
+                return searchOptions.Value;
             }
         }
 
@@ -44,7 +44,7 @@
                 behaviors.Add( settingsContract );
             }
 
-            foreach ( var appSetting in this.appSettings )
+            foreach ( var appSetting in appSettings )
             {
                 var setting = new ApplicationSetting()
                 {
@@ -63,10 +63,10 @@
         {
             Contract.Requires( behaviors != null );
 
-            if ( !this.searchOptions.IsValueCreated )
+            if ( !searchOptions.IsValueCreated )
                 return;
 
-            var options = this.searchOptions.Value;
+            var options = searchOptions.Value;
             var searchContract = behaviors.OfType<SearchContractBehavior>().FirstOrDefault();
 
             if ( searchContract == null )
@@ -92,9 +92,9 @@
         /// <param name="viewTypeName">The type name of the view displayed by the setting.</param>
         public void AddSetting( string name, string viewTypeName )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( viewTypeName ), "viewTypeName" );
-            this.appSettings.Add( new Tuple<string, string, string>( null, name, viewTypeName ) );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            Arg.NotNullOrEmpty( viewTypeName, nameof( viewTypeName ) );
+            appSettings.Add( new Tuple<string, string, string>( null, name, viewTypeName ) );
         }
 
         /// <summary>
@@ -105,10 +105,10 @@
         /// <param name="viewTypeName">The type name of the view displayed by the setting.</param>
         public virtual void AddSetting( string id, string name, string viewTypeName )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( id ), "id" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( name ), "name" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( viewTypeName ), "viewTypeName" );
-            this.appSettings.Add( new Tuple<string, string, string>( id, name, viewTypeName ) );
+            Arg.NotNullOrEmpty( id, nameof( id ) );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            Arg.NotNullOrEmpty( viewTypeName, nameof( viewTypeName ) );
+            appSettings.Add( new Tuple<string, string, string>( id, name, viewTypeName ) );
         }
 
         /// <summary>
@@ -117,6 +117,8 @@
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> associated with the task.</param>
         protected override void OnExecute( IServiceProvider serviceProvider )
         {
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+
             // this is assumed to be the shell view. it's unlikely the root element will
             // change after initialization (e.g. multiple shell views). such a scenario
             // is not supported in this version. consider in future versions.
@@ -127,8 +129,8 @@
 
             var behaviors = Microsoft.Xaml.Interactivity.Interaction.GetBehaviors( root );
 
-            this.ConfigureOrCreateSettingsContract( behaviors );
-            this.ConfigureOrCreateSearchContract( behaviors );
+            ConfigureOrCreateSettingsContract( behaviors );
+            ConfigureOrCreateSearchContract( behaviors );
         }
     }
 }

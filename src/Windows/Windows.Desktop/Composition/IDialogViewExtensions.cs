@@ -51,7 +51,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static Task ShowAsync<TViewModel>( this IDialogView<TViewModel> view, object owner ) where TViewModel : class
         {
-            Contract.Requires<ArgumentNullException>( view != null, "view" );
+            Arg.NotNull( view, nameof( view ) );
             
             var window = view as Window;
 
@@ -79,7 +79,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static Task<bool?> ShowDialogAsync<TViewModel>( this IDialogView<TViewModel> view, object owner ) where TViewModel : class
         {
-            Contract.Requires<ArgumentNullException>( view != null, "view" );
+            Arg.NotNull( view, nameof( view ) );
             
             var window = view as Window;
 

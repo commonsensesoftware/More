@@ -30,14 +30,14 @@
         {
             base.OnSourceInitialized( e );
 
-            if ( this.input != null )
+            if ( input != null )
             {
-                this.input.Text = this.DefaultResponse;
-                this.input.Focus();
-                this.input.SelectAll();
+                input.Text = DefaultResponse;
+                input.Focus();
+                input.SelectAll();
             }
 
-            this.Response = null;
+            Response = null;
         }
 
         /// <summary>
@@ -47,13 +47,13 @@
         {
             base.OnApplyTemplate();
 
-            if ( this.input != null )
-                this.input.KeyUp -= this.OnTextBoxKeyUp;
+            if ( input != null )
+                input.KeyUp -= OnTextBoxKeyUp;
 
-            this.input = this.GetTemplateChild( "InputTextBox" ) as TextBox;
+            input = GetTemplateChild( "InputTextBox" ) as TextBox;
 
-            if ( this.input != null )
-                this.input.KeyUp += this.OnTextBoxKeyUp;
+            if ( input != null )
+                input.KeyUp += OnTextBoxKeyUp;
         }
     }
 }

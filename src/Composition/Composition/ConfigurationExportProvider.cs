@@ -34,10 +34,10 @@
         /// <param name="origin">The origin of exported promises.</param>
         public ConfigurationExportProvider( Func<string, object> locator, string origin )
         {
-            Arg.NotNull( locator, "locator" );
-            Arg.NotNullOrEmpty( origin, "origin" );
+            Arg.NotNull( locator, nameof( locator ) );
+            Arg.NotNullOrEmpty( origin, nameof( origin ) );
 
-            this.locate = locator;
+            locate = locator;
             this.origin = origin;
         }
 
@@ -49,8 +49,8 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.origin ) );
-                return this.origin;
+                Contract.Ensures( !string.IsNullOrEmpty( origin ) );
+                return origin;
             }
         }
 
@@ -77,7 +77,7 @@
             Contract.Requires( contract != null );
             Contract.Requires( !string.IsNullOrEmpty( key ) );
 
-            var value = this.locate( key );
+            var value = locate( key );
 
             if ( value != null )
                 return value;
@@ -117,9 +117,9 @@
             if ( !TryGetKey( contract, out key, out targetType ) )
                 return NoExportDescriptors;
 
-            Func<object> resolver = () => this.GetValue( contract, key );
+            Func<object> resolver = () => GetValue( contract, key );
             var activator = CreateActivator( resolver, targetType );
-            var descriptor = new ExportDescriptorPromise( contract, this.Origin, true, NoDependencies, d => ExportDescriptor.Create( activator, NoMetadata ) );
+            var descriptor = new ExportDescriptorPromise( contract, Origin, true, NoDependencies, d => ExportDescriptor.Create( activator, NoMetadata ) );
             var descriptors = new[] { descriptor };
 
             return descriptors;

@@ -20,7 +20,7 @@
         {
             get
             {
-                return this.file;
+                return file;
             }
         }
 
@@ -37,61 +37,61 @@
         {
             get
             {
-                return this.file.Extension;
+                return file.Extension;
             }
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
         {
-            Arg.NotNull( fileToReplace, "fileToReplace" );
+            Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
 
             var destinationFileName = fileToReplace.Path;
-            IFile copy = new FileInfoAdapter( this.file.CopyTo( destinationFileName, true ) );
+            IFile copy = new FileInfoAdapter( file.CopyTo( destinationFileName, true ) );
             return Task.FromResult( copy );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IFile> CopyAsync( IFolder destinationFolder, string desiredNewName )
         {
-            Arg.NotNull( destinationFolder, "destinationFolder" );
-            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
+            Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
 
             var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
-            IFile copy = new FileInfoAdapter( this.file.CopyTo( destinationFileName ) );
+            IFile copy = new FileInfoAdapter( file.CopyTo( destinationFileName ) );
             return Task.FromResult( copy );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public async Task MoveAndReplaceAsync( IFile fileToReplace )
         {
-            Arg.NotNull( fileToReplace, "fileToReplace" );
+            Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
 
             var destinationFileName = fileToReplace.Path;
             await fileToReplace.DeleteAsync();
-            this.file.MoveTo( destinationFileName );
+            file.MoveTo( destinationFileName );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task MoveAsync( IFolder destinationFolder, string desiredNewName )
         {
-            Arg.NotNull( destinationFolder, "destinationFolder" );
-            Arg.NotNullOrEmpty( desiredNewName, "desiredNewName" );
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
+            Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
 
             var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
-            this.file.MoveTo( destinationFileName );
+            file.MoveTo( destinationFileName );
             return Task.FromResult( 0 );
         }
 
         public Task<Stream> OpenReadAsync()
         {
-            Stream stream = this.file.OpenRead();
+            Stream stream = file.OpenRead();
             return Task.FromResult( stream );
         }
 
         public Task<Stream> OpenReadWriteAsync()
         {
-            Stream stream = this.file.Open( FileMode.Open, FileAccess.ReadWrite );
+            Stream stream = file.Open( FileMode.Open, FileAccess.ReadWrite );
             return Task.FromResult( stream );
         }
 
@@ -99,7 +99,7 @@
         {
             get
             {
-                return this.file.CreationTime;
+                return file.CreationTime;
             }
         }
 
@@ -107,7 +107,7 @@
         {
             get
             {
-                return this.file.Name;
+                return file.Name;
             }
         }
 
@@ -115,52 +115,52 @@
         {
             get
             {
-                return this.file.FullName;
+                return file.FullName;
             }
         }
 
         public Task DeleteAsync()
         {
-            this.file.Delete();
+            file.Delete();
             return Task.FromResult( 0 );
         }
 
         public Task<IBasicProperties> GetBasicPropertiesAsync()
         {
-            IBasicProperties properties = new FilePropertiesAdapter( this.file );
+            IBasicProperties properties = new FilePropertiesAdapter( file );
             return Task.FromResult( properties );
         }
 
         public Task RenameAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
 
-            this.file.MoveTo( desiredName );
+            file.MoveTo( desiredName );
             return Task.FromResult( 0 );
         }
 
         public Task<IFolder> GetParentAsync()
         {
-            IFolder parent = new DirectoryInfoAdapter( this.file.Directory );
+            IFolder parent = new DirectoryInfoAdapter( file.Directory );
             return Task.FromResult( parent );
         }
 
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IStorageItem );
+            return Equals( obj as IStorageItem );
         }
 
         public bool Equals( IStorageItem other )
         {
             if ( other is IFile )
-                return this.file.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
+                return file.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
 
             return false;
         }
 
         public override int GetHashCode()
         {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode( this.file.FullName );
+            return StringComparer.OrdinalIgnoreCase.GetHashCode( file.FullName );
         }
     }
 }

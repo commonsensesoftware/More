@@ -31,7 +31,7 @@
         public SelectContactInteraction( string title, bool multiselect )
             : base( title )
         {
-            Contract.Requires<ArgumentNullException>( title != null, "title" );
+            Arg.NotNull( title, nameof( title ) );
             this.multiselect = multiselect;
         }
 
@@ -43,11 +43,11 @@
         {
             get
             {
-                return this.multiselect;
+                return multiselect;
             }
             set
             {
-                this.SetProperty( ref this.multiselect, value );
+                SetProperty( ref multiselect, value );
             }
         }
 
@@ -55,13 +55,14 @@
         /// Gets a list of selected contacts.
         /// </summary>
         /// <value>A <see cref="IList{T}">list</see> of selected <see cref="Contact">contacts</see>.</value>
+        [CLSCompliant( false )]
         public virtual IList<Contact> Contacts
         {
             get
             {
-                Contract.Ensures( this.contacts != null );
+                Contract.Ensures( contacts != null );
                 Contract.Ensures( !Contract.Result<IList<Contact>>().IsReadOnly );
-                return this.contacts;
+                return contacts;
             }
         }
 
@@ -69,13 +70,14 @@
         /// Gets a list of the requested contact fields.
         /// </summary>
         /// <value>A <see cref="IList{T}">list</see> of the requested <see cref="ContactFieldType">contact fields</see>.</value>
+        [CLSCompliant( false )]
         public IList<ContactFieldType> DesiredFields
         {
             get
             {
-                Contract.Ensures( this.desiredFields != null );
+                Contract.Ensures( desiredFields != null );
                 Contract.Ensures( !Contract.Result<IList<ContactFieldType>>().IsReadOnly );
-                return this.desiredFields;
+                return desiredFields;
             }
         }
     }

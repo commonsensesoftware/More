@@ -21,53 +21,53 @@
         {
             get
             {
-                return this.folder;
+                return folder;
             }
         }
 
         public async Task<IFile> CreateFileAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
-            var file = await this.folder.CreateFileAsync( desiredName );
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
+            var file = await folder.CreateFileAsync( desiredName );
             return new StorageFileAdapter( file );
         }
 
         public async Task<IFolder> CreateFolderAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
             var folder = await this.folder.CreateFolderAsync( desiredName );
             return new StorageFolderAdapter( folder );
         }
 
         public async Task<IFile> GetFileAsync( string name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            var file = await this.folder.GetFileAsync( name );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            var file = await folder.GetFileAsync( name );
             return new StorageFileAdapter( file );
         }
 
         public async Task<IReadOnlyList<IFile>> GetFilesAsync()
         {
-            var files = await this.folder.GetFilesAsync();
+            var files = await folder.GetFilesAsync();
             return files.Select( f => new StorageFileAdapter( f ) ).ToArray();
         }
 
         public async Task<IFolder> GetFolderAsync( string name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
             var folder = await this.folder.GetFolderAsync( name );
             return new StorageFolderAdapter( folder );
         }
 
         public async Task<IReadOnlyList<IFolder>> GetFoldersAsync()
         {
-            var folders = await this.folder.GetFoldersAsync();
+            var folders = await folder.GetFoldersAsync();
             return folders.Select( f => new StorageFolderAdapter( f ) ).ToArray();
         }
 
         public async Task<IStorageItem> GetItemAsync( string name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
 
             var item = await this.folder.GetItemAsync( name );
             var file = item as StorageFile;
@@ -112,7 +112,7 @@
         {
             get
             {
-                return this.folder.DateCreated;
+                return folder.DateCreated;
             }
         }
 
@@ -120,7 +120,7 @@
         {
             get
             {
-                return this.folder.Name;
+                return folder.Name;
             }
         }
 
@@ -128,45 +128,45 @@
         {
             get
             {
-                return this.folder.Path;
+                return folder.Path;
             }
         }
 
         public Task DeleteAsync()
         {
-            return this.folder.DeleteAsync().AsTask();
+            return folder.DeleteAsync().AsTask();
         }
 
         public async Task<IBasicProperties> GetBasicPropertiesAsync()
         {
-            var properties = await this.folder.GetBasicPropertiesAsync();
+            var properties = await folder.GetBasicPropertiesAsync();
             return new BasicPropertiesAdapter( properties );
         }
 
         public Task RenameAsync( string desiredName )
         {
-            Arg.NotNullOrEmpty( desiredName, "desiredName" );
-            return this.folder.RenameAsync( desiredName ).AsTask();
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
+            return folder.RenameAsync( desiredName ).AsTask();
         }
 
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IPlatformStorageItem<StorageFolder> );
+            return Equals( obj as IPlatformStorageItem<StorageFolder> );
         }
 
         public bool Equals( IStorageItem other )
         {
-            return this.Equals( other as IPlatformStorageItem<StorageFolder> );
+            return Equals( other as IPlatformStorageItem<StorageFolder> );
         }
 
         private bool Equals( IPlatformStorageItem<StorageFolder> other )
         {
-            return other == null ? false : this.folder.Equals( other.NativeStorageItem );
+            return other == null ? false : folder.Equals( other.NativeStorageItem );
         }
 
         public override int GetHashCode()
         {
-            return this.folder.GetHashCode();
+            return folder.GetHashCode();
         }
     }
 }

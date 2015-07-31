@@ -168,7 +168,7 @@
         {
             get
             {
-                return this.value;
+                return value;
             }
         }
 
@@ -180,7 +180,7 @@
         {
             get
             {
-                return this.style;
+                return style;
             }
         }
 
@@ -192,9 +192,9 @@
         [Pure]
         public string ToString( string format )
         {
-            Arg.NotNullOrEmpty( format, "format" );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
             Contract.Ensures( Contract.Result<string>() != null );
-            return this.ToString( format, CultureInfo.CurrentCulture );
+            return ToString( format, CultureInfo.CurrentCulture );
         }
 
         /// <summary>
@@ -207,17 +207,17 @@
         {
             Contract.Ensures( Contract.Result<string>() != null );
 
-            switch ( this.NumberStyle )
+            switch ( NumberStyle )
             {
                 case NumberStyle.Currency:
-                    return this.Value.ToString( "C", formatProvider );
+                    return Value.ToString( "C", formatProvider );
                 case NumberStyle.Integer:
-                    return this.Value.ToString( "N0", formatProvider );
+                    return Value.ToString( "N0", formatProvider );
                 case NumberStyle.Percent:
-                    return this.Value.ToString( "P", formatProvider );
+                    return Value.ToString( "P", formatProvider );
             }
 
-            return this.Value.ToString( formatProvider );
+            return Value.ToString( formatProvider );
         }
 
         /// <summary>
@@ -229,7 +229,7 @@
         [Pure]
         public static Number Parse( string text, NumberStyle style )
         {
-            Arg.NotNullOrEmpty( text, "text" );
+            Arg.NotNullOrEmpty( text, nameof( text ) );
             Contract.Ensures( Contract.Result<Number>().NumberStyle == style );
             return Parse( text, style, CultureInfo.CurrentCulture );
         }
@@ -244,7 +244,7 @@
         [Pure]
         public static Number Parse( string text, NumberStyle style, IFormatProvider formatProvider )
         {
-            Arg.NotNullOrEmpty( text, "text" );
+            Arg.NotNullOrEmpty( text, nameof( text ) );
             Contract.Ensures( Contract.Result<Number>().NumberStyle == style );
             return new Number( decimal.Parse( text, NumberStyles.Any, formatProvider ), style );
         }
@@ -396,7 +396,7 @@
         /// <returns>True if the current instance equals the specified object; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
-            return ( obj is Number ) ? this.Equals( (Number) obj ) : false;
+            return ( obj is Number ) ? Equals( (Number) obj ) : false;
         }
 
         /// <summary>
@@ -405,7 +405,7 @@
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            return this.Value.GetHashCode();
+            return Value.GetHashCode();
         }
 
         /// <summary>
@@ -414,7 +414,7 @@
         /// <returns>The <see cref="String">string</see> representation of the current instance.</returns>
         public override string ToString()
         {
-            return this.ToString( CultureInfo.CurrentCulture );
+            return ToString( CultureInfo.CurrentCulture );
         }
 
         /// <summary>
@@ -809,7 +809,7 @@
         /// <returns>True if the current instance equals the specified object; otherwise, false.</returns>
         public bool Equals( Number other )
         {
-            return this.Value.Equals( other.Value );
+            return Value.Equals( other.Value );
         }
 
         /// <summary>
@@ -820,7 +820,7 @@
         /// specified object.  A value greater than zero indicates the current instance is greater than the specified object.  A value of zero indicates the objects are equal.</returns>
         public int CompareTo( Number other )
         {
-            return this.Value.CompareTo( other.Value );
+            return Value.CompareTo( other.Value );
         }
 
         /// <summary>
@@ -831,7 +831,7 @@
         /// specified object.  A value greater than zero indicates the current instance is greater than the specified object.  A value of zero indicates the objects are equal.</returns>
         public int CompareTo( object obj )
         {
-            return ( obj is Number ) ? this.CompareTo( (Number) obj ) : -1;
+            return ( obj is Number ) ? CompareTo( (Number) obj ) : -1;
         }
 
         /// <summary>
@@ -842,8 +842,8 @@
         /// <returns>The <see cref="String">string</see> representation of the value of this instance as specified by the <paramref name="format"/> and <paramref name="formatProvider">provider</paramref>.</returns>
         public string ToString( string format, IFormatProvider formatProvider )
         {
-            Arg.NotNullOrEmpty( format, "format" );
-            return this.Value.ToString( format, formatProvider );
+            Arg.NotNullOrEmpty( format, nameof( format ) );
+            return Value.ToString( format, formatProvider );
         }
     }
 }

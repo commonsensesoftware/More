@@ -25,7 +25,7 @@
         /// </summary>
         ~TemplateWizard()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<TemplateWizardContext>() != null );
-                return this.context;
+                return context;
             }
         }
 
@@ -66,8 +66,8 @@
         {
             get
             {
-                Contract.Ensures( this.dte != null );
-                return this.dte;
+                Contract.Ensures( dte != null );
+                return dte;
             }
         }
 
@@ -80,7 +80,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Solution>() != null );
-                return this.DesignTimeEnvironment.Solution;
+                return DesignTimeEnvironment.Solution;
             }
         }
 
@@ -92,7 +92,7 @@
         {
             get
             {
-                return this.DesignTimeEnvironment.GetActiveProject();
+                return DesignTimeEnvironment.GetActiveProject();
             }
         }
 
@@ -105,7 +105,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.GetString( "$solutiondirectory$" ) ?? this.ProjectDirectory;
+                return GetString( "$solutiondirectory$" ) ?? ProjectDirectory;
             }
         }
 
@@ -118,7 +118,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.GetString( "$destinationdirectory$", string.Empty );
+                return GetString( "$destinationdirectory$", string.Empty );
             }
         }
 
@@ -131,7 +131,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.GetString( "$specifiedsolutionname$", string.Empty );
+                return GetString( "$specifiedsolutionname$", string.Empty );
             }
         }
 
@@ -144,7 +144,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<string>() != null );
-                return this.GetString( "$projectname$", string.Empty );
+                return GetString( "$projectname$", string.Empty );
             }
         }
 
@@ -158,11 +158,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Simplified syntactic sugar. Non-overridable, non-public API." )]
         protected string GetString( string key, string defaultValue = null )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( key ), "key" );
+            Arg.NotNullOrEmpty( key, nameof( key ) );
 
             string value;
 
-            if ( this.Context.Replacements.TryGetValue( key, out value ) && !string.IsNullOrEmpty( value ) )
+            if ( Context.Replacements.TryGetValue( key, out value ) && !string.IsNullOrEmpty( value ) )
                 return value;
 
             return defaultValue;
@@ -178,9 +178,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Simplified syntactic sugar. Non-overridable, non-public API." )]
         protected bool GetBoolean( string key, bool defaultValue = false )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( key ), "key" );
+            Arg.NotNullOrEmpty( key, nameof( key ) );
 
-            var value = this.GetString( key );
+            var value = GetString( key );
             var parsed = false;
 
             if ( string.IsNullOrEmpty( value ) || !bool.TryParse( value, out parsed ) )
@@ -199,9 +199,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Simplified syntactic sugar. Non-overridable, non-public API." )]
         protected int GetInt32( string key, int defaultValue = 0 )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( key ), "key" );
+            Arg.NotNullOrEmpty( key, nameof( key ) );
 
-            var value = this.GetString( key );
+            var value = GetString( key );
             var parsed = 0;
 
             if ( string.IsNullOrEmpty( value ) || !int.TryParse( value, out parsed ) )
@@ -219,10 +219,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Simplified syntactic sugar. Non-overridable, non-public API." )]
         protected IList<string> GetStrings( string key )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( key ), "key" );
+            Arg.NotNullOrEmpty( key, nameof( key ) );
             Contract.Ensures( Contract.Result<IList<string>>() != null );
 
-            var value = this.GetString( key );
+            var value = GetString( key );
 
             if ( !string.IsNullOrEmpty( value ) )
                 value.Split( new[] { ',' }, StringSplitOptions.RemoveEmptyEntries ).Select( s => s.Trim() ).ToList();
@@ -239,8 +239,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected static ProjectItem GetOrCreateFolder( Project project, string folderName )
         {
-            Contract.Requires<ArgumentNullException>( project != null, "project" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( folderName ), "folderName" );
+            Arg.NotNull( project, nameof( project ) );
+            Arg.NotNullOrEmpty( folderName, nameof( folderName ) );
             Contract.Ensures( Contract.Result<ProjectItem>() != null );
 
             // find or create requested folder
@@ -262,7 +262,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "C# is the only language used or support at this time. Will reconsider in future release." )]
         protected ProjectItem AddFromTemplate( string templateName, string fileName, string language )
         {
-            return this.AddFromTemplate( null, templateName, fileName, language );
+            return AddFromTemplate( null, templateName, fileName, language );
         }
 
         /// <summary>
@@ -277,19 +277,19 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "C# is the only language used or support at this time. Will reconsider in future release." )]
         protected ProjectItem AddFromTemplate( string folderName, string templateName, string fileName, string language )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( templateName ), "templateName" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( fileName ), "fileName" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( language ), "language" );
+            Arg.NotNullOrEmpty( templateName, nameof( templateName ) );
+            Arg.NotNullOrEmpty( fileName, nameof( fileName ) );
+            Arg.NotNullOrEmpty( language, nameof( language ) );
 
             var subitem = !string.IsNullOrEmpty( folderName );
 
             // provide user feedback
             var format = subitem ? SR.AddTemplateSubItem : SR.AddTemplateItem;
-            this.DesignTimeEnvironment.StatusBar.Text = format.FormatDefault( fileName, folderName );
+            DesignTimeEnvironment.StatusBar.Text = format.FormatDefault( fileName, folderName );
 
-            var solution = (EnvDTE80.Solution2) this.Solution;
+            var solution = (EnvDTE80.Solution2) Solution;
             var templatePath = solution.GetProjectItemTemplate( templateName, language );
-            var projectItems = subitem ? GetOrCreateFolder( this.Project, folderName ).ProjectItems : this.Project.ProjectItems;
+            var projectItems = subitem ? GetOrCreateFolder( Project, folderName ).ProjectItems : Project.ProjectItems;
 
             return projectItems.AddFromTemplate( templatePath, fileName );
         }
@@ -300,21 +300,21 @@
         /// <param name="disposing">Indicates whether the object is being disposed.</param>
         protected virtual void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            this.dte = null;
+            dte = null;
 
-            if ( this.context == null )
+            if ( context == null )
                 return;
 
-            this.context.Dispose();
-            this.context = null;
+            context.Dispose();
+            context = null;
         }
 
         /// <summary>
@@ -322,7 +322,7 @@
         /// </summary>
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
 
@@ -333,7 +333,7 @@
         /// <returns>True if the wizard completed successfully; otherwise, false if the wizard was canceled.</returns>
         protected virtual bool TryRunWizard( IVsUIShell shell )
         {
-            Contract.Requires<ArgumentNullException>( shell != null, "shell" );
+            Arg.NotNull( shell, nameof( shell ) );
             return true;
         }
 
@@ -342,8 +342,8 @@
         /// </summary>
         protected virtual void OnCanceled()
         {
-            this.IsCanceled = true;
-            this.Context.Abandon();
+            IsCanceled = true;
+            Context.Abandon();
         }
 
         /// <summary>
@@ -352,7 +352,7 @@
         /// <remarks>This implementation performs no action.</remarks>
         public virtual void RunFinished()
         {
-            this.Context.Abandon();
+            Context.Abandon();
         }
 
         /// <summary>
@@ -368,18 +368,18 @@
         [SuppressMessage( "Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "object", Justification = "Matches method signature of Microsoft.VisualStudio.TemplateWizard.IWizard.RunStarted." )]
         public void RunStarted( object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams )
         {
-            this.dte = (DTE) automationObject;
-            this.dte.StatusBar.Clear();
-            this.context = new TemplateWizardContext( (IOleServiceProvider) automationObject, replacementsDictionary );
-            this.context.AddService( typeof( IProjectItemNameValidator ), ( s, t ) => new ProjectItemNameValidator( this.Project ) );
+            dte = (DTE) automationObject;
+            dte.StatusBar.Clear();
+            context = new TemplateWizardContext( (IOleServiceProvider) automationObject, replacementsDictionary );
+            context.AddService( typeof( IProjectItemNameValidator ), ( s, t ) => new ProjectItemNameValidator( Project ) );
 
-            var shell = this.context.GetRequiredService<IVsUIShell>();
+            var shell = context.GetRequiredService<IVsUIShell>();
 
             try
             {
                 // try running the wizard. most errors should be handled by the wizard, but a few (such as XAML parsing errors),
                 // might not get handled. ensure they are always handled here
-                if ( this.TryRunWizard( shell ) )
+                if ( TryRunWizard( shell ) )
                     return;
             }
             catch ( Exception ex )
@@ -393,8 +393,8 @@
                 shell.ShowError( ExceptionMessage.TemplateWizardErrorCaption, ex.Message );
             }
 
-            this.dte.StatusBar.Clear();
-            this.OnCanceled();
+            dte.StatusBar.Clear();
+            OnCanceled();
         }
     }
 }

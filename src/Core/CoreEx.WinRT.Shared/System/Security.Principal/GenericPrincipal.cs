@@ -28,10 +28,10 @@
         /// the user represented by <paramref name="identity"/> belongs to.</param>
         public GenericPrincipal( IIdentity identity, IEnumerable<string> roles )
         {
-            Arg.NotNull( identity, "identity" );
-            Arg.NotNull( roles, "roles" );
-          
-            this.Identity = identity;
+            Arg.NotNull( identity, nameof( identity ) );
+            Arg.NotNull( roles, nameof( roles ) );
+
+            Identity = identity;
             this.roles.AddRange( roles );
             this.roles.Sort( StringComparer.OrdinalIgnoreCase );
         }
@@ -56,7 +56,7 @@
             if ( string.IsNullOrEmpty( role ) )
                 return false;
 
-            return this.roles.BinarySearch( role, StringComparer.OrdinalIgnoreCase ) >= 0;
+            return roles.BinarySearch( role, StringComparer.OrdinalIgnoreCase ) >= 0;
         }
     }
 }

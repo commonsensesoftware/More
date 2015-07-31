@@ -15,20 +15,20 @@
 
         private object GetService( Guid guid )
         {
-            if ( this.serviceProvider == null )
+            if ( serviceProvider == null )
                 return null;
 
             // short circuit if possible
             if ( guid.Equals( Guid.Empty ) )
                 return null;
             else if ( guid.Equals( typeof( IOleServiceProvider ).GUID ) )
-                return this.serviceProvider;
+                return serviceProvider;
 
             var service = IntPtr.Zero;
             var iid = IUnknownInterfaceId;
 
             // query visual studio provider for service
-            if ( ( this.serviceProvider.QueryService( ref guid, ref iid, out service ) < 0 ) || ( service == IntPtr.Zero ) )
+            if ( ( serviceProvider.QueryService( ref guid, ref iid, out service ) < 0 ) || ( service == IntPtr.Zero ) )
                 return null;
 
             try
@@ -56,7 +56,7 @@
         protected override void Dispose( bool disposing )
         {
             base.Dispose( disposing );
-            this.serviceProvider = null;
+            serviceProvider = null;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@
             if ( serviceType == null )
                 throw new ArgumentNullException( "serviceType" );
 
-            return base.GetService( serviceType ) ?? this.GetService( serviceType.GUID );
+            return base.GetService( serviceType ) ?? GetService( serviceType.GUID );
         }
     }
 }

@@ -25,17 +25,18 @@
         [CLSCompliant( false )]
         public CompositionContextServiceProvider( CompositionContext context )
         {
-            Contract.Requires<ArgumentNullException>( context != null, "context" );
-            this.factory = () => context;
+            Arg.NotNull( context, nameof( context ) );
+            factory = () => context;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositionContextServiceProvider"/> class.
         /// </summary>
         /// <param name="factory">The underlying <see cref="CompositionContext">composition context</see> factory used by the service provider.</param>
+        [CLSCompliant( false )]
         public CompositionContextServiceProvider( Func<CompositionContext> factory )
         {
-            Contract.Requires<ArgumentNullException>( factory != null, "factory" );
+            Arg.NotNull( factory, nameof( factory ) );
             this.factory = factory;
         }
 
@@ -49,7 +50,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<CompositionContext>() != null );
-                return this.factory();
+                return factory();
             }
         }
 
@@ -85,7 +86,7 @@
                     exports.Add( service );
 
                 // add matching exports
-                exports.AddRange( this.Context.GetExports( serviceType, key ) );
+                exports.AddRange( Context.GetExports( serviceType, key ) );
                 return exports;
             }
 
@@ -99,7 +100,7 @@
 
             // return matching export
             object export;
-            this.Context.TryGetExport( serviceType, key, out export );
+            Context.TryGetExport( serviceType, key, out export );
 
             return export;
         }

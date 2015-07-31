@@ -25,7 +25,7 @@
         /// </summary>
         public DbContextItemTemplateWizard()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -43,13 +43,13 @@
             Lazy<IVsDataConnectionDialogFactory> dataConnectionDialogFactory,
             Lazy<IVsDataExplorerConnectionManager> dataExplorerConnectionManager )
         {
-            Contract.Requires<ArgumentNullException>( shell != null, "shell" );
-            Contract.Requires<ArgumentNullException>( dataConnectionDialogFactory != null, "dialogFactory" );
-            Contract.Requires<ArgumentNullException>( dataExplorerConnectionManager != null, "dataExplorerConnectionManager" );
+            Arg.NotNull( shell, nameof( shell ) );
+            Arg.NotNull( dataConnectionDialogFactory, nameof( dataConnectionDialogFactory ) );
+            Arg.NotNull( dataExplorerConnectionManager, nameof( dataExplorerConnectionManager ) );
 
-            this.InitializeComponent();
-            this.Model = model;
-            this.projectInfo = projectInformation;
+            InitializeComponent();
+            Model = model;
+            projectInfo = projectInformation;
             this.shell = shell;
             this.dataConnectionDialogFactory = dataConnectionDialogFactory;
             this.dataExplorerConnectionManager = dataExplorerConnectionManager;
@@ -63,14 +63,14 @@
         {
             get
             {
-                return this.DataContext as DbContextItemTemplateWizardViewModel;
+                return DataContext as DbContextItemTemplateWizardViewModel;
             }
             set
             {
-                var oldValue = this.Model;
-                this.UnwireInteractionRequests( oldValue );
-                this.DataContext = value;
-                this.WireInteractionRequests( value );
+                var oldValue = Model;
+                UnwireInteractionRequests( oldValue );
+                DataContext = value;
+                WireInteractionRequests( value );
             }
         }
 
@@ -83,7 +83,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IVsDataConnectionDialogFactory>() != null );
-                return this.dataConnectionDialogFactory.Value;
+                return dataConnectionDialogFactory.Value;
             }
         }
 
@@ -96,7 +96,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IVsDataExplorerConnectionManager>() != null );
-                return this.dataExplorerConnectionManager.Value;
+                return dataExplorerConnectionManager.Value;
             }
         }
 
@@ -107,9 +107,9 @@
         /// <param name="text">The error message text.</param>
         protected void ShowError( string title, string text )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( title ), "title" );
-            Contract.Requires<ArgumentNullException>( text != null, "text" );
-            this.shell.ShowError( title, text );
+            Arg.NotNullOrEmpty( title, nameof( title ) );
+            Arg.NotNull( text, nameof( text ) );
+            shell.ShowError( title, text );
         }
 
         private void WireInteractionRequests( DbContextItemTemplateWizardViewModel model )
@@ -117,8 +117,8 @@
             if ( model == null )
                 return;
 
-            model.InteractionRequests["BrowseForModel"].Requested += this.OnBrowseForModel;
-            model.InteractionRequests["AddDataConnection"].Requested += this.OnAddDataConnection;
+            model.InteractionRequests["BrowseForModel"].Requested += OnBrowseForModel;
+            model.InteractionRequests["AddDataConnection"].Requested += OnAddDataConnection;
         }
 
         private void UnwireInteractionRequests( DbContextItemTemplateWizardViewModel model )
@@ -126,8 +126,8 @@
             if ( model == null )
                 return;
 
-            model.InteractionRequests["BrowseForModel"].Requested -= this.OnBrowseForModel;
-            model.InteractionRequests["AddDataConnection"].Requested -= this.OnAddDataConnection;
+            model.InteractionRequests["BrowseForModel"].Requested -= OnBrowseForModel;
+            model.InteractionRequests["AddDataConnection"].Requested -= OnAddDataConnection;
         }
 
         private async void OnBrowseForModel( object sender, InteractionRequestedEventArgs e )
@@ -137,8 +137,8 @@
             var picker = new TypePicker()
             {
                 Title = e.Interaction.Title,
-                LocalAssemblyName = this.Model.LocalAssemblyName,
-                SourceProject = this.projectInfo,
+                LocalAssemblyName = Model.LocalAssemblyName,
+                SourceProject = projectInfo,
                 RestrictedBaseTypeNames =
                 {
                     "System.Windows.DependencyObject",
@@ -148,7 +148,7 @@
 
             if ( await picker.ShowDialogAsync( this ) ?? false )
             {
-                this.Model.ModelType = picker.SelectedType;
+                Model.ModelType = picker.SelectedType;
                 e.Interaction.ExecuteDefaultCommand();
             }
             else
@@ -160,7 +160,7 @@
         private void OnAddDataConnection( object sender, InteractionRequestedEventArgs e )
         {
             // ask visual studio to create a dialog
-            using ( var dialog = this.DataConnectionDialogFactory.CreateConnectionDialog() )
+            using ( var dialog = DataConnectionDialogFactory.CreateConnectionDialog() )
             {
                 dialog.AddSources( null );
                 dialog.LoadSourceSelection();
@@ -187,11 +187,11 @@
                 try
                 {
                     // add the connection to the data explorer
-                    dataExplorerConnection = this.DataExplorerConnectionManager.AddConnection( null, connection.Provider, connection.EncryptedConnectionString, true );
+                    dataExplorerConnection = DataExplorerConnectionManager.AddConnection( null, connection.Provider, connection.EncryptedConnectionString, true );
                 }
                 catch ( XmlException ex )
                 {
-                    this.ShowError( e.Interaction.Title, ExceptionMessage.DataConnectionInvalid.FormatDefault( ex.Message ) );
+                    ShowError( e.Interaction.Title, ExceptionMessage.DataConnectionInvalid.FormatDefault( ex.Message ) );
                     return;
                 }
 

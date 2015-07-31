@@ -19,11 +19,11 @@
             if ( frame == null || frame.ContentTransitions == null )
                 return;
 
-            this.transitions = new TransitionCollection();
-            this.transitions.AddRange( frame.ContentTransitions );
+            transitions = new TransitionCollection();
+            transitions.AddRange( frame.ContentTransitions );
 
             frame.ContentTransitions = null;
-            frame.Navigated += this.OnFirstNavigation;
+            frame.Navigated += OnFirstNavigation;
         }
 
         private void OnFirstNavigation( object sender, NavigationEventArgs e )
@@ -33,10 +33,10 @@
 
             var frame = (Frame) sender;
 
-            frame.Navigated -= this.OnFirstNavigation;
-            frame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
+            frame.Navigated -= OnFirstNavigation;
+            frame.ContentTransitions = transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
 
-            this.transitions = null;
+            transitions = null;
         }
     }
 }

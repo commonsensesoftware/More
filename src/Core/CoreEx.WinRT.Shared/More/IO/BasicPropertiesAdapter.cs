@@ -20,7 +20,7 @@
         {
             get
             {
-                return this.properties.DateModified;
+                return properties.DateModified;
             }
         }
 
@@ -28,7 +28,7 @@
         {
             get
             {
-                return this.properties.ItemDate;
+                return properties.ItemDate;
             }
         }
 
@@ -36,25 +36,25 @@
         {
             get
             {
-                return Convert.ToInt64( this.properties.Size );
+                return Convert.ToInt64( properties.Size );
             }
         }
 
         public Task<IDictionary<string, object>> RetrievePropertiesAsync( IEnumerable<string> propertiesToRetrieve )
         {
-            Arg.NotNull( propertiesToRetrieve, "propertiesToRetrieve" );
-            return this.properties.RetrievePropertiesAsync( propertiesToRetrieve ).AsTask();
+            Arg.NotNull( propertiesToRetrieve, nameof( propertiesToRetrieve ) );
+            return properties.RetrievePropertiesAsync( propertiesToRetrieve ).AsTask();
         }
 
         public Task SavePropertiesAsync()
         {
-            return this.properties.SavePropertiesAsync().AsTask();
+            return properties.SavePropertiesAsync().AsTask();
         }
 
         public Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )
         {
-            Arg.NotNull( propertiesToSave, "propertiesToSave" );
-            return this.properties.SavePropertiesAsync( propertiesToSave ).AsTask();
+            Arg.NotNull( propertiesToSave, nameof( propertiesToSave ) );
+            return properties.SavePropertiesAsync( propertiesToSave ).AsTask();
         }
     }
 }

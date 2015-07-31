@@ -11,10 +11,10 @@
     [ContractClassFor( typeof( IActivityManager ) )]
     internal abstract class IActivityManagerContract : IActivityManager
     {
-        IActivity IActivityManager.GetActivity(Guid activityId)
+        IActivity IActivityManager.GetActivity( Guid activityId )
         {
-                Contract.Ensures( Contract.Result<IActivity>() != null );
-                return default( IActivity );
+            Contract.Ensures( Contract.Result<IActivity>() != null );
+            return default( IActivity );
         }
 
         IReadOnlyList<IActivityDescriptor> IActivityManager.ActivityDescriptors

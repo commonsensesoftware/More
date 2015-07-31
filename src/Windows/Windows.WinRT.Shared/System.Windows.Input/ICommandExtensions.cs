@@ -21,9 +21,9 @@
 
                 var cmd = command;
 
-                this.Id = id;
+                Id = id;
                 this.label = label;
-                this.Invoked = c => cmd.Execute();
+                Invoked = c => cmd.Execute();
             }
 
             public object Id
@@ -42,11 +42,11 @@
             {
                 get
                 {
-                    return this.label;
+                    return label;
                 }
                 set
                 {
-                    this.label = value;
+                    label = value;
                 }
             }
         }
@@ -66,11 +66,11 @@
             {
                 get
                 {
-                    return this.command.Name;
+                    return command.Name;
                 }
                 set
                 {
-                    this.command.Name = value;
+                    command.Name = value;
                 }
             }
         }
@@ -84,8 +84,8 @@
         [CLSCompliant( false )]
         public static IUICommand AsUICommand( this ICommand command, string label )
         {
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( label ), "label" );
+            Arg.NotNull( command, nameof( command ) );
+            Arg.NotNullOrEmpty( label, nameof( label ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
             return new UICommandAdapter( null, label, command );
         }
@@ -100,8 +100,8 @@
         [CLSCompliant( false )]
         public static IUICommand AsUICommand( this ICommand command, object id, string label )
         {
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( label ), "label" );
+            Arg.NotNull( command, nameof( command ) );
+            Arg.NotNullOrEmpty( label, nameof( label ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
             return new UICommandAdapter( id, label, command );
         }
@@ -114,7 +114,7 @@
         [CLSCompliant( false )]
         public static IUICommand AsUICommand( this INamedCommand command )
         {
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
+            Arg.NotNull( command, nameof( command ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
             return new NamedUICommandAdapter( null, command );
         }
@@ -128,7 +128,7 @@
         [CLSCompliant( false )]
         public static IUICommand AsUICommand( this INamedCommand command, object id )
         {
-            Contract.Requires<ArgumentNullException>( command != null, "command" );
+            Arg.NotNull( command, nameof( command ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
             return new NamedUICommandAdapter( id, command );
         }

@@ -1,8 +1,9 @@
 ﻿namespace System.ComponentModel.DataAnnotations
 {
-    using global::System;
-    using global::System.Globalization;
-    using global::System.Reflection;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Reflection;
 
     /// <summary>
     /// Serves as the base class for all validation attributes.
@@ -31,8 +32,8 @@
         /// <param name="errorMessageAccessor">The function that enables access to validation resources.</param>
         protected ValidationAttribute( Func<string> errorMessageAccessor )
         {
-            this.syncLock = new object();
-            this.errorMessageResourceAccessor = errorMessageAccessor;
+            syncLock = new object();
+            errorMessageResourceAccessor = errorMessageAccessor;
         }
 
         /// <summary>
@@ -58,13 +59,13 @@
         {
             get
             {
-                return this.errorMessage;
+                return errorMessage;
             }
             set
             {
-                this.errorMessage = value;
-                this.errorMessageResourceAccessor = null;
-                this.CustomErrorMessageSet = true;
+                errorMessage = value;
+                errorMessageResourceAccessor = null;
+                CustomErrorMessageSet = true;
             }
         }
 
@@ -76,13 +77,13 @@
         {
             get
             {
-                return this.errorMessageResourceName;
+                return errorMessageResourceName;
             }
             set
             {
-                this.errorMessageResourceName = value;
-                this.errorMessageResourceAccessor = null;
-                this.CustomErrorMessageSet = true;
+                errorMessageResourceName = value;
+                errorMessageResourceAccessor = null;
+                CustomErrorMessageSet = true;
             }
         }
 
@@ -94,13 +95,13 @@
         {
             get
             {
-                return this.errorMessageResourceType;
+                return errorMessageResourceType;
             }
             set
             {
-                this.errorMessageResourceType = value;
-                this.errorMessageResourceAccessor = null;
-                this.CustomErrorMessageSet = true;
+                errorMessageResourceType = value;
+                errorMessageResourceAccessor = null;
+                CustomErrorMessageSet = true;
             }
         }
 
@@ -113,8 +114,8 @@
 
             get
             {
-                this.SetupResourceAccessor();
-                return this.errorMessageResourceAccessor();
+                SetupResourceAccessor();
+                return errorMessageResourceAccessor();
             }
         }
 
@@ -137,7 +138,7 @@
         /// <returns>An instance of the formatted error message.</returns>
         public virtual string FormatErrorMessage( string name )
         {
-            return string.Format( CultureInfo.CurrentCulture, this.ErrorMessageString, new object[] { name } );
+            return string.Format( CultureInfo.CurrentCulture, ErrorMessageString, new object[] { name } );
         }
 
         /// <summary>
@@ -146,18 +147,16 @@
         /// <param name="value">The value to validate.</param>
         /// <param name="validationContext">The context information about the validation operation.</param>
         /// <returns>An instance of the <see cref="ValidationResult" /> class.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public ValidationResult GetValidationResult( object value, ValidationContext validationContext )
         {
-            if ( validationContext == null )
-            {
-                throw new ArgumentNullException( "validationContext" );
-            }
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
-            var result = this.IsValid( value, validationContext );
+            var result = IsValid( value, validationContext );
 
             if ( ( result != null ) && !( ( result != null ) ? !string.IsNullOrEmpty( result.ErrorMessage ) : false ) )
             {
-                result = new ValidationResult( this.FormatErrorMessage( validationContext.DisplayName ), result.MemberNames );
+                result = new ValidationResult( FormatErrorMessage( validationContext.DisplayName ), result.MemberNames );
             }
 
             return result;
@@ -172,22 +171,22 @@
         {
             var valid = false;
 
-            lock ( this.syncLock )
+            lock ( syncLock )
             {
-                if ( this.isCallingOverload )
+                if ( isCallingOverload )
                 {
                     throw new NotImplementedException( DataAnnotationsResources.ValidationAttribute_IsValid_NotImplemented );
                 }
 
-                this.isCallingOverload = true;
+                isCallingOverload = true;
 
                 try
                 {
-                    valid = this.IsValid( value, null ) == null;
+                    valid = IsValid( value, null ) == ValidationResult.Success;
                 }
                 finally
                 {
-                    this.isCallingOverload = false;
+                    isCallingOverload = false;
                 }
             }
 
@@ -202,32 +201,35 @@
         /// <returns>An instance of the <see cref="ValidationResult" /> class.</returns>
         protected virtual ValidationResult IsValid( object value, ValidationContext validationContext )
         {
-            ValidationResult result;
+            var result = ValidationResult.Success;
 
-            lock ( this.syncLock )
+            lock ( syncLock )
             {
-                if ( this.isCallingOverload )
+                if ( isCallingOverload )
                 {
                     throw new NotImplementedException( DataAnnotationsResources.ValidationAttribute_IsValid_NotImplemented );
                 }
 
-                this.isCallingOverload = true;
+                isCallingOverload = true;
 
                 try
                 {
-                    var success = ValidationResult.Success;
-
-                    if ( !this.IsValid( value ) )
+                    if ( !IsValid( value ) )
                     {
-                        string[] memberNames = ( validationContext.MemberName != null ) ? new string[] { validationContext.MemberName } : null;
-                        success = new ValidationResult( this.FormatErrorMessage( validationContext.DisplayName ), memberNames );
+                        if ( validationContext == null )
+                        {
+                            result = new ValidationResult( DataAnnotationsResources.ValidationAttribute_InvalidValue );
+                        }
+                        else
+                        {
+                            var memberNames = validationContext.MemberName != null ? new [] { validationContext.MemberName } : null;
+                            result = new ValidationResult( FormatErrorMessage( validationContext.DisplayName ), memberNames );
+                        }
                     }
-
-                    result = success;
                 }
                 finally
                 {
-                    this.isCallingOverload = false;
+                    isCallingOverload = false;
                 }
             }
 
@@ -236,12 +238,12 @@
 
         private void SetResourceAccessorByPropertyLookup()
         {
-            if ( ( this.errorMessageResourceType == null ) || string.IsNullOrEmpty( this.errorMessageResourceName ) )
+            if ( ( errorMessageResourceType == null ) || string.IsNullOrEmpty( errorMessageResourceName ) )
             {
                 throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.ValidationAttribute_NeedBothResourceTypeAndResourceName, new object[0] ) );
             }
 
-            var property = this.errorMessageResourceType.GetRuntimeProperty( this.errorMessageResourceName );
+            var property = errorMessageResourceType.GetRuntimeProperty( errorMessageResourceName );
 
             if ( property != null )
             {
@@ -255,27 +257,27 @@
 
             if ( property == null )
             {
-                throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.ValidationAttribute_ResourceTypeDoesNotHaveProperty, new object[] { this.errorMessageResourceType.FullName, this.errorMessageResourceName } ) );
+                throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.ValidationAttribute_ResourceTypeDoesNotHaveProperty, new object[] { errorMessageResourceType.FullName, errorMessageResourceName } ) );
             }
 
             if ( property.PropertyType != typeof( string ) )
             {
-                throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.ValidationAttribute_ResourcePropertyNotStringType, new object[] { property.Name, this.errorMessageResourceType.FullName } ) );
+                throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.ValidationAttribute_ResourcePropertyNotStringType, new object[] { property.Name, errorMessageResourceType.FullName } ) );
             }
 
-            this.errorMessageResourceAccessor = () => (string) property.GetValue( null, null );
+            errorMessageResourceAccessor = () => (string) property.GetValue( null, null );
         }
 
         private void SetupResourceAccessor()
         {
-            if ( this.errorMessageResourceAccessor != null )
+            if ( errorMessageResourceAccessor != null )
                 return;
 
             Func<string> func = null;
-            string localErrorMessage = this.errorMessage;
-            bool flag = !string.IsNullOrEmpty( this.errorMessageResourceName );
+            string localErrorMessage = errorMessage;
+            bool flag = !string.IsNullOrEmpty( errorMessageResourceName );
             bool flag2 = !string.IsNullOrEmpty( localErrorMessage );
-            bool flag3 = this.errorMessageResourceType != null;
+            bool flag3 = errorMessageResourceType != null;
 
             if ( flag == flag2 )
             {
@@ -289,7 +291,7 @@
 
             if ( flag )
             {
-                this.SetResourceAccessorByPropertyLookup();
+                SetResourceAccessorByPropertyLookup();
             }
             else
             {
@@ -297,7 +299,7 @@
                 {
                     func = () => localErrorMessage;
                 }
-                this.errorMessageResourceAccessor = func;
+                errorMessageResourceAccessor = func;
             }
         }
 
@@ -308,17 +310,12 @@
         /// <param name="validationContext">The <see cref="ValidationContext" /> object that describes the context where the validation checks are performed. This parameter cannot be null.</param>
         public void Validate( object value, ValidationContext validationContext )
         {
-            if ( validationContext == null )
-            {
-                throw new ArgumentNullException( "validationContext" );
-            }
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
-            var validationResult = this.GetValidationResult( value, validationContext );
+            var validationResult = GetValidationResult( value, validationContext );
 
-            if ( validationResult != null )
-            {
+            if ( validationResult != ValidationResult.Success )
                 throw new ValidationException( validationResult, this, value );
-            }
         }
 
         /// <summary>
@@ -328,10 +325,8 @@
         /// <param name="name">The name to include in the error message.</param>
         public void Validate( object value, string name )
         {
-            if ( !this.IsValid( value ) )
-            {
-                throw new ValidationException( this.FormatErrorMessage( name ), this, value );
-            }
+            if ( !IsValid( value ) )
+                throw new ValidationException( FormatErrorMessage( name ), this, value );
         }
     }
 }

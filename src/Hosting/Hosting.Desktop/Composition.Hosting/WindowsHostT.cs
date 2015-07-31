@@ -50,13 +50,15 @@
         /// </example>
         public override void Run( Application application )
         {
+            Arg.NotNull( application, nameof( application ) );
+
             // setup export by convention
-            this.Configuration.WithPart<ShowShellView<T>>();
+            Configuration.WithPart<ShowShellView<T>>();
 
             // automatically register tasks
             // note: use WithConfiguration to enable tolerance to the fact that the task could
             // have already been registered and re-registering would throw an exception
-            this.WithConfiguration<ShowShellView<T>>();
+            WithConfiguration<ShowShellView<T>>();
             
             base.Run( application );
         }

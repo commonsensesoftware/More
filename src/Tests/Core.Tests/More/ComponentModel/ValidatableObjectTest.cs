@@ -26,11 +26,11 @@
             {
                 get
                 {
-                    return this.id;
+                    return id;
                 }
                 set
                 {
-                    this.SetProperty( ref this.id, value );
+                    SetProperty( ref id, value );
                 }
             }
 
@@ -43,11 +43,11 @@
             {
                 get
                 {
-                    return this.name;
+                    return name;
                 }
                 set
                 {
-                    this.SetProperty( ref this.name, value );
+                    SetProperty( ref name, value );
                 }
             }
 
@@ -60,11 +60,11 @@
             {
                 get
                 {
-                    return this.address;
+                    return address;
                 }
                 set
                 {
-                    this.SetProperty( ref this.address, value );
+                    SetProperty( ref address, value );
                 }
             }
 
@@ -72,11 +72,11 @@
             {
                 get
                 {
-                    return this.hireDate;
+                    return hireDate;
                 }
                 set
                 {
-                    this.SetProperty( ref this.hireDate, value );
+                    SetProperty( ref hireDate, value );
                 }
             }
 
@@ -84,11 +84,11 @@
             {
                 get
                 {
-                    return this.separationDate;
+                    return separationDate;
                 }
                 set
                 {
-                    this.SetProperty( ref this.separationDate, value );
+                    SetProperty( ref separationDate, value );
                 }
             }
 
@@ -99,42 +99,42 @@
 
             public IMultivalueDictionary<string, IValidationResult> InvokeGetPropertyErrors()
             {
-                return this.PropertyErrors;
+                return PropertyErrors;
             }
 
             public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue )
             {
-                return this.IsPropertyValid( newValue, propertyName );
+                return IsPropertyValid( newValue, propertyName );
             }
 
             public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue, ICollection<IValidationResult> results )
             {
-                return this.IsPropertyValid( newValue, results, propertyName );
+                return IsPropertyValid( newValue, results, propertyName );
             }
 
             public void InvokeValidateProperty<TValue>( string propertyName, TValue newValue )
             {
-                this.ValidateProperty( newValue, propertyName );
+                ValidateProperty( newValue, propertyName );
             }
 
             public IEnumerable<string> InvokeFormatErrorMessages( string propertyName, IEnumerable<IValidationResult> results )
             {
-                return this.FormatErrorMessages( propertyName, results );
+                return FormatErrorMessages( propertyName, results );
             }
 
             public void InvokeSetProperty<TValue>( string propertyName, ref TValue currentValue, TValue newValue, IEqualityComparer<TValue> comparer )
             {
-                this.SetProperty( ref currentValue, newValue, comparer, propertyName );
+                SetProperty( ref currentValue, newValue, comparer, propertyName );
             }
 
             public void InvokeOnErrorsChanged( string propertyName )
             {
-                this.OnErrorsChanged( propertyName );
+                OnErrorsChanged( propertyName );
             }
 
             public void InvokeOnErrorsChanged( DataErrorsChangedEventArgs e )
             {
-                this.OnErrorsChanged( e );
+                OnErrorsChanged( e );
             }
         }
 

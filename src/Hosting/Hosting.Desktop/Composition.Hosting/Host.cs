@@ -33,26 +33,26 @@
         {
             Contract.Ensures( Contract.Result<CompositionHost>() != null );
 
-            var conventions = this.conventionsHolder.Value;
-            var config = this.Configuration;
+            var conventions = conventionsHolder.Value;
+            var config = Configuration;
             var origin = typeof( Host ).Name;
 
             config.WithAppDomain( conventions );
             config.WithDefaultConventions( conventions );
             config.WithProvider( new HostExportDescriptorProvider( this, origin ) );
-            config.WithProvider( new ConfigurationExportProvider( this.configSettingLocator, origin ) );
+            config.WithProvider( new ConfigurationExportProvider( configSettingLocator, origin ) );
 
-            var container = config.CreateContainer();
+            var newContainer = config.CreateContainer();
 
             // register default services directly after the underlying container is created
             // optimization: call base implementation because this object will never be composed
             base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
             base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
 
-            return container;
+            return newContainer;
         }
 
-        partial void AddPlatformSpecificConventions( ConventionBuilder builder )
+        static partial void AddPlatformSpecificConventions( ConventionBuilder builder )
         {
             var assembly = new HostAssemblySpecification();
             var window = new AssignableSpecification<Window>().And( new AssignableSpecification<IShellView>().Not() );
@@ -103,7 +103,7 @@
             // HACK: WPF doesn't set the Application.Current property until an application object has been created.  This can cause composition issues.
             // Require this method to accept an application object to ensure it's set.  This also simplifies startup code.
 
-            Contract.Requires<ArgumentNullException>( application != null, "application" );
+            Arg.NotNull( application, nameof( application ) );
 
             // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )
@@ -112,7 +112,7 @@
             try
             {
                 // build up and execute the startup activities
-                foreach ( var activity in this.Activities )
+                foreach ( var activity in Activities )
                     activity.Execute( this );
             }
             catch ( HostException ex )
@@ -127,7 +127,7 @@
 
             // set the default unit of work if unset
             if ( UnitOfWork.Provider == UnitOfWork.DefaultProvider )
-                UnitOfWork.Provider = new UnitOfWorkFactoryProvider( this.Container.GetExports<IUnitOfWorkFactory> );
+                UnitOfWork.Provider = new UnitOfWorkFactoryProvider( Container.GetExports<IUnitOfWorkFactory> );
 
             // run the application
             if ( application.MainWindow != null )

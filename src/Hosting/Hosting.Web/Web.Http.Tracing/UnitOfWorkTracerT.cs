@@ -1,6 +1,6 @@
 ﻿namespace More.Web.Http.Tracing
 {
-    using More.ComponentModel;
+    using ComponentModel;
     using System;
     using System.ComponentModel;
     using System.Composition;
@@ -34,7 +34,6 @@
         public UnitOfWorkTracer( IUnitOfWork<T> unitOfWork, HttpRequestMessage request )
             : this( unitOfWork, request, "Data" )
         {
-            Contract.Requires<ArgumentNullException>( unitOfWork != null, "unitOfWork" );
         }
 
         /// <summary>
@@ -46,26 +45,26 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public UnitOfWorkTracer( IUnitOfWork<T> unitOfWork, HttpRequestMessage request, string category )
         {
-            Contract.Requires<ArgumentNullException>( unitOfWork != null, "unitOfWork" );
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( category ), "category" );
+            Arg.NotNull( unitOfWork, nameof( unitOfWork ) );
+            Arg.NotNullOrEmpty( category, nameof( category ) );
 
-            this.operatorName = unitOfWork.GetType().Name;
-            this.decorated = unitOfWork;
-            this.decorated.PropertyChanged += this.OnDecoratedPropertyChanged;
+            operatorName = unitOfWork.GetType().Name;
+            decorated = unitOfWork;
+            decorated.PropertyChanged += OnDecoratedPropertyChanged;
             this.category = category;
 
             if ( ( this.request = request ) != null )
-                this.traceWriter = request.GetConfiguration().Services.GetTraceWriter() ?? NullTraceWriter.Instance;
+                traceWriter = request.GetConfiguration().Services.GetTraceWriter() ?? NullTraceWriter.Instance;
             else
-                this.traceWriter = NullTraceWriter.Instance;
+                traceWriter = NullTraceWriter.Instance;
         }
 
         private void OnDecoratedPropertyChanged( object sender, PropertyChangedEventArgs e )
         {
             Contract.Requires( e != null );
 
-            if ( string.IsNullOrEmpty( e.PropertyName ) || e.PropertyName == "HasPendingChanges" )
-                this.OnPropertyChanged( e );
+            if ( string.IsNullOrEmpty( e.PropertyName ) || e.PropertyName == nameof( HasPendingChanges ) )
+                OnPropertyChanged( e );
         }
 
         /// <summary>
@@ -76,13 +75,13 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.category ) );
-                return this.category;
+                Contract.Ensures( !string.IsNullOrEmpty( category ) );
+                return category;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( value ), "value" );
-                this.category = value;
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                category = value;
             }
         }
 
@@ -94,8 +93,8 @@
         {
             get
             {
-                Contract.Ensures( this.traceWriter != null );
-                return this.traceWriter;
+                Contract.Ensures( traceWriter != null );
+                return traceWriter;
             }
         }
 
@@ -107,8 +106,8 @@
         {
             get
             {
-                Contract.Ensures( this.request != null );
-                return this.request;
+                Contract.Ensures( request != null );
+                return request;
             }
         }
 
@@ -121,14 +120,14 @@
         {
             var duration = new TraceStopwatch( tr => tr.Message = SR.CommitBegin, tr => tr.Message = SR.CommitEnd );
 
-            return this.TraceWriter.TraceBeginEndAsync(
-                this.Request,
-                this.TraceCategory,
+            return TraceWriter.TraceBeginEndAsync(
+                Request,
+                TraceCategory,
                 TraceLevel.Info,
-                this.operatorName,
-                "CommitAsync",
+                operatorName,
+                nameof( CommitAsync ),
                 duration.StartTrace,
-                () => this.decorated.CommitAsync( cancellationToken ),
+                () => decorated.CommitAsync( cancellationToken ),
                 duration.EndTrace,
                 null );
         }
@@ -141,7 +140,7 @@
         {
             get
             {
-                return this.decorated.HasPendingChanges;
+                return decorated.HasPendingChanges;
             }
         }
 
@@ -151,18 +150,20 @@
         /// <param name="item">The changed item to register.</param>
         public void RegisterChanged( T item )
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            Arg.NotNull( item, nameof( item ) );
+
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "RegisterChanged";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( RegisterChanged );
                 } );
 
-            this.decorated.RegisterChanged( item );
+            decorated.RegisterChanged( item );
         }
 
         /// <summary>
@@ -171,18 +172,20 @@
         /// <param name="item">The new item to register.</param>
         public void RegisterNew( T item )
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            Arg.NotNull( item, nameof( item ) );
+
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "RegisterNew";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( RegisterNew );
                 } );
 
-            this.decorated.RegisterNew( item );
+            decorated.RegisterNew( item );
         }
 
         /// <summary>
@@ -191,18 +194,20 @@
         /// <param name="item">The removed item to register.</param>
         public void RegisterRemoved( T item )
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            Arg.NotNull( item, nameof( item ) );
+
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "RegisterRemoved";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( RegisterRemoved );
                 } );
 
-            this.decorated.RegisterRemoved( item );
+            decorated.RegisterRemoved( item );
         }
 
         /// <summary>
@@ -210,18 +215,18 @@
         /// </summary>
         public void Rollback()
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "Rollback";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( Rollback );
                 } );
 
-            this.decorated.Rollback();
+            decorated.Rollback();
         }
 
         /// <summary>
@@ -230,18 +235,20 @@
         /// <param name="item">The item to unregister.</param>
         public void Unregister( T item )
         {
-            this.TraceWriter.Trace(
-                this.Request,
-                this.TraceCategory,
+            Arg.NotNull( item, nameof( item ) );
+
+            TraceWriter.Trace(
+                Request,
+                TraceCategory,
                 TraceLevel.Debug,
                 r =>
                 {
                     r.Kind = TraceKind.Trace;
-                    r.Operator = this.operatorName;
-                    r.Operation = "Unregister";
+                    r.Operator = operatorName;
+                    r.Operation = nameof( Unregister );
                 } );
 
-            this.decorated.Unregister( item );
+            decorated.Unregister( item );
         }
 
         /// <summary>
@@ -252,7 +259,7 @@
         {
             get
             {
-                return this.decorated;
+                return decorated;
             }
         }
     }

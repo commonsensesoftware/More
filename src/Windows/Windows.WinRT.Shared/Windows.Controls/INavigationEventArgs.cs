@@ -1,10 +1,12 @@
 ﻿namespace More.Windows.Controls
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Defines the behavior of navigation event arguments.
     /// </summary>
+    [SuppressMessage( "Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Represents the contact used for WinRT event arguments." )]
     public interface INavigationEventArgs
     {
         /// <summary>

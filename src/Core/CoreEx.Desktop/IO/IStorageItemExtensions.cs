@@ -19,7 +19,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static FileInfo AsFileInfo( this IFile file )
         {
-            Arg.NotNull( file, "file" );
+            Arg.NotNull( file, nameof( file ) );
             Contract.Ensures( Contract.Result<FileInfo>() != null );
 
             var platform = file as IPlatformStorageItem<FileInfo>;
@@ -38,7 +38,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DirectoryInfo AsDirectoryInfo( this IFolder folder )
         {
-            Arg.NotNull( folder, "folder" );
+            Arg.NotNull( folder, nameof( folder ) );
             Contract.Ensures( Contract.Result<DirectoryInfo>() != null );
 
             var platform = folder as IPlatformStorageItem<DirectoryInfo>;

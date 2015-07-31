@@ -16,7 +16,7 @@
         /// </summary>
         protected ProjectTemplateWizard()
         {
-            this.CancelBehavior = ProjectTemplateCancelBehavior.Cancel;
+            CancelBehavior = ProjectTemplateCancelBehavior.Cancel;
         }
 
         /// <summary>
@@ -44,12 +44,12 @@
         {
             try
             {
-                this.BeforeOpeningFile( projectItem );
+                BeforeOpeningFile( projectItem );
             }
             catch
             {
                 // note: RunFinished is not called if an exception occurs
-                this.Context.Abandon();
+                Context.Abandon();
                 throw;
             }
         }
@@ -66,12 +66,12 @@
         {
             try
             {
-                this.ProjectFinishedGenerating( project );
+                ProjectFinishedGenerating( project );
             }
             catch
             {
                 // note: RunFinished is not called if an exception occurs
-                this.Context.Abandon();
+                Context.Abandon();
                 throw;
             }
         }
@@ -97,12 +97,12 @@
             try
             {
                 // clean up project directory
-                if ( Directory.Exists( this.ProjectDirectory ) )
-                    Directory.Delete( this.ProjectDirectory );
+                if ( Directory.Exists( ProjectDirectory ) )
+                    Directory.Delete( ProjectDirectory );
 
                 // clean up solution directory
-                if ( Directory.Exists( this.SolutionDirectory ) )
-                    Directory.Delete( this.SolutionDirectory );
+                if ( Directory.Exists( SolutionDirectory ) )
+                    Directory.Delete( SolutionDirectory );
             }
             catch ( IOException )
             {
@@ -112,7 +112,7 @@
 
             // visual studio's behavior is influenced by which exception is thrown. use the enumeration
             // to map to an exception. the exception message is irrelevant in this context.
-            switch ( this.CancelBehavior )
+            switch ( CancelBehavior )
             {
                 case ProjectTemplateCancelBehavior.BackOut:
                     throw new WizardBackoutException();

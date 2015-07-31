@@ -19,7 +19,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void PerformClick<T>( this IClickableItem<T> item )
         {
-            Arg.NotNull( item, "item" );
+            Arg.NotNull( item, nameof( item ) );
 
             if ( item.Click.CanExecute( null ) )
                 item.Click.Execute( null );
@@ -36,7 +36,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static void PerformClick<T>( this IClickableItem<T> item, object parameter )
         {
-            Arg.NotNull( item, "item" );
+            Arg.NotNull( item, nameof( item ) );
 
             if ( item.Click.CanExecute( parameter ) )
                 item.Click.Execute( parameter );

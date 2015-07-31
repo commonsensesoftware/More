@@ -19,7 +19,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static bool Any( this IEnumerable sequence )
         {
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
 
             var enumerator = sequence.GetEnumerator();
 
@@ -45,7 +45,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int Count( this IEnumerable sequence )
         {
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<int>() >= 0 );
 
             var collection = sequence as ICollection;
@@ -81,7 +81,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int IndexOf( this IEnumerable sequence, object item )
         {
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Contract.Ensures( Contract.Result<int>() >= -1 );
 
             return sequence.IndexOf( item, EqualityComparer<object>.Default );
@@ -98,8 +98,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by code contract." )]
         public static int IndexOf( this IEnumerable sequence, object item, IEqualityComparer comparer )
         {
-            Arg.NotNull( sequence, "sequence" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( sequence, nameof( sequence ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
             Contract.Ensures( Contract.Result<int>() >= -1 );
 
             var enumerator = sequence.GetEnumerator();
@@ -137,7 +137,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static object ElementAt( this IEnumerable sequence, int index )
         {
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
             Arg.GreaterThanOrEqualTo( index, 0, "index" );
 
             var list = sequence as IList;
@@ -184,7 +184,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static object ElementAtOrDefault( this IEnumerable sequence, int index )
         {
-            Arg.NotNull( sequence, "sequence" );
+            Arg.NotNull( sequence, nameof( sequence ) );
 
             if ( index < 0 )
                 return null;

@@ -13,7 +13,7 @@
         /// </summary>
         public UriConverter()
         {
-            this.UriKind = System.UriKind.Absolute;
+            UriKind = System.UriKind.Absolute;
         }
 
         /// <summary>
@@ -41,10 +41,10 @@
 
             if ( value == null )
             {
-                if ( string.IsNullOrEmpty( this.DefaultNullValue ) )
+                if ( string.IsNullOrEmpty( DefaultNullValue ) )
                     return null;
                 else
-                    value = this.DefaultNullValue;
+                    value = DefaultNullValue;
             }
 
 #if NETFX_CORE
@@ -53,11 +53,11 @@
             var formattable = value as IFormattable;
 
             if ( formattable != null )
-                return new Uri( formattable.ToString( this.Format, culture ), this.UriKind );
-            else if ( !string.IsNullOrEmpty( this.Format ) )
-                return new Uri( string.Format( culture, this.Format, value ), this.UriKind );
+                return new Uri( formattable.ToString( Format, culture ), UriKind );
+            else if ( !string.IsNullOrEmpty( Format ) )
+                return new Uri( string.Format( culture, Format, value ), UriKind );
 
-            return new Uri( value.ToString(), this.UriKind );
+            return new Uri( value.ToString(), UriKind );
         }
 
 #if NETFX_CORE
@@ -73,7 +73,7 @@
             if ( !supported )
                 throw new ArgumentException( ExceptionMessage.UnsupportedConversionType.FormatDefault( targetType ), "targetType" );
 
-            if ( value == null || StringComparer.Ordinal.Equals( value.ToString(), this.DefaultNullValue ) )
+            if ( value == null || StringComparer.Ordinal.Equals( value.ToString(), DefaultNullValue ) )
                 return null;
 
             return value.ToString();

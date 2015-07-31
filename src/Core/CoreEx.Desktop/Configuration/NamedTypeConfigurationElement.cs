@@ -30,8 +30,8 @@
         protected NamedTypeConfigurationElement( string name, Type baseType )
             : base( name )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            this.BaseType = baseType;
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            BaseType = baseType;
         }
 
         /// <summary>
@@ -61,12 +61,12 @@
         {
             get
             {
-                return this.BaseType;
+                return BaseType;
             }
             set
             {
-                this.Validate( value );
-                this.BaseType = value;
+                Validate( value );
+                BaseType = value;
             }
         }
 

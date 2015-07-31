@@ -23,7 +23,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ContainerConfiguration WithPrivateAssemblies( this ContainerConfiguration configuration )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
+            Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ContainerConfiguration>() != null );
             return configuration.WithPrivateAssemblies( (AttributedModelProvider) null );
         }
@@ -37,7 +37,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ContainerConfiguration WithPrivateAssemblies( this ContainerConfiguration configuration, AttributedModelProvider conventions )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
+            Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ContainerConfiguration>() != null );
 
             var relativeSearchPath = AppDomain.CurrentDomain.RelativeSearchPath;
@@ -76,7 +76,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ContainerConfiguration WithAppDomain( this ContainerConfiguration configuration )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
+            Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ContainerConfiguration>() != null );
             return configuration.WithAppDomain( (AttributedModelProvider) null );
         }
@@ -92,7 +92,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ContainerConfiguration WithAppDomain( this ContainerConfiguration configuration, AttributedModelProvider conventions )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
+            Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ContainerConfiguration>() != null );
 
             // find all the executables and libraries in the current base directory

@@ -24,7 +24,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "False positive. The overload is called using a constructed Uri object." )]
         public Task<T> FromResourceAsync( string resourceName )
         {
-            Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( resourceName ), "resourceName" );
+            Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
             var uri = new Uri( resourceName, UriKind.RelativeOrAbsolute );
@@ -32,7 +32,7 @@
             if ( !uri.IsAbsoluteUri)
                 uri = new Uri( TypeExtensions.AppXFormat.FormatInvariant( resourceName), UriKind.Absolute );
 
-            return this.FromResourceAsync( uri );
+            return FromResourceAsync( uri );
         }
 
         /// <summary>
@@ -43,13 +43,13 @@
         /// <remarks>The specified resource is retrieved using the <see cref="M:StorageFile.GetFileFromApplicationUriAsync"/> method.</remarks>
         public virtual async Task<T> FromResourceAsync( Uri resourceUri )
         {
-            Contract.Requires<ArgumentNullException>( resourceUri != null, "resourceUri" );
+            Arg.NotNull( resourceUri, nameof( resourceUri ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
             var file = await StorageFile.GetFileFromApplicationUriAsync( resourceUri );
 
             using ( var inputStream = await file.OpenSequentialReadAsync() )
-                return await this.OnReadStreamAsync( inputStream.AsStreamForRead() );
+                return await OnReadStreamAsync( inputStream.AsStreamForRead() );
         }
     }
 }

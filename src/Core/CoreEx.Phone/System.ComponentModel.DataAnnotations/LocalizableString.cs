@@ -24,15 +24,15 @@
         {
             get
             {
-                return this.propertyValue;
+                return propertyValue;
             }
             set
             {
-                if ( this.propertyValue == value )
+                if ( propertyValue == value )
                     return;
 
-                this.ClearCache();
-                this.propertyValue = value;
+                ClearCache();
+                propertyValue = value;
             }
         }
 
@@ -41,33 +41,33 @@
         {
             get
             {
-                return this.resourceType;
+                return resourceType;
             }
             set
             {
-                if ( this.resourceType == value )
+                if ( resourceType == value )
                     return;
 
-                this.ClearCache();
-                this.resourceType = value;
+                ClearCache();
+                resourceType = value;
             }
         }
 
         internal string GetLocalizableValue()
         {
-            if ( this.cachedResult != null )
-                return this.cachedResult();
+            if ( cachedResult != null )
+                return cachedResult();
 
-            if ( this.propertyValue == null || this.resourceType == null )
+            if ( propertyValue == null || resourceType == null )
             {
-                this.cachedResult = () => this.propertyValue;
+                cachedResult = () => propertyValue;
             }
             else
             {
-                var property = this.resourceType.GetRuntimeProperty( this.propertyValue );
+                var property = resourceType.GetRuntimeProperty( propertyValue );
                 var flag = false;
 
-                if ( !this.resourceType.GetTypeInfo().IsVisible || property == null || property.PropertyType != typeof( string ) )
+                if ( !resourceType.GetTypeInfo().IsVisible || property == null || property.PropertyType != typeof( string ) )
                 {
                     flag = true;
                 }
@@ -80,27 +80,27 @@
                 if ( flag )
                 {
                     var exceptionMessage = DataAnnotationsResources.LocalizationFailed.FormatDefault(
-                        this.propertyName,
-                        this.resourceType.FullName,
-                        this.propertyValue );
+                        propertyName,
+                        resourceType.FullName,
+                        propertyValue );
 
-                    this.cachedResult = () =>
+                    cachedResult = () =>
                     {
                         throw new InvalidOperationException( exceptionMessage );
                     };
                 }
                 else
                 {
-                    this.cachedResult = () => (string) property.GetValue( null, null );
+                    cachedResult = () => (string) property.GetValue( null, null );
                 }
             }
 
-            return this.cachedResult();
+            return cachedResult();
         }
 
         private void ClearCache()
         {
-            this.cachedResult = null;
+            cachedResult = null;
         }
     }
 }

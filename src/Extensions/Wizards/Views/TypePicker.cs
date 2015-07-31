@@ -70,12 +70,12 @@
                 // pick type from available assemblies in another app domain. this prevents assemblies from being loaded into the current app domain/process,
                 // which could prevent prevent the target project from build (because the file is locked by Visual Studio)
                 proxy = (TypePicker.Proxy) appDomain.CreateInstanceAndUnwrap( assemblyName, typeName, false, BindingFlags.Default, null, null, null, null );
-                proxy.Title = this.Title;
-                proxy.NameConvention = this.NameConvention;
-                proxy.RestrictedBaseTypeNames = this.RestrictedBaseTypeNames.ToArray();
-                proxy.SourceProject = this.SourceProject;
+                proxy.Title = Title;
+                proxy.NameConvention = NameConvention;
+                proxy.RestrictedBaseTypeNames = RestrictedBaseTypeNames.ToArray();
+                proxy.SourceProject = SourceProject;
 
-                await appDomain.RunAsync( proxy.CreateLocalAssemblyAsync, this.LocalAssemblyName ).ConfigureAwait( false );
+                await appDomain.RunAsync( proxy.CreateLocalAssemblyAsync, LocalAssemblyName ).ConfigureAwait( false );
             }
             catch
             {
@@ -100,7 +100,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         public async Task<bool?> ShowDialogAsync( Window owner )
         {
-            var info = await Loader.LoadAsync( this.CreateProxyAsync, owner, SR.StatusInitializing );
+            var info = await Loader.LoadAsync( CreateProxyAsync, owner, SR.StatusInitializing );
             var appDomain = info.Item1;
             var proxy = info.Item2;
             var ownerHandler = owner == null ? IntPtr.Zero : new WindowInteropHelper( owner ).Handle;
@@ -109,7 +109,7 @@
             try
             {
                 result = proxy.ShowDialog( ownerHandler );
-                this.SelectedType = proxy.SelectedType;
+                SelectedType = proxy.SelectedType;
             }
             finally
             {
@@ -184,8 +184,8 @@
         {
             get
             {
-                Contract.Ensures( this.restrictedBaseTypeNames != null );
-                return this.restrictedBaseTypeNames;
+                Contract.Ensures( restrictedBaseTypeNames != null );
+                return restrictedBaseTypeNames;
             }
         }
     }

@@ -47,8 +47,8 @@
         /// <param name="getHashCode">The <see cref="Func{T1,TResult}">function</see> used to get the hash code for an object.</param>
         public DynamicComparer( Func<T, T, int> comparison, Func<T, int> getHashCode )
         {
-            Arg.NotNull( comparison, "comparison" );
-            Arg.NotNull( getHashCode, "getHashCode" );
+            Arg.NotNull( comparison, nameof( comparison ) );
+            Arg.NotNull( getHashCode, nameof( getHashCode ) );
             this.comparison = comparison;
             this.getHashCode = getHashCode;
         }
@@ -59,9 +59,9 @@
         /// <param name="getHashCode">The <see cref="Func{T1,TResult}">function</see> used to get the hash code for an object.</param>
         public DynamicComparer( Func<T, int> getHashCode )
         {
-            Arg.NotNull( getHashCode, "getHashCode" );
+            Arg.NotNull( getHashCode, nameof( getHashCode ) );
             this.getHashCode = getHashCode;
-            this.comparison = ( i1, i2 ) => this.GetHashCode( i1 ).CompareTo( this.GetHashCode( i2 ) );
+            comparison = ( i1, i2 ) => GetHashCode( i1 ).CompareTo( GetHashCode( i2 ) );
         }
 
         /// <summary>
@@ -74,14 +74,14 @@
         public int Compare( T x, T y )
         {
             if ( default( T ) != null )
-                return this.comparison( x, y );
+                return comparison( x, y );
 
             if ( x == null )
                 return y == null ? 0 : -1;
             else if ( y == null )
                 return 1;
 
-            return this.comparison( x, y );
+            return comparison( x, y );
         }
 
         /// <summary>
@@ -92,7 +92,7 @@
         /// <returns>True if the two objects are equal; otherwise, false.</returns>
         public bool Equals( T x, T y )
         {
-            return this.comparison( x, y ) == 0;
+            return comparison( x, y ) == 0;
         }
 
         /// <summary>
@@ -103,22 +103,22 @@
         /// <remarks>This method returns the default implementation of <see cref="M:Object.GetHashCode"/>.</remarks>
         public int GetHashCode( T obj )
         {
-            return this.getHashCode( obj );
+            return getHashCode( obj );
         }
 
         int IComparer.Compare( object x, object y )
         {
-            return this.Compare( (T) x, (T) y );
+            return Compare( (T) x, (T) y );
         }
 
         bool IEqualityComparer.Equals( object x, object y )
         {
-            return this.Equals( (T) x, (T) y );
+            return Equals( (T) x, (T) y );
         }
 
         int IEqualityComparer.GetHashCode( object obj )
         {
-            return this.GetHashCode( (T) obj );
+            return GetHashCode( (T) obj );
         }
     }
 }

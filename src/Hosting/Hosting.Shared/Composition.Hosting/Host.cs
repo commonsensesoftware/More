@@ -47,7 +47,7 @@
         public Host( Func<string, object> configurationSettingLocator )
             : this( new ContainerConfiguration(), configurationSettingLocator )
         {
-            Contract.Requires<ArgumentNullException>( configurationSettingLocator != null, "configurationSettingLocator" );
+            Arg.NotNull( configurationSettingLocator, nameof( configurationSettingLocator ) );
         }
 
         /// <summary>
@@ -58,7 +58,7 @@
         public Host( ContainerConfiguration configuration )
             : this( configuration, LocateSetting )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
+            Arg.NotNull( configuration, nameof( configuration ) );
         }
 
         /// <summary>
@@ -69,13 +69,13 @@
         [CLSCompliant( false )]
         public Host( ContainerConfiguration configuration, Func<string, object> configurationSettingLocator )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
-            Contract.Requires<ArgumentNullException>( configurationSettingLocator != null, "configurationSettingLocator" );
+            Arg.NotNull( configuration, nameof( configuration ) );
+            Arg.NotNull( configurationSettingLocator, nameof( configurationSettingLocator ) );
 
             this.configuration = configuration;
-            this.container = new Lazy<CompositionHost>( this.CreateContainer );
-            this.conventionsHolder = new Lazy<ConventionBuilder>( this.GetConventions );
-            this.configSettingLocator = configurationSettingLocator;
+            container = new Lazy<CompositionHost>( CreateContainer );
+            conventionsHolder = new Lazy<ConventionBuilder>( GetConventions );
+            configSettingLocator = configurationSettingLocator;
         }
 
         /// <summary>
@@ -87,8 +87,8 @@
         {
             get
             {
-                Contract.Ensures( this.configuration != null );
-                return this.configuration;
+                Contract.Ensures( configuration != null );
+                return configuration;
             }
         }
 
@@ -102,8 +102,8 @@
             get
             {
                 Contract.Ensures( Contract.Result<CompositionHost>() != null );
-                this.CheckDisposed();
-                return this.container.Value;
+                CheckDisposed();
+                return container.Value;
             }
         }
 
@@ -116,22 +116,22 @@
             get
             {
                 Contract.Ensures( Contract.Result<IReadOnlyList<IActivity>>() != null );
-                this.CheckDisposed();
-                return this.QueryActivities();
+                CheckDisposed();
+                return QueryActivities();
             }
         }
 
         private void CheckDisposed()
         {
-            if ( this.disposed )
-                throw new ObjectDisposedException( this.GetType().Name );
+            if ( disposed )
+                throw new ObjectDisposedException( GetType().Name );
         }
 
         private IReadOnlyList<IActivity> QueryActivities()
         {
             Contract.Ensures( Contract.Result<IReadOnlyList<IActivity>>() != null );
 
-            var composedTasks = this.GetComposedActivities();
+            var composedTasks = GetComposedActivities();
             var correlatedTasks = CorrelateActivityDependencies( composedTasks ).ToArray();
 
             return correlatedTasks;
@@ -161,16 +161,16 @@
             Contract.Ensures( Contract.Result<KeyedCollection<Type, Tuple<IActivity, IEnumerable<Type>>>>() != null );
 
             var composedActivities = new ObservableKeyedCollection<Type, Tuple<IActivity, IEnumerable<Type>>>( t => t.Item1.GetType() );
-            var activityExports = this.Container.GetExports<ExportFactory<IActivity, ExportMetadata>>().ToArray();
+            var activityExports = Container.GetExports<ExportFactory<IActivity, ExportMetadata>>().ToArray();
 
-            foreach ( var activityType in this.activityTypes )
+            foreach ( var activityType in activityTypes )
             {
                 var activity = GetExportedActivity( activityExports, activityType );
                 IActivityConfiguration config;
                 Tuple<IActivity, IEnumerable<Type>> tuple;
 
                 // look up configuration
-                if ( this.configurations.TryGetValue( activityType, out config ) )
+                if ( configurations.TryGetValue( activityType, out config ) )
                 {
                     // apply activity configuration
                     config.Configure( activity );
@@ -221,31 +221,32 @@
         /// <param name="disposing">Indicates whether the object is being disposed.</param>
         protected override void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
             base.Dispose( disposing );
 
             if ( !disposing )
                 return;
 
-            this.activityTypes.Clear();
-            this.configurations.Clear();
+            activityTypes.Clear();
+            configurations.Clear();
 
-            if ( this.container.IsValueCreated )
-                this.container.Value.Dispose();
+            if ( container.IsValueCreated )
+                container.Value.Dispose();
         }
 
-        partial void AddUISpecificConventions( ConventionBuilder builder );
+        static partial void AddUISpecificConventions( ConventionBuilder builder );
 
-        partial void AddPlatformSpecificConventions( ConventionBuilder builder );
+        static partial void AddPlatformSpecificConventions( ConventionBuilder builder );
 
         /// <summary>
         /// Gets the attributed model conventions used by the host.
         /// </summary>
         /// <returns>A <see cref="ConventionBuilder">convention builder</see>.</returns>
         [CLSCompliant( false )]
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is a factory method and should not be a property." )]
         protected virtual ConventionBuilder GetConventions()
         {
             Contract.Ensures( Contract.Result<ConventionBuilder>() != null );
@@ -261,8 +262,8 @@
             builder.ForTypesDerivedFrom<IActivity>().Export( b => b.AddMetadata( "ExportedType", t => t ) ).Export<IActivity>();
             builder.ForTypesMatching<IUnitOfWorkFactory>( unitOfWorkFactory.IsSatisfiedBy ).Export<IUnitOfWorkFactory>().Shared();
             builder.ForTypesMatching( dataAccess.IsSatisfiedBy ).ExportInterfaces( assembly.IsSatisfiedBy );
-            this.AddUISpecificConventions( builder );
-            this.AddPlatformSpecificConventions( builder );
+            AddUISpecificConventions( builder );
+            AddPlatformSpecificConventions( builder );
 
             return builder;
         }
@@ -300,22 +301,22 @@
         public ActivityConfiguration<TActivity> Register<TActivity>() where TActivity : IActivity
         {
             Contract.Ensures( Contract.Result<ActivityConfiguration<TActivity>>() != null );
-            this.CheckDisposed();
+            CheckDisposed();
 
             var activityType = typeof( TActivity );
 
-            if ( this.activityTypes.Contains( activityType ) )
+            if ( activityTypes.Contains( activityType ) )
                 throw new InvalidOperationException( ExceptionMessage.ActivityCannotBeRegisteredMoreThanOnce.FormatDefault( activityType ) );
 
-            this.activityTypes.Add( activityType );
+            activityTypes.Add( activityType );
 
             IActivityConfiguration config;
 
-            if ( this.configurations.TryGetValue( activityType, out config ) )
+            if ( configurations.TryGetValue( activityType, out config ) )
                 return (ActivityConfiguration<TActivity>) config;
 
             var newConfiguration = new ActivityConfiguration<TActivity>();
-            this.configurations.Add( activityType, newConfiguration );
+            configurations.Add( activityType, newConfiguration );
 
             return newConfiguration;
         }
@@ -357,20 +358,20 @@
         public ActivityConfiguration<TActivity> WithConfiguration<TActivity>() where TActivity : IActivity
         {
             Contract.Ensures( Contract.Result<ActivityConfiguration<TActivity>>() != null );
-            this.CheckDisposed();
+            CheckDisposed();
 
             var activityType = typeof( TActivity );
 
-            if ( !this.activityTypes.Contains( activityType ) )
-                this.activityTypes.Add( activityType );
+            if ( !activityTypes.Contains( activityType ) )
+                activityTypes.Add( activityType );
 
             IActivityConfiguration config;
 
-            if ( this.configurations.TryGetValue( activityType, out config ) )
+            if ( configurations.TryGetValue( activityType, out config ) )
                 return (ActivityConfiguration<TActivity>) config;
 
             var newConfiguration = new ActivityConfiguration<TActivity>();
-            this.configurations.Add( activityType, newConfiguration );
+            configurations.Add( activityType, newConfiguration );
 
             return newConfiguration;
         }
@@ -384,13 +385,13 @@
         /// <param name="promote">True to promote this request to any parent service containers; otherwise, false.</param>
         public override void AddService( Type serviceType, ServiceCreatorCallback callback, bool promote )
         {
-            this.CheckDisposed();
+            CheckDisposed();
 
             var @new = callback;
             ServiceCreatorCallback composedCallback = ( c, t ) =>
             {
                 var instance = @new( c, t );
-                this.Container.SatisfyImports( instance );
+                Container.SatisfyImports( instance );
                 return instance;
             };
 
@@ -405,15 +406,13 @@
         /// or <c>null</c> if no match is found.</returns>
         public override object GetService( Type serviceType )
         {
-            this.CheckDisposed();
-
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
+            CheckDisposed();
 
             var generator = new ServiceTypeDisassembler();
             var key = generator.ExtractKey( serviceType );
 #if WINDOWS_PHONE_APP
-            return this.GetService( serviceType, key );
+            return GetService( serviceType, key );
 #else
             Type innerServiceType;
             object service = null;
@@ -429,7 +428,7 @@
                     if ( ExportedInterfaces.Contains( innerServiceType ) )
                         exports.Add( this );
                     else if ( ExportedTypes.Contains( innerServiceType ) )
-                        exports.Add( this.Container );
+                        exports.Add( Container );
                 }
 
                 // add any matching, manually added services
@@ -437,7 +436,7 @@
                     exports.Add( service );
 
                 // add matching exports
-                exports.AddRange( this.Container.GetExports( innerServiceType, key ) );
+                exports.AddRange( Container.GetExports( innerServiceType, key ) );
                 return exports;
             }
 
@@ -447,7 +446,7 @@
                 if ( ExportedInterfaces.Contains( serviceType ) )
                     return this;
                 else if ( ExportedTypes.Contains( serviceType ) )
-                    return this.Container;
+                    return Container;
             }
 
             // return any matching, manually added services
@@ -456,7 +455,7 @@
 
             // return matching export
             object export;
-            this.Container.TryGetExport( serviceType, key, out export );
+            Container.TryGetExport( serviceType, key, out export );
 
             return export;
 #endif
@@ -469,7 +468,7 @@
         public virtual void Compose( object instance )
         {
             if ( instance != null )
-                this.Container.SatisfyImports( instance, this.conventionsHolder.Value );
+                Container.SatisfyImports( instance, conventionsHolder.Value );
         }
     }
 }

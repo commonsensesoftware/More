@@ -19,13 +19,13 @@
         {
             get
             {
-                Contract.Ensures( this.targetType != null );
-                return this.targetType;
+                Contract.Ensures( targetType != null );
+                return targetType;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.targetType = value;
+                Arg.NotNull( value, nameof( value ) );
+                targetType = value;
             }
         }
     }

@@ -27,14 +27,14 @@
         {
             get
             {
-                Contract.Ensures( this.indentSize >= 0 );
-                return this.indentSize;
+                Contract.Ensures( indentSize >= 0 );
+                return indentSize;
             }
             [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Reserved for use if indent size needs to be changed." )]
             set
             {
                 Contract.Requires( value >= 0 );
-                this.indentSize = value;
+                indentSize = value;
             }
         }
 
@@ -42,65 +42,65 @@
         {
             get
             {
-                Contract.Ensures( this.indentLevel >= 0 );
-                return this.indentLevel;
+                Contract.Ensures( indentLevel >= 0 );
+                return indentLevel;
             }
         }
 
         internal void Indent()
         {
-            Contract.Ensures( this.IndentLevel == Contract.OldValue( this.IndentLevel ) + 1 );
-            this.indentText = new string( Space, ++this.indentLevel * this.IndentSize );
+            Contract.Ensures( IndentLevel == Contract.OldValue( IndentLevel ) + 1 );
+            indentText = new string( Space, ++indentLevel * IndentSize );
         }
 
         internal void Unindent()
         {
-            Contract.Ensures( this.IndentLevel == 0 || this.IndentLevel == Contract.OldValue( this.IndentLevel ) - 1 );
-            this.indentText = new string( Space, Math.Max( 0, --this.indentLevel ) * this.IndentSize );
+            Contract.Ensures( IndentLevel == 0 || IndentLevel == Contract.OldValue( IndentLevel ) - 1 );
+            indentText = new string( Space, Math.Max( 0, --indentLevel ) * IndentSize );
         }
 
         public override void Close()
         {
-            this.innerWriter.Close();
+            innerWriter.Close();
         }
 
         protected override void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
             base.Dispose( disposing );
 
             if ( !disposing )
                 return;
 
-            this.innerWriter.Dispose();
+            innerWriter.Dispose();
         }
 
         public override Encoding Encoding
         {
             get
             {
-                return this.innerWriter.Encoding;
+                return innerWriter.Encoding;
             }
         }
 
         public override void Flush()
         {
-            this.innerWriter.Flush();
+            innerWriter.Flush();
         }
 
         public override Task FlushAsync()
         {
-            return this.innerWriter.FlushAsync();
+            return innerWriter.FlushAsync();
         }
 
         public override IFormatProvider FormatProvider
         {
             get
             {
-                return this.innerWriter.FormatProvider;
+                return innerWriter.FormatProvider;
             }
         }
 
@@ -108,46 +108,46 @@
         {
             get
             {
-                return this.innerWriter.NewLine;
+                return innerWriter.NewLine;
             }
             set
             {
-                this.innerWriter.NewLine = value;
+                innerWriter.NewLine = value;
             }
         }
 
         public override void Write( char value )
         {
-            this.innerWriter.Write( value );
+            innerWriter.Write( value );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by underlying TextWriter." )]
         public override void Write( char[] buffer )
         {
-            this.innerWriter.Write( buffer );
+            innerWriter.Write( buffer );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by underlying TextWriter." )]
         public override void Write( char[] buffer, int index, int count )
         {
-            this.innerWriter.Write( buffer, index, count );
+            innerWriter.Write( buffer, index, count );
         }
 
         public override void Write( string value )
         {
-            this.innerWriter.Write( this.indentText );
-            this.innerWriter.Write( value );
+            innerWriter.Write( indentText );
+            innerWriter.Write( value );
         }
 
         public override void WriteLine( string value )
         {
-            this.innerWriter.Write( this.indentText );
-            this.innerWriter.WriteLine( value );
+            innerWriter.Write( indentText );
+            innerWriter.WriteLine( value );
         }
 
         public override void WriteLine()
         {
-            this.innerWriter.WriteLine();
+            innerWriter.WriteLine();
         }
     }
 }

@@ -33,6 +33,6 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
+  <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
  </files>
 </package>

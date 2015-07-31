@@ -103,7 +103,7 @@
         /// </summary>
         public NumericDenominationConverter()
         {
-            this.denomination = 1;
+            denomination = 1;
         }
 
         /// <summary>
@@ -113,9 +113,9 @@
         /// <param name="defaultDenomination">The default denomination for the converter.</param>
         public NumericDenominationConverter( string defaultFormat, decimal defaultDenomination )
         {
-            Contract.Requires<ArgumentOutOfRangeException>( defaultDenomination > 0m, "defaultDenomination" );
-            this.DefaultFormat = defaultFormat;
-            this.denomination = defaultDenomination;
+            Arg.GreaterThan( defaultDenomination, 0m, nameof( defaultDenomination ) );
+            DefaultFormat = defaultFormat;
+            denomination = defaultDenomination;
         }
 
         /// <summary>
@@ -137,12 +137,12 @@
             get
             {
                 Contract.Ensures( Contract.Result<decimal>() > 0m );
-                return this.denomination;
+                return denomination;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value > 0m, "value" );
-                this.denomination = value;
+                Arg.GreaterThan( value, 0m, nameof( value ) );
+                denomination = value;
             }
         }
 
@@ -155,7 +155,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<DenominationConvertRule>>() != null );
-                return this.convertRules.Value;
+                return convertRules.Value;
             }
         }
 
@@ -168,7 +168,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<DenominationConvertBackRule>>() != null );
-                return this.convertBackRules.Value;
+                return convertBackRules.Value;
             }
         }
 
@@ -206,9 +206,9 @@
             var culture = Util.GetCultureFromLanguage( language );
 #endif
             var result = System.Convert.ToDecimal( value, culture );
-            var rule = this.ConvertRules.FirstOrDefault( r => r.Evaluate( result ) );
-            var scale = this.DefaultDenomination;
-            var format = this.DefaultFormat;
+            var rule = ConvertRules.FirstOrDefault( r => r.Evaluate( result ) );
+            var scale = DefaultDenomination;
+            var format = DefaultFormat;
 
             if ( rule != null )
             {
@@ -234,24 +234,24 @@
 #endif
         {
             // must have convert back rules if there are convert rules
-            if ( this.ConvertRules.Any() && !this.ConvertBackRules.Any() )
+            if ( ConvertRules.Any() && !ConvertBackRules.Any() )
                 throw new NotSupportedException( ExceptionMessage.ConvertBackUnsupported );
 
             if ( value == null || value.GetType().Equals( targetType ) )
                 return value;
 
             var item = value.ToString();
-            var scale = this.DefaultDenomination;
+            var scale = DefaultDenomination;
 #if NETFX_CORE
             var culture = Util.GetCultureFromLanguage( language );
 #endif
             // use matching rule or failover to default converter
-            if ( this.ConvertBackRules.Any() )
+            if ( ConvertBackRules.Any() )
             {
                 try
                 {
                     // must match exactly one rule
-                    var rule = this.ConvertBackRules.Single( r => r.Evaluate( item ) );
+                    var rule = ConvertBackRules.Single( r => r.Evaluate( item ) );
                     scale = rule.Denomination;
                 }
                 catch ( InvalidOperationException ex )

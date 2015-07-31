@@ -36,14 +36,14 @@
 
             internal UncommittableUnitOfWorkFactory()
             {
-                this.RegisterFactoryMethod( () => new UncommittableUnitOfWork<T>() );
+                RegisterFactoryMethod( () => new UncommittableUnitOfWork<T>() );
             }
 
             public override ISpecification<Type> Specification
             {
                 get
                 {
-                    return this.specification;
+                    return specification;
                 }
             }
         }
@@ -102,7 +102,7 @@
             }
             set
             {
-                Arg.NotNull( value, "value" );
+                Arg.NotNull( value, nameof( value ) );
                 provider = value;
             }
         }
@@ -160,7 +160,7 @@
         /// <param name="unitOfWork">The current <see cref="IUnitOfWork{T}">unit of work</see>.</param>
         public static void SetCurrent<TItem>( IUnitOfWork<TItem> unitOfWork ) where TItem : class
         {
-            Arg.NotNull( unitOfWork, "unitOfWork" );
+            Arg.NotNull( unitOfWork, nameof( unitOfWork ) );
 
             var factory = GetFactory<TItem>();
             factory.SetCurrent( unitOfWork );

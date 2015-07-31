@@ -43,9 +43,9 @@
         /// <param name="ignoreCase">Indicates whether comparisons are case sensitive.</param>
         public UriComparer( UriComponents components, UriFormat format, bool ignoreCase )
         {
-            this.UriComponents = components;
-            this.UriFormat = format;
-            this.comparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+            UriComponents = components;
+            UriFormat = format;
+            comparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@
         {
             get
             {
-                return this.comparison == StringComparison.OrdinalIgnoreCase;
+                return comparison == StringComparison.OrdinalIgnoreCase;
             }
         }
 
@@ -119,12 +119,12 @@
         /// negative one if <paramref name="x"/> is less than <paramref name="y"/>.</returns>
         public virtual int Compare( Uri x, Uri y )
         {
-            return Uri.Compare( x, y, this.UriComponents, this.UriFormat, this.comparison );
+            return Uri.Compare( x, y, UriComponents, UriFormat, comparison );
         }
 
         int IComparer.Compare( object x, object y )
         {
-            return this.Compare( (Uri) x, (Uri) y );
+            return Compare( (Uri) x, (Uri) y );
         }
 
         /// <summary>
@@ -135,7 +135,7 @@
         /// <returns>True if the two objects are equal; otherwise, false.</returns>
         public virtual bool Equals( Uri x, Uri y )
         {
-            return this.Compare( x, y ) == 0;
+            return Compare( x, y ) == 0;
         }
 
         /// <summary>
@@ -151,12 +151,12 @@
 
         bool IEqualityComparer.Equals( object x, object y )
         {
-            return this.Equals( (Uri) x, (Uri) y );
+            return Equals( (Uri) x, (Uri) y );
         }
 
         int IEqualityComparer.GetHashCode( object obj )
         {
-            return this.GetHashCode( (Uri) obj );
+            return GetHashCode( (Uri) obj );
         }
     }
 }

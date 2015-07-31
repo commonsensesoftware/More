@@ -19,8 +19,8 @@
         /// <param name="right">The <see cref="ISpecification{T}">specification</see> representing the right-hand side of the unioned specification.</param>
         public LogicalOrSpecification( ISpecification<T> left, ISpecification<T> right )
         {
-            Arg.NotNull( left, "left" );
-            Arg.NotNull( right, "right" );
+            Arg.NotNull( left, nameof( left ) );
+            Arg.NotNull( right, nameof( right ) );
             this.left = left;
             this.right = right;
         }
@@ -34,8 +34,8 @@
             get
             {
                 Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
-                Contract.Assume( this.left != null ); 
-                return this.left;
+                Contract.Assume( left != null ); 
+                return left;
             }
         }
 
@@ -48,8 +48,8 @@
             get
             {
                 Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
-                Contract.Assume( this.right != null ); 
-                return this.right;
+                Contract.Assume( right != null ); 
+                return right;
             }
         }
 
@@ -60,7 +60,7 @@
         /// <returns>True if <paramref name="item"/> satisfies the specification; otherwise, false.</returns>
         public override bool IsSatisfiedBy( T item )
         {
-            return this.Left.IsSatisfiedBy( item ) || this.Right.IsSatisfiedBy( item );
+            return Left.IsSatisfiedBy( item ) || Right.IsSatisfiedBy( item );
         }
     }
 }

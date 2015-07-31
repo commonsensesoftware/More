@@ -24,13 +24,13 @@
             dialog.ContinuationData.AddRange( saveFile.ContinuationData );
             dialog.DefaultFileExtension = saveFile.DefaultFileExtension;
             dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices );
-            dialog.SuggestedStartLocation = this.SuggestedStartLocation;
+            dialog.SuggestedStartLocation = SuggestedStartLocation;
 
             if ( !string.IsNullOrEmpty( saveFile.FileName ) )
                 dialog.SuggestedFileName = saveFile.FileName;
 
-            if ( !string.IsNullOrEmpty( this.SettingsIdentifier ) )
-                dialog.SettingsIdentifier = this.SettingsIdentifier;
+            if ( !string.IsNullOrEmpty( SettingsIdentifier ) )
+                dialog.SettingsIdentifier = SettingsIdentifier;
 
             dialog.PickSaveFileAndContinue();
         }
@@ -46,7 +46,7 @@
             var saveFile = GetRequestedInteraction<SaveFileInteraction>( parameter );
 
             if ( saveFile != null )
-                this.SaveFile( saveFile );
+                SaveFile( saveFile );
 
             return null;
         }

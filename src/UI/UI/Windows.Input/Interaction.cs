@@ -47,7 +47,7 @@
         /// <param name="content">The content associated with the interaction.</param>
         public Interaction( string title, object content )
         {
-            Arg.NotNull( title, "title" );
+            Arg.NotNull( title, nameof( title ) );
 
             this.title = title;
             this.content = content;
@@ -61,13 +61,13 @@
         {
             get
             {
-                Contract.Ensures( this.title != null );
-                return this.title;
+                Contract.Ensures( title != null );
+                return title;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.title, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref title, value );
             }
         }
 
@@ -79,11 +79,11 @@
         {
             get
             {
-                return this.content;
+                return content;
             }
             set
             {
-                this.SetProperty( ref this.content, value );
+                SetProperty( ref content, value );
             }
         }
 
@@ -96,8 +96,8 @@
         {
             get
             {
-                Contract.Ensures( this.commands != null );
-                return this.commands;
+                Contract.Ensures( commands != null );
+                return commands;
             }
         }
 
@@ -109,12 +109,12 @@
         {
             get
             {
-                return this.defaultCommandIndex;
+                return defaultCommandIndex;
             }
             set
             {
-                if ( this.SetProperty( ref this.defaultCommandIndex, value ) )
-                    this.OnPropertyChanged( "DefaultCommand" );
+                if ( SetProperty( ref defaultCommandIndex, value ) )
+                    OnPropertyChanged( "DefaultCommand" );
             }
         }
 
@@ -126,12 +126,12 @@
         {
             get
             {
-                return this.cancelCommandIndex;
+                return cancelCommandIndex;
             }
             set
             {
-                if ( this.SetProperty( ref this.cancelCommandIndex, value ) )
-                    this.OnPropertyChanged( "CancelCommand" );
+                if ( SetProperty( ref cancelCommandIndex, value ) )
+                    OnPropertyChanged( "CancelCommand" );
             }
         }
 
@@ -144,7 +144,7 @@
         {
             get
             {
-                return this.Commands.ElementAtOrDefault( this.DefaultCommandIndex );
+                return Commands.ElementAtOrDefault( DefaultCommandIndex );
             }
         }
 
@@ -158,7 +158,7 @@
         {
             get
             {
-                return this.Commands.ElementAtOrDefault( this.CancelCommandIndex );
+                return Commands.ElementAtOrDefault( CancelCommandIndex );
             }
         }
 
@@ -172,8 +172,8 @@
         {
             get
             {
-                Contract.Ensures( this.continuationData != null );
-                return this.continuationData.Value;
+                Contract.Ensures( continuationData != null );
+                return continuationData.Value;
             }
         }
     }

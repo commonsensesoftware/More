@@ -17,7 +17,7 @@
 
             internal void InvokeRegisterFactoryMethod<TItem>( Func<IUnitOfWork<TItem>> factory ) where TItem : class
             {
-                this.RegisterFactoryMethod( factory );
+                RegisterFactoryMethod( factory );
             }
         }
 

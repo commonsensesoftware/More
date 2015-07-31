@@ -45,21 +45,21 @@
         /// </summary>
         public DbContextItemTemplateWizardViewModel()
         {
-            this.Title = SR.DbContextItemTemplateWizardTitle;
-            this.interactionRequests.Add( this.close );
-            this.interactionRequests.Add( this.browse );
-            this.interactionRequests.Add( this.addDataConnection );
-            this.dialogCommands.Add( new NamedCommand<object>( "0", SR.BackCaption, this.OnGoBack, this.OnCanGoBack ) );
-            this.dialogCommands.Add( new NamedCommand<object>( "1", SR.NextCaption, this.OnGoForward, this.OnCanGoForward ) );
-            this.dialogCommands.Add( new NamedCommand<object>( "2", SR.CancelCaption, this.OnCancel ) );
-            this.commands.Add( new NamedCommand<object>( "BrowseForModel", this.OnBrowseForModel ) );
-            this.commands.Add( new NamedCommand<object>( "AddDataConnection", this.OnAddDataConnection ) );
-            this.frameworkVersions.CollectionChanged += ( s, e ) => this.OnPropertyChanged( "CanSelectEntityFrameworkVersion" );
+            Title = SR.DbContextItemTemplateWizardTitle;
+            interactionRequests.Add( close );
+            interactionRequests.Add( browse );
+            interactionRequests.Add( addDataConnection );
+            dialogCommands.Add( new NamedCommand<object>( "0", SR.BackCaption, OnGoBack, OnCanGoBack ) );
+            dialogCommands.Add( new NamedCommand<object>( "1", SR.NextCaption, OnGoForward, OnCanGoForward ) );
+            dialogCommands.Add( new NamedCommand<object>( "2", SR.CancelCaption, OnCancel ) );
+            commands.Add( new NamedCommand<object>( "BrowseForModel", OnBrowseForModel ) );
+            commands.Add( new NamedCommand<object>( "AddDataConnection", OnAddDataConnection ) );
+            frameworkVersions.CollectionChanged += ( s, e ) => OnPropertyChanged( "CanSelectEntityFrameworkVersion" );
 
-            INotifyPropertyChanged optionChanged = this.implementedInterfaces;
-            optionChanged.PropertyChanged += this.OnInterfaceOptionChanged;
+            INotifyPropertyChanged optionChanged = implementedInterfaces;
+            optionChanged.PropertyChanged += OnInterfaceOptionChanged;
 
-            this.InitializeValidationErrors();
+            InitializeValidationErrors();
         }
 
         /// <summary>
@@ -71,8 +71,8 @@
         {
             get
             {
-                Contract.Ensures( this.interactionRequests != null );
-                return this.interactionRequests;
+                Contract.Ensures( interactionRequests != null );
+                return interactionRequests;
             }
         }
 
@@ -86,8 +86,8 @@
         {
             get
             {
-                Contract.Ensures( this.commands != null );
-                return this.commands;
+                Contract.Ensures( commands != null );
+                return commands;
             }
         }
 
@@ -101,8 +101,8 @@
         {
             get
             {
-                Contract.Ensures( this.dialogCommands != null );
-                return this.dialogCommands;
+                Contract.Ensures( dialogCommands != null );
+                return dialogCommands;
             }
         }
 
@@ -114,12 +114,12 @@
         {
             get
             {
-                Contract.Ensures( this.title != null );
-                return this.title ?? ( this.title = string.Empty );
+                Contract.Ensures( title != null );
+                return title ?? ( title = string.Empty );
             }
             set
             {
-                this.SetProperty( ref this.title, value );
+                SetProperty( ref title, value );
             }
         }
 
@@ -131,15 +131,15 @@
         {
             get
             {
-                Contract.Ensures( this.currentStep >= 0 );
-                return this.currentStep;
+                Contract.Ensures( currentStep >= 0 );
+                return currentStep;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0, nameof( value ) );
 
-                if ( this.SetProperty( ref this.currentStep, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref currentStep, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -151,11 +151,11 @@
         {
             get
             {
-                return this.localAssemblyName;
+                return localAssemblyName;
             }
             set
             {
-                this.SetProperty( ref this.localAssemblyName, value );
+                SetProperty( ref localAssemblyName, value );
             }
         }
 
@@ -167,11 +167,11 @@
         {
             get
             {
-                return this.showTips;
+                return showTips;
             }
             set
             {
-                this.SetProperty( ref this.showTips, value );
+                SetProperty( ref showTips, value );
             }
         }
 
@@ -183,11 +183,11 @@
         {
             get
             {
-                return this.useComposition;
+                return useComposition;
             }
             set
             {
-                this.SetProperty( ref this.useComposition, value );
+                SetProperty( ref useComposition, value );
             }
         }
 
@@ -199,12 +199,12 @@
         {
             get
             {
-                return this.modelType;
+                return modelType;
             }
             set
             {
-                if ( this.SetProperty( ref this.modelType, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref modelType, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -216,8 +216,8 @@
         {
             get
             {
-                Contract.Ensures( this.implementedInterfaces != null );
-                return this.implementedInterfaces;
+                Contract.Ensures( implementedInterfaces != null );
+                return implementedInterfaces;
             }
         }
 
@@ -231,7 +231,7 @@
         {
             get
             {
-                return this.EntityFrameworkVersions.Count > 1;
+                return EntityFrameworkVersions.Count > 1;
             }
         }
 
@@ -243,12 +243,12 @@
         {
             get
             {
-                return this.selectedFrameworkVersion;
+                return selectedFrameworkVersion;
             }
             set
             {
-                if ( this.SetProperty( ref this.selectedFrameworkVersion, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref selectedFrameworkVersion, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -260,8 +260,8 @@
         {
             get
             {
-                Contract.Ensures( this.frameworkVersions != null );
-                return this.frameworkVersions;
+                Contract.Ensures( frameworkVersions != null );
+                return frameworkVersions;
             }
         }
 
@@ -273,12 +273,12 @@
         {
             get
             {
-                return this.selectedDataSource;
+                return selectedDataSource;
             }
             set
             {
-                if ( this.SetProperty( ref this.selectedDataSource, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref selectedDataSource, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -290,8 +290,8 @@
         {
             get
             {
-                Contract.Ensures( this.dataSources != null );
-                return this.dataSources;
+                Contract.Ensures( dataSources != null );
+                return dataSources;
             }
         }
 
@@ -303,15 +303,15 @@
         {
             get
             {
-                return this.saveToConfigurationFile;
+                return saveToConfigurationFile;
             }
             set
             {
-                if ( !this.SetProperty( ref this.saveToConfigurationFile, value ) )
+                if ( !SetProperty( ref saveToConfigurationFile, value ) )
                     return;
 
-                this.RevalidateProperty( "ConnectionStringName", this.ConnectionStringName );
-                this.UpdateCommands();
+                RevalidateProperty( "ConnectionStringName", ConnectionStringName );
+                UpdateCommands();
             }
         }
 
@@ -323,13 +323,13 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.saveToConfigurationCaption ) );
-                return this.saveToConfigurationCaption;
+                Contract.Ensures( !string.IsNullOrEmpty( saveToConfigurationCaption ) );
+                return saveToConfigurationCaption;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( value ), "value" );
-                this.SetProperty( ref this.saveToConfigurationCaption, value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                SetProperty( ref saveToConfigurationCaption, value );
             }
         }
 
@@ -342,12 +342,12 @@
         {
             get
             {
-                return this.connectionStringName;
+                return connectionStringName;
             }
             set
             {
-                if ( this.SetProperty( ref this.connectionStringName, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref connectionStringName, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -360,7 +360,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static ValidationResult ValidateConnectionStringName( string value, ValidationContext context )
         {
-            Contract.Requires<ArgumentNullException>( context != null, "context" );
+            Arg.NotNull( context, nameof( context ) );
 
             var model = context.ObjectInstance as DbContextItemTemplateWizardViewModel;
 
@@ -387,29 +387,29 @@
         private void RevalidateProperty<TValue>( string propertyName, TValue value )
         {
             var results = new List<IValidationResult>();
-            var valid = this.IsPropertyValid( value, results, propertyName );
+            var valid = IsPropertyValid( value, results, propertyName );
 
             if ( valid )
             {
                 // clear any errors on success and raise error notifications
-                if ( this.PropertyErrors.Remove( propertyName ) )
-                    this.OnErrorsChanged( propertyName );
+                if ( PropertyErrors.Remove( propertyName ) )
+                    OnErrorsChanged( propertyName );
             }
             else if ( results.Any() )
             {
                 // add or replace errors and raise error notifications
-                this.PropertyErrors.SetRange( propertyName, results );
-                this.OnErrorsChanged( propertyName );
+                PropertyErrors.SetRange( propertyName, results );
+                OnErrorsChanged( propertyName );
             }
 
             // raise events
-            this.OnPropertyChanged( "IsValid" );
+            OnPropertyChanged( "IsValid" );
         }
 
         private void UpdateCommands()
         {
-            this.Commands.RaiseCanExecuteChanged();
-            this.DialogCommands.RaiseCanExecuteChanged();
+            Commands.RaiseCanExecuteChanged();
+            DialogCommands.RaiseCanExecuteChanged();
         }
 
         private void OnInterfaceOptionChanged( object sender, PropertyChangedEventArgs e )
@@ -417,7 +417,7 @@
             Contract.Requires( e != null );
 
             if ( e.PropertyName == "AtLeastOneItemEnabled" || string.IsNullOrEmpty( e.PropertyName ) )
-                this.UpdateCommands();
+                UpdateCommands();
         }
 
         private void OnBrowseForModel( object parameter )
@@ -430,12 +430,12 @@
                 Commands =
                 {
                     new NamedCommand<object>( SR.OKCaption, DefaultAction.None ),
-                    new NamedCommand<object>( SR.CancelCaption, p => this.ModelType = null )
+                    new NamedCommand<object>( SR.CancelCaption, p => ModelType = null )
                 }
             };
 
             // request ui interaction to browse for a type
-            this.browse.Request( interaction );
+            browse.Request( interaction );
         }
 
         private void OnAddDataConnection( object parameter )
@@ -447,46 +447,46 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<DataSource>( SR.OKCaption, this.OnDataSourceAdded ),
+                    new NamedCommand<DataSource>( SR.OKCaption, OnDataSourceAdded ),
                     new NamedCommand<object>( SR.CancelCaption, DefaultAction.None )
                 }
             };
 
             // request ui interaction to create a new data connection
-            this.addDataConnection.Request( interaction );
+            addDataConnection.Request( interaction );
         }
 
         private void OnDataSourceAdded( DataSource dataSource )
         {
-            this.DataSources.Add( dataSource );
-            this.SelectedDataSource = dataSource;
+            DataSources.Add( dataSource );
+            SelectedDataSource = dataSource;
         }
 
         private bool OnCanGoBack( object parameter )
         {
-            return this.CurrentStep > 0;
+            return CurrentStep > 0;
         }
 
         private void OnGoBack( object parameter )
         {
-            if ( !this.OnCanGoBack( parameter ) )
+            if ( !OnCanGoBack( parameter ) )
                 return;
 
-            --this.CurrentStep;
-            this.dialogCommands[1].Name = SR.NextCaption;
+            --CurrentStep;
+            dialogCommands[1].Name = SR.NextCaption;
         }
 
         private bool OnCanGoForward( object parameter )
         {
-            switch ( this.CurrentStep )
+            switch ( CurrentStep )
             {
                 case 0: // select ef version, data model, and interfaces
                     {
-                        return this.ModelType != null && this.implementedInterfaces.AtLeastOneItemEnabled;
+                        return ModelType != null && implementedInterfaces.AtLeastOneItemEnabled;
                     }
                 case 1: // select data source
                     {
-                        return !this.SaveToConfigurationFile || this.SelectedDataSource != null;
+                        return !SaveToConfigurationFile || SelectedDataSource != null;
                     }
                 default:
                     {
@@ -498,20 +498,20 @@
 
         private void OnGoForward( object parameter )
         {
-            if ( !this.OnCanGoForward( parameter ) )
+            if ( !OnCanGoForward( parameter ) )
                 return;
 
-            switch ( this.CurrentStep )
+            switch ( CurrentStep )
             {
                 case 0: // select ef version and data model
                     {
-                        this.CurrentStep = 1;
-                        this.dialogCommands[1].Name = SR.FinishCaption;
+                        CurrentStep = 1;
+                        dialogCommands[1].Name = SR.FinishCaption;
                         break;
                     }
                 case 1: // select implemented interfaces
                     {
-                        this.close.Request( new WindowCloseInteraction() );
+                        close.Request( new WindowCloseInteraction() );
                         break;
                     }
             }
@@ -519,7 +519,7 @@
 
         private void OnCancel( object parameter )
         {
-            this.close.Request( new WindowCloseInteraction( true ) );
+            close.Request( new WindowCloseInteraction( true ) );
         }
     }
 }

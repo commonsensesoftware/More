@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
-    using More.Collections.Generic;
-    using More.ComponentModel.DataAnnotations;
+    using Collections.Generic;
+    using DataAnnotations;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -24,7 +24,7 @@
         /// </summary>
         protected ValidatableObject()
         {
-            this.propertyErrors.CollectionChanged += ( s, e ) => this.HasErrors = this.propertyErrors.Any();
+            propertyErrors.CollectionChanged += ( s, e ) => HasErrors = propertyErrors.Any();
         }
 
         private static IValidator Validator
@@ -59,10 +59,10 @@
         protected void InitializeValidationErrors()
         {
             var results = new List<IValidationResult>();
-            var context = this.CreateValidationContext();
+            var context = CreateValidationContext();
 
-            this.PropertyErrors.Clear();
-            this.HasErrors = false;
+            PropertyErrors.Clear();
+            HasErrors = false;
 
             if ( Validator.TryValidateObject( this, context, results, true ) )
                 return;
@@ -71,8 +71,8 @@
             {
                 foreach ( var propertyName in result.MemberNames.Where( m => !string.IsNullOrEmpty( m ) ) )
                 {
-                    this.PropertyErrors.SetRange( propertyName, new[] { result } );
-                    this.HasErrors = true;
+                    PropertyErrors.SetRange( propertyName, new[] { result } );
+                    HasErrors = true;
                 }
             }
         }
@@ -85,7 +85,7 @@
         {
             get
             {
-                var context = this.CreateValidationContext();
+                var context = CreateValidationContext();
                 return Validator.TryValidateObject( this, context, null, true );
             }
         }
@@ -99,8 +99,8 @@
         {
             get
             {
-                Contract.Ensures( this.propertyErrors != null );
-                return this.propertyErrors;
+                Contract.Ensures( propertyErrors != null );
+                return propertyErrors;
             }
         }
 
@@ -112,11 +112,11 @@
         {
             get
             {
-                return this.hasErrors;
+                return hasErrors;
             }
             private set
             {
-                base.SetProperty( ref this.hasErrors, value );
+                base.SetProperty( ref hasErrors, value );
             }
         }
 
@@ -124,10 +124,7 @@
         /// Raises the <see cref="E:ErrorsChanged"/> event for the supplied property name.
         /// </summary>
         /// <param name="propertyName">The name of the property that contains an error.</param>
-        protected void OnErrorsChanged( string propertyName )
-        {
-            this.OnErrorsChanged( new DataErrorsChangedEventArgs( propertyName ) );
-        }
+        protected void OnErrorsChanged( string propertyName ) => OnErrorsChanged( new DataErrorsChangedEventArgs( propertyName ) );
 
         /// <summary>
         /// Raises the <see cref="E:ErrorsChanged"/> event.
@@ -135,12 +132,8 @@
         /// <param name="e">The <see cref="DataErrorsChangedEventArgs"/> event data.</param>
         protected virtual void OnErrorsChanged( DataErrorsChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
-
-            var handler = this.ErrorsChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            ErrorsChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -155,8 +148,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected bool IsPropertyValid<TValue>( TValue value, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            return this.IsPropertyValid( value, new List<IValidationResult>(), propertyName );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            return IsPropertyValid( value, new List<IValidationResult>(), propertyName );
         }
 
         /// <summary>
@@ -172,10 +165,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected virtual bool IsPropertyValid<TValue>( TValue value, ICollection<IValidationResult> results, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNull( results, "results" );
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( results, nameof( results ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
-            var context = this.CreateValidationContext();
+            var context = CreateValidationContext();
             context.MemberName = propertyName;
             var valid = Validator.TryValidateProperty( value, context, results );
 
@@ -195,28 +188,28 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "The value is provided a compile-time. An exception will be thrown if not provided." )]
         protected virtual void ValidateProperty<TValue>( TValue value, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
             var results = new List<IValidationResult>();
 
-            if ( this.IsPropertyValid( value, results, propertyName ) )
+            if ( IsPropertyValid( value, results, propertyName ) )
             {
                 // clear any errors on success and raise error notifications
-                if ( this.PropertyErrors.Remove( propertyName ) )
-                    this.OnErrorsChanged( propertyName );
+                if ( PropertyErrors.Remove( propertyName ) )
+                    OnErrorsChanged( propertyName );
             }
             else if ( results.Count > 0 )
             {
                 // add or replace errors
-                this.PropertyErrors.SetRange( propertyName, results );
+                PropertyErrors.SetRange( propertyName, results );
 
                 // raise error notifications
-                this.OnErrorsChanged( propertyName );
+                OnErrorsChanged( propertyName );
             }
 
             // raise events
-            this.OnPropertyChanged( propertyName );
-            this.OnPropertyChanged( "IsValid" );
+            OnPropertyChanged( propertyName );
+            OnPropertyChanged( nameof( IsValid ) );
         }
 
         /// <summary>
@@ -228,8 +221,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual IEnumerable<string> FormatErrorMessages( string propertyName, IEnumerable<IValidationResult> results )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
-            Arg.NotNull( results, "results" );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
+            Arg.NotNull( results, nameof( results ) );
             Contract.Ensures( Contract.Result<IEnumerable<string>>() != null );
 
             var messages = from result in results
@@ -246,7 +239,7 @@
         public IEnumerable<IValidationResult> GetErrors()
         {
             Contract.Ensures( Contract.Result<IEnumerable<IValidationResult>>() != null );
-            return this.GetErrors( null );
+            return GetErrors( null );
         }
 
         /// <summary>
@@ -265,22 +258,19 @@
             {
                 ICollection<IValidationResult> results;
 
-                if ( !this.PropertyErrors.TryGetValue( propertyName, out results ) || results == null )
+                if ( !PropertyErrors.TryGetValue( propertyName, out results ) || results == null )
                     return list.AsReadOnly();
 
                 return results.ToArray().AsReadOnly();
             }
 
-            foreach ( var error in this.PropertyErrors )
+            foreach ( var error in PropertyErrors )
                 list.AddRange( error.Value );
 
             return list.AsReadOnly();
         }
 
-        IEnumerable INotifyDataErrorInfo.GetErrors( string propertyName )
-        {
-            return this.GetErrors( propertyName );
-        }
+        IEnumerable INotifyDataErrorInfo.GetErrors( string propertyName ) => GetErrors( propertyName );
 
         /// <summary>
         /// Validates, changes, and raises the corresponding events for the specified property.
@@ -346,14 +336,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Required to support the CallerMemberNameAttribute." )]
         protected override bool SetProperty<TValue>( ref TValue backingField, TValue value, IEqualityComparer<TValue> comparer, [CallerMemberName] string propertyName = null )
         {
-            Arg.NotNull( comparer, "comparer" );
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( comparer, nameof( comparer ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
-            if ( !this.OnPropertyChanging( backingField, value, comparer, propertyName ) )
+            if ( !OnPropertyChanging( backingField, value, comparer, propertyName ) )
                 return false;
 
             backingField = value;
-            this.ValidateProperty( value, propertyName );
+            ValidateProperty( value, propertyName );
             return true;
         }
 

@@ -29,18 +29,18 @@
         /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}">dictionary</see> to make read-only.</param>
         public ReadOnlyDictionary( IDictionary<TKey, TValue> dictionary )
         {
-            Arg.NotNull( dictionary, "dictionary" );
-            this.dict = dictionary;
+            Arg.NotNull( dictionary, nameof( dictionary ) );
+            dict = dictionary;
 
             var propertyChanged = dictionary as INotifyPropertyChanged;
 
             if ( propertyChanged != null )
-                propertyChanged.PropertyChanged += this.SourcePropertyChanged;
+                propertyChanged.PropertyChanged += SourcePropertyChanged;
 
             var collectionChanged = dictionary as INotifyCollectionChanged;
 
             if ( collectionChanged != null )
-                collectionChanged.CollectionChanged += ( s, e ) => this.OnCollectionChanged( e );
+                collectionChanged.CollectionChanged += ( s, e ) => OnCollectionChanged( e );
         }
 
         /// <summary>
@@ -52,7 +52,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IDictionary<TKey, TValue>>() != null );
-                return this.dict;
+                return dict;
             }
         }
 
@@ -66,7 +66,7 @@
         {
             get
             {
-                return this.Dictionary[key];
+                return Dictionary[key];
             }
         }
 
@@ -77,7 +77,7 @@
                 case "Count":
                 case "Item[]":
                     {
-                        this.OnPropertyChanged( e );
+                        OnPropertyChanged( e );
                         break;
                     }
             }
@@ -89,7 +89,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -98,12 +98,9 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -112,12 +109,9 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "The collection is read-only." )]
@@ -133,8 +127,12 @@
         /// <returns>True if the dictionary contains an element with the specified key; otherwise, false.</returns>
         public bool ContainsKey( TKey key )
         {
-            Contract.Assume( false || this.Count > 0 );
-            return this.Dictionary.ContainsKey( key );
+            return Dictionary.ContainsKey( key );
+        }
+
+        bool IReadOnlyDictionary<TKey, TValue>.ContainsKey( TKey key )
+        {
+            return ContainsKey( key );
         }
 
         /// <summary>
@@ -145,10 +143,10 @@
         {
             get
             {
-                if ( this.Dictionary.Keys.IsReadOnly )
-                    return this.Dictionary.Keys;
+                if ( Dictionary.Keys.IsReadOnly )
+                    return Dictionary.Keys;
 
-                return this.Dictionary.Keys.ToArray();
+                return Dictionary.Keys.ToArray();
             }
         }
 
@@ -156,7 +154,7 @@
         {
             get
             {
-                return this.Keys;
+                return Keys;
             }
         }
 
@@ -175,8 +173,12 @@
         /// <returns>True if the dictioanry contains an element with the specified key; otherwise, false.</returns>
         public bool TryGetValue( TKey key, out TValue value )
         {
-            Contract.Assume( this.ContainsKey( key ) );
-            return this.Dictionary.TryGetValue( key, out value );
+            return Dictionary.TryGetValue( key, out value );
+        }
+
+        bool IReadOnlyDictionary<TKey, TValue>.TryGetValue( TKey key, out TValue value )
+        {
+            return TryGetValue( key, out value );
         }
 
         /// <summary>
@@ -187,10 +189,10 @@
         {
             get
             {
-                if ( this.Dictionary.Values.IsReadOnly )
-                    return this.Dictionary.Values;
+                if ( Dictionary.Values.IsReadOnly )
+                    return Dictionary.Values;
 
-                return this.Dictionary.Values.ToArray();
+                return Dictionary.Values.ToArray();
             }
         }
 
@@ -198,7 +200,7 @@
         {
             get
             {
-                return this.Values;
+                return Values;
             }
         }
 
@@ -207,7 +209,7 @@
         {
             get
             {
-                return this.Dictionary[key];
+                return Dictionary[key];
             }
             set
             {
@@ -234,8 +236,8 @@
         /// <returns>True if the item is found; otherwise, false.</returns>
         public bool Contains( KeyValuePair<TKey, TValue> item )
         {
-            Contract.Assume( false || this.Count > 0 );
-            return this.Dictionary.Contains( item );
+            Contract.Assume( false || Count > 0 );
+            return Dictionary.Contains( item );
         }
 
         /// <summary>
@@ -246,8 +248,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public void CopyTo( KeyValuePair<TKey, TValue>[] array, int arrayIndex )
         {
-            Contract.Assume( arrayIndex + this.Dictionary.Count <= array.Length );
-            this.Dictionary.CopyTo( array, arrayIndex );
+            Contract.Assume( arrayIndex + Dictionary.Count <= array.Length );
+            Dictionary.CopyTo( array, arrayIndex );
         }
 
         /// <summary>
@@ -258,7 +260,7 @@
         {
             get
             {
-                return this.Dictionary.Count;
+                return Dictionary.Count;
             }
         }
 
@@ -286,13 +288,13 @@
         /// <returns>An <see cref="IEnumerator{KeyValuePair}"/> object.</returns>
         public virtual IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return this.Dictionary.GetEnumerator();
+            return Dictionary.GetEnumerator();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Unexposed legacy support." )]
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.Dictionary.GetEnumerator();
+            return Dictionary.GetEnumerator();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "The collection is read-only." )]
@@ -311,7 +313,7 @@
         bool IDictionary.Contains( object key )
         {
             if ( key is TKey )
-                return this.ContainsKey( (TKey) key );
+                return ContainsKey( (TKey) key );
 
             return false;
         }
@@ -319,7 +321,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Unexposed legacy support." )]
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
-            return new Dictionary<TKey, TValue>( this.Dictionary ).GetEnumerator();
+            return new Dictionary<TKey, TValue>( Dictionary ).GetEnumerator();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "The collection is read-only." )]
@@ -327,7 +329,7 @@
         {
             get
             {
-                var idict = this.Dictionary as IDictionary;
+                var idict = Dictionary as IDictionary;
 
                 if ( idict != null )
                     return idict.IsFixedSize;
@@ -343,7 +345,7 @@
         {
             get
             {
-                return this.Dictionary.Keys.ToList();
+                return Dictionary.Keys.ToList();
             }
         }
 
@@ -358,7 +360,7 @@
         {
             get
             {
-                return this.Dictionary.Values.ToList();
+                return Dictionary.Values.ToList();
             }
         }
 
@@ -382,7 +384,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Unexposed legacy support." )]
         void ICollection.CopyTo( Array array, int index )
         {
-            var col = this.Dictionary as ICollection;
+            var col = Dictionary as ICollection;
 
             if ( col != null )
             {
@@ -396,8 +398,8 @@
                 if ( items == null )
                     throw new ArrayTypeMismatchException( ExceptionMessage.ArrayMismatch );
 
-                Contract.Assume( index + this.Count <= items.Length );
-                this.CopyTo( items, index );
+                Contract.Assume( index + Count <= items.Length );
+                CopyTo( items, index );
             }
         }
 
@@ -415,18 +417,18 @@
         {
             get
             {
-                if ( this.syncRoot == null )
+                if ( syncRoot == null )
                 {
-                    var col = this.Dictionary as ICollection;
+                    var col = Dictionary as ICollection;
 
                     if ( col != null )
-                        this.syncRoot = col.SyncRoot;
+                        syncRoot = col.SyncRoot;
 
-                    Interlocked.CompareExchange( ref this.syncRoot, new object(), null );
+                    Interlocked.CompareExchange( ref syncRoot, new object(), null );
                 }
 
-                Contract.Assume( this.syncRoot != null );
-                return this.syncRoot;
+                Contract.Assume( syncRoot != null );
+                return syncRoot;
             }
         }
 

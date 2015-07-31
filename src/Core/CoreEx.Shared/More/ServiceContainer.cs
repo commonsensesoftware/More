@@ -26,14 +26,14 @@
             internal ServiceEntry( Func<object> valueFactory, bool disposable )
                 : base( valueFactory )
             {
-                this.lifetimeManaged = disposable;
+                lifetimeManaged = disposable;
             }
 
             internal bool LifetimeIsManaged
             {
                 get
                 {
-                    return this.lifetimeManaged;
+                    return lifetimeManaged;
                 }
             }
         }
@@ -48,7 +48,7 @@
         /// </summary>
         ~ServiceContainer()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         /// <summary>
@@ -56,7 +56,7 @@
         /// </summary>
         public ServiceContainer()
         {
-            this.parent = new Lazy<IServiceContainer>( () => null );
+            parent = new Lazy<IServiceContainer>( () => null );
         }
 
         /// <summary>
@@ -112,7 +112,7 @@
         {
             get
             {
-                return this.parent.Value;
+                return parent.Value;
             }
         }
 
@@ -128,8 +128,8 @@
             {
                 Contract.Ensures( Contract.Result<IReadOnlyList<ServiceRegistryKey>>() != null );
 
-                var hashSet = new HashSet<ServiceRegistryKey>( this.registry.Keys );
-                var next = this.Parent as ServiceContainer;
+                var hashSet = new HashSet<ServiceRegistryKey>( registry.Keys );
+                var next = Parent as ServiceContainer;
 
                 while ( next != null )
                 {
@@ -153,17 +153,17 @@
         /// <param name="disposing">Indicates whether the objects is being disposed.</param>
         protected virtual void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
             // dispose of any services where their lifetime is managed by the container
-            this.registry.Values.Where( s => s.LifetimeIsManaged && s.IsValueCreated ).OfType<IDisposable>().ForEach( d => d.Dispose() );
-            this.registry.Clear();
+            registry.Values.Where( s => s.LifetimeIsManaged && s.IsValueCreated ).OfType<IDisposable>().ForEach( d => d.Dispose() );
+            registry.Clear();
         }
 
         /// <summary>
@@ -175,7 +175,7 @@
         /// <remarks><see cref="IDisposable">Disposable</see> services created by the <paramref name="callback"/> will be automatically disposed when the container is disposed.</remarks>
         public virtual void AddService( Type serviceType, ServiceCreatorCallback callback )
         {
-            this.AddService( serviceType, callback, this.PromoteByDefault );
+            AddService( serviceType, callback, PromoteByDefault );
         }
 
         /// <summary>
@@ -188,17 +188,17 @@
         /// <remarks><see cref="IDisposable">Disposable</see> services created by the <paramref name="callback"/> will be automatically disposed when the container is disposed.</remarks>
         public virtual void AddService( Type serviceType, ServiceCreatorCallback callback, bool promote )
         {
-            Arg.NotNull( serviceType, "serviceType" );
-            Arg.NotNull( callback, "callback" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
+            Arg.NotNull( callback, nameof( callback ) );
 
             var type = serviceType;
             var create = callback;
             var key = new ServiceRegistryKey( serviceType );
 
-            this.registry[key] = new ServiceEntry( () => create( this, type ), IsDisposableService( serviceType ) );
+            registry[key] = new ServiceEntry( () => create( this, type ), IsDisposableService( serviceType ) );
 
-            if ( promote && this.Parent != null )
-                this.Parent.AddService( serviceType, callback, promote );
+            if ( promote && Parent != null )
+                Parent.AddService( serviceType, callback, promote );
         }
 
         /// <summary>
@@ -210,7 +210,7 @@
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="serviceType"/> is not assignable from <paramref name="serviceInstance"/>.</exception>
         public virtual void AddService( Type serviceType, object serviceInstance )
         {
-            this.AddService( serviceType, serviceInstance, this.PromoteByDefault );
+            AddService( serviceType, serviceInstance, PromoteByDefault );
         }
 
         /// <summary>
@@ -225,8 +225,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public virtual void AddService( Type serviceType, object serviceInstance, bool promote )
         {
-            Arg.NotNull( serviceType, "serviceType" );
-            Arg.NotNull( serviceInstance, "serviceInstance" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
+            Arg.NotNull( serviceInstance, nameof( serviceInstance ) );
 
             if ( !serviceType.GetTypeInfo().IsAssignableFrom( serviceInstance.GetType().GetTypeInfo() ) )
                 throw new ArgumentOutOfRangeException( "serviceInstance" );
@@ -234,10 +234,10 @@
             var service = serviceInstance;
             var key = new ServiceRegistryKey( serviceType );
 
-            this.registry[key] = new ServiceEntry( service );
+            registry[key] = new ServiceEntry( service );
 
-            if ( promote && this.Parent != null )
-                this.Parent.AddService( serviceType, serviceInstance, promote );
+            if ( promote && Parent != null )
+                Parent.AddService( serviceType, serviceInstance, promote );
         }
 
         /// <summary>
@@ -247,7 +247,7 @@
         /// <exception cref="ArgumentNullException"><paramref name="serviceType"/> is <c>null</c>.</exception>
         public virtual void RemoveService( Type serviceType )
         {
-            this.RemoveService( serviceType, this.PromoteByDefault );
+            RemoveService( serviceType, PromoteByDefault );
         }
 
         /// <summary>
@@ -258,13 +258,13 @@
         /// <exception cref="ArgumentNullException"><paramref name="serviceType"/> is <c>null</c>.</exception>
         public virtual void RemoveService( Type serviceType, bool promote )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
 
             var key = new ServiceRegistryKey( serviceType );
-            this.registry.Remove( key );
+            registry.Remove( key );
 
-            if ( promote && this.Parent != null )
-                this.Parent.RemoveService( serviceType, promote );
+            if ( promote && Parent != null )
+                Parent.RemoveService( serviceType, promote );
         }
 
         /// <summary>
@@ -276,20 +276,20 @@
         /// parent containers, if any. If multiple services are requested, resolution is constrainted to the current container.</remarks>
         public virtual object GetService( Type serviceType )
         {
-            Arg.NotNull( serviceType, "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
 
             var key = new ServiceRegistryKey( serviceType );
             ServiceEntry entry;
 
             // search added services first
-            if ( this.registry.TryGetValue( key, out entry ) )
+            if ( registry.TryGetValue( key, out entry ) )
                 return entry.Value;
 
             // return ourself as appropriate
             if ( typeof( IServiceContainer ).Equals( serviceType ) || typeof( IServiceProvider ).Equals( serviceType ) )
                 return this;
 
-            return this.Parent == null ? null : this.Parent.GetService( serviceType );
+            return Parent == null ? null : Parent.GetService( serviceType );
         }
 
         /// <summary>
@@ -309,7 +309,7 @@
         /// </summary>
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

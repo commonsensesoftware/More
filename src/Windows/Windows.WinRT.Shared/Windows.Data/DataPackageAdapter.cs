@@ -20,18 +20,18 @@
         {
             Contract.Requires( dataPackage != null );
 
-            this.adapted = dataPackage;
-            this.properties = new Lazy<IDataPackagePropertySet>( () => new DataPackagePropertySetAdapter( this.adapted.Properties ) );
-            this.resourceMap = new Lazy<IDictionary<string, IRandomAccessStreamReference>>( () => new VariantDictionaryAdapter<string, RandomAccessStreamReference, IRandomAccessStreamReference>( this.adapted.ResourceMap ) );
-            this.adapted.Destroyed += this.OnDestoryed;
-            this.adapted.OperationCompleted += this.OnOperationCompleted;
+            adapted = dataPackage;
+            properties = new Lazy<IDataPackagePropertySet>( () => new DataPackagePropertySetAdapter( adapted.Properties ) );
+            resourceMap = new Lazy<IDictionary<string, IRandomAccessStreamReference>>( () => new VariantDictionaryAdapter<string, RandomAccessStreamReference, IRandomAccessStreamReference>( adapted.ResourceMap ) );
+            adapted.Destroyed += OnDestoryed;
+            adapted.OperationCompleted += OnOperationCompleted;
         }
 
         public IDataPackagePropertySet Properties
         {
             get
             {
-                return this.properties.Value;
+                return properties.Value;
             }
         }
 
@@ -39,11 +39,11 @@
         {
             get
             {
-                return this.adapted.RequestedOperation;
+                return adapted.RequestedOperation;
             }
             set
             {
-                this.adapted.RequestedOperation = value;
+                adapted.RequestedOperation = value;
             }
         }
 
@@ -51,24 +51,18 @@
         {
             get
             {
-                return this.resourceMap.Value;
+                return resourceMap.Value;
             }
         }
 
         private void OnDestoryed( object sender, object e )
         {
-            var handler = this.Destroyed;
-
-            if ( handler != null )
-                handler( this, e );
+            Destroyed?.Invoke( this, e );
         }
 
         private void OnOperationCompleted( object sender, OperationCompletedEventArgs e )
         {
-            var handler = this.OperationCompleted;
-
-            if ( handler != null )
-                handler( this, e );
+            OperationCompleted?.Invoke( this, e );
         }
 
         public event TypedEventHandler<IDataPackage, object> Destroyed;
@@ -77,58 +71,58 @@
 
         public IDataPackageView GetView()
         {
-            return new DataPackageViewAdapter( this.adapted.GetView() );
+            return new DataPackageViewAdapter( adapted.GetView() );
         }
 
         public void SetApplicationLink( Uri value )
         {
-            this.adapted.SetApplicationLink( value );
+            adapted.SetApplicationLink( value );
         }
 
         public void SetBitmap( IRandomAccessStreamReference value )
         {
             // note: this would seem to be a flaw in the design. this should have been an interface all along.
-            this.adapted.SetBitmap( (RandomAccessStreamReference) value );
+            adapted.SetBitmap( (RandomAccessStreamReference) value );
         }
 
         public void SetData( string formatId, object value )
         {
-            this.adapted.SetData( formatId, value );
+            adapted.SetData( formatId, value );
         }
 
         public void SetDataProvider( string formatId, DataProviderHandler delayRenderer )
         {
-            this.adapted.SetDataProvider( formatId, delayRenderer );
+            adapted.SetDataProvider( formatId, delayRenderer );
         }
 
         public void SetHtmlFormat( string value )
         {
-            this.adapted.SetHtmlFormat( value );
+            adapted.SetHtmlFormat( value );
         }
 
         public void SetRtf( string value )
         {
-            this.adapted.SetRtf( value );
+            adapted.SetRtf( value );
         }
 
         public void SetStorageItems( IEnumerable<IStorageItem> value )
         {
-            this.adapted.SetStorageItems( value );
+            adapted.SetStorageItems( value );
         }
 
         public void SetStorageItems( IEnumerable<IStorageItem> value, bool readOnly )
         {
-            this.adapted.SetStorageItems( value, readOnly );
+            adapted.SetStorageItems( value, readOnly );
         }
 
         public void SetText( string value )
         {
-            this.adapted.SetText( value );
+            adapted.SetText( value );
         }
 
         public void SetWebLink( Uri value )
         {
-            this.adapted.SetWebLink( value );
+            adapted.SetWebLink( value );
         }
     }
 }

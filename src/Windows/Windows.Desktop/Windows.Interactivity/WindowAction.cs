@@ -23,35 +23,35 @@
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty ViewNameProperty =
-            DependencyProperty.Register( "ViewName", typeof( string ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ViewName ), typeof( string ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property of the view <see cref="Type">type</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty ViewTypeProperty =
-            DependencyProperty.Register( "ViewType", typeof( Type ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ViewType ), typeof( Type ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property indicating whether the view is modal.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty IsModalProperty =
-            DependencyProperty.Register( "IsModal", typeof( bool ), typeof( WindowAction ), new PropertyMetadata( true ) );
+            DependencyProperty.Register( nameof( IsModal ), typeof( bool ), typeof( WindowAction ), new PropertyMetadata( true ) );
 
         /// <summary>
         /// Gets the dependency property for the view <see cref="Style">style</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty StyleProperty =
-            DependencyProperty.Register( "Style", typeof( Style ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( Style ), typeof( Style ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property for the view <see cref="DataTemplate">content template</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
         public static readonly DependencyProperty ContentTemplateProperty =
-            DependencyProperty.Register( "ContentTemplate", typeof( DataTemplate ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ContentTemplate ), typeof( DataTemplate ), typeof( WindowAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets a value indicating whether the provided cancel command is bound to the window close button.
@@ -79,11 +79,11 @@
         {
             get
             {
-                return (string) this.GetValue( ViewNameProperty );
+                return (string) GetValue( ViewNameProperty );
             }
             set
             {
-                this.SetValue( ViewNameProperty, value );
+                SetValue( ViewNameProperty, value );
             }
         }
 
@@ -95,11 +95,11 @@
         {
             get
             {
-                return (Type) this.GetValue( ViewTypeProperty );
+                return (Type) GetValue( ViewTypeProperty );
             }
             set
             {
-                this.SetValue( ViewTypeProperty, value );
+                SetValue( ViewTypeProperty, value );
             }
         }
 
@@ -112,11 +112,11 @@
         {
             get
             {
-                return (bool) this.GetValue( IsModalProperty );
+                return (bool) GetValue( IsModalProperty );
             }
             set
             {
-                this.SetValue( IsModalProperty, value );
+                SetValue( IsModalProperty, value );
             }
         }
 
@@ -129,11 +129,11 @@
         {
             get
             {
-                return (Style) this.GetValue( StyleProperty );
+                return (Style) GetValue( StyleProperty );
             }
             set
             {
-                this.SetValue( StyleProperty, value );
+                SetValue( StyleProperty, value );
             }
         }
 
@@ -146,11 +146,11 @@
         {
             get
             {
-                return (DataTemplate) this.GetValue( ContentTemplateProperty );
+                return (DataTemplate) GetValue( ContentTemplateProperty );
             }
             set
             {
-                this.SetValue( ContentTemplateProperty, value );
+                SetValue( ContentTemplateProperty, value );
             }
         }
 
@@ -168,7 +168,7 @@
 
             Window window = null;
 
-            if ( this.ViewType == null )
+            if ( ViewType == null )
             {
                 window = new Window();
             }
@@ -178,10 +178,10 @@
                 object view = null;
 
                 // if the view is resolved from the service provider, it is assumed to be composed
-                if ( !services.TryGetService( this.ViewType, out view, this.ViewName ) )
+                if ( !services.TryGetService( ViewType, out view, ViewName ) )
                 {
                     // use fallback method
-                    view = Activator.CreateInstance( this.ViewType );
+                    view = Activator.CreateInstance( ViewType );
 
                     ICompositionService composer;
 
@@ -197,7 +197,7 @@
                 }
             }
 
-            window.Owner = Window.GetWindow( this.AssociatedObject );
+            window.Owner = Window.GetWindow( AssociatedObject );
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             return window;
@@ -239,23 +239,23 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Invoke( InteractionRequestedEventArgs args )
         {
-            Contract.Requires<ArgumentNullException>( args != null, "args" );
+            Arg.NotNull( args, nameof( args ) );
 
-            var window = this.CreateWindow();
+            var window = CreateWindow();
 
             if ( window == null )
                 return;
 
             // copy content template from action
-            if ( this.ContentTemplate != null )
-                window.ContentTemplate = this.ContentTemplate;
+            if ( ContentTemplate != null )
+                window.ContentTemplate = ContentTemplate;
 
             // copy style from action
-            if ( this.Style != null )
-                window.Style = this.Style;
+            if ( Style != null )
+                window.Style = Style;
 
             // attempt to get or create a matching delegate for the IView<TOutput,TIntput>.Attach method
-            var attach = this.attachMethods.GetOrAdd( window.GetType(), () => CreateAttachDelegate( window, args.Interaction ) );
+            var attach = attachMethods.GetOrAdd( window.GetType(), () => CreateAttachDelegate( window, args.Interaction ) );
 
             // if a delegate cannot be created, use the default behavior
             if ( attach == null )
@@ -275,9 +275,9 @@
                 attach.DynamicInvoke( window, args.Interaction );
             }
 
-            using ( new CommandMediator( window, args.Interaction, this.BindCancelToClose ) )
+            using ( new CommandMediator( window, args.Interaction, BindCancelToClose ) )
             {
-                if ( this.IsModal )
+                if ( IsModal )
                     window.ShowDialog();
                 else
                     window.Show();
@@ -294,7 +294,7 @@
             var args = parameter as InteractionRequestedEventArgs;
 
             if ( args != null )
-                this.Invoke( args );
+                Invoke( args );
         }
 
         /// <summary>
@@ -302,7 +302,7 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            this.attachMethods.Clear();
+            attachMethods.Clear();
             base.OnDetaching();
         }
     }

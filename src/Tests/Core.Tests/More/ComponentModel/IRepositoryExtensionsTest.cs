@@ -22,17 +22,17 @@
 
             internal MockReadOnlyRepository( IEnumerable<T> source )
             {
-                this.query = source.AsQueryable();
+                query = source.AsQueryable();
             }
 
             public Task<IEnumerable<T>> GetAsync( Func<IQueryable<T>, IQueryable<T>> queryShaper, CancellationToken cancellationToken )
             {
-                return Task.FromResult( queryShaper( this.query ).AsEnumerable() );
+                return Task.FromResult( queryShaper( query ).AsEnumerable() );
             }
 
             public Task<TResult> GetAsync<TResult>( Func<IQueryable<T>, TResult> queryShaper, CancellationToken cancellationToken )
             {
-                return Task.FromResult( queryShaper( this.query ) );
+                return Task.FromResult( queryShaper( query ) );
             }
         }
 

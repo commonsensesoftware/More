@@ -25,9 +25,9 @@
         /// then the <see cref="NullTraceWriter"/> is used.</remarks>
         public PerRequestTraceWriter( HttpRequestMessage request )
         {
-            Contract.Requires<ArgumentNullException>( request != null, "request" );
-            this.traceWriter = request.GetConfiguration().Services.GetTraceWriter() ?? NullTraceWriter.Instance;
-            this.currentRequest = request;
+            Arg.NotNull( request, nameof( request ) );
+            traceWriter = request.GetConfiguration().Services.GetTraceWriter() ?? NullTraceWriter.Instance;
+            currentRequest = request;
         }
 
         /// <summary>
@@ -37,9 +37,9 @@
         /// <param name="request">The current <see cref="HttpRequestMessage">request</see> associated with the trace writer.</param>
         public PerRequestTraceWriter( ITraceWriter traceWriter, HttpRequestMessage request )
         {
-            Contract.Requires<ArgumentNullException>( traceWriter != null, "traceWriter" );
+            Arg.NotNull( traceWriter, nameof( traceWriter ) );
             this.traceWriter = traceWriter;
-            this.currentRequest = request;
+            currentRequest = request;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@
         /// <remarks>The implementation for this instance performs no operation.</remarks>
         public void Trace( HttpRequestMessage request, string category, TraceLevel level, Action<TraceRecord> traceAction )
         {
-            this.traceWriter.Trace( request ?? this.currentRequest, category, level, traceAction );
+            traceWriter.Trace( request ?? currentRequest, category, level, traceAction );
         }
     }
 }

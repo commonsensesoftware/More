@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
 
@@ -13,31 +14,22 @@
         internal VariantDictionaryAdapter( IDictionary<TKey, TFrom> dictionary )
         {
             Contract.Requires( dictionary != null );
-            this.adapted = dictionary;
+            adapted = dictionary;
         }
 
-        public void Add( TKey key, TTo value )
-        {
-            this.adapted.Add( key, (TFrom) value );
-        }
+        public void Add( TKey key, TTo value ) => adapted.Add( key, (TFrom) value );
 
-        public bool ContainsKey( TKey key )
-        {
-            return this.adapted.ContainsKey( key );
-        }
+        public bool ContainsKey( TKey key ) => adapted.ContainsKey( key );
 
         public ICollection<TKey> Keys
         {
             get
             {
-                return this.adapted.Keys;
+                return adapted.Keys;
             }
         }
 
-        public bool Remove( TKey key )
-        {
-            return this.adapted.Remove( key );
-        }
+        public bool Remove( TKey key ) => adapted.Remove( key );
 
         public bool TryGetValue( TKey key, out TTo value )
         {
@@ -45,7 +37,7 @@
 
             TFrom temp;
 
-            if ( !this.adapted.TryGetValue( key, out temp ) )
+            if ( !adapted.TryGetValue( key, out temp ) )
                 return false;
 
             value = (TTo) temp;
@@ -56,7 +48,7 @@
         {
             get
             {
-                return this.adapted.Values.Cast<TTo>().ToArray();
+                return adapted.Values.Cast<TTo>().ToArray();
             }
         }
 
@@ -64,36 +56,26 @@
         {
             get
             {
-                return this.adapted[key];
+                return adapted[key];
             }
             set
             {
-                this.adapted[key] = (TFrom) value;
+                adapted[key] = (TFrom) value;
             }
         }
 
-        public void Add( KeyValuePair<TKey, TTo> item )
-        {
-            this.adapted.Add( new KeyValuePair<TKey, TFrom>( item.Key, (TFrom) item.Value ) );
-        }
+        public void Add( KeyValuePair<TKey, TTo> item ) => adapted.Add( new KeyValuePair<TKey, TFrom>( item.Key, (TFrom) item.Value ) );
 
-        public void Clear()
-        {
-            this.adapted.Clear();
-        }
+        public void Clear() => adapted.Clear();
 
-        public bool Contains( KeyValuePair<TKey, TTo> item )
-        {
-            return this.adapted.ContainsKey( item.Key );
-        }
+        public bool Contains( KeyValuePair<TKey, TTo> item ) => adapted.ContainsKey( item.Key );
 
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public void CopyTo( KeyValuePair<TKey, TTo>[] array, int arrayIndex )
         {
-            if ( array == null )
-                throw new ArgumentNullException( "array" );
-
+            Arg.NotNull( array, nameof( array ) );
             var temp = new KeyValuePair<TKey, TFrom>[array.Length];
-            this.adapted.CopyTo( temp, arrayIndex );
+            adapted.CopyTo( temp, arrayIndex );
             temp.Cast<TTo>().ToArray().CopyTo( array, arrayIndex );
         }
 
@@ -101,7 +83,7 @@
         {
             get
             {
-                return this.adapted.Count;
+                return adapted.Count;
             }
         }
 
@@ -109,23 +91,14 @@
         {
             get
             {
-                return this.adapted.IsReadOnly;
+                return adapted.IsReadOnly;
             }
         }
 
-        public bool Remove( KeyValuePair<TKey, TTo> item )
-        {
-            return this.adapted.Remove( item.Key );
-        }
+        public bool Remove( KeyValuePair<TKey, TTo> item ) => adapted.Remove( item.Key );
 
-        public IEnumerator<KeyValuePair<TKey, TTo>> GetEnumerator()
-        {
-            return this.adapted.Select( p => new KeyValuePair<TKey, TTo>( p.Key, p.Value ) ).GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<TKey, TTo>> GetEnumerator() => adapted.Select( p => new KeyValuePair<TKey, TTo>( p.Key, p.Value ) ).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

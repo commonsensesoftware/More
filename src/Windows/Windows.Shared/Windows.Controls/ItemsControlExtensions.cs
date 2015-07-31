@@ -56,7 +56,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Only valid for ItemsControl controls." )]
         public static TPanel GetItemsPanel<TPanel>( this ItemsControl control ) where TPanel : Panel
         {
-            Contract.Requires<ArgumentNullException>( control != null, "control" );
+            Arg.NotNull( control, nameof( control ) );
             return FindItemsPanel<TPanel>( control );
         }
     }

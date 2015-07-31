@@ -182,5 +182,16 @@ namespace More
                 return ResourceManager.GetString( "ShellViewResolutionFailed", resourceCulture );
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The specified activity identifier is invalid. The value must be a globally unique identifier (GUID)..
+        /// </summary>
+        internal static string InvalidActivityId
+        {
+            get
+            {
+                return ResourceManager.GetString( "InvalidActivityId", resourceCulture );
+            }
+        }
     }
 }

@@ -47,7 +47,7 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed by the caller." )]
         public static ExtensionPropertyScope<T> ExtensionProperties<T>( this T instance )
         {
-            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( instance, nameof( instance ) );
             Contract.Ensures( Contract.Result<ExtensionPropertyScope<T>>() != null );
             return new ExtensionPropertyScope<T>( instance );
         }

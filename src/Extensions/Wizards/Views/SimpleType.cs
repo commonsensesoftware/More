@@ -19,20 +19,20 @@
             if ( info == null )
                 throw new ArgumentNullException( "info" );
 
-            this.assemblyQualifiedName = info.GetString( "AssemblyQualifiedName" );
-            this.fullName = info.GetString( "FullName" );
-            this.namespaceName = info.GetString( "Namespace" );
-            this.typeName = info.GetString( "Name" );
+            assemblyQualifiedName = info.GetString( "AssemblyQualifiedName" );
+            fullName = info.GetString( "FullName" );
+            namespaceName = info.GetString( "Namespace" );
+            typeName = info.GetString( "Name" );
         }
 
         internal SimpleType( Type type )
         {
             Contract.Requires( type != null );
 
-            this.assemblyQualifiedName = type.AssemblyQualifiedName;
-            this.fullName = type.FullName;
-            this.namespaceName = type.Namespace;
-            this.typeName = type.Name;
+            assemblyQualifiedName = type.AssemblyQualifiedName;
+            fullName = type.FullName;
+            namespaceName = type.Namespace;
+            typeName = type.Name;
         }
 
         public void GetObjectData( SerializationInfo info, StreamingContext context )
@@ -40,10 +40,10 @@
             if ( info == null )
                 throw new ArgumentNullException( "info" );
 
-            info.AddValue( "AssemblyQualifiedName", this.AssemblyQualifiedName );
-            info.AddValue( "FullName", this.FullName );
-            info.AddValue( "Namespace", this.Namespace );
-            info.AddValue( "Name", this.Name );
+            info.AddValue( "AssemblyQualifiedName", AssemblyQualifiedName );
+            info.AddValue( "FullName", FullName );
+            info.AddValue( "Namespace", Namespace );
+            info.AddValue( "Name", Name );
         }
 
         public override Assembly Assembly
@@ -58,7 +58,7 @@
         {
             get
             {
-                return this.assemblyQualifiedName;
+                return assemblyQualifiedName;
             }
         }
 
@@ -74,7 +74,7 @@
         {
             get
             {
-                return this.fullName;
+                return fullName;
             }
         }
 
@@ -218,7 +218,7 @@
         {
             get
             {
-                return this.namespaceName;
+                return namespaceName;
             }
         }
 
@@ -249,7 +249,7 @@
         {
             get
             {
-                return this.typeName;
+                return typeName;
             }
         }
 
@@ -258,7 +258,7 @@
             if ( o == null )
                 return false;
 
-            return this.AssemblyQualifiedName == o.AssemblyQualifiedName;
+            return AssemblyQualifiedName == o.AssemblyQualifiedName;
         }
 
         public override int GetHashCode()

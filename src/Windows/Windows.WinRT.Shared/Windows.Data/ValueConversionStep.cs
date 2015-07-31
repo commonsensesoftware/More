@@ -22,19 +22,19 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return this.TargetType.FullName;
+                return TargetType.FullName;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( value ), "value" );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
 
                 ITypeResolutionService service;
 
                 // use the registered type resolution service, if one is found; otherwise, failover to default type resolution
                 if ( ServiceProvider.Current.TryGetService( out service ) )
-                    this.targetType = service.GetType( value, true );
+                    targetType = service.GetType( value, true );
                 else
-                    this.targetType = Type.GetType( value, true );
+                    targetType = Type.GetType( value, true );
             }
         }
 
@@ -46,8 +46,8 @@
         {
             get
             {
-                Contract.Ensures( this.targetType != null );
-                return this.targetType ?? ( this.targetType = typeof( object ) );
+                Contract.Ensures( targetType != null );
+                return targetType ?? ( targetType = typeof( object ) );
             }
         }
     }

@@ -68,7 +68,7 @@
         public AsyncNamedDataItemCommand( string id, string name, Func<TItem, TParameter, Task> executeAsyncMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
             : base( executeAsyncMethod, canExecuteMethod, dataItem )
         {
-            Arg.NotNullOrEmpty( name, "name" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
 
             this.id = id;
             this.name = name;
@@ -83,12 +83,12 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( name ) );
-                return this.name;
+                return name;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
-                this.SetProperty( ref this.name, value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                SetProperty( ref name, value );
             }
         }
 
@@ -100,13 +100,13 @@
         {
             get
             {
-                Contract.Ensures( this.desc != null );
-                return this.desc;
+                Contract.Ensures( desc != null );
+                return desc;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.desc, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref desc, value );
             }
         }
 
@@ -120,12 +120,12 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return string.IsNullOrEmpty( this.id ) ? this.Name : this.id;
+                return string.IsNullOrEmpty( id ) ? Name : id;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
-                this.SetProperty( ref this.id, value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                SetProperty( ref id, value );
             }
         }
     }

@@ -22,7 +22,7 @@
         /// <returns>True if all of the items in the sequence are valid; otherwise, false.</returns>
         public static bool IsValid<TItem>( this IEnumerable<TItem> items ) where TItem : ValidatableObject
         {
-            Arg.NotNull( items, "items" );
+            Arg.NotNull( items, nameof( items ) );
             return items.All( item => item.IsValid );
         }
 
@@ -34,7 +34,7 @@
         /// <returns>True if at least one item in the sequence has changed; otherwise, false.</returns>
         public static bool IsChanged<TItem>( this IEnumerable<TItem> items ) where TItem : IChangeTracking
         {
-            Arg.NotNull( items, "items" );
+            Arg.NotNull( items, nameof( items ) );
             return items.Any( item => item.IsChanged );
         }
 
@@ -45,7 +45,7 @@
         /// <param name="items">The <see cref="IEnumerable{T}">sequence</see> of items to accept the changes to.</param>
         public static void AcceptChanges<TItem>( this IEnumerable<TItem> items ) where TItem : IChangeTracking
         {
-            Arg.NotNull( items, "items" );
+            Arg.NotNull( items, nameof( items ) );
             items.ForEach( item => item.AcceptChanges() );
         }
 
@@ -56,7 +56,7 @@
         /// <param name="items">The <see cref="IEnumerable{T}">sequence</see> of items to reject the changes to.</param>
         public static void RejectChanges<TItem>( this IEnumerable<TItem> items ) where TItem : IRevertibleChangeTracking
         {
-            Arg.NotNull( items, "items" );
+            Arg.NotNull( items, nameof( items ) );
             items.ForEach( item => item.RejectChanges() );
         }
     }

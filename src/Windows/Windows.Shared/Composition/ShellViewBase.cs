@@ -30,17 +30,14 @@ namespace More.Composition
         protected ShellViewBase( bool loadComponent )
         {
             if ( loadComponent )
-                Application.LoadComponent( this, this.GetType().CreateXamlResourceUri() );
+                Application.LoadComponent( this, GetType().CreateXamlResourceUri() );
         }
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event for the supplied property name.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
-        protected void OnPropertyChanged( string propertyName )
-        {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
-        }
+        protected void OnPropertyChanged( string propertyName ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event with the supplied arguments.
@@ -48,12 +45,8 @@ namespace More.Composition
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            Arg.NotNull( e, nameof( e ) );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>

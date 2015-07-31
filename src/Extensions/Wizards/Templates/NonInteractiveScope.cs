@@ -12,7 +12,7 @@
 
         ~NonInteractiveScope()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         internal NonInteractiveScope( TemplateWizardContext context, Action<TemplateWizardContext, bool> transition )
@@ -21,28 +21,28 @@
             Contract.Requires( transition != null );
 
             this.context = context;
-            this.restore = context.IsInteractive;
+            restore = context.IsInteractive;
             this.transition = transition;
             this.transition( this.context, false );
         }
 
         private void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( !disposing )
                 return;
 
-            if ( this.restore && this.context != null && this.transition != null )
-                this.transition( this.context, true );
+            if ( restore && context != null && transition != null )
+                transition( context, true );
         }
 
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

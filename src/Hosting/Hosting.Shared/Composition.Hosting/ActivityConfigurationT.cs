@@ -71,9 +71,9 @@
         /// </example>
         public ActivityConfiguration<T> Configure( Action<T> configuration )
         {
-            Contract.Requires<ArgumentNullException>( configuration != null, "configuration" );
+            Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ActivityConfiguration<T>>() != null );
-            this.configurations.Add( configuration );
+            configurations.Add( configuration );
             return this;
         }
 
@@ -108,9 +108,9 @@
         /// </example>
         public virtual ActivityConfiguration<T> DependsOn( Type activityType )
         {
-            Contract.Requires<ArgumentNullException>( activityType != null, "activityType" );
+            Arg.NotNull( activityType, nameof( activityType ) );
             Contract.Ensures( Contract.Result<ActivityConfiguration<T>>() != null );
-            this.dependencies.Add( activityType );
+            dependencies.Add( activityType );
             return this;
         }
 
@@ -147,7 +147,7 @@
         public ActivityConfiguration<T> DependsOn<TActivity>() where TActivity : IActivity
         {
             Contract.Ensures( Contract.Result<ActivityConfiguration<T>>() != null );
-            return this.DependsOn( typeof( TActivity ) );
+            return DependsOn( typeof( TActivity ) );
         }
 
         /// <summary>
@@ -156,8 +156,8 @@
         /// <param name="activity">The <typeparamref name="T">activity</typeparamref> to configure.</param>
         protected virtual void Configure( T activity )
         {
-            Contract.Requires<ArgumentNullException>( activity != null, "activity" );
-            this.configurations.ForEach( configure => configure( activity ) );
+            Arg.NotNull( activity, nameof( activity ) );
+            configurations.ForEach( configure => configure( activity ) );
         }
 
         /// <summary>
@@ -169,18 +169,20 @@
         {
             get
             {
-                return this.dependencies;
+                return dependencies;
             }
         }
 
         void IActivityConfiguration.Configure( IActivity activity )
         {
-            this.Configure( (T) activity );
+            Arg.NotNull( activity, nameof( activity ) );
+            Configure( (T) activity );
         }
 
         void IActivityConfiguration.DependsOn( Type activityType )
         {
-            this.DependsOn( activityType );
+            Arg.NotNull( activityType, nameof( activityType ) );
+            DependsOn( activityType );
         }
     }
 }

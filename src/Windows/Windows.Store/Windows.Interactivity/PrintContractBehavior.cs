@@ -1,9 +1,10 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
-    using More.Windows.Printing;
+    using Input;
+    using Printing;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using System.Windows.Interactivity;
@@ -25,29 +26,33 @@
         /// Gets or sets the print title dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register( "Title", typeof( string ), typeof( PrintContractBehavior ), new PropertyMetadata( null ) );
+            DependencyProperty.Register( nameof( Title ), typeof( string ), typeof( PrintContractBehavior ), new PropertyMetadata( null ) );
 
         /// <summary>
         /// Gets or sets the print request dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty PrintRequestProperty =
-            DependencyProperty.Register( "PrintRequest", typeof( object ), typeof( PrintContractBehavior ), new PropertyMetadata( null, OnPrintRequestChanged ) );
+            DependencyProperty.Register( nameof( PrintRequest ), typeof( object ), typeof( PrintContractBehavior ), new PropertyMetadata( null, OnPrintRequestChanged ) );
 
         /// <summary>
         /// Gets or sets the print command dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty PrintCommandProperty =
-            DependencyProperty.Register( "PrintCommand", typeof( ICommand ), typeof( PrintContractBehavior ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( PrintCommand ), typeof( ICommand ), typeof( PrintContractBehavior ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets the print options command dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty SetPrintOptionsCommandProperty =
-            DependencyProperty.Register( "SetPrintOptionsCommand", typeof( ICommand ), typeof( PrintContractBehavior ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( SetPrintOptionsCommand ), typeof( ICommand ), typeof( PrintContractBehavior ), new PropertyMetadata( (object) null ) );
 
         private Interaction lastInteraction;
         private PrintManager printManager;
@@ -56,20 +61,20 @@
         {
             get
             {
-                return this.printManager;
+                return printManager;
             }
             set
             {
-                if ( this.printManager == value )
+                if ( printManager == value )
                     return;
 
-                if ( this.printManager != null )
-                    this.printManager.PrintTaskRequested -= this.OnPrintTaskRequested;
+                if ( printManager != null )
+                    printManager.PrintTaskRequested -= OnPrintTaskRequested;
 
-                this.printManager = value;
+                printManager = value;
 
-                if ( this.printManager != null )
-                    this.printManager.PrintTaskRequested += this.OnPrintTaskRequested;
+                if ( printManager != null )
+                    printManager.PrintTaskRequested += OnPrintTaskRequested;
             }
         }
 
@@ -81,11 +86,11 @@
         {
             get
             {
-                return (string) this.GetValue( TitleProperty );
+                return (string) GetValue( TitleProperty );
             }
             set
             {
-                this.SetValue( TitleProperty, value );
+                SetValue( TitleProperty, value );
             }
         }
 
@@ -97,11 +102,11 @@
         {
             get
             {
-                return (IInteractionRequest) this.GetValue( PrintRequestProperty );
+                return (IInteractionRequest) GetValue( PrintRequestProperty );
             }
             set
             {
-                this.SetValue( PrintRequestProperty, value );
+                SetValue( PrintRequestProperty, value );
             }
         }
 
@@ -114,11 +119,11 @@
         {
             get
             {
-                return (ICommand) this.GetValue( PrintCommandProperty );
+                return (ICommand) GetValue( PrintCommandProperty );
             }
             set
             {
-                this.SetValue( PrintCommandProperty, value );
+                SetValue( PrintCommandProperty, value );
             }
         }
 
@@ -131,11 +136,11 @@
         {
             get
             {
-                return (ICommand) this.GetValue( SetPrintOptionsCommandProperty );
+                return (ICommand) GetValue( SetPrintOptionsCommandProperty );
             }
             set
             {
-                this.SetValue( SetPrintOptionsCommandProperty, value );
+                SetValue( SetPrintOptionsCommandProperty, value );
             }
         }
 
@@ -159,7 +164,7 @@
             Contract.Requires( printingRoot != null );
 
             var queue = new Queue<DependencyObject>();
-            queue.Enqueue( this.AssociatedObject );
+            queue.Enqueue( AssociatedObject );
             Panel panel = null;
 
             // find the first container relative to the associated object,
@@ -186,7 +191,7 @@
             panel.Children.Insert( 0, printingRoot );
         }
 
-        private void RemovePrintingArea( Panel printingRoot )
+        private static void RemovePrintingArea( Panel printingRoot )
         {
             if ( printingRoot == null )
                 return;
@@ -213,7 +218,7 @@
         private async void OnPrintRequested( object sender, InteractionRequestedEventArgs e )
         {
             // capture the interaction request and show the print charm
-            this.lastInteraction = e.Interaction;
+            lastInteraction = e.Interaction;
             await PrintManager.ShowPrintUIAsync();
         }
 
@@ -222,19 +227,19 @@
             string title = null;
 
             // setup based on the request interaction
-            if ( this.lastInteraction != null )
+            if ( lastInteraction != null )
             {
-                title = this.lastInteraction.Title;
-                this.lastInteraction = null;
+                title = lastInteraction.Title;
+                lastInteraction = null;
             }
 
             // fallback to behavior settings
             if ( string.IsNullOrEmpty( title ) )
-                title = this.Title ?? string.Empty;
+                title = Title ?? string.Empty;
 
             // create print task
             PrintTask printTask = null;
-            printTask = e.Request.CreatePrintTask( title, request => this.OnPrintTaskCreated( printTask, request ) );
+            printTask = e.Request.CreatePrintTask( title, request => OnPrintTaskCreated( printTask, request ) );
         }
 
         private void OnPrintTaskCreated( PrintTask printTask, PrintTaskSourceRequestedArgs request )
@@ -242,24 +247,26 @@
             Contract.Requires( printTask != null );
             Contract.Requires( request != null );
 
-            var command = this.SetPrintOptionsCommand;
+            PrintTaskOptionDetailsWrapper factory = null;
+            var command = SetPrintOptionsCommand;
 
             if ( command != null )
             {
-                // invoke command to setup print options
-                var factory = new PrintTaskOptionDetailsWrapper( PrintTaskOptionDetails.GetFromPrintTaskOptions( printTask.Options ) );
+                // create a factory that abstracts creating print options during the print task
+                factory = new PrintTaskOptionDetailsWrapper( PrintTaskOptionDetails.GetFromPrintTaskOptions( printTask.Options ) );
 
+                // invoke command to setup print options
                 if ( command.CanExecute( factory ) )
                     command.Execute( factory );
             }
 
             // create the print area
-            var printingRoot = this.CreatePrintingRoot();
+            var printingRoot = CreatePrintingRoot();
             var printArea = new PrintAreaWrapper( printingRoot );
-            command = this.PrintCommand;
+            command = PrintCommand;
 
             // add the print are element to the associated object
-            this.AddPrintingArea( printingRoot );
+            AddPrintingArea( printingRoot );
 
             // execute the command to initiate printing
             if ( command.CanExecute( printArea ) )
@@ -271,7 +278,8 @@
             handler = ( s, e ) =>
             {
                 task.Completed -= handler;
-                this.RemovePrintingArea( printingRoot );
+                RemovePrintingArea( printingRoot );
+                factory?.Dispose();
             };
             printTask.Completed += handler;
 
@@ -285,7 +293,7 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.PrintManager = PrintManager.GetForCurrentView();
+            PrintManager = PrintManager.GetForCurrentView();
         }
 
         /// <summary>
@@ -293,7 +301,7 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            this.PrintManager = null;
+            PrintManager = null;
             base.OnDetaching();
         }
     }

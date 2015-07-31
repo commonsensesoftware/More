@@ -12,7 +12,7 @@
         /// </summary>
         public void DismissUI()
         {
-            this.adapted.DismissUI();
+            adapted.DismissUI();
         }
     }
 }

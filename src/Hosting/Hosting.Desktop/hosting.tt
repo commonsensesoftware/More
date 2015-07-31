@@ -38,14 +38,14 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="$bin$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
+  <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
 
-  <file src="..\Hosting.Store\$bin$\$id$.dll" target="lib\win81" />
-  <file src="..\Hosting.Store\$bin$\$id$.xml" target="lib\win81" />
-  <file src="..\Hosting.Store\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
+  <file src="..\Hosting.Store\bin\$configuration$\$id$.dll" target="lib\win81" />
+  <file src="..\Hosting.Store\bin\$configuration$\$id$.xml" target="lib\win81" />
+  <file src="..\Hosting.Store\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
 
-  <file src="..\Hosting.Phone\$bin$\$id$.dll" target="lib\portable-wp81+wpa81" />
-  <file src="..\Hosting.Phone\$bin$\$id$.xml" target="lib\portable-wp81+wpa81" />
-  <file src="..\Hosting.Phone\$bin$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
+  <file src="..\Hosting.Phone\bin\$configuration$\$id$.dll" target="lib\portable-wp81+wpa81" />
+  <file src="..\Hosting.Phone\bin\$configuration$\$id$.xml" target="lib\portable-wp81+wpa81" />
+  <file src="..\Hosting.Phone\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
  </files>
 </package>

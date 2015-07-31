@@ -36,7 +36,7 @@
         public ExtensionMethodToPropertyDescriptor( string propertyName, Func<TObject, TValue> accessor, Action<TObject, TValue> mutator )
             : base( propertyName, new Attribute[0] )
         {
-            Arg.NotNull( accessor, "accessor" );
+            Arg.NotNull( accessor, nameof( accessor ) );
 
             this.accessor = accessor;
             this.mutator = mutator;
@@ -71,7 +71,7 @@
         /// <returns>The value of the property.</returns>
         public override object GetValue( object component )
         {
-            return this.accessor( (TObject) component );
+            return accessor( (TObject) component );
         }
 
         /// <summary>
@@ -82,7 +82,7 @@
         {
             get
             {
-                return this.mutator == null;
+                return mutator == null;
             }
         }
 
@@ -114,10 +114,10 @@
         /// <param name="value">The value to set.</param>
         public override void SetValue( object component, object value )
         {
-            if ( this.IsReadOnly )
-                throw new InvalidOperationException( SR.PropertyIsReadOnly.FormatDefault( this.Name ) );
+            if ( IsReadOnly )
+                throw new InvalidOperationException( SR.PropertyIsReadOnly.FormatDefault( Name ) );
 
-            this.mutator( (TObject) component, (TValue) value );
+            mutator( (TObject) component, (TValue) value );
         }
 
         /// <summary>

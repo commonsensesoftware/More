@@ -1,8 +1,9 @@
 ﻿namespace More.Windows.Input
 {
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
     using global::Windows.Storage.Streams;
 
     /// <summary>
@@ -81,6 +82,7 @@
         /// </summary>
         /// <returns>An object that allows an application to provide search suggestions asynchronously. When the
         /// object is disposed, the deferral to the original operation ends.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This method has side effects and should not be a property." )]
         IDisposable GetDeferral();
 
         /// <summary>

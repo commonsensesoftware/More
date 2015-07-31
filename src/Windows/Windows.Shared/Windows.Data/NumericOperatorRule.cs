@@ -20,7 +20,7 @@
         /// <param name="value">The value associated with the rule.</param>
         protected NumericOperatorRule( decimal? value )
         {
-            this.Value = value;
+            Value = value;
         }
 
         /// <summary>

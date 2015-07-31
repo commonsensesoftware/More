@@ -33,15 +33,15 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated with a code contract" )]
         public ValidationContext( object instance, IServiceProvider serviceProvider, IDictionary<object, object> items )
         {
-            Arg.NotNull( instance, "instance" );
-            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
 
             var dict = items;
 
             this.serviceProvider = serviceProvider;
             this.items = new Lazy<IDictionary<object, object>>( () => dict ?? new Dictionary<object, object>() );
-            this.ObjectInstance = instance;
-            this.ObjectType = instance.GetType();
+            ObjectInstance = instance;
+            ObjectType = instance.GetType();
         }
 
         /// <summary>
@@ -62,7 +62,7 @@
         {
             get
             {
-                return this.items.Value;
+                return items.Value;
             }
         }
 
@@ -94,13 +94,13 @@
         {
             get
             {
-                Contract.Ensures(this.objectType !=null);
-                return this.objectType;
+                Contract.Ensures( objectType != null);
+                return objectType;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.objectType = value;
+                Arg.NotNull( value, nameof( value ) );
+                objectType = value;
             }
         }
 
@@ -111,7 +111,7 @@
         /// <returns>A service of the requested <paramref name="serviceType">type</paramref> or <c>null</c>.</returns>
         public virtual object GetService( Type serviceType )
         {
-            return this.serviceProvider.GetService( serviceType );
+            return serviceProvider.GetService( serviceType );
         }
     }
 }

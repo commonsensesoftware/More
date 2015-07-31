@@ -17,7 +17,7 @@
         {
             public override bool Evaluate( string item )
             {
-                using ( var iterator = this.NestedRules.GetEnumerator() )
+                using ( var iterator = NestedRules.GetEnumerator() )
                 {
                     if ( !iterator.MoveNext() )
                         return false;

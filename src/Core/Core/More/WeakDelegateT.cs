@@ -46,7 +46,7 @@
         public virtual bool IsMatch( T strongDelegate )
         {
             var d = strongDelegate as Delegate;
-            return this.IsMatch( d );
+            return IsMatch( d );
         }
 
         /// <summary>
@@ -56,7 +56,7 @@
         /// null if the delegate cannot be created.</returns>
         public virtual T CreateTypedDelegate()
         {
-            return this.CreateDelegate() as T;
+            return CreateDelegate() as T;
         }
     }
 }

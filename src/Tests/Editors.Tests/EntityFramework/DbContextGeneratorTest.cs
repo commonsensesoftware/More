@@ -170,27 +170,9 @@
         private static string CreateExpectedPropertyChangedCode()
         {
             return
-@"        private volatile PropertyChangedEventHandler propertyChanged;
+@"        public event PropertyChangedEventHandler PropertyChanged;
 
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
-        {
-            add
-            {
-                this.propertyChanged += value;
-            }
-            remove
-            {
-                this.propertyChanged -= value;
-            }
-        }
-
-        private void OnPropertyChanged( PropertyChangedEventArgs e )
-        {
-            var handler = this.propertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
-        }";
+        private void OnPropertyChanged( PropertyChangedEventArgs e ) => PropertyChanged?.Invoke( this, e );";
         }
 
         private static string CreateExpectedReadOnlyRepositoryCode()
@@ -198,12 +180,12 @@
             return
 @"        async Task<IEnumerable<Class1>> IReadOnlyRepository<Class1>.GetAsync( Func<IQueryable<Class1>, IQueryable<Class1>> queryShaper, CancellationToken cancellationToken )
         {
-            return await queryShaper( this.Set<Class1>() ).ToArrayAsync( cancellationToken ).ConfigureAwait( false );
+            return await queryShaper( Set<Class1>() ).ToArrayAsync( cancellationToken ).ConfigureAwait( false );
         }
 
         async Task<TResult> IReadOnlyRepository<Class1>.GetAsync<TResult>( Func<IQueryable<Class1>, TResult> queryShaper, CancellationToken cancellationToken )
         {
-            return await Task<TResult>.Factory.StartNew( () => queryShaper( this.Set<Class1>() ), cancellationToken ).ConfigureAwait( false );
+            return await Task<TResult>.Factory.StartNew( () => queryShaper( Set<Class1>() ), cancellationToken ).ConfigureAwait( false );
         }";
         }
 
@@ -214,35 +196,35 @@
         {
             get
             {
-                return this.ChangeTracker.HasChanges();
+                return ChangeTracker.HasChanges();
             }
         }
 
         void IRepository<Class1>.Add( Class1 item )
         {
-            this.Set<Class1>().Add( item );
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            Set<Class1>().Add( item );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         void IRepository<Class1>.Remove( Class1 item )
         {
-            this.Set<Class1>().Remove( item );
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            Set<Class1>().Remove( item );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         void IRepository<Class1>.Update( Class1 item )
         {
-            if ( this.Entry( item ).State != EntityState.Detached )
+            if ( Entry( item ).State != EntityState.Detached )
                 return;
 
-            this.Set<Class1>().Attach( item );
-            this.Entry( item ).State = EntityState.Modified;
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            Set<Class1>().Attach( item );
+            Entry( item ).State = EntityState.Modified;
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         void IRepository<Class1>.DiscardChanges()
         {
-            foreach ( var entry in this.ChangeTracker.Entries<Class1>() )
+            foreach ( var entry in ChangeTracker.Entries<Class1>() )
             {
                 switch ( entry.State )
                 {
@@ -257,13 +239,13 @@
                 }
             }
 
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         async Task IRepository<Class1>.SaveChangesAsync( CancellationToken cancellationToken )
         {
-            await this.SaveChangesAsync( cancellationToken ).ConfigureAwait( false );
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }";
         }
 
@@ -274,41 +256,41 @@
         {
             get
             {
-                return this.ChangeTracker.HasChanges();
+                return ChangeTracker.HasChanges();
             }
         }
 
         void IUnitOfWork<Class1>.RegisterNew( Class1 item )
         {
-            this.Set<Class1>().Add( item );
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            Set<Class1>().Add( item );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         void IUnitOfWork<Class1>.RegisterRemoved( Class1 item )
         {
-            this.Set<Class1>().Remove( item );
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            Set<Class1>().Remove( item );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         void IUnitOfWork<Class1>.RegisterChanged( Class1 item )
         {
-            if ( this.Entry( item ).State != EntityState.Detached )
+            if ( Entry( item ).State != EntityState.Detached )
                 return;
 
-            this.Set<Class1>().Attach( item );
-            this.Entry( item ).State = EntityState.Modified;
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            Set<Class1>().Attach( item );
+            Entry( item ).State = EntityState.Modified;
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         void IUnitOfWork<Class1>.Unregister( Class1 item )
         {
-            this.Entry( item ).State = EntityState.Detached;
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            Entry( item ).State = EntityState.Detached;
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         void IUnitOfWork<Class1>.Rollback()
         {
-            foreach ( var entry in this.ChangeTracker.Entries<Class1>() )
+            foreach ( var entry in ChangeTracker.Entries<Class1>() )
             {
                 switch ( entry.State )
                 {
@@ -323,13 +305,13 @@
                 }
             }
 
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }
 
         async Task IUnitOfWork<Class1>.CommitAsync( CancellationToken cancellationToken )
         {
-            await this.SaveChangesAsync( cancellationToken ).ConfigureAwait( false );
-            this.OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
+            await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );
+            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
         }";
         }
 
@@ -341,7 +323,7 @@
             var defaultNamespace = "ClassLibrary1";
             var expected = CreateExpected( IReadOnlyRepository );
             string actual;
-            var result = this.Generate( path, content, defaultNamespace, out actual );
+            var result = Generate( path, content, defaultNamespace, out actual );
 
             Assert.Equal( 0, result );
             Assert.Equal( expected, actual );
@@ -355,7 +337,7 @@
             var defaultNamespace = "ClassLibrary1";
             var expected = CreateExpected( IRepository );
             string actual;
-            var result = this.Generate( path, content, defaultNamespace, out actual );
+            var result = Generate( path, content, defaultNamespace, out actual );
 
             Assert.Equal( 0, result );
             Assert.Equal( expected, actual );
@@ -369,7 +351,7 @@
             var defaultNamespace = "ClassLibrary1";
             var expected = CreateExpected( IUnitOfWork );
             string actual;
-            var result = this.Generate( path, content, defaultNamespace, out actual );
+            var result = Generate( path, content, defaultNamespace, out actual );
 
             Assert.Equal( 0, result );
             Assert.Equal( expected, actual );
@@ -383,7 +365,7 @@
             var defaultNamespace = "ClassLibrary1";
             var expected = CreateExpected( IReadOnlyRepository, IRepository, IUnitOfWork );
             string actual;
-            var result = this.Generate( path, content, defaultNamespace, out actual );
+            var result = Generate( path, content, defaultNamespace, out actual );
 
             Assert.Equal( 0, result );
             Assert.Equal( expected, actual );

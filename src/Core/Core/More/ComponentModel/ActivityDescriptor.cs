@@ -18,9 +18,9 @@
         /// </summary>
         public ActivityDescriptor()
         {
-            this.id = Guid.NewGuid().ToString();
-            this.name = "Activity";
-            this.desc = string.Empty;
+            id = Guid.NewGuid().ToString();
+            name = "Activity";
+            desc = string.Empty;
         }
 
         /// <summary>
@@ -31,16 +31,16 @@
         /// <param name="description">The activity description.</param>
         public ActivityDescriptor( string id, string name, string description )
         {
-            Arg.NotNullOrEmpty( id, "id" );
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( description, "description" );
+            Arg.NotNullOrEmpty( id, nameof( id ) );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            Arg.NotNull( description, nameof( description ) );
 
             if ( !IsValidIdentifier( id ) )
                 throw new ArgumentException( ExceptionMessage.InvalidActivityId, "id" );
 
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
+            Id = id;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -51,16 +51,16 @@
         {
             get
             {
-                return this.id;
+                return id;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
 
                 if ( !IsValidIdentifier( value ) )
                     throw new ArgumentException( ExceptionMessage.InvalidActivityId, "value" );
 
-                this.id = value;
+                id = value;
             }
         }
 
@@ -72,12 +72,12 @@
         {
             get
             {
-                return this.name;
+                return name;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
-                this.name = value;
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                name = value;
             }
         }
 
@@ -89,11 +89,11 @@
         {
             get
             {
-                return this.desc;
+                return desc;
             }
             set
             {
-                this.desc = value ?? string.Empty;
+                desc = value ?? string.Empty;
             }
         }
 

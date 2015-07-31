@@ -23,6 +23,7 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SR.Designer.cs">
       <DependentUpon>SR.resx</DependentUpon>
       <DesignTime>True</DesignTime>

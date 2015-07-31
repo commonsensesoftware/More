@@ -21,7 +21,7 @@
         /// <param name="stack">The <see cref="IStack{T}"/> instance to debug.</param>
         public StackDebugView( IStack<T> stack )
         {
-            Arg.NotNull( stack, "stack" );
+            Arg.NotNull( stack, nameof( stack ) );
             this.stack = stack;
         }
 
@@ -35,8 +35,8 @@
         {
             get
             {
-                Contract.Ensures( this.stack != null );
-                return this.stack.ToArray();
+                Contract.Ensures( stack != null );
+                return stack.ToArray();
             }
         }
     }

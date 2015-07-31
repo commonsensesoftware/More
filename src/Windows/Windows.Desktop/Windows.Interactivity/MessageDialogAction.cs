@@ -24,7 +24,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Alert( Interaction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
 
             var dialog = new MessageDialog();
 
@@ -32,7 +32,7 @@
             dialog.Content = interaction.Content;
             dialog.DefaultCommandIndex = 0;
             dialog.Commands.Add( new NamedCommand<object>( SR.OKCaption, DefaultAction.None ) );
-            dialog.Owner = Window.GetWindow( this.AssociatedObject );
+            dialog.Owner = Window.GetWindow( AssociatedObject );
             dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dialog.ShowDialog();
         }
@@ -44,7 +44,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Prompt( Interaction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
 
             var dialog = new MessageDialog();
             var commands = interaction.Commands.DelayAll().ToArray();
@@ -54,7 +54,7 @@
             behavior.CloseCommand = interaction.CancelCommand;
             System.Windows.Interactivity.Interaction.GetBehaviors( dialog ).Add( behavior );
 
-            dialog.Owner = Window.GetWindow( this.AssociatedObject );
+            dialog.Owner = Window.GetWindow( AssociatedObject );
             dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             dialog.Title = interaction.Title;
             dialog.Content = interaction.Content;
@@ -73,14 +73,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Invoke( InteractionRequestedEventArgs args )
         {
-            Contract.Requires<ArgumentNullException>( args != null, "args" );
+            Arg.NotNull( args, nameof( args ) );
 
             var interaction = args.Interaction;
 
             if ( interaction.Commands.Any() )
-                this.Prompt( interaction );
+                Prompt( interaction );
             else
-                this.Alert( interaction );
+                Alert( interaction );
         }
 
         /// <summary>
@@ -93,7 +93,7 @@
             var args = parameter as InteractionRequestedEventArgs;
 
             if ( args != null )
-                this.Invoke( args );
+                Invoke( args );
         }
     }
 }

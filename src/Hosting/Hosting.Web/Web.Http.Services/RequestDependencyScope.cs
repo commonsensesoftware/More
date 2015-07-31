@@ -24,7 +24,7 @@
         /// </summary>
         ~RequestDependencyScope()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         /// <summary>
@@ -34,10 +34,10 @@
         /// <param name="request">The current <see cref="HttpRequestMessage">request</see>.</param>
         public RequestDependencyScope( IDependencyScope currentScope, HttpRequestMessage request )
         {
-            Contract.Requires<ArgumentNullException>( currentScope != null, "currentScope" );
-            Contract.Requires<ArgumentNullException>( request != null, "request" );
+            Arg.NotNull( currentScope, nameof( currentScope ) );
+            Arg.NotNull( request, nameof( request ) );
 
-            this.scope = currentScope;
+            scope = currentScope;
             this.request = request;
         }
 
@@ -47,13 +47,13 @@
         /// <param name="disposing">Indicates whether the object is being disposed.</param>
         protected virtual void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( disposing )
-                this.scope.Dispose();
+                scope.Dispose();
         }
 
         private static object DefaultActivator( HttpRequestMessage request, object instance )
@@ -68,11 +68,11 @@
 
             Func<HttpRequestMessage, object, object> activator;
 
-            if ( this.activators.TryGetValue( serviceType, out activator ) )
+            if ( activators.TryGetValue( serviceType, out activator ) )
                 return activator;
 
             var factoryType = typeof( IDecoratorFactory<> ).MakeGenericType( serviceType );
-            var factory = this.scope.GetService( factoryType );
+            var factory = scope.GetService( factoryType );
 
             if ( factory == null )
             {
@@ -93,7 +93,7 @@
                 activator = l.Compile();
             }
 
-            this.activators[serviceType] = activator;
+            activators[serviceType] = activator;
             return activator;
         }
 
@@ -104,13 +104,13 @@
         /// <returns>An instance of the requested <paramref name="serviceType">service type</paramref> or null if no match is found.</returns>
         public object GetService( Type serviceType )
         {
-            var service = this.scope.GetService( serviceType );
+            var service = scope.GetService( serviceType );
 
             if ( service == null )
                 return service;
 
-            var activator = this.GetOrCreateActivator( serviceType );
-            return activator( this.request, service );
+            var activator = GetOrCreateActivator( serviceType );
+            return activator( request, service );
         }
 
         /// <summary>
@@ -120,15 +120,15 @@
         /// <returns>A <see cref="IEnumerable{T}">sequence</see> of services matching the requested <paramref name="serviceType">service type</paramref>.</returns>
         public IEnumerable<object> GetServices( Type serviceType )
         {
-            var services = this.scope.GetServices( serviceType );
+            var services = scope.GetServices( serviceType );
 
             if ( services == null )
                 yield break;
 
-            var activator = this.GetOrCreateActivator( serviceType );
+            var activator = GetOrCreateActivator( serviceType );
 
             foreach ( var service in services )
-                yield return activator( this.request, service );
+                yield return activator( request, service );
         }
 
         /// <summary>
@@ -136,7 +136,7 @@
         /// </summary>
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

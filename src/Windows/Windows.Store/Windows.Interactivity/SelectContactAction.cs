@@ -72,7 +72,7 @@
             if ( selectContact == null )
                 return;
 
-            var contacts = await this.SelectContactsAsync( selectContact );
+            var contacts = await SelectContactsAsync( selectContact );
             InvokeCallbackCommand( selectContact, contacts );
         }
     }

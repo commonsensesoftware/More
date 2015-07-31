@@ -18,10 +18,11 @@
         /// </summary>
         /// <param name="contextFactory">The factory <see cref="Func{T}">method</see> used to retrieve the
         /// current <see cref="CompositionContext">context</see> used by the resolver.</param>
+        [CLSCompliant( false )]
         public CompositionScopeHttpDependencyResolver( Func<CompositionContext> contextFactory )
         {
-            Contract.Requires<ArgumentNullException>( contextFactory != null, "contextFactory" );
-            this.factory = contextFactory;
+            Arg.NotNull( contextFactory, nameof( contextFactory ) );
+            factory = contextFactory;
         }
 
         /// <summary>
@@ -49,7 +50,7 @@
 
             object export = null;
 
-            if ( !this.factory().TryGetExport( serviceType, null, out export ) )
+            if ( !factory().TryGetExport( serviceType, null, out export ) )
                 export = null;
 
             return export;
@@ -71,7 +72,7 @@
             if ( serviceType == typeof( IDependencyResolver ) || serviceType == typeof( CompositionScopeHttpDependencyResolver ) )
                 exports.Add( this );
 
-            exports.AddRange( this.factory().GetExports( serviceType ) );
+            exports.AddRange( factory().GetExports( serviceType ) );
             return exports;
         }
 

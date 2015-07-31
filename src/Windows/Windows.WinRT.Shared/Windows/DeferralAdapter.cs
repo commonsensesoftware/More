@@ -16,15 +16,15 @@
 
         public void Dispose()
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
-            if ( this.complete != null )
+            if ( complete != null )
             {
-                this.complete();
-                this.complete = null;
+                complete();
+                complete = null;
             }
 
             GC.SuppressFinalize( this );

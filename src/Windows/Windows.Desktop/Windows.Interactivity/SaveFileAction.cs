@@ -72,7 +72,7 @@
         {
             Contract.Requires( saveFile != null );
 
-            var owner = Window.GetWindow( this.AssociatedObject );
+            var owner = Window.GetWindow( AssociatedObject );
             var dialog = CreateDialog( saveFile );
             var result = dialog.ShowDialog( owner ) ?? false;
 
@@ -98,12 +98,12 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Invoke( InteractionRequestedEventArgs args )
         {
-            Contract.Requires<ArgumentNullException>( args != null, "args" );
+            Arg.NotNull( args, nameof( args ) );
 
             var saveFile = args.Interaction as SaveFileInteraction;
 
             if ( saveFile != null )
-                this.InvokeCallbackCommand( saveFile );
+                InvokeCallbackCommand( saveFile );
         }
 
         /// <summary>
@@ -116,7 +116,7 @@
             var args = parameter as InteractionRequestedEventArgs;
 
             if ( args != null )
-                this.Invoke( args );
+                Invoke( args );
         }
     }
 }

@@ -25,7 +25,7 @@
         /// <param name="errorMessage">The error message associated with the rule.</param>
         public PhoneRule( string errorMessage )
         {
-            Arg.NotNullOrEmpty( errorMessage, "errorMessage" );
+            Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
             this.errorMessage = errorMessage;
         }
 
@@ -39,7 +39,7 @@
             if ( item == null || item.Value == null || regex.IsMatch( item.Value ) )
                 return ValidationResult.Success;
 
-            var message = this.errorMessage ?? ValidationMessage.PhoneInvalid.FormatDefault( item.Name );
+            var message = errorMessage ?? ValidationMessage.PhoneInvalid.FormatDefault( item.Name );
             return new ValidationResult( message, item.Name );
         }
     }

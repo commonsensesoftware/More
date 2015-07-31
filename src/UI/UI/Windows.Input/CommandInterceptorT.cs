@@ -45,19 +45,19 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Validated by a code contract." )]
         public CommandInterceptor( Action<T> preAction, Action<T> postAction, ICommand command )
         {
-            Arg.NotNull( preAction, "preAction" );
-            Arg.NotNull( postAction, "postAction" );
-            Arg.NotNull( command, "command" );
+            Arg.NotNull( preAction, nameof( preAction ) );
+            Arg.NotNull( postAction, nameof( postAction ) );
+            Arg.NotNull( command, nameof( command ) );
             
             this.command = command;
             this.preAction = preAction;
             this.postAction = postAction;
-            this.command.CanExecuteChanged += ( s, e ) => this.OnCanExecuteChanged( e );
+            this.command.CanExecuteChanged += ( s, e ) => OnCanExecuteChanged( e );
 
             var notifyCommand = command as INotifyCommandChanged;
 
             if ( notifyCommand != null )
-                notifyCommand.Executed += ( s, e ) => this.OnExecuted( e );
+                notifyCommand.Executed += ( s, e ) => OnExecuted( e );
         }
 
         /// <summary>
@@ -66,12 +66,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExecuted( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Executed;
-
-            if ( handler != null )
-                handler( this, e );
+            Executed?.Invoke( this, e );
         }
 
         /// <summary>
@@ -81,12 +78,9 @@
         /// <remarks>Note to inheritors: the base class has no implementation and is not required to be called.</remarks>
         protected virtual void OnCanExecuteChanged( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CanExecuteChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CanExecuteChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -96,7 +90,7 @@
         /// <returns>True if the command can be executed; otherwise, false.</returns>
         public virtual bool CanExecute( T parameter )
         {
-            return this.command.CanExecute( parameter );
+            return command.CanExecute( parameter );
         }
 
         /// <summary>
@@ -105,14 +99,14 @@
         /// <param name="parameter">The contextual parameter for the command.</param>
         public virtual void Execute( T parameter )
         {
-            this.preAction( parameter );
-            this.command.Execute( parameter );
-            this.postAction( parameter );
+            preAction( parameter );
+            command.Execute( parameter );
+            postAction( parameter );
         }
 
         bool ICommand.CanExecute( object parameter )
         {
-            return this.CanExecute( Util.CastOrDefault<T>( parameter ) );
+            return CanExecute( Util.CastOrDefault<T>( parameter ) );
         }
 
         /// <summary>
@@ -122,7 +116,7 @@
 
         void ICommand.Execute( object parameter )
         {
-            this.Execute( Util.CastOrDefault<T>( parameter ) );
+            Execute( Util.CastOrDefault<T>( parameter ) );
         }
 
         /// <summary>
@@ -132,7 +126,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Allows the command to be forcibly re-evaluated from an external source." )]
         public virtual void RaiseCanExecuteChanged()
         {
-            var notify = this.command as INotifyCommandChanged;
+            var notify = command as INotifyCommandChanged;
 
             if ( notify != null )
                 notify.RaiseCanExecuteChanged();

@@ -16,7 +16,7 @@
         /// <param name="serviceProvider">The <see cref="IServiceProvider">service provider</see> associated with the completed activity.</param>
         public ActivityCompletedEventArgs( IServiceProvider serviceProvider )
         {
-            Arg.NotNull( serviceProvider, "serviceProvider" );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
             this.serviceProvider = serviceProvider;
         }
 
@@ -28,8 +28,8 @@
         {
             get
             {
-                Contract.Ensures( this.serviceProvider != null );
-                return this.serviceProvider;
+                Contract.Ensures( serviceProvider != null );
+                return serviceProvider;
             }
         }
     }

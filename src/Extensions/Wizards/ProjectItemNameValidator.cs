@@ -36,14 +36,14 @@
             // short-circuit when possible
             if ( string.IsNullOrWhiteSpace( itemName ) )
                 return false;
-            else if ( this.project == null )
+            else if ( project == null )
                 return true;
 
             var comparer = StringComparer.OrdinalIgnoreCase;
             var projectItems = new Queue<ProjectItem>();
 
             // add initial items for evaluation
-            foreach ( var item in this.project.ProjectItems.OfType<ProjectItem>() )
+            foreach ( var item in project.ProjectItems.OfType<ProjectItem>() )
                 projectItems.Enqueue( item );
 
             while ( projectItems.Count > 0 )
@@ -86,12 +86,12 @@
             // short-circuit when possible
             if ( string.IsNullOrWhiteSpace( name ) )
                 return false;
-            else if ( this.project == null )
+            else if ( project == null )
                 return true;
 
-            var fileName = this.project.GetConfigurationFileName();
+            var fileName = project.GetConfigurationFileName();
             var comparer = StringComparer.OrdinalIgnoreCase;
-            var configFile = this.project.ProjectItems.Cast<ProjectItem>().FirstOrDefault( pi => comparer.Equals( pi.Name, fileName ) );
+            var configFile = project.ProjectItems.Cast<ProjectItem>().FirstOrDefault( pi => comparer.Equals( pi.Name, fileName ) );
 
             // a *.config file doesn't exist
             if ( configFile == null )

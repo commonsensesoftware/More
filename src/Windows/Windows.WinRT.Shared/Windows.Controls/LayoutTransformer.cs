@@ -19,8 +19,9 @@
         /// Gets the layout transform dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty LayoutTransformProperty =
-            DependencyProperty.Register( "LayoutTransform", typeof( Transform ), typeof( LayoutTransformer ), new PropertyMetadata( null, OnLayoutTransformChanged ) );
+            DependencyProperty.Register( nameof( LayoutTransform ), typeof( Transform ), typeof( LayoutTransformer ), new PropertyMetadata( null, OnLayoutTransformChanged ) );
 
         private const string TransformRootName = "TransformRoot";
         private const string PresenterName = "Presenter";
@@ -28,7 +29,7 @@
 
         private Panel transformRoot;
         private ContentPresenter contentPresenter;
-        private MatrixTransform matrixTransform;
+        private MatrixTransform renderTransform;
         private Matrix transformation;
         private Size childActualSize = Size.Empty;
 
@@ -61,14 +62,11 @@
         {
             get
             {
-                return this.contentPresenter == null ? null : ( this.contentPresenter.Content as FrameworkElement ?? this.contentPresenter );
+                return contentPresenter == null ? null : ( contentPresenter.Content as FrameworkElement ?? contentPresenter );
             }
         }
 
-        private static void OnLayoutTransformChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e )
-        {
-            ( (LayoutTransformer) sender ).ProcessTransform( (Transform) e.NewValue );
-        }
+        private static void OnLayoutTransformChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e ) => ( (LayoutTransformer) sender ).ProcessTransform( (Transform) e.NewValue );
 
         /// <summary>
         /// Overrides the default behavior when the control template is applied.
@@ -77,14 +75,14 @@
         {
             base.OnApplyTemplate();
 
-            this.transformRoot = this.GetTemplateChild( TransformRootName ) as Grid;
-            this.contentPresenter = this.GetTemplateChild( PresenterName ) as ContentPresenter;
-            this.matrixTransform = new MatrixTransform();
+            transformRoot = GetTemplateChild( TransformRootName ) as Grid;
+            contentPresenter = GetTemplateChild( PresenterName ) as ContentPresenter;
+            renderTransform = new MatrixTransform();
 
-            if ( this.transformRoot != null )
-                this.transformRoot.RenderTransform = this.matrixTransform;
+            if ( transformRoot != null )
+                transformRoot.RenderTransform = renderTransform;
 
-            this.ApplyLayoutTransform();
+            ApplyLayoutTransform();
         }
 
         /// <summary>
@@ -94,19 +92,16 @@
         /// This method should be used to notify the control that some aspect of its
         /// <see cref="P:LayoutTransform"/> property has changed. 
         /// </remarks>
-        public void ApplyLayoutTransform()
-        {
-            this.ProcessTransform( this.LayoutTransform );
-        }
+        public void ApplyLayoutTransform() => ProcessTransform( LayoutTransform );
 
         private void ProcessTransform( Transform transform )
         {
-            this.transformation = RoundMatrix( this.GetTransformMatrix( transform ) );
+            transformation = RoundMatrix( GetTransformMatrix( transform ) );
 
-            if ( this.matrixTransform != null )
-                this.matrixTransform.Matrix = this.transformation;
+            if ( renderTransform != null )
+                renderTransform.Matrix = transformation;
 
-            this.InvalidateMeasure();
+            InvalidateMeasure();
         }
 
         private Matrix GetTransformMatrix( Transform transform )
@@ -126,7 +121,7 @@
                 var groupMatrix = Matrix.Identity;
 
                 foreach ( Transform child in transformGroup.Children )
-                    groupMatrix = MatrixMultiply( groupMatrix, this.GetTransformMatrix( child ) );
+                    groupMatrix = MatrixMultiply( groupMatrix, GetTransformMatrix( child ) );
 
                 return groupMatrix;
             }
@@ -196,10 +191,10 @@
                 arrangeBounds.Height = arrangeBounds.Width;
 
             // capture the matrix parameters
-            var a = this.transformation.M11;
-            var b = this.transformation.M12;
-            var c = this.transformation.M21;
-            var d = this.transformation.M22;
+            var a = transformation.M11;
+            var b = transformation.M12;
+            var c = transformation.M21;
+            var d = transformation.M22;
 
             // compute maximum possible transformed width/height based on starting width/height
             // these constraints define two lines in the positive x/y quadrant
@@ -229,7 +224,7 @@
                 // check for completely unbound scenario
                 computedSize = new Size( double.PositiveInfinity, double.PositiveInfinity );
             }
-            else if ( !MatrixHasInverse( this.transformation ) )
+            else if ( !MatrixHasInverse( transformation ) )
             {
                 // check for singular matrix
                 computedSize = new Size( 0d, 0d );
@@ -297,7 +292,7 @@
                 // neither midpoint is viable; use the intersection of the two constraint lines instead
                 // compute width by setting heights equal (m1*x+c1=m2*x+c2)
                 var computedWidth = ( maxHeightFromHeight - maxHeightFromWidth ) / ( slopeFromWidth - slopeFromHeight );
-                
+
                 // compute height from width constraint line (y=m*x+c; using height would give same result)
                 computedSize = new Size( computedWidth, ( slopeFromWidth * computedWidth ) + maxHeightFromWidth );
             }
@@ -346,12 +341,10 @@
                 ( ( matrix1.OffsetX * matrix2.M12 ) + ( matrix1.OffsetY * matrix2.M22 ) ) + matrix2.OffsetY );
         }
 
-        private static bool MatrixHasInverse( Matrix matrix )
-        {
-            // WPF equivalent of following code:
-            // return matrix.HasInverse;
-            return ( ( matrix.M11 * matrix.M22 ) - ( matrix.M12 * matrix.M21 ) ) != 0d;
-        }
+        /// <summary>
+        /// WPF equivalent of following code:  return matrix.HasInverse;
+        /// </summary>
+        private static bool MatrixHasInverse( Matrix matrix ) => ( ( matrix.M11 * matrix.M22 ) - ( matrix.M12 * matrix.M21 ) ) != 0d;
 
         /// <summary>
         /// Provides the behavior for the measure pass of the layout.
@@ -360,26 +353,26 @@
         /// <returns>The size that this element determines it needs during layout, based on its calculations of child element sizes.</returns>
         protected override Size MeasureOverride( Size availableSize )
         {
-            var child = this.Child;
+            var child = Child;
 
-            if ( this.transformRoot == null || child == null )
+            if ( transformRoot == null || child == null )
                 return Size.Empty;
 
             Size measureSize;
 
-            if ( this.childActualSize == Size.Empty )
+            if ( childActualSize == Size.Empty )
             {
                 // determine the largest size after the transformation
-                measureSize = this.ComputeLargestTransformedSize( availableSize );
+                measureSize = ComputeLargestTransformedSize( availableSize );
             }
             else
             {
                 // previous measure/arrange pass determined that Child.DesiredSize was larger than believed
-                measureSize = this.childActualSize;
+                measureSize = childActualSize;
             }
 
             // perform a mesaure on the _transformRoot (containing Child)
-            this.transformRoot.Measure( measureSize );
+            transformRoot.Measure( measureSize );
 
             // WPF equivalent of _childActualSize technique
             // If the child is going to render larger than the available size, re-measure according to that size: child.Arrange(new Rect());
@@ -389,7 +382,7 @@
             // }
 
             // transform DesiredSize to find its width/height
-            var transformedDesiredRect = RectTransform( new Rect( 0d, 0d, this.transformRoot.DesiredSize.Width, this.transformRoot.DesiredSize.Height ), this.transformation );
+            var transformedDesiredRect = RectTransform( new Rect( 0d, 0d, transformRoot.DesiredSize.Width, transformRoot.DesiredSize.Height ), transformation );
             var transformedDesiredSize = new Size( transformedDesiredRect.Width, transformedDesiredRect.Height );
             return transformedDesiredSize;
         }
@@ -401,23 +394,23 @@
         /// <returns>The actual size used.</returns>
         protected override Size ArrangeOverride( Size finalSize )
         {
-            var child = this.Child;
+            var child = Child;
 
-            if ( this.transformRoot == null || child == null )
+            if ( transformRoot == null || child == null )
                 return finalSize;
 
             // determine the largest available size after the transformation
-            var finalSizeTransformed = this.ComputeLargestTransformedSize( finalSize );
+            var finalSizeTransformed = ComputeLargestTransformedSize( finalSize );
 
-            if ( finalSizeTransformed.Width < this.transformRoot.DesiredSize.Width || finalSizeTransformed.Height < this.transformRoot.DesiredSize.Height )
+            if ( finalSizeTransformed.Width < transformRoot.DesiredSize.Width || finalSizeTransformed.Height < transformRoot.DesiredSize.Height )
             {
                 // some elements do not like being given less space than they asked for (ex: TextBlock)
                 // bump the working size up to do the right thing by them
-                finalSizeTransformed = this.transformRoot.DesiredSize;
+                finalSizeTransformed = transformRoot.DesiredSize;
             }
 
             // transform the working size to find its width/height and create the arrange rect to center the transformed content
-            var transformedRect = RectTransform( new Rect( 0d, 0d, finalSizeTransformed.Width, finalSizeTransformed.Height ), this.transformation );
+            var transformedRect = RectTransform( new Rect( 0d, 0d, finalSizeTransformed.Width, finalSizeTransformed.Height ), transformation );
             var finalRect = new Rect(
                 -transformedRect.Left + ( ( finalSize.Width - transformedRect.Width ) / 2d ),
                 -transformedRect.Top + ( ( finalSize.Height - transformedRect.Height ) / 2d ),
@@ -425,21 +418,21 @@
                 finalSizeTransformed.Height );
 
             // perform an Arrange on _transformRoot (containing Child)
-            this.transformRoot.Arrange( finalRect );
+            transformRoot.Arrange( finalRect );
 
             // this is the first opportunity to find out the Child's true DesiredSize
-            if ( ( finalSizeTransformed.Width < child.RenderSize.Width || finalSizeTransformed.Height < child.RenderSize.Height ) && ( this.childActualSize == Size.Empty ) )
+            if ( ( finalSizeTransformed.Width < child.RenderSize.Width || finalSizeTransformed.Height < child.RenderSize.Height ) && ( childActualSize == Size.Empty ) )
             {
                 // unfortunately, all the work so far is invalid because the wrong DesiredSize was used; make a note of the actual DesiredSize
-                this.childActualSize = new Size( child.ActualWidth, child.ActualHeight );
+                childActualSize = new Size( child.ActualWidth, child.ActualHeight );
 
                 // force a new measure/arrange pass
-                this.InvalidateMeasure();
+                InvalidateMeasure();
             }
             else
             {
                 // clear the "need to measure/arrange again" flag
-                this.childActualSize = Size.Empty;
+                childActualSize = Size.Empty;
             }
 
             return finalSize;

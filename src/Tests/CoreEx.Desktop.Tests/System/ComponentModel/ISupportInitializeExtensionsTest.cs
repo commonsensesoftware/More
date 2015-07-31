@@ -18,40 +18,40 @@
             {
                 get
                 {
-                    return this.lastModified;
+                    return lastModified;
                 }
                 set
                 {
-                    if ( this.lastModified == value )
+                    if ( lastModified == value )
                         return;
 
-                    this.lastModified = value;
+                    lastModified = value;
 
-                    if ( !this.initializing )
-                        this.changed = true;
+                    if ( !initializing )
+                        changed = true;
                 }
             }
 
             public void BeginInit()
             {
-                this.initializing = true;
+                initializing = true;
             }
 
             public void EndInit()
             {
-                this.initializing = false;
+                initializing = false;
             }
 
             public void AcceptChanges()
             {
-                this.changed = false;
+                changed = false;
             }
 
             public bool IsChanged
             {
                 get
                 {
-                    return this.changed;
+                    return changed;
                 }
             }
         }

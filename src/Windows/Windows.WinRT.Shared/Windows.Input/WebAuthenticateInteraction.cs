@@ -20,21 +20,21 @@
         /// <param name="requestUri">The starting URI of the web service. This URI must be a secure address of https://.</param>
         public WebAuthenticateInteraction( Uri requestUri )
         {
-            Contract.Requires<ArgumentNullException>( requestUri != null, "requestUri" );
+            Arg.NotNull( requestUri, nameof( requestUri ) );
             this.requestUri = requestUri;
         }
 
         private bool GetOption( WebAuthenticationOptions option )
         {
-            return ( this.options & option ) == option;
+            return ( options & option ) == option;
         }
 
         private void SetOption( WebAuthenticationOptions option, bool value )
         {
             if ( value )
-                this.options |= option;
+                options |= option;
             else
-                this.options &= ~option;
+                options &= ~option;
         }
 
         /// <summary>
@@ -46,8 +46,8 @@
         {
             get
             {
-                Contract.Ensures( this.requestUri != null );
-                return this.requestUri;
+                Contract.Ensures( requestUri != null );
+                return requestUri;
             }
         }
 
@@ -68,7 +68,7 @@
         {
             get
             {
-                return this.options;
+                return options;
             }
         }
 
@@ -82,11 +82,11 @@
         {
             get
             {
-                return this.GetOption( WebAuthenticationOptions.UseCorporateNetwork );
+                return GetOption( WebAuthenticationOptions.UseCorporateNetwork );
             }
             set
             {
-                this.SetOption( WebAuthenticationOptions.UseCorporateNetwork, value );
+                SetOption( WebAuthenticationOptions.UseCorporateNetwork, value );
             }
         }
 
@@ -99,11 +99,11 @@
         {
             get
             {
-                return this.GetOption( WebAuthenticationOptions.UseHttpPost );
+                return GetOption( WebAuthenticationOptions.UseHttpPost );
             }
             set
             {
-                this.SetOption( WebAuthenticationOptions.UseHttpPost, value );
+                SetOption( WebAuthenticationOptions.UseHttpPost, value );
             }
         }
 
@@ -115,11 +115,11 @@
         {
             get
             {
-                return this.GetOption( WebAuthenticationOptions.UseTitle );
+                return GetOption( WebAuthenticationOptions.UseTitle );
             }
             set
             {
-                this.SetOption( WebAuthenticationOptions.UseTitle, value );
+                SetOption( WebAuthenticationOptions.UseTitle, value );
             }
         }
 

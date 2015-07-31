@@ -54,8 +54,8 @@
         /// Initializes a new instance of the <see cref="KeyPressTrigger"/> class.
         /// </summary>
         public KeyPressTrigger()
-        {   
-            this.Key = Key.Enter;
+        {
+            Key = Key.Enter;
         }
 
         /// <summary>
@@ -72,17 +72,17 @@
         {
             Contract.Requires( e != null );
 
-            if ( e.Key != this.Key )
+            if ( e.Key != Key )
                 return;
 
-            this.OnKeyPress( e );
+            OnKeyPress( e );
 
             if ( !e.Handled )
             {
 #if NETFX_CORE
-                this.Execute( sender, e );
+                Execute( sender, e );
 #else
-                this.InvokeActions( e );
+                InvokeActions( e );
 #endif
             }
         }
@@ -91,9 +91,10 @@
         /// Occurs when the behavior is triggered by a key press.
         /// </summary>
         /// <param name="e">The <see cref="KeyEventArgs"/> event data.</param>
+        [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
         protected virtual void OnKeyPress( KeyEventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
         }
 
         /// <summary>
@@ -102,7 +103,7 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.AssociatedObject.KeyUp += OnKeyUp;
+            AssociatedObject.KeyUp += OnKeyUp;
         }
 
         /// <summary>
@@ -110,7 +111,7 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            this.AssociatedObject.KeyUp -= this.OnKeyUp;
+            AssociatedObject.KeyUp -= OnKeyUp;
             base.OnDetaching();
         }
     }

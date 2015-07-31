@@ -55,13 +55,13 @@
         {
             get
             {
-                Contract.Ensures( this.parameters != null );
-                return this.parameters.ToArray();
+                Contract.Ensures( parameters != null );
+                return parameters.ToArray();
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.parameters.ReplaceAll( value );
+                Arg.NotNull( value, nameof( value ) );
+                parameters.ReplaceAll( value );
             }
         }
 
@@ -74,7 +74,7 @@
         {
             get
             {
-                var validator = new RequiredConstructorValidator( this.AllowContravariance, this.parameters );
+                var validator = new RequiredConstructorValidator( AllowContravariance, parameters );
                 return validator;
             }
         }

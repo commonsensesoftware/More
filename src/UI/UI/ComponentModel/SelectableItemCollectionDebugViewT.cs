@@ -21,8 +21,8 @@
         /// <param name="collection">The <see cref="SelectableItemCollection{T}">collection</see> to debug.</param>
         public SelectableItemCollectionDebugView( SelectableItemCollection<T> collection )
         {
-            Arg.NotNull( collection, "collection" );
-            this.source = collection;
+            Arg.NotNull( collection, nameof( collection ) );
+            source = collection;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<SelectableItem<T>[]>() != null );
-                return this.source.ToArray();
+                return source.ToArray();
             }
         }
 
@@ -51,7 +51,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<SelectableItem<T>[]>() != null );
-                return this.source.SelectedItems.ToArray();
+                return source.SelectedItems.ToArray();
             }
         }
 
@@ -66,7 +66,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<T[]>() != null );
-                return this.source.SelectedValues.ToArray();
+                return source.SelectedValues.ToArray();
             }
         }
     }

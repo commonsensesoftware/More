@@ -22,7 +22,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public CompositeValidator( IEnumerable<ConfigurationValidatorBase> validators )
         {
-            Arg.NotNull( validators, "validators" );
+            Arg.NotNull( validators, nameof( validators ) );
             this.validators = validators.ToArray();
         }
 
@@ -38,7 +38,7 @@
             if ( typeToValidate == null )
                 throw new ArgumentException( SR.InvalidArgType.FormatDefault( typeof( Type ) ), "value" );
 
-            foreach ( var validator in this.validators )
+            foreach ( var validator in validators )
                 validator.Validate( value );
         }
 
@@ -51,7 +51,7 @@
         /// <returns>True if the <paramref name="type"/> parameter matches the expected <see cref="Type">type</see>; otherwise, false.</returns>
         public override bool CanValidate( Type type )
         {
-            var valid = this.validators.All( validator => validator.CanValidate( type ) );
+            var valid = validators.All( validator => validator.CanValidate( type ) );
             return valid;
         }
     }

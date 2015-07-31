@@ -32,9 +32,9 @@
         /// </summary>
         public TypeBrowserViewModel()
         {
-            this.interactionRequests.Add( this.close );
-            this.dialogCommands.Add( new NamedCommand<object>( SR.OKCaption, p => this.close.Request( new WindowCloseInteraction() ), p => this.SelectedType != null ) );
-            this.dialogCommands.Add( new NamedCommand<object>( SR.CancelCaption, p => this.close.Request( new WindowCloseInteraction( true ) ) ) );
+            interactionRequests.Add( close );
+            dialogCommands.Add( new NamedCommand<object>( SR.OKCaption, p => close.Request( new WindowCloseInteraction() ), p => SelectedType != null ) );
+            dialogCommands.Add( new NamedCommand<object>( SR.CancelCaption, p => close.Request( new WindowCloseInteraction( true ) ) ) );
         }
 
         private static ISpecification<Type> CreateFilter( string nameConvention, ICollection<string> restrictedBaseTypeNames )
@@ -64,12 +64,12 @@
         {
             get
             {
-                Contract.Ensures( this.title != null );
-                return this.title ?? ( this.title = string.Empty );
+                Contract.Ensures( title != null );
+                return title ?? ( title = string.Empty );
             }
             set
             {
-                this.SetProperty( ref this.title, value );
+                SetProperty( ref title, value );
             }
         }
 
@@ -82,8 +82,8 @@
         {
             get
             {
-                Contract.Ensures( this.interactionRequests != null );
-                return this.interactionRequests;
+                Contract.Ensures( interactionRequests != null );
+                return interactionRequests;
             }
         }
 
@@ -97,8 +97,8 @@
         {
             get
             {
-                Contract.Ensures( this.dialogCommands != null );
-                return this.dialogCommands;
+                Contract.Ensures( dialogCommands != null );
+                return dialogCommands;
             }
         }
 
@@ -110,12 +110,12 @@
         {
             get
             {
-                return this.localAssembly;
+                return localAssembly;
             }
             set
             {
-                if ( this.SetProperty( ref this.localAssembly, value ) )
-                    this.OnPropertyChanged( "LocalAssemblyName" );
+                if ( SetProperty( ref localAssembly, value ) )
+                    OnPropertyChanged( "LocalAssemblyName" );
             }
         }
 
@@ -127,7 +127,7 @@
         {
             get
             {
-                var value = this.LocalAssembly;
+                var value = LocalAssembly;
                 return value == null ? null : value.GetName();
             }
         }
@@ -141,8 +141,8 @@
         {
             get
             {
-                Contract.Ensures( this.localAssemblyReferences != null );
-                return this.localAssemblyReferences;
+                Contract.Ensures( localAssemblyReferences != null );
+                return localAssemblyReferences;
             }
         }
 
@@ -150,7 +150,7 @@
         {
             get
             {
-                return this.LocalAssemblyReferences;
+                return LocalAssemblyReferences;
             }
         }
 
@@ -162,15 +162,15 @@
         {
             get
             {
-                return this.filterByConvention;
+                return filterByConvention;
             }
             set
             {
-                if ( !this.SetProperty( ref this.filterByConvention, value ) )
+                if ( !SetProperty( ref filterByConvention, value ) )
                     return;
 
-                var convention = value ? this.NameConvention : null;
-                this.TypeFilter = CreateFilter( convention, this.RestrictedBaseTypeNames );
+                var convention = value ? NameConvention : null;
+                TypeFilter = CreateFilter( convention, RestrictedBaseTypeNames );
             }
         }
 
@@ -183,15 +183,15 @@
         {
             get
             {
-                return this.nameConvention;
+                return nameConvention;
             }
             set
             {
-                if ( !this.SetProperty( ref this.nameConvention, value ) )
+                if ( !SetProperty( ref nameConvention, value ) )
                     return;
 
-                if ( this.FilterByConvention )
-                    this.TypeFilter = CreateFilter( value, this.RestrictedBaseTypeNames );
+                if ( FilterByConvention )
+                    TypeFilter = CreateFilter( value, RestrictedBaseTypeNames );
             }
         }
 
@@ -204,12 +204,12 @@
         {
             get
             {
-                return this.selectedType;
+                return selectedType;
             }
             set
             {
-                if ( this.SetProperty( ref this.selectedType, value ) )
-                    this.DialogCommands.RaiseCanExecuteChanged();
+                if ( SetProperty( ref selectedType, value ) )
+                    DialogCommands.RaiseCanExecuteChanged();
             }
         }
 
@@ -223,19 +223,19 @@
         {
             get
             {
-                Contract.Ensures( this.typeFilter != null );
-                return this.typeFilter ?? ( this.typeFilter = CreateFilter( this.NameConvention, this.RestrictedBaseTypeNames ) );
+                Contract.Ensures( typeFilter != null );
+                return typeFilter ?? ( typeFilter = CreateFilter( NameConvention, RestrictedBaseTypeNames ) );
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null );
+                Arg.NotNull( value, nameof( value ) );
 
-                if ( !this.SetProperty( ref this.typeFilter, value ) )
+                if ( !SetProperty( ref typeFilter, value ) )
                     return;
 
                 // if the filter is updated, re-evaluate the specification if a type has been selected
-                if ( value != null && this.SelectedType != null && !value.IsSatisfiedBy( this.SelectedType ) )
-                    this.SelectedType = null;
+                if ( value != null && SelectedType != null && !value.IsSatisfiedBy( SelectedType ) )
+                    SelectedType = null;
             }
         }
 
@@ -249,8 +249,8 @@
         {
             get
             {
-                Contract.Ensures( this.restrictedBaseTypeNames != null );
-                return this.restrictedBaseTypeNames;
+                Contract.Ensures( restrictedBaseTypeNames != null );
+                return restrictedBaseTypeNames;
             }
         }
     }

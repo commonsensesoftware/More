@@ -10,6 +10,7 @@
     /// Represents a Microsoft Build <see cref="ITask">task</see> which resolves the NuGet
     /// semantic version of a referenced source project.
     /// </summary>
+    [CLSCompliant( false )]
     public class ResolvePackageReference : AssemblyMetadataTask
     {
         /// <summary>
@@ -21,8 +22,8 @@
         {
             Contract.Assume( attributes != null );
 
-            this.SemanticVersion = attributes.GetSemanticVersion();
-            this.IsValid = !string.IsNullOrEmpty( this.SemanticVersion );
+            SemanticVersion = attributes.GetSemanticVersion();
+            IsValid = !string.IsNullOrEmpty( SemanticVersion );
         }
 
         /// <summary>

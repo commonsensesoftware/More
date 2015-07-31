@@ -24,7 +24,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static T GetService<T>( this IDependencyResolver resolver )
         {
-            Contract.Requires<ArgumentNullException>( resolver != null, "resolver" );
+            Arg.NotNull( resolver, nameof( resolver ) );
             return (T) resolver.GetService( typeof( T ) );
         }
 
@@ -37,7 +37,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static IEnumerable<T> GetServices<T>( this IDependencyResolver resolver )
         {
-            Contract.Requires<ArgumentNullException>( resolver != null, "resolver" );
+            Arg.NotNull( resolver, nameof( resolver ) );
             Contract.Ensures( Contract.Result<IEnumerable<T>>() != null );
             return resolver.GetServices( typeof( T ) ).Cast<T>();
         }
@@ -51,7 +51,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static T GetService<T>( this IDependencyScope scope )
         {
-            Contract.Requires<ArgumentNullException>( scope != null, "scope" );
+            Arg.NotNull( scope, nameof( scope ) );
             return (T) scope.GetService( typeof( T ) );
         }
 
@@ -64,7 +64,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static IEnumerable<T> GetServices<T>( this IDependencyScope scope )
         {
-            Contract.Requires<ArgumentNullException>( scope != null, "scope" );
+            Arg.NotNull( scope, nameof( scope ) );
             Contract.Ensures( Contract.Result<IEnumerable<T>>() != null );
             return scope.GetServices( typeof( T ) ).Cast<T>();
         }

@@ -7,16 +7,15 @@
     using Microsoft.VisualStudio.DataTools.Interop;
     using Microsoft.VisualStudio.Shell.Interop;
     using Microsoft.VSDesigner.VSDesignerPackage;
-    using More.VisualStudio.ViewModels;
-    using More.VisualStudio.Views;
-    using NuGet.VisualStudio;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using System.Threading.Tasks;
     using System.Xml.Linq;
-    using Window = System.Windows.Window;
+    using ViewModels;
+    using Views;
+    using IVsPackageInstaller = NuGet.VisualStudio.IVsPackageInstaller;
+    using IVsPackageInstallerServices = NuGet.VisualStudio.IVsPackageInstallerServices;
 
     /// <summary>
     /// Represents a template wizard to create an Entity Framework (EF) DbContext with interface scaffolding.
@@ -49,10 +48,10 @@
                 };
 
                 // provide user feedback
-                this.DesignTimeEnvironment.StatusBar.Text = SR.PackageInstallStatus.FormatDefault( entry.Key, entry.Value );
+                DesignTimeEnvironment.StatusBar.Text = SR.PackageInstallStatus.FormatDefault( entry.Key, entry.Value );
 
                 // install the package from the vsix location
-                installer.InstallPackagesFromVSExtensionRepository( extensionId, unzipped, skipAssemblyReferences, ignoreDependencies, this.Project, packageVersion );
+                installer.InstallPackagesFromVSExtensionRepository( extensionId, unzipped, skipAssemblyReferences, ignoreDependencies, Project, packageVersion );
             }
         }
 
@@ -63,7 +62,7 @@
             Contract.Requires( wizardData != null );
 
             // ensure composition is enabled
-            if ( !this.GetBoolean( "$compose$" ) )
+            if ( !GetBoolean( "$compose$" ) )
                 return;
 
             var packages = wizardData.Value;
@@ -73,7 +72,7 @@
             // build collection of required packages and versions
             foreach ( var packageId in packageIds )
             {
-                if ( nuget.IsPackageInstalled( this.Project, packageId ) )
+                if ( nuget.IsPackageInstalled( Project, packageId ) )
                     continue;
 
                 var packageVersion = ( from element in packages.Elements( "package" )
@@ -85,7 +84,7 @@
                     packageVersions[packageId] = packageVersion;
             }
 
-            this.InstallPackages( services, packages, packageVersions );
+            InstallPackages( services, packages, packageVersions );
         }
 
         private void InstallEntityFrameworkPackageIfNeeded( IComponentModel services, IVsPackageInstallerServices nuget, Lazy<XElement> wizardData )
@@ -95,11 +94,11 @@
             Contract.Requires( wizardData != null );
 
             // determine whether the package is already installed
-            if ( nuget.IsPackageInstalled( this.Project, "EntityFramework" ) )
+            if ( nuget.IsPackageInstalled( Project, "EntityFramework" ) )
                 return;
 
             var packages = wizardData.Value;
-            var selectedId = this.GetString( "_SelectedEFVersion" );
+            var selectedId = GetString( "_SelectedEFVersion" );
             var packageVersion = ( from element in packages.Elements( "package" )
                                    let id = (string) element.Attribute( "id" )
                                    where id == selectedId
@@ -114,40 +113,40 @@
                 { "EntityFramework", packageVersion }
             };
 
-            this.InstallPackages( services, packages, packageVersions );
+            InstallPackages( services, packages, packageVersions );
         }
 
         private ProjectItem GetOrCreateConfigFile()
         {
-            var fileName = this.Project.GetConfigurationFileName();
+            var fileName = Project.GetConfigurationFileName();
             var comparer = StringComparer.OrdinalIgnoreCase;
-            var configFile = this.Project.ProjectItems.Cast<ProjectItem>().FirstOrDefault( pi => comparer.Equals( pi.Name, fileName ) );
+            var configFile = Project.ProjectItems.Cast<ProjectItem>().FirstOrDefault( pi => comparer.Equals( pi.Name, fileName ) );
 
             // if a *.config file already exists, there's nothing to do
             if ( configFile != null )
                 return configFile;
 
-            var vb = this.Project.IsVisualBasic();
+            var vb = Project.IsVisualBasic();
 
             // add *.config for a web application
-            if ( this.Project.IsWebApp() )
-                return this.AddFromTemplate( "WebConfig.zip", fileName, vb ? "{349C5854-65DF-11DA-9384-00065B846F21}" : "{349C5853-65DF-11DA-9384-00065B846F21}" );
+            if ( Project.IsWebApp() )
+                return AddFromTemplate( "WebConfig.zip", fileName, vb ? "{349C5854-65DF-11DA-9384-00065B846F21}" : "{349C5853-65DF-11DA-9384-00065B846F21}" );
 
             // add *.config for all other web project types
-            var templateName = this.Project.IsWebProject() ? "WebConfig.zip" : ( vb ? "AppConfigurationInternal.zip" : "AppConfigInternal.zip" );
-            return this.AddFromTemplate( templateName, fileName, this.Project.Kind );
+            var templateName = Project.IsWebProject() ? "WebConfig.zip" : ( vb ? "AppConfigurationInternal.zip" : "AppConfigInternal.zip" );
+            return AddFromTemplate( templateName, fileName, Project.Kind );
         }
 
         private void UpdateConfigFileIfNeeded()
         {
-            var cs = this.GetString( "$connectionString$" );
+            var cs = GetString( "$connectionString$" );
 
             if ( string.IsNullOrEmpty( cs ) )
                 return;
 
-            var name = this.GetString( "$connectionStringKey$" );
-            var configFile = this.GetOrCreateConfigFile();
-            var sourceControl = this.DesignTimeEnvironment.SourceControl;
+            var name = GetString( "$connectionStringKey$" );
+            var configFile = GetOrCreateConfigFile();
+            var sourceControl = DesignTimeEnvironment.SourceControl;
 
             // check-out file if necessary
             if ( sourceControl.IsItemUnderSCC( configFile.Name ) && !sourceControl.IsItemCheckedOut( configFile.Name ) )
@@ -172,14 +171,14 @@
             // add or update <add/> element
             if ( add == null )
             {
-                var providerName = this.GetString( "$providerName$", "System.Data.SqlClient" );
+                var providerName = GetString( "$providerName$", "System.Data.SqlClient" );
                 add = new XElement( "add", new XAttribute( "name", name ), new XAttribute( "connectionString", cs ), new XAttribute( "providerName", providerName ) );
                 connectionStrings.Add( add );
             }
             else
             {
                 // if a provider name isn't provided, use the current value (if any) or assume the default value
-                var providerName = this.GetString( "$providerName$", (string) add.Attribute( "providerName" ) ?? "System.Data.SqlClient" );
+                var providerName = GetString( "$providerName$", (string) add.Attribute( "providerName" ) ?? "System.Data.SqlClient" );
                 add.SetAttributeValue( "connectionString", cs );
                 add.SetAttributeValue( "providerName", providerName );
             }
@@ -198,15 +197,15 @@
                 return;
 
             projectItem.Properties.Item( "CustomTool" ).Value = "DbContextGenerator";
-            this.DesignTimeEnvironment.StatusBar.Text = SR.EvaluatingPackages;
+            DesignTimeEnvironment.StatusBar.Text = SR.EvaluatingPackages;
 
-            var services = this.Context.GetRequiredService<IComponentModel>();
+            var services = Context.GetRequiredService<IComponentModel>();
             var nuget = services.GetService<IVsPackageInstallerServices>();
-            var wizardData = new Lazy<XElement>( () => XDocument.Parse( this.GetString( "$packagedata$", "<packages />" ) ).Root );
+            var wizardData = new Lazy<XElement>( () => XDocument.Parse( GetString( "$packagedata$", "<packages />" ) ).Root );
 
-            this.InstallCompositionPackagesIfNeeded( services, nuget, wizardData );
-            this.InstallEntityFrameworkPackageIfNeeded( services, nuget, wizardData );
-            this.UpdateConfigFileIfNeeded();
+            InstallCompositionPackagesIfNeeded( services, nuget, wizardData );
+            InstallEntityFrameworkPackageIfNeeded( services, nuget, wizardData );
+            UpdateConfigFileIfNeeded();
         }
 
         private DbContextReplacementsMapper CreateMapper( DbContextItemTemplateWizardViewModel model )
@@ -214,16 +213,16 @@
             Contract.Requires( model != null );
             Contract.Ensures( Contract.Result<DbContextReplacementsMapper>() != null );
 
-            var dataProviderManager = this.Context.GetRequiredService<IVsDataProviderManager>();
-            var providerMapper = new Lazy<IDTAdoDotNetProviderMapper>( this.Context.GetRequiredService<IDTAdoDotNetProviderMapper> );
-            var dataExplorerConnectionManager = this.Context.GetRequiredService<IVsDataExplorerConnectionManager>();
-            Func<IVsDataConnectionManager> dataConnectionManagerFactory = this.Context.GetRequiredService<IVsDataConnectionManager>;
+            var dataProviderManager = Context.GetRequiredService<IVsDataProviderManager>();
+            var providerMapper = new Lazy<IDTAdoDotNetProviderMapper>( Context.GetRequiredService<IDTAdoDotNetProviderMapper> );
+            var dataExplorerConnectionManager = Context.GetRequiredService<IVsDataExplorerConnectionManager>();
+            Func<IVsDataConnectionManager> dataConnectionManagerFactory = Context.GetRequiredService<IVsDataConnectionManager>;
             IGlobalConnectionService globalConnectionService;
 
             // we honor the global connection service if available, but we don't need it
-            this.Context.TryGetService( out globalConnectionService );
+            Context.TryGetService( out globalConnectionService );
 
-            return new DbContextReplacementsMapper( this.Project, this.Context, dataProviderManager, globalConnectionService, providerMapper, dataExplorerConnectionManager, dataConnectionManagerFactory );
+            return new DbContextReplacementsMapper( Project, Context, dataProviderManager, globalConnectionService, providerMapper, dataExplorerConnectionManager, dataConnectionManagerFactory );
         }
 
         private DbContextItemTemplateWizard CreateView( DbContextItemTemplateWizardViewModel model, IVsUIShell shell )
@@ -232,9 +231,9 @@
             Contract.Requires( shell != null );
             Contract.Ensures( Contract.Result<DbContextItemTemplateWizard>() != null );
 
-            var projectInfo = new ProjectInformation( this.Project );
-            var dataConnectionDialogFactory = new Lazy<IVsDataConnectionDialogFactory>( this.Context.GetRequiredService<IVsDataConnectionDialogFactory> );
-            var dataExplorerConnectionManager = new Lazy<IVsDataExplorerConnectionManager>( this.Context.GetRequiredService<IVsDataExplorerConnectionManager> );
+            var projectInfo = new ProjectInformation( Project );
+            var dataConnectionDialogFactory = new Lazy<IVsDataConnectionDialogFactory>( Context.GetRequiredService<IVsDataConnectionDialogFactory> );
+            var dataExplorerConnectionManager = new Lazy<IVsDataExplorerConnectionManager>( Context.GetRequiredService<IVsDataExplorerConnectionManager> );
 
             return new DbContextItemTemplateWizard( model, projectInfo, shell, dataConnectionDialogFactory, dataExplorerConnectionManager );
         }
@@ -246,23 +245,25 @@
         /// <returns>True if the wizard completed successfully; otherwise, false if the wizard was canceled.</returns>
         protected override bool TryRunWizard( IVsUIShell shell )
         {
+            Arg.NotNull( shell, nameof( shell ) );
+
             var model = new DbContextItemTemplateWizardViewModel();
-            var mapper = this.CreateMapper( model );
-            var view = this.CreateView( model, shell );
-            var statusBar = this.DesignTimeEnvironment.StatusBar;
+            var mapper = CreateMapper( model );
+            var view = CreateView( model, shell );
+            var statusBar = DesignTimeEnvironment.StatusBar;
 
             // the mapping relies on visual studio enumerating the available data sources,
             // which could take a while. we [seemingly] cannot run this in the background
             // so provide the user with some feedback to let them know we are doing work.
             statusBar.Text = SR.StatusInitializingDataSources;
-            mapper.Map( this.Context.Replacements, model );
+            mapper.Map( Context.Replacements, model );
             statusBar.Clear();
 
             if ( !( view.ShowDialog( shell ) ?? false ) )
                 return false;
 
             // map model back to replacements
-            mapper.Map( model, this.Context.Replacements );
+            mapper.Map( model, Context.Replacements );
             return true;
         }
     }

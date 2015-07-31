@@ -25,13 +25,13 @@
 
             dialog.DefaultFileExtension = saveFile.DefaultFileExtension;
             dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices );
-            dialog.SuggestedStartLocation = this.SuggestedStartLocation;
+            dialog.SuggestedStartLocation = SuggestedStartLocation;
 
             if ( !string.IsNullOrEmpty( saveFile.FileName ) )
                 dialog.SuggestedFileName = saveFile.FileName;
 
-            if ( !string.IsNullOrEmpty( this.SettingsIdentifier ) )
-                dialog.SettingsIdentifier = this.SettingsIdentifier;
+            if ( !string.IsNullOrEmpty( SettingsIdentifier ) )
+                dialog.SettingsIdentifier = SettingsIdentifier;
 
             return dialog.PickSaveFileAsync();
         }
@@ -67,7 +67,7 @@
             if ( interaction == null )
                 return;
 
-            var storageFile = await this.SaveFileAsync( interaction );
+            var storageFile = await SaveFileAsync( interaction );
             var savedFile = storageFile == null ? null : storageFile.AsFile();
             InvokeCallbackCommand( interaction, savedFile );
         }

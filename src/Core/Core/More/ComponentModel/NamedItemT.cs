@@ -20,9 +20,9 @@
         /// </summary>
         public NamedItem()
         {
-            this.name = this.GetType().GetTypeInfo().Name;
-            this.description = string.Empty;
-            this.itemValue = default( T );
+            name = GetType().GetTypeInfo().Name;
+            description = string.Empty;
+            itemValue = default( T );
         }
 
         /// <summary>
@@ -43,12 +43,12 @@
         /// <param name="value">The item value of type <typeparamref name="T"/>.</param>
         public NamedItem( string name, string description, T value )
         {
-            Arg.NotNullOrEmpty( name, "name" );
-            Arg.NotNull( description, "description" );
+            Arg.NotNullOrEmpty( name, nameof( name ) );
+            Arg.NotNull( description, nameof( description ) );
 
             this.name = name;
             this.description = description;
-            this.itemValue = value;
+            itemValue = value;
         }
 
         /// <summary>
@@ -59,11 +59,11 @@
         {
             get
             {
-                return this.itemValue;
+                return itemValue;
             }
             set
             {
-                this.SetProperty( ref this.itemValue, value );
+                SetProperty( ref itemValue, value );
             }
         }
 
@@ -75,13 +75,13 @@
         {
             get
             {
-                Contract.Ensures( !string.IsNullOrEmpty( this.name ) );
-                return this.name;
+                Contract.Ensures( !string.IsNullOrEmpty( name ) );
+                return name;
             }
             set
             {
-                Arg.NotNullOrEmpty( value, "value" );
-                this.SetProperty( ref this.name, value );
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                SetProperty( ref name, value );
             }
         }
 
@@ -93,13 +93,13 @@
         {
             get
             {
-                Contract.Ensures( this.description != null );
-                return this.description;
+                Contract.Ensures( description != null );
+                return description;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.description, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref description, value );
             }
         }
     }

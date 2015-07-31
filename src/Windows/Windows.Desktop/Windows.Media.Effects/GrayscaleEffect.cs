@@ -25,8 +25,8 @@
         /// </summary>
         public GrayscaleEffect()
         {
-            this.PixelShader = pixelShader;
-            this.UpdateShaderValue( InputProperty );
+            PixelShader = pixelShader;
+            UpdateShaderValue( InputProperty );
         }
 
         /// <summary>
@@ -37,11 +37,11 @@
         {
             get
             {
-                return (Brush) this.GetValue( InputProperty );
+                return (Brush) GetValue( InputProperty );
             }
             set
             {
-                this.SetValue( InputProperty, value );
+                SetValue( InputProperty, value );
             }
         }
 

@@ -3,11 +3,14 @@
     using global::System;
     using global::System.Globalization;
     using global::System.Reflection;
+    using Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Specifies the numeric range constraints for the value of a data field.
     /// </summary>
     /// <remarks>This class provides ported compatibility for System.ComponentModel.DataAnnotations.RangeAttribute.</remarks>
+    [SuppressMessage( "Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments", Justification = "Ported from System.ComponentModel.DataAnnotations." )]
+    [SuppressMessage( "Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "Ported from System.ComponentModel.DataAnnotations." )]
     [AttributeUsage( AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
     public class RangeAttribute : ValidationAttribute
     {
@@ -24,9 +27,9 @@
         public RangeAttribute( double minimum, double maximum )
             : this()
         {
-            this.Minimum = minimum;
-            this.Maximum = maximum;
-            this.OperandType = typeof( double );
+            Minimum = minimum;
+            Maximum = maximum;
+            OperandType = typeof( double );
         }
 
         /// <summary>
@@ -37,9 +40,9 @@
         public RangeAttribute( int minimum, int maximum )
             : this()
         {
-            this.Minimum = minimum;
-            this.Maximum = maximum;
-            this.OperandType = typeof( int );
+            Minimum = minimum;
+            Maximum = maximum;
+            OperandType = typeof( int );
         }
 
         /// <summary>
@@ -51,9 +54,9 @@
         public RangeAttribute( Type type, string minimum, string maximum )
             : this()
         {
-            this.OperandType = type;
-            this.Minimum = minimum;
-            this.Maximum = maximum;
+            OperandType = type;
+            Minimum = minimum;
+            Maximum = maximum;
         }
 
         private Func<object, object> Conversion
@@ -98,18 +101,18 @@
             {
                 throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.RangeAttribute_MinGreaterThanMax, new object[] { maximum, minimum } ) );
             }
-            this.Minimum = minimum;
-            this.Maximum = maximum;
-            this.Conversion = conversion;
+            Minimum = minimum;
+            Maximum = maximum;
+            Conversion = conversion;
         }
 
         private void SetupConversion()
         {
-            if ( this.Conversion != null )
+            if ( Conversion != null )
                 return;
 
-            object minimum = this.Minimum;
-            object maximum = this.Maximum;
+            object minimum = Minimum;
+            object maximum = Maximum;
 
             if ( ( minimum == null ) || ( maximum == null ) )
             {
@@ -120,15 +123,15 @@
 
             if ( type == typeof( int ) )
             {
-                this.Initialize( (int) minimum, (int) maximum, v => Convert.ToInt32( v, CultureInfo.InvariantCulture ) );
+                Initialize( (int) minimum, (int) maximum, v => Convert.ToInt32( v, CultureInfo.InvariantCulture ) );
             }
             else if ( type == typeof( double ) )
             {
-                this.Initialize( (double) minimum, (double) maximum, v => Convert.ToDouble( v, CultureInfo.InvariantCulture ) );
+                Initialize( (double) minimum, (double) maximum, v => Convert.ToDouble( v, CultureInfo.InvariantCulture ) );
             }
             else
             {
-                type = this.OperandType;
+                type = OperandType;
 
                 if ( type == null )
                 {
@@ -154,7 +157,7 @@
                     return Convert.ChangeType( value, type, culture );
                 };
 
-                this.Initialize( comparable, comparable2, conversion );
+                Initialize( comparable, comparable2, conversion );
             }
         }
 
@@ -165,8 +168,8 @@
         /// <returns>The formatted error message.</returns>
         public override string FormatErrorMessage( string name )
         {
-            this.SetupConversion();
-            return string.Format( CultureInfo.CurrentCulture, base.ErrorMessageString, new object[] { name, this.Minimum, this.Maximum } );
+            SetupConversion();
+            return string.Format( CultureInfo.CurrentCulture, base.ErrorMessageString, new object[] { name, Minimum, Maximum } );
         }
 
         /// <summary>
@@ -176,7 +179,7 @@
         /// <returns>True if the specified value is in the range; otherwise, false.</returns>
         public override bool IsValid( object value )
         {
-            this.SetupConversion();
+            SetupConversion();
 
             if ( value == null )
             {
@@ -194,7 +197,7 @@
 
             try
             {
-                obj2 = this.Conversion( value );
+                obj2 = Conversion( value );
             }
             catch ( FormatException )
             {
@@ -209,8 +212,8 @@
                 return false;
             }
 
-            var minimum = (IComparable) this.Minimum;
-            var maximum = (IComparable) this.Maximum;
+            var minimum = (IComparable) Minimum;
+            var maximum = (IComparable) Maximum;
 
             return ( ( minimum.CompareTo( obj2 ) <= 0 ) && ( maximum.CompareTo( obj2 ) >= 0 ) );
         }

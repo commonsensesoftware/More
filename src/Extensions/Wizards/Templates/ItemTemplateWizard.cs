@@ -28,12 +28,12 @@
         {
             try
             {
-                this.BeforeOpeningFile( projectItem );
+                BeforeOpeningFile( projectItem );
             }
             catch
             {
                 // note: RunFinished is not called if an exception occurs
-                this.Context.Abandon();
+                Context.Abandon();
                 throw;
             }
         }
@@ -55,12 +55,12 @@
         {
             try
             {
-                this.ProjectItemFinishedGenerating( projectItem );
+                ProjectItemFinishedGenerating( projectItem );
             }
             catch
             {
                 // note: RunFinished is not called if an exception occurs
-                this.Context.Abandon();
+                Context.Abandon();
                 throw;
             }
         }
@@ -72,19 +72,19 @@
         /// <returns>True if the project item should be added; otherwise, false.</returns>
         public virtual bool ShouldAddProjectItem( string filePath )
         {
-            return !this.IsCanceled;
+            return !IsCanceled;
         }
 
         bool IWizard.ShouldAddProjectItem( string filePath )
         {
             try
             {
-                return this.ShouldAddProjectItem( filePath );
+                return ShouldAddProjectItem( filePath );
             }
             catch
             {
                 // note: RunFinished is not called if an exception occurs
-                this.Context.Abandon();
+                Context.Abandon();
                 throw;
             }
         }

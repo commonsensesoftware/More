@@ -53,8 +53,8 @@
 
             protected override void OnExecute( IServiceProvider serviceProvider )
             {
-                if ( !this.SkipCompletion )
-                    this.IsCompleted = true;
+                if ( !SkipCompletion )
+                    IsCompleted = true;
             }
         }
 

@@ -30,7 +30,7 @@
         /// to initialize the month with.</param>
         public FiscalMonth( IEnumerable<FiscalWeek> weeks )
         {
-            Arg.NotNull( weeks, "weeks" );
+            Arg.NotNull( weeks, nameof( weeks ) );
             this.weeks.AddRange( weeks );
         }
 
@@ -42,7 +42,7 @@
         {
             get
             {
-                return !this.Weeks.Any() ? DateTime.Today : this.Weeks.First().FirstDay;
+                return !Weeks.Any() ? DateTime.Today : Weeks.First().FirstDay;
             }
         }
 
@@ -54,7 +54,7 @@
         {
             get
             {
-                return !this.Weeks.Any() ? DateTime.Today : this.Weeks.Last().LastDay;
+                return !Weeks.Any() ? DateTime.Today : Weeks.Last().LastDay;
             }
         }
 
@@ -67,7 +67,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<int>() >= 0 );
-                return ( (int) Math.Floor( this.LastDay.Subtract( this.FirstDay ).TotalDays ) ) + 1;
+                return ( (int) Math.Floor( LastDay.Subtract( FirstDay ).TotalDays ) ) + 1;
             }
         }
 
@@ -80,7 +80,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IList<FiscalWeek>>() != null );
-                return this.weeks;
+                return weeks;
             }
         }
 
@@ -90,7 +90,7 @@
         /// <returns>A <see cref="String"/> object.</returns>
         public override string ToString()
         {
-            return string.Format( CultureInfo.CurrentCulture, "FirstDay = {0:d}, LastDay = {1:d}", this.FirstDay, this.LastDay );
+            return string.Format( CultureInfo.CurrentCulture, "FirstDay = {0:d}, LastDay = {1:d}", FirstDay, LastDay );
         }
     }
 }

@@ -86,8 +86,8 @@
                 Contract.Requires( targetMethod != null );
 
                 this.targetType = targetType;
-                this.methodName = targetMethod.Name;
-                this.parameters = targetMethod.GetParameters();
+                methodName = targetMethod.Name;
+                parameters = targetMethod.GetParameters();
             }
 
             public override bool IsSatisfiedBy( Tuple<Type, InvokeMethodAction> item )
@@ -97,17 +97,17 @@
 
                 var otherType = item.Item1;
 
-                if ( this.targetType != otherType )
+                if ( targetType != otherType )
                     return false;
 
                 var action = item.Item2;
 
-                if ( this.methodName != action.MethodName )
+                if ( methodName != action.MethodName )
                     return false;
 
                 // match on parameter count only
                 // note: this could be enhanced to verify parameter types too
-                return this.parameters.Count == action.Parameters.Count;
+                return parameters.Count == action.Parameters.Count;
             }
         }
 
@@ -115,22 +115,25 @@
         /// Gets the target dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty TargetObjectProperty =
-            DependencyProperty.Register( "TargetObject", typeof( object ), typeof( InvokeMethodAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( TargetObject ), typeof( object ), typeof( InvokeMethodAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the property method name dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty MethodNameProperty =
-            DependencyProperty.Register( "MethodName", typeof( string ), typeof( InvokeMethodAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( MethodName ), typeof( string ), typeof( InvokeMethodAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the return value dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ReturnValueProperty =
-            DependencyProperty.Register( "ReturnValue", typeof( object ), typeof( InvokeMethodAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ReturnValue ), typeof( object ), typeof( InvokeMethodAction ), new PropertyMetadata( (object) null ) );
 
         private readonly Lazy<Collection<MethodParameter>> parameters = new Lazy<Collection<MethodParameter>>( () => new Collection<MethodParameter>() );
         private bool setBinding = true;
@@ -145,11 +148,11 @@
         {
             get
             {
-                return this.GetValue( TargetObjectProperty );
+                return GetValue( TargetObjectProperty );
             }
             set
             {
-                this.SetValue( TargetObjectProperty, value );
+                SetValue( TargetObjectProperty, value );
             }
         }
 
@@ -161,11 +164,11 @@
         {
             get
             {
-                return (string) this.GetValue( MethodNameProperty );
+                return (string) GetValue( MethodNameProperty );
             }
             set
             {
-                this.SetValue( MethodNameProperty, value );
+                SetValue( MethodNameProperty, value );
             }
         }
 
@@ -177,11 +180,11 @@
         {
             get
             {
-                return this.GetValue( ReturnValueProperty );
+                return GetValue( ReturnValueProperty );
             }
             set
             {
-                this.SetValue( ReturnValueProperty, value );
+                SetValue( ReturnValueProperty, value );
             }
         }
 
@@ -194,23 +197,23 @@
             get
             {
                 Contract.Ensures( Contract.Result<Collection<MethodParameter>>() != null );
-                return this.parameters.Value;
+                return parameters.Value;
             }
         }
 
         private void EnsureDataBinding( object sender )
         {
-            if ( !this.setBinding )
+            if ( !setBinding )
                 return;
 
             var element = sender as FrameworkElement;
 
             this.SetDataContext( TargetObjectProperty, element );
 
-            foreach ( var param in this.Parameters )
+            foreach ( var param in Parameters )
                 param.SetDataContext( MethodParameter.ParameterValueProperty, element );
 
-            this.setBinding = false;
+            setBinding = false;
         }
 
         private MethodInfo GetOrResolveMethod( Type targetType )
@@ -218,21 +221,21 @@
             Contract.Requires( targetType != null );
 
             // non-null after first pass
-            if ( this.specification != null )
+            if ( specification != null )
             {
                 var item = new Tuple<Type, InvokeMethodAction>( targetType, this );
 
                 // if specification is met, use resolved method
-                if ( this.specification.IsSatisfiedBy( item ) )
-                    return this.targetMethod;
+                if ( specification.IsSatisfiedBy( item ) )
+                    return targetMethod;
 
                 // a new method will be resolved, so trigger binding update
-                this.setBinding = true;
+                setBinding = true;
             }
 
-            this.targetMethod = ReflectHelper.GetMatchingMethod( targetType, this.MethodName, this.Parameters );
-            this.specification = new MethodSpecification( targetType, this.targetMethod );
-            return this.targetMethod;
+            targetMethod = ReflectHelper.GetMatchingMethod( targetType, MethodName, Parameters );
+            specification = new MethodSpecification( targetType, targetMethod );
+            return targetMethod;
         }
     }
 }

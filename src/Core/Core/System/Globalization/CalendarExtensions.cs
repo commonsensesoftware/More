@@ -21,7 +21,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentFirstDayOfWeekInMonth( this Calendar calendar, DayOfWeek dayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( DateTime.Today.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( DateTime.Today.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -40,7 +40,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime FirstDayOfWeekInMonth( this Calendar calendar, DateTime date, DayOfWeek dayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -58,7 +58,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentLastDayOfWeekInMonth( this Calendar calendar, DayOfWeek dayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( DateTime.Today.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( DateTime.Today.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -77,7 +77,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime LastDayOfWeekInMonth( this Calendar calendar, DateTime date, DayOfWeek dayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -97,7 +97,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime DayOfWeekInMonth( this Calendar calendar, DateTime date, int occurrence, DayOfWeek dayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<DateTime>().Month == Contract.OldValue( date.Month ) );
             Contract.Ensures( Contract.Result<DateTime>().Year == Contract.OldValue( date.Year ) );
             Contract.Ensures( Contract.Result<DateTime>().DayOfWeek == dayOfWeek );
@@ -117,7 +117,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentStartOfWeek( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return calendar.StartOfWeek( DateTime.Today, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek );
         }
@@ -132,7 +132,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentStartOfWeek( this Calendar calendar, DayOfWeek firstDayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return calendar.StartOfWeek( DateTime.Today, firstDayOfWeek );
         }
@@ -148,7 +148,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime StartOfWeek( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return date.StartOfWeek( CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek );
         }
@@ -164,7 +164,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime StartOfWeek( this Calendar calendar, DateTime date, DayOfWeek firstDayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return date.StartOfWeek( firstDayOfWeek );
         }
@@ -178,7 +178,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentStartOfMonth( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
             Contract.Ensures( calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetMonth( DateTime.Today ) ) );
 
@@ -195,7 +195,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime StartOfMonth( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetMonth( date ) ) );
 
@@ -211,7 +211,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentStartOfQuarter( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( calendar ) == Contract.OldValue( DateTime.Today.Quarter( calendar ) ) );
 
@@ -228,7 +228,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime StartOfQuarter( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( calendar ) == Contract.OldValue( date.Quarter( calendar ) ) );
 
@@ -244,7 +244,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentStartOfSemester( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( calendar ) == Contract.OldValue( DateTime.Today.Semester( calendar ) ) );
 
@@ -261,7 +261,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime StartOfSemester( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( calendar ) == Contract.OldValue( date.Semester( calendar ) ) );
 
@@ -277,7 +277,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentStartOfYear( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
 
             return calendar.StartOfYear( DateTime.Today );
@@ -293,7 +293,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime StartOfYear( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
 
             return date.StartOfYear( calendar );
@@ -310,7 +310,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentEndOfWeek( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return calendar.EndOfWeek( DateTime.Today );
         }
@@ -325,7 +325,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentEndOfWeek( this Calendar calendar, DayOfWeek firstDayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return calendar.EndOfWeek( DateTime.Today, firstDayOfWeek );
         }
@@ -341,7 +341,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime EndOfWeek( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return calendar.EndOfWeek( date, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek );
         }
@@ -357,7 +357,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime EndOfWeek( this Calendar calendar, DateTime date, DayOfWeek firstDayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
 
             return date.EndOfWeek( firstDayOfWeek );
         }
@@ -371,7 +371,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentEndOfMonth( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
             Contract.Ensures( calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetMonth( DateTime.Today ) ) );
 
@@ -388,7 +388,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime EndOfMonth( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( calendar.GetMonth( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetMonth( date ) ) );
 
@@ -404,7 +404,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentEndOfQuarter( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( calendar ) == Contract.OldValue( DateTime.Today.Quarter( calendar ) ) );
 
@@ -421,7 +421,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime EndOfQuarter( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Quarter( calendar ) == Contract.OldValue( date.Quarter( calendar ) ) );
 
@@ -437,7 +437,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentEndOfSemester( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( calendar ) == Contract.OldValue( DateTime.Today.Semester( calendar ) ) );
 
@@ -454,7 +454,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime EndOfSemester( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
             Contract.Ensures( Contract.Result<DateTime>().Semester( calendar ) == Contract.OldValue( date.Semester( calendar ) ) );
 
@@ -470,7 +470,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime CurrentEndOfYear( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( DateTime.Today ) ) );
 
             return calendar.EndOfYear( DateTime.Today );
@@ -486,7 +486,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime EndOfYear( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( calendar.GetYear( Contract.Result<DateTime>() ) == Contract.OldValue( calendar.GetYear( date ) ) );
 
             return date.EndOfYear( calendar );
@@ -502,7 +502,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int CurrentWeek( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             return calendar.Week( DateTime.Today, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek );
@@ -518,7 +518,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int CurrentWeek( this Calendar calendar, DayOfWeek firstDayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             return calendar.Week( DateTime.Today, firstDayOfWeek );
@@ -535,7 +535,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int Week( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             return calendar.Week( date, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek );
@@ -552,7 +552,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int Week( this Calendar calendar, DateTime date, DayOfWeek firstDayOfWeek )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             return date.Week( calendar, firstDayOfWeek );
@@ -567,7 +567,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int CurrentQuarter( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 5 );
 
@@ -584,7 +584,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int Quarter( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 5 );
 
@@ -600,7 +600,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int CurrentSemester( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 3 );
 
@@ -617,7 +617,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int Semester( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 3 );
 
@@ -633,7 +633,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int CurrentYear( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 10000 );
 
@@ -650,7 +650,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int Year( this Calendar calendar, DateTime date )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
             Contract.Ensures( Contract.Result<int>() < 10000 );
 
@@ -667,7 +667,7 @@
         /// calendar starts on.</remarks>
         public static int FirstMonthOfYear( this Calendar calendar )
         {
-            Arg.NotNull( calendar, "calendar" );
+            Arg.NotNull( calendar, nameof( calendar ) );
             Contract.Ensures( Contract.Result<int>() > 0 );
 
             var epoch = calendar as ICalendarEpoch;

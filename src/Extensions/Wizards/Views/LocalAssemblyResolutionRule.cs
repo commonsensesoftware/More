@@ -22,8 +22,8 @@
             if ( item == null )
                 return null;
 
-            if ( AssemblyName.ReferenceMatchesDefinition( this.localAssemblySource.LocalAssemblyName, item ) )
-                return this.localAssemblySource.LocalAssembly;
+            if ( AssemblyName.ReferenceMatchesDefinition( localAssemblySource.LocalAssemblyName, item ) )
+                return localAssemblySource.LocalAssembly;
 
             return null;
         }

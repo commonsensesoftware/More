@@ -1,8 +1,9 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using System.Windows.Interactivity;
@@ -20,7 +21,7 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:i="using:System.Windows.Interactivity"
-    ///  xmlns:More="using:System.Windows.Interactivity">
+    ///  xmlns:More="using:More.Windows.Interactivity">
     ///  <i:Interaction.Behaviors>
     ///   <More:SearchContractBehavior SearchSuggestionsCommand="{Binding Commands[ProvideSuggestions]}" SearchCommand="{Binding Commands[Search]}" />
     ///  </i:Interaction.Behaviors>
@@ -45,15 +46,15 @@
 
             public void Dispose()
             {
-                if ( this.disposed )
+                if ( disposed )
                     return;
 
-                this.disposed = true;
+                disposed = true;
 
-                if ( this.deferral != null )
+                if ( deferral != null )
                 {
-                    this.deferral.Complete();
-                    this.deferral = null;
+                    deferral.Complete();
+                    deferral = null;
                 }
 
                 GC.SuppressFinalize( this );
@@ -74,7 +75,7 @@
             {
                 get
                 {
-                    return this.args.Language ?? string.Empty;
+                    return args.Language ?? string.Empty;
                 }
             }
 
@@ -82,7 +83,7 @@
             {
                 get
                 {
-                    return this.args.QueryText ?? string.Empty;
+                    return args.QueryText ?? string.Empty;
                 }
             }
 
@@ -90,7 +91,7 @@
             {
                 get
                 {
-                    return this.args.Request.IsCanceled;
+                    return args.Request.IsCanceled;
                 }
             }
 
@@ -98,7 +99,7 @@
             {
                 get
                 {
-                    return this.args.Request.SearchSuggestionCollection.Size;
+                    return args.Request.SearchSuggestionCollection.Size;
                 }
             }
 
@@ -106,7 +107,7 @@
             {
                 get
                 {
-                    return this.args.LinguisticDetails.QueryTextAlternatives;
+                    return args.LinguisticDetails.QueryTextAlternatives;
                 }
             }
 
@@ -114,7 +115,7 @@
             {
                 get
                 {
-                    return this.args.LinguisticDetails.QueryTextCompositionLength;
+                    return args.LinguisticDetails.QueryTextCompositionLength;
                 }
             }
 
@@ -122,33 +123,35 @@
             {
                 get
                 {
-                    return this.args.LinguisticDetails.QueryTextCompositionStart;
+                    return args.LinguisticDetails.QueryTextCompositionStart;
                 }
             }
 
-            public IDisposable GetDeferral()
-            {
-                return new SearchSuggestionRequestDeferralWrapper( this.args.Request.GetDeferral() );
-            }
+            [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Must be disposed by the caller." )]
+            public IDisposable GetDeferral() => new SearchSuggestionRequestDeferralWrapper( args.Request.GetDeferral() );
 
             public void AppendQuerySuggestion( string text )
             {
-                this.args.Request.SearchSuggestionCollection.AppendQuerySuggestion( text );
+                Arg.NotNullOrEmpty( text, nameof( text ) );
+                args.Request.SearchSuggestionCollection.AppendQuerySuggestion( text );
             }
 
             public void AppendQuerySuggestions( IEnumerable<string> suggestions )
             {
-                this.args.Request.SearchSuggestionCollection.AppendQuerySuggestions( suggestions );
+                Arg.NotNull( suggestions, nameof( suggestions ) );
+                args.Request.SearchSuggestionCollection.AppendQuerySuggestions( suggestions );
             }
 
             public void AppendResultSuggestion( string text, string detailText, string tag, IRandomAccessStreamReference image, string imageAlternateText )
             {
-                this.args.Request.SearchSuggestionCollection.AppendResultSuggestion( text, detailText, tag, image, imageAlternateText );
+                Arg.NotNullOrEmpty( text, nameof( text ) );
+                args.Request.SearchSuggestionCollection.AppendResultSuggestion( text, detailText, tag, image, imageAlternateText );
             }
 
             public void AppendSearchSeparator( string label )
             {
-                this.args.Request.SearchSuggestionCollection.AppendSearchSeparator( label );
+                Arg.NotNullOrEmpty( label, nameof( label ) );
+                args.Request.SearchSuggestionCollection.AppendSearchSeparator( label );
             }
         }
 
@@ -167,7 +170,7 @@
             {
                 get
                 {
-                    return this.language;
+                    return language;
                 }
             }
 
@@ -175,7 +178,7 @@
             {
                 get
                 {
-                    return this.query;
+                    return query;
                 }
             }
         }
@@ -184,57 +187,65 @@
         /// Gets or sets the search request dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty SearchRequestProperty =
-            DependencyProperty.Register( "SearchRequest", typeof( object ), typeof( SearchContractBehavior ), new PropertyMetadata( null, OnSearchRequestChanged ) );
+            DependencyProperty.Register( nameof( SearchRequest ), typeof( object ), typeof( SearchContractBehavior ), new PropertyMetadata( null, OnSearchRequestChanged ) );
 
         /// <summary>
         /// Gets or sets the search suggestions command dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty SearchSuggestionsCommandProperty =
-            DependencyProperty.Register( "SearchSuggestionsCommand", typeof( ICommand ), typeof( SearchContractBehavior ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( SearchSuggestionsCommand ), typeof( ICommand ), typeof( SearchContractBehavior ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets the result suggestion chosen command dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty SuggestionChosenCommandProperty =
-            DependencyProperty.Register( "SuggestionChosenCommand", typeof( ICommand ), typeof( SearchContractBehavior ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( SuggestionChosenCommand ), typeof( ICommand ), typeof( SearchContractBehavior ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets the search command dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty SearchCommandProperty =
-            DependencyProperty.Register( "SearchCommand", typeof( ICommand ), typeof( SearchContractBehavior ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( SearchCommand ), typeof( ICommand ), typeof( SearchContractBehavior ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets the placeholder text dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty PlaceholderTextProperty =
-            DependencyProperty.Register( "PlaceholderText", typeof( string ), typeof( SearchContractBehavior ), new PropertyMetadata( string.Empty, OnPlaceholderTextPropertyChanged ) );
+            DependencyProperty.Register( nameof( PlaceholderText ), typeof( string ), typeof( SearchContractBehavior ), new PropertyMetadata( string.Empty, OnPlaceholderTextPropertyChanged ) );
 
         /// <summary>
         /// Gets or sets the search history context dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty SearchHistoryContextProperty =
-            DependencyProperty.Register( "SearchHistoryContext", typeof( string ), typeof( SearchContractBehavior ), new PropertyMetadata( string.Empty, OnSearchHistoryContextPropertyChanged ) );
+            DependencyProperty.Register( nameof( SearchHistoryContext ), typeof( string ), typeof( SearchContractBehavior ), new PropertyMetadata( string.Empty, OnSearchHistoryContextPropertyChanged ) );
 
         /// <summary>
         /// Gets or sets the search history enabled dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty SearchHistoryEnabledProperty =
-            DependencyProperty.Register( "SearchHistoryEnabled", typeof( bool ), typeof( SearchContractBehavior ), new PropertyMetadata( true, OnSearchHistoryEnabledPropertyChanged ) );
+            DependencyProperty.Register( nameof( SearchHistoryEnabled ), typeof( bool ), typeof( SearchContractBehavior ), new PropertyMetadata( true, OnSearchHistoryEnabledPropertyChanged ) );
 
         /// <summary>
         /// Gets or sets the show on keyboard input dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ShowOnKeyboardInputProperty =
-            DependencyProperty.Register( "ShowOnKeyboardInput", typeof( bool ), typeof( SearchContractBehavior ), new PropertyMetadata( false, OnShowOnKeyboardInputPropertyChanged ) );
+            DependencyProperty.Register( nameof( ShowOnKeyboardInput ), typeof( bool ), typeof( SearchContractBehavior ), new PropertyMetadata( false, OnShowOnKeyboardInputPropertyChanged ) );
 
         private SearchPane searchPane;
 
@@ -242,30 +253,30 @@
         {
             get
             {
-                return this.searchPane;
+                return searchPane;
             }
             set
             {
-                if ( this.searchPane == value )
+                if ( searchPane == value )
                     return;
 
-                if ( this.searchPane != null )
+                if ( searchPane != null )
                 {
-                    this.searchPane.QuerySubmitted -= this.OnQuerySubmitted;
-                    this.searchPane.SuggestionsRequested -= this.OnSuggestionsRequested;
-                    this.searchPane.ResultSuggestionChosen -= this.OnResultSuggestionChosen;
+                    searchPane.QuerySubmitted -= OnQuerySubmitted;
+                    searchPane.SuggestionsRequested -= OnSuggestionsRequested;
+                    searchPane.ResultSuggestionChosen -= OnResultSuggestionChosen;
                 }
 
-                if ( ( this.searchPane = value ) == null )
+                if ( ( searchPane = value ) == null )
                     return;
 
-                this.searchPane.PlaceholderText = this.PlaceholderText;
-                this.searchPane.SearchHistoryContext = this.SearchHistoryContext;
-                this.searchPane.SearchHistoryEnabled = this.SearchHistoryEnabled;
-                this.searchPane.ShowOnKeyboardInput = this.ShowOnKeyboardInput;
-                this.searchPane.QuerySubmitted += this.OnQuerySubmitted;
-                this.searchPane.SuggestionsRequested += this.OnSuggestionsRequested;
-                this.searchPane.ResultSuggestionChosen += this.OnResultSuggestionChosen;
+                searchPane.PlaceholderText = PlaceholderText;
+                searchPane.SearchHistoryContext = SearchHistoryContext;
+                searchPane.SearchHistoryEnabled = SearchHistoryEnabled;
+                searchPane.ShowOnKeyboardInput = ShowOnKeyboardInput;
+                searchPane.QuerySubmitted += OnQuerySubmitted;
+                searchPane.SuggestionsRequested += OnSuggestionsRequested;
+                searchPane.ResultSuggestionChosen += OnResultSuggestionChosen;
             }
         }
 
@@ -277,11 +288,11 @@
         {
             get
             {
-                return (IInteractionRequest) this.GetValue( SearchRequestProperty );
+                return (IInteractionRequest) GetValue( SearchRequestProperty );
             }
             set
             {
-                this.SetValue( SearchRequestProperty, value );
+                SetValue( SearchRequestProperty, value );
             }
         }
 
@@ -289,16 +300,16 @@
         /// Gets or sets the command that is invoked when the Search suggestions are requested.
         /// </summary>
         /// <value>The <see cref="ICommand">command</see> invoked when the Search suggestions are requested.</value>
-        /// <remarks>The parameter passed to the command will be an <see cref="ISearchSuggestionsRequest"/>.</remarks>
+        /// <remarks>The parameter passed to the command will be an <see cref="T:ISearchSuggestionsRequest"/>.</remarks>
         public ICommand SearchSuggestionsCommand
         {
             get
             {
-                return (ICommand) this.GetValue( SearchSuggestionsCommandProperty );
+                return (ICommand) GetValue( SearchSuggestionsCommandProperty );
             }
             set
             {
-                this.SetValue( SearchSuggestionsCommandProperty, value );
+                SetValue( SearchSuggestionsCommandProperty, value );
             }
         }
 
@@ -311,11 +322,11 @@
         {
             get
             {
-                return (ICommand) this.GetValue( SuggestionChosenCommandProperty );
+                return (ICommand) GetValue( SuggestionChosenCommandProperty );
             }
             set
             {
-                this.SetValue( SuggestionChosenCommandProperty, value );
+                SetValue( SuggestionChosenCommandProperty, value );
             }
         }
 
@@ -328,11 +339,11 @@
         {
             get
             {
-                return (ICommand) this.GetValue( SearchCommandProperty );
+                return (ICommand) GetValue( SearchCommandProperty );
             }
             set
             {
-                this.SetValue( SearchCommandProperty, value );
+                SetValue( SearchCommandProperty, value );
             }
         }
 
@@ -344,11 +355,11 @@
         {
             get
             {
-                return (string) this.GetValue( PlaceholderTextProperty );
+                return (string) GetValue( PlaceholderTextProperty );
             }
             set
             {
-                this.SetValue( PlaceholderTextProperty, value );
+                SetValue( PlaceholderTextProperty, value );
             }
         }
 
@@ -360,11 +371,11 @@
         {
             get
             {
-                return (string) this.GetValue( SearchHistoryContextProperty );
+                return (string) GetValue( SearchHistoryContextProperty );
             }
             set
             {
-                this.SetValue( SearchHistoryContextProperty, value );
+                SetValue( SearchHistoryContextProperty, value );
             }
         }
 
@@ -376,11 +387,11 @@
         {
             get
             {
-                return (bool) this.GetValue( SearchHistoryEnabledProperty );
+                return (bool) GetValue( SearchHistoryEnabledProperty );
             }
             set
             {
-                this.SetValue( SearchHistoryEnabledProperty, value );
+                SetValue( SearchHistoryEnabledProperty, value );
             }
         }
 
@@ -392,11 +403,11 @@
         {
             get
             {
-                return (bool) this.GetValue( ShowOnKeyboardInputProperty );
+                return (bool) GetValue( ShowOnKeyboardInputProperty );
             }
             set
             {
-                this.SetValue( ShowOnKeyboardInputProperty, value );
+                SetValue( ShowOnKeyboardInputProperty, value );
             }
         }
 
@@ -417,12 +428,12 @@
         {
             var search = e.Interaction;
             var query = ( search.Content ?? string.Empty ).ToString();
-            this.SearchPane.Show( query );
+            SearchPane.Show( query );
         }
 
         private void OnQuerySubmitted( SearchPane sender, SearchPaneQuerySubmittedEventArgs e )
         {
-            var command = this.SearchCommand;
+            var command = SearchCommand;
 
             if ( command == null )
                 return;
@@ -435,7 +446,7 @@
 
         private void OnSuggestionsRequested( SearchPane sender, SearchPaneSuggestionsRequestedEventArgs e )
         {
-            var command = this.SearchSuggestionsCommand;
+            var command = SearchSuggestionsCommand;
 
             if ( command == null )
                 return;
@@ -448,7 +459,7 @@
 
         private void OnResultSuggestionChosen( SearchPane sender, SearchPaneResultSuggestionChosenEventArgs e )
         {
-            var command = this.SuggestionChosenCommand;
+            var command = SuggestionChosenCommand;
 
             if ( command != null && command.CanExecute( e.Tag ) )
                 command.Execute( e.Tag );
@@ -486,10 +497,7 @@
                 @this.SearchPane.ShowOnKeyboardInput = (bool) e.NewValue;
         }
 
-        private void OnAssociatedObjectUnloaded( object sender, RoutedEventArgs e )
-        {
-            this.Detach();
-        }
+        private void OnAssociatedObjectUnloaded( object sender, RoutedEventArgs e ) => Detach();
 
         /// <summary>
         /// Overrides the default behavior when the behavior is attached to an associated object.
@@ -497,8 +505,8 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            this.AssociatedObject.Unloaded += this.OnAssociatedObjectUnloaded;
-            this.SearchPane = SearchPane.GetForCurrentView();
+            AssociatedObject.Unloaded += OnAssociatedObjectUnloaded;
+            SearchPane = SearchPane.GetForCurrentView();
         }
 
         /// <summary>
@@ -506,8 +514,8 @@
         /// </summary>
         protected override void OnDetaching()
         {
-            this.AssociatedObject.Unloaded -= this.OnAssociatedObjectUnloaded;
-            this.SearchPane = null;
+            AssociatedObject.Unloaded -= OnAssociatedObjectUnloaded;
+            SearchPane = null;
             base.OnDetaching();
         }
     }

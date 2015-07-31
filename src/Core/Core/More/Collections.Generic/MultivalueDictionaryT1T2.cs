@@ -33,7 +33,7 @@
         public MultivalueDictionary()
             : base( EqualityComparer<TKey>.Default )
         {
-            this.factory = CreateFactory( () => new Collection<TValue>() );
+            factory = CreateFactory( () => new Collection<TValue>() );
         }
 
         /// <summary>
@@ -45,8 +45,8 @@
         public MultivalueDictionary( IEqualityComparer<TKey> keyComparer )
             : base( keyComparer )
         {
-            Arg.NotNull( keyComparer, "keyComparer" );
-            this.factory = CreateFactory( () => new Collection<TValue>() );
+            Arg.NotNull( keyComparer, nameof( keyComparer ) );
+            factory = CreateFactory( () => new Collection<TValue>() );
         }
 
         /// <summary>
@@ -58,8 +58,8 @@
         public MultivalueDictionary( Func<ICollection<TValue>> valueFactory )
             : base( EqualityComparer<TKey>.Default )
         {
-            Arg.NotNull( valueFactory, "valueFactory" );
-            this.factory = CreateFactory( valueFactory );
+            Arg.NotNull( valueFactory, nameof( valueFactory ) );
+            factory = CreateFactory( valueFactory );
         }
 
         /// <summary>
@@ -72,9 +72,9 @@
         public MultivalueDictionary( IEqualityComparer<TKey> keyComparer, Func<ICollection<TValue>> valueFactory )
             : base( keyComparer )
         {
-            Arg.NotNull( keyComparer, "keyComparer" );
-            Arg.NotNull( valueFactory, "valueFactory" );
-            this.factory = CreateFactory( valueFactory );
+            Arg.NotNull( keyComparer, nameof( keyComparer ) );
+            Arg.NotNull( valueFactory, nameof( valueFactory ) );
+            factory = CreateFactory( valueFactory );
         }
 
         /// <summary>
@@ -83,7 +83,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -92,12 +92,9 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -106,12 +103,9 @@
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         private static Func<IEnumerable<TValue>, ICollection<TValue>> CreateFactory( Func<ICollection<TValue>> valueFactory )
@@ -152,22 +146,22 @@
         /// </remarks>
         public new bool Remove( TKey key )
         {
-            Arg.NotNull( key, "key" );
+            Arg.NotNull( key, nameof( key ) );
 
-            if ( !this.ContainsKey( key ) )
+            if ( !ContainsKey( key ) )
                 return false;
 
             var oldItem = new KeyValuePair<TKey, ICollection<TValue>>( key, base[key].ToArray() );
-            var index = this.IndexOf( key );
+            var index = IndexOf( key );
 
             var removed = base.Remove( key );
 
             if ( !removed )
                 return false;
 
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, oldItem, index ) );
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, oldItem, index ) );
 
             return true;
         }
@@ -205,33 +199,33 @@
         {
             get
             {
-                Arg.NotNull( key, "key" );
+                Arg.NotNull( key, nameof( key ) );
                 return base[key];
             }
             set
             {
-                Arg.NotNull( key, "key" );
+                Arg.NotNull( key, nameof( key ) );
 
                 if ( value == null )
                 {
-                    this.Remove( key );
+                    Remove( key );
                     return;
                 }
 
-                value = this.factory( value );
+                value = factory( value );
 
-                if ( this.ContainsKey( key ) )
+                if ( ContainsKey( key ) )
                 {
                     var collection = base[key];
                     var oldItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
                     collection.ReplaceAll( value );
                     var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                    this.OnPropertyChanged( "Item[]" );
-                    this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, this.IndexOf( key ) ) );
+                    OnPropertyChanged( "Item[]" );
+                    OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, IndexOf( key ) ) );
                     return;
                 }
 
-                this.AddRange( key, value );
+                AddRange( key, value );
             }
         }
 
@@ -271,8 +265,8 @@
         /// </remarks>
         public new virtual void Add( TKey key, ICollection<TValue> values )
         {
-            Arg.NotNull( key, "key" );
-            this.AddRange( key, values );
+            Arg.NotNull( key, nameof( key ) );
+            AddRange( key, values );
         }
 
         /// <summary>
@@ -302,24 +296,24 @@
         public new virtual void Clear()
         {
             base.Clear();
-            this.OnPropertyChanged( "Count" );
-            this.OnPropertyChanged( "Item[]" );
-            this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
+            OnPropertyChanged( "Count" );
+            OnPropertyChanged( "Item[]" );
+            OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 
         void ICollection<KeyValuePair<TKey, ICollection<TValue>>>.Clear()
         {
-            this.Clear();
+            Clear();
         }
 
         void ICollection<KeyValuePair<TKey, ICollection<TValue>>>.Add( KeyValuePair<TKey, ICollection<TValue>> item )
         {
-            this.Add( item.Key, item.Value );
+            Add( item.Key, item.Value );
         }
 
         bool ICollection<KeyValuePair<TKey, ICollection<TValue>>>.Remove( KeyValuePair<TKey, ICollection<TValue>> item )
         {
-            return this.Remove( item.Key );
+            return Remove( item.Key );
         }
 
         [SuppressMessage( "Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "This an item in the dictionary not a collection property." )]
@@ -337,12 +331,12 @@
 
         void IDictionary<TKey, ICollection<TValue>>.Add( TKey key, ICollection<TValue> value )
         {
-            this.AddRange( key, value );
+            AddRange( key, value );
         }
 
         bool IDictionary<TKey, ICollection<TValue>>.Remove( TKey key )
         {
-            return this.Remove( key );
+            return Remove( key );
         }
 
         /// <summary>
@@ -352,8 +346,8 @@
         /// <returns>The index of <paramref name="key"/> if found in the <see cref="IMultivalueDictionary{TKey,TValue}">dictionary</see>; otherwise, -1.</returns>
         public int IndexOf( TKey key )
         {
-            Arg.NotNull( key, "key" );
-            return this.Keys.IndexOf( key, this.Comparer );
+            Arg.NotNull( key, nameof( key ) );
+            return Keys.IndexOf( key, Comparer );
         }
 
         /// <summary>
@@ -392,26 +386,26 @@
         /// </remarks>
         public virtual void AddRange( TKey key, IEnumerable<TValue> values )
         {
-            Arg.NotNull( key, "key" );
-            Arg.NotNull( values, "values" );
+            Arg.NotNull( key, nameof( key ) );
+            Arg.NotNull( values, nameof( values ) );
 
-            if ( this.ContainsKey( key ) )
+            if ( ContainsKey( key ) )
             {
                 var collection = base[key];
                 var oldItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
                 collection.AddRange( values );
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, this.IndexOf( key ) ) );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, IndexOf( key ) ) );
             }
             else
             {
-                var collection = this.factory( values );
+                var collection = factory( values );
                 base[key] = collection;
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, newItem, this.Count - 1 ) );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, newItem, Count - 1 ) );
             }
         }
 
@@ -448,10 +442,10 @@
         /// </remarks>
         public virtual void Add( TKey key, TValue value )
         {
-            Arg.NotNull( key, "key" );
+            Arg.NotNull( key, nameof( key ) );
 
-            var exists = this.ContainsKey( key );
-            var item = this.GetOrAdd( key, () => this.factory( new[] { value } ) );
+            var exists = ContainsKey( key );
+            var item = this.GetOrAdd( key, () => factory( new[] { value } ) );
 
             if ( exists )
                 item.Add( value );
@@ -486,10 +480,10 @@
         /// </remarks>
         public virtual int RemoveRange( TKey key, IEnumerable<TValue> values )
         {
-            Arg.NotNull( key, "key" );
-            Arg.NotNull( values, "values" );
+            Arg.NotNull( key, nameof( key ) );
+            Arg.NotNull( values, nameof( values ) );
 
-            if ( !this.ContainsKey( key ) )
+            if ( !ContainsKey( key ) )
                 return 0;
 
             var collection = this[key];
@@ -498,13 +492,13 @@
 
             if ( collection.Count == 0 )
             {
-                this.Remove( key );
+                Remove( key );
             }
             else
             {
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, this.IndexOf( key ) ) );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, IndexOf( key ) ) );
             }
 
             return count;
@@ -539,11 +533,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public virtual int RemoveRange( IEnumerable<TKey> keys )
         {
-            Arg.NotNull( keys, "keys" );
+            Arg.NotNull( keys, nameof( keys ) );
 
             var removed = new List<KeyValuePair<TKey, ICollection<TValue>>>();
             var items = from key in keys
-                        where this.ContainsKey( key )
+                        where ContainsKey( key )
                         let item = new KeyValuePair<TKey, ICollection<TValue>>( key, base[key].ToArray() )
                         select item;
 
@@ -555,9 +549,9 @@
 
             if ( removed.Any() )
             {
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, removed.AsReadOnly() ) );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, removed.AsReadOnly() ) );
             }
 
             return removed.Count;
@@ -592,9 +586,9 @@
         /// </remarks>
         public virtual bool Set( TKey key, TValue value )
         {
-            Arg.NotNull( key, "key" );
+            Arg.NotNull( key, nameof( key ) );
 
-            var replaced = this.ContainsKey( key );
+            var replaced = ContainsKey( key );
 
             if ( replaced )
             {
@@ -602,17 +596,17 @@
                 var oldItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
                 collection.ReplaceAll( new[] { value } );
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, this.IndexOf( key ) ) );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, IndexOf( key ) ) );
             }
             else
             {
-                var collection = this.factory( new[] { value } );
+                var collection = factory( new[] { value } );
                 base.Add( key, collection );
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, newItem, this.IndexOf( key ) ) );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, newItem, IndexOf( key ) ) );
             }
 
             return replaced;
@@ -648,28 +642,28 @@
         /// </remarks>
         public virtual bool SetRange( TKey key, IEnumerable<TValue> values )
         {
-            Arg.NotNull( key, "key" );
-            Arg.NotNull( values, "values" );
+            Arg.NotNull( key, nameof( key ) );
+            Arg.NotNull( values, nameof( values ) );
 
-            var replaced = this.ContainsKey( key );
+            var replaced = ContainsKey( key );
 
             if ( replaced )
             {
                 var collection = base[key];
                 var oldItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                collection.ReplaceAll( this.factory( values ) );
+                collection.ReplaceAll( factory( values ) );
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, this.IndexOf( key ) ) );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, IndexOf( key ) ) );
             }
             else
             {
-                var collection = this.factory( values );
+                var collection = factory( values );
                 base.Add( key, collection );
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Count" );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, newItem, this.IndexOf( key ) ) );
+                OnPropertyChanged( "Count" );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, newItem, IndexOf( key ) ) );
             }
 
             return replaced;
@@ -703,9 +697,9 @@
         /// </remarks>
         public virtual bool Remove( TKey key, TValue value )
         {
-            Arg.NotNull( key, "key" );
+            Arg.NotNull( key, nameof( key ) );
 
-            if ( !this.ContainsKey( key ) )
+            if ( !ContainsKey( key ) )
                 return false;
 
             var collection = base[key];
@@ -715,12 +709,12 @@
             if ( removed )
             {
                 var newItem = new KeyValuePair<TKey, ICollection<TValue>>( key, collection.ToArray() );
-                this.OnPropertyChanged( "Item[]" );
-                this.OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, this.IndexOf( key ) ) );
+                OnPropertyChanged( "Item[]" );
+                OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Replace, newItem, oldItem, IndexOf( key ) ) );
             }
 
             if ( collection.Count == 0 )
-                this.Remove( key );
+                Remove( key );
 
             return removed;
         }
@@ -733,8 +727,8 @@
         /// <returns>True if the dictionary has an associated <paramref name="value"/> with the specified <paramref name="key"/>.</returns>
         public virtual bool Contains( TKey key, TValue value )
         {
-            Arg.NotNull( key, "key" );
-            return this.ContainsKey( key ) && this[key].Contains( value );
+            Arg.NotNull( key, nameof( key ) );
+            return ContainsKey( key ) && this[key].Contains( value );
         }
 
         /// <summary>
@@ -744,8 +738,8 @@
         /// <returns>If the <paramref name="key"/> exists, then the number of values associated with that <paramref name="key"/>.</returns>
         public virtual int CountValues( TKey key )
         {
-            Arg.NotNull( key, "key" );
-            return this.ContainsKey( key ) ? this[key].Count : 0;
+            Arg.NotNull( key, nameof( key ) );
+            return ContainsKey( key ) ? this[key].Count : 0;
         }
 
         /// <summary>

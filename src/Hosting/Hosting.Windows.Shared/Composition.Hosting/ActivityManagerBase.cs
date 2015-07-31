@@ -11,6 +11,7 @@
     /// <summary>
     /// Represents a base implementation for an activity manager.
     /// </summary>
+    [ContractClass( typeof( ActivityManagerBaseContract ) )]
     public abstract class ActivityManagerBase : IActivityManager
     {
         private readonly IDictionary<Guid, ExportFactory<IActivity, ActivityDescriptor>> activities;
@@ -21,13 +22,14 @@
         /// </summary>
         /// <param name="activities">The <see cref="IEnumerable{T}">sequence</see> of <see cref="ExportFactory{T,TMetadata}">exported</see>
         /// <see cref="IActivity">activities</see> to initialize the manager with.</param>
+        [CLSCompliant( false )]
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         protected ActivityManagerBase( IEnumerable<ExportFactory<IActivity, ActivityDescriptor>> activities )
         {
-            Contract.Requires<ArgumentNullException>( activities != null, "activities" );
+            Arg.NotNull( activities, nameof( activities ) );
 
             this.activities = activities.ToDictionary( a => new Guid( a.Metadata.Id ) );
-            this.descriptors = activities.Select( a => a.Metadata ).ToArray();
+            descriptors = activities.Select( a => a.Metadata ).ToArray();
         }
 
         /// <summary>
@@ -38,7 +40,7 @@
         {
             get
             {
-                return this.descriptors;
+                return descriptors;
             }
         }
 
@@ -49,7 +51,7 @@
         /// <returns>An <see cref="IActivity"/> object.</returns>
         public IActivity GetActivity( Guid activityId )
         {
-            return this.activities[activityId].CreateExport().Value;
+            return activities[activityId].CreateExport().Value;
         }
 
         /// <summary>
@@ -67,6 +69,12 @@
         /// <remarks>The <see cref="Uri"/> returned represents the external Uniform Resource Locator (URL) that can be used to execute the activity.</remarks>
         public abstract Task<Uri> RegisterAsync( IActivity activity );
 
+        Task<Uri> IActivityManager.RegisterAsync( IActivity activity )
+        {
+            Arg.NotNull( activity, nameof( activity ) );
+            return RegisterAsync( activity );
+        }
+
         /// <summary>
         /// Unregisters the specified activity instance from the activity manager.
         /// </summary>
@@ -75,7 +83,8 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public virtual Task<bool> UnregisterAsync( IActivity activity )
         {
-            return this.UnregisterAsync( activity.Id, activity.InstanceId );
+            Arg.NotNull( activity, nameof( activity ) );
+            return UnregisterAsync( activity.Id, activity.InstanceId );
         }
 
         /// <summary>

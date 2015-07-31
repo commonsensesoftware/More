@@ -30,10 +30,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generic expressions" )]
         public PropertyValidator( Expression<Func<TObject, TValue>> propertyExpression, string propertyName )
         {
-            Arg.NotNull( propertyExpression, "propertyExpression" );
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNull( propertyExpression, nameof( propertyExpression ) );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
-            this.getter = new Lazy<Func<TObject, TValue>>( propertyExpression.Compile );
+            getter = new Lazy<Func<TObject, TValue>>( propertyExpression.Compile );
             this.propertyName = propertyName;
         }
 
@@ -42,7 +42,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<TypeInfo>() != null );
-                return this.valueTypeInfo.Value.TypeInfo;
+                return valueTypeInfo.Value.TypeInfo;
             }
         }
 
@@ -50,7 +50,7 @@
         {
             get
             {
-                return this.valueTypeInfo.Value.IsValueType;
+                return valueTypeInfo.Value.IsValueType;
             }
         }
 
@@ -64,7 +64,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IReadOnlyList<IRule<Property<TValue>, IValidationResult>>>() != null );
-                return this.rules.Value;
+                return rules.Value;
             }
         }
 
@@ -76,7 +76,7 @@
         {
             get
             {
-                return this.propertyName;
+                return propertyName;
             }
         }
 
@@ -87,42 +87,42 @@
         /// <returns>The current <see cref="IValidationBuilder{TObject,TValue}">validator</see>.</returns>
         public virtual IValidationBuilder<TObject, TValue> Apply( IRule<Property<TValue>, IValidationResult> rule )
         {
-            Arg.NotNull( rule, "rule" );
-            this.rules.Value.Add( rule );
+            Arg.NotNull( rule, nameof( rule ) );
+            rules.Value.Add( rule );
             return this;
         }
 
         IReadOnlyList<IValidationResult> IPropertyValidator.ValidateObject( object instance )
         {
-            Arg.NotNull( instance, "instance" );
-            return this.ValidateObject( (TObject) instance );
+            Arg.NotNull( instance, nameof( instance ) );
+            return ValidateObject( (TObject) instance );
         }
 
         IReadOnlyList<IValidationResult> IPropertyValidator.ValidateValue( object value )
         {
             TypeInfo ti;
 
-            if ( this.IsForValueType )
+            if ( IsForValueType )
             {
                 if ( value == null )
                 {
-                    ti = this.ValueTypeInfo;
-                    var message = ValidationMessage.PropertyValueCannotBeNull.FormatDefault( this.PropertyName, ti );
-                    return new[] { new ValidationResult( message, this.PropertyName ) };
+                    ti = ValueTypeInfo;
+                    var message = ValidationMessage.PropertyValueCannotBeNull.FormatDefault( PropertyName, ti );
+                    return new[] { new ValidationResult( message, PropertyName ) };
                 }
 
-                return this.ValidateValue( (TValue) value );
+                return ValidateValue( (TValue) value );
             }
 
-            ti = this.ValueTypeInfo;
+            ti = ValueTypeInfo;
 
             if ( value != null && !ti.IsAssignableFrom( value.GetType().GetTypeInfo() ) )
             {
-                var message = ValidationMessage.InvalidPropertyValue.FormatDefault( this.PropertyName, ti, value.GetType().GetTypeInfo() );
-                return new[] { new ValidationResult( message, this.PropertyName ) };
+                var message = ValidationMessage.InvalidPropertyValue.FormatDefault( PropertyName, ti, value.GetType().GetTypeInfo() );
+                return new[] { new ValidationResult( message, PropertyName ) };
             }
 
-            return this.ValidateValue( (TValue) value );
+            return ValidateValue( (TValue) value );
         }
 
         /// <summary>
@@ -133,10 +133,10 @@
         /// which describe any validation errors.</returns>
         public virtual IReadOnlyList<IValidationResult> ValidateObject( TObject instance )
         {
-            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( instance, nameof( instance ) );
 
-            var property = new Property<TValue>( this.PropertyName, this.getter.Value( instance ) );
-            var results = from baseRule in this.Rules
+            var property = new Property<TValue>( PropertyName, getter.Value( instance ) );
+            var results = from baseRule in Rules
                           let rule = baseRule.GetPerInstance( instance )
                           let result = rule.Evaluate( property )
                           where result != ValidationResult.Success
@@ -153,8 +153,8 @@
         /// which describe any validation errors.</returns>
         public virtual IReadOnlyList<IValidationResult> ValidateValue( TValue value )
         {
-            var property = new Property<TValue>( this.PropertyName, value );
-            var results = from rule in this.Rules
+            var property = new Property<TValue>( PropertyName, value );
+            var results = from rule in Rules
                           let result = rule.Evaluate( property )
                           where result != ValidationResult.Success
                           select result;

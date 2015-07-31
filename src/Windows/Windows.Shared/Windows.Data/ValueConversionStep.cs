@@ -35,10 +35,10 @@
 #endif
         public ValueConversionStep( Type targetType, IValueConverter valueConverter )
         {
-            Contract.Requires<ArgumentNullException>( targetType != null, "targetType" );
-            Contract.Requires<ArgumentNullException>( valueConverter != null, "valueConverter" );
+            Arg.NotNull( targetType, nameof( targetType ) );
+            Arg.NotNull( valueConverter, nameof( valueConverter ) );
             this.targetType = targetType;
-            this.converter = valueConverter;
+            converter = valueConverter;
         }
 
         /// <summary>
@@ -59,14 +59,14 @@
         {
             get
             {
-                Contract.Ensures( this.converter != null );
-                Contract.Assume( this.converter != null );
-                return this.converter;
+                Contract.Ensures( converter != null );
+                Contract.Assume( converter != null );
+                return converter;
             }
             set
             {
-                Contract.Requires<ArgumentNullException>( value != null, "value" );
-                this.converter = value;
+                Arg.NotNull( value, nameof( value ) );
+                converter = value;
             }
         }
     }

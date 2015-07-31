@@ -174,7 +174,7 @@
 
             ~SelectedValuesMediator()
             {
-                this.Dispose( false );
+                Dispose( false );
             }
 
             internal SelectedValuesMediator( ObservableCollection<TItem> source, ICollection<TItem> targetCollection )
@@ -184,24 +184,24 @@
 
                 this.source = source;
                 this.targetCollection = targetCollection;
-                this.source.CollectionChanged += this.OnSourceChanged;
-                this.target = targetCollection as INotifyCollectionChanged;
+                this.source.CollectionChanged += OnSourceChanged;
+                target = targetCollection as INotifyCollectionChanged;
 
-                if ( this.target != null )
-                    this.target.CollectionChanged += this.OnTargetChanged;
+                if ( target != null )
+                    target.CollectionChanged += OnTargetChanged;
             }
 
             [SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "disposing", Justification = "This is the standard implementation of the Dispose pattern." )]
             private void Dispose( bool disposing )
             {
-                if ( this.disposed )
+                if ( disposed )
                     return;
 
-                this.disposed = true;
-                this.source.CollectionChanged -= this.OnSourceChanged;
+                disposed = true;
+                source.CollectionChanged -= OnSourceChanged;
 
-                if ( this.target != null )
-                    this.target.CollectionChanged -= this.OnTargetChanged;
+                if ( target != null )
+                    target.CollectionChanged -= OnTargetChanged;
             }
 
             private void OnSourceChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -210,35 +210,35 @@
                 Contract.Requires( e != null );
 
                 // disable events (to prevent cyclic recursion)
-                if ( this.target != null )
-                    this.target.CollectionChanged -= this.OnTargetChanged;
+                if ( target != null )
+                    target.CollectionChanged -= OnTargetChanged;
 
                 switch ( e.Action )
                 {
                     case NotifyCollectionChangedAction.Add:
                         {
                             if ( e.NewItems != null )
-                                this.targetCollection.AddRange( e.NewItems.OfType<TItem>() );
+                                targetCollection.AddRange( e.NewItems.OfType<TItem>() );
 
                             break;
                         }
                     case NotifyCollectionChangedAction.Remove:
                         {
                             if ( e.OldItems != null )
-                                this.targetCollection.RemoveRange( e.OldItems.OfType<TItem>() );
+                                targetCollection.RemoveRange( e.OldItems.OfType<TItem>() );
 
                             break;
                         }
                     case NotifyCollectionChangedAction.Reset:
                         {
-                            this.targetCollection.Clear();
+                            targetCollection.Clear();
                             break;
                         }
                 }
 
                 // re-enable events
-                if ( this.target != null )
-                    this.target.CollectionChanged += this.OnTargetChanged;
+                if ( target != null )
+                    target.CollectionChanged += OnTargetChanged;
             }
 
             private void OnTargetChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -247,38 +247,38 @@
                 Contract.Requires( e != null );
 
                 // disable events (to prevent cyclic recursion)
-                this.source.CollectionChanged -= this.OnSourceChanged;
+                source.CollectionChanged -= OnSourceChanged;
 
                 switch ( e.Action )
                 {
                     case NotifyCollectionChangedAction.Add:
                         {
                             if ( e.NewItems != null )
-                                this.source.AddRange( e.NewItems.OfType<TItem>() );
+                                source.AddRange( e.NewItems.OfType<TItem>() );
 
                             break;
                         }
                     case NotifyCollectionChangedAction.Remove:
                         {
                             if ( e.OldItems != null )
-                                this.source.RemoveRange( e.OldItems.OfType<TItem>() );
+                                source.RemoveRange( e.OldItems.OfType<TItem>() );
 
                             break;
                         }
                     case NotifyCollectionChangedAction.Reset:
                         {
-                            this.source.Clear();
+                            source.Clear();
                             break;
                         }
                 }
 
                 // re-enable events
-                this.source.CollectionChanged += this.OnSourceChanged;
+                source.CollectionChanged += OnSourceChanged;
             }
 
             public void Dispose()
             {
-                this.Dispose( true );
+                Dispose( true );
                 GC.SuppressFinalize( this );
             }
         }
@@ -302,24 +302,24 @@
 
             internal void SetSelectedWithoutEvents( bool? value )
             {
-                this.suppressEvents = true;
-                this.IsSelected = value;
-                this.suppressEvents = false;
+                suppressEvents = true;
+                IsSelected = value;
+                suppressEvents = false;
             }
 
             internal void UpdateSelectedWithoutEvents()
             {
-                if ( this.processing )
+                if ( processing )
                     return;
 
-                var count = this.owner.Count - 1;
+                var count = owner.Count - 1;
 
                 if ( count == 0 )
                     return;
 
                 // update state if there is more than just the 'All' item
                 bool? state = null;
-                var selectedCount = this.owner.SelectedItems.Count;
+                var selectedCount = owner.SelectedItems.Count;
 
                 // determine if all items are checked or unchecked
                 if ( count == selectedCount )
@@ -327,31 +327,31 @@
                 else if ( selectedCount == 0 )
                     state = false;
 
-                this.SetSelectedWithoutEvents( state );
+                SetSelectedWithoutEvents( state );
             }
 
             [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Handled by base class" )]
             protected override void OnPropertyChanged( PropertyChangedEventArgs e )
             {
-                Arg.NotNull( e, "e" );
+                Arg.NotNull( e, nameof( e ) );
 
                 base.OnPropertyChanged( e );
 
-                if ( this.suppressEvents ||
+                if ( suppressEvents ||
                     !string.Equals( e.PropertyName, "IsSelected", StringComparison.Ordinal ) ||
-                    this.IsSelected == null )
+                    IsSelected == null )
                 {
                     return;
                 }
 
-                var state = this.IsSelected;
+                var state = IsSelected;
 
-                this.processing = true;
+                processing = true;
 
-                foreach ( var item in this.owner.Where( i => !object.ReferenceEquals( this, i ) ) )
+                foreach ( var item in owner.Where( i => !object.ReferenceEquals( this, i ) ) )
                     item.IsSelected = state;
 
-                this.processing = false;
+                processing = false;
             }
         }
 
@@ -371,8 +371,8 @@
 
                 // since we don't have a comparer that can be used here for the standard 0,1,-1 values use -1 as the non-equal value
                 // we're only interested in equality so that should suffice for this internally implementation
-                this.itemComparer = new DynamicComparer<SelectableItem<TItem>>( ( i1, i2 ) => comparer.Equals( i1.Value, i2.Value ) ? 0 : -1, i => comparer.GetHashCode( i.Value ) );
-                this.valueComparer = comparer;
+                itemComparer = new DynamicComparer<SelectableItem<TItem>>( ( i1, i2 ) => comparer.Equals( i1.Value, i2.Value ) ? 0 : -1, i => comparer.GetHashCode( i.Value ) );
+                valueComparer = comparer;
             }
 
             internal void Initialize( SelectableItemCollection<TItem> source, IEnumerable<TItem> sequence )
@@ -380,63 +380,63 @@
                 Contract.Requires( source != null );
                 Contract.Requires( sequence != null );
 
-                this.owner = source;
+                owner = source;
 
                 var notifyCollection = sequence as INotifyCollectionChanged;
 
                 foreach ( var item in sequence )
                 {
-                    var selectableItem = this.owner.CreateItem( item );
-                    selectableItem.PropertyChanged += this.OnItemChanged;
-                    this.Items.Add( selectableItem );
+                    var selectableItem = owner.CreateItem( item );
+                    selectableItem.PropertyChanged += OnItemChanged;
+                    Items.Add( selectableItem );
                 }
 
                 if ( notifyCollection != null )
-                    notifyCollection.CollectionChanged += this.OnSourceCollectionChanged;
+                    notifyCollection.CollectionChanged += OnSourceCollectionChanged;
             }
 
             private void AddNewItems( IEnumerable<TItem> newItems )
             {
-                var count = this.Count;
+                var count = Count;
 
                 foreach ( var newItem in newItems )
                 {
-                    var item = this.owner.CreateItem( newItem );
-                    item.PropertyChanged += this.OnItemChanged;
-                    this.Add( item );
+                    var item = owner.CreateItem( newItem );
+                    item.PropertyChanged += OnItemChanged;
+                    Add( item );
                 }
 
                 // all items cannot be selected once a single item is not selected
-                if ( this.Count != count && this.owner.selectAllItem != null && ( this.owner.selectAllItem.IsSelected ?? false ) )
-                    this.owner.selectAllItem.SetSelectedWithoutEvents( null );
+                if ( Count != count && owner.selectAllItem != null && ( owner.selectAllItem.IsSelected ?? false ) )
+                    owner.selectAllItem.SetSelectedWithoutEvents( null );
             }
 
             private void RemoveOldItems( IEnumerable<TItem> oldItems )
             {
-                var count = this.Count;
+                var count = Count;
 
                 foreach ( var oldItem in oldItems )
                 {
                     var removedItems = ( from i in this
-                                         where this.valueComparer.Equals( i.Value, oldItem )
+                                         where valueComparer.Equals( i.Value, oldItem )
                                          select i ).ToArray();
 
                     foreach ( var removedItem in removedItems )
                     {
-                        removedItem.PropertyChanged -= this.OnItemChanged;
-                        this.Remove( removedItem );
+                        removedItem.PropertyChanged -= OnItemChanged;
+                        Remove( removedItem );
 
                         if ( removedItem.IsSelected ?? false )
                         {
-                            this.owner.SelectedValues.Remove( removedItem.Value );
-                            this.owner.selectedItems.Remove( removedItem, this.itemComparer );
+                            owner.SelectedValues.Remove( removedItem.Value );
+                            owner.selectedItems.Remove( removedItem, itemComparer );
                         }
                     }
                 }
 
                 // removing an item might trigger a state change
-                if ( this.Count != count && this.owner.selectAllItem != null )
-                    this.owner.selectAllItem.UpdateSelectedWithoutEvents();
+                if ( Count != count && owner.selectAllItem != null )
+                    owner.selectAllItem.UpdateSelectedWithoutEvents();
             }
 
             private void ReplaceItems( int startingIndex, IEnumerable<TItem> newValues )
@@ -448,23 +448,23 @@
                 {
                     any = true;
                     var oldItem = this[index];
-                    var newItem = this.owner.CreateItem( newValue );
+                    var newItem = owner.CreateItem( newValue );
 
-                    oldItem.PropertyChanged -= this.OnItemChanged;
+                    oldItem.PropertyChanged -= OnItemChanged;
 
                     if ( oldItem.IsSelected ?? false )
                     {
-                        this.owner.SelectedValues.Remove( oldItem.Value );
-                        this.owner.selectedItems.Remove( oldItem, this.itemComparer );
+                        owner.SelectedValues.Remove( oldItem.Value );
+                        owner.selectedItems.Remove( oldItem, itemComparer );
                     }
 
-                    newItem.PropertyChanged += this.OnItemChanged;
+                    newItem.PropertyChanged += OnItemChanged;
                     this[index++] = newItem;
                 }
 
                 // replacing an item might trigger a state change
-                if ( any && this.owner.selectAllItem != null )
-                    this.owner.selectAllItem.UpdateSelectedWithoutEvents();
+                if ( any && owner.selectAllItem != null )
+                    owner.selectAllItem.UpdateSelectedWithoutEvents();
             }
 
             private void OnSourceCollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
@@ -477,27 +477,27 @@
                     case NotifyCollectionChangedAction.Add:
                         {
                             if ( e.NewItems != null )
-                                this.AddNewItems( e.NewItems.OfType<TItem>() );
+                                AddNewItems( e.NewItems.OfType<TItem>() );
 
                             break;
                         }
                     case NotifyCollectionChangedAction.Remove:
                         {
                             if ( e.OldItems != null )
-                                this.RemoveOldItems( e.OldItems.OfType<TItem>() );
+                                RemoveOldItems( e.OldItems.OfType<TItem>() );
 
                             break;
                         }
                     case NotifyCollectionChangedAction.Replace:
                         {
                             if ( ( e.OldItems != null && e.OldItems.Count > 0 ) && ( e.NewItems != null && e.NewItems.Count > 0 ) )
-                                this.ReplaceItems( e.NewStartingIndex, e.NewItems.OfType<TItem>() );
+                                ReplaceItems( e.NewStartingIndex, e.NewItems.OfType<TItem>() );
 
                             break;
                         }
                     case NotifyCollectionChangedAction.Reset:
                         {
-                            this.Clear();
+                            Clear();
                             break;
                         }
                 }
@@ -513,51 +513,51 @@
                 if ( item.IsSelected ?? false )
                 {
                     // never add the 'All' item as a selection
-                    if ( !object.ReferenceEquals( this.owner.selectAllItem, item ) )
+                    if ( !object.ReferenceEquals( owner.selectAllItem, item ) )
                     {
                         // add selected value
-                        if ( !this.owner.SelectedValues.Contains( item.Value, this.valueComparer ) )
-                            this.owner.SelectedValues.Add( item.Value );
+                        if ( !owner.SelectedValues.Contains( item.Value, valueComparer ) )
+                            owner.SelectedValues.Add( item.Value );
 
                         // add selected item
-                        if ( !this.owner.selectedItems.Contains( item, this.itemComparer ) )
-                            this.owner.selectedItems.Add( item );
+                        if ( !owner.selectedItems.Contains( item, itemComparer ) )
+                            owner.selectedItems.Add( item );
                     }
 
                     // update the state of the 'All' item as necessary
-                    if ( this.owner.selectAllItem != null )
-                        this.owner.selectAllItem.UpdateSelectedWithoutEvents();
+                    if ( owner.selectAllItem != null )
+                        owner.selectAllItem.UpdateSelectedWithoutEvents();
                 }
                 else
                 {
                     // never add the 'All' item as a selection
-                    if ( !object.ReferenceEquals( this.owner.selectAllItem, item ) )
+                    if ( !object.ReferenceEquals( owner.selectAllItem, item ) )
                     {
                         // remove selected value and item
-                        this.owner.SelectedValues.Remove( item.Value );
-                        this.owner.selectedItems.Remove( item, this.itemComparer );
+                        owner.SelectedValues.Remove( item.Value );
+                        owner.selectedItems.Remove( item, itemComparer );
                     }
 
                     // update the state of the 'All' item as necessary
-                    if ( this.owner.selectAllItem != null )
-                        this.owner.selectAllItem.UpdateSelectedWithoutEvents();
+                    if ( owner.selectAllItem != null )
+                        owner.selectAllItem.UpdateSelectedWithoutEvents();
                 }
             }
 
             protected override void ClearItems()
             {
-                foreach ( var item in this.owner )
-                    item.PropertyChanged -= this.OnItemChanged;
+                foreach ( var item in owner )
+                    item.PropertyChanged -= OnItemChanged;
 
                 base.ClearItems();
-                this.owner.SelectedValues.Clear();
-                this.owner.selectedItems.Clear();
+                owner.SelectedValues.Clear();
+                owner.selectedItems.Clear();
 
-                if ( this.owner.selectAllItem == null )
+                if ( owner.selectAllItem == null )
                     return;
 
-                this.owner.selectAllItem.SetSelectedWithoutEvents( false );
-                this.owner.Items.Add( this.owner.selectAllItem );
+                owner.selectAllItem.SetSelectedWithoutEvents( false );
+                owner.Items.Add( owner.selectAllItem );
             }
 
         }
@@ -581,36 +581,36 @@
 
             private bool ItemExistsInSource( TValue value )
             {
-                return this.FindAll( value ).Any();
+                return FindAll( value ).Any();
             }
 
             private IEnumerable<SelectableItem<TValue>> FindAll( TValue value )
             {
                 Contract.Ensures( Contract.Result<IEnumerable<SelectableItem<TValue>>>() != null );
-                return this.owner.Where( item => this.comparer.Equals( item.Value, value ) );
+                return owner.Where( item => comparer.Equals( item.Value, value ) );
             }
 
             protected override void ClearItems()
             {
                 base.ClearItems();
 
-                foreach ( var item in this.owner )
+                foreach ( var item in owner )
                     item.IsSelected = false;
 
-                this.owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
+                owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
             }
 
             protected override void InsertItem( int index, TValue item )
             {
-                if ( !this.ItemExistsInSource( item ) )
+                if ( !ItemExistsInSource( item ) )
                     throw new KeyNotFoundException( ExceptionMessage.ItemDoesNotExistInSource );
 
                 base.InsertItem( index, item );
 
-                foreach ( var selectableItem in this.FindAll( item ) )
+                foreach ( var selectableItem in FindAll( item ) )
                     selectableItem.IsSelected = true;
 
-                this.owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
+                owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
             }
 
             protected override void RemoveItem( int index )
@@ -618,28 +618,28 @@
                 var oldItem = this[index];
                 base.RemoveItem( index );
 
-                foreach ( var item in this.FindAll( oldItem ) )
+                foreach ( var item in FindAll( oldItem ) )
                     item.IsSelected = false;
 
-                this.owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
+                owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
             }
 
             protected override void SetItem( int index, TValue item )
             {
-                if ( !this.ItemExistsInSource( item ) )
+                if ( !ItemExistsInSource( item ) )
                     throw new KeyNotFoundException( ExceptionMessage.ItemDoesNotExistInSource );
 
                 var oldItem = this[index];
 
-                foreach ( var selectableItem in this.FindAll( oldItem ) )
+                foreach ( var selectableItem in FindAll( oldItem ) )
                     selectableItem.IsSelected = false;
 
                 base.SetItem( index, item );
 
-                foreach ( var selectableItem in this.FindAll( item ) )
+                foreach ( var selectableItem in FindAll( item ) )
                     selectableItem.IsSelected = true;
 
-                this.owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
+                owner.OnPropertyChanged( new PropertyChangedEventArgs( "SelectedValues" ) );
             }
         }
 
@@ -735,22 +735,22 @@
             IEqualityComparer<T> comparer )
             : base( new ItemCollection<T>( comparer ) )
         {
-            Arg.NotNull( factory, "factory" );
-            Arg.NotNull( sequence, "sequence" );
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( factory, nameof( factory ) );
+            Arg.NotNull( sequence, nameof( sequence ) );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
             this.factory = factory;
-            this.valueComparer = comparer;
-            ( (ItemCollection<T>) this.Items ).Initialize( this, sequence );
-            this.selectedValues = new SelectedValuesCollection<T>( this, comparer );
-            this.selectedItems = new ObservableCollection<SelectableItem<T>>();
-            this.readOnlySelectedItems = new ReadOnlyObservableCollection<SelectableItem<T>>( this.selectedItems );
+            valueComparer = comparer;
+            ( (ItemCollection<T>) Items ).Initialize( this, sequence );
+            selectedValues = new SelectedValuesCollection<T>( this, comparer );
+            selectedItems = new ObservableCollection<SelectableItem<T>>();
+            readOnlySelectedItems = new ReadOnlyObservableCollection<SelectableItem<T>>( selectedItems );
 
             if ( selectAllValue == null )
                 return;
 
-            this.selectAllItem = new SelectAllItem<T>( this, (T) selectAllValue );
-            this.Items.Insert( 0, this.selectAllItem );
+            selectAllItem = new SelectAllItem<T>( this, (T) selectAllValue );
+            Items.Insert( 0, selectAllItem );
         }
 
         /// <summary>
@@ -762,7 +762,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEqualityComparer<T>>() != null ); 
-                return this.valueComparer;
+                return valueComparer;
             }
         }
 
@@ -776,7 +776,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ReadOnlyObservableCollection<SelectableItem<T>>>() != null ); 
-                return this.readOnlySelectedItems;
+                return readOnlySelectedItems;
             }
         }
 
@@ -789,7 +789,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ObservableCollection<T>>() != null ); 
-                return this.selectedValues;
+                return selectedValues;
             }
         }
 
@@ -859,9 +859,9 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "This method creates and returns a disposable object." )]
         public virtual IDisposable CreateSelectedValuesMediator( ICollection<T> target )
         {
-            Arg.NotNull( target, "target" );
+            Arg.NotNull( target, nameof( target ) );
             Contract.Ensures( Contract.Result<IDisposable>() != null );
-            return new SelectedValuesMediator<T>( this.SelectedValues, target );
+            return new SelectedValuesMediator<T>( SelectedValues, target );
         }
 
         /// <summary>
@@ -873,7 +873,7 @@
         protected SelectableItem<T> CreateItem( T value )
         {
             Contract.Ensures( Contract.Result<SelectableItem<T>>() != null ); 
-            return this.factory( value, this.ValueComparer );
+            return factory( value, ValueComparer );
         }
     }
 }

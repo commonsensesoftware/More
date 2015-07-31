@@ -26,11 +26,11 @@
             var dialog = new FileOpenPicker();
 
             dialog.FileTypeFilter.AddRange( openFile.FileTypeFilter );
-            dialog.SuggestedStartLocation = this.SuggestedStartLocation;
-            dialog.ViewMode = this.ViewMode;
+            dialog.SuggestedStartLocation = SuggestedStartLocation;
+            dialog.ViewMode = ViewMode;
 
-            if ( !string.IsNullOrEmpty( this.SettingsIdentifier ) )
-                dialog.SettingsIdentifier = this.SettingsIdentifier;
+            if ( !string.IsNullOrEmpty( SettingsIdentifier ) )
+                dialog.SettingsIdentifier = SettingsIdentifier;
 
             if ( saveButton != null )
                 dialog.CommitButtonText = saveButton.Name;
@@ -77,7 +77,7 @@
             if ( openFile == null )
                 return;
 
-            var files = await this.OpenFilesAsync( openFile );
+            var files = await OpenFilesAsync( openFile );
             InvokeCallbackCommand( openFile, files );
         }
     }

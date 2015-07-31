@@ -68,10 +68,10 @@
         {
             parameter = parameter ?? new CancelEventArgs();
 
-            await this.executeAsyncMethod( parameter );
+            await executeAsyncMethod( parameter );
 
             if ( !parameter.Cancel )
-                this.OnExecuted( parameter );
+                OnExecuted( parameter );
         }
     }
 }

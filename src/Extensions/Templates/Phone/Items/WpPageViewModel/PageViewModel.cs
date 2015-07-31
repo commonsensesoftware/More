@@ -36,7 +36,7 @@
         private readonly InteractionRequest<Interaction> share = new InteractionRequest<Interaction>( "Share" );$endif$
         private readonly ObservableKeyedCollection<string, IInteractionRequest> interactionRequests = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
         private readonly ObservableKeyedCollection<string, INamedCommand> commands = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
-        private string title = "$title$";
+        private string titleField = "$title$";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="$safeitemrootname$"/> class.
@@ -49,26 +49,26 @@
             Contract.Requires( eventBroker != null );$endif$$if$ ($enableAppSharing$ == true)
 
             // subscribe to application-wide sharing. this event is fired when the application is activated via a share operation.
-            eventBroker.Subscribe( "Share", ( string eventName, object sender, ShareEventArgs e ) => this.OnShareReceived( e ) );
+            eventBroker.Subscribe( "Share", ( string eventName, object sender, ShareEventArgs e ) => OnShareReceived( e ) );
 $endif$$if$ ($showTips$ == true)
             // TODO: If this class has import dependencies, they can be specified in the constructor arguments
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: Add or modify this interaction requests and commands to suit your needs$endif$$if$ ($enableOpenFile$ == true)
-            this.openFile = continuationManager.CreateInteractionRequest<OpenFileInteraction, IFileOpenPickerContinuationEventArgs>( "OpenFile", this.OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
-            this.saveFile = continuationManager.CreateInteractionRequest<SaveFileInteraction, IFileSavePickerContinuationEventArgs>( "SaveFile", this.OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
-            this.selectFolder = continuationManager.CreateInteractionRequest<SelectFolderInteraction, IFolderPickerContinuationEventArgs>( "SelectFolder", this.OnFolderSelected );$endif$
-            this.interactionRequests.Add( this.userFeedback );
-            this.interactionRequests.Add( this.navigate );$if$ ($enableOpenFile$ == true)
-            this.interactionRequests.Add( this.openFile );$endif$$if$ ($enableSaveFile$ == true)
-            this.interactionRequests.Add( this.saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            this.interactionRequests.Add( this.selectFolder );$endif$$if$ ($enableSharing$ == true)
-            this.interactionRequests.Add( this.share );$endif$$if$ ($enableOpenFile$ == true)
-            this.commands.Add( new NamedCommand<object>( "OpenFile", "Open File", this.OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            this.commands.Add( new NamedCommand<object>( "SaveFile", "Save File", this.OnSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            this.commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", this.OnSelectFolder ) );$endif$$if$ ($enableSharing$ == true)
-            this.commands.Add( new NamedCommand<IDataRequest>( "Share", this.OnShare ) );$endif$
-            //this.commands.Add( new NamedCommand<object>( "Navigate", p => this.Navigate( "Page1" ) ) );
+            openFile = continuationManager.CreateInteractionRequest<OpenFileInteraction, IFileOpenPickerContinuationEventArgs>( "OpenFile", OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
+            saveFile = continuationManager.CreateInteractionRequest<SaveFileInteraction, IFileSavePickerContinuationEventArgs>( "SaveFile", OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
+            selectFolder = continuationManager.CreateInteractionRequest<SelectFolderInteraction, IFolderPickerContinuationEventArgs>( "SelectFolder", OnFolderSelected );$endif$
+            interactionRequests.Add( userFeedback );
+            interactionRequests.Add( navigate );$if$ ($enableOpenFile$ == true)
+            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            interactionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
+            interactionRequests.Add( share );$endif$$if$ ($enableOpenFile$ == true)
+            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSharing$ == true)
+            commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$
+            //commands.Add( new NamedCommand<object>( "Navigate", p => Navigate( "Page1" ) ) );
         }
 
         /// <summary>
@@ -79,11 +79,11 @@ $endif$$if$ ($showTips$ == true)
         {
             get
             {
-                return this.title;
+                return titleField;
             }
             set
             {
-                this.SetProperty( ref this.title, value );
+                SetProperty( ref titleField, value );
             }
         }
 
@@ -96,8 +96,8 @@ $endif$$if$ ($showTips$ == true)
         {
             get
             {
-                Contract.Ensures( this.interactionRequests != null );
-                return this.interactionRequests;
+                Contract.Ensures( interactionRequests != null );
+                return interactionRequests;
             }
         }
 
@@ -110,8 +110,8 @@ $endif$$if$ ($showTips$ == true)
         {
             get
             {
-                Contract.Ensures( this.commands != null );
-                return this.commands;
+                Contract.Ensures( commands != null );
+                return commands;
             }
         }
 
@@ -122,7 +122,7 @@ $endif$$if$ ($showTips$ == true)
         protected void Alert( string message )
         {
             Contract.Requires( message != null );
-            this.Alert( this.Title, message );
+            Alert( Title, message );
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ $endif$$if$ ($showTips$ == true)
         {
             Contract.Requires( !string.IsNullOrEmpty( title ) );
             Contract.Requires( message != null );
-            this.userFeedback.Request( new Interaction( title, message ) );
+            userFeedback.Request( new Interaction( title, message ) );
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ $endif$$if$ ($showTips$ == true)
                 }
             };
 
-            this.userFeedback.Request( interaction );
+            userFeedback.Request( interaction );
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ $endif$$if$ ($showTips$ == true)
             Contract.Requires( !string.IsNullOrEmpty( pageName ) );
             var interaction = new NavigateInteraction();
             interaction.Url = new Uri( pageName, UriKind.Relative );
-            this.Navigate( interaction );
+            Navigate( interaction );
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ $endif$$if$ ($showTips$ == true)
         protected void Navigate( NavigateInteraction interaction )
         {
             Contract.Requires( interaction != null );
-            this.navigate.Request( interaction );
+            navigate.Request( interaction );
         }$if$ ($enableAppSharing$ == true)
 
         private void OnShareReceived( IShareOperation share )
@@ -213,7 +213,7 @@ $endif$$if$ ($showTips$ == true)
         /// </summary>
         protected void Share()
         {
-            this.share.Request( new Interaction() );
+            share.Request( new Interaction() );
         }$endif$$if$ ($enableOpenFile$ == true)
 
         private void OnOpenFile( object parameter )
@@ -236,7 +236,7 @@ $endif$$if$ ($showTips$ == true)
                 }
             };
 
-            this.openFile.Request( interaction );
+            openFile.Request( interaction );
         }
 
         private void OnFilesOpened( IFileOpenPickerContinuationEventArgs e )
@@ -265,7 +265,7 @@ $endif$$if$ ($showTips$ == true)
                 }
             };
 
-            this.saveFile.Request( interaction );
+            saveFile.Request( interaction );
         }
 
         private void OnFileSaved( IFileSavePickerContinuationEventArgs e )
@@ -289,7 +289,7 @@ $endif$$if$ ($showTips$ == true)
                 }
             };
 
-            this.selectFolder.Request( interaction );
+            selectFolder.Request( interaction );
         }
 
         private void OnFolderSelected( IFolderPickerContinuationEventArgs e )

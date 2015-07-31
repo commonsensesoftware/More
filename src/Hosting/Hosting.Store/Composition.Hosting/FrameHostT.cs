@@ -9,7 +9,7 @@
     {
         partial void OnConfigure()
         {
-            this.WithConfiguration<ContractSettings>().DependsOn<ShowShellView<FrameShellView<T>>>();
+            WithConfiguration<ContractSettings>().DependsOn<ShowShellView<FrameShellView<T>>>();
         }
     }
 }

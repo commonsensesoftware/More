@@ -17,7 +17,7 @@
         /// <param name="complement">The <see cref="ISpecification{T}">specification</see> representing the logical complement the specification.</param>
         public LogicalNotSpecification( ISpecification<T> complement )
         {
-            Arg.NotNull( complement, "complement" );
+            Arg.NotNull( complement, nameof( complement ) );
             this.complement = complement;
         }
 
@@ -30,8 +30,8 @@
             get
             {
                 Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
-                Contract.Assume( this.complement != null ); 
-                return this.complement;
+                Contract.Assume( complement != null ); 
+                return complement;
             }
         }
 
@@ -42,7 +42,7 @@
         /// <returns>True if <paramref name="item"/> satisfies the specification; otherwise, false.</returns>
         public override bool IsSatisfiedBy( T item )
         {
-            return !this.Complement.IsSatisfiedBy( item );
+            return !Complement.IsSatisfiedBy( item );
         }
     }
 }

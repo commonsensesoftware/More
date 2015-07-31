@@ -16,25 +16,25 @@
         private void Invoke()
         {
             // ensure there is a valid method to execute
-            if ( string.IsNullOrEmpty( this.MethodName ) )
+            if ( string.IsNullOrEmpty( MethodName ) )
             {
-                this.ReturnValue = null;
+                ReturnValue = null;
                 return;
             }
 
             // TriggerAction<T> is not a FrameworkElement, therefore, we need to ensure the Source of
             // parameter bindings by using the DataContext of the associated object
-            this.EnsureDataBinding( this.AssociatedObject );
+            EnsureDataBinding( AssociatedObject );
 
             // use target or failover to associated object
-            var target = this.ReadLocalValue( TargetObjectProperty ) == DependencyProperty.UnsetValue ? this.AssociatedObject : this.TargetObject;
-            var method = this.GetOrResolveMethod( target.GetType() );
+            var target = ReadLocalValue( TargetObjectProperty ) == DependencyProperty.UnsetValue ? AssociatedObject : TargetObject;
+            var method = GetOrResolveMethod( target.GetType() );
 
             // invoke method and capture return value
             if ( method == null )
-                this.ReturnValue = null;
+                ReturnValue = null;
             else
-                this.ReturnValue = method.Invoke( target, this.Parameters );
+                ReturnValue = method.Invoke( target, Parameters );
         }
 
         /// <summary>
@@ -43,8 +43,8 @@
         /// <param name="e">The <see cref="EventArgs"/> for the event that triggered the action.</param>
         protected virtual void Invoke( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
-            this.Invoke();
+            Arg.NotNull( e, nameof( e ) );
+            Invoke();
         }
 
         /// <summary>
@@ -53,7 +53,7 @@
         /// <param name="parameter">The parameter supplied by the trigger that invoked the action.</param>
         protected sealed override void Invoke( object parameter )
         {
-            this.Invoke( ( parameter as EventArgs ) ?? EventArgs.Empty );
+            Invoke( ( parameter as EventArgs ) ?? EventArgs.Empty );
         }
     }
 }

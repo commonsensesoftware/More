@@ -27,12 +27,12 @@
         {
             get
             {
-                var result = (Brush) this.GetValue( ScoreBrushProperty ) ?? DefaultScoreBrush;
+                var result = (Brush) GetValue( ScoreBrushProperty ) ?? DefaultScoreBrush;
                 return result;
             }
             protected set
             {
-                this.SetValue( ScoreBrushPropertyKey, value );
+                SetValue( ScoreBrushPropertyKey, value );
             }
         }
 
@@ -42,15 +42,15 @@
         public override void EndInit()
         {
             // if the Trend property is set, trigger a property change after initialization
-            if ( this.ReadLocalValue( TrendProperty ) != DependencyProperty.UnsetValue )
+            if ( ReadLocalValue( TrendProperty ) != DependencyProperty.UnsetValue )
             {
-                this.UpdateVisualState();
-                this.OnTrendChanged( EventArgs.Empty );
+                UpdateVisualState();
+                OnTrendChanged( EventArgs.Empty );
             }
 
             // if the Score property is set, trigger a property change after initialization
-            if ( this.ReadLocalValue( ScoreProperty ) != DependencyProperty.UnsetValue )
-                this.OnScoreChanged( EventArgs.Empty );
+            if ( ReadLocalValue( ScoreProperty ) != DependencyProperty.UnsetValue )
+                OnScoreChanged( EventArgs.Empty );
         }
 
         /// <summary>
@@ -59,7 +59,7 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            this.UpdateVisualState();
+            UpdateVisualState();
         }
     }
 }

@@ -37,7 +37,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ISpecification<GenericNameSyntax>>() != null );
-                return this.interfaceSpecification.Value;
+                return interfaceSpecification.Value;
             }
         }
 
@@ -61,7 +61,7 @@
 
             var interfaces = from @class in classes
                              from @interface in @class.BaseList.DescendantNodes().OfType<GenericNameSyntax>()
-                             where this.InterfaceSpecification.IsSatisfiedBy( @interface )
+                             where InterfaceSpecification.IsSatisfiedBy( @interface )
                              select new InterfaceDeclaration( @class, @interface );
 
             return interfaces.ToArray();
@@ -234,37 +234,9 @@
 
             implementedInterfaces.Add( INotifyPropertyChanged );
 
-            writer.WriteLine( "private volatile PropertyChangedEventHandler propertyChanged;" );
+            writer.WriteLine( "public event PropertyChangedEventHandler PropertyChanged;" );
             writer.WriteLine();
-            writer.WriteLine( "event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged" );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "add" );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "this.propertyChanged += value;" );
-            writer.Unindent();
-            writer.WriteLine( "}" );
-            writer.WriteLine( "remove" );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "this.propertyChanged -= value;" );
-            writer.Unindent();
-            writer.WriteLine( "}" );
-            writer.Unindent();
-            writer.WriteLine( "}" );
-            writer.WriteLine();
-            writer.WriteLine( "private void OnPropertyChanged( PropertyChangedEventArgs e )" );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "var handler = this.propertyChanged;" );
-            writer.WriteLine();
-            writer.WriteLine( "if ( handler != null )" );
-            writer.Indent();
-            writer.WriteLine( "handler( this, e );" );
-            writer.Unindent();
-            writer.Unindent();
-            writer.WriteLine( "}" );
+            writer.WriteLine( "private void OnPropertyChanged( PropertyChangedEventArgs e ) => PropertyChanged?.Invoke( this, e );" );
 
             return true;
         }
@@ -282,14 +254,14 @@
             writer.WriteLine( "async Task<IEnumerable<{1}>> {0}.GetAsync( Func<IQueryable<{1}>, IQueryable<{1}>> queryShaper, CancellationToken cancellationToken )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "return await queryShaper( this.Set<{0}>() ).ToArrayAsync( cancellationToken ).ConfigureAwait( false );", declaration.ArgumentTypeName );
+            writer.WriteLine( "return await queryShaper( Set<{0}>() ).ToArrayAsync( cancellationToken ).ConfigureAwait( false );", declaration.ArgumentTypeName );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "async Task<TResult> {0}.GetAsync<TResult>( Func<IQueryable<{1}>, TResult> queryShaper, CancellationToken cancellationToken )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "return await Task<TResult>.Factory.StartNew( () => queryShaper( this.Set<{0}>() ), cancellationToken ).ConfigureAwait( false );", declaration.ArgumentTypeName );
+            writer.WriteLine( "return await Task<TResult>.Factory.StartNew( () => queryShaper( Set<{0}>() ), cancellationToken ).ConfigureAwait( false );", declaration.ArgumentTypeName );
             writer.Unindent();
             writer.WriteLine( "}" );
 
@@ -313,7 +285,7 @@
             writer.WriteLine( "get" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "return this.ChangeTracker.HasChanges();" );
+            writer.WriteLine( "return ChangeTracker.HasChanges();" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.Unindent();
@@ -322,37 +294,37 @@
             writer.WriteLine( "void {0}.Add( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "this.Set<{0}>().Add( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "Set<{0}>().Add( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "void {0}.Remove( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "this.Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "void {0}.Update( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "if ( this.Entry( item ).State != EntityState.Detached )" );
+            writer.WriteLine( "if ( Entry( item ).State != EntityState.Detached )" );
             writer.Indent();
             writer.WriteLine( "return;" );
             writer.Unindent();
             writer.WriteLine();
-            writer.WriteLine( "this.Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "this.Entry( item ).State = EntityState.Modified;" );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "void {0}.DiscardChanges()", declaration.TypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "foreach ( var entry in this.ChangeTracker.Entries<{0}>() )", declaration.ArgumentTypeName );
+            writer.WriteLine( "foreach ( var entry in ChangeTracker.Entries<{0}>() )", declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "switch ( entry.State )" );
@@ -375,15 +347,15 @@
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "async Task IRepository<{0}>.SaveChangesAsync( CancellationToken cancellationToken )", declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "await this.SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
 
@@ -407,7 +379,7 @@
             writer.WriteLine( "get" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "return this.ChangeTracker.HasChanges();" );
+            writer.WriteLine( "return ChangeTracker.HasChanges();" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.Unindent();
@@ -416,45 +388,45 @@
             writer.WriteLine( "void {0}.RegisterNew( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "this.Set<{0}>().Add( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "Set<{0}>().Add( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "void {0}.RegisterRemoved( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "this.Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "void {0}.RegisterChanged( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "if ( this.Entry( item ).State != EntityState.Detached )" );
+            writer.WriteLine( "if ( Entry( item ).State != EntityState.Detached )" );
             writer.Indent();
             writer.WriteLine( "return;" );
             writer.Unindent();
             writer.WriteLine();
-            writer.WriteLine( "this.Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "this.Entry( item ).State = EntityState.Modified;" );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "void {0}.Unregister( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "this.Entry( item ).State = EntityState.Detached;" );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "Entry( item ).State = EntityState.Detached;" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "void {0}.Rollback()", declaration.TypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "foreach ( var entry in this.ChangeTracker.Entries<{0}>() )", declaration.ArgumentTypeName );
+            writer.WriteLine( "foreach ( var entry in ChangeTracker.Entries<{0}>() )", declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "switch ( entry.State )" );
@@ -477,15 +449,15 @@
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
             writer.WriteLine( "async Task {0}.CommitAsync( CancellationToken cancellationToken )", declaration.TypeName );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "await this.SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );
-            writer.WriteLine( "this.OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
+            writer.WriteLine( "await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
 
@@ -507,7 +479,7 @@
                 return;
             }
 
-            var declarations = this.FindInterfaceDeclarations( classes );
+            var declarations = FindInterfaceDeclarations( classes );
 
             if ( declarations.Count == 0 )
                 writer.WriteLine( SR.NoInterfacesFound.FormatDefault( typeof( IReadOnlyRepository<> ), typeof( IRepository<> ), typeof( IUnitOfWork<> ) ) );
@@ -518,12 +490,14 @@
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed by the caller." )]
         public Stream Generate( CodeGeneratorContext context )
         {
+            Arg.NotNull( context, nameof( context ) );
+
             var stream = new MemoryStream();
             var writer = new StreamWriter( stream );
 
             try
             {
-                this.EvaluateAndGenerateCode( context, writer );
+                EvaluateAndGenerateCode( context, writer );
             }
             catch
             {

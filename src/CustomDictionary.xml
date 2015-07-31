@@ -18,6 +18,7 @@
    <Word>Subfeature</Word>
    <Word>Flyout</Word>
    <Word>Uneditable</Word>
+   <Word>Continuable</Word>
   </Recognized>
   <DiscreteExceptions>
    <Term>Commonsense</Term>
@@ -30,6 +31,7 @@
    <Term>Subfeature</Term>
    <Term>Flyout</Term>
    <Term>Uneditable</Term>
+   <Term>Continuable</Term>
   </DiscreteExceptions>
  </Words>
  <Acronyms>

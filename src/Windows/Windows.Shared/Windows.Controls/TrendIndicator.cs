@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
 #if NETFX_CORE
@@ -37,15 +38,17 @@
         /// Gets the trend dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty TrendProperty =
-            DependencyProperty.Register( "Trend", typeof( decimal? ), typeof( TrendIndicator ), new PropertyMetadata( null, OnTrendPropertyChanged ) );
+            DependencyProperty.Register( nameof( Trend ), typeof( decimal? ), typeof( TrendIndicator ), new PropertyMetadata( null, OnTrendPropertyChanged ) );
 
         /// <summary>
         /// Gets the score dependency property.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ScoreProperty =
-            DependencyProperty.Register( "Score", typeof( decimal? ), typeof( TrendIndicator ), new PropertyMetadata( null, OnScorePropertyChanged ) );
+            DependencyProperty.Register( nameof( Score ), typeof( decimal? ), typeof( TrendIndicator ), new PropertyMetadata( null, OnScorePropertyChanged ) );
 
         private const string UndefinedState = "Undefined";
 
@@ -60,8 +63,8 @@
         /// </summary>
         public TrendIndicator()
         {
-            this.DefaultStyleKey = typeof( TrendIndicator );
-            this.Loaded += ( s, e ) => this.EndInit();
+            DefaultStyleKey = typeof( TrendIndicator );
+            Loaded += ( s, e ) => EndInit();
         }
 
         /// <summary>
@@ -73,11 +76,11 @@
         {
             get
             {
-                return (decimal?) this.GetValue( TrendProperty );
+                return (decimal?) GetValue( TrendProperty );
             }
             set
             {
-                this.SetValue( TrendProperty, value );
+                SetValue( TrendProperty, value );
             }
         }
 
@@ -90,11 +93,11 @@
         {
             get
             {
-                return (decimal?) this.GetValue( ScoreProperty );
+                return (decimal?) GetValue( ScoreProperty );
             }
             set
             {
-                this.SetValue( ScoreProperty, value );
+                SetValue( ScoreProperty, value );
             }
         }
 
@@ -106,7 +109,7 @@
         {
             get
             {
-                return this.trendRules;
+                return trendRules;
             }
         }
 
@@ -118,13 +121,14 @@
         {
             get
             {
-                return this.scoreRules;
+                return scoreRules;
             }
         }
 
         private static void OnTrendPropertyChanged( object sender, DependencyPropertyChangedEventArgs e )
         {
             Contract.Requires( sender != null );
+
             var control = (TrendIndicator) sender;
 
             if ( !control.IsInitialized )
@@ -137,6 +141,7 @@
         private static void OnScorePropertyChanged( object sender, DependencyPropertyChangedEventArgs e )
         {
             Contract.Requires( sender != null );
+
             var control = (TrendIndicator) sender;
 
             if ( control.IsInitialized )
@@ -263,13 +268,13 @@
 
         private void UpdateVisualState( bool useTransitions = true )
         {
-            IEnumerable<TrendRule> rules = this.TrendRules;
+            IEnumerable<TrendRule> rules = TrendRules;
 
             if ( !rules.Any() )
                 rules = DefaultTrendRules;
 
             // select visual state from rule set
-            var trend = this.Trend;
+            var trend = Trend;
             var stateName = rules.Where( r => r.Evaluate( trend ) ).Select( r => r.VisualState ).FirstOrDefault();
 
             // failover to undefined state
@@ -285,7 +290,7 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnTrendChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
         }
 
         /// <summary>
@@ -294,20 +299,20 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnScoreChanged( EventArgs e )
         {
-            Contract.Requires<ArgumentNullException>( e != null, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            IEnumerable<ConditionalBrushRule> rules = this.ScoreRules;
+            IEnumerable<ConditionalBrushRule> rules = ScoreRules;
 
             if ( !rules.Any() )
                 rules = DefaultScoreRules;
 
-            var score = this.Score;
+            var score = Score;
 
             // select brush from rule set
             var brush = rules.Where( r => r.Evaluate( score ) ).Select( r => r.Brush ).FirstOrDefault();
 
             // use matching brush or failover to default brush
-            this.ScoreBrush = brush ?? DefaultScoreBrush;
+            ScoreBrush = brush ?? DefaultScoreBrush;
         }
     }
 }

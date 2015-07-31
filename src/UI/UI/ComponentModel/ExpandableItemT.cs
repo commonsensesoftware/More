@@ -54,13 +54,13 @@
         /// <param name="comparer">The <see cref="IEqualityComparer{T}">comparer</see> used to compare values.</param>
         public ExpandableItem( bool expanded, T value, IEqualityComparer<T> comparer )
         {
-            Arg.NotNull( comparer, "comparer" );
+            Arg.NotNull( comparer, nameof( comparer ) );
 
-            this.Value = value;
+            Value = value;
             this.expanded = expanded;
             this.comparer = comparer;
-            this.Expand = new Command<object>( p => this.IsExpanded = true );
-            this.Collapse = new Command<object>( p => this.IsExpanded = false );
+            Expand = new Command<object>( p => IsExpanded = true );
+            Collapse = new Command<object>( p => IsExpanded = false );
         }
 
         /// <summary>
@@ -71,8 +71,8 @@
         {
             get
             {
-                Contract.Ensures( this.comparer != null );
-                return this.comparer;
+                Contract.Ensures( comparer != null );
+                return comparer;
             }
         }
 
@@ -82,12 +82,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExpanded( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Expanded;
-
-            if ( handler != null )
-                handler( this, e );
+            Expanded?.Invoke( this, e );
         }
 
         /// <summary>
@@ -96,12 +93,9 @@
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnCollapsed( EventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.Collapsed;
-
-            if ( handler != null )
-                handler( this, e );
+            Collapsed?.Invoke( this, e );
         }
 
         /// <summary>
@@ -111,7 +105,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IExpandableItem<T> );
+            return Equals( obj as IExpandableItem<T> );
         }
 
         /// <summary>
@@ -120,7 +114,7 @@
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            return this.Value == null ? 0 : this.Comparer.GetHashCode( this.Value );
+            return Value == null ? 0 : Comparer.GetHashCode( Value );
         }
 
         /// <summary>
@@ -129,7 +123,7 @@
         /// <returns>The string representation of the current instance.</returns>
         public override string ToString()
         {
-            return this.Value == null ? string.Empty : this.Value.ToString();
+            return Value == null ? string.Empty : Value.ToString();
         }
 
         /// <summary>
@@ -168,17 +162,17 @@
         {
             get
             {
-                return this.expanded;
+                return expanded;
             }
             set
             {
-                if ( !this.SetProperty( ref this.expanded, value ) )
+                if ( !SetProperty( ref expanded, value ) )
                     return;
 
-                if ( this.expanded )
-                    this.OnExpanded( EventArgs.Empty );
+                if ( expanded )
+                    OnExpanded( EventArgs.Empty );
                 else
-                    this.OnCollapsed( EventArgs.Empty );
+                    OnCollapsed( EventArgs.Empty );
             }
         }
 
@@ -229,7 +223,7 @@
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public bool Equals( IExpandableItem<T> other )
         {
-            return !object.Equals( other, null ) && this.Comparer.Equals( this.Value, other.Value );
+            return !object.Equals( other, null ) && Comparer.Equals( Value, other.Value );
         }
 
         /// <summary>
@@ -239,7 +233,7 @@
         /// <returns>True if the specified value equals the current instance; otherwise, false.</returns>
         public bool Equals( T other )
         {
-            return this.Comparer.Equals( this.Value, other );
+            return Comparer.Equals( Value, other );
         }
     }
 }

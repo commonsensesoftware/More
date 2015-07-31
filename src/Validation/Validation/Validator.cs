@@ -22,17 +22,17 @@
         /// <returns>True if the <paramref name="validator"/> was successfully retrieved; otherwise, false.</returns>
         protected virtual bool TryGetValidator( Type type, out IObjectValidator validator )
         {
-            Arg.NotNull( type, "type" );
+            Arg.NotNull( type, nameof( type ) );
             Contract.Ensures( ( Contract.Result<bool>() && Contract.ValueAtReturn( out validator ) != null ) || Contract.ValueAtReturn( out validator ) == null );
 
             // try retrieving an exact match
-            if ( this.validators.TryGetValue( type, out validator ) )
+            if ( validators.TryGetValue( type, out validator ) )
                 return true;
 
             // if there isn't an exact match, aggregate covariant validators
             // note: this allows the support of interfaces and inheritance scenarios
             var typeInfo = type.GetTypeInfo();
-            var covariantValidators = ( from entry in this.validators
+            var covariantValidators = ( from entry in validators
                                         let otherTypeInfo = entry.Key.GetTypeInfo()
                                         where otherTypeInfo.IsAssignableFrom( typeInfo )
                                         select entry.Value ).ToArray();
@@ -60,11 +60,11 @@
             var type = typeof( T );
             IObjectValidator validator;
 
-            if ( this.validators.TryGetValue( type, out validator ) )
+            if ( validators.TryGetValue( type, out validator ) )
                 return (IObjectValidator<T>) validator;
 
             var newValidator = new ObjectValidator<T>();
-            this.validators[type] = newValidator;
+            validators[type] = newValidator;
             return newValidator;
         }
 
@@ -76,7 +76,7 @@
         /// <returns>A new <see cref="IValidationContext">validation context</see>.</returns>
         public virtual IValidationContext CreateContext( object instance, IDictionary<object, object> items )
         {
-            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( instance, nameof( instance ) );
             return new ValidationContext( instance, items );
         }
 
@@ -92,7 +92,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public virtual bool TryValidateObject( object instance, IValidationContext validationContext, ICollection<IValidationResult> validationResults, bool validateAllProperties )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             if ( instance == null )
                 return true;
@@ -100,7 +100,7 @@
             var type = validationContext.ObjectType;
             IObjectValidator validator;
 
-            if ( !this.TryGetValidator( type, out validator ) )
+            if ( !TryGetValidator( type, out validator ) )
                 return true;
 
             var results = validateAllProperties ?
@@ -125,9 +125,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public bool TryValidateObject( object instance, IValidationContext validationContext, ICollection<IValidationResult> validationResults )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
             var validateAllProperties = string.IsNullOrEmpty( validationContext.MemberName );
-            return this.TryValidateObject( instance, validationContext, validationResults, validateAllProperties );
+            return TryValidateObject( instance, validationContext, validationResults, validateAllProperties );
         }
 
         /// <summary>
@@ -140,12 +140,12 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public virtual bool TryValidateProperty( object value, IValidationContext validationContext, ICollection<IValidationResult> validationResults )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             var type = validationContext.ObjectType;
             IObjectValidator validator;
 
-            if ( !this.TryGetValidator( type, out validator ) )
+            if ( !TryGetValidator( type, out validator ) )
                 return true;
 
             var results = validator.ValidateProperty( validationContext.MemberName, value );
@@ -166,7 +166,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public virtual void ValidateObject( object instance, IValidationContext validationContext, bool validateAllProperties )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             if ( instance == null )
                 return;
@@ -174,7 +174,7 @@
             var type = validationContext.ObjectType;
             IObjectValidator validator;
 
-            if ( !this.TryGetValidator( type, out validator ) )
+            if ( !TryGetValidator( type, out validator ) )
                 return;
 
             var results = validateAllProperties ?
@@ -193,9 +193,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public void ValidateObject( object instance, IValidationContext validationContext )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
             var validateAllProperties = string.IsNullOrEmpty( validationContext.MemberName );
-            this.ValidateObject( instance, validationContext, validateAllProperties );
+            ValidateObject( instance, validationContext, validateAllProperties );
         }
 
         /// <summary>
@@ -206,12 +206,12 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public virtual void ValidateProperty( object value, IValidationContext validationContext )
         {
-            Arg.NotNull( validationContext, "validationContext" );
+            Arg.NotNull( validationContext, nameof( validationContext ) );
 
             var type = validationContext.ObjectType;
             IObjectValidator validator;
 
-            if ( !this.TryGetValidator( type, out validator ) )
+            if ( !TryGetValidator( type, out validator ) )
                 return;
 
             var results = validator.ValidateProperty( validationContext.MemberName, value );

@@ -31,13 +31,13 @@
         /// </summary>
         public ViewModelItemTemplateWizardViewModel()
         {
-            this.Title = SR.ViewModelItemTemplateWizardTitle;
-            this.interactionRequests.Add( this.close );
-            this.dialogCommands.Add( new NamedCommand<object>( "0", SR.BackCaption, this.OnGoBack, this.OnCanGoBack ) );
-            this.dialogCommands.Add( new NamedCommand<object>( "1", SR.FinishCaption, this.OnGoForward, this.OnCanGoForward ) );
-            this.dialogCommands.Add( new NamedCommand<object>( "2", SR.CancelCaption, this.OnCancel ) );
-            this.interactions.CollectionChanged += this.OnOptionsChanged;
-            this.appContracts.CollectionChanged += this.OnOptionsChanged;
+            Title = SR.ViewModelItemTemplateWizardTitle;
+            interactionRequests.Add( close );
+            dialogCommands.Add( new NamedCommand<object>( "0", SR.BackCaption, OnGoBack, OnCanGoBack ) );
+            dialogCommands.Add( new NamedCommand<object>( "1", SR.FinishCaption, OnGoForward, OnCanGoForward ) );
+            dialogCommands.Add( new NamedCommand<object>( "2", SR.CancelCaption, OnCancel ) );
+            interactions.CollectionChanged += OnOptionsChanged;
+            appContracts.CollectionChanged += OnOptionsChanged;
         }
 
         /// <summary>
@@ -49,8 +49,8 @@
         {
             get
             {
-                Contract.Ensures( this.interactionRequests != null );
-                return this.interactionRequests;
+                Contract.Ensures( interactionRequests != null );
+                return interactionRequests;
             }
         }
 
@@ -64,8 +64,8 @@
         {
             get
             {
-                Contract.Ensures( this.commands != null );
-                return this.commands;
+                Contract.Ensures( commands != null );
+                return commands;
             }
         }
 
@@ -79,8 +79,8 @@
         {
             get
             {
-                Contract.Ensures( this.dialogCommands != null );
-                return this.dialogCommands;
+                Contract.Ensures( dialogCommands != null );
+                return dialogCommands;
             }
         }
 
@@ -92,12 +92,12 @@
         {
             get
             {
-                Contract.Ensures( this.title != null );
-                return this.title ?? ( this.title = string.Empty );
+                Contract.Ensures( title != null );
+                return title ?? ( title = string.Empty );
             }
             set
             {
-                this.SetProperty( ref this.title, value );
+                SetProperty( ref title, value );
             }
         }
 
@@ -109,15 +109,15 @@
         {
             get
             {
-                Contract.Ensures( this.currentStep >= 0 );
-                return this.currentStep;
+                Contract.Ensures( currentStep >= 0 );
+                return currentStep;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0, nameof( value ) );
 
-                if ( this.SetProperty( ref this.currentStep, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref currentStep, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -129,11 +129,11 @@
         {
             get
             {
-                return this.showTips;
+                return showTips;
             }
             set
             {
-                this.SetProperty( ref this.showTips, value );
+                SetProperty( ref showTips, value );
             }
         }
 
@@ -145,8 +145,8 @@
         {
             get
             {
-                Contract.Ensures( this.baseClasses != null );
-                return this.baseClasses;
+                Contract.Ensures( baseClasses != null );
+                return baseClasses;
             }
         }
 
@@ -158,12 +158,12 @@
         {
             get
             {
-                return this.selectedBaseClass;
+                return selectedBaseClass;
             }
             set
             {
-                if ( this.SetProperty( ref this.selectedBaseClass, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref selectedBaseClass, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -175,8 +175,8 @@
         {
             get
             {
-                Contract.Ensures( this.interactions != null );
-                return this.interactions;
+                Contract.Ensures( interactions != null );
+                return interactions;
             }
         }
 
@@ -189,47 +189,47 @@
         {
             get
             {
-                Contract.Ensures( this.appContracts != null );
-                return this.appContracts;
+                Contract.Ensures( appContracts != null );
+                return appContracts;
             }
         }
 
         private void UpdateCommands()
         {
-            this.DialogCommands.RaiseCanExecuteChanged();
-            this.Commands.RaiseCanExecuteChanged();
+            DialogCommands.RaiseCanExecuteChanged();
+            Commands.RaiseCanExecuteChanged();
         }
 
         private void OnOptionsChanged( object sender, NotifyCollectionChangedEventArgs e )
         {
-            if ( this.CurrentStep != 0 )
+            if ( CurrentStep != 0 )
                 return;
 
-            var text = this.InteractionOptions.Any() || this.ApplicationContractOptions.Any() ? SR.NextCaption : SR.FinishCaption;
-            this.dialogCommands[1].Name = text;
+            var text = InteractionOptions.Any() || ApplicationContractOptions.Any() ? SR.NextCaption : SR.FinishCaption;
+            dialogCommands[1].Name = text;
         }
 
         private bool OnCanGoBack( object parameter )
         {
-            return this.CurrentStep > 0;
+            return CurrentStep > 0;
         }
 
         private void OnGoBack( object parameter )
         {
-            if ( !this.OnCanGoBack( parameter ) )
+            if ( !OnCanGoBack( parameter ) )
                 return;
 
-            --this.CurrentStep;
-            this.dialogCommands[1].Name = SR.NextCaption;
+            --CurrentStep;
+            dialogCommands[1].Name = SR.NextCaption;
         }
 
         private bool OnCanGoForward( object parameter )
         {
-            switch ( this.CurrentStep )
+            switch ( CurrentStep )
             {
                 case 0: // initial
                     {
-                        return this.SelectedBaseClass != null;
+                        return SelectedBaseClass != null;
                     }
                 case 1: // interaction options
                 case 2: // app contract options
@@ -247,48 +247,48 @@
 
         private void OnGoForward( object parameter )
         {
-            if ( !this.OnCanGoForward( parameter ) )
+            if ( !OnCanGoForward( parameter ) )
                 return;
 
-            switch ( this.CurrentStep )
+            switch ( CurrentStep )
             {
                 case 0: // initial
                     {
-                        if ( this.InteractionOptions.Any() )
+                        if ( InteractionOptions.Any() )
                         {
-                            this.CurrentStep = 1;
+                            CurrentStep = 1;
 
                             // the next step will be the last step
-                            if ( !this.ApplicationContractOptions.Any() )
-                                this.dialogCommands[1].Name = SR.FinishCaption;
+                            if ( !ApplicationContractOptions.Any() )
+                                dialogCommands[1].Name = SR.FinishCaption;
                         }
-                        else if ( this.ApplicationContractOptions.Any() )
+                        else if ( ApplicationContractOptions.Any() )
                         {
-                            this.CurrentStep = 2;
-                            this.dialogCommands[1].Name = SR.FinishCaption;
+                            CurrentStep = 2;
+                            dialogCommands[1].Name = SR.FinishCaption;
                         }
                         else
                         {
-                            this.close.Request( new WindowCloseInteraction() );
+                            close.Request( new WindowCloseInteraction() );
                         }
                         break;
                     }
                 case 1: // interaction options
                     {
-                        if ( this.ApplicationContractOptions.Any() )
+                        if ( ApplicationContractOptions.Any() )
                         {
-                            this.CurrentStep = 2;
-                            this.dialogCommands[1].Name = SR.FinishCaption;
+                            CurrentStep = 2;
+                            dialogCommands[1].Name = SR.FinishCaption;
                         }
                         else
                         {
-                            this.close.Request( new WindowCloseInteraction() );
+                            close.Request( new WindowCloseInteraction() );
                         }
                         break;
                     }
                 case 2: // app contract options
                     {
-                        this.close.Request( new WindowCloseInteraction() );
+                        close.Request( new WindowCloseInteraction() );
                         break;
                     }
             }
@@ -296,7 +296,7 @@
 
         private void OnCancel( object parameter )
         {
-            this.close.Request( new WindowCloseInteraction( true ) );
+            close.Request( new WindowCloseInteraction( true ) );
         }
     }
 }

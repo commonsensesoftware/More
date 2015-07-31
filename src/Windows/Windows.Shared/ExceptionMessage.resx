@@ -261,6 +261,9 @@
   <data name="NoConvertBackRule" xml:space="preserve">
     <value>A ConvertBack rule could not be found for the value '{0}'.</value>
   </data>
+  <data name="NoParameterlessConstructor" xml:space="preserve">
+    <value>The type '{0}' does not have a parameterless constructor.</value>
+  </data>
   <data name="NumericFormatMustBeUsedToConvertEnumToNumber" xml:space="preserve">
     <value>The UseNumericFormat property must be set to true in order to convert to type {0}.</value>
   </data>

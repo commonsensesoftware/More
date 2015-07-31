@@ -1,6 +1,7 @@
 ﻿namespace More.Windows.Controls
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using global::Windows.UI.Xaml.Navigation;
 
@@ -18,7 +19,7 @@
         {
             get
             {
-                return this.source;
+                return source;
             }
         }
 
@@ -26,14 +27,15 @@
         {
             get
             {
-                return this.source.Cancel;
+                return source.Cancel;
             }
             set
             {
-                this.source.Cancel = value;
+                source.Cancel = value;
             }
         }
 
+        [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Required to implement INavigationStartingEventArgs." )]
         public Uri Uri
         {
             get;

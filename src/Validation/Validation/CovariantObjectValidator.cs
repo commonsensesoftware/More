@@ -17,11 +17,11 @@
 
         public IReadOnlyList<IValidationResult> ValidateObject( object instance )
         {
-            Arg.NotNull( instance, "instance" );
+            Arg.NotNull( instance, nameof( instance ) );
 
             var results = new List<IValidationResult>();
 
-            foreach ( var validator in this.validators )
+            foreach ( var validator in validators )
                 results.AddRange( validator.ValidateObject( instance ) );
 
             return results;
@@ -29,12 +29,12 @@
 
         public IReadOnlyList<IValidationResult> ValidateObject( object instance, IEnumerable<string> propertyNames )
         {
-            Arg.NotNull( instance, "instance" );
-            Arg.NotNull( propertyNames, "propertyNames" );
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( propertyNames, nameof( propertyNames ) );
 
             var results = new List<IValidationResult>();
 
-            foreach ( var validator in this.validators )
+            foreach ( var validator in validators )
                 results.AddRange( validator.ValidateObject( instance, propertyNames ) );
 
             return results;
@@ -42,11 +42,11 @@
 
         public IReadOnlyList<IValidationResult> ValidateProperty( string propertyName, object value )
         {
-            Arg.NotNullOrEmpty( propertyName, "propertyName" );
+            Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
             var results = new List<IValidationResult>();
 
-            foreach ( var validator in this.validators )
+            foreach ( var validator in validators )
                 results.AddRange( validator.ValidateProperty( propertyName, value ) );
 
             return results;

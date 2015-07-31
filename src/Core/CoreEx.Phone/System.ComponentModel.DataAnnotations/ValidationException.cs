@@ -43,7 +43,7 @@
         /// <param name="validatingAttribute">The attribute that caused the current exception.</param>
         /// <param name="value">The value of the object that caused the attribute to trigger the validation error.</param>
         public ValidationException( ValidationResult validationResult, ValidationAttribute validatingAttribute, object value )
-            : this( validationResult.ErrorMessage, validatingAttribute, value )
+            : this( validationResult?.ErrorMessage, validatingAttribute, value )
         {
             this.validationResult = validationResult;
         }
@@ -57,8 +57,8 @@
         public ValidationException( string errorMessage, ValidationAttribute validatingAttribute, object value )
             : base( errorMessage )
         {
-            this.Value = value;
-            this.ValidationAttribute = validatingAttribute;
+            Value = value;
+            ValidationAttribute = validatingAttribute;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@
         {
             get
             {
-                return this.validationResult ?? ( this.validationResult = new ValidationResult( this.Message ) );
+                return validationResult ?? ( validationResult = new ValidationResult( Message ) );
             }
         }
 

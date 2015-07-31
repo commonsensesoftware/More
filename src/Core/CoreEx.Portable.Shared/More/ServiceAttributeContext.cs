@@ -14,7 +14,7 @@
         internal ServiceAttributeContext( string key )
         {
             Contract.Requires( key != null );
-            this.serviceKey = new ServiceKeyAttribute( key );
+            serviceKey = new ServiceKeyAttribute( key );
         }
 
         protected override IEnumerable<object> GetCustomAttributes( MemberInfo member, IEnumerable<object> declaredAttributes )
@@ -27,7 +27,7 @@
                 return declaredAttributes;
 
             var attributes = declaredAttributes.ToList();
-            attributes.Add( this.serviceKey );
+            attributes.Add( serviceKey );
             return attributes.ToArray();
         }
     }

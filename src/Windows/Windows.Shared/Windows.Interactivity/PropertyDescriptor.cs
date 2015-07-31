@@ -20,12 +20,12 @@
         [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Consistent with a property descriptor. Reserved for future use." )]
         public object GetValue( object obj )
         {
-            return this.property.GetValue( obj, this.index );
+            return property.GetValue( obj, index );
         }
 
         public void SetValue( object obj, object value )
         {
-            this.property.SetValue( obj, value, this.index );
+            property.SetValue( obj, value, index );
         }
     }
 }

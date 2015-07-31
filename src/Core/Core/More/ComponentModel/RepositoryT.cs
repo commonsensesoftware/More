@@ -25,9 +25,9 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected Repository( IUnitOfWork<T> unitOfWork )
         {
-            Arg.NotNull( unitOfWork, "unitOfWork" );
+            Arg.NotNull( unitOfWork, nameof( unitOfWork ) );
             this.unitOfWork = unitOfWork;
-            this.unitOfWork.PropertyChanged += this.OnUnitOfWorkPropertyChanged;
+            this.unitOfWork.PropertyChanged += OnUnitOfWorkPropertyChanged;
         }
 
         /// <summary>
@@ -38,8 +38,8 @@
         {
             get
             {
-                Contract.Ensures( this.unitOfWork != null );
-                return this.unitOfWork;
+                Contract.Ensures( unitOfWork != null );
+                return unitOfWork;
             }
         }
 
@@ -48,7 +48,7 @@
             Contract.Requires( e != null );
 
             if ( string.IsNullOrEmpty( e.PropertyName ) || e.PropertyName == "HasPendingChanges" )
-                this.OnPropertyChanged( e );
+                OnPropertyChanged( e );
         }
 
         /// <summary>
@@ -80,7 +80,7 @@
         {
             get
             {
-                return this.UnitOfWork.HasPendingChanges;
+                return UnitOfWork.HasPendingChanges;
             }
         }
 
@@ -90,8 +90,8 @@
         /// <param name="item">The new item to add.</param>
         public virtual void Add( T item )
         {
-            Arg.NotNull( item, "item" );
-            this.UnitOfWork.RegisterNew( item );
+            Arg.NotNull( item, nameof( item ) );
+            UnitOfWork.RegisterNew( item );
         }
 
         /// <summary>
@@ -100,8 +100,8 @@
         /// <param name="item">The item to remove.</param>
         public virtual void Remove( T item )
         {
-            Arg.NotNull( item, "item" );
-            this.UnitOfWork.RegisterRemoved( item );
+            Arg.NotNull( item, nameof( item ) );
+            UnitOfWork.RegisterRemoved( item );
         }
 
         /// <summary>
@@ -110,8 +110,8 @@
         /// <param name="item">The item to update.</param>
         public virtual void Update( T item )
         {
-            Arg.NotNull( item, "item" );
-            this.UnitOfWork.RegisterChanged( item );
+            Arg.NotNull( item, nameof( item ) );
+            UnitOfWork.RegisterChanged( item );
         }
 
         /// <summary>
@@ -119,7 +119,7 @@
         /// </summary>
         public virtual void DiscardChanges()
         {
-            this.UnitOfWork.Rollback();
+            UnitOfWork.Rollback();
         }
 
         /// <summary>
@@ -129,7 +129,7 @@
         /// <returns>A <see cref="Task">task</see> representing the save operation.</returns>
         public virtual Task SaveChangesAsync( CancellationToken cancellationToken )
         {
-            return this.UnitOfWork.CommitAsync( cancellationToken );
+            return UnitOfWork.CommitAsync( cancellationToken );
         }
     }
 }

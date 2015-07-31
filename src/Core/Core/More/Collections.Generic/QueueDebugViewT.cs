@@ -21,7 +21,7 @@
         /// <param name="queue">The <see cref="IQueue{T}"/> instance to debug.</param>
         public QueueDebugView( IQueue<T> queue )
         {
-            Arg.NotNull( queue, "queue" );
+            Arg.NotNull( queue, nameof( queue ) );
             this.queue = queue;
         }
 
@@ -36,8 +36,8 @@
             get
             {
                 Contract.Ensures( Contract.Result<T[]>() != null );
-                Contract.Assume( this.queue != null );
-                return this.queue.ToArray();
+                Contract.Assume( queue != null );
+                return queue.ToArray();
             }
         }
     }

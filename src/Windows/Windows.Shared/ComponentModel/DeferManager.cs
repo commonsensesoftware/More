@@ -16,7 +16,7 @@
         /// </summary>
         ~DeferManager()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         /// <summary>
@@ -26,7 +26,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public DeferManager( IDeferrable source )
         {
-            Contract.Requires<ArgumentNullException>( source != null, "source" );
+            Arg.NotNull( source, nameof( source ) );
 
             this.source = source;
             this.source.BeginDefer();
@@ -49,11 +49,11 @@
         [SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "disposing", Justification = "This is the standard implementation of the Dispose pattern." )]
         protected virtual void Dispose( bool disposing )
         {
-            if ( this.IsDisposed )
+            if ( IsDisposed )
                 return;
 
-            this.IsDisposed = true;
-            this.source.EndDefer();
+            IsDisposed = true;
+            source.EndDefer();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@
         /// </summary>
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
     }

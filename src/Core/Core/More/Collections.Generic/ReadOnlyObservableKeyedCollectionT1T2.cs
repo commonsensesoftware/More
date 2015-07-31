@@ -29,18 +29,18 @@
         /// <param name="collection">The <see cref="KeyedCollection{TKey,TItem}">collection</see> to make read-only.</param>
         public ReadOnlyObservableKeyedCollection( KeyedCollection<TKey, TItem> collection )
         {
-            Arg.NotNull( collection, "collection" );
+            Arg.NotNull( collection, nameof( collection ) );
 
-            this.items = collection;
+            items = collection;
 
             var notifyProperty = collection as INotifyPropertyChanged;
             var notifyCollection = collection as INotifyCollectionChanged;
 
             if ( notifyProperty != null )
-                notifyProperty.PropertyChanged += ( s, e ) => this.OnPropertyChanged( e );
+                notifyProperty.PropertyChanged += ( s, e ) => OnPropertyChanged( e );
 
             if ( notifyCollection != null )
-                notifyCollection.CollectionChanged += ( s, e ) => this.OnCollectionChanged( e );
+                notifyCollection.CollectionChanged += ( s, e ) => OnCollectionChanged( e );
         }
 
         /// <summary>
@@ -51,8 +51,8 @@
         {
             get
             {
-                Contract.Ensures( this.items != null ); 
-                return this.items;
+                Contract.Ensures( items != null ); 
+                return items;
             }
         }
 
@@ -65,7 +65,7 @@
         {
             get
             {
-                return this.Items[index];
+                return Items[index];
             }
         }
 
@@ -78,7 +78,7 @@
         {
             get
             {
-                return this.Items[key];
+                return Items[key];
             }
         }
 
@@ -94,7 +94,7 @@
         /// <returns>True if the collection contains an item with the specified key; otherwise, false.</returns>
         public bool Contains( TKey key )
         {
-            return this.Items.Contains( key );
+            return Items.Contains( key );
         }
 
         /// <summary>
@@ -103,7 +103,7 @@
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName )
         {
-            this.OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
         }
 
         /// <summary>
@@ -112,12 +112,9 @@
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.PropertyChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            PropertyChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -127,12 +124,9 @@
         /// <exception cref="ArgumentNullException"><paramref name="e"/> is <see langkeyword="null">null</see>.</exception>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )
         {
-            Arg.NotNull( e, "e" );
+            Arg.NotNull( e, nameof( e ) );
 
-            var handler = this.CollectionChanged;
-
-            if ( handler != null )
-                handler( this, e );
+            CollectionChanged?.Invoke( this, e );
         }
 
         /// <summary>
@@ -142,7 +136,7 @@
         /// <returns>The zero-based item in the collection or -1 if no match is found.</returns>
         public int IndexOf( TItem item )
         {
-            return this.Items.IndexOf( item );
+            return Items.IndexOf( item );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "The collection is read-only." )]
@@ -189,7 +183,7 @@
         /// <returns>True if the collection contains the specified item; otherwise, false.</returns>
         public bool Contains( TItem item )
         {
-            return this.Items.Contains( item );
+            return Items.Contains( item );
         }
 
         /// <summary>
@@ -200,7 +194,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by the base implementation." )]
         public void CopyTo( TItem[] array, int arrayIndex )
         {
-            this.Items.CopyTo( array, arrayIndex );
+            Items.CopyTo( array, arrayIndex );
         }
 
         /// <summary>
@@ -211,7 +205,7 @@
         {
             get
             {
-                return this.Items.Count;
+                return Items.Count;
             }
         }
 
@@ -236,12 +230,12 @@
         /// <returns>An <see cref="IEnumerable{T}"/> object.</returns>
         public virtual IEnumerator<TItem> GetEnumerator()
         {
-            return this.Items.GetEnumerator();
+            return Items.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is for legacy support." )]
@@ -259,13 +253,13 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is for legacy support." )]
         bool IList.Contains( object value )
         {
-            return IsCompatibleObject( value ) && this.Contains( (TItem) value );
+            return IsCompatibleObject( value ) && Contains( (TItem) value );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is for legacy support." )]
         int IList.IndexOf( object value )
         {
-            return IsCompatibleObject( value ) ? this.IndexOf( (TItem) value ) : -1;
+            return IsCompatibleObject( value ) ? IndexOf( (TItem) value ) : -1;
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is for legacy support." )]
@@ -279,7 +273,7 @@
         {
             get
             {
-                return ( (IList) this.Items ).IsFixedSize;
+                return ( (IList) Items ).IsFixedSize;
             }
         }
 
@@ -320,7 +314,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by the base implementation." )]
         void ICollection.CopyTo( Array array, int index )
         {
-            ( (ICollection) this.Items ).CopyTo( array, index );
+            ( (ICollection) Items ).CopyTo( array, index );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is for legacy support." )]
@@ -328,7 +322,7 @@
         {
             get
             {
-                return ( (ICollection) this.Items ).IsSynchronized;
+                return ( (ICollection) Items ).IsSynchronized;
             }
         }
 
@@ -337,7 +331,7 @@
         {
             get
             {
-                return ( (ICollection) this.Items ).SyncRoot;
+                return ( (ICollection) Items ).SyncRoot;
             }
         }
 

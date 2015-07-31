@@ -1,6 +1,6 @@
 ﻿namespace More.Web.Http.Services
 {
-    using More.Web.Http.Tracing;
+    using Tracing;
     using System.Net.Http;
     using System.Web.Http.Tracing;
 
@@ -19,6 +19,7 @@
         /// <returns>An new <see cref="ITraceWriter">trace writer</see> that decorates the original <paramref name="instance"/>.</returns>
         public ITraceWriter CreatePerRequestDecorator( HttpRequestMessage request, ITraceWriter instance )
         {
+            Arg.NotNull( instance, nameof( instance ) );
             return new PerRequestTraceWriter( instance, request );
         }
     }

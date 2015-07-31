@@ -69,8 +69,8 @@
         [ReflectionPermission( SecurityAction.PermitOnly, Flags = ReflectionPermissionFlag.NoFlags )]
         public CompositeValidatorAttribute( Type factoryType, string methodName )
         {
-            Arg.NotNull( factoryType, "factoryType" );
-            Arg.NotNullOrEmpty( methodName, "methodName" );
+            Arg.NotNull( factoryType, nameof( factoryType ) );
+            Arg.NotNullOrEmpty( methodName, nameof( methodName ) );
             
             var flags = BindingFlags.IgnoreCase | BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy;
             var method = factoryType.GetMethod( methodName, flags );
@@ -81,7 +81,7 @@
             if ( !method.IsStatic )
                 throw new ArgumentException( SR.ExpectedStaticMethod.FormatDefault( methodName, factoryType.FullName ), "methodName" );
 
-            this.factory = (Func<IEnumerable<ConfigurationValidatorBase>>) Delegate.CreateDelegate( typeof( Func<IEnumerable<ConfigurationValidatorBase>> ), method );
+            factory = (Func<IEnumerable<ConfigurationValidatorBase>>) Delegate.CreateDelegate( typeof( Func<IEnumerable<ConfigurationValidatorBase>> ), method );
         }
 
         /// <summary>
@@ -94,7 +94,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Type>() != null );
-                return this.factory.Method.DeclaringType;
+                return factory.Method.DeclaringType;
             }
         }
 
@@ -107,7 +107,7 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return this.factory.Method.Name;
+                return factory.Method.Name;
             }
         }
 
@@ -121,7 +121,7 @@
         {
             get
             {
-                var validators = this.factory();
+                var validators = factory();
                 var validator = new CompositeValidator( validators );
                 return validator;
             }

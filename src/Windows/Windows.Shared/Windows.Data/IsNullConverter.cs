@@ -51,7 +51,7 @@
         /// </summary>
         public IsNullConverter()
         {
-            this.TreatEmptyStringAsNull = true;
+            TreatEmptyStringAsNull = true;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@
         private bool ShouldNegate( object parameter, CultureInfo culture )
         {
             if ( parameter == null )
-                return this.Negate;
+                return Negate;
             else if ( parameter is bool )
                 return (bool) parameter;
 
@@ -112,12 +112,12 @@
 #if NETFX_CORE
             var culture = Util.GetCultureFromLanguage( language );
 #endif
-            var negate = this.ShouldNegate( parameter, culture );
+            var negate = ShouldNegate( parameter, culture );
 
             if ( value == null )
                 return negate ? false : true;
 
-            if ( ( value is string ) && value.ToString().Length == 0 && this.TreatEmptyStringAsNull )
+            if ( ( value is string ) && value.ToString().Length == 0 && TreatEmptyStringAsNull )
                 return negate ? false : true;
             
             return negate ? true : false;

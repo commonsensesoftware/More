@@ -83,10 +83,10 @@
         public TextInputInteraction( string title, string prompt, string defaultResponse )
             : base( title, prompt )
         {
-            Arg.NotNull( prompt, "prompt" );
-            Arg.NotNull( defaultResponse, "defaultResponse" );
+            Arg.NotNull( prompt, nameof( prompt ) );
+            Arg.NotNull( defaultResponse, nameof( defaultResponse ) );
 
-            this.Content = prompt;
+            Content = prompt;
             this.defaultResponse = defaultResponse;
         }
 
@@ -98,13 +98,13 @@
         {
             get
             {
-                Contract.Ensures( this.defaultResponse != null );
-                return this.defaultResponse;
+                Contract.Ensures( defaultResponse != null );
+                return defaultResponse;
             }
             set
             {
-                Arg.NotNull( value, "value" );
-                this.SetProperty( ref this.defaultResponse, value );
+                Arg.NotNull( value, nameof( value ) );
+                SetProperty( ref defaultResponse, value );
             }
         }
 
@@ -116,11 +116,11 @@
         {
             get
             {
-                return this.response;
+                return response;
             }
             set
             {
-                this.SetProperty( ref this.response, value );
+                SetProperty( ref response, value );
             }
         }
     }

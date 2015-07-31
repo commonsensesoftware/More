@@ -21,8 +21,8 @@
         /// <param name="innerStack">The <see cref="Stack{T}">stack</see> to adapt to.</param>
         public StackAdapter( Stack<T> innerStack )
         {
-            Arg.NotNull( innerStack, "innerStack" );
-            this.stack = innerStack;
+            Arg.NotNull( innerStack, nameof( innerStack ) );
+            stack = innerStack;
         }
 
         /// <summary>
@@ -35,11 +35,11 @@
         /// </remarks>
         public T Peek()
         {
-            if ( this.Count <= 0 )
+            if ( Count <= 0 )
                 throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
 
             Contract.EndContractBlock();
-            return this.stack.Peek();
+            return stack.Peek();
         }
 
         /// <summary>
@@ -52,11 +52,11 @@
         /// </remarks>
         public T Pop()
         {
-            if ( this.Count <= 0 )
+            if ( Count <= 0 )
                 throw new InvalidOperationException( ExceptionMessage.StackIsEmpty );
 
             Contract.EndContractBlock();
-            return this.stack.Pop();
+            return stack.Pop();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@
         /// </remarks>
         public void Push( T item )
         {
-            this.stack.Push( item );
+            stack.Push( item );
         }
 
         /// <summary>
@@ -80,7 +80,7 @@
         /// </summary>
         public void Clear()
         {
-            this.stack.Clear();
+            stack.Clear();
         }
 
         /// <summary>
@@ -91,7 +91,7 @@
         /// otherwise, <see langkeyword="false">false</see>.</returns>
         public bool Contains( T item )
         {
-            return this.stack.Contains( item );
+            return stack.Contains( item );
         }
 
         /// <summary>
@@ -108,10 +108,10 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public void CopyTo( T[] array, int arrayIndex )
         {
-            Arg.NotNull( array, "array" );
-            Arg.InRange( arrayIndex, 0, array.Length + this.Count, "arrayIndex" );
+            Arg.NotNull( array, nameof( array ) );
+            Arg.InRange( arrayIndex, 0, array.Length + Count, "arrayIndex" );
 
-            this.stack.CopyTo( array, arrayIndex );
+            stack.CopyTo( array, arrayIndex );
         }
 
         /// <summary>
@@ -120,18 +120,18 @@
         /// <returns>An <see cref="IEnumerator{T}">iterator</see> for the <see cref="StackAdapter{T}">stack</see>.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return this.stack.GetEnumerator();
+            return stack.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Handled by the adapted object." )]
         void ICollection.CopyTo( Array array, int index )
         {
-            ( (ICollection) this.stack ).CopyTo( array, index );
+            ( (ICollection) stack ).CopyTo( array, index );
         }
 
         /// <summary>
@@ -142,7 +142,7 @@
         {
             get
             {
-                return this.stack.Count;
+                return stack.Count;
             }
         }
 
@@ -150,7 +150,7 @@
         {
             get
             {
-                return ( (ICollection) this.stack ).IsSynchronized;
+                return ( (ICollection) stack ).IsSynchronized;
             }
         }
 
@@ -158,7 +158,7 @@
         {
             get
             {
-                return ( (ICollection) this.stack ).SyncRoot;
+                return ( (ICollection) stack ).SyncRoot;
             }
         }
     }

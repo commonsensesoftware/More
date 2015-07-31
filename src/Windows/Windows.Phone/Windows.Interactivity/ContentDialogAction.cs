@@ -3,6 +3,7 @@
     using More.Composition;
     using More.Windows.Input;
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
     using System.Windows.Input;
@@ -34,56 +35,56 @@
             {
                 Contract.Requires( dialog != null );
                 this.dialog = dialog;
-                this.primary = this.WirePrimaryCommand( primary );
-                this.secondary = this.WirePrimaryCommand( secondary );
+                this.primary = WirePrimaryCommand( primary );
+                this.secondary = WireSecondaryCommand( secondary );
             }
 
             private INamedCommand WirePrimaryCommand( INamedCommand command )
             {
-                if ( !( this.dialog.IsPrimaryButtonEnabled = ( command != null ) ) )
+                if ( !( dialog.IsPrimaryButtonEnabled = ( command != null ) ) )
                     return command;
 
-                this.dialog.PrimaryButtonText = command.Name;
-                this.dialog.PrimaryButtonClick += this.OnPrimaryClick;
+                dialog.PrimaryButtonText = command.Name;
+                dialog.PrimaryButtonClick += OnPrimaryClick;
 
-                command.Executed += this.OnCommandExecuted;
-                command.CanExecuteChanged += this.OnPrimaryCanExecuteChanged;
+                command.Executed += OnCommandExecuted;
+                command.CanExecuteChanged += OnPrimaryCanExecuteChanged;
 
                 return command;
             }
 
             private INamedCommand WireSecondaryCommand( INamedCommand command )
             {
-                if ( !( this.dialog.IsSecondaryButtonEnabled = ( command != null ) ) )
+                if ( !( dialog.IsSecondaryButtonEnabled = ( command != null ) ) )
                     return command;
 
-                this.dialog.SecondaryButtonText = command.Name;
-                this.dialog.SecondaryButtonClick += this.OnPrimaryClick;
+                dialog.SecondaryButtonText = command.Name;
+                dialog.SecondaryButtonClick += OnPrimaryClick;
 
-                command.Executed += this.OnCommandExecuted;
-                command.CanExecuteChanged += this.OnSecondaryCanExecuteChanged;
+                command.Executed += OnCommandExecuted;
+                command.CanExecuteChanged += OnSecondaryCanExecuteChanged;
 
                 return command;
             }
 
             private void UnwireCommands()
             {
-                if ( this.dialog != null )
+                if ( dialog != null )
                 {
-                    this.dialog.PrimaryButtonClick -= this.OnPrimaryClick;
-                    this.dialog.SecondaryButtonClick -= this.OnSecondaryClick;
+                    dialog.PrimaryButtonClick -= OnPrimaryClick;
+                    dialog.SecondaryButtonClick -= OnSecondaryClick;
                 }
 
-                if ( this.primary != null )
+                if ( primary != null )
                 {
-                    this.primary.Executed -= this.OnCommandExecuted;
-                    this.primary.CanExecuteChanged -= this.OnPrimaryCanExecuteChanged;
+                    primary.Executed -= OnCommandExecuted;
+                    primary.CanExecuteChanged -= OnPrimaryCanExecuteChanged;
                 }
 
-                if ( this.secondary != null )
+                if ( secondary != null )
                 {
-                    this.secondary.Executed -= this.OnCommandExecuted;
-                    this.secondary.CanExecuteChanged -= this.OnSecondaryCanExecuteChanged;
+                    secondary.Executed -= OnCommandExecuted;
+                    secondary.CanExecuteChanged -= OnSecondaryCanExecuteChanged;
                 }
             }
 
@@ -91,74 +92,74 @@
             {
                 Contract.Requires( e != null );
 
-                if ( this.primary == null )
+                if ( primary == null )
                     return;
 
-                var parameter = this.dialog.PrimaryButtonCommandParameter;
-                this.deferral = e.GetDeferral();
+                var parameter = dialog.PrimaryButtonCommandParameter;
+                deferral = e.GetDeferral();
 
-                if ( this.secondary != null )
-                    this.secondary.RaiseCanExecuteChanged();
+                if ( secondary != null )
+                    secondary.RaiseCanExecuteChanged();
 
-                this.primary.RaiseCanExecuteChanged();
+                primary.RaiseCanExecuteChanged();
 
-                if ( this.primary.CanExecute( parameter ) )
-                    this.primary.Execute( parameter );
+                if ( primary.CanExecute( parameter ) )
+                    primary.Execute( parameter );
             }
 
             private void OnPrimaryCanExecuteChanged( object sender, EventArgs e )
             {
-                var parameter = this.dialog.PrimaryButtonCommandParameter;
-                var enabled = this.deferral == null && this.primary != null && this.primary.CanExecute( parameter );
-                this.dialog.IsPrimaryButtonEnabled = enabled;
+                var parameter = dialog.PrimaryButtonCommandParameter;
+                var enabled = deferral == null && primary != null && primary.CanExecute( parameter );
+                dialog.IsPrimaryButtonEnabled = enabled;
             }
 
             private void OnSecondaryClick( object sender, ContentDialogButtonClickEventArgs e )
             {
                 Contract.Requires( e != null );
 
-                if ( this.secondary == null )
+                if ( secondary == null )
                     return;
 
-                var parameter = this.dialog.SecondaryButtonCommandParameter;
+                var parameter = dialog.SecondaryButtonCommandParameter;
 
-                this.deferral = e.GetDeferral();
+                deferral = e.GetDeferral();
 
-                if ( this.primary != null )
-                    this.primary.RaiseCanExecuteChanged();
+                if ( primary != null )
+                    primary.RaiseCanExecuteChanged();
 
-                this.secondary.RaiseCanExecuteChanged();
+                secondary.RaiseCanExecuteChanged();
 
-                if ( this.secondary.CanExecute( parameter ) )
-                    this.secondary.Execute( parameter );
+                if ( secondary.CanExecute( parameter ) )
+                    secondary.Execute( parameter );
             }
 
             private void OnSecondaryCanExecuteChanged( object sender, EventArgs e )
             {
-                var paramter = this.dialog.SecondaryButtonCommandParameter;
-                var enabled = this.deferral == null && this.secondary != null && this.secondary.CanExecute( paramter );
-                this.dialog.IsSecondaryButtonEnabled = enabled;
+                var paramter = dialog.SecondaryButtonCommandParameter;
+                var enabled = deferral == null && secondary != null && secondary.CanExecute( paramter );
+                dialog.IsSecondaryButtonEnabled = enabled;
             }
 
             private void OnCommandExecuted( object sender, EventArgs e )
             {
-                this.deferral.Complete();
-                this.UnwireCommands();
-                this.dialog.Hide();
+                deferral.Complete();
+                UnwireCommands();
+                dialog.Hide();
             }
 
             public void Dispose()
             {
-                if ( this.deferral != null )
+                if ( deferral != null )
                 {
-                    this.deferral.Complete();
-                    this.deferral = null;
+                    deferral.Complete();
+                    deferral = null;
                 }
 
-                this.UnwireCommands();
+                UnwireCommands();
 
-                if ( this.dialog != null )
-                    this.dialog.Hide();
+                if ( dialog != null )
+                    dialog.Hide();
 
                 GC.SuppressFinalize( this );
             }
@@ -168,36 +169,41 @@
         /// Gets the dependency property of the view name.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ViewNameProperty =
-            DependencyProperty.Register( "ViewName", typeof( string ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ViewName ), typeof( string ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property of the view <see cref="Type">type</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ViewTypeProperty =
-            DependencyProperty.Register( "ViewType", typeof( Type ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ViewType ), typeof( Type ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property for the view <see cref="Style">style</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty StyleProperty =
-            DependencyProperty.Register( "Style", typeof( Style ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( Style ), typeof( Style ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property for the view <see cref="DataTemplate">content template</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty ContentTemplateProperty =
-            DependencyProperty.Register( "ContentTemplate", typeof( DataTemplate ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( ContentTemplate ), typeof( DataTemplate ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets the dependency property for the view <see cref="DataTemplate">title template</see>.
         /// </summary>
         /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
         public static readonly DependencyProperty TitleTemplateProperty =
-            DependencyProperty.Register( "TitleTemplate", typeof( DataTemplate ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
+            DependencyProperty.Register( nameof( TitleTemplate ), typeof( DataTemplate ), typeof( ContentDialogAction ), new PropertyMetadata( (object) null ) );
 
         /// <summary>
         /// Gets or sets the name of the view the action shows.
@@ -207,11 +213,11 @@
         {
             get
             {
-                return (string) this.GetValue( ViewNameProperty );
+                return (string) GetValue( ViewNameProperty );
             }
             set
             {
-                this.SetValue( ViewNameProperty, value );
+                SetValue( ViewNameProperty, value );
             }
         }
 
@@ -223,11 +229,11 @@
         {
             get
             {
-                return (Type) this.GetValue( ViewTypeProperty );
+                return (Type) GetValue( ViewTypeProperty );
             }
             set
             {
-                this.SetValue( ViewTypeProperty, value );
+                SetValue( ViewTypeProperty, value );
             }
         }
 
@@ -240,11 +246,11 @@
         {
             get
             {
-                return (Style) this.GetValue( StyleProperty );
+                return (Style) GetValue( StyleProperty );
             }
             set
             {
-                this.SetValue( StyleProperty, value );
+                SetValue( StyleProperty, value );
             }
         }
 
@@ -257,11 +263,11 @@
         {
             get
             {
-                return (DataTemplate) this.GetValue( ContentTemplateProperty );
+                return (DataTemplate) GetValue( ContentTemplateProperty );
             }
             set
             {
-                this.SetValue( ContentTemplateProperty, value );
+                SetValue( ContentTemplateProperty, value );
             }
         }
 
@@ -274,11 +280,11 @@
         {
             get
             {
-                return (DataTemplate) this.GetValue( TitleTemplateProperty );
+                return (DataTemplate) GetValue( TitleTemplateProperty );
             }
             set
             {
-                this.SetValue( TitleTemplateProperty, value );
+                SetValue( TitleTemplateProperty, value );
             }
         }
 
@@ -311,7 +317,7 @@
 
             ContentDialog dialog = null;
 
-            if ( this.ViewType == null )
+            if ( ViewType == null )
             {
                 dialog = new ContentDialog();
             }
@@ -321,10 +327,10 @@
                 object view = null;
 
                 // if the view is resolved from the service provider, it is assumed to be composed
-                if ( !services.TryGetService( this.ViewType, out view, this.ViewName ) )
+                if ( !services.TryGetService( ViewType, out view, ViewName ) )
                 {
                     // use fallback method
-                    view = Activator.CreateInstance( this.ViewType );
+                    view = Activator.CreateInstance( ViewType );
 
                     ICompositionService composer;
 
@@ -348,14 +354,14 @@
             Contract.Requires( dialog != null );
             Contract.Requires( interaction != null );
 
-            if ( this.ContentTemplate != null )
-                dialog.ContentTemplate = this.ContentTemplate;
+            if ( ContentTemplate != null )
+                dialog.ContentTemplate = ContentTemplate;
 
-            if ( this.TitleTemplate != null )
-                dialog.TitleTemplate = this.TitleTemplate;
+            if ( TitleTemplate != null )
+                dialog.TitleTemplate = TitleTemplate;
 
-            if ( this.Style != null )
-                dialog.Style = this.Style;
+            if ( Style != null )
+                dialog.Style = Style;
 
             // use interaction if there is no content
             if ( dialog.Content == null )
@@ -380,11 +386,11 @@
             if ( interaction == null )
                 return;
 
-            var dialog = this.CreateDialog();
-            this.PrepareDialog( dialog, interaction );
+            var dialog = CreateDialog();
+            PrepareDialog( dialog, interaction );
 
             // if custom buttons are indicated, just show the dialog
-            if ( this.HasCustomButtons )
+            if ( HasCustomButtons )
             {
                 await dialog.ShowAsync();
                 return;

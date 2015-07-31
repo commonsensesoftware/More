@@ -40,13 +40,13 @@
         /// </summary>
         public ViewItemTemplateWizardViewModel()
         {
-            this.interactionRequests.Add( this.close );
-            this.interactionRequests.Add( this.browse );
-            this.dialogCommands.Add( new NamedCommand<object>( "0", SR.BackCaption, this.OnGoBack, this.OnCanGoBack ) );
-            this.dialogCommands.Add( new NamedCommand<object>( "1", SR.NextCaption, this.OnGoForward, this.OnCanGoForward ) );
-            this.dialogCommands.Add( new NamedCommand<object>( "2", SR.CancelCaption, this.OnCancel ) );
-            this.commands.Add( new NamedCommand<object>( "BrowseForViewModel", this.OnBrowseForViewModel, this.OnCanBrowseForViewModel ) );
-            this.InitializeValidationErrors();
+            interactionRequests.Add( close );
+            interactionRequests.Add( browse );
+            dialogCommands.Add( new NamedCommand<object>( "0", SR.BackCaption, OnGoBack, OnCanGoBack ) );
+            dialogCommands.Add( new NamedCommand<object>( "1", SR.NextCaption, OnGoForward, OnCanGoForward ) );
+            dialogCommands.Add( new NamedCommand<object>( "2", SR.CancelCaption, OnCancel ) );
+            commands.Add( new NamedCommand<object>( "BrowseForViewModel", OnBrowseForViewModel, OnCanBrowseForViewModel ) );
+            InitializeValidationErrors();
         }
 
         /// <summary>
@@ -58,8 +58,8 @@
         {
             get
             {
-                Contract.Ensures( this.interactionRequests != null );
-                return this.interactionRequests;
+                Contract.Ensures( interactionRequests != null );
+                return interactionRequests;
             }
         }
 
@@ -73,8 +73,8 @@
         {
             get
             {
-                Contract.Ensures( this.commands != null );
-                return this.commands;
+                Contract.Ensures( commands != null );
+                return commands;
             }
         }
 
@@ -88,8 +88,8 @@
         {
             get
             {
-                Contract.Ensures( this.dialogCommands != null );
-                return this.dialogCommands;
+                Contract.Ensures( dialogCommands != null );
+                return dialogCommands;
             }
         }
 
@@ -101,12 +101,12 @@
         {
             get
             {
-                Contract.Ensures( this.title != null );
-                return this.title ?? ( this.title = string.Empty );
+                Contract.Ensures( title != null );
+                return title ?? ( title = string.Empty );
             }
             set
             {
-                this.SetProperty( ref this.title, value );
+                SetProperty( ref title, value );
             }
         }
 
@@ -118,15 +118,15 @@
         {
             get
             {
-                Contract.Ensures( this.currentStep >= 0 );
-                return this.currentStep;
+                Contract.Ensures( currentStep >= 0 );
+                return currentStep;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0, nameof( value ) );
 
-                if ( this.SetProperty( ref this.currentStep, value ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref currentStep, value ) )
+                    UpdateCommands();
             }
         }
 
@@ -138,11 +138,11 @@
         {
             get
             {
-                return this.showTips;
+                return showTips;
             }
             set
             {
-                this.SetProperty( ref this.showTips, value );
+                SetProperty( ref showTips, value );
             }
         }
 
@@ -154,7 +154,7 @@
         {
             get
             {
-                return this.ViewInterfaceOption > 0;
+                return ViewInterfaceOption > 0;
             }
         }
 
@@ -166,11 +166,11 @@
         {
             get
             {
-                return this.localAssemblyName;
+                return localAssemblyName;
             }
             set
             {
-                this.SetProperty( ref this.localAssemblyName, value );
+                SetProperty( ref localAssemblyName, value );
             }
         }
 
@@ -206,21 +206,21 @@
         {
             get
             {
-                Contract.Ensures( this.interfaceOption >= 0 );
-                return this.interfaceOption;
+                Contract.Ensures( interfaceOption >= 0 );
+                return interfaceOption;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0, nameof( value ) );
 
-                if ( !this.SetProperty( ref this.interfaceOption, value ) )
+                if ( !SetProperty( ref interfaceOption, value ) )
                     return;
 
                 // if an interface is implemented, then ensure a view model is used
-                if ( value > 0 && this.ViewModelOption == 0 )
-                    this.ViewModelOption = 1;
+                if ( value > 0 && ViewModelOption == 0 )
+                    ViewModelOption = 1;
 
-                this.OnPropertyChanged( "RequiresViewModel" );
+                OnPropertyChanged( "RequiresViewModel" );
             }
         }
 
@@ -232,8 +232,8 @@
         {
             get
             {
-                Contract.Ensures( this.viewOptions != null );
-                return this.viewOptions;
+                Contract.Ensures( viewOptions != null );
+                return viewOptions;
             }
         }
 
@@ -265,19 +265,19 @@
         {
             get
             {
-                Contract.Ensures( this.viewModelOption >= 0 );
-                return this.viewModelOption;
+                Contract.Ensures( viewModelOption >= 0 );
+                return viewModelOption;
             }
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>( value >= 0, "value" );
+                Arg.GreaterThanOrEqualTo( value, 0, nameof( value ) );
 
-                if ( !this.SetProperty( ref this.viewModelOption, value ) )
+                if ( !SetProperty( ref viewModelOption, value ) )
                     return;
 
-                this.ViewModelName = null;
-                this.ViewModelType = null;
-                this.UpdateCommands();
+                ViewModelName = null;
+                ViewModelType = null;
+                UpdateCommands();
             }
         }
 
@@ -293,12 +293,12 @@
         {
             get
             {
-                return this.viewModelName;
+                return viewModelName;
             }
             set
             {
-                if ( this.SetProperty( ref this.viewModelName, value, NullStringEqualityComparer.Default ) )
-                    this.UpdateCommands();
+                if ( SetProperty( ref viewModelName, value, NullStringEqualityComparer.Default ) )
+                    UpdateCommands();
             }
         }
 
@@ -312,15 +312,15 @@
         {
             get
             {
-                return this.viewModelType;
+                return viewModelType;
             }
             set
             {
-                if ( !this.SetProperty( ref this.viewModelType, value ) )
+                if ( !SetProperty( ref viewModelType, value ) )
                     return;
 
-                this.ViewModelName = value == null ? null : value.Name;
-                this.UpdateCommands();
+                ViewModelName = value == null ? null : value.Name;
+                UpdateCommands();
             }
         }
 
@@ -332,11 +332,11 @@
         {
             get
             {
-                return this.topLevel;
+                return topLevel;
             }
             set
             {
-                this.SetProperty( ref this.topLevel, value );
+                SetProperty( ref topLevel, value );
             }
         }
 
@@ -348,11 +348,11 @@
         {
             get
             {
-                return this.topLevelSupported;
+                return topLevelSupported;
             }
             set
             {
-                this.SetProperty( ref this.topLevelSupported, value );
+                SetProperty( ref topLevelSupported, value );
             }
         }
 
@@ -364,8 +364,8 @@
         {
             get
             {
-                Contract.Ensures( this.interactions != null );
-                return this.interactions;
+                Contract.Ensures( interactions != null );
+                return interactions;
             }
         }
 
@@ -378,8 +378,8 @@
         {
             get
             {
-                Contract.Ensures( this.appContracts != null );
-                return this.appContracts;
+                Contract.Ensures( appContracts != null );
+                return appContracts;
             }
         }
 
@@ -392,7 +392,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static ValidationResult ValidateViewModelName( string value, ValidationContext context )
         {
-            Contract.Requires<ArgumentNullException>( context != null, "context" );
+            Arg.NotNull( context, nameof( context ) );
 
             var model = context.ObjectInstance as ViewItemTemplateWizardViewModel;
 
@@ -430,27 +430,27 @@
 
         private void UpdateCommands()
         {
-            this.Commands.RaiseCanExecuteChanged();
-            this.DialogCommands.RaiseCanExecuteChanged();
+            Commands.RaiseCanExecuteChanged();
+            DialogCommands.RaiseCanExecuteChanged();
         }
 
         private bool OnCanGoBack( object parameter )
         {
-            return this.CurrentStep > 0;
+            return CurrentStep > 0;
         }
 
         private void OnGoBack( object parameter )
         {
-            if ( !this.OnCanGoBack( parameter ) )
+            if ( !OnCanGoBack( parameter ) )
                 return;
 
-            --this.CurrentStep;
-            this.dialogCommands[1].Name = SR.NextCaption;
+            --CurrentStep;
+            dialogCommands[1].Name = SR.NextCaption;
         }
 
         private bool OnCanGoForward( object parameter )
         {
-            switch ( this.CurrentStep )
+            switch ( CurrentStep )
             {
                 case 0: // initial
                 case 2: // interaction options
@@ -461,17 +461,17 @@
                     }
                 case 1: // view model options
                     {
-                        switch ( this.ViewModelOption )
+                        switch ( ViewModelOption )
                         {
                             case 0:
                                 // no validation when there's no view model
                                 return true;
                             case 1:
                                 // must have a valid view model name
-                                return this.IsPropertyValid( this.ViewModelName, "ViewModelName" );
+                                return IsPropertyValid( ViewModelName, "ViewModelName" );
                             case 2:
                                 // must have a selected view model
-                                return this.viewModelType != null;
+                                return viewModelType != null;
                             default:
                                 // unknown option
                                 return false;
@@ -487,58 +487,58 @@
 
         private void OnGoForward( object parameter )
         {
-            if ( !this.OnCanGoForward( parameter ) )
+            if ( !OnCanGoForward( parameter ) )
                 return;
 
-            switch ( this.CurrentStep )
+            switch ( CurrentStep )
             {
                 case 0: // initial
                     {
-                        this.CurrentStep = 1;
+                        CurrentStep = 1;
 
                         // the next step will be the last step
-                        if ( !this.InteractionOptions.Any() && !this.ApplicationContractOptions.Any() )
-                            this.dialogCommands[1].Name = SR.FinishCaption;
+                        if ( !InteractionOptions.Any() && !ApplicationContractOptions.Any() )
+                            dialogCommands[1].Name = SR.FinishCaption;
 
                         break;
                     }
                 case 1: // view model options
                     {
-                        if ( this.InteractionOptions.Any() )
+                        if ( InteractionOptions.Any() )
                         {
-                            this.CurrentStep = 2;
+                            CurrentStep = 2;
 
                             // the next step will be the last step
-                            if ( !this.ApplicationContractOptions.Any() )
-                                this.dialogCommands[1].Name = SR.FinishCaption;
+                            if ( !ApplicationContractOptions.Any() )
+                                dialogCommands[1].Name = SR.FinishCaption;
                         }
-                        else if ( this.ApplicationContractOptions.Any() )
+                        else if ( ApplicationContractOptions.Any() )
                         {
-                            this.CurrentStep = 3;
-                            this.dialogCommands[1].Name = SR.FinishCaption;
+                            CurrentStep = 3;
+                            dialogCommands[1].Name = SR.FinishCaption;
                         }
                         else
                         {
-                            this.close.Request( new WindowCloseInteraction() );
+                            close.Request( new WindowCloseInteraction() );
                         }
                         break;
                     }
                 case 2: // interaction options
                     {
-                        if ( this.ApplicationContractOptions.Any() )
+                        if ( ApplicationContractOptions.Any() )
                         {
-                            this.CurrentStep = 3;
-                            this.dialogCommands[1].Name = SR.FinishCaption;
+                            CurrentStep = 3;
+                            dialogCommands[1].Name = SR.FinishCaption;
                         }
                         else
                         {
-                            this.close.Request( new WindowCloseInteraction() );
+                            close.Request( new WindowCloseInteraction() );
                         }
                         break;
                     }
                 case 3: // app contract options
                     {
-                        this.close.Request( new WindowCloseInteraction() );
+                        close.Request( new WindowCloseInteraction() );
                         break;
                     }
             }
@@ -546,12 +546,12 @@
 
         private bool OnCanBrowseForViewModel( object parameter )
         {
-            return this.CurrentStep == 1 && this.ViewModelOption == 2;
+            return CurrentStep == 1 && ViewModelOption == 2;
         }
 
         private void OnBrowseForViewModel( object parameter )
         {
-            if ( !this.OnCanBrowseForViewModel( parameter ) )
+            if ( !OnCanBrowseForViewModel( parameter ) )
                 return;
 
             var interaction = new Interaction()
@@ -562,17 +562,17 @@
                 Commands =
                 {
                     new NamedCommand<object>( SR.OKCaption, DefaultAction.None ),
-                    new NamedCommand<object>( SR.CancelCaption, p => this.ViewModelType = null )
+                    new NamedCommand<object>( SR.CancelCaption, p => ViewModelType = null )
                 }
             };
 
             // request an ui interaction to browse for a type
-            this.browse.Request( interaction );
+            browse.Request( interaction );
         }
 
         private void OnCancel( object parameter )
         {
-            this.close.Request( new WindowCloseInteraction( true ) );
+            close.Request( new WindowCloseInteraction( true ) );
         }
     }
 }

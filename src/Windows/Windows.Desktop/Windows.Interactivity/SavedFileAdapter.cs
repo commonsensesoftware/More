@@ -20,14 +20,14 @@
 
             this.path = path;
             this.open = open;
-            this.fileInfo = new Lazy<FileInfo>( () => new FileInfo( path ) );
+            fileInfo = new Lazy<FileInfo>( () => new FileInfo( path ) );
         }
 
         public FileInfo NativeStorageItem
         {
             get
             {
-                return this.fileInfo.Value;
+                return fileInfo.Value;
             }
         }
 
@@ -44,59 +44,69 @@
         {
             get
             {
-                return this.NativeStorageItem.Extension;
+                return NativeStorageItem.Extension;
             }
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract.")]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
         {
+            Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
+
             var destinationFileName = fileToReplace.Path;
-            var copy = this.NativeStorageItem.CopyTo( destinationFileName, true ).AsFile();
+            var copy = NativeStorageItem.CopyTo( destinationFileName, true ).AsFile();
             return Task.FromResult( copy );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IFile> CopyAsync( IFolder destinationFolder, string desiredNewName )
         {
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
+            Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
+
             var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
-            var copy = this.NativeStorageItem.CopyTo( destinationFileName ).AsFile();
+            var copy = NativeStorageItem.CopyTo( destinationFileName ).AsFile();
             return Task.FromResult( copy );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public async Task MoveAndReplaceAsync( IFile fileToReplace )
         {
+            Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
+
             var destinationFileName = fileToReplace.Path;
             await fileToReplace.DeleteAsync();
-            this.NativeStorageItem.MoveTo( destinationFileName );
-            this.open = () => this.NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
+            NativeStorageItem.MoveTo( destinationFileName );
+            open = () => NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task MoveAsync( IFolder destinationFolder, string desiredNewName )
         {
+            Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
+            Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
+
             var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
-            this.NativeStorageItem.MoveTo( destinationFileName );
-            this.open = () => this.NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
+            NativeStorageItem.MoveTo( destinationFileName );
+            open = () => NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
             return Task.FromResult( 0 );
         }
 
         public Task<Stream> OpenReadAsync()
         {
-            return Task.FromResult( this.open() );
+            return Task.FromResult( open() );
         }
 
         public Task<Stream> OpenReadWriteAsync()
         {
-            return Task.FromResult( this.open() );
+            return Task.FromResult( open() );
         }
 
         public DateTimeOffset DateCreated
         {
             get
             {
-                return this.NativeStorageItem.CreationTime;
+                return NativeStorageItem.CreationTime;
             }
         }
 
@@ -104,7 +114,7 @@
         {
             get
             {
-                return this.NativeStorageItem.Name;
+                return NativeStorageItem.Name;
             }
         }
 
@@ -112,49 +122,50 @@
         {
             get
             {
-                return this.path;
+                return path;
             }
         }
 
         public Task DeleteAsync()
         {
-            this.NativeStorageItem.Delete();
+            NativeStorageItem.Delete();
             return Task.FromResult( 0 );
         }
 
         public Task<IBasicProperties> GetBasicPropertiesAsync()
         {
-            return this.NativeStorageItem.AsFile().GetBasicPropertiesAsync();
+            return NativeStorageItem.AsFile().GetBasicPropertiesAsync();
         }
 
         public Task RenameAsync( string desiredName )
         {
-            this.NativeStorageItem.MoveTo( desiredName );
-            this.open = () => this.NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
+            Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
+            NativeStorageItem.MoveTo( desiredName );
+            open = () => NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
             return Task.FromResult( 0 );
         }
 
         public Task<IFolder> GetParentAsync()
         {
-            return Task.FromResult( this.NativeStorageItem.Directory.AsFolder() );
+            return Task.FromResult( NativeStorageItem.Directory.AsFolder() );
         }
 
         public override bool Equals( object obj )
         {
-            return this.Equals( obj as IStorageItem );
+            return Equals( obj as IStorageItem );
         }
 
         public bool Equals( IStorageItem other )
         {
             if ( other is IFile )
-                return this.path.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
+                return path.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
 
             return false;
         }
 
         public override int GetHashCode()
         {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode( this.path );
+            return StringComparer.OrdinalIgnoreCase.GetHashCode( path );
         }
     }
 }

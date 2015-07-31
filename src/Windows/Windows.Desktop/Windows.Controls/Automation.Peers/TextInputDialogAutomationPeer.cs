@@ -15,14 +15,14 @@
         public TextInputDialogAutomationPeer( TextInputDialog owner )
             : base( owner )
         {
-            this.IsReadOnly = false;
-            this.IsModal = true;
-            this.IsTopmost = true;
-            this.Maximizable = false;
-            this.Minimizable = false;
-            this.InteractionState = this.Window.IsOpen ? WindowInteractionState.ReadyForUserInteraction : WindowInteractionState.Running;
-            this.Window.Opened += ( s, e ) => this.InteractionState = WindowInteractionState.ReadyForUserInteraction;
-            this.Window.Closing += ( s, e ) => this.InteractionState = WindowInteractionState.Closing;
+            IsReadOnly = false;
+            IsModal = true;
+            IsTopmost = true;
+            Maximizable = false;
+            Minimizable = false;
+            InteractionState = Window.IsOpen ? WindowInteractionState.ReadyForUserInteraction : WindowInteractionState.Running;
+            Window.Opened += ( s, e ) => InteractionState = WindowInteractionState.ReadyForUserInteraction;
+            Window.Closing += ( s, e ) => InteractionState = WindowInteractionState.Closing;
         }
 
         /// <summary>
@@ -33,11 +33,11 @@
         {
             get
             {
-                return this.Value;
+                return Value;
             }
             set
             {
-                this.Value = value;
+                Value = value;
             }
         }
 
@@ -49,11 +49,11 @@
         {
             get
             {
-                return this.Window.DefaultResponse;
+                return Window.DefaultResponse;
             }
             set
             {
-                this.Window.DefaultResponse = value;
+                Window.DefaultResponse = value;
             }
         }
 
@@ -62,7 +62,7 @@
         /// </summary>
         public override void Invoke()
         {
-            this.Window.ExecuteCommand( this.Window.DefaultCommandIndex );
+            Window.ExecuteCommand( Window.DefaultCommandIndex );
         }
 
         /// <summary>
@@ -73,11 +73,11 @@
         {
             get
             {
-                return this.Window.Response;
+                return Window.Response;
             }
             protected set
             {
-                this.Window.Response = value ?? string.Empty;
+                Window.Response = value ?? string.Empty;
             }
         }
 

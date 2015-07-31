@@ -37,7 +37,7 @@
         /// <returns>The <typeparamref name="T">result</typeparamref> of the evaluation.</returns>
         public override T Evaluate( T item )
         {
-            this.NestedRules.ForEach( rule => item = rule.Evaluate( item ) );
+            NestedRules.ForEach( rule => item = rule.Evaluate( item ) );
             return item;
         }
     }

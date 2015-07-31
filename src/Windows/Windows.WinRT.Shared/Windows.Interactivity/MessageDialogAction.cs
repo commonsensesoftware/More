@@ -27,7 +27,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual IAsyncOperation<IUICommand> Alert( Interaction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
             Contract.Ensures( Contract.Result<IAsyncOperation<IUICommand>>() != null );
 
             var content = interaction.Content == null ? string.Empty : interaction.Content.ToString();
@@ -47,7 +47,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual IAsyncOperation<IUICommand> Prompt( Interaction interaction )
         {
-            Contract.Requires<ArgumentNullException>( interaction != null, "interaction" );
+            Arg.NotNull( interaction, nameof( interaction ) );
             Contract.Ensures( Contract.Result<IAsyncOperation<IUICommand>>() != null );
 
             var content = interaction.Content == null ? string.Empty : interaction.Content.ToString();
@@ -78,9 +78,9 @@
             var interaction = GetRequestedInteraction<Interaction>( parameter );
 
             if ( interaction.Commands.Any() )
-                await this.Prompt( interaction );
+                await Prompt( interaction );
             else
-                await this.Alert( interaction );
+                await Alert( interaction );
         }
     }
 }

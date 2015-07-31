@@ -13,8 +13,8 @@
             Contract.Requires( source != null );
 
             this.source = source;
-            this.Uri = source.Uri;
-            this.IsSuccess = true;
+            Uri = source.Uri;
+            IsSuccess = true;
         }
 
         internal NavigationEventArgsAdapter( NavigationFailedEventArgs source )
@@ -22,14 +22,14 @@
             Contract.Requires( source != null );
 
             this.source = source;
-            this.IsSuccess = false;
+            IsSuccess = false;
         }
 
         public object SourceEventArgs
         {
             get
             {
-                return this.source;
+                return source;
             }
         }
 

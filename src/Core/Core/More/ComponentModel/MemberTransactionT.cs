@@ -53,7 +53,7 @@
         protected MemberTransaction( object target, IEnumerable<string> memberNames )
             : this( target, member => ( memberNames ?? Enumerable.Empty<string>() ).Contains( member.Name ), SnapshotStrategy.Default )
         {
-            Arg.NotNull( memberNames, "memberNames" );
+            Arg.NotNull( memberNames, nameof( memberNames ) );
         }
 
         /// <summary>
@@ -66,7 +66,7 @@
         protected MemberTransaction( object target, IEnumerable<string> memberNames, IEditSnapshotStrategy editSnapshotStrategy )
             : this( target, member => ( memberNames ?? Enumerable.Empty<string>() ).Contains( member.Name ), editSnapshotStrategy )
         {
-            Arg.NotNull( memberNames, "memberNames" );
+            Arg.NotNull( memberNames, nameof( memberNames ) );
         }
 
         /// <summary>
@@ -90,18 +90,18 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by code contract." )]
         protected MemberTransaction( object target, Func<T, bool> memberFilter, IEditSnapshotStrategy editSnapshotStrategy )
         {
-            Arg.NotNull( target, "target" );
-            Arg.NotNull( memberFilter, "memberFilter" );
-            Arg.NotNull( editSnapshotStrategy, "editSnapshotStrategy" );
+            Arg.NotNull( target, nameof( target ) );
+            Arg.NotNull( memberFilter, nameof( memberFilter ) );
+            Arg.NotNull( editSnapshotStrategy, nameof( editSnapshotStrategy ) );
 
-            this.instance = target;
-            this.type = target.GetType();
-            this.snapshotStrategy = editSnapshotStrategy;
+            instance = target;
+            type = target.GetType();
+            snapshotStrategy = editSnapshotStrategy;
 
-            var allMembers = this.type.GetRuntimeFields().Cast<MemberInfo>().Union( this.type.GetRuntimeProperties() );
+            var allMembers = type.GetRuntimeFields().Cast<MemberInfo>().Union( type.GetRuntimeProperties() );
             var filteredMembers = allMembers.OfType<T>().Where( m => memberFilter( m ) && CanManage( m ) );
 
-            this.members.AddRange( filteredMembers );
+            members.AddRange( filteredMembers );
         }
 
         /// <summary>
@@ -123,7 +123,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<object>() != null );
-                return this.instance;
+                return instance;
             }
         }
 
@@ -136,7 +136,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<Type>() != null );
-                return this.type;
+                return type;
             }
         }
 
@@ -149,7 +149,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<KeyedCollection<string, T>>() != null );
-                return this.members;
+                return members;
             }
         }
 
@@ -162,7 +162,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IDictionary<string, object>>() != null );
-                return this.state;
+                return state;
             }
         }
 
@@ -175,7 +175,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<IEditSnapshotStrategy>() != null );
-                return this.snapshotStrategy;
+                return snapshotStrategy;
             }
         }
 
@@ -205,7 +205,7 @@
         /// <returns>A <see cref="String">string</see> representing the state key.</returns>
         protected virtual string CreateStateKey( T member )
         {
-            Arg.NotNull( member, "member" );
+            Arg.NotNull( member, nameof( member ) );
             Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
             return string.Format( null, "{0}.{1}", member.DeclaringType.FullName, member.Name );
         }
@@ -236,16 +236,16 @@
         /// </summary>
         protected virtual void OnBegin()
         {
-            foreach ( var member in this.Members )
+            foreach ( var member in Members )
             {
-                var value = this.GetMemberValue( member );
-                var key = this.CreateStateKey( member );
+                var value = GetMemberValue( member );
+                var key = CreateStateKey( member );
                 var editable = value as IEditableObject;
 
                 if ( editable != null )
                     editable.BeginEdit();
 
-                this.State[key] = value;
+                State[key] = value;
             }
         }
 
@@ -255,15 +255,15 @@
         protected virtual void OnCommit()
         {
             var editableType = typeof( IEditableObject ).GetTypeInfo();
-            var editableMembers = from member in this.Members
-                                  where editableType.IsAssignableFrom( this.GetMemberType( member ).GetTypeInfo() )
-                                  let key = this.CreateStateKey( member )
-                                  let editable = (IEditableObject) this.State[key]
+            var editableMembers = from member in Members
+                                  where editableType.IsAssignableFrom( GetMemberType( member ).GetTypeInfo() )
+                                  let key = CreateStateKey( member )
+                                  let editable = (IEditableObject) State[key]
                                   where editable != null
                                   select editable;
 
             editableMembers.ForEach( e => e.EndEdit() );
-            this.State.Clear();
+            State.Clear();
         }
 
         /// <summary>
@@ -271,19 +271,19 @@
         /// </summary>
         protected virtual void OnRollback()
         {
-            foreach ( var member in this.Members )
+            foreach ( var member in Members )
             {
-                var key = this.CreateStateKey( member );
-                var value = this.State[key];
+                var key = CreateStateKey( member );
+                var value = State[key];
                 var editable = value as IEditableObject;
 
                 if ( editable != null )
                     editable.CancelEdit();
 
-                this.SetMemberValue( member, value );
+                SetMemberValue( member, value );
             }
 
-            this.State.Clear();
+            State.Clear();
         }
 
         /// <summary>
@@ -293,11 +293,11 @@
         /// <exception cref="InvalidOperationException">A transaction has already been started.</exception>
         public void Begin()
         {
-            if ( this.TransactionState == EditTransactionState.Started )
+            if ( TransactionState == EditTransactionState.Started )
                 throw new InvalidOperationException( ExceptionMessage.NestedEditTransactionDetected );
 
-            this.TransactionState = EditTransactionState.Started;
-            this.OnBegin();
+            TransactionState = EditTransactionState.Started;
+            OnBegin();
         }
 
         /// <summary>
@@ -306,11 +306,11 @@
         /// <exception cref="InvalidOperationException">A transaction has not been started.</exception>
         public void Commit()
         {
-            if ( this.TransactionState != EditTransactionState.Started )
+            if ( TransactionState != EditTransactionState.Started )
                 throw new InvalidOperationException( ExceptionMessage.EditTransactionNotStarted );
 
-            this.OnCommit();
-            this.TransactionState = EditTransactionState.Committed;
+            OnCommit();
+            TransactionState = EditTransactionState.Committed;
         }
 
         /// <summary>
@@ -321,22 +321,22 @@
         public virtual IEditSavepoint CreateSavepoint()
         {
             var stateBag = new Dictionary<string, object>();
-            var autoCommit = this.TransactionState != EditTransactionState.Started;
+            var autoCommit = TransactionState != EditTransactionState.Started;
 
             // force transaction to populate state bag
             if ( autoCommit )
-                this.OnBegin();
+                OnBegin();
 
             // snapshot values in current state bag so that the object can be properly restored
-            foreach ( var item in this.State )
+            foreach ( var item in State )
             {
-                var value = this.EditSnapshotStrategy.GetSnapshot( item.Value );
+                var value = EditSnapshotStrategy.GetSnapshot( item.Value );
                 stateBag.Add( item.Key, value );
             }
 
             // commit transaction if necessary (this has no real net effect)
             if ( autoCommit )
-                this.OnCommit();
+                OnCommit();
 
             return new EditSavePoint( this, stateBag );
         }
@@ -347,11 +347,11 @@
         /// <exception cref="InvalidOperationException">A transaction has not been started.</exception>
         public void Rollback()
         {
-            if ( this.TransactionState != EditTransactionState.Started )
+            if ( TransactionState != EditTransactionState.Started )
                 throw new InvalidOperationException( ExceptionMessage.EditTransactionNotStarted );
 
-            this.OnRollback();
-            this.TransactionState = EditTransactionState.RolledBack;
+            OnRollback();
+            TransactionState = EditTransactionState.RolledBack;
         }
 
         /// <summary>
@@ -361,11 +361,11 @@
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public void Rollback( IEditSavepoint savepoint )
         {
-            Arg.NotNull( savepoint, "savepoint" );
+            Arg.NotNull( savepoint, nameof( savepoint ) );
 
-            this.State.ReplaceAll( savepoint.State );
-            this.OnRollback();
-            this.TransactionState = EditTransactionState.RolledBack;
+            State.ReplaceAll( savepoint.State );
+            OnRollback();
+            TransactionState = EditTransactionState.RolledBack;
         }
     }
 }

@@ -2,11 +2,13 @@
 {
     using global::System;
     using global::System.Globalization;
+    using Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Specifies the minimum and maximum length of characters that are allowed in a data field.
     /// </summary>
     /// <remarks>This class provides ported compatibility for System.ComponentModel.DataAnnotations.StringLengthAttribute.</remarks>
+    [SuppressMessage( "Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "Ported from System.ComponentModel.DataAnnotations." )]
     [AttributeUsage( AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false )]
     public class StringLengthAttribute : ValidationAttribute
     {
@@ -17,7 +19,7 @@
         public StringLengthAttribute( int maximumLength )
             : base( (Func<string>) ( () => DataAnnotationsResources.StringLengthAttribute_ValidationError ) )
         {
-            this.MaximumLength = maximumLength;
+            MaximumLength = maximumLength;
         }
 
         /// <summary>
@@ -42,14 +44,14 @@
 
         private void EnsureLegalLengths()
         {
-            if ( this.MaximumLength < 0 )
+            if ( MaximumLength < 0 )
             {
                 throw new InvalidOperationException( DataAnnotationsResources.StringLengthAttribute_InvalidMaxLength );
             }
 
-            if ( this.MaximumLength < this.MinimumLength )
+            if ( MaximumLength < MinimumLength )
             {
-                throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.RangeAttribute_MinGreaterThanMax, new object[] { this.MaximumLength, this.MinimumLength } ) );
+                throw new InvalidOperationException( string.Format( CultureInfo.CurrentCulture, DataAnnotationsResources.RangeAttribute_MinGreaterThanMax, new object[] { MaximumLength, MinimumLength } ) );
             }
         }
 
@@ -60,9 +62,9 @@
         /// <returns>The formatted error message.</returns>
         public override string FormatErrorMessage( string name )
         {
-            this.EnsureLegalLengths();
-            string format = ( ( this.MinimumLength != 0 ) && !base.CustomErrorMessageSet ) ? DataAnnotationsResources.StringLengthAttribute_ValidationErrorIncludingMinimum : base.ErrorMessageString;
-            return string.Format( CultureInfo.CurrentCulture, format, new object[] { name, this.MaximumLength, this.MinimumLength } );
+            EnsureLegalLengths();
+            string format = ( ( MinimumLength != 0 ) && !base.CustomErrorMessageSet ) ? DataAnnotationsResources.StringLengthAttribute_ValidationErrorIncludingMinimum : base.ErrorMessageString;
+            return string.Format( CultureInfo.CurrentCulture, format, new object[] { name, MaximumLength, MinimumLength } );
         }
 
         /// <summary>
@@ -72,9 +74,9 @@
         /// <returns>True if the specified object is valid; otherwise, false.</returns>
         public override bool IsValid( object value )
         {
-            this.EnsureLegalLengths();
+            EnsureLegalLengths();
             int num = ( value == null ) ? 0 : ( (string) value ).Length;
-            return ( ( value == null ) || ( ( num >= this.MinimumLength ) && ( num <= this.MaximumLength ) ) );
+            return ( ( value == null ) || ( ( num >= MinimumLength ) && ( num <= MaximumLength ) ) );
         }
     }
 }

@@ -15,7 +15,7 @@
         {
             public override void Post( SendOrPostCallback d, object state )
             {
-                this.Send( d, state );
+                Send( d, state );
             }
         }
 
@@ -24,29 +24,29 @@
 
         ~EventBrokerTest()
         {
-            this.Dispose( false );
+            Dispose( false );
         }
 
         public EventBrokerTest()
         {
-            this.currentContext = SynchronizationContext.Current;
+            currentContext = SynchronizationContext.Current;
             SynchronizationContext.SetSynchronizationContext( new SyncOnlyContext() );
         }
 
         private void Dispose( bool disposing )
         {
-            if ( this.disposed )
+            if ( disposed )
                 return;
 
-            this.disposed = true;
+            disposed = true;
 
             if ( disposing )
-                SynchronizationContext.SetSynchronizationContext( this.currentContext );
+                SynchronizationContext.SetSynchronizationContext( currentContext );
         }
 
         public void Dispose()
         {
-            this.Dispose( true );
+            Dispose( true );
             GC.SuppressFinalize( this );
         }
 

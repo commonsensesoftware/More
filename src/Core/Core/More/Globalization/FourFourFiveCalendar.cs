@@ -37,10 +37,10 @@
         public FourFourFiveCalendar( IEnumerable<FiscalYear> years )
             : base( years )
         {
-            Arg.NotNull( years, "years" );
+            Arg.NotNull( years, nameof( years ) );
 
             foreach ( var year in years )
-                this.calendarYears[year.LastDay.Year] = year;
+                calendarYears[year.LastDay.Year] = year;
         }
 
         private static bool IsValidDate( Calendar calendar, DateTime date )
@@ -70,8 +70,8 @@
 
         private FiscalYear GetFiscalYear( DateTime date )
         {
-            var year = this.GetYear( date );
-            return this.calendarYears[year];
+            var year = GetYear( date );
+            return calendarYears[year];
         }
 
         /// <summary>
@@ -82,8 +82,8 @@
         public virtual int GetWeekOfYear( DateTime time )
         {
             Contract.Ensures( Contract.Result<int>() >= 1 );
-            Arg.InRange( time, this.MinSupportedDateTime, this.MaxSupportedDateTime, "time" );
-            return this.GetWeekOfYear( time, CalendarWeekRule.FirstDay, this.MinSupportedDateTime.DayOfWeek );
+            Arg.InRange( time, MinSupportedDateTime, MaxSupportedDateTime, "time" );
+            return GetWeekOfYear( time, CalendarWeekRule.FirstDay, MinSupportedDateTime.DayOfWeek );
         }
 
         /// <summary>
@@ -97,7 +97,7 @@
                 // derive the epoch month from the first fiscal date under the 4-4-5 calendar, the epoch month might start
                 // in a previous month (ex: fiscal July starts could start on 6/28).  a fiscal month would never start in
                 // the middle of calendar month, so it's reasonable to add a month if we're over the half-way mark.
-                var epoch = this.Years.First().FirstDay;
+                var epoch = Years.First().FirstDay;
                 var month = epoch.Day >= 15 ? epoch.Month + 1 : epoch.Month;
                 return month;
             }
@@ -131,21 +131,21 @@
             if ( months == 0 )
                 return time;
 
-            var day = this.GetDayOfMonth( time );
-            var fiscalYear = this.GetFiscalYear( time );
-            var monthsInYear = this.GetMonthsInYear( fiscalYear.LastDay.Year );
+            var day = GetDayOfMonth( time );
+            var fiscalYear = GetFiscalYear( time );
+            var monthsInYear = GetMonthsInYear( fiscalYear.LastDay.Year );
             var years = (int) Math.Floor( ( (double) months ) / ( (double) monthsInYear ) );
 
             if ( months < 0 )
                 years += 1;
 
-            time = this.AddYears( time, years );
+            time = AddYears( time, years );
             months -= years * monthsInYear;
 
             if ( months == 0 )
                 return time;
 
-            var month = this.GetMonth( time ) + months;
+            var month = GetMonth( time ) + months;
 
             if ( month > monthsInYear )
             {
@@ -155,7 +155,7 @@
                     throw new ArgumentOutOfRangeException( "months" );
 
                 month %= monthsInYear;
-                fiscalYear = this.calendarYears[year];
+                fiscalYear = calendarYears[year];
             }
             else if ( month <= 0 )
             {
@@ -165,7 +165,7 @@
                     throw new ArgumentOutOfRangeException( "months" );
 
                 month = monthsInYear - ( Math.Abs( month ) % monthsInYear );
-                fiscalYear = this.calendarYears[year];
+                fiscalYear = calendarYears[year];
             }
 
             var fiscalMonth = fiscalYear.Months[month];
@@ -192,14 +192,14 @@
             if ( years == 0 )
                 return time;
 
-            var year = this.GetYear( time ) + years;
+            var year = GetYear( time ) + years;
 
             if ( !IsValidYear( this, year ) )
                 throw new ArgumentOutOfRangeException( "years" );
 
-            var day = this.GetDayOfMonth( time );
-            var month = this.GetMonth( time );
-            var fiscalYear = this.calendarYears[year];
+            var day = GetDayOfMonth( time );
+            var month = GetMonth( time );
+            var fiscalYear = calendarYears[year];
             var fiscalMonth = fiscalYear.Months[month];
 
             time = fiscalMonth.FirstDay.AddDays( Math.Min( day, fiscalMonth.DaysInMonth ) - 1 );
@@ -219,8 +219,8 @@
             if ( !IsValidDate( this, time ) )
                 throw new ArgumentOutOfRangeException( "time" );
 
-            var fiscalYear = this.GetFiscalYear( time );
-            var month = this.GetMonth( time );
+            var fiscalYear = GetFiscalYear( time );
+            var month = GetMonth( time );
             var startDate = fiscalYear.Months[month].FirstDay;
             return (int) ( Math.Ceiling( time.Date.Subtract( startDate ).TotalDays ) + 1.0 );
         }
@@ -252,7 +252,7 @@
             if ( !IsValidDate( this, time ) )
                 throw new ArgumentOutOfRangeException( "time" );
 
-            var startDate = this.GetFiscalYear( time ).FirstDay;
+            var startDate = GetFiscalYear( time ).FirstDay;
             return (int) ( Math.Ceiling( time.Date.Subtract( startDate ).TotalDays ) + 1.0 );
         }
 
@@ -275,7 +275,7 @@
             if ( !IsValidMonth( this, year, month, era ) )
                 throw new ArgumentOutOfRangeException( "month" );
 
-            return this.calendarYears[year].Months[month].DaysInMonth;
+            return calendarYears[year].Months[month].DaysInMonth;
         }
 
         /// <summary>
@@ -291,7 +291,7 @@
             if ( !IsValidYear( this, year ) )
                 throw new ArgumentOutOfRangeException( "year" );
 
-            return this.calendarYears[year].DaysInYear;
+            return calendarYears[year].DaysInYear;
         }
 
         /// <summary>
@@ -323,7 +323,7 @@
 
             time = time.Date;
 
-            var months = this.GetFiscalYear( time ).Months;
+            var months = GetFiscalYear( time ).Months;
             var month = 0;
 
             while ( ++month <= months.Count )
@@ -368,12 +368,12 @@
             if ( !IsValidDate( this, time ) )
                 throw new ArgumentOutOfRangeException( "time" );
 
-            if ( this.MinSupportedDateTime.DayOfWeek != firstDayOfWeek )
+            if ( MinSupportedDateTime.DayOfWeek != firstDayOfWeek )
                 throw new ArgumentOutOfRangeException( "firstDayOfWeek", string.Format( null, ExceptionMessage.MustMatchEpochStartDay, firstDayOfWeek ) );
 
             time = time.Date; // truncate time
 
-            var current = this.GetFiscalYear( time ).FirstDay;
+            var current = GetFiscalYear( time ).FirstDay;
             var week = 0;
 
             while ( current <= time )
@@ -399,7 +399,7 @@
 
             time = time.Date;
 
-            foreach ( var year in this.calendarYears )
+            foreach ( var year in calendarYears )
             {
                 if ( ( time >= year.Value.FirstDay ) && ( time <= year.Value.LastDay ) )
                     return year.Value.LastDay.Year;
@@ -428,7 +428,7 @@
             if ( !IsValidMonth( this, year, month, era ) )
                 throw new ArgumentOutOfRangeException( "month" );
 
-            return ( day >= 28 && day <= 35 ) && this.IsLeapMonth( year, month, era );
+            return ( day >= 28 && day <= 35 ) && IsLeapMonth( year, month, era );
         }
 
         /// <summary>
@@ -450,7 +450,7 @@
             if ( !IsValidMonth( this, year, month, era ) )
                 throw new ArgumentOutOfRangeException( "month" );
 
-            return ( this.GetMonthsInYear( year, era ) == month ) && this.IsLeapYear( year, era );
+            return ( GetMonthsInYear( year, era ) == month ) && IsLeapYear( year, era );
         }
 
         /// <summary>
@@ -466,7 +466,7 @@
             if ( !IsValidYear( this, year ) )
                 throw new ArgumentOutOfRangeException( "year" );
 
-            return this.calendarYears[year].DaysInYear == DaysInLeapYear;
+            return calendarYears[year].DaysInYear == DaysInLeapYear;
         }
 
         /// <summary>
@@ -513,7 +513,7 @@
             if ( millisecond < 0 )
                 throw new ArgumentOutOfRangeException( "millisecond", ExceptionMessage.ArgumentLessThanZero );
 
-            var date = this.calendarYears[year].Months[month].FirstDay.AddDays( ( (double) day ) - 1.0 );
+            var date = calendarYears[year].Months[month].FirstDay.AddDays( ( (double) day ) - 1.0 );
             return date.Add( new TimeSpan( 0, hour, minute, second, millisecond ) );
         }
 
@@ -523,7 +523,7 @@
         /// <returns>A <see cref="String"/> object.</returns>
         public override string ToString()
         {
-            return string.Format( CultureInfo.CurrentCulture, "MinSupportedDateTime = {0:d}, MaxSupportedDateTime = {1:d}", this.MinSupportedDateTime, this.MaxSupportedDateTime );
+            return string.Format( CultureInfo.CurrentCulture, "MinSupportedDateTime = {0:d}, MaxSupportedDateTime = {1:d}", MinSupportedDateTime, MaxSupportedDateTime );
         }
     }
 }
