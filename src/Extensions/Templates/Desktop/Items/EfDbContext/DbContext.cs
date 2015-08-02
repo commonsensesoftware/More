@@ -1,19 +1,14 @@
 ﻿namespace $rootnamespace$
 {$if$($modelNamespaceRequired$ == true)
     using $modelNamespace$;$endif$
-    using More;
     using More.ComponentModel;$if$($compose$ == true)
     using More.Composition;$endif$
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
-    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;$if$($compose$ == true)
+    using System.Linq;$if$($compose$ == true)
     using ConnectionStringSettings = System.Configuration.ConnectionStringSettings;$endif$
 
     /// <summary>
@@ -34,7 +29,7 @@
             : base( "name=$connectionStringKey$" )$endif$
         {
             Contract.Requires( settings != null );
-            System.Data.Entity.Database.SetInitializer<$safeitemrootname$>( null );
+            Database.SetInitializer<$safeitemrootname$>( null );
         }
 
         /// <summary>

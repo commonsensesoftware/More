@@ -230,6 +230,8 @@
       <Project>{62ac5515-17dc-412b-ba7b-f96aef78aff3}</Project>
       <Name>WpInteractionViewModel</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
     </ProjectReference>
     <ProjectReference Include="..\Templates\Phone\Items\WpPageViewModel\WpPageViewModel.csproj">
       <Project>{7e0f2cf7-ffcd-4113-9cba-eadeead933e8}</Project>

@@ -1,4 +1,5 @@
-﻿namespace More.VisualStudio.Editors
+﻿using System.Diagnostics.Contracts;
+namespace More.VisualStudio.Editors
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

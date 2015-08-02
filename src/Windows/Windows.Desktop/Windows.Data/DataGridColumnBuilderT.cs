@@ -420,7 +420,7 @@
             {
                 // must have the a data grid column definition
                 if ( Attribute.IsDefined( property, typeof( DataGridColumnAttribute ), true ) )
-                    list.Add( new Tuple<PropertyInfo, IEnumerable<Attribute>>( property, property.GetCustomAttributes( true ).Cast<Attribute>().ToList() ) );
+                    list.Add( new Tuple<PropertyInfo, IEnumerable<Attribute>>( property, property.GetCustomAttributes( true ).Cast<Attribute>().ToArray() ) );
             }
 
             if ( ( buildOrders & ColumnBuildOrders.DisplayIndex ) == ColumnBuildOrders.DisplayIndex )

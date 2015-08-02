@@ -47,7 +47,7 @@
             var match = Regex.Match( typeName, @"^(([^,]+\.)?([^\x20,]+))(\x20*,\x20*([^\x20,]+))?", RegexOptions.Singleline );
 
             if ( match.Success )
-                return new Tuple<string, string, string, bool>( match.Groups[1].Value, match.Groups[3].Value, match.Groups[5].Value, match.Groups[2].Success );
+                return Tuple.Create( match.Groups[1].Value, match.Groups[3].Value, match.Groups[5].Value, match.Groups[2].Success );
 
             return new Tuple<string, string, string, bool>( string.Empty, string.Empty, string.Empty, false );
         }

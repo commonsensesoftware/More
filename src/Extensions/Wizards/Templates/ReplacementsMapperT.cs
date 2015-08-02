@@ -123,7 +123,7 @@
 
             // get the key of the replacement from the state map or short-circuit if there is no mapping
             if ( !states.TryGetValue( id, out key ) || !currentReplacements.TryGetValue( key, out state ) )
-                return new Tuple<bool, bool>( enabled, optional );
+                return Tuple.Create( enabled, optional );
 
             // if the value parses and is enabled, make the option required
             if ( bool.TryParse( state, out enabled ) )
@@ -131,7 +131,7 @@
             else
                 enabled = false;
 
-            return new Tuple<bool, bool>( enabled, optional );
+            return Tuple.Create( enabled, optional );
         }
 
         protected IEnumerable<TemplateOption> StringsToTemplateOptions(

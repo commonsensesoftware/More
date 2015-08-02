@@ -1,9 +1,6 @@
 ﻿namespace More.VisualStudio.Views
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Emit;
     using Microsoft.CodeAnalysis.MSBuild;
-    using More.VisualStudio.ViewModels;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -15,6 +12,7 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Interop;
+    using ViewModels;
 
     /// <content>
     /// Provides additional implementation for the <see cref="TypePicker"/> class.
@@ -26,7 +24,6 @@
         /// </summary>
         private sealed class Proxy : MarshalByRefObject
         {
-            private static readonly AssemblyName System_Runtime = new AssemblyName( "System.Runtime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" );
             private Assembly localAssembly;
             private IReadOnlyList<AssemblyName> localAssemblyReferences;
 
@@ -48,7 +45,7 @@
                 };
 
                 model.RestrictedBaseTypeNames.AddRange( RestrictedBaseTypeNames ?? Enumerable.Empty<string>() );
-                model.LocalAssemblyReferences.AddRange( AddSystemRuntimeIfNeeded( localAssemblyReferences ) );
+                model.LocalAssemblyReferences.AddRange( localAssemblyReferences );
 
                 using ( var view = new TypeBrowserDialog( model ) )
                 {
@@ -88,31 +85,6 @@
                 field.SetValue( null, size );
             }
 
-            private static IEnumerable<AssemblyName> AddSystemRuntimeIfNeeded( IReadOnlyList<AssemblyName> references )
-            {
-                Contract.Requires( references != null );
-                Contract.Ensures( Contract.Result<IEnumerable<AssemblyName>>() != null );
-
-                // HACK: references to System.Runtime may be indirect and not reported via Assembly.GetReferencedAssemblies or detected
-                // via roslyn. this typically occurs with WinRT-based applications.  if System.Runtime 4.0 isn't loaded, all other
-                // Reflection requests will fail (ex: for System.Runtime 4.0.10). if we provide an empty assembly reference list, things
-                // will work as expected because System.Runtime 4.0 will be requested (and first); however, the type picker will display
-                // a large number of extra assemblies that shouldn't be considered.  unless a better solution is found (if ever), this
-                // is the most suitable workaround.
-                var filteredReferences = references.Where( r => AssemblyName.ReferenceMatchesDefinition( r, System_Runtime ) ).ToArray();
-                var reference = filteredReferences.FirstOrDefault( r => r.Version == System_Runtime.Version );
-
-                if ( reference == null && filteredReferences.Length > 0 )
-                {
-                    // System.Runtime 4.0 was not found, but there are references to System.Runtime; inject the reference
-                    var clone = references.ToList();
-                    clone.Insert( 0, System_Runtime );
-                    return clone;
-                }
-
-                return references;
-            }
-
             public async Task CreateLocalAssemblyAsync( AssemblyName localAssemblyName )
             {
                 Contract.Requires( localAssemblyName != null );
@@ -141,94 +113,6 @@
                     localAssemblyReferences = localAssembly.GetReferencedAssemblies();
             }
 
-            private static bool ReferencesFacadesIndirectly( Project project )
-            {
-                Contract.Requires( project != null );
-
-                // we consider only level of depth from each reference (which should typically be as deep as we need to go anyway).
-                // if we find at least one reference to 'System.Runtime', then we know we need to reference the facade assemblies.
-                var references = from reference in project.MetadataReferences
-                                 let assembly = Assembly.ReflectionOnlyLoadFrom( reference.Display )
-                                 from indirectReference in assembly.GetReferencedAssemblies()
-                                 where indirectReference.Name == "System.Runtime"
-                                 select reference;
-
-                return references.Any();
-            }
-
-            private static EmitResult CompileWithFacades( Project project, Compilation compilation, Stream stream, EmitResult previousResult )
-            {
-                Contract.Requires( project != null );
-                Contract.Requires( compilation != null );
-                Contract.Requires( stream != null );
-                Contract.Requires( previousResult != null );
-                Contract.Ensures( Contract.Result<EmitResult>() != null );
-
-                var mscorlib = project.MetadataReferences.SingleOrDefault( r => r.Display.EndsWith( "mscorlib.dll", StringComparison.OrdinalIgnoreCase ) );
-
-                if ( mscorlib == null )
-                    return previousResult;
-
-                var facadeDirectory = Path.Combine( Path.GetDirectoryName( mscorlib.Display ), "Facades" );
-
-                if ( !Directory.Exists( facadeDirectory ) )
-                    return previousResult;
-
-                var references = Directory.GetFiles( facadeDirectory ).Select( file => MetadataReference.CreateFromFile( file ) );
-                var recompilation = compilation.AddReferences( references );
-
-                return recompilation.Emit( stream );
-            }
-
-            private static bool IsIntellisenseFile( string file, string ext )
-            {
-                // intellisense (and other vs features) use the *.g.i.<lang> convention for auto-generated files; excluded these
-                var name = Path.GetFileName( file );
-                return name.EndsWith( ext, StringComparison.OrdinalIgnoreCase );
-            }
-
-            private static async Task<Project> GetProjectIncludingGeneratedFilesAsync( Project project, ProjectInformation projectInfo, AssemblyContentType contentType )
-            {
-                Contract.Requires( project != null );
-                Contract.Requires( projectInfo != null );
-                Contract.Ensures( Contract.Result<Task<Project>>() != null );
-
-                var obj = projectInfo.IntermediateDirectory;
-                var searchPattern = "*" + projectInfo.FileExtension;
-                var files = Directory.EnumerateFiles( obj, searchPattern, SearchOption.AllDirectories );
-
-                switch ( contentType )
-                {
-                    case AssemblyContentType.WindowsRuntime:
-                        // since roslyn doesn't support pre-build activities for ms build (that I can find),
-                        // we need to include auto-generated files by visual studio that are used by
-                        // intellisense and other features. without these files, roslyn will fail to
-                        // build the project
-                        break;
-                    case AssemblyContentType.Default:
-                        // for non-WinRT applications, we want to include auto-generated files (ex: *.g.cs),
-                        // but not intellisense files (*.g.i.cs). doing so typically causes compilation
-                        // errors do to duplicate source code.
-                        var ext = ".g.i" + projectInfo.FileExtension;
-                        files = files.Where( f => !IsIntellisenseFile( f, ext ) );
-                        break;
-                }
-
-                foreach ( var file in files )
-                {
-                    using ( var stream = new FileStream( file, FileMode.Open ) )
-                    {
-                        var reader = new StreamReader( stream );
-                        var text = await reader.ReadToEndAsync();
-                        var name = Path.GetFileNameWithoutExtension( file );
-
-                        project = project.AddDocument( name, text ).Project;
-                    }
-                }
-
-                return project;
-            }
-
             private static async Task<Tuple<Assembly, IReadOnlyList<AssemblyName>>> CreateDynamicAssemblyAsync( ProjectInformation projectInfo, AssemblyContentType contentType )
             {
                 Contract.Ensures( Contract.Result<Task<Tuple<Assembly, IReadOnlyList<AssemblyName>>>>() != null );
@@ -239,42 +123,33 @@
                 byte[] rawAssembly;
                 IReadOnlyList<AssemblyName> referencedAssemblies;
 
+                // create a msbuild workspace and get the compilation unit for the current project
                 using ( var workspace = MSBuildWorkspace.Create() )
                 {
                     var project = await workspace.OpenProjectAsync( projectInfo.ProjectPath ).ConfigureAwait( false );
-                    var completeProject = await GetProjectIncludingGeneratedFilesAsync( project, projectInfo, contentType ).ConfigureAwait( false );
-                    var compilation = await completeProject.GetCompilationAsync().ConfigureAwait( false );
+                    var compilation = await project.GetCompilationAsync().ConfigureAwait( false );
 
                     using ( var stream = new MemoryStream() )
                     {
                         // compile into an in-memory assembly
                         var result = compilation.Emit( stream );
 
+                        // handled failed compilation gracefully
                         if ( !result.Success )
-                        {
-                            // HACK: roslyn does not resolve the facade assemblies (e.g. System.Runtime) automatically.
-                            // it's unknown at this point (1/19/2015) whether this is a bug or the expected behavior
-                            // as MSBuild does this automatically. if this is the expected behavior, the correct setup
-                            // is also unknown. this process is seemingly expensive and should be refactored at some point.
-                            if ( ReferencesFacadesIndirectly( completeProject ) )
-                                result = CompileWithFacades( completeProject, compilation, stream, result );
-
-                            // if compilation fails again, the assembly cannot be generated
-                            if ( !result.Success )
-                                return new Tuple<Assembly, IReadOnlyList<AssemblyName>>( null, new AssemblyName[0] );
-                        }
+                            return new Tuple<Assembly, IReadOnlyList<AssemblyName>>( null, new AssemblyName[0] );
 
                         rawAssembly = stream.ToArray();
                     }
 
                     // loading assemblies from binary will result in no location information being available. to ensure that referenced
-                    // assemblies can be resolved, but a list of referenced assembly names from the metadata
-                    referencedAssemblies = completeProject.MetadataReferences.Select( mr => AssemblyName.GetAssemblyName( mr.Display ) ).ToArray();
+                    // assemblies can be resolved, build a list of referenced assembly names from the metadata
+                    referencedAssemblies = project.MetadataReferences.Select( mr => AssemblyName.GetAssemblyName( mr.Display ) ).ToArray();
                 }
 
+                // we only need the type name so we use a reflection-only load
                 var assembly = Assembly.ReflectionOnlyLoad( rawAssembly );
 
-                return new Tuple<Assembly, IReadOnlyList<AssemblyName>>( assembly, referencedAssemblies );
+                return Tuple.Create( assembly, referencedAssemblies );
             }
 
             private static Assembly LoadLocalAssemblyFromExistingBuild( ProjectInformation projectInfo )

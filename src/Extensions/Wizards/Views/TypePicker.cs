@@ -19,36 +19,19 @@
     {
         private readonly List<string> restrictedBaseTypeNames = new List<string>();
 
-        [Conditional( "DEBUG" )]
-        private static void PrintReflectionOnlyAssemblies()
-        {
-            var assemblies = AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies();
-
-            Debug.WriteLine( "Reflection-only assemblies loaded: {0}", assemblies.Length );
-            Debug.Indent();
-
-            foreach ( var assembly in assemblies )
-                Debug.WriteLine( assembly.GetName().Name );
-
-            Debug.Unindent();
-        }
-
-        private static AppDomainSetup GetSetupInformation( AppDomain appDomain )
-        {
-            Contract.Requires( appDomain != null );
-            Contract.Ensures( Contract.Result<AppDomainSetup>() != null );
-
-            var setup = appDomain.SetupInformation;
-            setup.ApplicationBase = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
-            return setup;
-        }
-
         private static AppDomain CreateAppDomain()
         {
+            Contract.Ensures( Contract.Result<AppDomain>() != null );
+
             var currentDomain = AppDomain.CurrentDomain;
             var evidence = currentDomain.Evidence;
-            var setup = GetSetupInformation( currentDomain );
-            return AppDomain.CreateDomain( "TypePickerSandbox", evidence, setup );
+            var setup = currentDomain.SetupInformation;
+
+            setup.LoaderOptimization = LoaderOptimization.MultiDomain;
+
+            var newDomain = AppDomain.CreateDomain( "TypePickerSandbox", evidence, setup );
+
+            return newDomain;
         }
 
         private async Task<Tuple<AppDomain, Proxy>> CreateProxyAsync( Window window, IProgress<Window> progress )
@@ -57,19 +40,17 @@
             Contract.Requires( progress != null );
             Contract.Ensures( Contract.Result<Task<Tuple<AppDomain, Proxy>>>() != null );
 
-            var type = typeof( TypePicker.Proxy );
+            var type = typeof( Proxy );
             var assemblyName = type.Assembly.FullName;
             var typeName = type.FullName;
-            var appDomain = await Task.Run( new Func<AppDomain>( CreateAppDomain ) ).ConfigureAwait( false );
-            TypePicker.Proxy proxy;
-
-            PrintReflectionOnlyAssemblies();
+            var appDomain = CreateAppDomain();
+            Proxy proxy;
 
             try
             {
                 // pick type from available assemblies in another app domain. this prevents assemblies from being loaded into the current app domain/process,
                 // which could prevent prevent the target project from build (because the file is locked by Visual Studio)
-                proxy = (TypePicker.Proxy) appDomain.CreateInstanceAndUnwrap( assemblyName, typeName, false, BindingFlags.Default, null, null, null, null );
+                proxy = (Proxy) appDomain.CreateInstanceAndUnwrap( assemblyName, typeName, false, BindingFlags.Default, null, null, null, null );
                 proxy.Title = Title;
                 proxy.NameConvention = NameConvention;
                 proxy.RestrictedBaseTypeNames = RestrictedBaseTypeNames.ToArray();
@@ -88,7 +69,7 @@
                 progress.Report( window );
             }
 
-            return new Tuple<AppDomain, Proxy>( appDomain, proxy );
+            return Tuple.Create( appDomain, proxy );
         }
 
         /// <summary>
@@ -114,7 +95,6 @@
             finally
             {
                 AppDomain.Unload( appDomain );
-                PrintReflectionOnlyAssemblies();
             }
 
             return result;

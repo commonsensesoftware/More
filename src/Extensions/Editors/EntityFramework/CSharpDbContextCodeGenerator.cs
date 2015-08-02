@@ -1,16 +1,16 @@
 ﻿namespace More.VisualStudio.Editors.EntityFramework
 {
+    using ComponentModel;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using More.ComponentModel;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
+    using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
     internal class CSharpDbContextCodeGenerator : ICodeGenerator
     {
@@ -54,6 +54,13 @@
             return classes.ToArray();
         }
 
+        private static IReadOnlyList<UsingDirectiveSyntax> FindUsings( SyntaxNode node )
+        {
+            Contract.Requires( node != null );
+            Contract.Ensures( Contract.Result<IEnumerable<UsingDirectiveSyntax>>() != null );
+            return node.DescendantNodes().OfType<UsingDirectiveSyntax>().ToArray();
+        }
+
         private IReadOnlyList<InterfaceDeclaration> FindInterfaceDeclarations( IEnumerable<ClassDeclarationSyntax> classes )
         {
             Contract.Requires( classes != null );
@@ -67,7 +74,11 @@
             return interfaces.ToArray();
         }
 
-        private static void ImplementInterfaces( CodeGeneratorContext context, IReadOnlyList<InterfaceDeclaration> declarations, TextWriter writer )
+        private static void ImplementInterfaces(
+            CodeGeneratorContext context,
+            IReadOnlyList<UsingDirectiveSyntax> usings,
+            IReadOnlyList<InterfaceDeclaration> declarations,
+            TextWriter writer )
         {
             Contract.Requires( context != null );
             Contract.Requires( declarations != null );
@@ -80,7 +91,7 @@
 
             var indentingWriter = new IndentingTextWriter( writer );
             var implementedInterfaces = new HashSet<string>();
-            var hasNamespace = WriteStartClass( indentingWriter, context.DefaultNamespace, iterator.Current.DefiningClass );
+            var hasNamespace = WriteStartClass( indentingWriter, context.DefaultNamespace, usings, iterator.Current.DefiningClass );
 
             ImplementInterface( indentingWriter, iterator.Current, implementedInterfaces );
 
@@ -137,10 +148,44 @@
             return string.Empty;
         }
 
-        private static bool WriteStartClass( IndentingTextWriter writer, string defaultNamespace, ClassDeclarationSyntax @class )
+        [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "CodeDom", Justification = "False positive" )]
+        [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ComponentModel", Justification = "False positive" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Microsoft.CodeAnalysis.CSharp.SyntaxFactory.Whitespace(System.String)", Justification = "A space does not require localization." )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseName(System.String,System.Int32,System.Boolean)", Justification = "These literals are namespaces and cannot be localized." )]
+        private static void WriteUsings( IndentingTextWriter writer, IReadOnlyList<UsingDirectiveSyntax> usings )
+        {
+            Contract.Requires( writer != null );
+            Contract.Requires( usings != null );
+
+            var space = Whitespace( " " );
+            var requiredUsings = new SortedSet<UsingDirectiveSyntax>( UsingDirectiveComparer.Instance )
+            {
+                UsingDirective( ParseName( "More.ComponentModel" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.CodeDom.Compiler" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Collections.Generic" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.ComponentModel" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Data.Entity" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Linq" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Threading" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Threading.Tasks" ).WithLeadingTrivia( space ) )
+            };
+
+            requiredUsings.AddRange( usings );
+
+            foreach ( var @using in requiredUsings )
+                writer.WriteLine( @using );
+        }
+
+        private static bool WriteStartClass(
+            IndentingTextWriter writer,
+            string defaultNamespace,
+            IReadOnlyList<UsingDirectiveSyntax> usings,
+            ClassDeclarationSyntax @class )
         {
             Contract.Requires( writer != null );
             Contract.Requires( defaultNamespace != null );
+            Contract.Requires( usings != null );
             Contract.Requires( @class != null );
 
             var @namespace = ResolveNamespace( @class, defaultNamespace );
@@ -154,15 +199,7 @@
                 writer.Indent();
             }
 
-            writer.WriteLine( "using More.ComponentModel;" );
-            writer.WriteLine( "using System;" );
-            writer.WriteLine( "using System.CodeDom.Compiler;" );
-            writer.WriteLine( "using System.Collections.Generic;" );
-            writer.WriteLine( "using System.ComponentModel;" );
-            writer.WriteLine( "using System.Data.Entity;" );
-            writer.WriteLine( "using System.Linq;" );
-            writer.WriteLine( "using System.Threading;" );
-            writer.WriteLine( "using System.Threading.Tasks;" );
+            WriteUsings( writer, usings );
             writer.WriteLine();
             writer.WriteLine( "/// <content>" );
             writer.WriteLine( "/// Provides auto-generated interfaces for the <see cref=\"{0}\" /> class. To add addition interfaces,", className );
@@ -202,24 +239,24 @@
             switch ( declaration.Key )
             {
                 case IReadOnlyRepository:
-                    WriteReadOnlyRepositoryImplementation( writer, declaration, implementedInterfaces );
+                    WriteReadOnlyRepository( writer, declaration, implementedInterfaces );
                     break;
                 case IRepository:
                     var inheritedDeclaration = new InterfaceDeclaration( IReadOnlyRepository, declaration );
 
                     if ( WritePropertyChangedImplementation( writer, implementedInterfaces ) )
                         writer.WriteLine();
-                    
-                    if ( WriteReadOnlyRepositoryImplementation( writer, inheritedDeclaration, implementedInterfaces ) )
+
+                    if ( WriteReadOnlyRepository( writer, inheritedDeclaration, implementedInterfaces ) )
                         writer.WriteLine();
 
-                    WriteRepositoryImplementation( writer, declaration, implementedInterfaces );
+                    WriteRepository( writer, declaration, implementedInterfaces );
                     break;
                 case IUnitOfWork:
                     if ( WritePropertyChangedImplementation( writer, implementedInterfaces ) )
                         writer.WriteLine();
 
-                    WriteUnitOfWorkImplementation( writer, declaration, implementedInterfaces );
+                    WriteUnitOfWork( writer, declaration, implementedInterfaces );
                     break;
             }
         }
@@ -241,7 +278,7 @@
             return true;
         }
 
-        private static bool WriteReadOnlyRepositoryImplementation( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
+        private static bool WriteReadOnlyRepository( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
         {
             Contract.Requires( writer != null );
             Contract.Requires( implementedInterfaces != null );
@@ -268,7 +305,7 @@
             return true;
         }
 
-        private static bool WriteRepositoryImplementation( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
+        private static bool WriteRepository( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
         {
             Contract.Requires( writer != null );
             Contract.Requires( declaration != null );
@@ -295,7 +332,7 @@
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "Set<{0}>().Add( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -303,7 +340,7 @@
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -317,7 +354,7 @@
             writer.WriteLine();
             writer.WriteLine( "Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
             writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -347,7 +384,7 @@
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -355,14 +392,14 @@
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
 
             return true;
         }
 
-        private static bool WriteUnitOfWorkImplementation( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
+        private static bool WriteUnitOfWork( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
         {
             Contract.Requires( writer != null );
             Contract.Requires( declaration != null );
@@ -389,7 +426,7 @@
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "Set<{0}>().Add( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -397,7 +434,7 @@
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -411,7 +448,7 @@
             writer.WriteLine();
             writer.WriteLine( "Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
             writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -419,7 +456,7 @@
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "Entry( item ).State = EntityState.Detached;" );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -449,7 +486,7 @@
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
@@ -457,7 +494,7 @@
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );
-            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );" );
+            writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
 
@@ -479,12 +516,13 @@
                 return;
             }
 
+            var usings = FindUsings( root );
             var declarations = FindInterfaceDeclarations( classes );
 
             if ( declarations.Count == 0 )
                 writer.WriteLine( SR.NoInterfacesFound.FormatDefault( typeof( IReadOnlyRepository<> ), typeof( IRepository<> ), typeof( IUnitOfWork<> ) ) );
             else
-                ImplementInterfaces( context, declarations, writer );
+                ImplementInterfaces( context, usings, declarations, writer );
         }
 
         [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed by the caller." )]

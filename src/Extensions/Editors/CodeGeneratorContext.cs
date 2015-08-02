@@ -141,9 +141,7 @@
         /// <returns>An instance of the requested <paramref name="serviceType">service type</paramref> or <c>null</c> if no match is found.</returns>
         public object GetService( Type serviceType )
         {
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
-
+            Arg.NotNull( serviceType, nameof( serviceType ) );
             return serviceProvider.GetService( serviceType );
         }
     }

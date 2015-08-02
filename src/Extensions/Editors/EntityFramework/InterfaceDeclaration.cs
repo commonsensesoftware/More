@@ -75,7 +75,7 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return DeclaredInterface.TypeArgumentList.Arguments.OfType<IdentifierNameSyntax>().Single().Identifier.Text;
+                return DeclaredInterface.TypeArgumentList.Arguments.OfType<NameSyntax>().Single().ToString();
             }
         }
     }

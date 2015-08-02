@@ -223,7 +223,7 @@
             // non-null after first pass
             if ( specification != null )
             {
-                var item = new Tuple<Type, InvokeMethodAction>( targetType, this );
+                var item = Tuple.Create( targetType, this );
 
                 // if specification is met, use resolved method
                 if ( specification.IsSatisfiedBy( item ) )

@@ -27,6 +27,7 @@
     using System.ComponentModel;
     using System.Data.Entity;
     using System.Linq;
+    using ConnectionStringSettings = System.Configuration.ConnectionStringSettings;
 
     public partial class MyDbContext : DbContext{0}
     {{
@@ -36,11 +37,11 @@
 
             foreach ( var interfaceType in interfaceTypes )
             {
-                if ( interfaceType.Equals( typeof( IReadOnlyRepository<> ) ) )
+                if ( interfaceType.Equals( IReadOnlyRepository ) )
                     interfaces.Append( ", IReadOnlyRepository<Class1>" );
-                else if ( interfaceType.Equals( typeof( IRepository<> ) ) )
+                else if ( interfaceType.Equals( IRepository ) )
                     interfaces.Append( ", IRepository<Class1>" );
-                else if ( interfaceType.Equals( typeof( IUnitOfWork<> ) ) )
+                else if ( interfaceType.Equals( IUnitOfWork ) )
                     interfaces.Append( ", IUnitOfWork<Class1>" );
             }
 
@@ -64,6 +65,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using ConnectionStringSettings = System.Configuration.ConnectionStringSettings;
 
     /// <content>
     /// Provides auto-generated interfaces for the <see cref=""MyDbContext"" /> class. To add addition interfaces,
@@ -203,13 +205,13 @@
         void IRepository<Class1>.Add( Class1 item )
         {
             Set<Class1>().Add( item );
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IRepository<Class1>.Remove( Class1 item )
         {
             Set<Class1>().Remove( item );
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IRepository<Class1>.Update( Class1 item )
@@ -219,7 +221,7 @@
 
             Set<Class1>().Attach( item );
             Entry( item ).State = EntityState.Modified;
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IRepository<Class1>.DiscardChanges()
@@ -239,13 +241,13 @@
                 }
             }
 
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         async Task IRepository<Class1>.SaveChangesAsync( CancellationToken cancellationToken )
         {
             await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }";
         }
 
@@ -263,13 +265,13 @@
         void IUnitOfWork<Class1>.RegisterNew( Class1 item )
         {
             Set<Class1>().Add( item );
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IUnitOfWork<Class1>.RegisterRemoved( Class1 item )
         {
             Set<Class1>().Remove( item );
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IUnitOfWork<Class1>.RegisterChanged( Class1 item )
@@ -279,13 +281,13 @@
 
             Set<Class1>().Attach( item );
             Entry( item ).State = EntityState.Modified;
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IUnitOfWork<Class1>.Unregister( Class1 item )
         {
             Entry( item ).State = EntityState.Detached;
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IUnitOfWork<Class1>.Rollback()
@@ -305,17 +307,17 @@
                 }
             }
 
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         async Task IUnitOfWork<Class1>.CommitAsync( CancellationToken cancellationToken )
         {
             await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );
-            OnPropertyChanged( new PropertyChangedEventArgs( nameof( HasPendingChanges ) ) );
+            OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }";
         }
 
-        [Fact]
+        [Fact( DisplayName = "generate should write code for IReadOnlyRepository<T>" )]
         public void GenerateShouldReturnExpectedOutputForIReadOnlyRepository()
         {
             var path = @"C:\temp\MyDbContext.cs";
@@ -329,7 +331,7 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact]
+        [Fact( DisplayName = "generate should write code for IRepository<T>" )]
         public void GenerateShouldReturnExpectedOutputForIRepository()
         {
             var path = @"C:\temp\MyDbContext.cs";
@@ -343,7 +345,7 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact]
+        [Fact( DisplayName = "generate should write code for IUnitOfWork<T>" )]
         public void GenerateShouldReturnExpectedOutputForIUnitOfWork()
         {
             var path = @"C:\temp\MyDbContext.cs";
@@ -357,7 +359,7 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact]
+        [Fact( DisplayName = "generate should write code for multiple interfaces" )]
         public void GenerateShouldReturnExpectedOutputForMultipleInterfaces()
         {
             var path = @"C:\temp\MyDbContext.cs";

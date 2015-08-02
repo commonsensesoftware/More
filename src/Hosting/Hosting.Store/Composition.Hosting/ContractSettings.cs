@@ -94,7 +94,7 @@
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
             Arg.NotNullOrEmpty( viewTypeName, nameof( viewTypeName ) );
-            appSettings.Add( new Tuple<string, string, string>( null, name, viewTypeName ) );
+            appSettings.Add( Tuple.Create( (string) null, name, viewTypeName ) );
         }
 
         /// <summary>
@@ -108,7 +108,7 @@
             Arg.NotNullOrEmpty( id, nameof( id ) );
             Arg.NotNullOrEmpty( name, nameof( name ) );
             Arg.NotNullOrEmpty( viewTypeName, nameof( viewTypeName ) );
-            appSettings.Add( new Tuple<string, string, string>( id, name, viewTypeName ) );
+            appSettings.Add( Tuple.Create( id, name, viewTypeName ) );
         }
 
         /// <summary>
