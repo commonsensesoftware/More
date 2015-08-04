@@ -5,33 +5,46 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
   <DefaultName>ViewModel.cs</DefaultName>
-  <Name>Interaction View Model (Portable, More)</Name>
+  <Name>Page View Model (More)</Name>
   <Icon Package="{FAE04EC1-301F-11d3-BF4B-00C04F79EFBC}" ID="4515" />
-  <Description>A class that implements a view model with basic interactivity support in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.Portable.CSharp.InteractionViewModel</TemplateID>
+  <Description>A class that implements a view model for a Page-based view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.CS.WinRT.PageViewModel</TemplateID>
+  <TemplateGroupID>WinRT-Managed-Win81</TemplateGroupID>
   <ProjectType>CSharp</ProjectType>
-  <SortOrder>10</SortOrder>
-  <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
-  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
-  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+  <ShowByDefault>false</ShowByDefault>
+  <TargetPlatformName>Windows</TargetPlatformName>
+  <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
+  <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <References />
-  <ProjectItem TargetFileName="$fileinputname$.cs" ReplaceParameters="true">InteractionViewModel.cs</ProjectItem>
+  <ProjectItem TargetFileName="$fileinputname$.cs" ReplaceParameters="true">PageViewModel.cs</ProjectItem>
   <CustomParameters>
    <CustomParameter Name="_baseClassNames" Value="" />
    <CustomParameter Name="_defaultBaseClass" Value="" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
    <CustomParameter Name="$base$" Value="" />
    <CustomParameter Name="$title$" Value="" />
-   <CustomParameter Name="$addTitle$" Value="false" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$showOpenFileTips$" Value="false" />
    <CustomParameter Name="$showSaveFileTips$" Value="false" />
    <CustomParameter Name="$showSelectFolderTips$" Value="false" />
+   <CustomParameter Name="$showSharingTips$" Value="false" />
+   <CustomParameter Name="$showAppSharingTips$" Value="false" />
+   <CustomParameter Name="$showSearchTips$" Value="false" />
+   <CustomParameter Name="$showAppSearchTips$" Value="false" />
+   <CustomParameter Name="$showSettingsTips$" Value="false" />
+   <CustomParameter Name="$eventBrokerRequired$" Value="false" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableSettings$" Value="false" />
+   <CustomParameter Name="$enableSharing$" Value="false" />
+   <CustomParameter Name="$enableSearch$" Value="false" />
+   <CustomParameter Name="$enableAppSharing$" Value="false" />
+   <CustomParameter Name="$enableAppSearch$" Value="false" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>

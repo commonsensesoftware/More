@@ -7,16 +7,16 @@
  <TemplateData>
   <DefaultName>UserControl.xaml</DefaultName>
   <Name>User Control View (More)</Name>
-  <Icon Package="{b3bae735-386c-4030-8329-ef48eeda4036}" ID="4594" />
-  <Description>A Windows Presentation Foundation user control which represents a view in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.WPF.CSharp.UserControl</TemplateID>
-  <TemplateGroupID>WPF</TemplateGroupID>
+  <Icon Package="{BB89AFCA-43DA-45C1-907D-9D61DD11F28D}" ID="4022" />
+  <Description>A blank user control which represents a view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.CS.WinRT.UserControl</TemplateID>
+  <TemplateGroupID>WinRT-Managed-Win81</TemplateGroupID>
   <ProjectType>CSharp</ProjectType>
-  <SortOrder>10</SortOrder>
-  <ShowByDefault>true</ShowByDefault>
-  <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
-  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
-  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+  <ShowByDefault>false</ShowByDefault>
+  <TargetPlatformName>Windows</TargetPlatformName>
+  <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
+  <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <References />
@@ -24,14 +24,20 @@
   <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">UserControl1.xaml.cs</ProjectItem>
   <CustomParameters>
    <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
-   <CustomParameter Name="_viewModelTemplateName" Value="More\Universal\1033\InteractionViewModel.zip" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WsInteractionViewModel.zip" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
    <CustomParameter Name="$showTips$" Value="true" />
-   <CustomParameter Name="$hasviewmodel$" Value="true" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
-   <CustomParameter Name="$interfaceoption$" Value="2" />
+   <CustomParameter Name="$enableSettings$" Value="false" />
+   <CustomParameter Name="$enableSharing$" Value="false" />
+   <CustomParameter Name="$enableSearch$" Value="false" />
+   <CustomParameter Name="$enableAppSharing$" Value="false" />
+   <CustomParameter Name="$enableAppSearch$" Value="false" />
+   <CustomParameter Name="$interfaceoption$" Value="1" />
+   <CustomParameter Name="$hasviewmodel$" Value="true" />
    <CustomParameter Name="$viewmodel$" Value="" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />
   </CustomParameters>

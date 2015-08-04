@@ -78,7 +78,7 @@
             set
             {
                 if ( !IsValidIdentifier( value ) )
-                    throw new ArgumentException( ExceptionMessage.InvalidActivityId, nameof( value ) );
+                    throw new ArgumentException( ExceptionMessage.InvalidActivityAttributeId, nameof( value ) );
 
                 id = new Lazy<string>( () => value );
             }

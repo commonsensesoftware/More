@@ -6,36 +6,41 @@
 <#@ parameter type="System.String" name="PresentationVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
-  <DefaultName>UserControl.xaml</DefaultName>
-  <Name>User Control View (More)</Name>
-  <Icon>__TemplateIcon.ico</Icon>
-  <Description>A Windows Phone user control which represents a view in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.WindowsPhoneApp.CSharp.UserControl</TemplateID>
-  <TemplateGroupID>WindowsPhoneApp-Managed-Win81</TemplateGroupID>
+  <DefaultName>Window.xaml</DefaultName>
+  <Name>Window View (More)</Name>
+  <Icon Package="{b3bae735-386c-4030-8329-ef48eeda4036}" ID="4593" />
+  <Description>A Windows Presentation Foundation window which represents a view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.WPF.CSharp.Window</TemplateID>
+  <TemplateGroupID>WPF</TemplateGroupID>
   <ProjectType>CSharp</ProjectType>
-  <TargetPlatformName>Windows</TargetPlatformName>
-  <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
+  <SortOrder>10</SortOrder>
+  <ShowByDefault>true</ShowByDefault>
+  <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
   <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
  </TemplateData>
  <TemplateContent>
   <References />
-  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">UserControl1.xaml</ProjectItem>
-  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">UserControl1.xaml.cs</ProjectItem>
+  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">Window1.xaml</ProjectItem>
+  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">Window1.xaml.cs</ProjectItem>
   <CustomParameters>
-   <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
-   <CustomParameter Name="_viewModelTemplateName" Value="More\Windows Phone\1033\InteractionViewModel.zip" />
+   <CustomParameter Name="_views" Value="WindowOnly,ImplementIViewT,ImplementIViewTT,ImplementIDialogViewT" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WpfChildWindowViewModel.zip|FrameworkVersion=4.5" />
+   <CustomParameter Name="_topLevelViewModelTemplateName" Value="More\Code\1033\WpfWindowViewModel.zip|FrameworkVersion=4.5" />
+   <CustomParameter Name="_topLevel" Value="false" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
-   <CustomParameter Name="_contracts" Value="Share,AppShare" />
+   <CustomParameter Name="$addTitle$" Value="true" />
    <CustomParameter Name="$showTips$" Value="true" />
-   <CustomParameter Name="$enableSharing$" Value="false" />
-   <CustomParameter Name="$enableAppSharing$" Value="false" />
+   <CustomParameter Name="$addCloseBehavior$" Value="false" />
+   <CustomParameter Name="$hasviewmodel$" Value="true" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
-   <CustomParameter Name="$interfaceoption$" Value="0" />
-   <CustomParameter Name="$hasviewmodel$" Value="true" />
+   <CustomParameter Name="$interfaceoption$" Value="3" />
    <CustomParameter Name="$viewmodel$" Value="" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />
+   <CustomParameter Name="$commands$" Value="" />
+   <CustomParameter Name="$dialogCommands$" Value="" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>
@@ -50,7 +55,7 @@
    <package id="More.UI.Presentation" version="<#= PresentationVersion #>" />
   </packages>
  </WizardData>
-  <WizardExtension>
+ <WizardExtension>
   <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
   <FullClassName>More.VisualStudio.Templates.ViewTemplateWizard</FullClassName>
  </WizardExtension>

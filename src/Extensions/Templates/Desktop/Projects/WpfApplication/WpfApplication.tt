@@ -23,6 +23,7 @@
   <CreateInPlace>false</CreateInPlace>
   <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
   <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <References />
@@ -41,7 +42,7 @@
   </Project>
   <CustomParameters>
    <CustomParameter Name="_view" Value="MainWindow" />
-   <CustomParameter Name="_viewTemplate" Value="More\Windows Desktop\1033\WindowShellView.zip|FrameworkVersion=4.5" />
+   <CustomParameter Name="_viewTemplate" Value="More\WPF\1033\WpfWindowShellView.zip|FrameworkVersion=4.5" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />

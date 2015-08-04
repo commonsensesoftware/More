@@ -5,6 +5,8 @@
 # ignore visual studio files
 *.suo
 *.user
+/$tf
+/src/.vs/config
 
 # ignore template-generated file version
 FileVersionInfo.cs
@@ -31,4 +33,3 @@ FakesAssemblies/
 
 # ignore generated html files (typically from portability analysis)
 *.htm
-/$tf

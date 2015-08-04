@@ -26,6 +26,7 @@
   <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
   <CreateInPlace>true</CreateInPlace>
   <PreviewImage>BlankApp.png</PreviewImage>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <Project File="Application.csproj" ReplaceParameters="true">
@@ -46,7 +47,7 @@
   </Project>
   <CustomParameters>
    <CustomParameter Name="_view" Value="MainPage" />
-   <CustomParameter Name="_viewTemplate" Value="More\Windows Phone\1033\BlankPage.zip" />
+   <CustomParameter Name="_viewTemplate" Value="More\XAML\1033\WpBlankPage.zip" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
    <CustomParameter Name="_contracts" Value="Share,AppShare" />
    <CustomParameter Name="$viewmodel$" Value="MainViewModel" />

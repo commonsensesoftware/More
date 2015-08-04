@@ -1,4 +1,5 @@
-﻿namespace More.VisualStudio.Templates
+﻿using System.Diagnostics.Contracts;
+namespace More.VisualStudio.Templates
 {
     using EnvDTE;
     using Microsoft.VisualStudio.Shell.Interop;
@@ -23,9 +24,10 @@
             writer.ApplyExtensions( project, key => GetBoolean( key, false ) );
         }
 
-        private void TryAddMainView( Project project )
+        private void TryAddMainView( Project project, string language )
         {
             Contract.Requires( project != null );
+            Contract.Requires( !string.IsNullOrEmpty( language ) );
 
             var viewTemplate = GetString( "_viewTemplate" );
 
@@ -34,12 +36,13 @@
 
             var viewName = GetString( "_view", "MainView" );
 
-            AddFromTemplate( "Views", viewTemplate, viewName, "CSharp" );
+            AddFromTemplate( "Views", viewTemplate, viewName, language );
         }
 
-        private void TryAddSettingsFlyout( Project project )
+        private void TryAddSettingsFlyout( Project project, string language )
         {
             Contract.Requires( project != null );
+            Contract.Requires( !string.IsNullOrEmpty( language ) );
 
             var addSettings = GetBoolean( "$enableSettings$" );
             var settingsTemplate = GetString( "_settingsTemplate" );
@@ -48,7 +51,7 @@
                 return;
 
             Context.Replacements["$viewmodel$"] = "DefaultSettingsViewModel";
-            AddFromTemplate( "Views", settingsTemplate, "DefaultSettings", "CSharp" );
+            AddFromTemplate( "Views", settingsTemplate, "DefaultSettings", language );
         }
 
         /// <summary>
@@ -60,12 +63,14 @@
             if ( project == null )
                 return;
 
+            var language = project.GetTemplateLanguage();
+
             // suppress futher user interactions
             using ( Context.EnterNonInteractiveScope() )
             {
                 // try to add additional files from templates, if configured
-                TryAddMainView( project );
-                TryAddSettingsFlyout( project );
+                TryAddMainView( project, language );
+                TryAddSettingsFlyout( project, language );
             }
 
             // HACK: for some reason template parameters are not replaced in *.appxmanifest files.

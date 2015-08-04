@@ -258,7 +258,7 @@
     <value>The specified index is out of bounds.</value>
   </data>
   <data name="InvalidActivityId" xml:space="preserve">
-    <value>The specified activity identifier is invalid.</value>
+    <value>The specified activity identifier is invalid. The value must be a globally unique identifier (GUID).</value>
   </data>
   <data name="InvalidCast" xml:space="preserve">
     <value>Cannot convert type '{0}' to type '{1}'.</value>

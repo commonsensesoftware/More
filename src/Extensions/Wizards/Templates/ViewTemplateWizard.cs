@@ -29,8 +29,12 @@
             var viewModelName = GetString( "$viewmodel$" );
             var viewModelTemplate = GetString( viewModelTemplateKey );
 
-            if ( !string.IsNullOrEmpty( viewModelName ) && !string.IsNullOrEmpty( viewModelTemplate ) )
-                AddFromTemplate( "ViewModels", viewModelTemplate, viewModelName, "CSharp" );
+            if ( string.IsNullOrEmpty( viewModelName ) || string.IsNullOrEmpty( viewModelTemplate ) )
+                return;
+
+            var language = projectItem.ContainingProject.GetTemplateLanguage();
+
+            AddFromTemplate( "ViewModels", viewModelTemplate, viewModelName, language );
         }
 
         /// <summary>

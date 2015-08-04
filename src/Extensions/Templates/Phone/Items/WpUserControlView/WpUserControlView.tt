@@ -1,4 +1,4 @@
-﻿<#@ template language="c#" hostspecific="true" #>
+<#@ template language="c#" hostspecific="true" #>
 <#@ output extension=".vstemplate" #>
 <#@ parameter type="System.String" name="CoreVersion" #>
 <#@ parameter type="System.String" name="UIVersion" #>
@@ -6,25 +6,26 @@
 <#@ parameter type="System.String" name="PresentationVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
-  <DefaultName>Page.xaml</DefaultName>
-  <Name>Blank Page View (More)</Name>
-  <Icon Package="{BB89AFCA-43DA-45C1-907D-9D61DD11F28D}" ID="4062" />
-  <Description>A blank page which represents a view in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.WindowsPhoneApp.CSharp.BlankPage</TemplateID>
+  <DefaultName>UserControl.xaml</DefaultName>
+  <Name>User Control View (More)</Name>
+  <Icon>__TemplateIcon.ico</Icon>
+  <Description>A Windows Phone user control which represents a view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.CS.WindowsPhoneApp.UserControl</TemplateID>
   <TemplateGroupID>WindowsPhoneApp-Managed-Win81</TemplateGroupID>
   <ProjectType>CSharp</ProjectType>
-  <PreviewImage>BlankPage.png</PreviewImage>
+  <ShowByDefault>false</ShowByDefault>
   <TargetPlatformName>Windows</TargetPlatformName>
   <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
-  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+  <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <References />
-  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">BlankPage.xaml</ProjectItem>
-  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" ReplaceParameters="true">BlankPage.xaml.cs</ProjectItem>
+  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">UserControl1.xaml</ProjectItem>
+  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">UserControl1.xaml.cs</ProjectItem>
   <CustomParameters>
-   <CustomParameter Name="_views" Value="PageOnly,ImplementIViewT,ImplementIViewTT" />
-   <CustomParameter Name="_viewModelTemplateName" Value="More\Windows Phone\1033\PageViewModel.zip" />
+   <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WpInteractionViewModel.zip" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
    <CustomParameter Name="_contracts" Value="Share,AppShare" />
    <CustomParameter Name="$showTips$" Value="true" />
@@ -33,7 +34,7 @@
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
-   <CustomParameter Name="$interfaceoption$" Value="2" />
+   <CustomParameter Name="$interfaceoption$" Value="0" />
    <CustomParameter Name="$hasviewmodel$" Value="true" />
    <CustomParameter Name="$viewmodel$" Value="" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />
@@ -51,7 +52,7 @@
    <package id="More.UI.Presentation" version="<#= PresentationVersion #>" />
   </packages>
  </WizardData>
- <WizardExtension>
+  <WizardExtension>
   <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
   <FullClassName>More.VisualStudio.Templates.ViewTemplateWizard</FullClassName>
  </WizardExtension>

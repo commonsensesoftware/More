@@ -62,9 +62,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SettingsFlyout.tt">
+    <None Include="WsSettingsFlyout.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SettingsFlyout.vstemplate</LastGenOutput>
+      <LastGenOutput>WsSettingsFlyout.vstemplate</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -74,15 +74,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="SettingsFlyout.vstemplate">
+    <VSTemplate Include="WsSettingsFlyout.vstemplate">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SettingsFlyout.tt</DependentUpon>
-      <OutputSubPath>More\Windows</OutputSubPath>
+      <DependentUpon>WsSettingsFlyout.tt</DependentUpon>
+      <OutputSubPath>More\XAML</OutputSubPath>
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SettingsFlyout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

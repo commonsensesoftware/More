@@ -8,12 +8,15 @@
   <Name>View Model (Portable, More)</Name>
   <Icon Package="{FAE04EC1-301F-11d3-BF4B-00C04F79EFBC}" ID="4515" />
   <Description>A class that implements a view model in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.Portable.CSharp.ViewModel</TemplateID>
+  <TemplateID>More.CSharp.PortableViewModel</TemplateID>
+  <AppliesTo>CSharp</AppliesTo>
   <ProjectType>CSharp</ProjectType>
   <SortOrder>10</SortOrder>
+  <ShowByDefault>true</ShowByDefault>
   <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
   <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
-  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+  <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <References />

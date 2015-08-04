@@ -21,7 +21,7 @@
   <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">Window1.xaml</ProjectItem>
   <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">Window1.xaml.cs</ProjectItem>
   <CustomParameters>
-   <CustomParameter Name="_topLevelViewModelTemplateName" Value="More\Windows Desktop\1033\WindowViewModel.zip|FrameworkVersion=4.5" />
+   <CustomParameter Name="_topLevelViewModelTemplateName" Value="More\Code\1033\WpfWindowViewModel.zip|FrameworkVersion=4.5" />
    <CustomParameter Name="_topLevel" Value="true" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
    <CustomParameter Name="$showTips$" Value="true" />

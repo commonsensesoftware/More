@@ -1,4 +1,5 @@
-﻿namespace More.VisualStudio.Editors.EntityFramework
+﻿using System.Diagnostics.Contracts;
+namespace More.VisualStudio.Editors.EntityFramework
 {
     using ComponentModel;
     using Microsoft.CodeAnalysis;
@@ -10,6 +11,7 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
+    using static Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree;
     using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
     internal class CSharpDbContextCodeGenerator : ICodeGenerator
@@ -21,10 +23,33 @@
         private const string IUnitOfWork = "IUnitOfWork";
         private const string INotifyPropertyChanged = "INotifyPropertyChanged";
 
-        private readonly Lazy<ISpecification<GenericNameSyntax>> interfaceSpecification = new Lazy<ISpecification<GenericNameSyntax>>( CreateInterfaceSpecification );
+        private static readonly Lazy<IReadOnlyList<UsingDirectiveSyntax>> requiredUsings = new Lazy<IReadOnlyList<UsingDirectiveSyntax>>( CreateRequiredUsings );
+        private static readonly Lazy<ISpecification<GenericNameSyntax>> interfaceSpecification = new Lazy<ISpecification<GenericNameSyntax>>( CreateInterfaceSpecification );
+
+        private static IReadOnlyList<UsingDirectiveSyntax> CreateRequiredUsings()
+        {
+            Contract.Ensures( Contract.Result<IReadOnlyList<UsingDirectiveSyntax>>() != null );
+
+            var space = Whitespace( " " );
+
+            return new[]
+            {
+                UsingDirective( ParseName( "More.ComponentModel" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.CodeDom.Compiler" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Collections.Generic" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.ComponentModel" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Data.Entity" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Linq" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Threading" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Threading.Tasks" ).WithLeadingTrivia( space ) )
+            };
+        }
 
         private static ISpecification<GenericNameSyntax> CreateInterfaceSpecification()
         {
+            Contract.Ensures( Contract.Result<ISpecification<GenericNameSyntax>>() != null );
+
             var specification = new Specification<GenericNameSyntax>( i => i.Identifier.Text == IReadOnlyRepository )
                                                                  .Or( i => i.Identifier.Text == IRepository )
                                                                  .Or( i => i.Identifier.Text == IUnitOfWork );
@@ -32,7 +57,16 @@
             return specification;
         }
 
-        private ISpecification<GenericNameSyntax> InterfaceSpecification
+        private static IReadOnlyList<UsingDirectiveSyntax> RequiredUsings
+        {
+            get
+            {
+                Contract.Ensures( Contract.Result<IReadOnlyList<UsingDirectiveSyntax>>() != null );
+                return requiredUsings.Value;
+            }
+        }
+
+        private static ISpecification<GenericNameSyntax> InterfaceSpecification
         {
             get
             {
@@ -152,28 +186,19 @@
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ComponentModel", Justification = "False positive" )]
         [SuppressMessage( "Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Microsoft.CodeAnalysis.CSharp.SyntaxFactory.Whitespace(System.String)", Justification = "A space does not require localization." )]
         [SuppressMessage( "Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseName(System.String,System.Int32,System.Boolean)", Justification = "These literals are namespaces and cannot be localized." )]
-        private static void WriteUsings( IndentingTextWriter writer, IReadOnlyList<UsingDirectiveSyntax> usings )
+        private static void WriteUsings( IndentingTextWriter writer, IReadOnlyList<UsingDirectiveSyntax> declaredUsings )
         {
             Contract.Requires( writer != null );
-            Contract.Requires( usings != null );
+            Contract.Requires( declaredUsings != null );
 
-            var space = Whitespace( " " );
-            var requiredUsings = new SortedSet<UsingDirectiveSyntax>( UsingDirectiveComparer.Instance )
-            {
-                UsingDirective( ParseName( "More.ComponentModel" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System.CodeDom.Compiler" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System.Collections.Generic" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System.ComponentModel" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System.Data.Entity" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System.Linq" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System.Threading" ).WithLeadingTrivia( space ) ),
-                UsingDirective( ParseName( "System.Threading.Tasks" ).WithLeadingTrivia( space ) )
-            };
+            var usings = new SortedSet<UsingDirectiveSyntax>( UsingDirectiveComparer.Instance );
 
-            requiredUsings.AddRange( usings );
+            // merge sorted, distinct list of required and declared usings
+            usings.AddRange( RequiredUsings );
+            usings.AddRange( declaredUsings );
 
-            foreach ( var @using in requiredUsings )
+            // write out required usings
+            foreach ( var @using in usings )
                 writer.WriteLine( @using );
         }
 
@@ -283,10 +308,10 @@
             Contract.Requires( writer != null );
             Contract.Requires( implementedInterfaces != null );
 
-            if ( implementedInterfaces.Contains( declaration.Key ) )
+            if ( implementedInterfaces.Contains( declaration.TypeName ) )
                 return false;
 
-            implementedInterfaces.Add( declaration.Key );
+            implementedInterfaces.Add( declaration.TypeName );
 
             writer.WriteLine( "async Task<IEnumerable<{1}>> {0}.GetAsync( Func<IQueryable<{1}>, IQueryable<{1}>> queryShaper, CancellationToken cancellationToken )", declaration.TypeName, declaration.ArgumentTypeName );
             writer.WriteLine( "{" );
@@ -311,10 +336,10 @@
             Contract.Requires( declaration != null );
             Contract.Requires( implementedInterfaces != null );
 
-            if ( implementedInterfaces.Contains( declaration.Key ) )
+            if ( implementedInterfaces.Contains( declaration.TypeName ) )
                 return false;
 
-            implementedInterfaces.Add( declaration.Key );
+            implementedInterfaces.Add( declaration.TypeName );
 
             writer.WriteLine( "bool {0}.HasPendingChanges", declaration.TypeName );
             writer.WriteLine( "{" );
@@ -405,10 +430,10 @@
             Contract.Requires( declaration != null );
             Contract.Requires( implementedInterfaces != null );
 
-            if ( implementedInterfaces.Contains( declaration.Key ) )
+            if ( implementedInterfaces.Contains( declaration.TypeName ) )
                 return false;
 
-            implementedInterfaces.Add( declaration.Key );
+            implementedInterfaces.Add( declaration.TypeName );
 
             writer.WriteLine( "bool {0}.HasPendingChanges", declaration.TypeName );
             writer.WriteLine( "{" );
@@ -506,7 +531,7 @@
             Contract.Requires( context != null );
             Contract.Requires( writer != null );
 
-            var ast = CSharpSyntaxTree.ParseText( context.FileContents );
+            var ast = ParseText( context.FileContents );
             var root = ast.GetRoot();
             var classes = FindClasses( root );
 

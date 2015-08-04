@@ -186,11 +186,11 @@ namespace More
         /// <summary>
         ///   Looks up a localized string similar to The specified activity identifier is invalid. The value must be a globally unique identifier (GUID)..
         /// </summary>
-        internal static string InvalidActivityId
+        internal static string InvalidActivityAttributeId
         {
             get
             {
-                return ResourceManager.GetString( "InvalidActivityId", resourceCulture );
+                return ResourceManager.GetString( "InvalidActivityAttributeId", resourceCulture );
             }
         }
     }

@@ -5,29 +5,33 @@
 <#@ parameter type="System.String" name="PresentationVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
-  <DefaultName>SettingsFlyout.xaml</DefaultName>
-  <Name>Settings Flyout View (More)</Name>
-  <Icon Package="{BB89AFCA-43DA-45C1-907D-9D61DD11F28D}" ID="4007" />
-  <Description>A blank Settings flyout which represents a view in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.WinRT.CSharp.SettingsFlyout</TemplateID>
-  <TemplateGroupID>WinRT-Managed-Win81</TemplateGroupID>
+  <DefaultName>UserControl.xaml</DefaultName>
+  <Name>User Control View (More)</Name>
+  <Icon Package="{b3bae735-386c-4030-8329-ef48eeda4036}" ID="4594" />
+  <Description>A Windows Presentation Foundation user control which represents a view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.WPF.CSharp.UserControl</TemplateID>
+  <TemplateGroupID>WPF</TemplateGroupID>
   <ProjectType>CSharp</ProjectType>
-  <PreviewImage>SettingsFlyout.png</PreviewImage>
-  <TargetPlatformName>Windows</TargetPlatformName>
-  <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
+  <SortOrder>10</SortOrder>
+  <ShowByDefault>true</ShowByDefault>
+  <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
   <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
  </TemplateData>
  <TemplateContent>
   <References />
-  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">SettingsFlyout.xaml</ProjectItem>
-  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" ReplaceParameters="true">SettingsFlyout.xaml.cs</ProjectItem>
+  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">UserControl1.xaml</ProjectItem>
+  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">UserControl1.xaml.cs</ProjectItem>
   <CustomParameters>
-   <CustomParameter Name="_views" Value="SettingsFlyoutOnly,ImplementIViewT,ImplementIViewTT" />
-   <CustomParameter Name="_viewModelTemplateName" Value="More\Windows\1033\InteractionViewModel.zip" />
-   <CustomParameter Name="$addTitle$" Value="true" />
+   <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\UaInteractionViewModel.zip" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
    <CustomParameter Name="$showTips$" Value="true" />
-   <CustomParameter Name="$interfaceoption$" Value="2" />
    <CustomParameter Name="$hasviewmodel$" Value="true" />
+   <CustomParameter Name="$enableOpenFile$" Value="false" />
+   <CustomParameter Name="$enableSaveFile$" Value="false" />
+   <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$interfaceoption$" Value="2" />
    <CustomParameter Name="$viewmodel$" Value="" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />
   </CustomParameters>

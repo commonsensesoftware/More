@@ -24,11 +24,11 @@
         /// <param name="settings">The <see cref="ConnectionStringSettings">connection string settings</see> for the context.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public $safeitemrootname$( [Setting( "$connectionStringKey$" )] ConnectionStringSettings settings )
-            : base( settings.ConnectionString )$endif$$if$($compose$ == false)
+            : base( settings?.ConnectionString )$endif$$if$($compose$ == false)
         public $safeitemrootname$()
             : base( "name=$connectionStringKey$" )$endif$
-        {
-            Contract.Requires( settings != null );
+        {$if$($compose$ == true)
+            Contract.Requires( settings != null );$endif$
             Database.SetInitializer<$safeitemrootname$>( null );
         }
 

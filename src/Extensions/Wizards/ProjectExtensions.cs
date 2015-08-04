@@ -1,4 +1,5 @@
-﻿namespace More.VisualStudio
+﻿using System.Diagnostics.Contracts;
+namespace More.VisualStudio
 {
     using EnvDTE;
     using Microsoft.CodeAnalysis.MSBuild;
@@ -11,6 +12,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
+    using System.Text;
     using System.Threading.Tasks;
     using VSLangProj;
     using VSLangProj80;
@@ -189,6 +191,12 @@
             return match;
         }
 
+        internal static bool IsWindowsStoreApp( this Project project )
+        {
+            Contract.Requires( project != null );
+            return project.IsProjectType( WindowsStoreApp81 );
+        }
+
         internal static bool IsWindowsPhoneApp( this Project project )
         {
             Contract.Requires( project != null );
@@ -200,6 +208,12 @@
         {
             Contract.Requires( project != null );
             return project.IsProjectType( WindowsStoreApp81, WindowsPhoneApp81 );
+        }
+
+        internal static bool IsCSharp( this Project project )
+        {
+            Contract.Requires( project != null );
+            return project.IsProjectType( CSharp );
         }
 
         internal static bool IsVisualBasic( this Project project )
@@ -225,6 +239,32 @@
         {
             Contract.Requires( project != null );
             return project.IsProjectType( Portable );
+        }
+
+        internal static string GetTemplateLanguage( this Project project )
+        {
+            Contract.Requires( project != null );
+            Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
+
+            var language = new StringBuilder();
+
+            // supported languages
+            if ( project.IsCSharp() )
+                language.Append( "CSharp" );
+            else if ( project.IsVisualBasic() )
+                language.Append( "VisualBasic" );
+            
+            // language is unknown; this will ultimately cause a failure
+            if ( language.Length == 0 )
+                return "Unknown";
+
+            // add applicable language subtype
+            if ( project.IsWindowsStoreApp() )
+                language.Append( "\\WinRT-Managed" );
+            else if ( project.IsWindowsPhoneApp() )
+                language.Append( "\\WindowsPhoneApp-Managed" );
+
+            return language.ToString();
         }
 
         internal static string GetConfigurationFileName( this Project project )

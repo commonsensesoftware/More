@@ -60,18 +60,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="InteractionViewModel.tt">
+    <None Include="WsInteractionViewModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>InteractionViewModel.vstemplate</LastGenOutput>
+      <LastGenOutput>WsInteractionViewModel.vstemplate</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="InteractionViewModel.vstemplate">
+    <VSTemplate Include="WsInteractionViewModel.vstemplate">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InteractionViewModel.tt</DependentUpon>
-      <OutputSubPath>More\Windows</OutputSubPath>
+      <DependentUpon>WsInteractionViewModel.tt</DependentUpon>
+      <OutputSubPath>More\Code</OutputSubPath>
     </VSTemplate>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

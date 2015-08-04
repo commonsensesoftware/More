@@ -1,19 +1,22 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
 <#@ output extension=".vstemplate" #>
 <#@ parameter type="System.String" name="CoreVersion" #>
-<#@ parameter type="System.String" name="UIVersion" #><?xml version="1.0" encoding="utf-8" ?>
+<#@ parameter type="System.String" name="UIVersion" #>
+<#@ parameter type="System.String" name="UIExVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
   <DefaultName>ViewModel.cs</DefaultName>
   <Name>Page View Model (More)</Name>
   <Icon Package="{FAE04EC1-301F-11d3-BF4B-00C04F79EFBC}" ID="4515" />
   <Description>A class that implements a view model for a Page-based view in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.WinRT.CSharp.Page.ViewModel</TemplateID>
-  <TemplateGroupID>WinRT-Managed-Win81</TemplateGroupID>
+  <TemplateID>More.CS.WindowsPhoneApp.PageViewModel</TemplateID>
+  <TemplateGroupID>WindowsPhoneApp-Managed-Win81</TemplateGroupID>
   <ProjectType>CSharp</ProjectType>
+  <ShowByDefault>false</ShowByDefault>
   <TargetPlatformName>Windows</TargetPlatformName>
   <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
-  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+  <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <References />
@@ -22,27 +25,23 @@
    <CustomParameter Name="_baseClassNames" Value="" />
    <CustomParameter Name="_defaultBaseClass" Value="" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
-   <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
+   <CustomParameter Name="_contracts" Value="Share,AppShare" />
    <CustomParameter Name="$base$" Value="" />
    <CustomParameter Name="$title$" Value="" />
+   <CustomParameter Name="$ctorParameters$" Value="" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$showOpenFileTips$" Value="false" />
    <CustomParameter Name="$showSaveFileTips$" Value="false" />
    <CustomParameter Name="$showSelectFolderTips$" Value="false" />
    <CustomParameter Name="$showSharingTips$" Value="false" />
    <CustomParameter Name="$showAppSharingTips$" Value="false" />
-   <CustomParameter Name="$showSearchTips$" Value="false" />
-   <CustomParameter Name="$showAppSearchTips$" Value="false" />
-   <CustomParameter Name="$showSettingsTips$" Value="false" />
+   <CustomParameter Name="$continuationRequired$" Value="false" />
    <CustomParameter Name="$eventBrokerRequired$" Value="false" />
+   <CustomParameter Name="$enableSharing$" Value="false" />
+   <CustomParameter Name="$enableAppSharing$" Value="false" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
-   <CustomParameter Name="$enableSettings$" Value="false" />
-   <CustomParameter Name="$enableSharing$" Value="false" />
-   <CustomParameter Name="$enableSearch$" Value="false" />
-   <CustomParameter Name="$enableAppSharing$" Value="false" />
-   <CustomParameter Name="$enableAppSearch$" Value="false" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>
@@ -53,6 +52,7 @@
   <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
    <package id="More" version="<#= CoreVersion #>" />
    <package id="More.UI" version="<#= UIVersion #>" />
+   <package id="More.UI.Extensions" version="<#= UIExVersion #>" />
   </packages>
  </WizardData>
  <WizardExtension>

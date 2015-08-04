@@ -1,0 +1,52 @@
+<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".vstemplate" #>
+<#@ parameter type="System.String" name="CoreVersion" #>
+<#@ parameter type="System.String" name="UIVersion" #>
+<#@ parameter type="System.String" name="PresentationVersion" #><?xml version="1.0" encoding="utf-8" ?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+ <TemplateData>
+  <DefaultName>SettingsFlyout.xaml</DefaultName>
+  <Name>Settings Flyout View (More)</Name>
+  <Icon Package="{BB89AFCA-43DA-45C1-907D-9D61DD11F28D}" ID="4031" />
+  <Description>A blank Settings flyout which represents a view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.CS.WinRT.SettingsFlyout</TemplateID>
+  <TemplateGroupID>WinRT-Managed-Win81</TemplateGroupID>
+  <ProjectType>CSharp</ProjectType>
+  <ShowByDefault>false</ShowByDefault>
+  <PreviewImage>SettingsFlyout.png</PreviewImage>
+  <TargetPlatformName>Windows</TargetPlatformName>
+  <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
+  <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
+ </TemplateData>
+ <TemplateContent>
+  <References />
+  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">SettingsFlyout.xaml</ProjectItem>
+  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" ReplaceParameters="true">SettingsFlyout.xaml.cs</ProjectItem>
+  <CustomParameters>
+   <CustomParameter Name="_views" Value="SettingsFlyoutOnly,ImplementIViewT,ImplementIViewTT" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WsInteractionViewModel.zip" />
+   <CustomParameter Name="$addTitle$" Value="true" />
+   <CustomParameter Name="$showTips$" Value="true" />
+   <CustomParameter Name="$interfaceoption$" Value="2" />
+   <CustomParameter Name="$hasviewmodel$" Value="true" />
+   <CustomParameter Name="$viewmodel$" Value="" />
+   <CustomParameter Name="$viewmodelnamespace$" Value="" />
+  </CustomParameters>
+ </TemplateContent>
+ <WizardExtension>
+  <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+  <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+ </WizardExtension>
+ <WizardData>
+  <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
+   <package id="More" version="<#= CoreVersion #>" />
+   <package id="More.UI" version="<#= UIVersion #>" />
+   <package id="More.UI.Presentation" version="<#= PresentationVersion #>" />
+  </packages>
+ </WizardData>
+ <WizardExtension>
+  <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
+  <FullClassName>More.VisualStudio.Templates.ViewTemplateWizard</FullClassName>
+ </WizardExtension>
+</VSTemplate>

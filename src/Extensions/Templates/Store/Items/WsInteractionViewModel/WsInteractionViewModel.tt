@@ -8,12 +8,14 @@
   <Name>Interaction View Model (More)</Name>
   <Icon Package="{FAE04EC1-301F-11d3-BF4B-00C04F79EFBC}" ID="4515" />
   <Description>A class that implements a view model with basic interactivity support in the Model-View-ViewModel pattern.</Description>
-  <TemplateID>More.WinRT.CSharp.InteractionViewModel</TemplateID>
+  <TemplateID>More.CS.WinRT.InteractionViewModel</TemplateID>
   <TemplateGroupID>WinRT-Managed-Win81</TemplateGroupID>
   <ProjectType>CSharp</ProjectType>
+  <ShowByDefault>false</ShowByDefault>
   <TargetPlatformName>Windows</TargetPlatformName>
   <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
-  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+  <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <References />

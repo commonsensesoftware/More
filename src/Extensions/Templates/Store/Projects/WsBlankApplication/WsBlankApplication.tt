@@ -25,6 +25,7 @@
   <RequiredPlatformVersion>6.3.0</RequiredPlatformVersion>
   <CreateInPlace>true</CreateInPlace>
   <PreviewImage>BlankApp.png</PreviewImage>
+  <AppIdFilter>blend</AppIdFilter>
  </TemplateData>
  <TemplateContent>
   <Project File="Application.csproj" ReplaceParameters="true">
@@ -44,8 +45,8 @@
   </Project>
   <CustomParameters>
    <CustomParameter Name="_view" Value="MainPage" />
-   <CustomParameter Name="_viewTemplate" Value="More\Windows\1033\BlankPage.zip" />
-   <CustomParameter Name="_settingsTemplate" Value="More\Windows\1033\SettingsFlyout.zip" />
+   <CustomParameter Name="_viewTemplate" Value="More\XAML\1033\WsBlankPage.zip" />
+   <CustomParameter Name="_settingsTemplate" Value="More\XAML\1033\WsSettingsFlyout.zip" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
    <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
    <CustomParameter Name="$viewmodel$" Value="MainViewModel" />
