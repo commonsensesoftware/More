@@ -46,7 +46,7 @@
   <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
  </WizardExtension>
  <WizardData>
-  <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
+  <packages repository="extension" repositoryId="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa">
    <package id="More" version="<#= CoreVersion #>" />
    <package id="More.UI" version="<#= UIVersion #>" />
    <package id="More.UI.Extensions" version="<#= UIExVersion #>" />

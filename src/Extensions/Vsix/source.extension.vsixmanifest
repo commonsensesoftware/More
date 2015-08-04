@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
  <Metadata>
-  <Identity Id="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab" Version="1.0.0" Language="en-US" Publisher="Commonsense Software" />
+  <Identity Id="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa" Version="1.0.0" Language="en-US" Publisher="Commonsense Software" />
   <DisplayName>More Framework</DisplayName>
   <Description xml:space="preserve">The More framework is a collection of patterns and practices for creating robust solutions using the Microsoft .NET Framework.  Features include comphrensive extensions for collections, data structures, component models, view models, composition, and other intrinsic concepts not present in the Microsoft .NET Framework Base Class Library (BCL). The core libraries are portable across Windows Desktop, Windows Store, Windows Phone, Xamarin Android, and Xamarin iOS projects.</Description>
   <MoreInfo>http://github.com/commonsensesoftware/more</MoreInfo>

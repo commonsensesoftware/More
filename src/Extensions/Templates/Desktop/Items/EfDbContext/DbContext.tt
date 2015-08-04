@@ -34,7 +34,7 @@
    <CustomParameter Name="$providerName$" Value="" />
    <!-- this set of packages is not used by directly by the nuget services, but is instead used by the custom wizard
        to add the packages dynamically based on selected options. the package ids are not necessarily mapped to nuget. -->
-   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.9cf80999-8721-4ef3-8154-fe1a5c7609ab'&gt;&lt;package id='EF6' version='6.1.3' /&gt;&lt;package id='Microsoft.Composition' version='1.0.30' /&gt;&lt;package id='More.Composition' version='<#= CompositionVersion #>' /&gt;&lt;/packages&gt;" />
+   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa'&gt;&lt;package id='EF6' version='6.1.3' /&gt;&lt;package id='Microsoft.Composition' version='1.0.30' /&gt;&lt;package id='More.Composition' version='<#= CompositionVersion #>' /&gt;&lt;/packages&gt;" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>
@@ -42,7 +42,7 @@
   <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
  </WizardExtension>
  <WizardData>
-  <packages repository="extension" repositoryId="More.9cf80999-8721-4ef3-8154-fe1a5c7609ab">
+  <packages repository="extension" repositoryId="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa">
    <package id="More" version="<#= CoreVersion #>" />
   </packages>
  </WizardData>

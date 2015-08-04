@@ -1,7 +1,7 @@
 ﻿// REF: http://msdn.microsoft.com/en-us/library/ee622589.aspx
 // REF: http://msdn.microsoft.com/en-us/library/cc138553.aspx
 // add binding path for package; in particular this solves an issue where System.Windows.Interactivity.dll is not resolved
-[$RootKey$\BindingPaths\{9cf80999-8721-4ef3-8154-fe1a5c7609ab}]
+[$RootKey$\BindingPaths\{38c8640e-a495-41ce-bc0a-341ccc7f3bfa}]
 "$PackageFolder$"=""
 // C# code generators
 [$RootKey$\Generators\{FAE04EC1-301F-11D3-BF4B-00C04F79EFBC}\DbContextGenerator]
