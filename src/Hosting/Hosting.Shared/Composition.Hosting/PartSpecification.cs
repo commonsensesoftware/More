@@ -1,9 +1,13 @@
 ﻿namespace More.Composition.Hosting
 {
-    using More.ComponentModel;
+    using ComponentModel;
     using System;
     using System.Reflection;
+#if NETFX_CORE
     using global::Windows.UI.Xaml;
+#else
+    using System.Windows;
+#endif
 
     internal sealed class PartSpecification : SpecificationBase<Type>
     {

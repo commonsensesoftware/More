@@ -4,6 +4,7 @@
     using ComponentModel.DataAnnotations;
     using IO;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.Composition.Convention;
     using System.Composition.Hosting;
@@ -33,41 +34,6 @@
                 return value;
 
             return null;
-        }
-
-        /// <summary>
-        /// Creates the underlying container.
-        /// </summary>
-        /// <returns>The constructed <see cref="CompositionHost">container</see>.</returns>
-        [CLSCompliant( false )]
-        protected virtual CompositionHost CreateContainer()
-        {
-            Contract.Ensures( Contract.Result<CompositionHost>() != null );
-
-            var conventions = conventionsHolder.Value;
-            var config = Configuration;
-            var part = new PartSpecification();
-            var core = typeof( ServiceProvider ).GetTypeInfo().Assembly;
-            var ui = typeof( ShellViewBase ).GetTypeInfo().Assembly;
-            var uiTypes = ui.ExportedTypes.Where( part.IsSatisfiedBy );
-            var host = typeof( Host ).GetTypeInfo().Assembly;
-            var hostTypes = host.ExportedTypes.Where( part.IsSatisfiedBy );
-
-            config.WithAssembly( core, conventions );
-            config.WithParts( uiTypes, conventions );
-            config.WithParts( hostTypes, conventions );
-            config.WithDefaultConventions( conventions );
-            config.WithProvider( new HostExportDescriptorProvider( this, "Host" ) );
-            config.WithProvider( new ConfigurationExportProvider( configSettingLocator, "Host" ) );
-
-            var newContainer = config.CreateContainer();
-
-            // register default services directly after the underlying container is created
-            // optimization: call base implementation because this object will never be composed
-            base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
-            base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
-
-            return newContainer;
         }
 
         static partial void AddWinRTSpecificConventions( ConventionBuilder builder );
@@ -136,8 +102,6 @@
             if ( ServiceProvider.Current == ServiceProvider.Default )
                 ServiceProvider.SetCurrent( this );
 
-            Exception exception = null;
-
             try
             {
                 // build up and execute the startup tasks
@@ -146,13 +110,7 @@
             }
             catch ( Exception ex )
             {
-                // cannot use 'await' in a catch block
-                exception = ex;
-            }
-
-            if ( exception != null )
-            {
-                await new MessageDialog( exception.Message, SR.ActivityFailedCaption ).ShowAsync();
+                await new MessageDialog( ex.Message, SR.ActivityFailedCaption ).ShowAsync();
                 return;
             }
 

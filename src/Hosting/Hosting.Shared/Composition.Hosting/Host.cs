@@ -1,12 +1,12 @@
 ﻿namespace More.Composition.Hosting
 {
-    using More.Collections.Generic;
-    using More.ComponentModel;
-    using More.ComponentModel.DataAnnotations;
+    using Collections.Generic;
+    using ComponentModel;
+    using ComponentModel.DataAnnotations;
+    using IO;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Composition;
     using System.Composition.Convention;
@@ -14,6 +14,8 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Reflection;
+    using ContainerConfigurationAction = System.Action<System.Composition.Hosting.ContainerConfiguration, System.Composition.Convention.ConventionBuilder>;
     using ServiceContainer = More.ServiceContainer;
 
     /// <summary>
@@ -24,9 +26,10 @@
     {
         private static readonly Type[] ExportedInterfaces = new[] { typeof( IServiceContainer ), typeof( ICompositionService ), typeof( IServiceProvider ) };
         private static readonly Type[] ExportedTypes = new[] { typeof( CompositionContext ), typeof( CompositionHost ) };
-        private readonly ContainerConfiguration configuration;
+        private readonly ContainerConfiguration configuration = new ContainerConfiguration();
+        private readonly Lazy<List<ContainerConfigurationAction>> containerConfigurations = new Lazy<List<ContainerConfigurationAction>>( () => new List<ContainerConfigurationAction>() );
         private readonly List<Type> activityTypes = new List<Type>();
-        private readonly Dictionary<Type, IActivityConfiguration> configurations = new Dictionary<Type, IActivityConfiguration>();
+        private readonly Dictionary<Type, IActivityConfiguration> activityConfigurations = new Dictionary<Type, IActivityConfiguration>();
         private readonly Lazy<CompositionHost> container;
         private readonly Lazy<ConventionBuilder> conventionsHolder;
         private readonly Func<string, object> configSettingLocator;
@@ -36,7 +39,7 @@
         /// Initializes a new instance of the <see cref="Host"/> class.
         /// </summary>
         public Host()
-            : this( new ContainerConfiguration(), LocateSetting )
+            : this( LocateSetting )
         {
         }
 
@@ -45,34 +48,9 @@
         /// </summary>
         /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T,TResult}">function</see> used to resolve composable configuration settings.</param>
         public Host( Func<string, object> configurationSettingLocator )
-            : this( new ContainerConfiguration(), configurationSettingLocator )
         {
             Arg.NotNull( configurationSettingLocator, nameof( configurationSettingLocator ) );
-        }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Host"/> class.
-        /// </summary>
-        /// <param name="configuration">The <see cref="ContainerConfiguration">configuration</see> to initialize the host with.</param>
-        [CLSCompliant( false )]
-        public Host( ContainerConfiguration configuration )
-            : this( configuration, LocateSetting )
-        {
-            Arg.NotNull( configuration, nameof( configuration ) );
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Host"/> class.
-        /// </summary>
-        /// <param name="configuration">The <see cref="ContainerConfiguration">configuration</see> to initialize the host with.</param>
-        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T,TResult}">function</see> used to resolve composable configuration settings.</param>
-        [CLSCompliant( false )]
-        public Host( ContainerConfiguration configuration, Func<string, object> configurationSettingLocator )
-        {
-            Arg.NotNull( configuration, nameof( configuration ) );
-            Arg.NotNull( configurationSettingLocator, nameof( configurationSettingLocator ) );
-
-            this.configuration = configuration;
             container = new Lazy<CompositionHost>( CreateContainer );
             conventionsHolder = new Lazy<ConventionBuilder>( GetConventions );
             configSettingLocator = configurationSettingLocator;
@@ -127,6 +105,47 @@
                 throw new ObjectDisposedException( GetType().Name );
         }
 
+        /// <summary>
+        /// Creates the underlying container.
+        /// </summary>
+        /// <returns>The constructed <see cref="CompositionHost">container</see>.</returns>
+        [CLSCompliant( false )]
+        protected virtual CompositionHost CreateContainer()
+        {
+            Contract.Ensures( Contract.Result<CompositionHost>() != null );
+
+            var conventions = conventionsHolder.Value;
+            var config = Configuration;
+            var part = new PartSpecification();
+            var core = typeof( ServiceProvider ).GetTypeInfo().Assembly;
+            var ui = typeof( IShellView ).GetTypeInfo().Assembly;
+            var presentation = typeof( ShellViewBase ).GetTypeInfo().Assembly;
+            var presentationTypes = presentation.ExportedTypes.Where( part.IsSatisfiedBy );
+            var host = typeof( Host ).GetTypeInfo().Assembly;
+            var hostTypes = host.ExportedTypes.Where( part.IsSatisfiedBy );
+
+            config.WithAssembly( core, conventions );
+            config.WithAssembly( ui, conventions );
+            config.WithParts( presentationTypes, conventions );
+            config.WithParts( hostTypes, conventions );
+            config.WithDefaultConventions( conventions );
+            config.WithProvider( new HostExportDescriptorProvider( this, nameof( Host ) ) );
+            config.WithProvider( new ConfigurationExportProvider( configSettingLocator, nameof( Host ) ) );
+
+            // run custom configurations, if any
+            if ( containerConfigurations.IsValueCreated )
+                containerConfigurations.Value.ForEach( a => a( config, conventions ) );
+
+            var newContainer = config.CreateContainer();
+
+            // register default services directly after the underlying container is created
+            // optimization: call base implementation because this object will never be composed
+            base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
+            base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
+
+            return newContainer;
+        }
+
         private IReadOnlyList<IActivity> QueryActivities()
         {
             Contract.Ensures( Contract.Result<IReadOnlyList<IActivity>>() != null );
@@ -170,7 +189,7 @@
                 Tuple<IActivity, IEnumerable<Type>> tuple;
 
                 // look up configuration
-                if ( configurations.TryGetValue( activityType, out config ) )
+                if ( activityConfigurations.TryGetValue( activityType, out config ) )
                 {
                     // apply activity configuration
                     config.Configure( activity );
@@ -231,7 +250,7 @@
                 return;
 
             activityTypes.Clear();
-            configurations.Clear();
+            activityConfigurations.Clear();
 
             if ( container.IsValueCreated )
                 container.Value.Dispose();
@@ -269,6 +288,38 @@
         }
 
         /// <summary>
+        /// Configures the underlying container when the host starts.
+        /// </summary>
+        /// <param name="configuration">The <see cref="ContainerConfigurationAction">configuration</see> to add.</param>
+        /// <example>This example illustrates how to register startup activities.
+        /// <code lang="C#">
+        /// <![CDATA[
+        /// using System.ComponentModel;
+        /// using System.Composition;
+        /// using System.Composition.Hosting;
+        /// using System;
+        /// 
+        /// public class Program
+        /// {
+        ///     [STAThread]
+        ///     public static void Main()
+        ///     {
+        ///         using ( var host = new Host() )
+        ///         {
+        ///             host.Configure( ( config, conventions ) => config.WithAppDomain( conventions ) );
+        ///         }
+        ///     }
+        /// }
+        /// ]]></code>
+        /// </example>
+        [CLSCompliant( false )]
+        public virtual void Configure( ContainerConfigurationAction configuration )
+        {
+            Arg.NotNull( configuration, nameof( configuration ) );
+            containerConfigurations.Value.Add( configuration );
+        }
+
+        /// <summary>
         /// Registers an activity to execute when the host starts.
         /// </summary>
         /// <typeparam name="TActivity">The <see cref="Type">type</see> of <see cref="IActivity">activity</see> to register.</typeparam>
@@ -286,8 +337,6 @@
         ///     [STAThread]
         ///     public static void Main()
         ///     {
-        ///         var configRoot = new Uri( "myconfig.xml", UriKind.Relative );
-        ///         
         ///         using ( var host = new Host() )
         ///         {
         ///             host.Register<LoadConfiguration>();
@@ -312,11 +361,11 @@
 
             IActivityConfiguration config;
 
-            if ( configurations.TryGetValue( activityType, out config ) )
+            if ( activityConfigurations.TryGetValue( activityType, out config ) )
                 return (ActivityConfiguration<TActivity>) config;
 
             var newConfiguration = new ActivityConfiguration<TActivity>();
-            configurations.Add( activityType, newConfiguration );
+            activityConfigurations.Add( activityType, newConfiguration );
 
             return newConfiguration;
         }
@@ -367,11 +416,11 @@
 
             IActivityConfiguration config;
 
-            if ( configurations.TryGetValue( activityType, out config ) )
+            if ( activityConfigurations.TryGetValue( activityType, out config ) )
                 return (ActivityConfiguration<TActivity>) config;
 
             var newConfiguration = new ActivityConfiguration<TActivity>();
-            configurations.Add( activityType, newConfiguration );
+            activityConfigurations.Add( activityType, newConfiguration );
 
             return newConfiguration;
         }

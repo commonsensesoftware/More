@@ -10,6 +10,22 @@
     public class WindowsHost<T> : Host where T : Window, IShellView
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="WindowsHost{T}"/> class.
+        /// </summary>
+        public WindowsHost()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WindowsHost{T}"/> class.
+        /// </summary>
+        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T,TResult}">function</see> used to resolve composable configuration settings.</param>
+        public WindowsHost( Func<string, object> configurationSettingLocator )
+            : base( configurationSettingLocator )
+        {
+        }
+
+        /// <summary>
         /// Runs the host.
         /// </summary>
         /// <param name="application">The <see cref="Application">application</see> associated with the host.</param>

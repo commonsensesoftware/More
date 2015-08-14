@@ -23,11 +23,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FrameHost{T}"/> class.
         /// </summary>
-        /// <param name="configuration">The <see cref="ContainerConfiguration">configuration</see> to initialize the host with.</param>
-        public FrameHost( ContainerConfiguration configuration )
-            : base( configuration )
+        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T,TResult}">function</see> used to resolve composable configuration settings.</param>
+        public FrameHost( Func<string, object> configurationSettingLocator )
+            : base( configurationSettingLocator )
         {
-            Arg.NotNull( configuration, nameof( configuration ) );
         }
 
         partial void OnConfigure();

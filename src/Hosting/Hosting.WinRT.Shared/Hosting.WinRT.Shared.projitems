@@ -14,7 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\Host.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\NavigationSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\PageSpecification.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\PartSpecification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ShowShellViewT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\UserControlSpecification.cs" />
   </ItemGroup>

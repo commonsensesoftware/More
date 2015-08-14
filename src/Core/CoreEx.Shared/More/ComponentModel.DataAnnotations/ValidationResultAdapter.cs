@@ -34,5 +34,10 @@
                 return adapted.MemberNames;
             }
         }
+
+        public override string ToString()
+        {
+            return ErrorMessage ?? base.ToString();
+        }
     }
 }

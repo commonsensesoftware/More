@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfigurationContract.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ActivityConfigurationT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\PartSpecification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionMessage.Designer.cs">
       <DependentUpon>ExceptionMessage.resx</DependentUpon>
       <DesignTime>True</DesignTime>

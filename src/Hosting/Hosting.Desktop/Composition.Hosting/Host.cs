@@ -1,14 +1,10 @@
 ﻿namespace More.Composition.Hosting
 {
-    using More.ComponentModel;
-    using More.ComponentModel.DataAnnotations;
-    using More.IO;
-    using System;
+    using ComponentModel;
     using System.Composition.Convention;
-    using System.Composition.Hosting;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -19,37 +15,8 @@
     {
         private static object LocateSetting( string key )
         {
-            var value = (object) ConfigurationManager.AppSettings[key] ?? (object) ConfigurationManager.ConnectionStrings[key];
-            return value;
-        }
-
-        /// <summary>
-        /// Creates the underlying container.
-        /// </summary>
-        /// <returns>The constructed <see cref="CompositionHost">container</see>.</returns>
-        [CLSCompliant( false )]
-        [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This method does not have idempoent behavior, which does makes it unsuitable for a property." )]
-        protected virtual CompositionHost CreateContainer()
-        {
-            Contract.Ensures( Contract.Result<CompositionHost>() != null );
-
-            var conventions = conventionsHolder.Value;
-            var config = Configuration;
-            var origin = typeof( Host ).Name;
-
-            config.WithAppDomain( conventions );
-            config.WithDefaultConventions( conventions );
-            config.WithProvider( new HostExportDescriptorProvider( this, origin ) );
-            config.WithProvider( new ConfigurationExportProvider( configSettingLocator, origin ) );
-
-            var newContainer = config.CreateContainer();
-
-            // register default services directly after the underlying container is created
-            // optimization: call base implementation because this object will never be composed
-            base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
-            base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
-
-            return newContainer;
+            object value = ConfigurationManager.AppSettings[key];
+            return value ?? ConfigurationManager.ConnectionStrings[key];
         }
 
         static partial void AddPlatformSpecificConventions( ConventionBuilder builder )
@@ -105,6 +72,8 @@
 
             Arg.NotNull( application, nameof( application ) );
 
+            Configuration.WithAssembly( application.GetType().Assembly );
+
             // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )
                 ServiceProvider.SetCurrent( this );
@@ -112,7 +81,7 @@
             try
             {
                 // build up and execute the startup activities
-                foreach ( var activity in Activities )
+                foreach ( var activity in Activities.Where( a => a.CanExecute( this ) ) )
                     activity.Execute( this );
             }
             catch ( HostException ex )
