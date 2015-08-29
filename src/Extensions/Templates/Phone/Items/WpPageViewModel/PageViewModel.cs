@@ -20,8 +20,8 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
-    using global::Windows.ApplicationModel.Activation;
-    using global::Windows.Storage;
+    using Windows.ApplicationModel.Activation;
+    using Windows.Storage;
 
 	/// <summary>
     /// Represents a view model for a page.
@@ -34,8 +34,6 @@
         private readonly InteractionRequest<SaveFileInteraction> saveFile;$endif$$if$ ($enableSelectFolder$ == true)
         private readonly InteractionRequest<SelectFolderInteraction> selectFolder;$endif$$if$ ($enableSharing$ == true)
         private readonly InteractionRequest<Interaction> share = new InteractionRequest<Interaction>( "Share" );$endif$
-        private readonly ObservableKeyedCollection<string, IInteractionRequest> interactionRequests = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
-        private readonly ObservableKeyedCollection<string, INamedCommand> commands = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
         private string titleField = "$title$";
 
         /// <summary>
@@ -58,17 +56,17 @@ $endif$$if$ ($showTips$ == true)
             openFile = continuationManager.CreateInteractionRequest<OpenFileInteraction, IFileOpenPickerContinuationEventArgs>( "OpenFile", OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
             saveFile = continuationManager.CreateInteractionRequest<SaveFileInteraction, IFileSavePickerContinuationEventArgs>( "SaveFile", OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
             selectFolder = continuationManager.CreateInteractionRequest<SelectFolderInteraction, IFolderPickerContinuationEventArgs>( "SelectFolder", OnFolderSelected );$endif$
-            interactionRequests.Add( userFeedback );
-            interactionRequests.Add( navigate );$if$ ($enableOpenFile$ == true)
-            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
-            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            interactionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
-            interactionRequests.Add( share );$endif$$if$ ($enableOpenFile$ == true)
-            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSharing$ == true)
-            commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$
-            //commands.Add( new NamedCommand<object>( "Navigate", p => Navigate( "Page1" ) ) );
+            InteractionRequests.Add( userFeedback );
+            InteractionRequests.Add( navigate );$if$ ($enableOpenFile$ == true)
+            InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
+            InteractionRequests.Add( share );$endif$$if$ ($enableOpenFile$ == true)
+            Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSharing$ == true)
+            Commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$
+            //Commands.Add( new NamedCommand<object>( "Navigate", p => Navigate( "Page1" ) ) );
         }
 
         /// <summary>
@@ -94,12 +92,8 @@ $endif$$if$ ($showTips$ == true)
         /// <see cref="IInteractionRequest">interaction requests</see>.</value>
         public ObservableKeyedCollection<string, IInteractionRequest> InteractionRequests
         {
-            get
-            {
-                Contract.Ensures( interactionRequests != null );
-                return interactionRequests;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
 
         /// <summary>
         /// Gets the collection of view model commands.
@@ -108,34 +102,21 @@ $endif$$if$ ($showTips$ == true)
         /// <see cref="INamedCommand">commands</see>.</value>
         public ObservableKeyedCollection<string, INamedCommand> Commands
         {
-            get
-            {
-                Contract.Ensures( commands != null );
-                return commands;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message )
-        {
-            Contract.Requires( message != null );
-            Alert( Title, message );
-        }
+        protected void Alert( string message ) => Alert( Title, message );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="title">The alert title.</param>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( message != null );
-            userFeedback.Request( new Interaction( title, message ) );
-        }
+        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
 
         /// <summary>
         /// Requests a user confirmation.
@@ -178,23 +159,13 @@ $endif$$if$ ($showTips$ == true)
         /// Requests a navigation operation to the specified page.
         /// </summary>
         /// <param name="pageName">The name of the page to navigate to.</param>
-        protected void Navigate( string pageName )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( pageName ) );
-            var interaction = new NavigateInteraction();
-            interaction.Url = new Uri( pageName, UriKind.Relative );
-            Navigate( interaction );
-        }
+        protected void Navigate( string pageName ) => Navigate( new NavigateInteraction() { Url = new Uri( pageName, UriKind.Relative ) } );
 
         /// <summary>
         /// Requests a navigation operation using the specified interaction.
         /// </summary>
         /// <param name="interaction">The <see cref="NavigateInteraction">navigate interaction</see> requested.</param>
-        protected void Navigate( NavigateInteraction interaction )
-        {
-            Contract.Requires( interaction != null );
-            navigate.Request( interaction );
-        }$if$ ($enableAppSharing$ == true)
+        protected void Navigate( NavigateInteraction interaction ) => navigate.Request( interaction );$if$ ($enableAppSharing$ == true)
 
         private void OnShareReceived( IShareOperation share )
         {
@@ -211,10 +182,7 @@ $endif$$if$ ($showTips$ == true)
         /// <summary>
         /// Requests a share operation.
         /// </summary>
-        protected void Share()
-        {
-            share.Request( new Interaction() );
-        }$endif$$if$ ($enableOpenFile$ == true)
+        protected void Share() => share.Request( new Interaction() );$endif$$if$ ($enableOpenFile$ == true)
 
         private void OnOpenFile( object parameter )
         {

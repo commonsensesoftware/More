@@ -29,9 +29,6 @@
         private readonly InteractionRequest<SaveFileInteraction> saveFile = new InteractionRequest<SaveFileInteraction>( "SaveFile" );$endif$$if$ ($enableSelectFolder$ == true)
         private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$
         private readonly InteractionRequest<WindowCloseInteraction> close = new InteractionRequest<WindowCloseInteraction>( "CloseWindow" );
-        private readonly ObservableKeyedCollection<string, IInteractionRequest> interactionRequests = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
-        private readonly ObservableKeyedCollection<string, INamedCommand> commands = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
-        private readonly ObservableKeyedCollection<string, INamedCommand> dialogCommands = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
         private bool closing;
         private string titleField = "$title$";
 
@@ -44,18 +41,18 @@
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: Add or modify this interaction requests and commands to suit your needs.$endif$
-            interactionRequests.Add( userFeedback );
-            //interactionRequests.Add( showChild );$if$ ($enableOpenFile$ == true)
-            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
-            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            interactionRequests.Add( selectFolder );$endif$
-            interactionRequests.Add( close );
+            InteractionRequests.Add( userFeedback );
+            //InteractionRequests.Add( showChild );$if$ ($enableOpenFile$ == true)
+            InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            InteractionRequests.Add( selectFolder );$endif$
+            InteractionRequests.Add( close );
             //commands.Add( new NamedCommand<object>( "Show", OnShowChildWindow ) );
-            dialogCommands.Add( new NamedCommand<object>( "OK", OnAccept, OnCanAccept ) );
-            dialogCommands.Add( new NamedCommand<object>( "Cancel", OnCancel ) );$if$ ($enableOpenFile$ == true)
-            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
+            DialogCommands.Add( new NamedCommand<object>( "OK", OnAccept, OnCanAccept ) );
+            DialogCommands.Add( new NamedCommand<object>( "Cancel", OnCancel ) );$if$ ($enableOpenFile$ == true)
+            Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
         }
 
         //private void OnShowChildWindow( object parameter )
@@ -95,12 +92,8 @@
         /// <see cref="IInteractionRequest">interaction requests</see>.</value>
         public ObservableKeyedCollection<string, IInteractionRequest> InteractionRequests
         {
-            get
-            {
-                Contract.Ensures( interactionRequests != null );
-                return interactionRequests;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
 
         /// <summary>
         /// Gets the collection of view model commands.
@@ -110,12 +103,8 @@
         /// <remarks>These commands do not control the behavior of a view.</remarks>
         public ObservableKeyedCollection<string, INamedCommand> Commands
         {
-            get
-            {
-                Contract.Ensures( commands != null );
-                return commands;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
 
         /// <summary>
         /// Gets the collection of view model dialog commands.
@@ -125,12 +114,8 @@
         /// <remarks>These commands control the behavior of a view, such as cancelling it.</remarks>
         public ObservableKeyedCollection<string, INamedCommand> DialogCommands
         {
-            get
-            {
-                Contract.Ensures( dialogCommands != null );
-                return dialogCommands;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
 
         private void OnAccept( object parameter )
         {$if$ ($showTips$ == true)
@@ -183,10 +168,7 @@
         /// <summary>
         /// Requests the associated window be closed.
         /// </summary>
-        protected void Close()
-        {
-            Close( false );
-        }
+        protected void Close() => Close( false );
 
         /// <summary>
         /// Requests the associated window be closed.
@@ -202,23 +184,14 @@
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message )
-        {
-            Contract.Requires( message != null );
-            Alert( Title, message );
-        }
+        protected void Alert( string message ) => Alert( Title, message );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="title">The alert title.</param>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( message != null );
-            userFeedback.Request( new Interaction( title, message ) );
-        }
+        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
 
         /// <summary>
         /// Requests a user confirmation.

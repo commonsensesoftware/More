@@ -5,6 +5,7 @@
     using More.Composition;
     using More.Composition.Hosting;
     using System;
+    using System.Linq;
 
 	/// <summary>
     /// Represents the current program.
@@ -22,6 +23,7 @@
                 // TODO: register and/or configure tasks to execute during start up
                 // the ShowShellViewTask is automatically registered. if you do not
                 // have additional start up logic, then there is nothing to do here.$endif$
+                host.Configure( ( config, builder ) => config.WithAppDomain() );
                 host.Run( new App() );
             }
         }

@@ -9,7 +9,7 @@
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance Type=vm:$viewmodel$}"
- Title="{Binding Title}" Height="300" Width="400" WindowStartupLocation="CenterOwner">
+ Title="{Binding Title}" Height="300" Width="400" WindowStartupLocation="CenterScreen">
  <i:Interaction.Behaviors>
   <b:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" CloseCommand="{Binding DialogCommands[Cancel]}" />
  </i:Interaction.Behaviors>

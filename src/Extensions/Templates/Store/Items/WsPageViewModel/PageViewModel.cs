@@ -97,12 +97,8 @@ $endif$$if$ ($showTips$ == true)
         /// <see cref="IInteractionRequest">interaction requests</see>.</value>
         public ObservableKeyedCollection<string, IInteractionRequest> InteractionRequests
         {
-            get
-            {
-                Contract.Ensures( interactionRequests != null );
-                return interactionRequests;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
 
         /// <summary>
         /// Gets the collection of view model commands.
@@ -111,34 +107,21 @@ $endif$$if$ ($showTips$ == true)
         /// <see cref="INamedCommand">commands</see>.</value>
         public ObservableKeyedCollection<string, INamedCommand> Commands
         {
-            get
-            {
-                Contract.Ensures( commands != null );
-                return commands;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message )
-        {
-            Contract.Requires( message != null );
-            Alert( Title, message );
-        }
+        protected void Alert( string message ) => Alert( Title, message );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="title">The alert title.</param>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( message != null );
-            userFeedback.Request( new Interaction( title, message ) );
-        }
+        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
 
         /// <summary>
         /// Requests a user confirmation.
@@ -181,31 +164,18 @@ $endif$$if$ ($showTips$ == true)
         /// Requests a navigation operation to the specified page.
         /// </summary>
         /// <param name="pageName">The name of the page to navigate to.</param>
-        protected void Navigate( string pageName )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( pageName ) );
-            var interaction = new NavigateInteraction();
-            interaction.Url = new Uri( pageName, UriKind.Relative );
-            Navigate( interaction );
-        }
+        protected void Navigate( string pageName ) => Navigate( new NavigateInteraction() { Url = new Uri( pageName, UriKind.Relative ) } );
 
         /// <summary>
         /// Requests a navigation operation using the specified interaction.
         /// </summary>
         /// <param name="interaction">The <see cref="NavigateInteraction">navigate interaction</see> requested.</param>
-        protected void Navigate( NavigateInteraction interaction )
-        {
-            Contract.Requires( interaction != null );
-            navigate.Request( interaction );
-        }$if$ ($enableSettings$ == true)
+        protected void Navigate( NavigateInteraction interaction ) => navigate.Request( interaction );$if$ ($enableSettings$ == true)
 
         /// <summary>
         /// Requests settings be displayed to the user.
         /// </summary>
-        protected void ShowSettings()
-        {
-            settings.Request( new Interaction() );
-        }$endif$$if$ ($enableAppSharing$ == true)
+        protected void ShowSettings() => settings.Request( new Interaction() );$endif$$if$ ($enableAppSharing$ == true)
 
         private void OnShareReceived( IShareOperation share )
         {
@@ -222,10 +192,7 @@ $endif$$if$ ($showTips$ == true)
         /// <summary>
         /// Requests a share operation.
         /// </summary>
-        protected void Share()
-        {
-            share.Request( new Interaction() );
-        }$endif$$if$ ($enableSearch$ == true)
+        protected void Share() => share.Request( new Interaction() );$endif$$if$ ($enableSearch$ == true)
 
         private void OnSearch( ISearchRequest searchRequest )
         {
@@ -248,10 +215,7 @@ $endif$$if$ ($showTips$ == true)
         /// Requests a search operation.
         /// </summary>
         /// <param name="text">The text to search for.</param>
-        protected void Search( string text )
-        {
-            search.Request( new Interaction(){ Content = text } );
-        }$endif$$if$ ($enableOpenFile$ == true)
+        protected void Search( string text ) => search.Request( new Interaction(){ Content = text } );$endif$$if$ ($enableOpenFile$ == true)
 
         private void OnOpenFile( object parameter )
         {

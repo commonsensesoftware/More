@@ -40,10 +40,7 @@
         /// <summary>
         /// Shows the view as the main window.
         /// </summary>
-        new public virtual void Show()
-        {
-            Application.Current.MainWindow = this;
-        }
+        new public virtual void Show() => Application.Current.MainWindow = this;
 
         string IShellView.Language
         {

@@ -27,8 +27,6 @@
         private readonly InteractionRequest<OpenFileInteraction> openFile = new InteractionRequest<OpenFileInteraction>( "OpenFile" );$endif$$if$ ($enableSaveFile$ == true)
         private readonly InteractionRequest<SaveFileInteraction> saveFile = new InteractionRequest<SaveFileInteraction>( "SaveFile" );$endif$$if$ ($enableSelectFolder$ == true)
         private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$
-        private readonly ObservableKeyedCollection<string, IInteractionRequest> interactionRequests = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
-        private readonly ObservableKeyedCollection<string, INamedCommand> commands = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
 
         /// <summary>
         /// Initializes a new instance of the <see cref="$safeitemrootname$"/> class.
@@ -38,13 +36,13 @@
         {$if$ ($showTips$ == true)
 
             // TODO: Add or modify this interaction requests and commands to suit your needs.$endif$
-            interactionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
-            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
-            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            interactionRequests.Add( selectFolder );$endif$$if$ ($enableOpenFile$ == true)
-            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
+            InteractionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
+            InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableOpenFile$ == true)
+            InteractionCommands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            InteractionCommands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            InteractionCommands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
         }
 
         /// <summary>
@@ -54,12 +52,8 @@
         /// <see cref="IInteractionRequest">interaction requests</see>.</value>
         public ObservableKeyedCollection<string, IInteractionRequest> InteractionRequests
         {
-            get
-            {
-                Contract.Ensures( interactionRequests != null );
-                return interactionRequests;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
 
         /// <summary>
         /// Gets the collection of view model interaction commands.
@@ -69,34 +63,21 @@
         /// <remarks>These commands do not control the behavior of a view.</remarks>
         public ObservableKeyedCollection<string, INamedCommand> InteractionCommands
         {
-            get
-            {
-                Contract.Ensures( commands != null );
-                return commands;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message )
-        {
-            Contract.Requires( message != null );
-            Alert( Title, message );
-        }
+        protected void Alert( string message ) => Alert( Title, message );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="title">The alert title.</param>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( message != null );
-            userFeedback.Request( new Interaction( title, message ) );
-        }
+        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
 
         /// <summary>
         /// Requests a user confirmation.

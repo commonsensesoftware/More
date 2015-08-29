@@ -8,10 +8,10 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using global::Windows.ApplicationModel;
-    using global::Windows.ApplicationModel.Activation;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Navigation;
+    using Windows.ApplicationModel;
+    using Windows.ApplicationModel.Activation;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// Represents the current application.

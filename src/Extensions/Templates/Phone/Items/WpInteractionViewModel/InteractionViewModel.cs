@@ -20,8 +20,8 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
-    using global::Windows.ApplicationModel.Activation;
-    using global::Windows.Storage;
+    using Windows.ApplicationModel.Activation;
+    using Windows.Storage;
 
 	/// <summary>
     /// Represents a view model that supports user interactions.
@@ -33,7 +33,6 @@
         private readonly InteractionRequest<SaveFileInteraction> saveFile;$endif$$if$ ($enableSelectFolder$ == true)
         private readonly InteractionRequest<SelectFolderInteraction> selectFolder;$endif$$if$ ($enableSharing$ == true)
         private readonly InteractionRequest<Interaction> share = new InteractionRequest<Interaction>( "Share" );$endif$
-        private readonly ObservableKeyedCollection<string, IInteractionRequest> interactionRequests = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
 
         /// <summary>
         /// Initializes a new instance of the <see cref="$safeitemrootname$"/> class.
@@ -55,15 +54,15 @@ $endif$$if$ ($showTips$ == true)
             openFile = continuationManager.CreateInteractionRequest<OpenFileInteraction, IFileOpenPickerContinuationEventArgs>( "OpenFile", OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
             saveFile = continuationManager.CreateInteractionRequest<SaveFileInteraction, IFileSavePickerContinuationEventArgs>( "SaveFile", OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
             selectFolder = continuationManager.CreateInteractionRequest<SelectFolderInteraction, IFolderPickerContinuationEventArgs>( "SelectFolder", OnFolderSelected );$endif$
-            interactionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
-            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
-            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            interactionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
-            interactionRequests.Add( share );$endif$$if$ ($enableOpenFile$ == true)
-            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSharing$ == true)
-            commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$
+            InteractionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
+            InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
+            InteractionRequests.Add( share );$endif$$if$ ($enableOpenFile$ == true)
+            Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSharing$ == true)
+            Commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$
         }
 
         /// <summary>
@@ -73,34 +72,21 @@ $endif$$if$ ($showTips$ == true)
         /// <see cref="IInteractionRequest">interaction requests</see>.</value>
         public ObservableKeyedCollection<string, IInteractionRequest> InteractionRequests
         {
-            get
-            {
-                Contract.Ensures( interactionRequests != null );
-                return interactionRequests;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message )
-        {
-            Contract.Requires( message != null );
-            Alert( Title, message );
-        }
+        protected void Alert( string message ) => Alert( Title, message );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="title">The alert title.</param>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( message != null );
-            userFeedback.Request( new Interaction( title, message ) );
-        }
+        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
 
         /// <summary>
         /// Requests a user confirmation.
@@ -154,10 +140,7 @@ $endif$$if$ ($showTips$ == true)
         /// <summary>
         /// Requests a share operation.
         /// </summary>
-        protected void Share()
-        {
-            share.Request( new Interaction() );
-        }$endif$$if$ ($enableOpenFile$ == true)
+        protected void Share() => share.Request( new Interaction() );$endif$$if$ ($enableOpenFile$ == true)
 
         private void OnOpenFile( object parameter )
         {

@@ -12,9 +12,9 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Navigation;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// Represents a <see cref="Page">page</see>-based view for a view model.
@@ -59,19 +59,13 @@
         /// Raises the <see cref="PropertyChanged"/> event for the supplied property name.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
-        protected void OnPropertyChanged( string propertyName )
-        {
-            OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
-        }
+        protected void OnPropertyChanged( string propertyName ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event with the supplied arguments.
         /// </summary>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
-        protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
-        {
-            PropertyChanged?.Invoke( this, e );
-        }
+        protected virtual void OnPropertyChanged( PropertyChangedEventArgs e ) => PropertyChanged?.Invoke( this, e );
 
         /// <summary>
         /// Attaches the specified view model to the view.
@@ -83,7 +77,7 @@
                 return;
 
             DataContext = model;
-            OnPropertyChanged( "Model" );
+            OnPropertyChanged( nameof( Model ) );
         }
 
         /// <summary>
@@ -93,9 +87,6 @@
         /// <c>null</c>or <see cref="F:String.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;$endif$$if$ ($interfaceoption$ >= 2)
 
-        void IView<$viewmodel$, $viewmodel$>.AttachModel( $viewmodel$ model )
-        {
-            AttachModel( model );
-        }$endif$
+        void IView<$viewmodel$, $viewmodel$>.AttachModel( $viewmodel$ model ) => AttachModel( model );$endif$
     }
 }

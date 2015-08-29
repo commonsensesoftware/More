@@ -31,8 +31,7 @@
         private readonly InteractionRequest<Interaction> search = new InteractionRequest<Interaction>( "Search" );$endif$$if$ ($enableOpenFile$ == true)
         private readonly InteractionRequest<OpenFileInteraction> openFile = new InteractionRequest<OpenFileInteraction>( "OpenFile" );$endif$$if$ ($enableSaveFile$ == true)
         private readonly InteractionRequest<SaveFileInteraction> saveFile = new InteractionRequest<SaveFileInteraction>( "SaveFile" );$endif$$if$ ($enableSelectFolder$ == true)
-        private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$
-        private readonly ObservableKeyedCollection<string, IInteractionRequest> interactionRequests = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );$if$ ($addTitle$ == true)
+        private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$$if$ ($addTitle$ == true)
         private string titleField = "$title$";$endif$
 
         /// <summary>
@@ -53,20 +52,20 @@ $endif$$if$ ($showTips$ == true)
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: add additional interaction requests to suit your needs$endif$
-            interactionRequests.Add( userFeedback );$if$ ($enableSettings$ == true)
-            interactionRequests.Add( settings );$endif$$if$ ($enableSharing$ == true)
-            interactionRequests.Add( share );$endif$$if$ ($enableSearch$ == true)
-            interactionRequests.Add( search );$endif$$if$ ($enableOpenFile$ == true)
-            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
-            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            interactionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
-            commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$$if$ ($enableSearch$ == true)
-            commands.Add( new NamedCommand<ISearchRequest>( "Search", OnSearch ) );
-            commands.Add( new NamedCommand<ISearchSuggestionsRequest>( "ProvideSuggestions", OnProvideSuggestions ) );
-            commands.Add( new NamedCommand<string>( "SuggestionChosen", OnSuggestionChosen ) );$endif$$if$ ($enableOpenFile$ == true)
-            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
+            InteractionRequests.Add( userFeedback );$if$ ($enableSettings$ == true)
+            InteractionRequests.Add( settings );$endif$$if$ ($enableSharing$ == true)
+            InteractionRequests.Add( share );$endif$$if$ ($enableSearch$ == true)
+            InteractionRequests.Add( search );$endif$$if$ ($enableOpenFile$ == true)
+            InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
+            Commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$$if$ ($enableSearch$ == true)
+            Commands.Add( new NamedCommand<ISearchRequest>( "Search", OnSearch ) );
+            Commands.Add( new NamedCommand<ISearchSuggestionsRequest>( "ProvideSuggestions", OnProvideSuggestions ) );
+            Commands.Add( new NamedCommand<string>( "SuggestionChosen", OnSuggestionChosen ) );$endif$$if$ ($enableOpenFile$ == true)
+            Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
         }$if$ ($addTitle$ == true)
 
         /// <summary>
@@ -92,34 +91,21 @@ $endif$$if$ ($showTips$ == true)
         /// <see cref="IInteractionRequest">interaction requests</see>.</value>
         public ObservableKeyedCollection<string, IInteractionRequest> InteractionRequests
         {
-            get
-            {
-                Contract.Ensures( interactionRequests != null );
-                return interactionRequests;
-            }
-        }
+            get;
+        } = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message )
-        {
-            Contract.Requires( message != null );
-            Alert( Title, message );
-        }
+        protected void Alert( string message ) => Alert( Title, message );
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="title">The alert title.</param>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( message != null );
-            userFeedback.Request( new Interaction( title, message ) );
-        }
+        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
 
         /// <summary>
         /// Requests a user confirmation.
@@ -161,10 +147,7 @@ $endif$$if$ ($showTips$ == true)
         /// <summary>
         /// Requests settings be displayed to the user.
         /// </summary>
-        protected void ShowSettings()
-        {
-            settings.Request( new Interaction() );
-        }$endif$$if$ ($enableAppSharing$ == true)
+        protected void ShowSettings() => settings.Request( new Interaction() );$endif$$if$ ($enableAppSharing$ == true)
 
         private void OnShareReceived( IShareOperation share )
         {
@@ -181,10 +164,7 @@ $endif$$if$ ($showTips$ == true)
         /// <summary>
         /// Requests a share operation.
         /// </summary>
-        protected void Share()
-        {
-            share.Request( new Interaction() );
-        }$endif$$if$ ($enableSearch$ == true)
+        protected void Share() => share.Request( new Interaction() );$endif$$if$ ($enableSearch$ == true)
 
         private void OnSearch( ISearchRequest searchRequest )
         {
@@ -207,10 +187,7 @@ $endif$$if$ ($showTips$ == true)
         /// Requests a search operation.
         /// </summary>
         /// <param name="text">The text to search for.</param>
-        protected void Search( string text )
-        {
-            search.Request( new Interaction(){ Content = text } );
-        }$endif$$if$ ($enableOpenFile$ == true)
+        protected void Search( string text ) => search.Request( new Interaction(){ Content = text } );$endif$$if$ ($enableOpenFile$ == true)
 
         private void OnOpenFile( object parameter )
         {
