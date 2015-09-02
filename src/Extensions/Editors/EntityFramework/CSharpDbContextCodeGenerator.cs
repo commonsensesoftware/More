@@ -26,6 +26,10 @@ namespace More.VisualStudio.Editors.EntityFramework
         private static readonly Lazy<IReadOnlyList<UsingDirectiveSyntax>> requiredUsings = new Lazy<IReadOnlyList<UsingDirectiveSyntax>>( CreateRequiredUsings );
         private static readonly Lazy<ISpecification<GenericNameSyntax>> interfaceSpecification = new Lazy<ISpecification<GenericNameSyntax>>( CreateInterfaceSpecification );
 
+        [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "CodeDom", Justification = "False positive. Literal code text." )]
+        [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ComponentModel", Justification = "False positive. Literal code text." )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Microsoft.CodeAnalysis.CSharp.SyntaxFactory.Whitespace(System.String)", Justification = "Literal code elements cannot be localized." )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseName(System.String,System.Int32,System.Boolean)", Justification = "Literal code elements cannot be localized." )]
         private static IReadOnlyList<UsingDirectiveSyntax> CreateRequiredUsings()
         {
             Contract.Ensures( Contract.Result<IReadOnlyList<UsingDirectiveSyntax>>() != null );
@@ -95,7 +99,7 @@ namespace More.VisualStudio.Editors.EntityFramework
             return node.DescendantNodes().OfType<UsingDirectiveSyntax>().ToArray();
         }
 
-        private IReadOnlyList<InterfaceDeclaration> FindInterfaceDeclarations( IEnumerable<ClassDeclarationSyntax> classes )
+        private static IReadOnlyList<InterfaceDeclaration> FindInterfaceDeclarations( IEnumerable<ClassDeclarationSyntax> classes )
         {
             Contract.Requires( classes != null );
             Contract.Ensures( Contract.Result<IEnumerable<InterfaceDeclaration>>() != null );
@@ -526,7 +530,7 @@ namespace More.VisualStudio.Editors.EntityFramework
             return true;
         }
 
-        private void EvaluateAndGenerateCode( CodeGeneratorContext context, StreamWriter writer )
+        private static void EvaluateAndGenerateCode( CodeGeneratorContext context, StreamWriter writer )
         {
             Contract.Requires( context != null );
             Contract.Requires( writer != null );

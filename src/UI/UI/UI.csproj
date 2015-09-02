@@ -185,6 +185,11 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SR.resx</DependentUpon>
+    </Compile>
     <Compile Include="Util.cs" />
     <Compile Include="Windows.Input\AsyncCancelableCommand.cs" />
     <Compile Include="Windows.Input\AsyncCommandT.cs" />
@@ -205,6 +210,7 @@
     <Compile Include="Windows.Input\Interaction.cs" />
     <Compile Include="Windows.Input\InteractionExtensions.cs" />
     <Compile Include="Windows.Input\InteractionRequestedEventArgs.cs" />
+    <Compile Include="Windows.Input\InteractionRequestExtensions.cs" />
     <Compile Include="Windows.Input\InteractionRequestT.cs" />
     <Compile Include="Windows.Input\NamedCommandT.cs" />
     <Compile Include="Windows.Input\NamedDataItemCommandT1T2.cs" />
@@ -223,6 +229,10 @@
     <EmbeddedResource Include="ExceptionMessage.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

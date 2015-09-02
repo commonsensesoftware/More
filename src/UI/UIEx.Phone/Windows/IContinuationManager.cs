@@ -3,9 +3,9 @@
     using More.Windows.Input;
     using System;
     using System.Diagnostics.Contracts;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
     using global::Windows.ApplicationModel.Activation;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Defines the behavior of a continuation manager.

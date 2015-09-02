@@ -205,7 +205,7 @@
             selectFolder.Request( interaction );
         }
 
-        private void OnFolderSelected( DirectoryInfo folder )
+        private void OnFolderSelected( IFolder folder )
         {
             Contract.Requires( folder != null );$endif$$if$ ($showSelectFolderTips$ == true)
             // TODO: use selected folder$endif$$if$ ($enableSelectFolder$ == true)

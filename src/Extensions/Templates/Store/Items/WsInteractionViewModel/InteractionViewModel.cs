@@ -93,12 +93,22 @@ $endif$$if$ ($showTips$ == true)
         {
             get;
         } = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
+    
+        /// <summary>
+        /// Gets the collection of view model commands.
+        /// </summary>
+        /// <value>A <see cref="ObservableKeyedCollection{TKey,TValue}">keyed collection</see> of
+        /// <see cref="INamedCommand">commands</see>.</value>
+        public ObservableKeyedCollection<string, INamedCommand> Commands
+        {
+            get;
+        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );$if$ ($addTitle$ == true)
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message ) => Alert( Title, message );
+        protected void Alert( string message ) => Alert( Title, message );$endif$
 
         /// <summary>
         /// Requests an alert be displayed to a user.

@@ -110,6 +110,7 @@
         /// </summary>
         /// <returns>The constructed <see cref="CompositionHost">container</see>.</returns>
         [CLSCompliant( false )]
+        [SuppressMessage( "Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "This is maintainable method. Service containers and locators may have high coupling." )]
         protected virtual CompositionHost CreateContainer()
         {
             Contract.Ensures( Contract.Result<CompositionHost>() != null );
@@ -290,7 +291,7 @@
         /// <summary>
         /// Configures the underlying container when the host starts.
         /// </summary>
-        /// <param name="configuration">The <see cref="ContainerConfigurationAction">configuration</see> to add.</param>
+        /// <param name="configurationAction">The <see cref="ContainerConfigurationAction">configuration</see> to add.</param>
         /// <example>This example illustrates how to register startup activities.
         /// <code lang="C#">
         /// <![CDATA[
@@ -313,10 +314,10 @@
         /// ]]></code>
         /// </example>
         [CLSCompliant( false )]
-        public virtual void Configure( ContainerConfigurationAction configuration )
+        public virtual void Configure( ContainerConfigurationAction configurationAction )
         {
-            Arg.NotNull( configuration, nameof( configuration ) );
-            containerConfigurations.Value.Add( configuration );
+            Arg.NotNull( configurationAction, nameof( configurationAction ) );
+            containerConfigurations.Value.Add( configurationAction );
         }
 
         /// <summary>

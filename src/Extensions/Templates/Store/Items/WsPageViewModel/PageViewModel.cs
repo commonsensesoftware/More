@@ -33,8 +33,6 @@
         private readonly InteractionRequest<OpenFileInteraction> openFile = new InteractionRequest<OpenFileInteraction>( "OpenFile" );$endif$$if$ ($enableSaveFile$ == true)
         private readonly InteractionRequest<SaveFileInteraction> saveFile = new InteractionRequest<SaveFileInteraction>( "SaveFile" );$endif$$if$ ($enableSelectFolder$ == true)
         private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$
-        private readonly ObservableKeyedCollection<string, IInteractionRequest> interactionRequests = new ObservableKeyedCollection<string, IInteractionRequest>( r => r.Id );
-        private readonly ObservableKeyedCollection<string, INamedCommand> commands = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
         private string titleField = "$title$";
 
         /// <summary>
@@ -56,22 +54,22 @@ $endif$$if$ ($showTips$ == true)
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: Add or modify the interaction requests and commands to suit your needs$endif$
-            interactionRequests.Add( userFeedback );
-            interactionRequests.Add( navigate );$if$ ($enableSettings$ == true)
-            interactionRequests.Add( settings );$endif$$if$ ($enableSharing$ == true)
-            interactionRequests.Add( share );$endif$$if$ ($enableSearch$ == true)
-            interactionRequests.Add( search );$endif$$if$ ($enableOpenFile$ == true)
-            interactionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
-            interactionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            interactionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
-            commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$$if$ ($enableSearch$ == true)
-            commands.Add( new NamedCommand<ISearchRequest>( "Search", OnSearch ) );
-            commands.Add( new NamedCommand<ISearchSuggestionsRequest>( "ProvideSuggestions", OnProvideSuggestions ) );
-            commands.Add( new NamedCommand<string>( "SuggestionChosen", OnSuggestionChosen ) );$endif$$if$ ($enableOpenFile$ == true)
-            commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
-            commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
-            //commands.Add( new NamedCommand<object>( "Navigate", p => Navigate( "Page1" ) ) );
+            InteractionRequests.Add( userFeedback );
+            InteractionRequests.Add( navigate );$if$ ($enableSettings$ == true)
+            InteractionRequests.Add( settings );$endif$$if$ ($enableSharing$ == true)
+            InteractionRequests.Add( share );$endif$$if$ ($enableSearch$ == true)
+            InteractionRequests.Add( search );$endif$$if$ ($enableOpenFile$ == true)
+            InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
+            InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
+            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
+            Commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$$if$ ($enableSearch$ == true)
+            Commands.Add( new NamedCommand<ISearchRequest>( "Search", OnSearch ) );
+            Commands.Add( new NamedCommand<ISearchSuggestionsRequest>( "ProvideSuggestions", OnProvideSuggestions ) );
+            Commands.Add( new NamedCommand<string>( "SuggestionChosen", OnSuggestionChosen ) );$endif$$if$ ($enableOpenFile$ == true)
+            Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
+            Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
+            //Commands.Add( new NamedCommand<object>( "Navigate", p => Navigate( "Page1" ) ) );
         }
 
         /// <summary>

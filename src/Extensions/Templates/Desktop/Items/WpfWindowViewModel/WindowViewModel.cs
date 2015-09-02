@@ -47,12 +47,12 @@
             InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
             InteractionRequests.Add( selectFolder );$endif$
             InteractionRequests.Add( close );
-            //commands.Add( new NamedCommand<object>( "Show", OnShowChildWindow ) );
-            DialogCommands.Add( new NamedCommand<object>( "OK", OnAccept, OnCanAccept ) );
-            DialogCommands.Add( new NamedCommand<object>( "Cancel", OnCancel ) );$if$ ($enableOpenFile$ == true)
+            //Commands.Add( new NamedCommand<object>( "Show", OnShowChildWindow ) );$if$ ($enableOpenFile$ == true)
             Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
             Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
             Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
+            DialogCommands.Add( new NamedCommand<object>( "OK", OnAccept, OnCanAccept ) );
+            DialogCommands.Add( new NamedCommand<object>( "Cancel", OnCancel ) );
         }
 
         //private void OnShowChildWindow( object parameter )

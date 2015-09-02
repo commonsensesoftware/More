@@ -18,7 +18,7 @@
     using System.Windows.Input;
 
 	/// <summary>
-    /// Represents a view model for a window.
+    /// Represents a view model that supports user interactions.
     /// </summary>
     public class $safeitemrootname$ :  $base$
     {
@@ -81,13 +81,13 @@
         public ObservableKeyedCollection<string, INamedCommand> Commands
         {
             get;
-        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
+        } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );$if$ ($addTitle$ == true)
 
         /// <summary>
         /// Requests an alert be displayed to a user.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message ) => Alert( Title, message );
+        protected void Alert( string message ) => Alert( Title, message );$endif$
 
         /// <summary>
         /// Requests an alert be displayed to a user.
