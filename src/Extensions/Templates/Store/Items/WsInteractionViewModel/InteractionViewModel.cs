@@ -105,54 +105,21 @@ $endif$$if$ ($showTips$ == true)
         } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );$if$ ($addTitle$ == true)
 
         /// <summary>
-        /// Requests an alert be displayed to a user.
+        /// Requests an alert be displayed to a user asynchronously.
         /// </summary>
         /// <param name="message">The alert message.</param>
-        protected void Alert( string message ) => Alert( Title, message );$endif$
+        /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
+        protected Task AlertAsync( string message ) => userFeedback.AlertAsync( Title, message );$endif$
 
         /// <summary>
-        /// Requests an alert be displayed to a user.
-        /// </summary>
-        /// <param name="title">The alert title.</param>
-        /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
-
-        /// <summary>
-        /// Requests a user confirmation.
+        /// Requests a user confirmation asynchronously.
         /// </summary>
         /// <param name="prompt">The user confirmation prompt.</param>
-        /// <param name="title">The prompt title.</param>
-        /// <param name="confirmed">The <see cref="Action{T}">action</see> performed when the request is confirmed.</param>
         /// <param name="acceptText">The confirmation acceptance text. The default value is "OK".</param>
         /// <param name="cancelText">The confirmation cancellation text. The default value is "Cancel".</param>
-        protected void Confirm(
-            string prompt,
-            string title,
-            Action<object> confirmed,
-            string acceptText = "OK",
-            string cancelText = "Cancel" )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( prompt ) );
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( confirmed != null );
-            Contract.Requires( !string.IsNullOrEmpty( acceptText ) );
-            Contract.Requires( !string.IsNullOrEmpty( cancelText ) );
-
-            var interaction = new Interaction()
-            {
-                Title = title,
-                Content = prompt,
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( acceptText, confirmed ),
-                    new NamedCommand<object>( cancelText, DefaultAction.None )
-                }
-            };
-
-            userFeedback.Request( interaction );
-        }$if$ ($enableSettings$ == true)
+        /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
+        protected Task<bool> ConfirmAsync( string prompt, string acceptText = "OK", string cancelText = "Cancel" ) =>
+            userFeedback.ConfirmAsync( prompt, Title, acceptText, cancelText );$if$ ($enableSettings$ == true)
 
         /// <summary>
         /// Requests settings be displayed to the user.
@@ -199,33 +166,16 @@ $endif$$if$ ($showTips$ == true)
         /// <param name="text">The text to search for.</param>
         protected void Search( string text ) => search.Request( new Interaction(){ Content = text } );$endif$$if$ ($enableOpenFile$ == true)
 
-        private void OnOpenFile( object parameter )
+        private async void OnOpenFile( object parameter )
         {
-            OpenFileInteraction interaction = null;
-            interaction = new OpenFileInteraction()
-            {
-                Title = "Open File",
-                Multiselect = false,
-                FileTypeFilter =
-                {
-                    ".txt"
-                },
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( "Open", p => OnFilesOpened( interaction.Files ) ),
-                    new NamedCommand<object>( "Cancel", DefaultAction.None )
-                }
-            };
+            var fileTypeFilter = new[] { ".txt" };
+            var file = await openFile.RequestSingleFileAsync( fileTypeFilter );
 
-            openFile.Request( interaction );
-        }
+            if ( file == null )
+                return;$endif$$if$ ($showOpenFileTips$ == true)
 
-        private void OnFilesOpened( IList<IFile> files )
-        {
-            Contract.Requires( files != null );$endif$$if$ ($showOpenFileTips$ == true)
-            // TODO: process opened files$endif$$if$ ($enableOpenFile$ == true)
+            // TODO: process opened file$endif$$if$ ($enableOpenFile$ == true)
+
         }$endif$$if$ ($enableSaveFile$ == true)
 
         private bool OnCanSaveFile( object parameter )
@@ -234,61 +184,33 @@ $endif$$if$ ($showTips$ == true)
             return true;
         }
 
-        private void OnSaveFile( object parameter )
+        private async void OnSaveFile( object parameter )
         {
-            SaveFileInteraction interaction = null;
-            interaction = new SaveFileInteraction()
-            {
-                Title = "Save File",
-                DefaultFileExtension = ".txt",
-                FileTypeChoices =
-                {
-                    { "Text File", new []{ ".txt" } }
-                },
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( "Save", p => OnFileSaved( interaction.SavedFile ) ),
-                    new NamedCommand<object>( "Cancel", DefaultAction.None )
-                }
-            };
+            var fileTypeChoices = new[] { new KeyValuePair<string, IReadOnlyList<string>>( "Text File", new[] { ".txt" } ) };
 
-            saveFile.Request( interaction );
-        }
-
-        private async void OnFileSaved( IFile file )
-        {
-            Contract.Requires( file != null );
+            if ( file == null )
+                return;
 
             using ( var stream = await file.OpenReadWriteAsync() )
-            {$endif$$if$ ($showSaveFileTips$ == true)
-                // TODO: save contents to created file$endif$$if$ ($enableSaveFile$ == true)
+            {
+                using ( var writer = new StreamWriter( stream ) )
+                {$endif$$if$ ($showSaveFileTips$ == true)
+                    // TODO: save contents to created file$endif$$if$ ($enableSaveFile$ == true)
+
+                    await writer.FlushAsync();
+                }
             }
         }$endif$$if$ ($enableSelectFolder$ == true)
 
-        private void OnSelectFolder( object parameter )
+        private async void OnSelectFolder( object parameter )
         {
-            SelectFolderInteraction interaction = null;
-            interaction = new SelectFolderInteraction()
-            {
-                Title = "Select Folder",
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( "Select", p => OnFolderSelected( interaction.Folder ) ),
-                    new NamedCommand<object>( "Cancel", DefaultAction.None )
-                }
-            };
+            var folder = await selectFolder.RequestAsync();
 
-            selectFolder.Request( interaction );
-        }
+            if ( folder == null )
+                return;$endif$$if$ ($showSelectFolderTips$ == true)
 
-        private void OnFolderSelected( IFolder folder )
-        {
-            Contract.Requires( folder != null );$endif$$if$ ($showSelectFolderTips$ == true)
             // TODO: use selected folder$endif$$if$ ($enableSelectFolder$ == true)
+
         }$endif$
     }
 }

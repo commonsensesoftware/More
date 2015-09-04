@@ -15,21 +15,42 @@
         private static readonly IList<IFile> NoFiles = new IFile[0];
 
         /// <summary>
-        /// Requests a user confirmation asynchronously.
+        /// Requests an alert be displayed to a user asynchronously.
         /// </summary>
         /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
-        /// <param name="title">The prompt title.</param>
-        /// <param name="message"></param>
+        /// <param name="title">The alert title.</param>
+        /// <param name="message">The alert message.</param>
         /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
-        public static Task Alert( this InteractionRequest<Interaction> interactionRequest, string title, string message )
+        /// <remarks>The requested <see cref="Interaction">interaction</see> will always contain a single <see cref="INamedCommand">command</see>
+        /// with the identifier and name "OK".</remarks>
+        public static Task AlertAsync( this InteractionRequest<Interaction> interactionRequest, string title, string message ) => interactionRequest.Alert( title, message, null );
+
+        /// <summary>
+        /// Requests an alert be displayed to a user asynchronously.
+        /// </summary>
+        /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
+        /// <param name="title">The alert title.</param>
+        /// <param name="message">The alert message.</param>
+        /// <param name="acknowledgeButtonText">The alert acknowledgement text. The default value is "OK".</param>
+        /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
+        /// <remarks>The requested <see cref="Interaction">interaction</see> will always contain a single <see cref="INamedCommand">command</see> with the identifier "OK".</remarks>
+        public static Task AlertAsync( this InteractionRequest<Interaction> interactionRequest, string title, string message, string acknowledgeButtonText )
         {
+            Arg.NotNull( interactionRequest, nameof( interactionRequest ) );
+
+            title = title ?? string.Empty;
+            message = message ?? string.Empty;
+
+            if ( string.IsNullOrEmpty( acknowledgeButtonText ) )
+                acknowledgeButtonText = SR.OK;
+
             var source = new TaskCompletionSource<object>();
             var interaction = new Interaction( title, message )
             {
                 DefaultCommandIndex = 0,
                 Commands =
                 {
-                    new NamedCommand<object>( "OK", "", p => source.SetResult( null ) )
+                    new NamedCommand<object>( "OK", acknowledgeButtonText, p => source.SetResult( null ) )
                 }
             };
             interactionRequest.Request( interaction );
@@ -42,9 +63,35 @@
         /// </summary>
         /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
         /// <param name="prompt">The user confirmation prompt.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
+        /// <remarks>The requested <see cref="Interaction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
+        /// with the identifiers and names "OK" and "Cancel", respectively.</remarks>
+        public static Task<bool> ConfirmAsync( this InteractionRequest<Interaction> interactionRequest, string prompt ) =>
+            interactionRequest.ConfirmAsync( prompt, null, null, null );
+
+        /// <summary>
+        /// Requests a user confirmation asynchronously.
+        /// </summary>
+        /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
+        /// <param name="prompt">The user confirmation prompt.</param>
+        /// <param name="title">The prompt title.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
+        /// <remarks>The requested <see cref="Interaction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
+        /// with the identifiers and names "OK" and "Cancel", respectively.</remarks>
+        public static Task<bool> ConfirmAsync( this InteractionRequest<Interaction> interactionRequest, string prompt, string title ) =>
+            interactionRequest.ConfirmAsync( prompt, title, null, null );
+
+        /// <summary>
+        /// Requests a user confirmation asynchronously.
+        /// </summary>
+        /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
+        /// <param name="prompt">The user confirmation prompt.</param>
         /// <param name="title">The prompt title.</param>
         /// <param name="acceptButtonText">The confirmation acceptance text. The default value is "OK".</param>
         /// <param name="cancelButtonText">The confirmation cancellation text. The default value is "Cancel".</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
+        /// <remarks>The requested <see cref="Interaction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
+        /// with the identifiers "OK" and "Cancel".</remarks>
         public static Task<bool> ConfirmAsync(
             this InteractionRequest<Interaction> interactionRequest,
             string prompt,
@@ -53,6 +100,14 @@
             string cancelButtonText )
         {
             Arg.NotNullOrEmpty( prompt, nameof( prompt ) );
+
+            title = title ?? string.Empty;
+
+            if ( string.IsNullOrEmpty( acceptButtonText ) )
+                acceptButtonText = SR.OK;
+
+            if ( string.IsNullOrEmpty( cancelButtonText ) )
+                cancelButtonText = SR.Cancel;
 
             var source = new TaskCompletionSource<bool>();
             var interaction = new Interaction()
@@ -79,7 +134,7 @@
         /// <param name="fileTypeFilter">A <see cref="IReadOnlyList{T}">read-only list</see> of filtered file types which can be opened.</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing the selected <see cref="IFile">file</see> or <c>null</c> if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="OpenFileInteraction">interaction</see> will always have the title "Open File" and contain two <see cref="INamedCommand">commands</see>
-        /// with the identifiers "Open" and "Cancel".</remarks>
+        /// with the identifiers and names "Open" and "Cancel", respectively.</remarks>
         public static async Task<IFile> RequestSingleFileAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, IReadOnlyList<string> fileTypeFilter ) =>
             ( await interactionRequest.RequestAsync( null, null, null, fileTypeFilter, false ) ).FirstOrDefault();
 
@@ -91,7 +146,7 @@
         /// <param name="fileTypeFilter">A <see cref="IReadOnlyList{T}">read-only list</see> of filtered file types which can be opened.</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing the selected <see cref="IFile">file</see> or <c>null</c> if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="OpenFileInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
-        /// with the identifiers "Open" and "Cancel".</remarks>
+        /// with the identifiers and names "Open" and "Cancel", respectively.</remarks>
         public static async Task<IFile> RequestSingleFileAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, string title, IReadOnlyList<string> fileTypeFilter ) =>
             ( await interactionRequest.RequestAsync( title, null, null, fileTypeFilter, false ) ).FirstOrDefault();
 
@@ -103,7 +158,7 @@
         /// <returns>A <see cref="Task{TResult}">task</see> containing a <see cref="IList{T}">list</see> of the selected <see cref="IFile">files</see>.
         /// The list is empty if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="OpenFileInteraction">interaction</see> will always have the title "Open File" and contain two <see cref="INamedCommand">commands</see>
-        /// with the identifiers "Open" and "Cancel".</remarks>
+        /// with the identifiers and names "Open" and "Cancel", respectively.</remarks>
         public static Task<IList<IFile>> RequestMultipleFilesAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, IReadOnlyList<string> fileTypeFilter ) =>
             interactionRequest.RequestAsync( null, null, null, fileTypeFilter, true );
 
@@ -116,7 +171,7 @@
         /// <returns>A <see cref="Task{TResult}">task</see> containing a <see cref="IList{T}">list</see> of the selected <see cref="IFile">files</see>.
         /// The list is empty if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="OpenFileInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
-        /// with the identifiers "Open" and "Cancel".</remarks>
+        /// with the identifiers and names "Open" and "Cancel", respectively.</remarks>
         public static Task<IList<IFile>> RequestMultipleFilesAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, string title, IReadOnlyList<string> fileTypeFilter ) =>
             interactionRequest.RequestAsync( title, null, null, fileTypeFilter, true );
 
@@ -182,7 +237,7 @@
         /// file type choices and their associated file extensions.</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing the saved <see cref="IFile">file</see> or <c>null</c> if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="SaveFileInteraction">interaction</see> will always have the title "Save File" and contain two <see cref="INamedCommand">commands</see>
-        /// with the identifiers "Save" and "Cancel", respectively.</remarks>
+        /// with the identifiers and names "Save" and "Cancel", respectively.</remarks>
         public static Task<IFile> RequestAsync( this InteractionRequest<SaveFileInteraction> interactionRequest, IEnumerable<KeyValuePair<string, IReadOnlyList<string>>> fileTypeChoices ) =>
             interactionRequest.RequestAsync( null, null, null, fileTypeChoices );
 
@@ -195,7 +250,7 @@
         /// file type choices and their associated file extensions.</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing the saved <see cref="IFile">file</see> or <c>null</c> if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="SaveFileInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
-        /// with the identifiers "Save" and "Cancel", respectively.</remarks>
+        /// with the identifiers and names "Save" and "Cancel", respectively.</remarks>
         public static Task<IFile> RequestAsync( this InteractionRequest<SaveFileInteraction> interactionRequest, string title, IEnumerable<KeyValuePair<string, IReadOnlyList<string>>> fileTypeChoices ) =>
             interactionRequest.RequestAsync( title, null, null, fileTypeChoices );
 
