@@ -1,8 +1,7 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
 <#@ output extension=".desktop.nuspec" #>
 <#@ parameter type="System.String" name="CoreExVersion" #>
-<#@ parameter type="System.String" name="UIVersion" #>
-<#@ parameter type="System.String" name="UIExVersion" #><?xml version="1.0"?>
+<#@ parameter type="System.String" name="UIVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
  <metadata>
   <id>$id$</id>
@@ -21,7 +20,9 @@
   <title>More - UI Presentation</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface presentations.</summary>
-  <releaseNotes>Corrected spelling of ContinuableInteractionRequest&lt;T&gt; for Phone.</releaseNotes>
+  <releaseNotes>• 'More.UI.Extensions' package dependency was removed.
+• UI extensions were refactored into the 'More.UI' package.
+• Added async extension methods for WebAuthenticateInteractionRequest.</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
@@ -33,18 +34,8 @@
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <group targetFramework="net45">
-    <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
-    <dependency id="More.UI.Extensions" version="<#= UIExVersion #>" /> 
-   </group>
-   <group targetFramework="win81">
-    <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
-    <dependency id="More.UI" version="<#= UIVersion #>" />
-   </group>
-   <group targetFramework="portable-wp81+wpa81">
-    <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
-    <dependency id="More.UI.Extensions" version="<#= UIExVersion #>" />
-   </group>
+   <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
+   <dependency id="More.UI" version="<#= UIVersion #>" />
   </dependencies>
  </metadata>
  <files>

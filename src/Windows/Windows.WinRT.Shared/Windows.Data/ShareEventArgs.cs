@@ -1,5 +1,6 @@
 ﻿namespace More.Windows.Data
 {
+    using Data;
     using System;
     using System.Diagnostics.Contracts;
     using global::Windows.ApplicationModel.Activation;

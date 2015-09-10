@@ -10,7 +10,15 @@
   <title>More - UI</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface applications.</summary>
-  <releaseNotes></releaseNotes>
+  <releaseNotes>• Refactored platform-specific extensions to be portable
+• Added WindowCloseInteraction
+• Added FileType
+• Added and refactored IContinuationManager
+• Added ContinuableInteractionRequest&lt;TInteraction, TContinuation&gt;
+• Added OpenFileInteractionRequest
+• Added SaveFileInteractionRequest
+• Added SelectFolderInteractionRequest
+• Added async extension methods for common InteractionRequest usage</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

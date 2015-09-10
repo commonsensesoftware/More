@@ -3,7 +3,7 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
- xmlns:b="using:More.Windows.Interactivity"
+ xmlns:a="using:More.Windows.Interactivity"
  xmlns:wf="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation"
  xmlns:v="clr-namespace:More.VisualStudio.Views"
  Title="{Binding Title}" WindowStartupLocation="CenterOwner"
@@ -19,7 +19,7 @@
   </ResourceDictionary>
  </Window.Resources>
  <i:Interaction.Behaviors>
-  <b:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
+  <a:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
  </i:Interaction.Behaviors>
  <Grid Margin="10">
   <Grid.ColumnDefinitions>

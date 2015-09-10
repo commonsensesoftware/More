@@ -1,6 +1,7 @@
 ﻿namespace More.Composition
 {
-    using More.Windows.Controls;
+    using Composition;
+    using Windows.Controls;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;

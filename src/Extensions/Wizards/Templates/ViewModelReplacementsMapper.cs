@@ -57,7 +57,6 @@
                 new Tuple<string, Func<ViewModelItemTemplateWizardViewModel, string>>( "$enableSharing$", m => GetOption( m.ApplicationContractOptions, "Share" ) ),
                 new Tuple<string, Func<ViewModelItemTemplateWizardViewModel, string>>( "$enableAppSharing$", m => GetOption( m.ApplicationContractOptions, "AppShare" ) ),
                 new Tuple<string, Func<ViewModelItemTemplateWizardViewModel, string>>( "$eventBrokerRequired$", IsEventBrokerRequired ),
-                new Tuple<string, Func<ViewModelItemTemplateWizardViewModel, string>>( "$continuationRequired$", IsContinuationRequired ),
                 new Tuple<string, Func<ViewModelItemTemplateWizardViewModel, string>>( "$ctorParameters$", CreateConstructorParameters ),
                 new Tuple<string, Func<ViewModelItemTemplateWizardViewModel, string>>( "$title$", m => NormalizeTitle( GetReplacement( "$safeitemname$" ) ) )
             };
@@ -111,14 +110,6 @@
             return model.ApplicationContractOptions.Any( o => o.IsEnabled && o.Id.StartsWith( "App", StringComparison.Ordinal ) ).ToString().ToLowerInvariant();
         }
 
-        [SuppressMessage( "Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Required by the VS template wizard engine." )]
-        private string IsContinuationRequired( ViewModelItemTemplateWizardViewModel model )
-        {
-            Contract.Requires( model != null );
-            Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-            return ( IsWindowsPhoneApp && model.InteractionOptions.Any( o => o.IsEnabled ) ).ToString().ToLowerInvariant();
-        }
-
         private string CreateConstructorParameters( ViewModelItemTemplateWizardViewModel model )
         {
             Contract.Requires( model != null );
@@ -126,18 +117,9 @@
 
             var parameters = new StringBuilder();
 
-            // if the continuation manager is needed, add it first
-            if ( IsWindowsPhoneApp && model.InteractionOptions.Any( o => o.IsEnabled ) )
-                parameters.Append( "IContinuationManager continuationManager" );
-
             // add the event broker as needed (ex: AppSearch or AppShare)
             if ( model.ApplicationContractOptions.Any( o => o.IsEnabled && o.Id.StartsWith( "App", StringComparison.Ordinal ) ) )
-            {
-                if ( parameters.Length > 0 )
-                    parameters.Append( ", " );
-
                 parameters.Append( "IEventBroker eventBroker" );
-            }
 
             return parameters.ToString();
         }

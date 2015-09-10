@@ -4,7 +4,6 @@
 <#@ parameter type="System.String" name="CoreExVersion" #>
 <#@ parameter type="System.String" name="CompositionVersion" #>
 <#@ parameter type="System.String" name="UIVersion" #>
-<#@ parameter type="System.String" name="UIExVersion" #>
 <#@ parameter type="System.String" name="PresentationVersion" #>
 <#@ parameter type="System.String" name="HostingVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
@@ -61,7 +60,6 @@
    <package id="More.Extensions" version="<#= CoreExVersion #>" />
    <package id="More.Composition" version="<#= CompositionVersion #>" />
    <package id="More.UI" version="<#= UIVersion #>" />
-   <package id="More.UI.Extensions" version="<#= UIExVersion #>" />
    <package id="More.UI.Presentation" version="<#= PresentationVersion #>" />
    <package id="More.UI.Hosting" version="<#= HostingVersion #>" />
   </packages>

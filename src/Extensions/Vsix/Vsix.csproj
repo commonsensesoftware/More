@@ -186,6 +186,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
     </ProjectReference>
+    <ProjectReference Include="..\Templates\Desktop\Items\WpfInteractionViewModel\WpfInteractionViewModel.csproj">
+      <Project>{dde37d57-25fa-4a4b-bda7-905871cd12c0}</Project>
+      <Name>WpfInteractionViewModel</Name>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup</IncludeOutputGroupsInVSIX>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+    </ProjectReference>
     <ProjectReference Include="..\Templates\Desktop\Items\WpfUserControlView\WpfUserControlView.csproj">
       <Project>{8c08ae5a-3809-45ad-8118-ae256419ece2}</Project>
       <Name>WpfUserControlView</Name>

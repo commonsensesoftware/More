@@ -23,9 +23,9 @@
     public class $safeitemrootname$ :  $base$
     {
         private readonly InteractionRequest<Interaction> userFeedback = new InteractionRequest<Interaction>( "UserFeedback" );$if$ ($enableOpenFile$ == true)
-        private readonly InteractionRequest<OpenFileInteraction> openFile = new InteractionRequest<OpenFileInteraction>( "OpenFile" );$endif$$if$ ($enableSaveFile$ == true)
-        private readonly InteractionRequest<SaveFileInteraction> saveFile = new InteractionRequest<SaveFileInteraction>( "SaveFile" );$endif$$if$ ($enableSelectFolder$ == true)
-        private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$$if$ ($addTitle$ == true)
+        private readonly InteractionRequest<OpenFileInteraction> openFile;$endif$$if$ ($enableSaveFile$ == true)
+        private readonly InteractionRequest<SaveFileInteraction> saveFile;$endif$$if$ ($enableSelectFolder$ == true)
+        private readonly InteractionRequest<SelectFolderInteraction> selectFolder;$endif$$if$ ($addTitle$ == true)
         private string titleField = "$title$";$endif$
 
         /// <summary>
@@ -36,7 +36,10 @@
             // TODO: If this class has import dependencies, they can be specified in the constructor arguments
             //       example: public $safeitemrootname$( MyService service )
 
-            // TODO: add additional interaction requests to suit your needs$endif$
+            // TODO: add additional interaction requests to suit your needs$endif$$if$ ($enableOpenFile$ == true)
+            openFile = new OpenFileInteractionRequest( "OpenFile", OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
+            saveFile = new SaveFileInteractionRequest( "SaveFile", OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
+            selectFolder = new SelectFolderInteractionRequest( "SelectFolder", OnFolderSelected );$endif$
             InteractionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
             InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
             InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
@@ -93,38 +96,39 @@
         /// <summary>
         /// Requests a user confirmation asynchronously.
         /// </summary>
-        /// <param name="prompt">The user confirmation prompt.</param>
+        /// <param name="prompt">The user confirmation prompt.</param>$if$ ($addTitle$ == false)
+        /// <param name="title">The confirmation title.</param>$endif$
         /// <param name="acceptText">The confirmation acceptance text. The default value is "OK".</param>
         /// <param name="cancelText">The confirmation cancellation text. The default value is "Cancel".</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
-        protected Task<bool> ConfirmAsync( string prompt, string acceptText = "OK", string cancelText = "Cancel" ) =>
-            userFeedback.ConfirmAsync( prompt, Title, acceptText, cancelText );$if$ ($enableOpenFile$ == true)
+        protected Task<bool> ConfirmAsync( string prompt, $if$ ($addTitle$ == false)string title, $endif$string acceptText = "OK", string cancelText = "Cancel" ) =>
+            userFeedback.ConfirmAsync( prompt, $if$ ($addTitle$ == true)Title$endif$$if$ ($addTitle$ == false)title$endif$, acceptText, cancelText );$if$ ($enableOpenFile$ == true)
 
         private async void OnOpenFile( object parameter )
         {
-            var fileTypeFilter = new[] { "All Files (*.*)", "*.*" };
-            var file = await openFile.RequestSingleFileAsync( fileTypeFilter );
-
-            if ( file == null )
-                return;$endif$$if$ ($showOpenFileTips$ == true)
-
-            // TODO: process opened file$endif$$if$ ($enableOpenFile$ == true)
-
-        }$endif$$if$ ($enableSaveFile$ == true)
-
-        private bool OnCanSaveFile( object parameter )
-        {$endif$$if$ ($showSaveFileTips$ == true)
-            // TODO: add logic when a file can be saved$endif$$if$ ($enableSaveFile$ == true)
-            return true;
+            var fileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) };
+            var files = await openFile.RequestAsync( fileTypeFilter, false );
+            OnFilesOpened( files );
         }
+
+        private void OnFilesOpened( IList<IFile> files )
+        {
+            Contract.Requires( files != null );$endif$$if$ ($showOpenFileTips$ == true)
+            // TODO: process opened files$endif$$if$ ($enableOpenFile$ == true)
+        }$endif$$if$ ($enableSaveFile$ == true)
 
         private async void OnSaveFile( object parameter )
         {
-            var fileTypeChoices = new[] { new KeyValuePair<string, IReadOnlyList<string>>( "Text File", new[] { ".txt" } ) };
+            var fileTypeChoices = new[] { new FileType( "Text Files", ".txt" ) };
+            var file = await saveFile.RequestAsync( fileTypeChoices );
+            OnFileSaved( file );
+        }
 
+        private async void OnFileSaved( IFile file )
+        {
             if ( file == null )
                 return;
-
+    
             using ( var stream = await file.OpenReadWriteAsync() )
             {
                 using ( var writer = new StreamWriter( stream ) )
@@ -139,12 +143,16 @@
         private async void OnSelectFolder( object parameter )
         {
             var folder = await selectFolder.RequestAsync();
+            OnFolderSelected( folder );
+        }
 
+        private void OnFolderSelected( IFolder folder )
+        {
             if ( folder == null )
                 return;$endif$$if$ ($showSelectFolderTips$ == true)
 
             // TODO: use selected folder$endif$$if$ ($enableSelectFolder$ == true)
-
+            
         }$endif$
     }
 }

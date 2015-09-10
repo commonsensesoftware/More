@@ -1,6 +1,6 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -9,7 +9,7 @@
     using global::Windows.Foundation;
     using global::Windows.Storage;
     using global::Windows.Storage.Pickers;
-    using IFile = More.IO.IFile;
+    using IFile = IO.IFile;
 
     /// <content>
     /// Provides additional implementation specific to Windows Store applications.
@@ -24,7 +24,7 @@
             var dialog = new FileSavePicker();
 
             dialog.DefaultFileExtension = saveFile.DefaultFileExtension;
-            dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices );
+            dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices.ToDictionary() );
             dialog.SuggestedStartLocation = SuggestedStartLocation;
 
             if ( !string.IsNullOrEmpty( saveFile.FileName ) )

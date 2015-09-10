@@ -35,10 +35,6 @@
    <Output PropertyName="UIVersion" TaskParameter="SemanticVersion" />
   </ResolvePackageReference>
 
-  <ResolvePackageReference SourceProjectPath="$(TemplateRootDirectory)\UI\UIEx.Phone\UIEx.Phone.csproj">
-   <Output PropertyName="UIExVersion" TaskParameter="SemanticVersion" />
-  </ResolvePackageReference>
-  
   <ResolvePackageReference SourceProjectPath="$(TemplateRootDirectory)\Windows\Windows.Phone\Windows.Phone.csproj">
    <Output PropertyName="PresentationVersion" TaskParameter="SemanticVersion" />
   </ResolvePackageReference>
@@ -60,9 +56,6 @@
    </T4ParameterValues>
    <T4ParameterValues Include="UIVersion">
     <Value>$(UIVersion)</Value>
-   </T4ParameterValues>
-   <T4ParameterValues Include="UIExVersion">
-    <Value>$(UIExVersion)</Value>
    </T4ParameterValues>
    <T4ParameterValues Include="PresentationVersion">
     <Value>$(PresentationVersion)</Value>

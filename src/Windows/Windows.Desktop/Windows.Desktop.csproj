@@ -156,6 +156,7 @@
     <Compile Include="..\..\Arg.cs">
       <Link>Arg.cs</Link>
     </Compile>
+    <Compile Include="Windows.Input\FileTypeExtensions.cs" />
     <Compile Include="Windows.Interactivity\SavedFileAdapter.cs" />
     <Compile Include="Windows.Interactivity\WindowAction.CommandMediator.cs" />
     <None Include="windows.desktop.nuspec">
@@ -275,10 +276,6 @@
       <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\UIEx.Desktop\UIEx.Desktop.csproj">
-      <Project>{26d1aa58-1623-454e-87c9-0e46dc31cf27}</Project>
-      <Name>UIEx.Desktop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\UI\UI\UI.csproj">
       <Project>{9aca8e82-303b-4114-9e0a-84a3ad67f766}</Project>
       <Name>UI</Name>
@@ -294,9 +291,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\nuget.pack.targets" />
   <Import Project="..\..\fileversion.targets" />
-  <PropertyGroup>
-    <NuGetPackTarget>$(ProjectDir)\windows.desktop.nuspec</NuGetPackTarget>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -24,8 +24,8 @@
         {
             get
             {
-                yield return new object[] { new Func<string[], OpenFileInteraction>( fileTypeFilter => new OpenFileInteraction( "", fileTypeFilter ) ) };
-                yield return new object[] { new Func<string[], OpenFileInteraction>( fileTypeFilter => new OpenFileInteraction( "", false, fileTypeFilter ) ) };
+                yield return new object[] { new Func<FileType[], OpenFileInteraction>( fileTypeFilter => new OpenFileInteraction( "", fileTypeFilter ) ) };
+                yield return new object[] { new Func<FileType[], OpenFileInteraction>( fileTypeFilter => new OpenFileInteraction( "", false, fileTypeFilter ) ) };
             }
         }
 
@@ -45,10 +45,10 @@
 
         [Theory( DisplayName = "new open file interaction should not allow null file type filter" )]
         [MemberData( "FileTypeFilterData" )]
-        public void ConstructorShouldNotAllowNullFileTypeFilter( Func<string[], OpenFileInteraction> test )
+        public void ConstructorShouldNotAllowNullFileTypeFilter( Func<FileType[], OpenFileInteraction> test )
         {
             // arrange
-            string[] fileTypeFilter = null;
+            FileType[] fileTypeFilter = null;
 
             // act
             var ex = Assert.Throws<ArgumentNullException>( () => test( fileTypeFilter ) );
@@ -74,10 +74,15 @@
 
         [Theory( DisplayName = "new open file interaction should set file type filter" )]
         [MemberData( "FileTypeFilterData" )]
-        public void ConstructorShouldSetFileTypeFilter( Func<string[], OpenFileInteraction> @new )
+        public void ConstructorShouldSetFileTypeFilter( Func<FileType[], OpenFileInteraction> @new )
         {
             // arrange
-            var expected = new[] { "*.txt", "*.csv", "*.*" };
+            var expected = new[]
+            {
+                new FileType( "Text Files", ".txt" ),
+                new FileType( "Comma-Separated Values Files", ".csv" ),
+                new FileType( "All Files", ".*" )
+            };
 
             // act
             var interaction = @new( expected );

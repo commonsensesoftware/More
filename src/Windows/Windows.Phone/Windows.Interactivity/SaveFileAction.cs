@@ -1,14 +1,10 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Windows.Input;
-    using global::Windows.Foundation;
-    using global::Windows.Storage;
     using global::Windows.Storage.Pickers;
-    using global::Windows.UI.Xaml;
 
     /// <content>
     /// Provides additional implementation specific to Windows Phone applications.
@@ -23,7 +19,7 @@
 
             dialog.ContinuationData.AddRange( saveFile.ContinuationData );
             dialog.DefaultFileExtension = saveFile.DefaultFileExtension;
-            dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices );
+            dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices.ToDictionary() );
             dialog.SuggestedStartLocation = SuggestedStartLocation;
 
             if ( !string.IsNullOrEmpty( saveFile.FileName ) )

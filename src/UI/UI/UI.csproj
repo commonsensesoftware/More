@@ -199,9 +199,11 @@
     <Compile Include="Windows.Input\CancelableCommand.cs" />
     <Compile Include="Windows.Input\CommandInterceptorT.cs" />
     <Compile Include="Windows.Input\CommandT.cs" />
+    <Compile Include="Windows.Input\ContinuableInteractionRequestT1T2.cs" />
     <Compile Include="Windows.Input\CredentialInteraction.cs" />
     <Compile Include="Windows.Input\DataItemCommandT1T2.cs" />
     <Compile Include="Windows.Input\DefaultFunc.cs" />
+    <Compile Include="Windows.Input\FileType.cs" />
     <Compile Include="Windows.Input\IInteractionRequest.cs" />
     <Compile Include="Windows.Input\INamedCommand.cs" />
     <Compile Include="Windows.Input\INamedCommandContract.cs" />
@@ -215,10 +217,17 @@
     <Compile Include="Windows.Input\NamedCommandT.cs" />
     <Compile Include="Windows.Input\NamedDataItemCommandT1T2.cs" />
     <Compile Include="Windows.Input\OpenFileInteraction.cs" />
+    <Compile Include="Windows.Input\SelectFolderInteractionRequest.cs" />
+    <Compile Include="Windows.Input\SaveFileInteractionRequest.cs" />
+    <Compile Include="Windows.Input\OpenFileInteractionRequest.cs" />
     <Compile Include="Windows.Input\PrintInteraction.cs" />
     <Compile Include="Windows.Input\SaveFileInteraction.cs" />
     <Compile Include="Windows.Input\SelectFolderInteraction.cs" />
     <Compile Include="Windows.Input\TextInputInteraction.cs" />
+    <Compile Include="Windows.Input\WindowCloseInteraction.cs" />
+    <Compile Include="Windows\DefaultContinuationManager.cs" />
+    <Compile Include="Windows\IContinuationManager.cs" />
+    <Compile Include="Windows\IContinuationManagerContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">

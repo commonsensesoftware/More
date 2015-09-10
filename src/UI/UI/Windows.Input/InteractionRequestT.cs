@@ -2,9 +2,6 @@
 {
     using More.ComponentModel;
     using System;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a user interface interaction request.
@@ -37,7 +34,6 @@
         protected virtual void OnRequested( InteractionRequestedEventArgs e )
         {
             Arg.NotNull( e, nameof( e ) );
-
             Requested?.Invoke( this, e );
         }
 

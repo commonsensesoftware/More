@@ -3,4 +3,9 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files %28x86%29\MSBuild\14.0\Bin\MSBuild.exe</StartProgram>
+    <StartArguments>C:\Dev\Projects\More\src\Core\Core\Core.csproj</StartArguments>
+  </PropertyGroup>
 </Project>

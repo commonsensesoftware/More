@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:a="using:More.Windows.Interactivity"
-        xmlns:b="using:More.Windows.Interactivity"
         Title="{Binding Title}" Height="275" Width="325" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
  <Window.Resources>
   <ResourceDictionary>
@@ -61,7 +60,7 @@
   </ResourceDictionary>
  </Window.Resources>
  <i:Interaction.Behaviors>
-  <b:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
+  <a:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
  </i:Interaction.Behaviors>
  <i:Interaction.Triggers>
   <a:KeyPressTrigger>

@@ -23,17 +23,16 @@
             Contract.Requires( openFile != null );
             Contract.Ensures( Contract.Result<IEnumerable<IFile>>() != null );
 
-            var filter = string.Join( "|", openFile.FileTypeFilter );
-            var dialog = new OpenFileDialog();
-
-            dialog.Filter = filter;
+            var dialog = new OpenFileDialog()
+            {
+                Filter = openFile.FileTypeFilter.ToFileFilter(),
+                Multiselect = openFile.Multiselect,
+                Title = openFile.Title
+            };
 
             // always default to first index, if there is one
-            if ( openFile.FileTypeFilter.Any() )
+            if ( !string.IsNullOrEmpty( dialog.Filter ) )
                 dialog.FilterIndex = 1;
-
-            dialog.Multiselect = openFile.Multiselect;
-            dialog.Title = openFile.Title;
 
             var owner = Window.GetWindow( AssociatedObject );
             var result = dialog.ShowDialog( owner ) ?? false;

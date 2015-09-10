@@ -36,12 +36,10 @@
 
         /// <summary>
         /// Initializes a new instance of the <see cref="$safeitemrootname$"/> class.
-        /// </summary>$if$ ($continuationRequired$ == true)
-        /// <param name="continuationManager">The <see cref="IContinuationManager">continuation manager</see> used by the view model.</param>$endif$$if$ ($eventBrokerRequired$ == true)
+        /// </summary>$if$ ($eventBrokerRequired$ == true)
         /// <param name="eventBroker">The <see cref="IEventBroker">event broker</see> used by the view model.</param>$endif$
         public $safeitemrootname$($ctorParameters$)
-        {$if$ ($continuationRequired$ == true)
-            Contract.Requires( continuationManager != null );$endif$$if$ ($eventBrokerRequired$ == true)
+        {$if$ ($eventBrokerRequired$ == true)
             Contract.Requires( eventBroker != null );$endif$$if$ ($enableAppSharing$ == true)
 
             // subscribe to application-wide sharing. this event is fired when the application is activated via a share operation.
@@ -51,9 +49,9 @@ $endif$$if$ ($showTips$ == true)
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: add additional interaction requests to suit your needs$endif$$if$ ($enableOpenFile$ == true)
-            openFile = continuationManager.CreateInteractionRequest<OpenFileInteraction, IFileOpenPickerContinuationEventArgs>( "OpenFile", OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
-            saveFile = continuationManager.CreateInteractionRequest<SaveFileInteraction, IFileSavePickerContinuationEventArgs>( "SaveFile", OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
-            selectFolder = continuationManager.CreateInteractionRequest<SelectFolderInteraction, IFolderPickerContinuationEventArgs>( "SelectFolder", OnFolderSelected );$endif$
+            openFile = new OpenFileInteractionRequest( "OpenFile", OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
+            saveFile = new SaveFileInteractionRequest( "SaveFile", OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
+            selectFolder = new SelectFolderInteractionRequest( "SelectFolder", OnFolderSelected );$endif$
             InteractionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
             InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
             InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
@@ -87,48 +85,15 @@ $endif$$if$ ($showTips$ == true)
         } = new ObservableKeyedCollection<string, INamedCommand>( c => c.Id );
 
         /// <summary>
-        /// Requests an alert be displayed to a user.
+        /// Requests a user confirmation asynchronously.
         /// </summary>
-        /// <param name="title">The alert title.</param>
-        /// <param name="message">The alert message.</param>
-        protected void Alert( string title, string message ) => userFeedback.Request( new Interaction( title, message ) );
-
-        /// <summary>
-        /// Requests a user confirmation.
-        /// </summary>
-        /// <param name="prompt">The user confirmation prompt.</param>
-        /// <param name="title">The prompt title.</param>
-        /// <param name="confirmed">The <see cref="Action{T}">action</see> performed when the request is confirmed.</param>
+        /// <param name="prompt">The user confirmation prompt.
+        /// <param name="title">The confirmation title.</param>
         /// <param name="acceptText">The confirmation acceptance text. The default value is "OK".</param>
         /// <param name="cancelText">The confirmation cancellation text. The default value is "Cancel".</param>
-        protected void Confirm(
-            string prompt,
-            string title,
-            Action<object> confirmed,
-            string acceptText = "OK",
-            string cancelText = "Cancel" )
-        {
-            Contract.Requires( !string.IsNullOrEmpty( prompt ) );
-            Contract.Requires( !string.IsNullOrEmpty( title ) );
-            Contract.Requires( confirmed != null );
-            Contract.Requires( !string.IsNullOrEmpty( acceptText ) );
-            Contract.Requires( !string.IsNullOrEmpty( cancelText ) );
-
-            var interaction = new Interaction()
-            {
-                Title = title,
-                Content = prompt,
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( acceptText, confirmed ),
-                    new NamedCommand<object>( cancelText, DefaultAction.None )
-                }
-            };
-
-            userFeedback.Request( interaction );
-        }$if$ ($enableAppSharing$ == true)
+        /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
+        protected Task<bool> ConfirmAsync( string prompt, string title, string acceptText = "OK", string cancelText = "Cancel" ) =>
+            userFeedback.ConfirmAsync( prompt, title, acceptText, cancelText );$if$ ($enableAppSharing$ == true)
 
         private void OnShareReceived( IShareOperation share )
         {
@@ -147,32 +112,16 @@ $endif$$if$ ($showTips$ == true)
         /// </summary>
         protected void Share() => share.Request( new Interaction() );$endif$$if$ ($enableOpenFile$ == true)
 
-        private void OnOpenFile( object parameter )
+        private async void OnOpenFile( object parameter )
         {
-            OpenFileInteraction interaction = null;
-            interaction = new OpenFileInteraction()
-            {
-                Title = "Open File",
-                Multiselect = false,
-                FileTypeFilter =
-                {
-                    ".txt"
-                },
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( "Open", DefaultAction.None ),
-                    new NamedCommand<object>( "Cancel", DefaultAction.None )
-                }
-            };
-
-            openFile.Request( interaction );
+            var fileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) };
+            var files = await openFile.RequestAsync( fileTypeFilter, false );
+            OnFilesOpened( files );
         }
 
-        private void OnFilesOpened( IFileOpenPickerContinuationEventArgs e )
+        private void OnFilesOpened( IList<IFile> files )
         {
-            Contract.Requires( e != null );$endif$$if$ ($showOpenFileTips$ == true)
+            Contract.Requires( files != null );$endif$$if$ ($showOpenFileTips$ == true)
             // TODO: process opened files$endif$$if$ ($enableOpenFile$ == true)
         }$endif$$if$ ($enableSaveFile$ == true)
 
@@ -182,57 +131,42 @@ $endif$$if$ ($showTips$ == true)
             return true;
         }
 
-        private void OnSaveFile( object parameter )
+        private async void OnSaveFile( object parameter )
         {
-            SaveFileInteraction interaction = null;
-            interaction = new SaveFileInteraction()
-            {
-                Title = "Save File",
-                DefaultFileExtension = ".txt",
-                FileTypeChoices =
-                {
-                    { "Text File", new []{ ".txt" } }
-                },
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( "Save", DefaultAction.None ),
-                    new NamedCommand<object>( "Cancel", DefaultAction.None )
-                }
-            };
-
-            saveFile.Request( interaction );
+            var fileTypeChoices = new[] { new FileType( "Text Files", ".txt" ) };
+            var file = await saveFile.RequestAsync( fileTypeChoices );
+            OnFileSaved( file );
         }
 
-        private void OnFileSaved( IFileSavePickerContinuationEventArgs e )
+        private async void OnFileSaved( IFile file )
         {
-            Contract.Requires( e != null );$endif$$if$ ($showSaveFileTips$ == true)
-            // TODO: save contents to created file$endif$$if$ ($enableSaveFile$ == true)
+            if ( file == null )
+                return;
+    
+            using ( var stream = await file.OpenReadWriteAsync() )
+            {
+                using ( var writer = new StreamWriter( stream ) )
+                {$endif$$if$ ($showSaveFileTips$ == true)
+                    // TODO: save contents to created file$endif$$if$ ($enableSaveFile$ == true)
+
+                    await writer.FlushAsync();
+                }
+            }
         }$endif$$if$ ($enableSelectFolder$ == true)
 
         private void OnSelectFolder( object parameter )
         {
-            SelectFolderInteraction interaction = null;
-            interaction = new SelectFolderInteraction()
-            {
-                Title = "Select Folder",
-                DefaultCommandIndex = 0,
-                CancelCommandIndex = 1,
-                Commands =
-                {
-                    new NamedCommand<object>( "Select", DefaultAction.None ),
-                    new NamedCommand<object>( "Cancel", DefaultAction.None )
-                }
-            };
-
-            selectFolder.Request( interaction );
+            var folder = await selectFolder.RequestAsync();
+            OnFolderSelected( folder );
         }
 
-        private void OnFolderSelected( IFolderPickerContinuationEventArgs e )
+        private void OnFolderSelected( IFolder folder )
         {
-            Contract.Requires( e != null );$endif$$if$ ($showSelectFolderTips$ == true)
+            if ( folder == null )
+                return;$endif$$if$ ($showSelectFolderTips$ == true)
+
             // TODO: use selected folder$endif$$if$ ($enableSelectFolder$ == true)
+            
         }$endif$
     }
 }

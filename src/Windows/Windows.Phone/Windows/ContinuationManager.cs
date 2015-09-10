@@ -1,13 +1,16 @@
 ﻿namespace More.Windows
 {
-    using More.Windows.Input;
+    using IO;
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Reflection;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
+    using System.IO;
     using global::Windows.ApplicationModel.Activation;
+    using global::Windows.Foundation.Collections;
 
     /// <summary>
     /// Represents a continuation manager for dialog pickers.
@@ -17,56 +20,100 @@
     {
         private readonly ConcurrentDictionary<long, Delegate> continuations = new ConcurrentDictionary<long, Delegate>();
 
+        private static object GetParameterValue( IContinuationActivatedEventArgs eventArgs, ValueSet data )
+        {
+            Contract.Requires( eventArgs != null );
+            Contract.Requires( data != null );
+
+            object value;
+            string type;
+
+            // must have continuation type
+            if ( !data.TryGetValue( "Continuation", out value ) || string.IsNullOrEmpty( type = value as string ) )
+                return null;
+
+            // unwrap continuation parameter based on the type
+            switch ( type )
+            {
+                case "OpenFile":
+                    {
+                        var storageFiles = ( (IFileOpenPickerContinuationEventArgs) eventArgs ).Files;
+                        IList<IFile> files = storageFiles.Select( f => f.AsFile() ).ToArray();
+                        return files;
+                    }
+                case "SaveFile":
+                    {
+                        var storageFile = ( (IFileSavePickerContinuationEventArgs) eventArgs ).File;
+                        IFile file = storageFile == null ? null : storageFile.AsFile();
+                        return file;
+                    }
+                case "SelectFolder":
+                    {
+                        var storageFolder = ( (IFolderPickerContinuationEventArgs) eventArgs ).Folder;
+                        IFolder folder = storageFolder == null ? null : storageFolder.AsFolder();
+                        return folder;
+                    }
+                case "WebAuthenticate":
+                    {
+                        var result = ( (IWebAuthenticationBrokerContinuationEventArgs) eventArgs ).WebAuthenticationResult;
+                        return new WebAuthenticationResultAdapter( result );
+                    }
+            }
+
+            return null;
+        }
+
         /// <summary>
-        /// Creates and returns an interation request that supports continuation to the specified callback.
+        /// Registers the specified continuation action and returns the registered continuation identifier.
         /// </summary>
-        /// <typeparam name="TInteraction">The <see cref="Type">type</see> of <see cref="Interaction">interaction</see> to create a request for.</typeparam>
-        /// <typeparam name="TEventArgs">The <see cref="IContinuationActivatedEventArgs">continuation event arguments</see> provided to the
-        /// callback <see cref="Action{T}">action</see>.</typeparam>
-        /// <param name="id">The identifier of the created interaction request.</param>
+        /// <typeparam name="TArg">The <see cref="Type">type</see> of parameter supplied to the continuation <see cref="Action{T}">action</see>.</typeparam>
         /// <param name="continuation">The continuation <see cref="Action{T}">action</see>.</param>
-        /// <returns>A new <see cref="InteractionRequest{T}">interaction request</see> with support for continuations.</returns>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
-        public InteractionRequest<TInteraction> CreateInteractionRequest<TInteraction, TEventArgs>( string id, Action<TEventArgs> continuation )
-            where TInteraction : Interaction
-            where TEventArgs : IContinuationActivatedEventArgs
+        /// <returns>The registered continuation identifier for the supplied <paramref name="continuation"/>.</returns>
+        public long Register<TArg>( Action<TArg> continuation )
         {
             Arg.NotNull( continuation, nameof( continuation ) );
 
-            var typeHashCode = (long) ( continuation.Target != null ? continuation.Target.GetType() : continuation.GetMethodInfo().DeclaringType ).GetHashCode();
-            var argsHashCode = (long) typeof( TEventArgs ).GetHashCode();
+            var typeHashCode = (long) ( continuation?.Target.GetType() ?? continuation.GetMethodInfo().DeclaringType ).GetHashCode();
+            var argsHashCode = (long) typeof( TArg ).GetHashCode();
             var key = ( typeHashCode << 4 ) | argsHashCode;
             Delegate addValue = continuation;
+
             continuations.AddOrUpdate( key, addValue, ( t, d ) => d );
-            return new ContinuableInteractionRequest<TInteraction>( id, key );
+
+            return key;
         }
 
         /// <summary>
         /// Continues a dialog picker operation.
         /// </summary>
-        /// <typeparam name="TEventArgs">The <see cref="Type">type</see> <see cref="IContinuationActivatedEventArgs">continuation event arguments</see>.</typeparam>
-        /// <param name="eventArgs">The <typeparamref name="TEventArgs">event arguments</typeparamref> for the continued operation.</param>
-        /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
-        /// <remarks>The default implementation assumes that the specified <paramref name="eventArgs">event arguments</paramref> has the key "ContinuationId"
-        /// in its <see cref="P:IContinuationActivatedEventArgs.ContinuationData"/> and the value is of type <see cref="Int64"/>.</remarks>
+        /// <typeparam name="TArg">The <see cref="Type">type</see> of parameter supplied to corresponding, registered continuation.</typeparam>
+        /// <param name="arg">The <typeparamref name="TArg">argument</typeparamref> for the continued operation.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        public void Continue<TEventArgs>( TEventArgs eventArgs ) where TEventArgs : IContinuationActivatedEventArgs
+        public void Continue<TArg>( TArg arg )
         {
-            Arg.NotNull( eventArgs, nameof( eventArgs ) );
+            Arg.NotNull( arg, nameof( arg ) );
 
-            object hashCode;
+            var eventArgs = arg as IContinuationActivatedEventArgs;
 
-            if ( !eventArgs.ContinuationData.TryGetValue( "ContinuationId", out hashCode ) || !( hashCode is long ) )
+            // argument must be for a continuation event
+            if ( eventArgs == null )
                 return;
 
-            var key = (long) hashCode;
+            var data = eventArgs.ContinuationData;
+            object continuationId;
+
+            // make sure we have a registered continuation
+            if ( !data.TryGetValue( "ContinuationId", out continuationId ) || !( continuationId is long ) )
+                return;
+
+            var key = (long) continuationId;
             Delegate continuation;
 
             // note: the registered event argument type could be the interface or concrete type; therefore, we cannot
-            // safely cast to a stronger delegate type without a lot of work. since continuations are infrequent and
+            // safely cast to a stronger delegate type without a lot of work. since continuations are infrequent,
             // we'll just rely on the intrinsic capabilities of DynamicInvoke.
             if ( continuations.TryGetValue( key, out continuation ) && continuation != null )
-                continuation.DynamicInvoke( eventArgs );
+                continuation.DynamicInvoke( GetParameterValue( eventArgs, data ) );
         }
     }
 }

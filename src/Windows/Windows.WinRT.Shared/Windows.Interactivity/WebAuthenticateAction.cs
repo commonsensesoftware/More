@@ -3,9 +3,7 @@
     using More.Windows.Input;
     using System;
     using System.Diagnostics.Contracts;
-    using System.Windows.Input;
     using global::Windows.Security.Authentication.Web;
-    using global::Windows.UI.Xaml;
 
     /// <summary>
     /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to perform web-based authentication
@@ -14,21 +12,24 @@
     [CLSCompliant( false )]
     public partial class WebAuthenticateAction : System.Windows.Interactivity.TriggerAction
     {
-        private static void InvokeCallbackCommand( WebAuthenticateInteraction webAuthenticate, WebAuthenticationResult result )
+        private static void InvokeCallbackCommand( WebAuthenticateInteraction webAuthenticate, WebAuthenticationResult authenticationResult )
         {
             Contract.Requires( webAuthenticate != null );
-            Contract.Requires( result != null );
+            Contract.Requires( authenticationResult != null );
 
-            if ( result.ResponseStatus == WebAuthenticationStatus.Success )
+            IWebAuthenticationResult result = null;
+
+            if ( authenticationResult.ResponseStatus == WebAuthenticationStatus.Success )
             {
+                result = new WebAuthenticationResultAdapter( authenticationResult );
                 webAuthenticate.ResponseStatus = 200U;
-                webAuthenticate.ResponseData = result.ResponseData;
-                webAuthenticate.ExecuteDefaultCommand();
+                webAuthenticate.ResponseData = authenticationResult.ResponseData;
+                webAuthenticate.DefaultCommand?.Execute( result );
             }
             else
             {
-                webAuthenticate.ResponseStatus = result.ResponseErrorDetail;
-                webAuthenticate.ExecuteCancelCommand();
+                webAuthenticate.ResponseStatus = authenticationResult.ResponseErrorDetail;
+                webAuthenticate.CancelCommand?.Execute( result );
             }
         }
     }

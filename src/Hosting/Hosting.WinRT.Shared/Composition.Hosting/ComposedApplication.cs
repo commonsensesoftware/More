@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-namespace More.Composition.Hosting
+﻿namespace More.Composition.Hosting
 {
     using More.ComponentModel;
     using More.Windows.Input;

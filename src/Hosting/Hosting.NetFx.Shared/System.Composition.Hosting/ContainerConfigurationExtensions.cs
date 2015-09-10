@@ -1,6 +1,8 @@
-﻿namespace More.Composition.Hosting
+﻿using System.Diagnostics.Contracts;
+namespace More.Composition.Hosting
 {
     using System;
+    using System.Collections.Generic;
     using System.Composition.Convention;
     using System.Composition.Hosting;
     using System.Diagnostics.CodeAnalysis;
@@ -15,6 +17,37 @@
     [CLSCompliant( false )]
     public static class ContainerConfigurationExtensions
     {
+        private static readonly Lazy<FieldInfo> typesField = new Lazy<FieldInfo>( () => typeof( ContainerConfiguration ).GetField( "_types", BindingFlags.Instance | BindingFlags.NonPublic ) );
+
+        /// <summary>
+        /// Returns a value indicating whether the specified assembly has been registered within the configuration.
+        /// </summary>
+        /// <param name="configuration">The extended <see cref="ContainerConfiguration">configuration</see>.</param>
+        /// <param name="assembly">The <see cref="Assembly">assembly</see> to evaluate.</param>
+        /// <returns>True if the <paramref name="assembly">assembly</paramref> is registered with the configuration; otherwise, false.</returns>
+        public static bool IsRegistered( this ContainerConfiguration configuration, Assembly assembly )
+        {
+            Arg.NotNull( configuration, nameof( configuration ) );
+            return configuration.IsRegistered( assembly?.GetName() );
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the specified assembly name has been registered within the configuration.
+        /// </summary>
+        /// <param name="configuration">The extended <see cref="ContainerConfiguration">configuration</see>.</param>
+        /// <param name="assemblyName">The <see cref="AssemblyName">assembly name</see> to evaluate.</param>
+        /// <returns>True if the <paramref name="assemblyName">assembly name</paramref> is registered with the configuration; otherwise, false.</returns>
+        public static bool IsRegistered( this ContainerConfiguration configuration, AssemblyName assemblyName )
+        {
+            Arg.NotNull( configuration, nameof( configuration ) );
+
+            if ( assemblyName == null )
+                return false;
+
+            var types = (IList<Tuple<IEnumerable<Type>, AttributedModelProvider>>) typesField.Value.GetValue( configuration );
+            return types.Any( tuple => tuple.Item1.Any( type => AssemblyName.ReferenceMatchesDefinition( type.Assembly.GetName(), assemblyName ) ) );
+        }
+
         /// <summary>
         /// Adds part types from assemblies in the current application domain defined in any relative probing paths.
         /// </summary>

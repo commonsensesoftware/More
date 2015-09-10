@@ -196,10 +196,6 @@
       <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\UIEx.Phone\UIEx.Phone.csproj">
-      <Project>{71a0b4a1-d246-4c22-8f6c-06a1db3ca94c}</Project>
-      <Name>UIEx.Phone</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\UI\UI\UI.csproj">
       <Project>{9aca8e82-303b-4114-9e0a-84a3ad67f766}</Project>
       <Name>UI</Name>

@@ -85,7 +85,7 @@
 
         private async void OnOpenFile( object parameter )
         {
-            var fileTypeFilter = new[] { "Text Files (*.txt)", "*.txt", "All Files (*.*)", "*.*" };
+            var fileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) };
             var file = await openFile.RequestSingleFileAsync( fileTypeFilter );
 
             if ( file == null )
@@ -103,7 +103,8 @@
 
         private async void OnSaveFile( object parameter )
         {
-            var fileTypeChoices = new[] { new KeyValuePair<string, IReadOnlyList<string>>( "Text File", new[] { ".txt" } ) };
+            var fileTypeChoices = new[] { new FileType( "Text Files", ".txt" ) };
+            var file = await saveFile.RequestAsync( fileTypeChoices );
 
             if ( file == null )
                 return;

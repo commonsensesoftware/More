@@ -21,7 +21,7 @@
   <title>More - UI Hosting</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for hosting user interface applications.</summary>
-  <releaseNotes></releaseNotes>
+  <releaseNotes>Added Configure method Host to enable container configurations.</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

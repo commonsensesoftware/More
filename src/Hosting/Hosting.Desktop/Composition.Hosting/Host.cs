@@ -72,7 +72,11 @@
 
             Arg.NotNull( application, nameof( application ) );
 
-            Configuration.WithAssembly( application.GetType().Assembly );
+            var assembly = application.GetType().Assembly;
+
+            // guard against potential double registration (typically resultant of using WithAppDomain)
+            if ( !Configuration.IsRegistered( assembly ) )
+                Configuration.WithAssembly( assembly );
 
             // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )

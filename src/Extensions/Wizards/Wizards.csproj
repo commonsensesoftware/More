@@ -475,10 +475,6 @@
       <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\UIEx.Desktop\UIEx.Desktop.csproj">
-      <Project>{26d1aa58-1623-454e-87c9-0e46dc31cf27}</Project>
-      <Name>UIEx.Desktop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\UI\UI\UI.csproj">
       <Project>{9aca8e82-303b-4114-9e0a-84a3ad67f766}</Project>
       <Name>UI</Name>

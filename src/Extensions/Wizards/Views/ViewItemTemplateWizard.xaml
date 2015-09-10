@@ -4,8 +4,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
  xmlns:a="using:More.Windows.Interactivity"
- xmlns:b="using:More.Windows.Interactivity"
- xmlns:c="using:More.Windows.Data"
+ xmlns:b="using:More.Windows.Data"
  xmlns:sys="clr-namespace:System;assembly=mscorlib"
  xmlns:w="clr-namespace:System.Activities.Presentation;assembly=System.Activities.Presentation"
  xmlns:wv="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation"
@@ -15,7 +14,7 @@
    <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="../Themes/Theme.xaml" />
    </ResourceDictionary.MergedDictionaries>
-   <c:BooleanConverter x:Key="BooleanConverter" Negate="True" />
+   <b:BooleanConverter x:Key="BooleanConverter" Negate="True" />
    <DataTemplate x:Key="Step1">
     <Grid>
      <Grid.RowDefinitions>
@@ -132,7 +131,7 @@
   </ResourceDictionary>
  </Window.Resources>
  <i:Interaction.Behaviors>
-  <b:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
+  <a:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" />
  </i:Interaction.Behaviors>
  <i:Interaction.Triggers>
   <a:KeyPressTrigger>

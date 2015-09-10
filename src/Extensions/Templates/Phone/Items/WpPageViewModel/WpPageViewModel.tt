@@ -1,8 +1,7 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
 <#@ output extension=".vstemplate" #>
 <#@ parameter type="System.String" name="CoreVersion" #>
-<#@ parameter type="System.String" name="UIVersion" #>
-<#@ parameter type="System.String" name="UIExVersion" #><?xml version="1.0" encoding="utf-8" ?>
+<#@ parameter type="System.String" name="UIVersion" #><?xml version="1.0" encoding="utf-8" ?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
  <TemplateData>
   <DefaultName>ViewModel.cs</DefaultName>
@@ -35,7 +34,6 @@
    <CustomParameter Name="$showSelectFolderTips$" Value="false" />
    <CustomParameter Name="$showSharingTips$" Value="false" />
    <CustomParameter Name="$showAppSharingTips$" Value="false" />
-   <CustomParameter Name="$continuationRequired$" Value="false" />
    <CustomParameter Name="$eventBrokerRequired$" Value="false" />
    <CustomParameter Name="$enableSharing$" Value="false" />
    <CustomParameter Name="$enableAppSharing$" Value="false" />
@@ -52,7 +50,6 @@
   <packages repository="extension" repositoryId="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa">
    <package id="More" version="<#= CoreVersion #>" />
    <package id="More.UI" version="<#= UIVersion #>" />
-   <package id="More.UI.Extensions" version="<#= UIExVersion #>" />
   </packages>
  </WizardData>
  <WizardExtension>

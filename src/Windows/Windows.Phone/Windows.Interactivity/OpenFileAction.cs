@@ -21,7 +21,7 @@
             var dialog = new FileOpenPicker();
 
             dialog.ContinuationData.AddRange( interaction.ContinuationData );
-            dialog.FileTypeFilter.AddRange( interaction.FileTypeFilter );
+            dialog.FileTypeFilter.AddRange( interaction.FileTypeFilter.FixUpExtensions() );
             dialog.SuggestedStartLocation = SuggestedStartLocation;
             dialog.ViewMode = ViewMode;
 

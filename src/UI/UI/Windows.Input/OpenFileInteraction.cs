@@ -1,11 +1,9 @@
 ﻿namespace More.Windows.Input
 {
-    using More.IO;
-    using System;
+    using IO;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
-    using System.Linq;
 
     /// <summary>
     /// Represents an interaction request to open one or more files.
@@ -13,7 +11,7 @@
     public class OpenFileInteraction : Interaction
     {
         private readonly ObservableCollection<IFile> files = new ObservableCollection<IFile>();
-        private readonly ObservableCollection<string> fileTypeFilter = new ObservableCollection<string>();
+        private readonly ObservableCollection<FileType> fileTypeFilter = new ObservableCollection<FileType>();
         private bool multiselect;
 
         /// <summary>
@@ -28,8 +26,8 @@
         /// Initializes a new instance of the <see cref="OpenFileInteraction"/> class.
         /// </summary>
         /// <param name="title">The title associated with the interaction.</param>
-        /// <param name="fileTypeFilter">An array of filter strings that specify the file types to display.</param>
-        public OpenFileInteraction( string title, params string[] fileTypeFilter )
+        /// <param name="fileTypeFilter">An array of <see cref="FileType">file type</see> that specify the file types to display.</param>
+        public OpenFileInteraction( string title, params FileType[] fileTypeFilter )
             : this( title, false, fileTypeFilter )
         {
         }
@@ -39,8 +37,8 @@
         /// </summary>
         /// <param name="title">The title associated with the interaction.</param>
         /// <param name="multiselect">Indicates whether multiple selections are allowed.</param>
-        /// <param name="fileTypeFilter">An array of filter strings that specify the file types to display.</param>
-        public OpenFileInteraction( string title, bool multiselect, params string[] fileTypeFilter )
+        /// <param name="fileTypeFilter">An array of <see cref="FileType">file type</see> that specify the file types to display.</param>
+        public OpenFileInteraction( string title, bool multiselect, params FileType[] fileTypeFilter )
             : base( title )
         {
             Arg.NotNull( fileTypeFilter, nameof( fileTypeFilter ) );
@@ -81,12 +79,12 @@
         /// <summary>
         /// Gets a filter string that specifies the file types and descriptions to display.
         /// </summary>
-        /// <value>A <see cref="IList{T}">list</see> of filter strings that specify the file types to display.</value>
-        public IList<string> FileTypeFilter
+        /// <value>A <see cref="IList{T}">list</see> of <see cref="FileType">file types</see> that specify the file types to display.</value>
+        public virtual IList<FileType> FileTypeFilter
         {
             get
             {
-                Contract.Ensures( Contract.Result<IList<string>>() != null );
+                Contract.Ensures( Contract.Result<IList<FileType>>() != null );
                 return fileTypeFilter;
             }
         }

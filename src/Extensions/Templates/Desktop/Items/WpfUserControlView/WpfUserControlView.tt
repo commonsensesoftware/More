@@ -24,7 +24,7 @@
   <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">UserControl1.xaml.cs</ProjectItem>
   <CustomParameters>
    <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
-   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\UaInteractionViewModel.zip" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WpfInteractionViewModel.zip" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$hasviewmodel$" Value="true" />

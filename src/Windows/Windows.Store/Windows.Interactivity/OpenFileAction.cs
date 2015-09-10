@@ -1,16 +1,15 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using global::Windows.Storage;
     using global::Windows.Storage.Pickers;
     using global::Windows.UI.Xaml;
-    using IFile = More.IO.IFile;
+    using IFile = IO.IFile;
 
     /// <content>
     /// Provides additional implementation specific to Windows Store applications.
@@ -25,7 +24,7 @@
             var saveButton = openFile.DefaultCommand;
             var dialog = new FileOpenPicker();
 
-            dialog.FileTypeFilter.AddRange( openFile.FileTypeFilter );
+            dialog.FileTypeFilter.AddRange( openFile.FileTypeFilter.FixUpExtensions() );
             dialog.SuggestedStartLocation = SuggestedStartLocation;
             dialog.ViewMode = ViewMode;
 

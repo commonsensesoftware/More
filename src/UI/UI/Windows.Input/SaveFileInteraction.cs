@@ -3,6 +3,7 @@
     using More.IO;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
 
@@ -11,7 +12,7 @@
     /// </summary>
     public class SaveFileInteraction : Interaction
     {
-        private readonly Dictionary<string, IList<string>> fileTypeChoices = new Dictionary<string, IList<string>>();
+        private readonly ObservableCollection<FileType> fileTypeChoices = new ObservableCollection<FileType>();
         private string defaultFileExt;
         private string fileName;
 
@@ -98,8 +99,8 @@
         /// <summary>
         /// Gets the collection of valid file types that the user can choose to assign to a file.
         /// </summary>
-        /// <value>A <see cref="IDictionary{TKey,TValue}"/> that contains a <see cref="IList{T}">collection</see> of
-        /// valid file types (extensions) that the user can use to save a file. Each element in this collection maps
+        /// <value>A <see cref="IList{T}"/> of valid <see cref="FileType">file types</see> (extensions)
+        /// that the user can use to save a file. Each element in this collection maps
         /// a display name to a corresponding collection of file name extensions.</value>
         /// <example>The following example demonstrates how to specify file types choices.
         /// <code lang="C#">
@@ -110,18 +111,18 @@
         /// public void DemoFileTypeChoices()
         /// {
         ///     var saveFile = new SaveFileNotification( "Save" );
-        ///     saveFile.FileTypeChoices.Add( "Text File", new []{ ".txt" } );
-        ///     saveFile.FileTypeChoices.Add( "XML File", new []{ ".xml" } );
+        ///     saveFile.FileTypeChoices.Add( new FileType( "Text File", ".txt" ) );
+        ///     saveFile.FileTypeChoices.Add( new FileType( "XML File", ".xml" ) );
         /// }
         /// ]]>
         /// </code>
         /// </example>
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
-        public virtual IDictionary<string, IList<string>> FileTypeChoices
+        public virtual IList<FileType> FileTypeChoices
         {
             get
             {
-                Contract.Ensures( Contract.Result<IDictionary<string, IList<string>>>() != null );
+                Contract.Ensures( Contract.Result<IList<FileType>>() != null );
                 return fileTypeChoices;
             }
         }
