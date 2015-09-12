@@ -1,6 +1,6 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -26,7 +26,7 @@
             {
                 MessageBoxResult result;
 
-                if ( Enum.TryParse<MessageBoxResult>( command.Name, true, out result ) )
+                if ( Enum.TryParse( command.Id, true, out result ) )
                     buttons.Add( result );
             }
 
@@ -62,7 +62,7 @@
             var command = interaction.Commands[interaction.DefaultCommandIndex];
             MessageBoxResult result;
 
-            if ( !Enum.TryParse<MessageBoxResult>( command.Name, true, out result ) )
+            if ( !Enum.TryParse( command.Id, true, out result ) )
                 return MessageBoxResult.None;
 
             return result;
@@ -80,7 +80,10 @@
             var owner = Window.GetWindow( AssociatedObject );
             var title = interaction.Title;
             var text = interaction.Content as string ?? string.Empty;
-            MessageBox.Show( owner, text, title, MessageBoxButton.OK );
+            var result = MessageBox.Show( owner, text, title, MessageBoxButton.OK );
+
+            if ( result == MessageBoxResult.OK )
+                interaction.ExecuteDefaultCommand();
         }
 
         /// <summary>
@@ -100,7 +103,7 @@
             var result = MessageBox.Show( owner, text, title, buttons, MessageBoxImage.None, defaultButton );
             var name = result.ToString();
             var comparer = StringComparer.OrdinalIgnoreCase;
-            var button = interaction.Commands.FirstOrDefault( c => comparer.Equals( c.Name, name ) );
+            var button = interaction.Commands.FirstOrDefault( c => comparer.Equals( c.Id, name ) );
 
             if ( button != null && button.CanExecute() )
                 button.Execute();

@@ -152,7 +152,6 @@
                 return;$endif$$if$ ($showSelectFolderTips$ == true)
 
             // TODO: use selected folder$endif$$if$ ($enableSelectFolder$ == true)
-            
         }$endif$
     }
 }

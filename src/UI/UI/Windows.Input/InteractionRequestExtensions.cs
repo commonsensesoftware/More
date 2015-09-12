@@ -173,9 +173,24 @@
         /// The list is empty if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="OpenFileInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
         /// with the identifiers and names "Open" and "Cancel", respectively.</remarks>
-        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for IEnumerable<T> with a generic argument." )]
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for Task<T> with a generic argument." )]
         public static Task<IList<IFile>> RequestMultipleFilesAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, string title, IEnumerable<FileType> fileTypeFilter ) =>
             interactionRequest.RequestAsync( title, null, null, fileTypeFilter, true );
+
+        /// <summary>
+        /// Requests an open file interaction asynchronously.
+        /// </summary>
+        /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
+        /// <param name="fileTypeFilter">A <see cref="IEnumerable{T}">sequence</see> of filtered <see cref="FileType">file types</see> which can be opened.</param>
+        /// <param name="multiselect">Indicates whether multiple files can be selected.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing a <see cref="IList{T}">list</see> of the selected <see cref="IFile">files</see>.
+        /// The list is empty if the operation was canceled.</returns>
+        /// <remarks>The requested <see cref="OpenFileInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see> with the
+        /// identifiers "Open" and "Cancel".</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for Task<T> with a generic argument." )]
+        public static Task<IList<IFile>> RequestAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, IEnumerable<FileType> fileTypeFilter, bool multiselect ) =>
+            interactionRequest.RequestAsync( null, null, null, fileTypeFilter, multiselect );
 
         /// <summary>
         /// Requests an open file interaction asynchronously.
@@ -191,7 +206,7 @@
         /// <remarks>The requested <see cref="OpenFileInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see> with the
         /// identifiers "Open" and "Cancel".</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for IEnumerable<T> with a generic argument." )]
+        [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for Task<T> with a generic argument." )]
         public static Task<IList<IFile>> RequestAsync(
             this InteractionRequest<OpenFileInteraction> interactionRequest,
             string title,

@@ -1,15 +1,13 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Controls;
-    using More.Windows.Input;
+    using Controls;
+    using Input;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Input;
 
     /// <summary>
     /// Represents an <see cref="T:System.Windows.Interactivity.TriggerAction{T}">interactivity action</see> that can be used to show the
@@ -31,10 +29,24 @@
             dialog.Title = interaction.Title;
             dialog.Content = interaction.Content;
             dialog.DefaultCommandIndex = 0;
-            dialog.Commands.Add( new NamedCommand<object>( SR.OKCaption, DefaultAction.None ) );
             dialog.Owner = Window.GetWindow( AssociatedObject );
             dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            dialog.ShowDialog();
+
+            if ( interaction.Commands.Count == 0 )
+            {
+                dialog.Commands.Add( new NamedCommand<object>( SR.OKCaption, DefaultAction.None ) );
+                dialog.ShowDialog();
+            }
+            else
+            {
+                var command = interaction.Commands[0].Delay();
+
+                dialog.Commands.Add( command );
+                dialog.ShowDialog();
+
+                if ( command.HasExecuted )
+                    command.Invoke();
+            }
         }
 
         /// <summary>
@@ -77,7 +89,7 @@
 
             var interaction = args.Interaction;
 
-            if ( interaction.Commands.Any() )
+            if ( interaction.Commands.Count > 1 )
                 Prompt( interaction );
             else
                 Alert( interaction );

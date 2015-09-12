@@ -34,7 +34,11 @@
             var dialog = new MessageDialog( content, interaction.Title );
 
             dialog.DefaultCommandIndex = 0;
-            dialog.Commands.Add( new UICommand( SR.OKCaption, DefaultAction.None ) );
+
+            if ( interaction.Commands.Count == 0 )
+                dialog.Commands.Add( new UICommand( SR.OKCaption, DefaultAction.None ) );
+            else
+                dialog.Commands.Add( interaction.Commands[0].AsUICommand() );
 
             return dialog.ShowAsync();
         }
@@ -77,7 +81,7 @@
 
             var interaction = GetRequestedInteraction<Interaction>( parameter );
 
-            if ( interaction.Commands.Any() )
+            if ( interaction.Commands.Count > 1 )
                 await Prompt( interaction );
             else
                 await Alert( interaction );
