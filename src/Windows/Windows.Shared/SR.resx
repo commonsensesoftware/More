@@ -136,6 +136,10 @@
   <data name="PrintPreviewTitle" xml:space="preserve">
     <value>Print Preview - {0}</value>
   </data>
+  <data name="SelectCaption" xml:space="preserve">
+    <value>Select</value>
+    <comment>Typically used for dialogs.</comment>
+  </data>
   <data name="ShowShellViewDesc" xml:space="preserve">
     <value>Shows the shell view of the application defined by type '{0}'.</value>
   </data>

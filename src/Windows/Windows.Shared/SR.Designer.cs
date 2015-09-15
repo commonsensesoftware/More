@@ -150,5 +150,16 @@ namespace More
                 return ResourceManager.GetString( "YesCaption", resourceCulture );
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        internal static string SelectCaption
+        {
+            get
+            {
+                return ResourceManager.GetString( "SelectCaption", resourceCulture );
+            }
+        }
     }
 }

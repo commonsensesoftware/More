@@ -1,7 +1,7 @@
 ﻿namespace More.VisualStudio.Templates
 {
     using EnvDTE;
-    using More.VisualStudio.ViewModels;
+    using ViewModels;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -29,7 +29,7 @@
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_interactions", ( m, s ) => ReadOptions( m.InteractionOptions, OptionStateMapping.Interactions, s ) ),
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "_contracts", ( m, s ) => ReadOptions( m.ApplicationContractOptions, OptionStateMapping.ApplicationContracts, s ) ),
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "$showTips$", ( m, s ) => m.ShowTips = GetBoolean( s, true ) ),
-                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "$viewmodel$", ( m, s ) => m.ViewModelName = s ),
+                new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "$viewmodel$", ReadDefaultViewModelName ),
                 new Tuple<string, Action<ViewItemTemplateWizardViewModel, string>>( "$interfaceoption$", ( m, s ) => m.ViewInterfaceOption = GetInt32( s, m.ViewOptions.Count - 1 ) )
             };
         }
@@ -93,6 +93,14 @@
             // which means that the template supports top levels
             model.IsTopLevelSupported = true;
             model.IsTopLevel = GetBoolean( value );
+        }
+
+        private void ReadDefaultViewModelName( ViewItemTemplateWizardViewModel model, string value )
+        {
+            if ( string.IsNullOrEmpty( value ) )
+                value = GetReplacement( "$safeitemname$" ) + "ViewModel";
+
+            model.ViewModelName = value;
         }
 
         private static string GetViewModel( ViewItemTemplateWizardViewModel model )

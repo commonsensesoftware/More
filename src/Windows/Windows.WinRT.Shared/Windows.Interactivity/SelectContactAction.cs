@@ -24,8 +24,9 @@
             var dialog = new ContactPicker();
 
             dialog.DesiredFieldsWithContactFieldType.AddRange( selectContact.DesiredFields );
+#if !WINDOWS_PHONE_APP
             dialog.SelectionMode = selectContact.DesiredFields.Any() ? ContactSelectionMode.Fields : ContactSelectionMode.Contacts;
-
+#endif
             if ( commitButton != null )
                 dialog.CommitButtonText = commitButton.Name;
 

@@ -187,6 +187,7 @@
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Composition\FrameShellViewBase.cs" />
+    <Compile Include="System.Windows.Input\ICommandExtensions.cs" />
     <Compile Include="Windows.Input\ContinuableInteractionRequestT.cs" />
     <Compile Include="Windows.Interactivity\BackBehavior.cs" />
     <Compile Include="Windows.Interactivity\ContentDialogAction.cs" />

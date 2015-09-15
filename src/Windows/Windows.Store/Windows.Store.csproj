@@ -207,6 +207,7 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="System.Windows.Input\ICommandExtensions.cs" />
     <Compile Include="Windows.Data\ShareEventArgs.cs" />
     <Compile Include="Windows.Interactivity\ApplicationSetting.cs" />
     <Compile Include="Windows.Interactivity\CredentialAction.cs" />
@@ -214,7 +215,6 @@
     <Compile Include="Windows.Interactivity\PrintContractBehavior.cs" />
     <Compile Include="Windows.Interactivity\SaveFileAction.cs" />
     <Compile Include="Windows.Interactivity\SearchContractBehavior.cs" />
-    <Compile Include="Windows.Interactivity\SelectContactAction.cs" />
     <Compile Include="Windows.Interactivity\SelectFolderAction.cs" />
     <Compile Include="Windows.Interactivity\SettingsContractBehavior.cs" />
     <Compile Include="Windows.Interactivity\SettingsFlyoutWidth.cs" />

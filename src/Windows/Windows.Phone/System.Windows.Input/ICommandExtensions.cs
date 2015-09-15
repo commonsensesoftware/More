@@ -1,80 +1,19 @@
 ﻿namespace System.Windows.Input
 {
     using More.Windows.Input;
+    using Diagnostics.Contracts;
+    using Diagnostics.CodeAnalysis;
     using System;
-    using System.Diagnostics.Contracts;
-    using System.Windows.Input;
     using global::Windows.UI.Popups;
 
     /// <content>
-    /// Provides additional implementation specific to Windows Runtime applications.
+    /// Provides additional implementation specific to Windows Phone applications.
     /// </content>
-    public static partial class ICommandExtensions
+    /// <remarks>Although controls such as <see cref="MessageDialog"/> have a collection of <see cref="MessageDialog.Commands">commands</see>
+    /// that accept <see cref="IUICommand"/>, <see cref="MessageDialog.ShowAsync"/> always throws <see cref="InvalidCastException"/> on
+    /// Windows Phone unless the items are of type <see cref="UICommand"/>.</remarks>
+    public static class ICommandExtensions
     {
-        private class UICommandAdapter : IUICommand
-        {
-            private string label;
-
-            internal UICommandAdapter( object id, string label, ICommand command )
-            {
-                Contract.Requires( command != null );
-
-                var cmd = command;
-
-                Id = id;
-                this.label = label;
-                Invoked = c => cmd.Execute();
-            }
-
-            public object Id
-            {
-                get;
-                set;
-            }
-
-            public UICommandInvokedHandler Invoked
-            {
-                get;
-                set;
-            }
-
-            public virtual string Label
-            {
-                get
-                {
-                    return label;
-                }
-                set
-                {
-                    label = value;
-                }
-            }
-        }
-
-        private sealed class NamedUICommandAdapter : UICommandAdapter
-        {
-            private readonly INamedCommand command;
-
-            internal NamedUICommandAdapter( object id, INamedCommand command )
-                : base( id, null, command )
-            {
-                Contract.Requires( command != null );
-                this.command = command;
-            }
-
-            public override string Label
-            {
-                get
-                {
-                    return command.Name;
-                }
-                set
-                {
-                    command.Name = value;
-                }
-            }
-        }
-
         /// <summary>
         /// Returns a UI command adapted to the specified command.
         /// </summary>
@@ -82,12 +21,13 @@
         /// <param name="label">The label associated with the command.</param>
         /// <returns>A new <see cref="IUICommand">command</see> adapted to the original <see cref="ICommand">command</see>.</returns>
         [CLSCompliant( false )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static IUICommand AsUICommand( this ICommand command, string label )
         {
             Arg.NotNull( command, nameof( command ) );
             Arg.NotNullOrEmpty( label, nameof( label ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
-            return new UICommandAdapter( null, label, command );
+            return new UICommand( label, c => command.Execute() );
         }
 
         /// <summary>
@@ -98,12 +38,13 @@
         /// <param name="label">The label associated with the command.</param>
         /// <returns>A new <see cref="IUICommand">command</see> adapted to the original <see cref="ICommand">command</see>.</returns>
         [CLSCompliant( false )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static IUICommand AsUICommand( this ICommand command, object id, string label )
         {
             Arg.NotNull( command, nameof( command ) );
             Arg.NotNullOrEmpty( label, nameof( label ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
-            return new UICommandAdapter( id, label, command );
+            return new UICommand( label, c => command.Execute(), id );
         }
 
         /// <summary>
@@ -112,11 +53,12 @@
         /// <param name="command">The extended <see cref="INamedCommand">command</see>.</param>
         /// <returns>A new <see cref="IUICommand">command</see> adapted to the original <see cref="INamedCommand">command</see>.</returns>
         [CLSCompliant( false )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static IUICommand AsUICommand( this INamedCommand command )
         {
             Arg.NotNull( command, nameof( command ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
-            return new NamedUICommandAdapter( null, command );
+            return new UICommand( command.Name, c => command.Execute(), command.Id );
         }
 
         /// <summary>
@@ -126,11 +68,12 @@
         /// <param name="id">The identifier associated with the command.</param>
         /// <returns>A new <see cref="IUICommand">command</see> adapted to the original <see cref="INamedCommand">command</see>.</returns>
         [CLSCompliant( false )]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static IUICommand AsUICommand( this INamedCommand command, object id )
         {
             Arg.NotNull( command, nameof( command ) );
             Contract.Ensures( Contract.Result<IUICommand>() != null );
-            return new NamedUICommandAdapter( id, command );
+            return new UICommand( command.Name, c => command.Execute(), id );
         }
     }
 }

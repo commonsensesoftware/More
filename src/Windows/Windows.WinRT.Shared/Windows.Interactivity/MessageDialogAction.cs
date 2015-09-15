@@ -25,7 +25,7 @@
         /// <param name="interaction">The <see cref="Interaction">interaction</see> to display.</param>
         /// <returns>An object representing the <see cref="IAsyncOperation{T}">asynchronous operation</see>.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        protected virtual IAsyncOperation<IUICommand> Alert( Interaction interaction )
+        protected virtual IAsyncOperation<IUICommand> AlertAsync( Interaction interaction )
         {
             Arg.NotNull( interaction, nameof( interaction ) );
             Contract.Ensures( Contract.Result<IAsyncOperation<IUICommand>>() != null );
@@ -49,7 +49,7 @@
         /// <param name="interaction">The <see cref="Interaction">interaction</see> to display.</param>
         /// <returns>An object representing the <see cref="IAsyncOperation{T}">asynchronous operation</see>.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        protected virtual IAsyncOperation<IUICommand> Prompt( Interaction interaction )
+        protected virtual IAsyncOperation<IUICommand> PromptAsync( Interaction interaction )
         {
             Arg.NotNull( interaction, nameof( interaction ) );
             Contract.Ensures( Contract.Result<IAsyncOperation<IUICommand>>() != null );
@@ -82,9 +82,9 @@
             var interaction = GetRequestedInteraction<Interaction>( parameter );
 
             if ( interaction.Commands.Count > 1 )
-                await Prompt( interaction );
+                await PromptAsync( interaction );
             else
-                await Alert( interaction );
+                await AlertAsync( interaction );
         }
     }
 }
