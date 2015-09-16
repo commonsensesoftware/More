@@ -105,6 +105,9 @@
                 throw new ObjectDisposedException( GetType().Name );
         }
 
+        partial void AddPlatformSpecificDefaultServices();
+
+
         /// <summary>
         /// Creates the underlying container.
         /// </summary>
@@ -143,6 +146,7 @@
             // optimization: call base implementation because this object will never be composed
             base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
             base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
+            AddPlatformSpecificDefaultServices();
 
             return newContainer;
         }

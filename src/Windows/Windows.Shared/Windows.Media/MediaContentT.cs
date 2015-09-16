@@ -1,6 +1,7 @@
 ﻿namespace More.Windows.Media
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Net.Http;
@@ -27,14 +28,15 @@
         /// <param name="assembly">The <see cref="Assembly">assembly</see> that contains the embedded resource.</param>
         /// <param name="resourceName">The name of the embedded resource to retrieve.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing an object of type <typeparamref name="T"/>.</returns>
-        public virtual async Task<T> FromEmbeddedResourceAsync( Assembly assembly, string resourceName )
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        public virtual Task<T> FromEmbeddedResourceAsync( Assembly assembly, string resourceName )
         {
             Arg.NotNull( assembly, nameof( assembly ) );
             Arg.NotNullOrEmpty( resourceName, nameof( resourceName ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
             using ( var stream = assembly.GetManifestResourceStream( resourceName ) )
-                return await OnReadStreamAsync( stream );
+                return OnReadStreamAsync( stream );
         }
 
         /// <summary>
@@ -55,8 +57,8 @@
 
             using ( var client = new HttpClient( handler, true ) )
             {
-                using ( var stream = await client.GetStreamAsync( resourceUri ) )
-                    return await OnReadStreamAsync( stream );
+                using ( var stream = await client.GetStreamAsync( resourceUri ).ConfigureAwait( false ) )
+                    return await OnReadStreamAsync( stream ).ConfigureAwait( false );
             }
         }
     }

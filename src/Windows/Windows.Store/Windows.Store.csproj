@@ -211,6 +211,7 @@
     <Compile Include="Windows.Data\ShareEventArgs.cs" />
     <Compile Include="Windows.Interactivity\ApplicationSetting.cs" />
     <Compile Include="Windows.Interactivity\CredentialAction.cs" />
+    <Compile Include="Windows.Interactivity\NavigationBehavior.cs" />
     <Compile Include="Windows.Interactivity\OpenFileAction.cs" />
     <Compile Include="Windows.Interactivity\PrintContractBehavior.cs" />
     <Compile Include="Windows.Interactivity\SaveFileAction.cs" />

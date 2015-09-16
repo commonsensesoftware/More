@@ -75,7 +75,7 @@
             Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
 
             var destinationFileName = fileToReplace.Path;
-            await fileToReplace.DeleteAsync();
+            await fileToReplace.DeleteAsync().ConfigureAwait( false );
             NativeStorageItem.MoveTo( destinationFileName );
             open = () => NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
         }

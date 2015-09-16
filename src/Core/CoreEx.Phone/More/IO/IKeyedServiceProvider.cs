@@ -1,6 +1,6 @@
 ﻿namespace More
 {
-    using global::System;
+    using System;
 
     /// <summary>
     /// Defines the behavior of a service provider with support for key-based services.

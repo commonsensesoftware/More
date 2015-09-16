@@ -18,7 +18,7 @@
   <title>More - Extensions</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices that contains platform-specific extensions.</summary>
-  <releaseNotes></releaseNotes>
+  <releaseNotes>Added special folder support to the FileSystem implementation for Windows Store and Windows Phone</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

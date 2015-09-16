@@ -46,10 +46,7 @@
             return properties.RetrievePropertiesAsync( propertiesToRetrieve ).AsTask();
         }
 
-        public Task SavePropertiesAsync()
-        {
-            return properties.SavePropertiesAsync().AsTask();
-        }
+        public Task SavePropertiesAsync() => properties.SavePropertiesAsync().AsTask();
 
         public Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )
         {

@@ -1,8 +1,9 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
@@ -15,21 +16,41 @@
     [CLSCompliant( false )]
     public class SelectContactAction : System.Windows.Interactivity.TriggerAction
     {
+        [Conditional( "WINDOWS_PHONE_APP" )]
+        private static void TryIfImplemented( Action action )
+        {
+            // HACK: some features are not available on WPA81. handle these
+            // actions gracefully. we don't ignore them as they may be available
+            // in later builds such as WPA10+.
+
+            try
+            {
+                action();
+            }
+            catch ( NotImplementedException )
+            {
+                // ignore features that aren't implemented
+            }
+        }
+
         private async Task<IList<Contact>> SelectContactsAsync( SelectContactInteraction selectContact )
         {
             Contract.Requires( selectContact != null );
             Contract.Ensures( Contract.Result<Task<IList<Contact>>>() != null );
 
-            var commitButton = selectContact.DefaultCommand;
+            var commitButtonText = selectContact.DefaultCommand?.Name;
             var dialog = new ContactPicker();
 
             dialog.DesiredFieldsWithContactFieldType.AddRange( selectContact.DesiredFields );
-#if !WINDOWS_PHONE_APP
+#if WINDOWS_PHONE_APP
+            TryIfImplemented( () => dialog.SelectionMode = selectContact.DesiredFields.Any() ? ContactSelectionMode.Fields : ContactSelectionMode.Contacts );
+            TryIfImplemented( () => { if ( !string.IsNullOrEmpty( commitButtonText ) ) dialog.CommitButtonText = commitButtonText; } );
+#else
             dialog.SelectionMode = selectContact.DesiredFields.Any() ? ContactSelectionMode.Fields : ContactSelectionMode.Contacts;
-#endif
-            if ( commitButton != null )
-                dialog.CommitButtonText = commitButton.Name;
 
+            if ( !string.IsNullOrEmpty( commitButtonText ) )
+                dialog.CommitButtonText = commitButtonText;
+#endif
             if ( selectContact.Multiselect )
                 return await dialog.PickContactsAsync();
 

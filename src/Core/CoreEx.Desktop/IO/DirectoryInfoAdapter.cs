@@ -6,9 +6,11 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using static System.IO.Path;
 
     internal sealed class DirectoryInfoAdapter : IFolder, IPlatformStorageItem<DirectoryInfo>
     {
+        private static readonly Task CompletedTask = Task.FromResult( false );
         private readonly DirectoryInfo folder;
 
         internal DirectoryInfoAdapter( DirectoryInfo folder )
@@ -28,7 +30,7 @@
         {
             Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
 
-            var newFileName = System.IO.Path.Combine( folder.FullName, desiredName );
+            var newFileName = Combine( folder.FullName, desiredName );
             var newFile = new FileInfo( newFileName );
 
             // close the stream immediately; creates a zero-byte file
@@ -51,54 +53,78 @@
         public Task<IFile> GetFileAsync( string name )
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
-            
+
             var fileInfo = folder.EnumerateFiles().FirstOrDefault( f => f.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
-            IFile file = fileInfo == null ? null : new FileInfoAdapter( fileInfo );
+
+            if ( fileInfo == null )
+                throw new FileNotFoundException( SR.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
+
+            IFile file = new FileInfoAdapter( fileInfo );
             return Task.FromResult( file );
         }
 
-        public Task<IReadOnlyList<IFile>> GetFilesAsync()
-        {
-            var query = from fileInfo in folder.EnumerateFiles()
-                        let file = (IFile) new FileInfoAdapter( fileInfo )
-                        select file;
-            IReadOnlyList<IFile> files = query.ToArray();
-            return Task.FromResult( files );
-        }
+        public Task<IReadOnlyList<IFile>> GetFilesAsync() => Task.FromResult<IReadOnlyList<IFile>>( folder.EnumerateFiles().Select( fi => new FileInfoAdapter( fi ) ).ToArray() );
 
         public Task<IFolder> GetFolderAsync( string name )
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
 
             var directoryInfo = folder.EnumerateDirectories().FirstOrDefault( d => d.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
-            IFolder result = directoryInfo == null ? null : new DirectoryInfoAdapter( directoryInfo );
+
+            if ( directoryInfo == null )
+                throw new DirectoryNotFoundException( SR.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
+
+            IFolder result = new DirectoryInfoAdapter( directoryInfo );
             return Task.FromResult( result );
         }
 
-        public Task<IReadOnlyList<IFolder>> GetFoldersAsync()
-        {
-            var query = from directoryInfo in this.folder.EnumerateDirectories()
-                        let folder = (IFolder) new DirectoryInfoAdapter( directoryInfo )
-                        select folder;
-            IReadOnlyList<IFolder> folders = query.ToArray();
-            return Task.FromResult( folders );
-        }
+        public Task<IReadOnlyList<IFolder>> GetFoldersAsync() => Task.FromResult<IReadOnlyList<IFolder>>( folder.EnumerateDirectories().Select( di => new DirectoryInfoAdapter( di ) ).ToArray() );
 
         public async Task<IStorageItem> GetItemAsync( string name )
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
 
-            var folder = await GetFolderAsync( name );
-
-            if ( folder == null )
-                return await GetFileAsync( name );
-
-            return folder;
+            try
+            {
+                // we don't know if it's a folder or file; try folder first
+                return await GetFolderAsync( name ).ConfigureAwait( false );
+            }
+            catch ( DirectoryNotFoundException )
+            {
+                try
+                {
+                    // try a file
+                    return await GetFileAsync( name ).ConfigureAwait( false );
+                }
+                catch ( FileNotFoundException )
+                {
+                    // use base IOException since we don't know if the intent was for a folder or file
+                    throw new IOException( SR.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
+                }
+            }
         }
 
         public async Task<IReadOnlyList<IStorageItem>> GetItemsAsync()
         {
-            IReadOnlyList<IStorageItem> items = ( await GetFoldersAsync() ).Cast<IStorageItem>().Union( await GetFilesAsync() ).ToArray();
+            var foldersTask = GetFoldersAsync();
+            var filesTask = GetFilesAsync();
+
+            // get folders and files in parallel
+            await Task.WhenAll( foldersTask, filesTask ).ConfigureAwait( false );
+
+            // union the results
+            var folders = foldersTask.Result;
+            var files = filesTask.Result;
+            var count = folders.Count + files.Count;
+            var items = new IStorageItem[count];
+            var i = 0;
+
+            for ( var j = 0; j < folders.Count; j++ )
+                items[i++] = folders[j];
+
+            for ( var j = 0; j < filesTask.Result.Count; j++ )
+                items[i++] = files[j];
+
             return items;
         }
 
@@ -129,45 +155,25 @@
         public Task DeleteAsync()
         {
             folder.Delete( true );
-            return Task.FromResult( 0 );
+            return CompletedTask;
         }
 
-        public Task<IBasicProperties> GetBasicPropertiesAsync()
-        {
-            IBasicProperties properties = new BasicPropertiesAdapter<DirectoryInfo>( folder );
-            return Task.FromResult( properties );
-        }
+        public Task<IBasicProperties> GetBasicPropertiesAsync() => Task.FromResult<IBasicProperties>( new BasicPropertiesAdapter<DirectoryInfo>( folder ) );
 
         public Task RenameAsync( string desiredName )
         {
             Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
 
             folder.MoveTo( desiredName );
-            return Task.FromResult( 0 );
+            return CompletedTask;
         }
 
-        public Task<IFolder> GetParentAsync()
-        {
-            IFolder parent = folder.Parent == null ? null : new DirectoryInfoAdapter( folder.Parent );
-            return Task.FromResult( parent );
-        }
+        public Task<IFolder> GetParentAsync() => Task.FromResult<IFolder>( folder.Parent == null ? null : new DirectoryInfoAdapter( folder.Parent ) );
 
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as IStorageItem );
-        }
+        public override bool Equals( object obj ) => Equals( obj as IStorageItem );
 
-        public bool Equals( IStorageItem other )
-        {
-            if ( other is IFolder )
-                return folder.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
+        public bool Equals( IStorageItem other ) => ( other is IFolder ) && folder.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
 
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode( folder.FullName );
-        }
+        public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode( folder.FullName );
     }
 }

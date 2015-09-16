@@ -325,7 +325,7 @@
             // subscribe to paged operation
             var actualPageSize = Math.Max( PageSize - FrozenItems.Count, 1 );
             var arguments = new PagingArguments( pageIndex, actualPageSize, SortDescriptions );
-            var pagedItems = await pagingMethod( arguments );
+            var pagedItems = await pagingMethod( arguments ).ConfigureAwait( false );
 
             OnRefreshed( pagedItems );
             OnRefreshComplete( pageIndex );

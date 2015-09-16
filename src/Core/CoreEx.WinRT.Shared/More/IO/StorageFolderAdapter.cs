@@ -132,16 +132,9 @@
             }
         }
 
-        public Task DeleteAsync()
-        {
-            return folder.DeleteAsync().AsTask();
-        }
+        public Task DeleteAsync() => folder.DeleteAsync().AsTask();
 
-        public async Task<IBasicProperties> GetBasicPropertiesAsync()
-        {
-            var properties = await folder.GetBasicPropertiesAsync();
-            return new BasicPropertiesAdapter( properties );
-        }
+        public async Task<IBasicProperties> GetBasicPropertiesAsync() => new BasicPropertiesAdapter( await folder.GetBasicPropertiesAsync() );
 
         public Task RenameAsync( string desiredName )
         {
@@ -149,24 +142,12 @@
             return folder.RenameAsync( desiredName ).AsTask();
         }
 
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as IPlatformStorageItem<StorageFolder> );
-        }
+        public override bool Equals( object obj ) => Equals( obj as IPlatformStorageItem<StorageFolder> );
 
-        public bool Equals( IStorageItem other )
-        {
-            return Equals( other as IPlatformStorageItem<StorageFolder> );
-        }
+        public bool Equals( IStorageItem other ) => Equals( other as IPlatformStorageItem<StorageFolder> );
 
-        private bool Equals( IPlatformStorageItem<StorageFolder> other )
-        {
-            return other == null ? false : folder.Equals( other.NativeStorageItem );
-        }
+        private bool Equals( IPlatformStorageItem<StorageFolder> other ) => other == null ? false : folder.Equals( other.NativeStorageItem );
 
-        public override int GetHashCode()
-        {
-            return folder.GetHashCode();
-        }
+        public override int GetHashCode() => folder.GetHashCode();
     }
 }

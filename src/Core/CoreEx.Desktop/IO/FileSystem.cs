@@ -18,9 +18,7 @@
         public Task<IFolder> GetFolderAsync( string path )
         {
             Arg.NotNullOrEmpty( path, nameof( path ) );
-
-            var directory = new DirectoryInfo( path );
-            return Task.FromResult( directory.AsFolder() );
+            return Task.FromResult( new DirectoryInfo( path ).AsFolder() );
         }
 
         /// <summary>
@@ -32,9 +30,7 @@
         public Task<IFile> GetFileAsync( string path )
         {
             Arg.NotNullOrEmpty( path, nameof( path ) );
-
-            var file = new FileInfo( path );
-            return Task.FromResult( file.AsFile() );
+            return Task.FromResult( new FileInfo( path ).AsFile() );
         }
 
         /// <summary>
@@ -50,8 +46,7 @@
             if ( !uri.IsFile )
                 throw new FileNotFoundException( SR.InvalidFileUri );
 
-            var file = new FileInfo( uri.LocalPath );
-            return Task.FromResult( file.AsFile() );
+            return Task.FromResult( new FileInfo( uri.LocalPath ).AsFile() );
         }
     }
 }

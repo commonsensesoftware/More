@@ -52,7 +52,7 @@
             T content;
 
             using ( var stream = info.Stream )
-                content = await OnReadStreamAsync( stream );
+                content = await OnReadStreamAsync( stream ).ConfigureAwait( false );
 
             return content;
         }

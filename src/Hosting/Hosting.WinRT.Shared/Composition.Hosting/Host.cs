@@ -1,7 +1,6 @@
 ﻿namespace More.Composition.Hosting
 {
     using ComponentModel;
-    using ComponentModel.DataAnnotations;
     using IO;
     using System;
     using System.Collections.Generic;
@@ -34,6 +33,12 @@
                 return value;
 
             return null;
+        }
+
+        partial void AddPlatformSpecificDefaultServices()
+        {
+            // optimization: call base implementation because this object will never be composed
+            base.AddService( typeof( ISuspensionManager ), ( sc, t ) => new LocalSuspensionManager( sc.GetRequiredService<IFileSystem>() ) );
         }
 
         static partial void AddWinRTSpecificConventions( ConventionBuilder builder );

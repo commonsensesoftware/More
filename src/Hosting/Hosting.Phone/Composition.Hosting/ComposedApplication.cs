@@ -17,9 +17,11 @@
         protected override void OnActivated( IActivatedEventArgs args )
         {
             base.OnActivated( args );
-
+            
             var e = args as IContinuationActivatedEventArgs;
             IContinuationManager continuationManager;
+
+            Init();
 
             // continue the operation as appropriate
             if ( e != null && Host.TryGetService( out continuationManager ) )

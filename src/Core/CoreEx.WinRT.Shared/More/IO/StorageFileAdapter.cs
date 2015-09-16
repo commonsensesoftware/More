@@ -72,15 +72,9 @@
             return file.MoveAsync( destinationFolder.AsFolder(), desiredNewName ).AsTask();
         }
 
-        public Task<Stream> OpenReadAsync()
-        {
-            return file.OpenStreamForReadAsync();
-        }
+        public Task<Stream> OpenReadAsync() => file.OpenStreamForReadAsync();
 
-        public Task<Stream> OpenReadWriteAsync()
-        {
-            return file.OpenStreamForWriteAsync();
-        }
+        public Task<Stream> OpenReadWriteAsync() => file.OpenStreamForWriteAsync();
 
         public DateTimeOffset DateCreated
         {
@@ -106,16 +100,9 @@
             }
         }
 
-        public Task DeleteAsync()
-        {
-            return file.DeleteAsync().AsTask();
-        }
+        public Task DeleteAsync() => file.DeleteAsync().AsTask();
 
-        public async Task<IBasicProperties> GetBasicPropertiesAsync()
-        {
-            var properties = await file.GetBasicPropertiesAsync();
-            return new BasicPropertiesAdapter( properties );
-        }
+        public async Task<IBasicProperties> GetBasicPropertiesAsync() => new BasicPropertiesAdapter( await file.GetBasicPropertiesAsync() );
 
         public Task RenameAsync( string desiredName )
         {
@@ -123,24 +110,12 @@
             return file.RenameAsync( desiredName ).AsTask();
         }
 
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as IPlatformStorageItem<StorageFile> );
-        }
+        public override bool Equals( object obj ) => Equals( obj as IPlatformStorageItem<StorageFile> );
 
-        public bool Equals( IStorageItem other )
-        {
-            return Equals( other as IPlatformStorageItem<StorageFile> );
-        }
+        public bool Equals( IStorageItem other ) => Equals( other as IPlatformStorageItem<StorageFile> );
 
-        private bool Equals( IPlatformStorageItem<StorageFile> other )
-        {
-            return other == null ? false : file.Equals( other.NativeStorageItem );
-        }
+        private bool Equals( IPlatformStorageItem<StorageFile> other ) => other == null ? false : file.Equals( other.NativeStorageItem );
 
-        public override int GetHashCode()
-        {
-            return file.GetHashCode();
-        }
+        public override int GetHashCode() => file.GetHashCode();
     }
 }

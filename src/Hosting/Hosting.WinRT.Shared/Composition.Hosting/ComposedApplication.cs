@@ -21,6 +21,14 @@
         private Host host;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ComposedApplication"/> class.
+        /// </summary>
+        protected ComposedApplication()
+        {
+            Suspending += ( s, e ) => OnSuspending( e );
+        }
+
+        /// <summary>
         /// Gets the current host associated with the application.
         /// </summary>
         /// <value>The current <see cref="Host">host</see> associated with the application.
@@ -66,10 +74,28 @@
         protected override void OnLaunched( LaunchActivatedEventArgs args )
         {
             Activation = args;
-            host = CreateHost();
-            host.AddService( typeof( IApplicationState ), this );
-            IsInitialized = true;
-            host.Run( this );
+            Init();
+        }
+
+        /// <summary>
+        /// Occurs when the application is about to be suspended.
+        /// </summary>
+        /// <param name="args">The <see cref="SuspendingEventArgs"/> event data.</param>
+        /// <remarks>This method responds to the <see cref="E:Suspending"/> event rather than raise it. The default implementation retrieves
+        /// an instance of the <see cref="ISuspensionManager"/> from the <see cref="Host"/> if one is registered and saves the application state.</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        protected virtual async void OnSuspending( SuspendingEventArgs args )
+        {
+            Arg.NotNull( args, nameof( args ) );
+
+            ISuspensionManager suspensionManager;
+
+            if ( !IsInitialized || !Host.TryGetService( out suspensionManager ) )
+                return;
+
+            var deferral = args.SuspendingOperation.GetDeferral();
+            await suspensionManager.SaveAsync();
+            deferral.Complete();
         }
 
         /// <summary>
@@ -190,12 +216,23 @@
             }
         }
 
+        private void Init()
+        {
+            BeginInit();
+            EndInit();
+        }
+
         /// <summary>
         /// Begin initialization of the application.
         /// </summary>
         /// <remarks>Note to inheritors: The base implementation does not perform any action.</remarks>
         public virtual void BeginInit()
         {
+            if ( IsInitialized )
+                return;
+
+            host = CreateHost();
+            host.AddService( typeof( IApplicationState ), this );
         }
 
         /// <summary>
@@ -204,6 +241,11 @@
         /// <remarks>Note to inheritors: The base implementation does not perform any action.</remarks>
         public virtual void EndInit()
         {
+            if ( IsInitialized )
+                return;
+
+            IsInitialized = true;
+            host.Run( this );
         }
     }
 }

@@ -11,6 +11,8 @@
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
+    using System.Threading.Tasks;
+    using ComponentModel;
 
     /// <summary>
     /// Represents the base implemention for a <see cref="IShellView">shell view</see> using a <see cref="Frame">frame</see>.
@@ -157,10 +159,18 @@
         /// Occurs when the application should load state from a previously suspended application.
         /// </summary>
         /// <param name="applicationState">The <see cref="IApplicationState">application state</see> information to load from.</param>
-        /// <remarks>Note to inheritors: The base implementation does not perform any action.</remarks>
-        protected virtual void OnLoadState( IApplicationState applicationState )
+        /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
+        /// <remarks>The default implementation retrieves an instance of the <see cref="ISuspensionManager"/> from the <see cref="ServiceProvider"/>
+        /// if one is registered and then <see cref="ISuspensionManager.RestoreAsync(string)">restores</see> the application state.</remarks>
+        protected virtual async Task OnLoadStateAsync( IApplicationState applicationState )
         {
             Arg.NotNull( applicationState, nameof( applicationState ) );
+            Contract.Ensures( Contract.Result<Task>() != null );
+
+            ISuspensionManager suspensionManager;
+
+            if ( ServiceProvider.TryGetService( out suspensionManager ) )
+                await suspensionManager.RestoreAsync();
         }
 
         /// <summary>
@@ -251,11 +261,11 @@
         /// <summary>
         /// Shows the view as the root visual.
         /// </summary>
-        public virtual void Show()
+        public virtual async void Show()
         {
             IApplicationState state = null;
 
-            ServiceProvider.TryGetService<IApplicationState>( out state );
+            ServiceProvider.TryGetService( out state );
 
             // do not repeat app initialization when the window already has content
             if ( Window.Current.Content == null )
@@ -264,7 +274,7 @@
                 {
                     // load state from previously suspended application
                     if ( state.Activation.PreviousExecutionState == ApplicationExecutionState.Terminated )
-                        OnLoadState( state );
+                        await OnLoadStateAsync( state );
                 }
 
                 ConfigureRootElement( Frame );

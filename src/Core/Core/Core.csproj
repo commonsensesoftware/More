@@ -277,6 +277,7 @@
     <Compile Include="More\IO\IFolder.cs" />
     <Compile Include="More\IO\IFile.cs" />
     <Compile Include="More\IO\IFolderContract.cs" />
+    <Compile Include="More\IO\IFileSystemExtensions.cs" />
     <Compile Include="More\IO\IFolderExtensions.cs" />
     <Compile Include="More\IO\IStorageItemContract.cs" />
     <Compile Include="More\IO\IStorageItem.cs" />

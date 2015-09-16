@@ -168,6 +168,9 @@
     <Compile Include="ComponentModel\IExpandableItemT.cs" />
     <Compile Include="ComponentModel\ISelectableItemContractT.cs" />
     <Compile Include="ComponentModel\ISelectableItemT.cs" />
+    <Compile Include="ComponentModel\ISuspensionManagerExtensions.cs" />
+    <Compile Include="ComponentModel\ISuspensionManager.cs" />
+    <Compile Include="ComponentModel\ISuspensionManagerContract.cs" />
     <Compile Include="ComponentModel\SelectableItemCollectionDebugViewT.cs" />
     <Compile Include="ComponentModel\SelectableItemCollectionT.cs" />
     <Compile Include="ComponentModel\SelectableItemT.cs" />

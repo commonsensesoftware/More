@@ -49,7 +49,7 @@
             var file = await StorageFile.GetFileFromApplicationUriAsync( resourceUri );
 
             using ( var inputStream = await file.OpenSequentialReadAsync() )
-                return await OnReadStreamAsync( inputStream.AsStreamForRead() );
+                return await OnReadStreamAsync( inputStream.AsStreamForRead() ).ConfigureAwait( false );
         }
     }
 }

@@ -277,7 +277,7 @@
             Arg.NotNull( repository, nameof( repository ) );
             Arg.NotNull( predicate, nameof( predicate ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
-            var items = await repository.GetAsync( q => q.Where( predicate ), cancellationToken );
+            var items = await repository.GetAsync( q => q.Where( predicate ), cancellationToken ).ConfigureAwait( false );
             return items.SingleOrDefault();
         }
 
@@ -374,7 +374,7 @@
             Arg.GreaterThanOrEqualTo( pageIndex, 0, "pageIndex" );
             Arg.GreaterThan( pageSize, 0, "pageSize" );
 
-            var groups = await repository.GetAsync( q => q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } ), cancellationToken );
+            var groups = await repository.GetAsync( q => q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } ), cancellationToken ).ConfigureAwait( false );
 
             // return first group
             var result = groups.FirstOrDefault();
@@ -486,7 +486,7 @@
                                     var q = queryShaper( query );
                                     return q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } );
                                 },
-                                cancellationToken );
+                                cancellationToken ).ConfigureAwait( false );
 
             // return first group
             var result = groups.FirstOrDefault();

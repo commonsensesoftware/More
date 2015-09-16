@@ -5,9 +5,11 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Threading.Tasks;
+    using static System.IO.Path;
 
     internal sealed class FileInfoAdapter : IFile, IPlatformStorageItem<FileInfo>
     {
+        private static readonly Task CompletedTask = Task.FromResult( false );
         private readonly FileInfo file;
 
         internal FileInfoAdapter( FileInfo file )
@@ -57,7 +59,7 @@
             Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
             Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
 
-            var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
+            var destinationFileName = Combine( destinationFolder.Path, desiredNewName );
             IFile copy = new FileInfoAdapter( file.CopyTo( destinationFileName ) );
             return Task.FromResult( copy );
         }
@@ -78,22 +80,14 @@
             Arg.NotNull( destinationFolder, nameof( destinationFolder ) );
             Arg.NotNullOrEmpty( desiredNewName, nameof( desiredNewName ) );
 
-            var destinationFileName = System.IO.Path.Combine( destinationFolder.Path, desiredNewName );
+            var destinationFileName = Combine( destinationFolder.Path, desiredNewName );
             file.MoveTo( destinationFileName );
-            return Task.FromResult( 0 );
+            return CompletedTask;
         }
 
-        public Task<Stream> OpenReadAsync()
-        {
-            Stream stream = file.OpenRead();
-            return Task.FromResult( stream );
-        }
+        public Task<Stream> OpenReadAsync() => Task.FromResult<Stream>( file.OpenRead() );
 
-        public Task<Stream> OpenReadWriteAsync()
-        {
-            Stream stream = file.Open( FileMode.Open, FileAccess.ReadWrite );
-            return Task.FromResult( stream );
-        }
+        public Task<Stream> OpenReadWriteAsync() => Task.FromResult<Stream>( file.Open( FileMode.Open, FileAccess.ReadWrite ) );
 
         public DateTimeOffset DateCreated
         {
@@ -122,45 +116,25 @@
         public Task DeleteAsync()
         {
             file.Delete();
-            return Task.FromResult( 0 );
+            return CompletedTask;
         }
 
-        public Task<IBasicProperties> GetBasicPropertiesAsync()
-        {
-            IBasicProperties properties = new FilePropertiesAdapter( file );
-            return Task.FromResult( properties );
-        }
+        public Task<IBasicProperties> GetBasicPropertiesAsync() => Task.FromResult<IBasicProperties>( new FilePropertiesAdapter( file ) );
 
         public Task RenameAsync( string desiredName )
         {
             Arg.NotNullOrEmpty( desiredName, nameof( desiredName ) );
 
             file.MoveTo( desiredName );
-            return Task.FromResult( 0 );
+            return CompletedTask;
         }
 
-        public Task<IFolder> GetParentAsync()
-        {
-            IFolder parent = new DirectoryInfoAdapter( file.Directory );
-            return Task.FromResult( parent );
-        }
+        public Task<IFolder> GetParentAsync() => Task.FromResult<IFolder>( new DirectoryInfoAdapter( file.Directory ) );
 
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as IStorageItem );
-        }
+        public override bool Equals( object obj ) => Equals( obj as IStorageItem );
 
-        public bool Equals( IStorageItem other )
-        {
-            if ( other is IFile )
-                return file.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
+        public bool Equals( IStorageItem other ) => ( other is IFile ) && file.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
 
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode( file.FullName );
-        }
+        public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode( file.FullName );
     }
 }

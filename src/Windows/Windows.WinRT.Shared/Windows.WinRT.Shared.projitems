@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IRepositoryExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\LocalSuspensionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\TypeName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\TypeResolutionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\FrameShellViewBase.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\SelectContactInteraction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\WebAuthenticateInteractionRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\WebAuthenticateInteraction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\NavigationBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\IActionWithAssociatedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\InteractionRequestBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\InvokeMethodAction.cs" />
