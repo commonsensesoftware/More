@@ -363,4 +363,22 @@
   <data name="StatusInitializingDataSources" xml:space="preserve">
     <value>Initializing data sources...</value>
   </data>
+  <data name="SelectContactOption" xml:space="preserve">
+    <value>Select Contacts</value>
+  </data>
+  <data name="TextInputOption" xml:space="preserve">
+    <value>Input Box</value>
+  </data>
+  <data name="ViewModelSelectContactOptionDesc" xml:space="preserve">
+    <value>The view model supports contact selection user interactions.</value>
+  </data>
+  <data name="ViewModelTextInputOptionDesc" xml:space="preserve">
+    <value>The view model supports simple text input user interactions.</value>
+  </data>
+  <data name="ViewSelectContactOptionDesc" xml:space="preserve">
+    <value>The view supports contact selection user interactions.</value>
+  </data>
+  <data name="ViewTextInputOptionDesc" xml:space="preserve">
+    <value>The view supports simple text input user interactions.</value>
+  </data>
 </root>

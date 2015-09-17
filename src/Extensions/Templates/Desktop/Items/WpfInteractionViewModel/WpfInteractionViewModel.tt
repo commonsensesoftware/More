@@ -22,16 +22,18 @@
   <CustomParameters>
    <CustomParameter Name="_baseClassNames" Value="" />
    <CustomParameter Name="_defaultBaseClass" Value="" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput" />
    <CustomParameter Name="$base$" Value="" />
    <CustomParameter Name="$title$" Value="" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$showOpenFileTips$" Value="false" />
    <CustomParameter Name="$showSaveFileTips$" Value="false" />
    <CustomParameter Name="$showSelectFolderTips$" Value="false" />
+   <CustomParameter Name="$showTextInputTips$" Value="false" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>

@@ -20,7 +20,8 @@
   <summary>Provides "More" patterns and practices that contains platform-specific extensions.</summary>
   <releaseNotes>• Added special folder support to the FileSystem implementation for Windows Store and Windows Phone
 • Fixed Desktop IO adapters to throw exception for missing folders and files
-• Refactored IApplicationState Activation from to ILaunchActivatedEventArgs to IActivatedEventArgs</releaseNotes>
+• Refactored IApplicationState Activation from to ILaunchActivatedEventArgs to IActivatedEventArgs
+• Added *.pri files for Windows Store and Windows Phone</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
@@ -40,10 +41,12 @@
 
   <file src="..\CoreEx.Windows\bin\$configuration$\$id$.dll" target="lib\win81" />
   <file src="..\CoreEx.Windows\bin\$configuration$\$id$.xml" target="lib\win81" />
+  <file src="..\CoreEx.Windows\bin\$configuration$\$id$.pri" target="lib\win81" />
   <file src="..\CoreEx.Windows\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
 
   <file src="..\CoreEx.Phone\bin\$configuration$\$id$.dll" target="lib\portable-wp81+wpa81" />
   <file src="..\CoreEx.Phone\bin\$configuration$\$id$.xml" target="lib\portable-wp81+wpa81" />
+  <file src="..\CoreEx.Phone\bin\$configuration$\$id$.pri" target="lib\portable-wp81+wpa81" />
   <file src="..\CoreEx.Phone\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
  </files>
 </package>

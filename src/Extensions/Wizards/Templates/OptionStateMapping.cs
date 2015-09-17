@@ -9,7 +9,9 @@
         {
             { "OpenFile", "$enableOpenFile$" },
             { "SaveFile", "$enableSaveFile$" },
-            { "SelectFolder", "$enableSelectFolder$" }
+            { "SelectFolder", "$enableSelectFolder$" },
+            { "TextInput", "$enableTextInput$" },
+            { "SelectContact", "$enableSelectContact$" }
         };
 
         private static readonly Dictionary<string, string> appContracts = new Dictionary<string, string>()

@@ -23,7 +23,8 @@
     /// </summary>
     public class $safeitemrootname$ :  $base$
     {
-        private readonly InteractionRequest<Interaction> userFeedback = new InteractionRequest<Interaction>( "UserFeedback" );
+        private readonly InteractionRequest<Interaction> userFeedback = new InteractionRequest<Interaction>( "UserFeedback" );$if$ ($enableTextInput$ == true)
+        private readonly InteractionRequest<TextInputInteraction> textInput = new InteractionRequest<TextInputInteraction>( "TextInput" );$endif$
         //private readonly InteractionRequest<Window1ViewModel> showChild = new InteractionRequest<Window1ViewModel>( "ShowChildWindow" );$if$ ($enableOpenFile$ == true)
         private readonly InteractionRequest<OpenFileInteraction> openFile = new InteractionRequest<OpenFileInteraction>( "OpenFile" );$endif$$if$ ($enableSaveFile$ == true)
         private readonly InteractionRequest<SaveFileInteraction> saveFile = new InteractionRequest<SaveFileInteraction>( "SaveFile" );$endif$$if$ ($enableSelectFolder$ == true)
@@ -41,7 +42,8 @@
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: Add or modify this interaction requests and commands to suit your needs.$endif$
-            InteractionRequests.Add( userFeedback );
+            InteractionRequests.Add( userFeedback );$if$ ($enableTextInput$ == true)
+            InteractionRequests.Add( textInput );$endif$
             //InteractionRequests.Add( showChild );$if$ ($enableOpenFile$ == true)
             InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
             InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
@@ -185,7 +187,16 @@
         /// <param name="cancelText">The confirmation cancellation text. The default value is "Cancel".</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
         protected Task<bool> ConfirmAsync( string prompt, string acceptText = "OK", string cancelText = "Cancel" ) =>
-            userFeedback.ConfirmAsync( prompt, Title, acceptText, cancelText );$if$ ($enableOpenFile$ == true)
+            userFeedback.ConfirmAsync( prompt, Title, acceptText, cancelText );$if$ ($enableTextInput$ == true)
+
+        /// <summary>
+        /// Requests input from a user asynchronously.
+        /// </summary>
+        /// <param name="prompt">The prompt provided to the user.</param>
+        /// <param name="defaultResponse">The default user response. The default value is an empty string.</param>
+        /// <param name="title">The title of the prompt. The default value is the current <see cref="P:Title"/>.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing the response. If the user canceled the operation, the response value is <c>null</c>.</returns>
+        protected Task<string> GetInputAsync( string prompt, string defaultResponse = "", string title = null ) => textInput.RequestAsync( title ?? Title, prompt, defaultResponse );$endif$$if$ ($enableOpenFile$ == true)
 
         private async void OnOpenFile( object parameter )
         {

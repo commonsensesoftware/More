@@ -73,8 +73,8 @@
         {
             Arg.NotNull( continuation, nameof( continuation ) );
 
-            var typeHashCode = (long) ( continuation?.Target.GetType() ?? continuation.GetMethodInfo().DeclaringType ).GetHashCode();
-            var argsHashCode = (long) typeof( TArg ).GetHashCode();
+            var typeHashCode = (long) ( continuation?.Target.GetType() ?? continuation.GetMethodInfo().DeclaringType ).AssemblyQualifiedName.GetHashCode();
+            var argsHashCode = (long) typeof( TArg ).AssemblyQualifiedName.GetHashCode();
             var key = ( typeHashCode << 4 ) | argsHashCode;
             Delegate addValue = continuation;
 

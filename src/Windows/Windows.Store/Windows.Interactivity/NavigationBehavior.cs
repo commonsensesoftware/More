@@ -85,18 +85,11 @@
             base.OnAttached();
 
             var page = AssociatedObject;
-            var window = Window.Current;
-            var bounds = window.Bounds;
+            var window = Window.Current.CoreWindow;
 
             page.NavigationCacheMode = NavigationCacheMode;
-
-            // keyboard and mouse navigation only apply when occupying the entire window
-            if ( page.ActualHeight != bounds.Height || page.ActualWidth != bounds.Width )
-                return;
-
-            var coreWindow = window.CoreWindow;
-            coreWindow.Dispatcher.AcceleratorKeyActivated += OnAcceleratorKeyActivated;
-            coreWindow.PointerPressed += OnPointerPressed;
+            window.Dispatcher.AcceleratorKeyActivated += OnAcceleratorKeyActivated;
+            window.PointerPressed += OnPointerPressed;
         }
 
         /// <summary>

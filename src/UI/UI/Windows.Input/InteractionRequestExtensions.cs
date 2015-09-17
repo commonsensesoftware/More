@@ -456,7 +456,7 @@
             Contract.Ensures( Contract.Result<Task<string>>() != null );
 
             if ( string.IsNullOrEmpty( acceptButtonText ) )
-                acceptButtonText = SR.Select;
+                acceptButtonText = SR.OK;
 
             if ( string.IsNullOrEmpty( cancelButtonText ) )
                 cancelButtonText = SR.Cancel;

@@ -33,3 +33,4 @@ FakesAssemblies/
 
 # ignore generated html files (typically from portability analysis)
 *.htm
+/src/TestResults

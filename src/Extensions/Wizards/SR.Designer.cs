@@ -511,6 +511,15 @@ namespace More.VisualStudio {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Contacts.
+        /// </summary>
+        internal static string SelectContactOption {
+            get {
+                return ResourceManager.GetString("SelectContactOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Folders.
         /// </summary>
         internal static string SelectFolderOption {
@@ -570,6 +579,15 @@ namespace More.VisualStudio {
         internal static string StatusInitializingDataSources {
             get {
                 return ResourceManager.GetString("StatusInitializingDataSources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Box.
+        /// </summary>
+        internal static string TextInputOption {
+            get {
+                return ResourceManager.GetString("TextInputOption", resourceCulture);
             }
         }
         
@@ -700,6 +718,15 @@ namespace More.VisualStudio {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The view model supports contact selection user interactions..
+        /// </summary>
+        internal static string ViewModelSelectContactOptionDesc {
+            get {
+                return ResourceManager.GetString("ViewModelSelectContactOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The view model supports folder selection user interactions..
         /// </summary>
         internal static string ViewModelSelectFolderOptionDesc {
@@ -723,6 +750,15 @@ namespace More.VisualStudio {
         internal static string ViewModelShareOptionDesc {
             get {
                 return ResourceManager.GetString("ViewModelShareOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The view model supports simple text input user interactions..
+        /// </summary>
+        internal static string ViewModelTextInputOptionDesc {
+            get {
+                return ResourceManager.GetString("ViewModelTextInputOptionDesc", resourceCulture);
             }
         }
         
@@ -754,6 +790,15 @@ namespace More.VisualStudio {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The view supports contact selection user interactions..
+        /// </summary>
+        internal static string ViewSelectContactOptionDesc {
+            get {
+                return ResourceManager.GetString("ViewSelectContactOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The view supports folder selection user interactions..
         /// </summary>
         internal static string ViewSelectFolderOptionDesc {
@@ -777,6 +822,15 @@ namespace More.VisualStudio {
         internal static string ViewShareOptionDesc {
             get {
                 return ResourceManager.GetString("ViewShareOptionDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The view supports simple text input user interactions..
+        /// </summary>
+        internal static string ViewTextInputOptionDesc {
+            get {
+                return ResourceManager.GetString("ViewTextInputOptionDesc", resourceCulture);
             }
         }
         

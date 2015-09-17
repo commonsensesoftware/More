@@ -6,31 +6,30 @@
  xmlns:i="using:Microsoft.Xaml.Interactivity"
  xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
  xmlns:a="using:More.Windows.Interactivity"
- xmlns:b="using:More.Windows.Interactivity"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  mc:Ignorable="d" x:Name="PageRoot"$if$ ($hasviewmodel$ == true) d:DataContext="{d:DesignInstance Type=vm:$viewmodel$}"$endif$
  Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
  <i:Interaction.Behaviors>
-  <b:NavigationBehavior />$if$ ($hasviewmodel$ == true)
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
+  <a:NavigationBehavior />$if$ ($hasviewmodel$ == true)
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
-  </b:InteractionRequestBehavior>
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[Navigate]}">
+  </a:InteractionRequestBehavior>
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[Navigate]}">
    <a:NavigateAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableOpenFile$ == true )
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableOpenFile$ == true )
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
    <a:OpenFileAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableSaveFile$ == true )
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[SaveFile]}">
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableSaveFile$ == true )
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[SaveFile]}">
    <a:SaveFileAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableSelectFolder$ == true )
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[SelectFolder]}">
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableSelectFolder$ == true )
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[SelectFolder]}">
    <a:SelectFolderAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableSettings$ == true)
-  <b:SettingsContractBehavior ShowRequest="{Binding InteractionRequests[Settings]}" />$endif$$if$ ($enableSharing$ == true)
-  <b:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />$endif$$if$ ($enableSearch$ == true)
-  <b:SearchContractBehavior SearchCommand="{Binding Commands[Search]}"
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableSettings$ == true)
+  <a:SettingsContractBehavior ShowRequest="{Binding InteractionRequests[Settings]}" />$endif$$if$ ($enableSharing$ == true)
+  <a:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />$endif$$if$ ($enableSearch$ == true)
+  <a:SearchContractBehavior SearchCommand="{Binding Commands[Search]}"
                             SearchSuggestionsCommand="{Binding Commands[ProvideSuggestions]}"
                             SuggestionChosenCommand="{Binding Commands[SuggestionChosen]}" />$endif$
  </i:Interaction.Behaviors>

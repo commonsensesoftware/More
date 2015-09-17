@@ -20,7 +20,9 @@
   <title>More - UI Presentation</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface presentations.</summary>
-  <releaseNotes>• 'More.UI.Extensions' package dependency was removed
+  <releaseNotes>• Added missing theme content for Windows Store and Windows Phone controls
+• Added *.pri files for Windows Store and Windows Phone
+• 'More.UI.Extensions' package dependency was removed
 • UI extensions were refactored into the 'More.UI' package
 • Added async extension methods for WebAuthenticateInteractionRequest
 • Fixed MessageBoxAction to map against INamedCommand Id rather than Name
@@ -54,10 +56,18 @@
 
   <file src="..\Windows.Store\bin\$configuration$\$id$.dll" target="lib\win81" />
   <file src="..\Windows.Store\bin\$configuration$\$id$.xml" target="lib\win81" />
+  <file src="..\Windows.Store\bin\$configuration$\$id$.pri" target="lib\win81" />
+  <file src="..\Windows.Store\bin\$configuration$\$id$.xr.xml" target="lib\win81\$id$" />
+  <file src="..\Windows.Store\bin\$configuration$\Themes\Generic.xbf" target="lib\win81\$id$\Themes" />
+  <file src="..\Windows.Store\Themes\Generic.xaml" target="lib\win81\$id$\Themes" />
   <file src="..\Windows.Store\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
 
   <file src="..\Windows.Phone\bin\$configuration$\$id$.dll" target="lib\portable-wp81+wpa81" />
   <file src="..\Windows.Phone\bin\$configuration$\$id$.xml" target="lib\portable-wp81+wpa81" />
+  <file src="..\Windows.Phone\bin\$configuration$\$id$.pri" target="lib\portable-wp81+wpa81" />
+  <file src="..\Windows.Phone\bin\$configuration$\$id$.xr.xml" target="lib\portable-wp81+wpa81\$id$" />
+  <file src="..\Windows.Phone\bin\$configuration$\Themes\Generic.xbf" target="lib\portable-wp81+wpa81\$id$\Themes" />
+  <file src="..\Windows.Phone\Themes\Generic.xaml" target="lib\portable-wp81+wpa81\$id$\Themes" />
   <file src="..\Windows.Phone\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
  </files>
 </package>

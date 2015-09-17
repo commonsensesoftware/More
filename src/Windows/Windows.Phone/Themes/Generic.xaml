@@ -1,0 +1,175 @@
+﻿<ResourceDictionary
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:Local="using:More.Windows.Controls">
+
+ <Style x:Key="DefaultDialogButton" TargetType="Button">
+  <Setter Property="Margin" Value="4,0,0,0" />
+ </Style>
+
+ <Style TargetType="Local:TextInputDialog">
+  <Setter Property="Padding" Value="10" />
+  <Setter Property="IsTabStop" Value="false" />
+  <Setter Property="HorizontalAlignment" Value="Center" />
+  <Setter Property="VerticalAlignment" Value="Center" />
+  <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+  <Setter Property="VerticalContentAlignment" Value="Stretch" />
+  <Setter Property="Background" Value="#FF3C3C3C" />
+  <Setter Property="BorderThickness" Value="0" />
+  <Setter Property="BorderBrush" Value="Transparent" />
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="Local:TextInputDialog">
+     <Border Background="{TemplateBinding Background}"
+             Padding="{TemplateBinding Padding}"
+             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+             VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+      <Grid>
+       <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+       </Grid.RowDefinitions>
+       <TextBlock Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" FontSize="30" TextWrapping="Wrap" />
+       <ContentPresenter Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" Margin="0,10,0,10" Grid.Row="1">
+        <ContentPresenter.Resources>
+         <Style TargetType="TextBlock">
+          <Setter Property="TextWrapping" Value="Wrap" />
+          <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+         </Style>
+        </ContentPresenter.Resources>
+       </ContentPresenter>
+       <TextBox x:Name="InputTextBox" Grid.Row="2" />
+       <ItemsControl ItemsSource="{Binding Commands, RelativeSource={RelativeSource TemplatedParent}}" Margin="0,12,0,0" Grid.Row="3">
+        <ItemsControl.ItemsPanel>
+         <ItemsPanelTemplate>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" />
+         </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+         <DataTemplate>
+          <Button Style="{StaticResource DefaultDialogButton}" Content="{Binding Name}" Command="{Binding}" />
+         </DataTemplate>
+        </ItemsControl.ItemTemplate>
+       </ItemsControl>
+      </Grid>
+     </Border>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
+ </Style>
+
+ <Style TargetType="Local:GridItemsControl">
+  <!-- REMARKS: The ItemsPanel for this implementation should NEVER use a panel other than Grid -->
+  <Setter Property="ItemsPanel">
+   <Setter.Value>
+    <ItemsPanelTemplate>
+     <Grid />
+    </ItemsPanelTemplate>
+   </Setter.Value>
+  </Setter>
+ </Style>
+
+ <Style TargetType="Local:TrendIndicator">
+  <Setter Property="IsTabStop" Value="False" />
+  <Setter Property="Width" Value="25" />
+  <Setter Property="Height" Value="25" />
+  <Setter Property="Padding" Value="1" />
+  <Setter Property="Foreground" Value="White" />
+  <Setter Property="HorizontalContentAlignment" Value="Center" />
+  <Setter Property="VerticalContentAlignment" Value="Center" />
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="Local:TrendIndicator">
+     <Grid>
+
+      <VisualStateManager.VisualStateGroups>
+       <VisualStateGroup x:Name="TrendStates">
+        <VisualState x:Name="Undefined">
+         <Storyboard>
+          <DoubleAnimation Duration="0:0:0.02" From="1" To="0" Storyboard.TargetName="Arrow" Storyboard.TargetProperty="Opacity" />
+          <DoubleAnimation Duration="0:0:0.02" From="1" To="0" Storyboard.TargetName="Dash" Storyboard.TargetProperty="Opacity" />
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Flat">
+         <Storyboard>
+          <DoubleAnimation Duration="0:0:0.02" From="1" To="0" Storyboard.TargetName="Arrow" Storyboard.TargetProperty="Opacity" />
+          <DoubleAnimation Duration="0:0:0.02" From="0" To="1" Storyboard.TargetName="Dash" Storyboard.TargetProperty="Opacity" />
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Positive">
+         <Storyboard>
+          <DoubleAnimation Duration="0:0:0.02" From="1" To="0" Storyboard.TargetName="Dash" Storyboard.TargetProperty="Opacity" />
+          <DoubleAnimation Duration="0:0:0.02" From="0" To="1" Storyboard.TargetName="Arrow" Storyboard.TargetProperty="Opacity" />
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Arrow" Storyboard.TargetProperty="Data">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="F1 M 278.398,10.3933L 273.525,16.7307L 276.608,16.7307L 276.608,22.5267L 280.193,22.5267L 280.193,16.7307L 283.276,16.7307L 278.398,10.3933 Z" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Negative">
+         <Storyboard>
+          <DoubleAnimation Duration="0:0:0.02" From="1" To="0" Storyboard.TargetName="Dash" Storyboard.TargetProperty="Opacity" />
+          <DoubleAnimation Duration="0:0:0.02" From="0" To="1" Storyboard.TargetName="Arrow" Storyboard.TargetProperty="Opacity" />
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Arrow" Storyboard.TargetProperty="Data">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="F1 M 642.725,23.2878L 647.599,16.9505L 644.517,16.9505L 644.517,11.1558L 640.932,11.1558L 640.932,16.9505L 637.851,16.9505L 642.725,23.2878 Z" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+       </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+
+      <Path x:Name="Circle"
+            Margin="{TemplateBinding Padding}"
+            Stretch="Fill"
+            Fill="{Binding ScoreBrush, RelativeSource={RelativeSource TemplatedParent}}"
+            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"    
+            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+            Data="F1 M 267.763,17.84C 267.763,23.9973 272.755,28.9866 278.909,28.9866L 278.909,28.9866C 285.065,28.9866 290.056,23.9973 290.056,17.84L 290.056,17.84C 290.056,11.684 285.065,6.6933 278.909,6.6933L 278.909,6.6933C 272.755,6.6933 267.763,11.684 267.763,17.84 Z ">
+      </Path>
+
+      <!-- trend up or down -->
+      <Path x:Name="Arrow"
+            Opacity="0"
+            Stretch="Fill"
+            Fill="{TemplateBinding Foreground}"
+            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"    
+            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+            RenderTransformOrigin="0.5,0.5"
+            Data="F1 M 278.398,10.3933L 273.525,16.7307L 276.608,16.7307L 276.608,22.5267L 280.193,22.5267L 280.193,16.7307L 283.276,16.7307L 278.398,10.3933 Z">
+       <Path.RenderTransform>
+        <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
+       </Path.RenderTransform>
+      </Path>
+
+      <!-- even trend -->
+      <Rectangle x:Name="Dash"
+                 RadiusX="2"
+                 RadiusY="2"
+                 Opacity="0"
+                 RenderTransformOrigin="0.5,0.5"
+                 Fill="{TemplateBinding Foreground}">
+       <Rectangle.RenderTransform>
+        <ScaleTransform ScaleX="0.6" ScaleY="0.2" />
+       </Rectangle.RenderTransform>
+      </Rectangle>
+
+     </Grid>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
+ </Style>
+
+ <Style TargetType="Local:LayoutTransformer">
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="Local:LayoutTransformer">
+     <Grid x:Name="TransformRoot" Background="{TemplateBinding Background}">
+      <ContentPresenter x:Name="Presenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+     </Grid>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
+ </Style>
+
+</ResourceDictionary>

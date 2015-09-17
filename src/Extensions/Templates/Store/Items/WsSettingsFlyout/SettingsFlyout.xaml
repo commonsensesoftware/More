@@ -6,15 +6,14 @@
  xmlns:i="using:Microsoft.Xaml.Interactivity"
  xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
  xmlns:a="using:More.Windows.Interactivity"
- xmlns:b="using:More.Windows.Interactivity"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="346"$if$ ($hasviewmodel$ == true) d:DataContext="{d:DesignInstance Type=vm:$viewmodel$}"$endif$
  IconSource="Assets/SmallLogo.png" Title="{Binding Title}">$if$ ($hasviewmodel$ == true)
  <i:Interaction.Behaviors>
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
-  </b:InteractionRequestBehavior>
+  </a:InteractionRequestBehavior>
  </i:Interaction.Behaviors>$endif$$if$ ($showTips$ == true)
  <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->$endif$
  <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">$if$ ($showTips$ == true)

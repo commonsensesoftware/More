@@ -25,12 +25,13 @@
   <CustomParameters>
    <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
    <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WpfInteractionViewModel.zip" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$hasviewmodel$" Value="true" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
    <CustomParameter Name="$interfaceoption$" Value="2" />
    <CustomParameter Name="$viewmodel$" Value="" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />

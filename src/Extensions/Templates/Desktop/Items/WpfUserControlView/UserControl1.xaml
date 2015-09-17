@@ -11,6 +11,9 @@
  <i:Interaction.Triggers>
   <i:EventTrigger EventName="Requested" SourceObject="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
+  </i:EventTrigger>$endif$$if$ ($enableTextInput$ == true)
+  <i:EventTrigger EventName="Requested" SourceObject="{Binding InteractionRequests[TextInput]}">
+   <a:TextInputAction />
   </i:EventTrigger>$endif$$if$ ($enableOpenFile$ == true)
   <i:EventTrigger EventName="Requested" SourceObject="{Binding InteractionRequests[OpenFile]}">
    <a:OpenFileAction />

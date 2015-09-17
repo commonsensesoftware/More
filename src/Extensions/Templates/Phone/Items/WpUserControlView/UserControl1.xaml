@@ -6,24 +6,23 @@
  xmlns:i="using:Microsoft.Xaml.Interactivity"
  xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
  xmlns:a="using:More.Windows.Interactivity"
- xmlns:b="using:More.Windows.Interactivity"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
  mc:Ignorable="d" d:DesignHeight="480" d:DesignWidth="480"$if$ ($hasviewmodel$ == true) d:DataContext="{d:DesignInstance Type=vm:$viewmodel$}"$endif$>$if$ ($hasviewmodel$ == true)
  <i:Interaction.Behaviors>
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableOpenFile$ == true )
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableOpenFile$ == true )
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
    <a:OpenFileAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableSaveFile$ == true )
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[SaveFile]}">
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableSaveFile$ == true )
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[SaveFile]}">
    <a:SaveFileAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableSelectFolder$ == true )
-  <b:InteractionRequestBehavior Request="{Binding InteractionRequests[SelectFolder]}">
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableSelectFolder$ == true )
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[SelectFolder]}">
    <a:SelectFolderAction />
-  </b:InteractionRequestBehavior>$endif$$if$ ($enableSharing$ == true)
-  <b:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />$endif$$if$ ($hasviewmodel$ == true)
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableSharing$ == true)
+  <a:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />$endif$$if$ ($hasviewmodel$ == true)
  </i:Interaction.Behaviors>$endif$
  <Grid>
 

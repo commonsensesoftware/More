@@ -44,6 +44,8 @@
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableOpenFile$", m => GetOption( m.InteractionOptions, "OpenFile" ) ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableSaveFile$", m => GetOption( m.InteractionOptions, "SaveFile" ) ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableSelectFolder$", m => GetOption( m.InteractionOptions, "SelectFolder" ) ),
+                new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableTextInput$", m => GetOption( m.InteractionOptions, "TextInput" ) ),
+                new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableSelectContact$", m => GetOption( m.InteractionOptions, "SelectContact" ) ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableSettings$", m => GetOption( m.ApplicationContractOptions, "Settings" ) ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableSearch$", m => GetOption( m.ApplicationContractOptions, "Search" ) ),
                 new Tuple<string, Func<ViewItemTemplateWizardViewModel, string>>( "$enableAppSearch$", m => GetOption( m.ApplicationContractOptions, "AppSearch" ) ),

@@ -5,13 +5,12 @@
  xmlns:vm="clr-namespace:$viewmodelnamespace$"$endif$
  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
  xmlns:a="using:More.Windows.Interactivity"
- xmlns:b="using:More.Windows.Interactivity"
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"$if$ ($hasviewmodel$ == true) d:DataContext="{d:DesignInstance Type=vm:$viewmodel$}"$endif$
  Title="{Binding Title}" Height="300" Width="400" WindowStartupLocation="CenterOwner">$if$ ($addCloseBehavior$ == true)
  <i:Interaction.Behaviors>
-  <b:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" CloseCommand="{Binding DialogCommands[Cancel]}" />
+  <a:WindowCloseBehavior CloseRequest="{Binding InteractionRequests[CloseWindow]}" CloseCommand="{Binding DialogCommands[Cancel]}" />
  </i:Interaction.Behaviors>$endif$
  <i:Interaction.Triggers>$if$ (_topLevel == true )
   <!--<i:EventTrigger EventName="Requested" SourceObject="{Binding InteractionRequests[ShowChildWindow]}">
@@ -19,6 +18,9 @@
   </i:EventTrigger>-->$endif$$if$ ($hasviewmodel$ == true)
   <i:EventTrigger EventName="Requested" SourceObject="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
+  </i:EventTrigger>$endif$$if$ ($enableTextInput$ == true)
+  <i:EventTrigger EventName="Requested" SourceObject="{Binding InteractionRequests[TextInput]}">
+   <a:TextInputAction />
   </i:EventTrigger>$endif$$if$ ($enableOpenFile$ == true)
   <i:EventTrigger EventName="Requested" SourceObject="{Binding InteractionRequests[OpenFile]}">
    <a:OpenFileAction />
