@@ -5,10 +5,10 @@
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
 
-    [ContractClassFor( typeof( ISuspensionManager ) )]
-    internal abstract class ISuspensionManagerContract : ISuspensionManager
+    [ContractClassFor( typeof( ISessionStateManager ) )]
+    internal abstract class ISessionStateManagerContract : ISessionStateManager
     {
-        IDictionary<string, object> ISuspensionManager.SessionState
+        IDictionary<string, object> ISessionStateManager.SessionState
         {
             get
             {
@@ -17,18 +17,18 @@
             }
         }
 
-        void ISuspensionManager.AddKnownType( Type sessionStateType )
+        void ISessionStateManager.AddKnownType( Type sessionStateType )
         {
             Contract.Requires<ArgumentNullException>( sessionStateType != null, nameof( sessionStateType ) );
         }
 
-        Task ISuspensionManager.RestoreAsync( string sessionKey )
+        Task ISessionStateManager.RestoreAsync( string sessionKey )
         {
             Contract.Ensures( Contract.Result<Task>() != null );
             return null;
         }
 
-        Task ISuspensionManager.SaveAsync()
+        Task ISessionStateManager.SaveAsync()
         {
             Contract.Ensures( Contract.Result<Task>() != null );
             return null;

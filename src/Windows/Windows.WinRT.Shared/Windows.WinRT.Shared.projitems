@@ -10,7 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IRepositoryExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\LocalSuspensionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ISessionStateManagerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\LocalSessionStateManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\TypeName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\TypeResolutionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\FrameShellViewBase.cs" />

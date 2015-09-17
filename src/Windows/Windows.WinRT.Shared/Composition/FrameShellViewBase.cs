@@ -1,18 +1,18 @@
 ﻿namespace More.Composition
 {
-    using Composition;
-    using Windows.Controls;
+    using ComponentModel;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
+    using Windows;
+    using Windows.Controls;
     using global::Windows.ApplicationModel.Activation;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
-    using System.Threading.Tasks;
-    using ComponentModel;
 
     /// <summary>
     /// Represents the base implemention for a <see cref="IShellView">shell view</see> using a <see cref="Frame">frame</see>.
@@ -21,7 +21,7 @@
     public partial class FrameShellViewBase : IShellView, INavigationService
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly Frame shellFrame = new Frame();
+        private readonly Frame shellFrame = new Frame() { Name = "Frame_Shell" };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrameShellViewBase"/> class.
@@ -118,7 +118,7 @@
             if ( ServiceProvider.TryGetService( out composer ) )
                 composer.Compose( args.Content );
 
-        RaiseEventHandler:
+            RaiseEventHandler:
             Navigated?.Invoke( this, e );
         }
 
@@ -160,17 +160,46 @@
         /// </summary>
         /// <param name="applicationState">The <see cref="IApplicationState">application state</see> information to load from.</param>
         /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
-        /// <remarks>The default implementation retrieves an instance of the <see cref="ISuspensionManager"/> from the <see cref="ServiceProvider"/>
-        /// if one is registered and then <see cref="ISuspensionManager.RestoreAsync(string)">restores</see> the application state.</remarks>
+        /// <remarks>The default implementation retrieves an instance of the <see cref="ISessionStateManager"/> from the <see cref="ServiceProvider"/>
+        /// if one is registered and then <see cref="ISessionStateManager.RestoreAsync(string)">restores</see> the application state.</remarks>
         protected virtual async Task OnLoadStateAsync( IApplicationState applicationState )
         {
             Arg.NotNull( applicationState, nameof( applicationState ) );
             Contract.Ensures( Contract.Result<Task>() != null );
 
-            ISuspensionManager suspensionManager;
+            ISessionStateManager sessionStateManager;
 
-            if ( ServiceProvider.TryGetService( out suspensionManager ) )
-                await suspensionManager.RestoreAsync();
+            if ( !ServiceProvider.TryGetService( out sessionStateManager ) )
+                return;
+
+            await sessionStateManager.RestoreAsync( Frame.Name );
+            sessionStateManager.RestoreNavigationState( Frame );
+        }
+
+        /// <summary>
+        /// Occurs when an operation is being continued.
+        /// </summary>
+        /// <param name="applicationState">The <see cref="IApplicationState">application state</see> information to continue from.</param>
+        /// <param name="content">The content being continued.</param>
+        /// <remarks>The default implementation will get the current <see cref="ICompositionService"/> and <see cref="ICompositionService.Compose(object)">compose</see>
+        /// the current content, if any. After the content has been composed, the <see cref="IContinuationManager"/> will be retrieved and the registered
+        /// <see cref="IContinuationManager.Continue{TArg}(TArg)">continuation</see> will execute, if any.</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        protected virtual void OnContinue( IApplicationState applicationState, object content )
+        {
+            Arg.NotNull( applicationState, nameof( applicationState ) );
+            Arg.NotNull( content, nameof( content ) );
+
+            ICompositionService composer;
+            IContinuationManager continuationManager;
+
+            // compose continued instance
+            if ( ServiceProvider.TryGetService( out composer ) )
+                composer.Compose( content );
+
+            // let the continuation manager continue an operation as necessary
+            if ( ServiceProvider.TryGetService( out continuationManager ) )
+                continuationManager.Continue( applicationState.Activation );
         }
 
         /// <summary>
@@ -241,7 +270,7 @@
             if ( StartPage == null )
                 return;
 
-            object parameter = applicationState == null ? null : applicationState.Activation.Arguments;
+            object parameter = ( applicationState?.Activation as ILaunchActivatedEventArgs )?.Arguments;
             Frame.Navigate( StartPage, parameter );
         }
 
@@ -281,12 +310,18 @@
                 Window.Current.Content = Frame;
             }
 
+            var content = Frame.Content;
+
             // when the navigation stack isn't restored, navigate to the first page and configure
             // the new page by passing required information as a navigation parameter
-            if ( Frame.Content == null )
+            if ( content == null )
             {
                 BeforeFirstNavigation( Frame );
                 OnNavigateToStartPage( state );
+            }
+            else if ( state != null )
+            {
+                OnContinue( state, content );
             }
 
             // ensure that the window is active

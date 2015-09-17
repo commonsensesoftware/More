@@ -19,11 +19,11 @@
             }
         }
 
-        ILaunchActivatedEventArgs IApplicationState.Activation
+        IActivatedEventArgs IApplicationState.Activation
         {
             get
             {
-                Contract.Ensures( Contract.Result<ILaunchActivatedEventArgs>() != null );
+                Contract.Ensures( Contract.Result<IActivatedEventArgs>() != null );
                 return null;
             }
         }

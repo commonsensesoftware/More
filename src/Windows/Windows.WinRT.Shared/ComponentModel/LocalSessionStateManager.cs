@@ -4,25 +4,24 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Runtime.Serialization.Json;
+    using System.Runtime.Serialization;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Represents a local, file-based suspension manager.
+    /// Represents a local, file-based session state manager.
     /// </summary>
-    public class LocalSuspensionManager : ISuspensionManager
+    public class LocalSessionStateManager : ISessionStateManager
     {
         private readonly IFileSystem fileSystem;
-        private readonly Dictionary<string, object> sessionState = new Dictionary<string, object>();
+        private IDictionary<string, object> sessionState = new Dictionary<string, object>();
         private readonly List<Type> knownTypes = new List<Type>();
-        private string fileName = "SessionState.json";
+        private string fileName = "SessionState.xml";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocalSuspensionManager"/> class.
+        /// Initializes a new instance of the <see cref="LocalSessionStateManager"/> class.
         /// </summary>
         /// <param name="fileSystem"></param>
-        public LocalSuspensionManager( IFileSystem fileSystem )
+        public LocalSessionStateManager( IFileSystem fileSystem )
         {
             Arg.NotNull( fileSystem, nameof( fileSystem ) );
             this.fileSystem = fileSystem;
@@ -42,9 +41,9 @@
         }
 
         /// <summary>
-        /// Gets or sets the name of the file the suspension manager reads and writes to.
+        /// Gets or sets the name of the file the session state manager reads and writes to.
         /// </summary>
-        /// <value>The name of the session state file. The default value is "SessionState.json".</value>
+        /// <value>The name of the session state file. The default value is "SessionState.xml".</value>
         /// <remarks>The specified file name should not contain a path. The session state data is
         /// always read and written to the local application storage.</remarks>
         public string FileName
@@ -102,13 +101,13 @@
             if ( file == null )
                 return;
 
-            var serializer = new DataContractJsonSerializer( typeof( Dictionary<string, object> ), knownTypes );
+            var serializer = new DataContractSerializer( typeof( Dictionary<string, object> ), knownTypes );
+            IDictionary<string, object> restoredState;
 
             using ( var stream = await file.OpenReadAsync().ConfigureAwait( false ) )
-            {
-                var restoredState = (Dictionary<string, object>) serializer.ReadObject( stream );
-                SessionState.ReplaceAll( restoredState );
-            }
+                restoredState = (IDictionary<string, object>) serializer.ReadObject( stream );
+
+            SessionState.ReplaceAll( restoredState );
         }
 
         /// <summary>
@@ -131,7 +130,7 @@
 
             // clone state to avoid changes during serialization
             var clone = new Dictionary<string, object>( SessionState );
-            var serializer = new DataContractJsonSerializer( typeof( Dictionary<string, object> ), knownTypes );
+            var serializer = new DataContractSerializer( typeof( Dictionary<string, object> ), knownTypes );
 
             using ( var stream = await file.OpenReadWriteAsync().ConfigureAwait( false ) )
             {

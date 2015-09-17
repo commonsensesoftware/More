@@ -1,11 +1,10 @@
 ﻿namespace More.Composition
 {
-    using global::System;
-    using global::System.ComponentModel;
-    using global::System.Diagnostics.Contracts;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Diagnostics.CodeAnalysis;
     using global::Windows.ApplicationModel;
     using global::Windows.ApplicationModel.Activation;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <content>
     /// Provides additional application state capabilities specific to Windows Store applications.
@@ -15,10 +14,10 @@
     public partial interface IApplicationState
     {
         /// <summary>
-        /// Gets the application launch activation arguments.
+        /// Gets the application activation arguments.
         /// </summary>
-        /// <value>The application <see cref="ILaunchActivatedEventArgs">launch activation arguments</see>.</value>
-        ILaunchActivatedEventArgs Activation
+        /// <value>The application <see cref="IActivatedEventArgs">activation arguments</see>.</value>
+        IActivatedEventArgs Activation
         {
             get;
         }

@@ -18,7 +18,8 @@
 • Added OpenFileInteractionRequest
 • Added SaveFileInteractionRequest
 • Added SelectFolderInteractionRequest
-• Added async extension methods for common InteractionRequest usage</releaseNotes>
+• Added async extension methods for common InteractionRequest usage
+• Added ISessionStateManager</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

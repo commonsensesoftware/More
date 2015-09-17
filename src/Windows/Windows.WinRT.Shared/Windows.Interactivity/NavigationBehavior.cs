@@ -1,14 +1,16 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Controls;
     using System;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Navigation;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// 
+    /// Represents a behavior which supports navigation operations
     /// </summary>
-    /// <example>
+    /// <remarks>Navigation support also includes when related hardware buttons are pressed.</remarks>
+    /// <example>This example demonstrates automatically handling navigation.
     /// <code lang="Xaml"><![CDATA[
     /// <Page
     ///  x:Class="Page1"
@@ -27,20 +29,27 @@
     [CLSCompliant( false )]
     public partial class NavigationBehavior : System.Windows.Interactivity.Behavior<Page>
     {
-        private INavigationService navigationService;
+        /// <summary>
+        /// Gets the navigation cache mode dependency property.
+        /// </summary>
+        /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
+        public static readonly DependencyProperty NavigationCacheModeProperty =
+            DependencyProperty.Register( "NavigationCacheMode", typeof( NavigationCacheMode ), typeof( NavigationBehavior ), new PropertyMetadata( NavigationCacheMode.Required ) );
 
         /// <summary>
-        /// Gets the navigation service associated with behavior.
+        /// Gets or sets the navigation cache mode for pages with the applied behavior.
         /// </summary>
-        /// <value>The <see cref="INavigationService">navigation service</see> associated with the behavior.</value>
-        /// <remarks>The <see cref="INavigationService">navigation service</see> is not available in the default implementation
-        /// before <see cref="OnAttached"/> or after <see cref="OnDetaching"/>.</remarks>
-
-        protected virtual INavigationService NavigationService
+        /// <value>One of the <see cref="T:NavigationCacheMode"/> values. The default value is <see cref="NavigationCacheMode.Required"/>.</value>
+        public NavigationCacheMode NavigationCacheMode
         {
             get
             {
-                return navigationService;
+                return (NavigationCacheMode) GetValue( NavigationCacheModeProperty );
+            }
+            set
+            {
+                SetValue( NavigationCacheModeProperty, value );
             }
         }
     }

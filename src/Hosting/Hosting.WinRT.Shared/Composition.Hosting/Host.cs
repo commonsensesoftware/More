@@ -3,12 +3,9 @@
     using ComponentModel;
     using IO;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.Composition.Convention;
-    using System.Composition.Hosting;
     using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Reflection;
     using global::Windows.Storage;
@@ -38,8 +35,12 @@
         partial void AddPlatformSpecificDefaultServices()
         {
             // optimization: call base implementation because this object will never be composed
-            base.AddService( typeof( ISuspensionManager ), ( sc, t ) => new LocalSuspensionManager( sc.GetRequiredService<IFileSystem>() ) );
+            base.AddService( typeof( ITypeResolutionService ), ( sc, t ) => new TypeResolutionService() );
+            base.AddService( typeof( ISessionStateManager ), ( sc, t ) => new LocalSessionStateManager( sc.GetRequiredService<IFileSystem>() ) );
+            AddWinRTDefaultServices();
         }
+
+        partial void AddWinRTDefaultServices();
 
         static partial void AddWinRTSpecificConventions( ConventionBuilder builder );
 
@@ -49,7 +50,6 @@
             var page = new PageSpecification();
             var userControl = new UserControlSpecification();
 
-            builder.ForType<TypeResolutionService>().Export<ITypeResolutionService>().Shared();
             builder.ForTypesMatching( page.IsSatisfiedBy ).Export().Export<Page>().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p != null && p.Name == "Model" );
             builder.ForTypesMatching( userControl.IsSatisfiedBy ).Export().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p != null && p.Name == "Model" );
             AddWinRTSpecificConventions( builder );
@@ -83,9 +83,7 @@
         /// {
         ///     protected override void OnLaunched( LaunchActivatedEventArgs args )
         ///     {
-        ///         var configuration = new CompositionConfiguration().WithAssembly( this.GetType().GetTypeInfo().Assembly );
-        ///         
-        ///         using ( var host = new Host( configuration ) )
+        ///         using ( var host = new Host() )
         ///         {
         ///             host.Register<ShowShellView>();
         ///             host.Run( this );

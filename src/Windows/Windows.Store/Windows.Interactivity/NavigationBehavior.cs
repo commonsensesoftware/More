@@ -1,18 +1,10 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using Controls;
-    using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
-    using global::Windows.System;
-    using global::Windows.UI.Xaml.Navigation;
-    using static global::Windows.UI.Core.CoreAcceleratorKeyEventType;
     using static global::Windows.System.VirtualKey;
+    using static global::Windows.UI.Core.CoreAcceleratorKeyEventType;
 
     /// <content>
     /// Provides additional implementation specific to Windows Store applications.
@@ -37,17 +29,18 @@
             var shiftKey = ( window.GetKeyState( Shift ) & down ) == down;
             var noModifiers = !menuKey && !controlKey && !shiftKey;
             var onlyAlt = menuKey && !controlKey && !shiftKey;
+            var frame = AssociatedObject.Frame;
 
-            if ( ( ( (int) virtualKey == 166 && noModifiers ) || ( virtualKey == Left && onlyAlt ) ) && NavigationService.CanGoBack )
+            if ( ( ( (int) virtualKey == 166 && noModifiers ) || ( virtualKey == Left && onlyAlt ) ) && frame.CanGoBack )
             {
                 // navigate back when the previous key or Alt+Left are pressed
-                NavigationService.GoBack();
+                frame.GoBack();
                 args.Handled = true;
             }
-            else if ( ( ( (int) virtualKey == 167 && noModifiers ) || ( virtualKey == Right && onlyAlt ) ) && NavigationService.CanGoBack )
+            else if ( ( ( (int) virtualKey == 167 && noModifiers ) || ( virtualKey == Right && onlyAlt ) ) && frame.CanGoBack )
             {
                 // navigate forward when the next key or Alt+Right are pressed
-                NavigationService.GoForward();
+                frame.GoForward();
                 args.Handled = true;
             }
         }
@@ -70,32 +63,32 @@
             if ( !mutuallyExclusive )
                 return;
 
-            if ( backPressed && NavigationService.CanGoBack )
+            var frame = AssociatedObject.Frame;
+
+            if ( backPressed && frame.CanGoBack )
             {
-                NavigationService.GoBack();
+                frame.GoBack();
                 args.Handled = true;
             }
-            else if ( forwardPressed && NavigationService.CanGoForward )
+            else if ( forwardPressed && frame.CanGoForward )
             {
-                NavigationService.GoForward();
+                frame.GoForward();
                 args.Handled = true;
             }
         }
 
         /// <summary>
-        /// Called after the behavior is attached to an AssociatedObject.
+        /// Called after the behavior is attached to an <see cref="P:AssociatedObject"/>.
         /// </summary>
         protected override void OnAttached()
         {
             base.OnAttached();
 
             var page = AssociatedObject;
-
-            page.NavigationCacheMode = NavigationCacheMode.Required;
-            navigationService = new FrameNavigationAdapter( AssociatedObject.Frame );
-            
             var window = Window.Current;
             var bounds = window.Bounds;
+
+            page.NavigationCacheMode = NavigationCacheMode;
 
             // keyboard and mouse navigation only apply when occupying the entire window
             if ( page.ActualHeight != bounds.Height || page.ActualWidth != bounds.Width )
@@ -107,14 +100,15 @@
         }
 
         /// <summary>
-        /// Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+        /// Called when the behavior is being detached from its <see cref="P:AssociatedObject"/>, but before it has actually occurred.
         /// </summary>
         protected override void OnDetaching()
         {
             var window = Window.Current.CoreWindow;
+
             window.Dispatcher.AcceleratorKeyActivated -= OnAcceleratorKeyActivated;
             window.PointerPressed -= OnPointerPressed;
-            navigationService = null;
+
             base.OnDetaching();
         }
     }

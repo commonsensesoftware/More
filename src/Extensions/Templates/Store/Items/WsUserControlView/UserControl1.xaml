@@ -13,7 +13,7 @@
  <i:Interaction.Behaviors>
   <b:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
-  </b:InteractionRequestBehavior>$if$ ($enableOpenFile$ == true )
+  </b:InteractionRequestBehavior>$endif$$if$ ($enableOpenFile$ == true )
   <b:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
    <a:OpenFileAction />
   </b:InteractionRequestBehavior>$endif$$if$ ($enableSaveFile$ == true )

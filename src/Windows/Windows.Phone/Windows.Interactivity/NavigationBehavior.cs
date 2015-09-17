@@ -1,10 +1,6 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Controls;
-    using System;
     using global::Windows.Phone.UI.Input;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Navigation;
 
     /// <content>
     /// Provides additional implementation specific to Windows Phone applications.
@@ -13,31 +9,31 @@
     {
         private void OnBackPressed( object sender, BackPressedEventArgs e )
         {
-            if ( !navigationService.CanGoBack )
+            var frame = AssociatedObject.Frame;
+
+            if ( !frame.CanGoBack )
                 return;
 
-            navigationService.GoBack();
+            frame.GoBack();
             e.Handled = true;
         }
 
         /// <summary>
-        /// Called after the behavior is attached to an AssociatedObject.
+        /// Called after the behavior is attached to an <see cref="P:AssociatedObject"/>.
         /// </summary>
         protected override void OnAttached()
         {
             base.OnAttached();
-            AssociatedObject.NavigationCacheMode = NavigationCacheMode.Required;
-            navigationService = new FrameNavigationAdapter( AssociatedObject.Frame );
+            AssociatedObject.NavigationCacheMode = NavigationCacheMode;
             HardwareButtons.BackPressed += OnBackPressed;
         }
 
         /// <summary>
-        /// Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+        /// Called when the behavior is being detached from its <see cref="P:AssociatedObject"/>, but before it has actually occurred.
         /// </summary>
         protected override void OnDetaching()
         {
             HardwareButtons.BackPressed -= OnBackPressed;
-            navigationService = null;
             base.OnDetaching();
         }
     }

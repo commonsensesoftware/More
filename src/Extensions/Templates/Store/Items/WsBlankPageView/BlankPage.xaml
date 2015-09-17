@@ -10,14 +10,15 @@
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  mc:Ignorable="d" x:Name="PageRoot"$if$ ($hasviewmodel$ == true) d:DataContext="{d:DesignInstance Type=vm:$viewmodel$}"$endif$
- Background="{StaticResource ApplicationPageBackgroundThemeBrush}">$if$ ($hasviewmodel$ == true)
+ Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
  <i:Interaction.Behaviors>
+  <b:NavigationBehavior />$if$ ($hasviewmodel$ == true)
   <b:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
   </b:InteractionRequestBehavior>
   <b:InteractionRequestBehavior Request="{Binding InteractionRequests[Navigate]}">
    <a:NavigateAction />
-  </b:InteractionRequestBehavior>$if$ ($enableOpenFile$ == true )
+  </b:InteractionRequestBehavior>$endif$$if$ ($enableOpenFile$ == true )
   <b:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
    <a:OpenFileAction />
   </b:InteractionRequestBehavior>$endif$$if$ ($enableSaveFile$ == true )
@@ -31,8 +32,8 @@
   <b:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />$endif$$if$ ($enableSearch$ == true)
   <b:SearchContractBehavior SearchCommand="{Binding Commands[Search]}"
                             SearchSuggestionsCommand="{Binding Commands[ProvideSuggestions]}"
-                            SuggestionChosenCommand="{Binding Commands[SuggestionChosen]}" />$endif$$if$ ($hasviewmodel$ == true)
- </i:Interaction.Behaviors>$endif$
+                            SuggestionChosenCommand="{Binding Commands[SuggestionChosen]}" />$endif$
+ </i:Interaction.Behaviors>
  <Grid Margin="10">
   <Grid.RowDefinitions>
    <RowDefinition Height="Auto" />

@@ -1,8 +1,5 @@
 ﻿namespace More.Composition.Hosting
 {
-    using More.Windows;
-    using System;
-    using System.Windows;
     using global::Windows.ApplicationModel.Activation;
 
     /// <content>
@@ -16,16 +13,8 @@
         /// <param name="args">The <see cref="IActivatedEventArgs"/> event data.</param>
         protected override void OnActivated( IActivatedEventArgs args )
         {
-            base.OnActivated( args );
-            
-            var e = args as IContinuationActivatedEventArgs;
-            IContinuationManager continuationManager;
-
+            Activation = args;
             Init();
-
-            // continue the operation as appropriate
-            if ( e != null && Host.TryGetService( out continuationManager ) )
-                continuationManager.Continue( e );
         }
     }
 }

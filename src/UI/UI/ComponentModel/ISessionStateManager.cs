@@ -6,10 +6,10 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Defines the behavior of a suspension manager.
+    /// Defines the behavior of a session state manager.
     /// </summary>
-    [ContractClass( typeof( ISuspensionManagerContract ) )]
-    public interface ISuspensionManager
+    [ContractClass( typeof( ISessionStateManagerContract ) )]
+    public interface ISessionStateManager
     {
         /// <summary>
         /// Gets a dictionary of key/value pairs representing the current session state.

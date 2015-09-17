@@ -1,12 +1,12 @@
 ﻿namespace More.Composition.Hosting
 {
-    using More.ComponentModel;
-    using More.Windows.Input;
-    using More.Windows.Data;
+    using ComponentModel;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
+    using Windows.Data;
+    using Windows.Input;
     using global::Windows.ApplicationModel;
     using global::Windows.ApplicationModel.Activation;
     using global::Windows.UI.Xaml;
@@ -82,19 +82,20 @@
         /// </summary>
         /// <param name="args">The <see cref="SuspendingEventArgs"/> event data.</param>
         /// <remarks>This method responds to the <see cref="E:Suspending"/> event rather than raise it. The default implementation retrieves
-        /// an instance of the <see cref="ISuspensionManager"/> from the <see cref="Host"/> if one is registered and saves the application state.</remarks>
+        /// an instance of the <see cref="ISessionStateManager"/> from the <see cref="Host"/> if one is registered and saves the application state.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual async void OnSuspending( SuspendingEventArgs args )
         {
             Arg.NotNull( args, nameof( args ) );
 
-            ISuspensionManager suspensionManager;
+            ISessionStateManager sessionStateManager;
 
-            if ( !IsInitialized || !Host.TryGetService( out suspensionManager ) )
+            if ( !IsInitialized || !Host.TryGetService( out sessionStateManager ) )
                 return;
 
             var deferral = args.SuspendingOperation.GetDeferral();
-            await suspensionManager.SaveAsync();
+            sessionStateManager.TrySaveNavigationState();
+            await sessionStateManager.SaveAsync();
             deferral.Complete();
         }
 
@@ -108,7 +109,6 @@
         protected override void OnSearchActivated( SearchActivatedEventArgs args )
         {
             Contract.Assume( args != null );
-            base.OnSearchActivated( args );
 
             IServiceProvider serviceProvider = Host;
 
@@ -135,7 +135,6 @@
         protected override void OnShareTargetActivated( ShareTargetActivatedEventArgs args )
         {
             Contract.Assume( args != null );
-            base.OnShareTargetActivated( args );
 
             IServiceProvider serviceProvider = Host;
 
@@ -183,10 +182,10 @@
         public event EventHandler<ProgressChangedEventArgs> ProgressChanged;
 
         /// <summary>
-        /// Gets or sets the application launch activation arguments.
+        /// Gets or sets the application activation arguments.
         /// </summary>
-        /// <value>The application <see cref="ILaunchActivatedEventArgs">launch activation arguments</see>.</value>
-        public ILaunchActivatedEventArgs Activation
+        /// <value>The application <see cref="IActivatedEventArgs">activation arguments</see>.</value>
+        public IActivatedEventArgs Activation
         {
             get;
             protected set;

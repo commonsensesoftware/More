@@ -11,9 +11,10 @@
     /// </content>
     public partial class Host : IKeyedServiceProvider
     {
-        static partial void AddWinRTSpecificConventions( ConventionBuilder builder )
+        partial void AddWinRTDefaultServices()
         {
-            builder.ForType<ContinuationManager>().Export<IContinuationManager>().Shared();
+            // optimization: call base implementation because this object will never be composed
+            base.AddService( typeof( IContinuationManager ), ( sc, t ) => new ContinuationManager() );
         }
 
         private object GetService( Type serviceType, string key )
