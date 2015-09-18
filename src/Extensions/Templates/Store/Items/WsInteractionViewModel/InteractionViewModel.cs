@@ -17,21 +17,24 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Input;
-    using global::Windows.Storage;
+    using System.Windows.Input;$if$ ($enableSelectContact$ == true)
+    using Windows.ApplicationModel.Contacts;$endif$
+    using Windows.Storage;
 
 	/// <summary>
     /// Represents a view model that supports user interactions.
     /// </summary>
     public class $safeitemrootname$ :  $base$
     {
-        private readonly InteractionRequest<Interaction> userFeedback = new InteractionRequest<Interaction>( "UserFeedback" );$if$ ($enableSettings$ == true)
+        private readonly InteractionRequest<Interaction> userFeedback = new InteractionRequest<Interaction>( "UserFeedback" );$if$ ($enableTextInput$ == true)
+        private readonly InteractionRequest<TextInputInteraction> textInput = new InteractionRequest<TextInputInteraction>( "TextInput" );$endif$$if$ ($enableSettings$ == true)
         private readonly InteractionRequest<Interaction> settings = new InteractionRequest<Interaction>( "Settings" );$endif$$if$ ($enableSharing$ == true)
         private readonly InteractionRequest<Interaction> share = new InteractionRequest<Interaction>( "Share" );$endif$$if$ ($enableSearch$ == true)
         private readonly InteractionRequest<Interaction> search = new InteractionRequest<Interaction>( "Search" );$endif$$if$ ($enableOpenFile$ == true)
         private readonly InteractionRequest<OpenFileInteraction> openFile = new InteractionRequest<OpenFileInteraction>( "OpenFile" );$endif$$if$ ($enableSaveFile$ == true)
         private readonly InteractionRequest<SaveFileInteraction> saveFile = new InteractionRequest<SaveFileInteraction>( "SaveFile" );$endif$$if$ ($enableSelectFolder$ == true)
-        private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$$if$ ($addTitle$ == true)
+        private readonly InteractionRequest<SelectFolderInteraction> selectFolder = new InteractionRequest<SelectFolderInteraction>( "SelectFolder" );$endif$$if$ ($enableSelectContact$ == true)
+        private readonly InteractionRequest<SelectContactInteraction> selectContact = new InteractionRequest<SelectContactInteraction>( "SelectContact" );$endif$$if$ ($addTitle$ == true)
         private string titleField = "$title$";$endif$
 
         /// <summary>
@@ -52,20 +55,23 @@ $endif$$if$ ($showTips$ == true)
             //       example: public $safeitemrootname$( MyService service )
 
             // TODO: add additional interaction requests to suit your needs$endif$
-            InteractionRequests.Add( userFeedback );$if$ ($enableSettings$ == true)
+            InteractionRequests.Add( userFeedback );$if$ ($enableTextInput$ == true)
+            InteractionRequests.Add( textInput );$endif$$if$ ($enableSettings$ == true)
             InteractionRequests.Add( settings );$endif$$if$ ($enableSharing$ == true)
             InteractionRequests.Add( share );$endif$$if$ ($enableSearch$ == true)
             InteractionRequests.Add( search );$endif$$if$ ($enableOpenFile$ == true)
             InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
             InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
+            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSelectContact$ == true)
+            InteractionRequests.Add( selectContact );$endif$$if$ ($enableSharing$ == true)
             Commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$$if$ ($enableSearch$ == true)
             Commands.Add( new NamedCommand<ISearchRequest>( "Search", OnSearch ) );
             Commands.Add( new NamedCommand<ISearchSuggestionsRequest>( "ProvideSuggestions", OnProvideSuggestions ) );
             Commands.Add( new NamedCommand<string>( "SuggestionChosen", OnSuggestionChosen ) );$endif$$if$ ($enableOpenFile$ == true)
             Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
             Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$
+            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSelectContact$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectContact", "Select Contact", OnSelectContact ) );$endif$
         }$if$ ($addTitle$ == true)
 
         /// <summary>
@@ -119,7 +125,17 @@ $endif$$if$ ($showTips$ == true)
         /// <param name="cancelText">The confirmation cancellation text. The default value is "Cancel".</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
         protected Task<bool> ConfirmAsync( string prompt, string acceptText = "OK", string cancelText = "Cancel" ) =>
-            userFeedback.ConfirmAsync( prompt, Title, acceptText, cancelText );$if$ ($enableSettings$ == true)
+            userFeedback.ConfirmAsync( prompt, Title, acceptText, cancelText );$if$ ($enableTextInput$ == true)
+
+        /// <summary>
+        /// Requests input from a user asynchronously.
+        /// </summary>
+        /// <param name="prompt">The prompt provided to the user.</param>
+        /// <param name="defaultResponse">The default user response. The default value is an empty string.</param>
+        /// <param name="title">The title of the prompt. The default value is the current <see cref="P:Title"/>.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing the response. If the user canceled the operation, the response value is <c>null</c>.</returns>
+        protected Task<string> GetInputAsync( string prompt, string defaultResponse = "", string title = null ) =>
+            textInput.RequestAsync( title ?? Title, prompt, defaultResponse );$endif$$if$ ($enableSettings$ == true)
 
         /// <summary>
         /// Requests settings be displayed to the user.
@@ -211,6 +227,16 @@ $endif$$if$ ($showTips$ == true)
                 return;$endif$$if$ ($showSelectFolderTips$ == true)
 
             // TODO: use selected folder$endif$$if$ ($enableSelectFolder$ == true)
+        }$endif$$if$ ($enableSelectContact$ == true)
+
+        private async void OnSelectContact( object parameter )
+        {
+            var contact = await selectContact.RequestSingleContactAsync();
+
+            if ( contact == null )
+                return;$endif$$if$ ($showSelectContactTips$ == true)
+
+            // TODO: use selected contact$endif$$if$ ($enableSelectContact$ == true)
         }$endif$
     }
 }

@@ -23,11 +23,12 @@
   <CustomParameters>
    <CustomParameter Name="_topLevelViewModelTemplateName" Value="More\Code\1033\WpfWindowViewModel.zip|FrameworkVersion=4.5" />
    <CustomParameter Name="_topLevel" Value="true" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
    <CustomParameter Name="$viewmodel$" Value="MainViewModel" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />
   </CustomParameters>

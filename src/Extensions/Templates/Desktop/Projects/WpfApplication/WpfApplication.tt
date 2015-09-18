@@ -42,11 +42,12 @@
   <CustomParameters>
    <CustomParameter Name="_view" Value="MainWindow" />
    <CustomParameter Name="_viewTemplate" Value="More\WPF\1033\WpfWindowShellView.zip|FrameworkVersion=4.5" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>

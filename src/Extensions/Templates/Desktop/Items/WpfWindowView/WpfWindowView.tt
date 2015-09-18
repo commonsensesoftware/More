@@ -27,7 +27,7 @@
    <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WpfChildWindowViewModel.zip|FrameworkVersion=4.5" />
    <CustomParameter Name="_topLevelViewModelTemplateName" Value="More\Code\1033\WpfWindowViewModel.zip|FrameworkVersion=4.5" />
    <CustomParameter Name="_topLevel" Value="false" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput" />
    <CustomParameter Name="$addTitle$" Value="true" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$addCloseBehavior$" Value="false" />
@@ -35,6 +35,7 @@
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
    <CustomParameter Name="$interfaceoption$" Value="3" />
    <CustomParameter Name="$viewmodel$" Value="" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />

@@ -25,7 +25,7 @@
   <CustomParameters>
    <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
    <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WsInteractionViewModel.zip" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput,SelectContact" />
    <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$enableOpenFile$" Value="false" />
@@ -36,6 +36,8 @@
    <CustomParameter Name="$enableSearch$" Value="false" />
    <CustomParameter Name="$enableAppSharing$" Value="false" />
    <CustomParameter Name="$enableAppSearch$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
+   <CustomParameter Name="$enableSelectContact$" Value="false" />
    <CustomParameter Name="$interfaceoption$" Value="1" />
    <CustomParameter Name="$hasviewmodel$" Value="true" />
    <CustomParameter Name="$viewmodel$" Value="" />

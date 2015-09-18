@@ -1,0 +1,7 @@
+﻿Version 1.1 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Updated templates to use C# 6.0 syntax
+• Added template wizard support for text input user interactions
+• Added template wizard support for contact selection user interactions (Windows Store and Windows Phone)
+• Updated templates to use new async extension methods for user interactions
+• Updated Portable and Windows Phone interaction templates to use portable implementations with continuations

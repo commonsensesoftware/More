@@ -196,7 +196,8 @@
         /// <param name="defaultResponse">The default user response. The default value is an empty string.</param>
         /// <param name="title">The title of the prompt. The default value is the current <see cref="P:Title"/>.</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing the response. If the user canceled the operation, the response value is <c>null</c>.</returns>
-        protected Task<string> GetInputAsync( string prompt, string defaultResponse = "", string title = null ) => textInput.RequestAsync( title ?? Title, prompt, defaultResponse );$endif$$if$ ($enableOpenFile$ == true)
+        protected Task<string> GetInputAsync( string prompt, string defaultResponse = "", string title = null ) =>
+            textInput.RequestAsync( title ?? Title, prompt, defaultResponse );$endif$$if$ ($enableOpenFile$ == true)
 
         private async void OnOpenFile( object parameter )
         {

@@ -12,6 +12,9 @@
  <i:Interaction.Behaviors>
   <a:InteractionRequestBehavior Request="{Binding InteractionRequests[UserFeedback]}">
    <a:MessageDialogAction />
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableTextInput$ == true)
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[TextInput]}">
+   <a:TextInputAction />
   </a:InteractionRequestBehavior>$endif$$if$ ($enableOpenFile$ == true )
   <a:InteractionRequestBehavior Request="{Binding InteractionRequests[OpenFile]}">
    <a:OpenFileAction />
@@ -21,6 +24,9 @@
   </a:InteractionRequestBehavior>$endif$$if$ ($enableSelectFolder$ == true )
   <a:InteractionRequestBehavior Request="{Binding InteractionRequests[SelectFolder]}">
    <a:SelectFolderAction />
+  </a:InteractionRequestBehavior>$endif$$if$ ($enableSelectContact$ == true )
+  <a:InteractionRequestBehavior Request="{Binding InteractionRequests[SelectContact]}">
+   <a:SelectContactAction />
   </a:InteractionRequestBehavior>$endif$$if$ ($enableSharing$ == true)
   <a:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />$endif$$if$ ($hasviewmodel$ == true)
  </i:Interaction.Behaviors>$endif$

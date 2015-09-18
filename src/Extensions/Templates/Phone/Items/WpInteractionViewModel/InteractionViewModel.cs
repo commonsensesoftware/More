@@ -19,8 +19,8 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
-    using System.Windows.Input;
-    using Windows.ApplicationModel.Activation;
+    using System.Windows.Input;$if$ ($enableSelectContact$ == true)
+    using Windows.ApplicationModel.Contacts;$endif$
     using Windows.Storage;
 
 	/// <summary>
@@ -28,10 +28,12 @@
     /// </summary>
     public class $safeitemrootname$ :  $base$
     {
-        private readonly InteractionRequest<Interaction> userFeedback = new InteractionRequest<Interaction>( "UserFeedback" );$if$ ($enableOpenFile$ == true)
+        private readonly InteractionRequest<Interaction> userFeedback = new InteractionRequest<Interaction>( "UserFeedback" );$if$ ($enableTextInput$ == true)
+        private readonly InteractionRequest<TextInputInteraction> textInput = new InteractionRequest<TextInputInteraction>( "TextInput" );$endif$$if$ ($enableOpenFile$ == true)
         private readonly InteractionRequest<OpenFileInteraction> openFile;$endif$$if$ ($enableSaveFile$ == true)
         private readonly InteractionRequest<SaveFileInteraction> saveFile;$endif$$if$ ($enableSelectFolder$ == true)
-        private readonly InteractionRequest<SelectFolderInteraction> selectFolder;$endif$$if$ ($enableSharing$ == true)
+        private readonly InteractionRequest<SelectFolderInteraction> selectFolder;$endif$$if$ ($enableSelectContact$ == true)
+        private readonly InteractionRequest<SelectContactInteraction> selectContact = new InteractionRequest<SelectContactInteraction>( "SelectContact" );$endif$$if$ ($enableSharing$ == true)
         private readonly InteractionRequest<Interaction> share = new InteractionRequest<Interaction>( "Share" );$endif$
 
         /// <summary>
@@ -52,14 +54,17 @@ $endif$$if$ ($showTips$ == true)
             openFile = new OpenFileInteractionRequest( "OpenFile", OnFilesOpened );$endif$$if$ ($enableSaveFile$ == true)
             saveFile = new SaveFileInteractionRequest( "SaveFile", OnFileSaved );$endif$$if$ ($enableSelectFolder$ == true)
             selectFolder = new SelectFolderInteractionRequest( "SelectFolder", OnFolderSelected );$endif$
-            InteractionRequests.Add( userFeedback );$if$ ($enableOpenFile$ == true)
+            InteractionRequests.Add( userFeedback );$if$ ($enableTextInput$ == true)
+            InteractionRequests.Add( textInput );$endif$$if$ ($enableOpenFile$ == true)
             InteractionRequests.Add( openFile );$endif$$if$ ($enableSaveFile$ == true)
             InteractionRequests.Add( saveFile );$endif$$if$ ($enableSelectFolder$ == true)
-            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSharing$ == true)
+            InteractionRequests.Add( selectFolder );$endif$$if$ ($enableSelectContact$ == true)
+            InteractionRequests.Add( selectContact );$endif$$if$ ($enableSharing$ == true)
             InteractionRequests.Add( share );$endif$$if$ ($enableOpenFile$ == true)
             Commands.Add( new NamedCommand<object>( "OpenFile", "Open File", OnOpenFile ) );$endif$$if$ ($enableSaveFile$ == true)
             Commands.Add( new NamedCommand<object>( "SaveFile", "Save File", OnSaveFile, OnCanSaveFile ) );$endif$$if$ ($enableSelectFolder$ == true)
-            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSharing$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectFolder", "Select Folder", OnSelectFolder ) );$endif$$if$ ($enableSelectContact$ == true)
+            Commands.Add( new NamedCommand<object>( "SelectContact", "Select Contact", OnSelectContact ) );$endif$$if$ ($enableSharing$ == true)
             Commands.Add( new NamedCommand<IDataRequest>( "Share", OnShare ) );$endif$
         }
 
@@ -93,7 +98,17 @@ $endif$$if$ ($showTips$ == true)
         /// <param name="cancelText">The confirmation cancellation text. The default value is "Cancel".</param>
         /// <returns>A <see cref="Task{TResult}">task</see> containing a value indicating whether the user accepted or canceled the prompt.</returns>
         protected Task<bool> ConfirmAsync( string prompt, string title, string acceptText = "OK", string cancelText = "Cancel" ) =>
-            userFeedback.ConfirmAsync( prompt, title, acceptText, cancelText );$if$ ($enableAppSharing$ == true)
+            userFeedback.ConfirmAsync( prompt, title, acceptText, cancelText );$if$ ($enableTextInput$ == true)
+
+        /// <summary>
+        /// Requests input from a user asynchronously.
+        /// </summary>
+        /// <param name="prompt">The prompt provided to the user.</param>
+        /// <param name="defaultResponse">The default user response. The default value is an empty string.</param>
+        /// <param name="title">The title of the prompt. The default value is the current <see cref="P:Title"/>.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing the response. If the user canceled the operation, the response value is <c>null</c>.</returns>
+        protected Task<string> GetInputAsync( string prompt, string defaultResponse = "", string title = null ) =>
+            textInput.RequestAsync( title ?? Title, prompt, defaultResponse );$endif$$if$ ($enableAppSharing$ == true)
 
         private void OnShareReceived( IShareOperation share )
         {
@@ -166,6 +181,16 @@ $endif$$if$ ($showTips$ == true)
                 return;$endif$$if$ ($showSelectFolderTips$ == true)
 
             // TODO: use selected folder$endif$$if$ ($enableSelectFolder$ == true)
+        }$endif$$if$ ($enableSelectContact$ == true)
+
+        private async void OnSelectContact( object parameter )
+        {
+            var contact = await selectContact.RequestSingleContactAsync( ContactFieldType.Email );
+
+            if ( contact == null )
+                return;$endif$$if$ ($showSelectContactTips$ == true)
+
+            // TODO: use selected contact$endif$$if$ ($enableSelectContact$ == true)
         }$endif$
     }
 }

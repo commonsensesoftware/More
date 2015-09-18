@@ -1,58 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
- <Metadata>
-  <Identity Id="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa" Version="1.0.0" Language="en-US" Publisher="Commonsense Software" />
-  <DisplayName>More Framework</DisplayName>
-  <Description xml:space="preserve">The More framework is a collection of patterns and practices for creating robust solutions using the Microsoft .NET Framework.  Features include comphrensive extensions for collections, data structures, component models, view models, composition, and other intrinsic concepts not present in the Microsoft .NET Framework Base Class Library (BCL). The core libraries are portable across Windows Desktop, Windows Store, Windows Phone, Xamarin Android, and Xamarin iOS projects.</Description>
-  <MoreInfo>http://github.com/commonsensesoftware/more</MoreInfo>
-  <License>LICENSE</License>
-  <GettingStartedGuide>http://commonsensesoftware.github.io/More/</GettingStartedGuide>
-  <Icon>Icon.png</Icon>
-  <PreviewImage>Preview.png</PreviewImage>
-  <Tags>More Design Patterns Practices Windows WPF WinRT Phone Store Extensions Composition UI MVVM</Tags>
- </Metadata>
- <Installation>
-  <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Community" />
- </Installation>
- <Dependencies>
-  <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.6,)" />
- </Dependencies>
- <Assets>
-  <!-- package definition registry entries -->
-  <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="References.pkgdef" />
-  <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="Generators.pkgdef" />
+  <Metadata>
+    <Identity Id="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa" Version="1.1.0" Language="en-US" Publisher="Commonsense Software" />
+    <DisplayName>More Framework</DisplayName>
+    <Description xml:space="preserve">The More framework is a collection of patterns and practices for creating robust solutions using the Microsoft .NET Framework.  Features include comphrensive extensions for collections, data structures, component models, view models, composition, and other intrinsic concepts not present in the Microsoft .NET Framework Base Class Library (BCL). The core libraries are portable across Windows Desktop, Windows Store, Windows Phone, Xamarin Android, and Xamarin iOS projects.</Description>
+    <MoreInfo>http://github.com/commonsensesoftware/more</MoreInfo>
+    <License>LICENSE</License>
+    <GettingStartedGuide>http://commonsensesoftware.github.io/More/</GettingStartedGuide>
+    <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
+    <Icon>Icon.png</Icon>
+    <PreviewImage>Preview.png</PreviewImage>
+    <Tags>More Design Patterns Practices Windows WPF WinRT Phone Store Extensions Composition UI MVVM</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Community" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.6,)" />
+  </Dependencies>
+  <Assets>
+    <!-- package definition registry entries -->
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="References.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="Generators.pkgdef" />
 
-  <!-- assemblies -->
-  <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Wizards" Path="|Wizards|" AssemblyName="|Wizards;AssemblyName|" />
-  <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Editors" Path="|Editors|" AssemblyName="|Editors;AssemblyName|" />
+    <!-- assemblies -->
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Wizards" Path="|Wizards|" AssemblyName="|Wizards;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="Editors" Path="|Editors|" AssemblyName="|Editors;AssemblyName|" />
 
-  <!-- desktop item and project templates -->
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="EfDbContext" d:TargetPath="|EfDbContext;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfUserControlView" d:TargetPath="|WpfUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowView" d:TargetPath="|WpfWindowView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowShellView" d:TargetPath="|WpfWindowShellView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowViewModel" d:TargetPath="|WpfWindowViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfInteractionViewModel" d:TargetPath="|WpfInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfChildWindowViewModel" d:TargetPath="|WpfChildWindowViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="WpfApplication" d:TargetPath="|WpfApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+    <!-- desktop item and project templates -->
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="EfDbContext" d:TargetPath="|EfDbContext;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfUserControlView" d:TargetPath="|WpfUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowView" d:TargetPath="|WpfWindowView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowShellView" d:TargetPath="|WpfWindowShellView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowViewModel" d:TargetPath="|WpfWindowViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfInteractionViewModel" d:TargetPath="|WpfInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfChildWindowViewModel" d:TargetPath="|WpfChildWindowViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="WpfApplication" d:TargetPath="|WpfApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
 
-  <!-- phone item and project templates -->
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpBlankPageView" d:TargetPath="|WpBlankPageView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpInteractionViewModel" d:TargetPath="|WpInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpPageViewModel" d:TargetPath="|WpPageViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpUserControlView" d:TargetPath="|WpUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="WpApplication" d:TargetPath="|WpApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+    <!-- phone item and project templates -->
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpBlankPageView" d:TargetPath="|WpBlankPageView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpInteractionViewModel" d:TargetPath="|WpInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpPageViewModel" d:TargetPath="|WpPageViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpUserControlView" d:TargetPath="|WpUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="WpApplication" d:TargetPath="|WpApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
 
-  <!-- store item and project templates -->
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsBlankPageView" d:TargetPath="|WsBlankPageView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsInteractionViewModel" d:TargetPath="|WsInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsPageViewModel" d:TargetPath="|WsPageViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsSettingsFlyout" d:TargetPath="|WsSettingsFlyout;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsUserControlView" d:TargetPath="|WsUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="WsBlankApplication" d:TargetPath="|WsBlankApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+    <!-- store item and project templates -->
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsBlankPageView" d:TargetPath="|WsBlankPageView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsInteractionViewModel" d:TargetPath="|WsInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsPageViewModel" d:TargetPath="|WsPageViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsSettingsFlyout" d:TargetPath="|WsSettingsFlyout;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WsUserControlView" d:TargetPath="|WsUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="WsBlankApplication" d:TargetPath="|WsBlankApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
 
-  <!-- universal item and project templates -->
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UaViewModel" d:TargetPath="|UaViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-  <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UaInteractionViewModel" d:TargetPath="|UaInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
- </Assets>
+    <!-- universal item and project templates -->
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UaViewModel" d:TargetPath="|UaViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UaInteractionViewModel" d:TargetPath="|UaInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+  </Assets>
 </PackageManifest>

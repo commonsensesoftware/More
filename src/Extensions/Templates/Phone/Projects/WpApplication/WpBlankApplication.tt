@@ -47,7 +47,7 @@
   <CustomParameters>
    <CustomParameter Name="_view" Value="MainPage" />
    <CustomParameter Name="_viewTemplate" Value="More\XAML\1033\WpBlankPage.zip" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput,SelectContact" />
    <CustomParameter Name="_contracts" Value="Share,AppShare" />
    <CustomParameter Name="$viewmodel$" Value="MainViewModel" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />
@@ -58,6 +58,8 @@
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableSelectContact$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>

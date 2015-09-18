@@ -47,7 +47,7 @@
    <CustomParameter Name="_view" Value="MainPage" />
    <CustomParameter Name="_viewTemplate" Value="More\XAML\1033\WsBlankPage.zip" />
    <CustomParameter Name="_settingsTemplate" Value="More\XAML\1033\WsSettingsFlyout.zip" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput,SelectContact" />
    <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
    <CustomParameter Name="$viewmodel$" Value="MainViewModel" />
    <CustomParameter Name="$viewmodelnamespace$" Value="" />
@@ -61,6 +61,8 @@
    <CustomParameter Name="$enableSearch$" Value="false" />
    <CustomParameter Name="$enableAppSharing$" Value="false" />
    <CustomParameter Name="$enableAppSearch$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
+   <CustomParameter Name="$enableSelectContact$" Value="false" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>

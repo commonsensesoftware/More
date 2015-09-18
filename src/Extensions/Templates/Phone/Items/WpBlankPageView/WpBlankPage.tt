@@ -26,7 +26,7 @@
   <CustomParameters>
    <CustomParameter Name="_views" Value="PageOnly,ImplementIViewT,ImplementIViewTT" />
    <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WpPageViewModel.zip" />
-   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput,SelectContact" />
    <CustomParameter Name="_contracts" Value="Share,AppShare" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$enableSharing$" Value="false" />
@@ -34,6 +34,8 @@
    <CustomParameter Name="$enableOpenFile$" Value="false" />
    <CustomParameter Name="$enableSaveFile$" Value="false" />
    <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
+   <CustomParameter Name="$enableSelectContact$" Value="false" />
    <CustomParameter Name="$interfaceoption$" Value="2" />
    <CustomParameter Name="$hasviewmodel$" Value="true" />
    <CustomParameter Name="$viewmodel$" Value="" />
