@@ -20,20 +20,8 @@
   <title>More - UI Presentation</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface presentations.</summary>
-  <releaseNotes>• Added missing theme content for Windows Store and Windows Phone controls
-• Added *.pri files for Windows Store and Windows Phone
-• 'More.UI.Extensions' package dependency was removed
-• UI extensions were refactored into the 'More.UI' package
-• Added async extension methods for WebAuthenticateInteractionRequest
-• Fixed MessageBoxAction to map against INamedCommand Id rather than Name
-• Fixed IUICommand mapping for Windows Phone; adapters must be of type UICommand
-• Refactored implementation of ContinuationManager
-• Removed ContinuableInterationRequest&lt;T&gt; for Windows Phone; refactored to 'More.UI'
-• Added NavigationBehavior for Windows Store and Windows Phone
-• Removed BackBehavior; supplanted by NavigationBehavior
-• Added LocalSessionStateManager for Windows Store and Windows Phone
-• Added session state support in FrameShellViewBase for Windows Store and Windows Phone
-• Fixed continuation support in FrameShellViewBase for Windows Store and Windows Phone</releaseNotes>
+  <releaseNotes>• Fixed TextInputDialog modality issue
+• Updated TextInputDialog default XAML template for better theming support</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

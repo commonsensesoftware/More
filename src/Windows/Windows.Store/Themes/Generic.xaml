@@ -3,10 +3,175 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:Local="using:More.Windows.Controls">
 
+ <ResourceDictionary.ThemeDictionaries>
+  
+  <ResourceDictionary x:Key="Default">
+
+   <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonBackgroundThemeBrush">#FF353535</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonBorderThemeBrush">#FF353535</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPointerOverBackgroundThemeBrush">#FF727272</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPointerOverForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedBackgroundThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedBorderThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledBackgroundThemeBrush">#66CACACA</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledBorderThemeBrush">#1A000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledForegroundThemeBrush">#66000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalFocusVisualWhiteStrokeThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalFocusVisualBlackStrokeThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalTextBoxBorderThemeBrush">#A3000000</SolidColorBrush>
+
+  </ResourceDictionary>
+  
+  <ResourceDictionary x:Key="Light">
+
+   <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonBackgroundThemeBrush">#FF353535</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonBorderThemeBrush">#FF353535</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPointerOverBackgroundThemeBrush">#FF727272</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPointerOverForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedBackgroundThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedBorderThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledBackgroundThemeBrush">#66CACACA</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledBorderThemeBrush">#1A000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledForegroundThemeBrush">#66000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalFocusVisualWhiteStrokeThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalFocusVisualBlackStrokeThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalTextBoxBorderThemeBrush">#A3000000</SolidColorBrush>
+   
+  </ResourceDictionary>
+  
+  <ResourceDictionary x:Key="Dark">
+
+   <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonBackgroundThemeBrush">#FF353535</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonBorderThemeBrush">#FF353535</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPointerOverBackgroundThemeBrush">#FF727272</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPointerOverForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedBackgroundThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedBorderThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonPressedForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledBackgroundThemeBrush">#66CACACA</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledBorderThemeBrush">#1A000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonDisabledForegroundThemeBrush">#66000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalFocusVisualWhiteStrokeThemeBrush">#FFFFFFFF</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalFocusVisualBlackStrokeThemeBrush">#FF000000</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalTextBoxBorderThemeBrush">#A3000000</SolidColorBrush>
+
+  </ResourceDictionary>
+  
+ </ResourceDictionary.ThemeDictionaries>
+
  <Style x:Key="DefaultDialogButton" TargetType="Button">
   <Setter Property="Margin" Value="4,0,0,0" />
  </Style>
- 
+
+ <Style x:Key="ModalDialogButton" TargetType="Button">
+  <Setter Property="Foreground" Value="{ThemeResource ModalButtonForegroundThemeBrush}" />
+  <Setter Property="Background" Value="{ThemeResource ModalButtonBackgroundThemeBrush}" />
+  <Setter Property="BorderBrush" Value="{ThemeResource ModalButtonBorderThemeBrush}" />
+  <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}" />
+  <Setter Property="MinWidth" Value="95" />
+  <Setter Property="Margin" Value="4,0,0,0" />
+  <Setter Property="Padding" Value="12,4,12,4" />
+  <Setter Property="HorizontalAlignment" Value="Left" />
+  <Setter Property="VerticalAlignment" Value="Center" />
+  <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+  <Setter Property="FontWeight" Value="SemiBold" />
+  <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="Button">
+     <Grid>
+      <VisualStateManager.VisualStateGroups>
+       <VisualStateGroup x:Name="CommonStates">
+        <VisualState x:Name="Normal" />
+        <VisualState x:Name="PointerOver">
+         <Storyboard>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="Background">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonPointerOverBackgroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonPointerOverForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Pressed">
+         <Storyboard>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="Background">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonPressedBackgroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonPressedBorderThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonPressedForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Disabled">
+         <Storyboard>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="Background">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonDisabledBackgroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonDisabledBorderThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonDisabledForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+       </VisualStateGroup>
+       <VisualStateGroup x:Name="FocusStates">
+        <VisualState x:Name="Focused">
+         <Storyboard>
+          <DoubleAnimation Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
+          <DoubleAnimation Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Unfocused" />
+        <VisualState x:Name="PointerFocused" />
+       </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Margin="3">
+       <ContentPresenter x:Name="ContentPresenter"
+                           Content="{TemplateBinding Content}"
+                           ContentTransitions="{TemplateBinding ContentTransitions}"
+                           ContentTemplate="{TemplateBinding ContentTemplate}"
+                           Margin="{TemplateBinding Padding}"
+                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                           AutomationProperties.AccessibilityView="Raw"/>
+      </Border>
+      <Rectangle x:Name="FocusVisualWhite"
+                   IsHitTestVisible="False"
+                   Stroke="{ThemeResource ModalFocusVisualWhiteStrokeThemeBrush}"
+                   StrokeEndLineCap="Square"
+                   StrokeDashArray="1,1"
+                   Opacity="0"
+                   StrokeDashOffset="1.5" />
+      <Rectangle x:Name="FocusVisualBlack"
+                   IsHitTestVisible="False"
+                   Stroke="{ThemeResource ModalFocusVisualBlackStrokeThemeBrush}"
+                   StrokeEndLineCap="Square"
+                   StrokeDashArray="1,1"
+                   Opacity="0"
+                   StrokeDashOffset="0.5" />
+     </Grid>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
+ </Style>
+
  <Style TargetType="Local:TextInputDialog">
   <Setter Property="Padding" Value="10" />
   <Setter Property="IsTabStop" Value="false" />
@@ -14,7 +179,8 @@
   <Setter Property="VerticalAlignment" Value="Center" />
   <Setter Property="HorizontalContentAlignment" Value="Stretch" />
   <Setter Property="VerticalContentAlignment" Value="Stretch" />
-  <Setter Property="Background" Value="#FF3C3C3C" />
+  <Setter Property="Foreground" Value="{ThemeResource ModalForegroundThemeBrush}" />
+  <Setter Property="Background" Value="{ThemeResource ModalBackgroundThemeBrush}" />
   <Setter Property="BorderThickness" Value="0" />
   <Setter Property="BorderBrush" Value="Transparent" />
   <Setter Property="Template">
@@ -40,7 +206,7 @@
          </Style>
         </ContentPresenter.Resources>
        </ContentPresenter>
-       <TextBox x:Name="InputTextBox" Grid.Row="2" />
+       <TextBox x:Name="InputTextBox" BorderBrush="{ThemeResource ModalTextBoxBorderThemeBrush}" Grid.Row="2" />
        <ItemsControl ItemsSource="{Binding Commands, RelativeSource={RelativeSource TemplatedParent}}" Margin="0,12,0,0" Grid.Row="3">
         <ItemsControl.ItemsPanel>
          <ItemsPanelTemplate>
@@ -49,7 +215,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
          <DataTemplate>
-          <Button Style="{StaticResource DefaultDialogButton}" Content="{Binding Name}" Command="{Binding}" />
+          <Button Style="{StaticResource ModalDialogButton}" Content="{Binding Name}" Command="{Binding}" />
          </DataTemplate>
         </ItemsControl.ItemTemplate>
        </ItemsControl>

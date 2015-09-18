@@ -208,6 +208,7 @@
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="System.Windows.Input\ICommandExtensions.cs" />
+    <Compile Include="Windows.Controls\InputDialogT.cs" />
     <Compile Include="Windows.Data\ShareEventArgs.cs" />
     <Compile Include="Windows.Interactivity\ApplicationSetting.cs" />
     <Compile Include="Windows.Interactivity\CredentialAction.cs" />

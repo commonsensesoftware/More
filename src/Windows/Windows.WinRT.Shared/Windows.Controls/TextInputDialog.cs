@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using global::Windows.Foundation;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
 

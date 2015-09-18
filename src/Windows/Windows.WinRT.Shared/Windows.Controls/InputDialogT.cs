@@ -1,9 +1,8 @@
 ﻿namespace More.Windows.Controls
 {
-    using More.Windows.Input;
+    using Input;
     using System;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -12,12 +11,12 @@
     using System.Threading;
     using System.Threading.Tasks;
     using global::Windows.Foundation;
-    using global::Windows.System;
+    using global::Windows.UI;
     using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Controls.Primitives;
-    using global::Windows.UI.Xaml.Input;
+    using global::Windows.UI.Xaml.Media;
+    using global::Windows.UI.Xaml.Shapes;
     using Key = global::Windows.System.VirtualKey;
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
 
@@ -26,7 +25,7 @@
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> of response.</typeparam>
     [CLSCompliant( false )]
-    public abstract class InputDialog<T> : ContentControl where T : class
+    public abstract partial class InputDialog<T> : ContentControl where T : class
     {
         private sealed class CommandCollection : ObservableCollection<INamedCommand>
         {
@@ -155,37 +154,21 @@
             }
         }
 
-        private static Window Window
-        {
-            get
-            {
-#if NETFX_CORE
-                return Window.Current;
-#else
-                return CoreWindow.GetForCurrentThread();
-#endif
-            }
-        }
-
         private void OnWindowSizeChanged( object sender, WindowSizeChangedEventArgs e ) => ArrangePopupContent( e.Size );
-
-        private void ArrangePopupContent( Size size )
-        {
-            Width = size.Width;
-            popup.VerticalOffset = Math.Max( ( size.Height - ActualHeight ), 0d ) / 2d;
-        }
 
         private Popup CreatePopup()
         {
             Contract.Ensures( Contract.Result<Popup>() != null );
 
-            var newPopup = new Popup()
-            {
-                Child = this,
-#if NETFX_CORE
-                IsLightDismissEnabled = true
-#endif
-            };
+            var newPopup = new Popup();
+            var grid = new Grid();
+            var modalVeneer = new Rectangle() { Fill = new SolidColorBrush( Colors.Transparent ) };
+
+            // this will prevent any content underneath the popup from receiving input,
+            // which could cancel the dialog or have other unintended behavior
+            grid.Children.Add( modalVeneer );
+            grid.Children.Add( this );
+            newPopup.Child = grid;
 
             newPopup.Loaded += ( s, e ) =>
             {
@@ -244,6 +227,7 @@
         {
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
+            completionSource?.TrySetResult( null );
             completionSource = new TaskCompletionSource<T>();
             token.Register(
                 () =>
@@ -262,13 +246,11 @@
         {
             Arg.GreaterThanOrEqualTo( commandIndex, -1, nameof( commandIndex ) );
 
-            Close();
-
             var accepted = commandIndex == DefaultCommandIndex;
             var response = accepted ? Response : null;
 
-            if ( completionSource != null )
-                completionSource.TrySetResult( response );
+            Close();
+            completionSource?.TrySetResult( response );
         }
 
         internal void ExecuteCommand( int commandIndex )

@@ -188,6 +188,7 @@
     </Compile>
     <Compile Include="Composition\FrameShellViewBase.cs" />
     <Compile Include="System.Windows.Input\ICommandExtensions.cs" />
+    <Compile Include="Windows.Controls\InputDialogT.cs" />
     <Compile Include="Windows.Interactivity\NavigationBehavior.cs" />
     <Compile Include="Windows.Interactivity\ContentDialogAction.cs" />
     <Compile Include="Windows.Interactivity\OpenFileAction.cs" />
