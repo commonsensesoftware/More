@@ -88,6 +88,7 @@
     <Compile Include="More\ServiceProviderAdapterTest.cs" />
     <Compile Include="More\ServiceTypeAssemblerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\ComponentModel.DataAnnotations\ValidationAdapterExtensionsTest.cs" />
     <Compile Include="System\ComponentModel\IServiceContainerExtensionsTest.cs" />
     <Compile Include="System\ComponentModel\ISupportInitializeExtensionsTest.cs" />
     <Compile Include="System\DateTimeExtensionsTest.cs" />

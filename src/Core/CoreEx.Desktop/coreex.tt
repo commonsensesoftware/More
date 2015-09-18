@@ -18,10 +18,7 @@
   <title>More - Extensions</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices that contains platform-specific extensions.</summary>
-  <releaseNotes>• Added special folder support to the FileSystem implementation for Windows Store and Windows Phone
-• Fixed Desktop IO adapters to throw exception for missing folders and files
-• Refactored IApplicationState Activation from to ILaunchActivatedEventArgs to IActivatedEventArgs
-• Added *.pri files for Windows Store and Windows Phone</releaseNotes>
+  <releaseNotes>• Added Adapt extension methods for adaptable Data Annotations types</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
