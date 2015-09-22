@@ -10,3 +10,4 @@
 [assembly: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "System", Justification = "Contains BCL extensions." )]
 [assembly: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "System.ComponentModel", Justification = "Contains BCL extensions." )]
 [assembly: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "System.Globalization", Justification = "Contains BCL extensions." )]
+[assembly: SuppressMessage( "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "System.ComponentModel.DataAnnotations", Justification = "Aligns with BCL namespaces." )]

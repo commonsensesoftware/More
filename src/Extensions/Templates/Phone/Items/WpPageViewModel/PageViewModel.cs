@@ -216,7 +216,7 @@ $endif$$if$ ($showTips$ == true)
 
         private async void OnSelectContact( object parameter )
         {
-            var contact = await selectContact.RequestSingleContactAsync();
+            var contact = await selectContact.RequestSingleContactAsync( ContactFieldType.Email );
 
             if ( contact == null )
                 return;$endif$$if$ ($showSelectContactTips$ == true)

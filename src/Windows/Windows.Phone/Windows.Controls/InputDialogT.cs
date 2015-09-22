@@ -16,12 +16,5 @@
                 return CoreWindow.GetForCurrentThread();
             }
         }
-
-        private void ArrangePopupContent( Size size )
-        {
-            // align top, full width
-            Width = size.Width;
-            popup.VerticalOffset = 0;
-        }
     }
 }
