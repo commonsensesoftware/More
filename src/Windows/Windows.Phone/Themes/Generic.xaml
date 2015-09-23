@@ -7,56 +7,155 @@
 
   <ResourceDictionary x:Key="Default">
 
-   <FontFamily x:Key="ModalThemeFontFamily">Segoe UI</FontFamily>
-   <FontFamily x:Key="ModalTitleThemeFontFamily">Segoe UI Semibold</FontFamily>
-
-   <FontWeight x:Key="ModalTitleThemeFontWeight">Normal</FontWeight>
-   <FontWeight x:Key="ModalMessageThemeFontWeight">Normal</FontWeight>
-
-   <x:Double x:Key="ModalTitleThemeFontSize">30</x:Double>
-   <x:Double x:Key="ModalMessageThemeFontSize">20</x:Double>
-   
    <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
    <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FF1F1F1F</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonBackgroundThemeBrush" Color="Transparent" />
+   <SolidColorBrush x:Key="ModalButtonBorderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonDisabledBackgroundThemeBrush" Color="Transparent" />
+   <SolidColorBrush x:Key="ModalButtonDisabledBorderThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonDisabledForegroundThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPointerOverBackgroundThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPointerOverForegroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPressedBackgroundThemeBrush" Color="{ThemeResource SystemColorControlAccentColor}" />
+   <SolidColorBrush x:Key="ModalButtonPressedForegroundThemeBrush" Color="#FFFFFFFF" />
 
   </ResourceDictionary>
 
   <ResourceDictionary x:Key="Light">
 
-   <FontFamily x:Key="ModalThemeFontFamily">Segoe UI</FontFamily>
-   <FontFamily x:Key="ModalTitleThemeFontFamily">Segoe UI Semibold</FontFamily>
-
-   <FontWeight x:Key="ModalTitleThemeFontWeight">Normal</FontWeight>
-   <FontWeight x:Key="ModalMessageThemeFontWeight">Normal</FontWeight>
-
-   <x:Double x:Key="ModalTitleThemeFontSize">30</x:Double>
-   <x:Double x:Key="ModalMessageThemeFontSize">20</x:Double>
-
    <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
    <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FF1F1F1F</SolidColorBrush>
-
+   <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonBackgroundThemeBrush" Color="Transparent" />
+   <SolidColorBrush x:Key="ModalButtonBorderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonDisabledBackgroundThemeBrush" Color="Transparent" />
+   <SolidColorBrush x:Key="ModalButtonDisabledBorderThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonDisabledForegroundThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPointerOverBackgroundThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPointerOverForegroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPressedBackgroundThemeBrush" Color="{ThemeResource SystemColorControlAccentColor}" />
+   <SolidColorBrush x:Key="ModalButtonPressedForegroundThemeBrush" Color="#FFFFFFFF" />
+   
   </ResourceDictionary>
 
   <ResourceDictionary x:Key="Dark">
 
-   <FontFamily x:Key="ModalThemeFontFamily">Segoe UI</FontFamily>
-   <FontFamily x:Key="ModalTitleThemeFontFamily">Segoe UI Semibold</FontFamily>
-
-   <FontWeight x:Key="ModalTitleThemeFontWeight">Normal</FontWeight>
-   <FontWeight x:Key="ModalMessageThemeFontWeight">Normal</FontWeight>
-
-   <x:Double x:Key="ModalTitleThemeFontSize">30</x:Double>
-   <x:Double x:Key="ModalMessageThemeFontSize">20</x:Double>
-
    <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
    <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FF1F1F1F</SolidColorBrush>
+   <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonBackgroundThemeBrush" Color="Transparent" />
+   <SolidColorBrush x:Key="ModalButtonBorderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonDisabledBackgroundThemeBrush" Color="Transparent" />
+   <SolidColorBrush x:Key="ModalButtonDisabledBorderThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonDisabledForegroundThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPointerOverBackgroundThemeBrush" Color="#73FFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPointerOverForegroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalButtonPressedBackgroundThemeBrush" Color="{ThemeResource SystemColorControlAccentColor}" />
+   <SolidColorBrush x:Key="ModalButtonPressedForegroundThemeBrush" Color="#FFFFFFFF" />
 
   </ResourceDictionary>
 
  </ResourceDictionary.ThemeDictionaries>
 
- <Style x:Key="DefaultDialogButton" TargetType="Button">
-  <Setter Property="Margin" Value="4,0,0,0" />
+ <FontFamily x:Key="ModalThemeFontFamily">Segoe WP</FontFamily>
+ <FontFamily x:Key="ModalTitleThemeFontFamily">Segoe WP Semibold</FontFamily>
+
+ <FontWeight x:Key="ModalButtonFontWeight">Semibold</FontWeight>
+
+ <Thickness x:Key="ModalBorderThickness">2.5</Thickness>
+ <Thickness x:Key="ModalTouchTargetOverhang">0,9.5</Thickness>
+ <Thickness x:Key="ModalTouchTargetLargeOverhang">0,16</Thickness>
+ <Thickness x:Key="ModalButtonContentPadding">9.5,0,9.5,3.5</Thickness>
+
+ <x:Double x:Key="ModalStrokeThickness">2.5</x:Double>
+ <x:Double x:Key="ModalButtonMinWidth">109</x:Double>
+ <x:Double x:Key="ModalButtonMinHeight">57.5</x:Double>
+ <x:Double x:Key="ModalTextFontSize">18.14</x:Double>
+ <x:Double x:Key="ModalTitleThemeFontSize">29.86</x:Double>
+
+ <Style  x:Key="ModalDialogButton" TargetType="Button">
+  <Setter Property="Background" Value="{ThemeResource ModalButtonBackgroundThemeBrush}" />
+  <Setter Property="BorderBrush" Value="{ThemeResource ModalButtonBorderThemeBrush}" />
+  <Setter Property="Foreground" Value="{ThemeResource ModalButtonForegroundThemeBrush}" />
+  <Setter Property="BorderThickness" Value="{ThemeResource ModalBorderThickness}" />
+  <Setter Property="FontFamily" Value="{ThemeResource ModalThemeFontFamily}" />
+  <Setter Property="FontWeight" Value="{ThemeResource ModalButtonFontWeight}" />
+  <Setter Property="FontSize" Value="{ThemeResource ModalTextFontSize}" />
+  <Setter Property="Padding" Value="{ThemeResource ModalButtonContentPadding}" />
+  <Setter Property="MinHeight" Value="{ThemeResource ModalButtonMinHeight}" />
+  <Setter Property="MinWidth" Value="{ThemeResource ModalButtonMinWidth}" />
+  <Setter Property="HorizontalAlignment" Value="Left" />
+  <Setter Property="VerticalAlignment" Value="Center" />
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="Button">
+     <Grid x:Name="Grid" Background="Transparent">
+      <VisualStateManager.VisualStateGroups>
+       <VisualStateGroup x:Name="CommonStates">
+        <VisualState x:Name="Normal" />
+        <VisualState x:Name="PointerOver" />
+        <VisualState x:Name="Pressed">
+         <Storyboard>
+          <PointerDownThemeAnimation Storyboard.TargetName="Grid" />
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonPressedForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="Background">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonPressedBackgroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Disabled">
+         <Storyboard>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonDisabledForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonDisabledBorderThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="Background">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalButtonDisabledBackgroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+        <VisualStateGroup.Transitions>
+         <VisualTransition From="Pressed" To="PointerOver">
+          <Storyboard>
+           <PointerUpThemeAnimation Storyboard.TargetName="Grid" />
+          </Storyboard>
+         </VisualTransition>
+         <VisualTransition From="PointerOver" To="Normal">
+          <Storyboard>
+           <PointerUpThemeAnimation Storyboard.TargetName="Grid" />
+          </Storyboard>
+         </VisualTransition>
+         <VisualTransition From="Pressed" To="Normal">
+          <Storyboard>
+           <PointerUpThemeAnimation Storyboard.TargetName="Grid" />
+          </Storyboard>
+         </VisualTransition>
+        </VisualStateGroup.Transitions>
+       </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Border x:Name="Border"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              Background="{TemplateBinding Background}"
+              Margin="{ThemeResource ModalTouchTargetOverhang}">
+       <ContentPresenter x:Name="ContentPresenter"
+                         Foreground="{TemplateBinding Foreground}"
+                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                         Margin="{TemplateBinding Padding}"
+                         Content="{TemplateBinding Content}"
+                         ContentTemplate="{TemplateBinding ContentTemplate}"
+                         AutomationProperties.AccessibilityView="Raw"/>
+      </Border>
+     </Grid>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
  </Style>
 
  <Style TargetType="Local:TextInputDialog">
@@ -86,18 +185,16 @@
         <RowDefinition Height="Auto" />
        </Grid.RowDefinitions>
        <TextBlock TextWrapping="Wrap"
-                  Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}"
+                  Text="{TemplateBinding Title}"
                   Foreground="{TemplateBinding Foreground}"
                   FontFamily="{ThemeResource ModalTitleThemeFontFamily}"
-                  FontWeight="{ThemeResource ModalTitleThemeFontWeight}"
                   FontSize="{ThemeResource ModalTitleThemeFontSize}" />
        <ContentPresenter Grid.Row="1"
                          Margin="0,10,0,10"
                          Foreground="{TemplateBinding Foreground}"
                          FontFamily="{TemplateBinding FontFamily}"
-                         FontWeight="{ThemeResource ModalMessageThemeFontWeight}"
-                         FontSize="{ThemeResource ModalMessageThemeFontSize}"
-                         Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}">
+                         FontSize="{ThemeResource ModalTextFontSize}"
+                         Content="{TemplateBinding Content}">
         <ContentPresenter.Resources>
          <Style TargetType="TextBlock">
           <Setter Property="TextWrapping" Value="Wrap" />
@@ -114,7 +211,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
          <DataTemplate>
-          <Button Content="{Binding Name}" Command="{Binding}" Margin="10,0,0,0" />
+          <Button Style="{ThemeResource ModalDialogButton}" Content="{Binding Name}" Command="{Binding}" Margin="10,0,0,0" />
          </DataTemplate>
         </ItemsControl.ItemTemplate>
        </ItemsControl>

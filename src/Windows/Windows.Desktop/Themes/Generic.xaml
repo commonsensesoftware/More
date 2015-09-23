@@ -3,10 +3,8 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:Local="clr-namespace:More.Windows.Controls">
 
- <Style x:Key="DefaultDialogButton" TargetType="Button">
-  <Setter Property="Height" Value="25" />
-  <Setter Property="MinWidth" Value="75" />
-  <Setter Property="Margin" Value="4,0,0,0" />
+ <Style x:Key="ModalDialogButton" TargetType="Button">
+  <Setter Property="MinWidth" Value="95" />
  </Style>
 
  <Style TargetType="Local:TextInputDialog" >
@@ -33,7 +31,7 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
        </Grid.RowDefinitions>
-       <ContentPresenter Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" Margin="0,0,0,3" VerticalAlignment="Top">
+       <ContentPresenter Content="{TemplateBinding Content}" Margin="0,0,0,3" VerticalAlignment="Top">
         <ContentPresenter.Resources>
          <Style TargetType="TextBlock">
           <Setter Property="TextWrapping" Value="Wrap" />
@@ -50,7 +48,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
          <DataTemplate>
-          <Button Style="{StaticResource DefaultDialogButton}" Content="{Binding Name}" Command="{Binding}" />
+          <Button Style="{StaticResource ModalDialogButton}" Content="{Binding Name}" Command="{Binding}" Margin="10,0,0,0" />
          </DataTemplate>
         </ItemsControl.ItemTemplate>
        </ItemsControl>
@@ -100,7 +98,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
          <DataTemplate>
-          <Button Style="{StaticResource DefaultDialogButton}" Content="{Binding Name}" Command="{Binding}" />
+          <Button Style="{StaticResource ModalDialogButton}" Content="{Binding Name}" Command="{Binding}" Margin="10,0,0,0" />
          </DataTemplate>
         </ItemsControl.ItemTemplate>
        </ItemsControl>
