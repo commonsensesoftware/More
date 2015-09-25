@@ -7,6 +7,18 @@
 
   <ResourceDictionary x:Key="Default">
 
+   <!-- modal dialog textbox -->
+   <SolidColorBrush x:Key="ModalTextBoxBackgroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxBorderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledBorderThemeBrush" Color="#40000000" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledForegroundThemeBrush" Color="#FFBFBFBF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledHeaderForegroundThemeBrush" Color="#40000000" />
+   <SolidColorBrush x:Key="ModalTextBoxForegroundHeaderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxForegroundThemeBrush" Color="#FF000000" />
+   <SolidColorBrush x:Key="ModalTextBoxPlaceholderTextThemeBrush" Color="#FF909090" />
+   <SolidColorBrush x:Key="ModalTextBoxFocusedBackgroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledBackgroundThemeBrush" Color="Transparent" />
+   <!-- modal dialog button -->
    <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
    <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FF1F1F1F</SolidColorBrush>
    <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush" Color="#FFFFFFFF" />
@@ -24,6 +36,18 @@
 
   <ResourceDictionary x:Key="Light">
 
+   <!-- modal dialog textbox -->
+   <SolidColorBrush x:Key="ModalTextBoxBackgroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxBorderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledBorderThemeBrush" Color="#40000000" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledForegroundThemeBrush" Color="#FFBFBFBF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledHeaderForegroundThemeBrush" Color="#40000000" />
+   <SolidColorBrush x:Key="ModalTextBoxForegroundHeaderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxForegroundThemeBrush" Color="#FF000000" />
+   <SolidColorBrush x:Key="ModalTextBoxPlaceholderTextThemeBrush" Color="#FF909090" />
+   <SolidColorBrush x:Key="ModalTextBoxFocusedBackgroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledBackgroundThemeBrush" Color="Transparent" />
+   <!-- modal dialog button -->
    <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
    <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FF1F1F1F</SolidColorBrush>
    <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush" Color="#FFFFFFFF" />
@@ -41,6 +65,18 @@
 
   <ResourceDictionary x:Key="Dark">
 
+   <!-- modal dialog textbox -->
+   <SolidColorBrush x:Key="ModalTextBoxBackgroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxBorderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledBorderThemeBrush" Color="#40000000" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledForegroundThemeBrush" Color="#FFBFBFBF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledHeaderForegroundThemeBrush" Color="#40000000" />
+   <SolidColorBrush x:Key="ModalTextBoxForegroundHeaderThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxForegroundThemeBrush" Color="#FF000000" />
+   <SolidColorBrush x:Key="ModalTextBoxPlaceholderTextThemeBrush" Color="#FF909090" />
+   <SolidColorBrush x:Key="ModalTextBoxFocusedBackgroundThemeBrush" Color="#FFFFFFFF" />
+   <SolidColorBrush x:Key="ModalTextBoxDisabledBackgroundThemeBrush" Color="Transparent" />
+   <!-- modal dialog button -->
    <SolidColorBrush x:Key="ModalForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
    <SolidColorBrush x:Key="ModalBackgroundThemeBrush">#FF1F1F1F</SolidColorBrush>
    <SolidColorBrush x:Key="ModalButtonForegroundThemeBrush" Color="#FFFFFFFF" />
@@ -73,6 +109,111 @@
  <x:Double x:Key="ModalButtonMinHeight">57.5</x:Double>
  <x:Double x:Key="ModalTextFontSize">18.14</x:Double>
  <x:Double x:Key="ModalTitleThemeFontSize">29.86</x:Double>
+
+ <Style x:Key="ModalTextBox" TargetType="TextBox">
+  <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}" />
+  <Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}" />
+  <Setter Property="Foreground" Value="{ThemeResource ModalTextBoxForegroundThemeBrush}" />
+  <Setter Property="SelectionHighlightColor" Value="{ThemeResource TextSelectionHighlightColorThemeBrush}" />
+  <Setter Property="Background" Value="{ThemeResource ModalTextBoxBackgroundThemeBrush}" />
+  <Setter Property="BorderBrush" Value="{ThemeResource ModalTextBoxBorderThemeBrush}" />
+  <Setter Property="BorderThickness" Value="{ThemeResource TextControlBorderThemeThickness}" />
+  <Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}" />
+  <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}" />
+  <Setter Property="TextWrapping" Value="NoWrap" />
+  <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto" />
+  <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto" />
+  <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+  <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+  <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False" />
+  <Setter Property="Padding" Value="{ThemeResource TextControlThemePadding}" />
+  <Setter Property="Margin" Value="{ThemeResource TextControlMarginThemeThickness}" />
+  <Setter Property="VerticalAlignment" Value="Top" />
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="TextBox">
+     <Grid Background="Transparent">
+      <VisualStateManager.VisualStateGroups>
+       <VisualStateGroup x:Name="CommonStates">
+        <VisualState x:Name="Disabled">
+         <Storyboard>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="Background">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalTextBoxDisabledBackgroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="BorderBrush">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalTextBoxDisabledBorderThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalTextBoxDisabledForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextContentPresenter" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalTextBoxDisabledForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HeaderContentPresenter" Storyboard.TargetProperty="Foreground">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalTextBoxDisabledHeaderForegroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Normal">
+         <Storyboard>
+          <DoubleAnimation Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="Opacity" Duration="0" To="{ThemeResource TextControlBorderThemeOpacity}" />
+         </Storyboard>
+        </VisualState>
+        <VisualState x:Name="Focused">
+         <Storyboard>
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="BorderBrush">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextSelectionHighlightColorThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+          <DoubleAnimation Storyboard.TargetName="PlaceholderTextContentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To="0" />
+          <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="Background">
+           <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ModalTextBoxFocusedBackgroundThemeBrush}" />
+          </ObjectAnimationUsingKeyFrames>
+         </Storyboard>
+        </VisualState>
+       </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Grid.RowDefinitions>
+       <RowDefinition Height="Auto"/>
+       <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Border x:Name="BorderElement"
+              Grid.Row="1"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}" />
+      <ContentPresenter x:Name="HeaderContentPresenter"
+                        Grid.Row="0"
+                        Style="{StaticResource HeaderContentPresenterStyle}"
+                        Margin="{ThemeResource TextControlHeaderMarginThemeThickness}"
+                        Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" />
+      <ScrollViewer x:Name="ContentElement"
+                    Grid.Row="1"
+                    MinHeight="{ThemeResource TextControlThemeMinHeight}"
+                    HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                    HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                    VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                    VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                    IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
+                    IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+                    IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+                    Margin="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}"
+                    IsTabStop="False"
+                    ZoomMode="Disabled"
+                    AutomationProperties.AccessibilityView="Raw"/>
+      <ContentControl x:Name="PlaceholderTextContentPresenter"
+                      Grid.Row="1"
+                      Foreground="{ThemeResource ModalTextBoxPlaceholderTextThemeBrush}"
+                      FontSize="{ThemeResource ContentControlFontSize}"
+                      Margin="{TemplateBinding BorderThickness}"
+                      Padding="{TemplateBinding Padding}"
+                      IsTabStop="False"
+                      Content="{TemplateBinding PlaceholderText}" />
+     </Grid>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
+ </Style>
 
  <Style  x:Key="ModalDialogButton" TargetType="Button">
   <Setter Property="Background" Value="{ThemeResource ModalButtonBackgroundThemeBrush}" />
@@ -191,10 +332,11 @@
                   FontSize="{ThemeResource ModalTitleThemeFontSize}" />
        <ContentPresenter Grid.Row="1"
                          Margin="0,10,0,10"
+                         Content="{TemplateBinding Content}"
+                         ContentTemplate="{TemplateBinding ContentTemplate}"
                          Foreground="{TemplateBinding Foreground}"
                          FontFamily="{TemplateBinding FontFamily}"
-                         FontSize="{ThemeResource ModalTextFontSize}"
-                         Content="{TemplateBinding Content}">
+                         FontSize="{ThemeResource ModalTextFontSize}">
         <ContentPresenter.Resources>
          <Style TargetType="TextBlock">
           <Setter Property="TextWrapping" Value="Wrap" />
@@ -202,7 +344,7 @@
          </Style>
         </ContentPresenter.Resources>
        </ContentPresenter>
-       <TextBox x:Name="InputTextBox" Grid.Row="2" />
+       <TextBox x:Name="InputTextBox" Grid.Row="2" Style="{ThemeResource ModalTextBox}" />
        <ItemsControl ItemsSource="{Binding Commands, RelativeSource={RelativeSource TemplatedParent}}" Margin="0,12,0,0" Grid.Row="3">
         <ItemsControl.ItemsPanel>
          <ItemsPanelTemplate>
@@ -211,7 +353,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
          <DataTemplate>
-          <Button Style="{ThemeResource ModalDialogButton}" Content="{Binding Name}" Command="{Binding}" Margin="10,0,0,0" />
+          <Button Margin="10,0,0,0" Style="{StaticResource ModalDialogButton}" Content="{Binding Name}" Command="{Binding}" />
          </DataTemplate>
         </ItemsControl.ItemTemplate>
        </ItemsControl>

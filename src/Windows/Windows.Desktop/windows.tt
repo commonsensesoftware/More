@@ -3,7 +3,7 @@
 <#@ parameter type="System.String" name="CoreExVersion" #>
 <#@ parameter type="System.String" name="UIVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
- <metadata>
+ <metadata minClientVersion="2.5">
   <id>$id$</id>
   <version>$version$</version>
   <authors>Chris Martinez</authors>
@@ -21,7 +21,8 @@
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface presentations.</summary>
   <releaseNotes>• Fixed TextInputDialog modality issue
-• Updated TextInputDialog default XAML template for better theming support</releaseNotes>
+• Updated TextInputDialog default XAML template for better theming support
+• Replaced use of SetResult with TrySetResult inside interaction request extensions</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

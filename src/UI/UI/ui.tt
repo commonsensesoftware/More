@@ -2,7 +2,7 @@
 <#@ output extension=".nuspec" #>
 <#@ parameter type="System.String" name="CoreVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
- <metadata>
+ <metadata minClientVersion="2.5">
   <id>$id$</id>
   <version>$version$</version>
   <authors>Chris Martinez</authors>
@@ -10,16 +10,7 @@
   <title>More - UI</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface applications.</summary>
-  <releaseNotes>• Refactored platform-specific extensions to be portable
-• Added WindowCloseInteraction
-• Added FileType
-• Added and refactored IContinuationManager
-• Added ContinuableInteractionRequest&lt;TInteraction, TContinuation&gt;
-• Added OpenFileInteractionRequest
-• Added SaveFileInteractionRequest
-• Added SelectFolderInteractionRequest
-• Added async extension methods for common InteractionRequest usage
-• Added ISessionStateManager</releaseNotes>
+  <releaseNotes>• Replaced use of SetResult with TrySetResult inside interaction request extensions</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

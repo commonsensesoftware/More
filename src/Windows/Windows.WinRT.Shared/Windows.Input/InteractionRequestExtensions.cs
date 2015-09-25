@@ -51,8 +51,8 @@
 
             // commands cannot be defined by caller in order to hook up completion
             interaction.Commands.Clear();
-            interaction.Commands.Add( new NamedCommand<IWebAuthenticationResult>( "OK", source.SetResult ) );
-            interaction.Commands.Add( new NamedCommand<IWebAuthenticationResult>( "Cancel", source.SetResult ) );
+            interaction.Commands.Add( new NamedCommand<IWebAuthenticationResult>( "OK", p => source.TrySetResult( p ) ) );
+            interaction.Commands.Add( new NamedCommand<IWebAuthenticationResult>( "Cancel", p => source.TrySetResult( p ) ) );
             interactionRequest.Request( interaction );
 
             return source.Task;
@@ -127,8 +127,8 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Select", selectButtonText, p => source.SetResult( interaction.Contacts.FirstOrDefault() ) ),
-                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.SetResult( null ) )
+                    new NamedCommand<object>( "Select", selectButtonText, p => source.TrySetResult( interaction.Contacts.FirstOrDefault() ) ),
+                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.TrySetResult( null ) )
                 }
             };
 
@@ -210,8 +210,8 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Select", selectButtonText, p => source.SetResult( interaction.Contacts ) ),
-                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.SetResult( NoContacts ) )
+                    new NamedCommand<object>( "Select", selectButtonText, p => source.TrySetResult( interaction.Contacts ) ),
+                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.TrySetResult( NoContacts ) )
                 }
             };
 

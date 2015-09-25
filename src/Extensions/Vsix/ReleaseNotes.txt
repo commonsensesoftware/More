@@ -1,7 +1,14 @@
-﻿Version 1.1 Release Notes
+﻿Version 1.1.0 Release Notes
 -----------------------------------------------------------------------------------------------------------------------
 • Updated templates to use C# 6.0 syntax
 • Added template wizard support for text input user interactions
 • Added template wizard support for contact selection user interactions (Windows Store and Windows Phone)
 • Updated templates to use new async extension methods for user interactions
 • Updated Portable and Windows Phone interaction templates to use portable implementations with continuations
+
+Version 1.1.1 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Fixed required ContactFieldType parameter for Windows Phone item template
+• Fixed project template wizards to correctly forward new user interaction parameters to item templates
+• Updated default dialog button styling for WPF item templates
+• Updated pre-packaged NuGet packages for project and item templates

@@ -64,8 +64,8 @@
         //    {
         //        Commands =
         //        {
-        //            new NamedCommand<object>( "Yes", p => source.SetResult( true ) ),
-        //            new NamedCommand<object>( "No", p => source.SetResult( false ) ),
+        //            new NamedCommand<object>( "Yes", p => source.TrySetResult( true ) ),
+        //            new NamedCommand<object>( "No", p => source.TrySetResult( false ) ),
         //        }
         //    };
         //

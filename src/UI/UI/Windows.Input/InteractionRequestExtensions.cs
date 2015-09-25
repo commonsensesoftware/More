@@ -49,7 +49,7 @@
                 DefaultCommandIndex = 0,
                 Commands =
                 {
-                    new NamedCommand<object>( "OK", acknowledgeButtonText, p => source.SetResult( null ) )
+                    new NamedCommand<object>( "OK", acknowledgeButtonText, p => source.TrySetResult( null ) )
                 }
             };
             interactionRequest.Request( interaction );
@@ -116,8 +116,8 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "OK",  acceptButtonText, p => source.SetResult( true ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.SetResult( false ) )
+                    new NamedCommand<object>( "OK",  acceptButtonText, p => source.TrySetResult( true ) ),
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( false ) )
                 }
             };
 
@@ -238,8 +238,8 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Open", acceptButtonText, p => source.SetResult( interaction.Files ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.SetResult( NoFiles ) )
+                    new NamedCommand<object>( "Open", acceptButtonText, p => source.TrySetResult( interaction.Files ) ),
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( NoFiles ) )
                 }
             };
 
@@ -315,8 +315,8 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Save", acceptButtonText, p => source.SetResult( interaction.SavedFile ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.SetResult( null ) )
+                    new NamedCommand<object>( "Save", acceptButtonText, p => source.TrySetResult( interaction.SavedFile ) ),
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) )
                 }
             };
 
@@ -389,8 +389,8 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "Select", acceptButtonText, p => source.SetResult( interaction.Folder ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.SetResult( null ) )
+                    new NamedCommand<object>( "Select", acceptButtonText, p => source.TrySetResult( interaction.Folder ) ),
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) )
                 }
             };
 
@@ -470,8 +470,8 @@
                 CancelCommandIndex = 1,
                 Commands =
                 {
-                    new NamedCommand<object>( "OK", acceptButtonText, p => source.SetResult( interaction.Response ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.SetResult( null ) )
+                    new NamedCommand<object>( "OK", acceptButtonText, p => source.TrySetResult( interaction.Response ) ),
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) )
                 }
             };
 
