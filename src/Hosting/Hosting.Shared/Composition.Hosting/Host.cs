@@ -30,7 +30,7 @@
         private readonly Lazy<List<ContainerConfigurationAction>> containerConfigurations = new Lazy<List<ContainerConfigurationAction>>( () => new List<ContainerConfigurationAction>() );
         private readonly List<Type> activityTypes = new List<Type>();
         private readonly Dictionary<Type, IActivityConfiguration> activityConfigurations = new Dictionary<Type, IActivityConfiguration>();
-        private readonly Lazy<CompositionHost> container;
+        private readonly Lazy<CompositionContext> container;
         private readonly Lazy<ConventionBuilder> conventionsHolder;
         private readonly Func<string, object> configSettingLocator;
         private bool disposed;
@@ -51,7 +51,7 @@
         {
             Arg.NotNull( configurationSettingLocator, nameof( configurationSettingLocator ) );
 
-            container = new Lazy<CompositionHost>( CreateContainer );
+            container = new Lazy<CompositionContext>( CreateContainer );
             conventionsHolder = new Lazy<ConventionBuilder>( GetConventions );
             configSettingLocator = configurationSettingLocator;
         }
@@ -73,13 +73,13 @@
         /// <summary>
         /// Gets the composition container for the host.
         /// </summary>
-        /// <value>A <see cref="CompositionHost"/> object.</value>
+        /// <value>A <see cref="CompositionContext"/> object.</value>
         [CLSCompliant( false )]
-        protected CompositionHost Container
+        protected CompositionContext Container
         {
             get
             {
-                Contract.Ensures( Contract.Result<CompositionHost>() != null );
+                Contract.Ensures( Contract.Result<CompositionContext>() != null );
                 CheckDisposed();
                 return container.Value;
             }
@@ -107,30 +107,33 @@
 
         partial void AddPlatformSpecificDefaultServices();
 
-
         /// <summary>
         /// Creates the underlying container.
         /// </summary>
-        /// <returns>The constructed <see cref="CompositionHost">container</see>.</returns>
+        /// <returns>The constructed <see cref="CompositionContext">container</see>.</returns>
         [CLSCompliant( false )]
         [SuppressMessage( "Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "This is maintainable method. Service containers and locators may have high coupling." )]
-        protected virtual CompositionHost CreateContainer()
+        protected virtual CompositionContext CreateContainer()
         {
-            Contract.Ensures( Contract.Result<CompositionHost>() != null );
+            Contract.Ensures( Contract.Result<CompositionContext>() != null );
 
             var conventions = conventionsHolder.Value;
             var config = Configuration;
             var part = new PartSpecification();
             var core = typeof( ServiceProvider ).GetTypeInfo().Assembly;
+#if !WEB
             var ui = typeof( IShellView ).GetTypeInfo().Assembly;
             var presentation = typeof( ShellViewBase ).GetTypeInfo().Assembly;
             var presentationTypes = presentation.ExportedTypes.Where( part.IsSatisfiedBy );
+#endif
             var host = typeof( Host ).GetTypeInfo().Assembly;
             var hostTypes = host.ExportedTypes.Where( part.IsSatisfiedBy );
 
             config.WithAssembly( core, conventions );
+#if !WEB
             config.WithAssembly( ui, conventions );
             config.WithParts( presentationTypes, conventions );
+#endif
             config.WithParts( hostTypes, conventions );
             config.WithDefaultConventions( conventions );
             config.WithProvider( new HostExportDescriptorProvider( this, nameof( Host ) ) );
@@ -258,7 +261,7 @@
             activityConfigurations.Clear();
 
             if ( container.IsValueCreated )
-                container.Value.Dispose();
+                ( container.Value as IDisposable )?.Dispose();
         }
 
         static partial void AddUISpecificConventions( ConventionBuilder builder );
@@ -284,8 +287,14 @@
 
             // build default conventions
             builder.ForTypesDerivedFrom<IActivity>().Export( b => b.AddMetadata( "ExportedType", t => t ) ).Export<IActivity>();
+
+#if WEB
+            builder.ForTypesMatching<IUnitOfWorkFactory>( unitOfWorkFactory.IsSatisfiedBy ).Export<IUnitOfWorkFactory>().Shared( Boundary.PerRequest );
+            builder.ForTypesMatching( dataAccess.IsSatisfiedBy ).ExportInterfaces( assembly.IsSatisfiedBy ).Shared( Boundary.PerRequest );
+#else
             builder.ForTypesMatching<IUnitOfWorkFactory>( unitOfWorkFactory.IsSatisfiedBy ).Export<IUnitOfWorkFactory>().Shared();
             builder.ForTypesMatching( dataAccess.IsSatisfiedBy ).ExportInterfaces( assembly.IsSatisfiedBy );
+#endif
             AddUISpecificConventions( builder );
             AddPlatformSpecificConventions( builder );
 

@@ -9,6 +9,7 @@
     <Import_RootNamespace>More</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Composition.Hosting\ContainerConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\CompositionContextServiceProvider.cs" />
   </ItemGroup>

@@ -9,7 +9,7 @@
     using System.Windows.Controls;
 
     /// <content>
-    /// Provides additional implementation specified to Windows Desktop applications.
+    /// Provides additional implementation specific to Windows Desktop applications.
     /// </content>
     public partial class Host
     {
