@@ -123,7 +123,7 @@
 
             container = configuration.CreateContainer();
 
-            var boundaryNames = new Dictionary<string, object> { { "SharingBoundaryNames", new[] { Boundary.HttpRequest, Boundary.DataConsistency, Boundary.UserIdentity } } };
+            var boundaryNames = new Dictionary<string, object> { { "SharingBoundaryNames", new[] { Boundary.PerRequest } } };
             var factoryContract = new CompositionContract( typeof( ExportFactory<CompositionContext> ), null, boundaryNames );
 
             requestScopeFactory = (ExportFactory<CompositionContext>) container.GetExport( factoryContract );

@@ -19,6 +19,8 @@
    <Word>Flyout</Word>
    <Word>Uneditable</Word>
    <Word>Continuable</Word>
+   <Word>Mvc</Word>
+   <Word>Api</Word>
   </Recognized>
   <DiscreteExceptions>
    <Term>Commonsense</Term>
@@ -32,11 +34,15 @@
    <Term>Flyout</Term>
    <Term>Uneditable</Term>
    <Term>Continuable</Term>
+   <Term>Mvc</Term>
+   <Term>Api</Term>
   </DiscreteExceptions>
  </Words>
  <Acronyms>
   <CasingExceptions>
    <Acronym>Dte</Acronym>
+   <Acronym>Mvc</Acronym>
+   <Acronym>Api</Acronym>
   </CasingExceptions>
  </Acronyms>
 </Dictionary>

@@ -145,12 +145,14 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Boundary.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConfigurationExportProvider.cs" />
     <Compile Include="ExportMetadata.cs" />
     <Compile Include="EnumConverter.cs" />
     <Compile Include="DefaultConverter.cs" />
+    <Compile Include="SharedPerRequestAttribute.cs" />
     <Compile Include="UserDefinedConverter.cs" />
     <Compile Include="StringConverterT.cs" />
     <Compile Include="TimeSpanConverter.cs" />

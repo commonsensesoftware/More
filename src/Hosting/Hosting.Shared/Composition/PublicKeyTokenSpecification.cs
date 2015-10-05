@@ -3,6 +3,7 @@
     using ComponentModel;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Reflection;
@@ -67,6 +68,7 @@
         /// </summary>
         /// <param name="item">The item to evaluate.</param>
         /// <returns>True if the specified <paramref name="item"/> matches the specification; otherwise, false.</returns>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public override bool IsSatisfiedBy( AssemblyName item )
         {
             Arg.NotNull( item, nameof( item ) );

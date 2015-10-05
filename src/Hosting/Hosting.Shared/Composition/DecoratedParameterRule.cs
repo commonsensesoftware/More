@@ -7,6 +7,7 @@
     using System.Diagnostics.Contracts;
     using System.Reflection;
     using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Represents a <see cref="IRule{T}">rule</see> for composing <see cref="ImportParameter">import parameters</see>.
@@ -14,7 +15,7 @@
     /// <remarks>This rule can be used to apply the contract name "Decorated" to matching import <see cref="Type">types</see>.</remarks>
     public class DecoratedParameterRule : IRule<ImportParameter>
     {
-        private readonly HashSet<TypeInfo> decoratedTypes;
+        private readonly HashSet<TypeInfo> decoratedTypes = new HashSet<TypeInfo>();
 
         /// <summary>
         /// Gets the contract name used for decorated imports.
@@ -60,6 +61,7 @@
         /// </summary>
         /// <param name="parameter">The imported <see cref="ParameterInfo">parameter</see>.</param>
         /// <param name="conventionBuilder">The <see cref="ImportConventionBuilder">convention builder</see> for the parameter.</param>
+        [CLSCompliant( false )]
         public void Evaluate( ParameterInfo parameter, ImportConventionBuilder conventionBuilder ) =>
             Evaluate( new ImportParameter( parameter, conventionBuilder ) );
 
@@ -67,6 +69,7 @@
         /// Evaluates the rule against the specified item.
         /// </summary>
         /// <param name="item">The item to evaluate.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public virtual void Evaluate( ImportParameter item )
         {
             Arg.NotNull( item, nameof( item ) );

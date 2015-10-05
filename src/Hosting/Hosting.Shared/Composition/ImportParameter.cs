@@ -19,6 +19,7 @@
         /// </summary>
         /// <param name="parameter">The imported <see cref="ParameterInfo">parameter</see>.</param>
         /// <param name="conventionBuilder">The <see cref="ImportConventionBuilder">convention builder</see> for the parameter.</param>
+        [CLSCompliant( false )]
         public ImportParameter( ParameterInfo parameter, ImportConventionBuilder conventionBuilder )
         {
             Arg.NotNull( parameter, nameof( parameter ) );
@@ -46,6 +47,7 @@
         /// Gets the convention builder for the imported parameter.
         /// </summary>
         /// <value>The <see cref="ImportConventionBuilder">convention builder</see> for the parameter.</value>
+        [CLSCompliant( false )]
         public ImportConventionBuilder ConventionBuilder
         {
             get

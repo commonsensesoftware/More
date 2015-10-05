@@ -1,12 +1,12 @@
 ﻿namespace More.Composition.Hosting
 {
     using ComponentModel;
-    using Owin;
     using System;
     using System.Collections.Generic;
     using System.Composition;
     using System.Composition.Hosting.Core;
     using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
 
@@ -19,16 +19,18 @@
         /// Initializes a new instance of the <see cref="Host"/> class.
         /// </summary>
         /// <param name="existing">The existing <see cref="Host">host</see> to initialize from.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected Host( Host existing )
+            : base( existing )
         {
             Arg.NotNull( existing, nameof( existing ) );
 
+            activityConfigurations = existing.activityConfigurations;
+            activityTypes = existing.activityTypes;
+            configSettingLocator = existing.configSettingLocator;
             configuration = existing.configuration;
             containerConfigurations = existing.containerConfigurations;
-            activityTypes = existing.activityTypes;
-            activityConfigurations = existing.activityConfigurations;
             conventionsHolder = existing.conventionsHolder;
-            configSettingLocator = existing.configSettingLocator;
 
             var boundaryNames = new Dictionary<string, object> { { "SharingBoundaryNames", new[] { Boundary.PerRequest } } };
             var contract = new CompositionContract( typeof( ExportFactory<CompositionContext> ), null, boundaryNames );
@@ -41,6 +43,7 @@
         /// Initializes a new instance of the current host with a lifetime that aligns to the current request.
         /// </summary>
         /// <returns>A new <see cref="Host">hsot</see> instance.</returns>
+        [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "New host must be disposed by the caller." )]
         public virtual Host CreatePerRequest()
         {
             Contract.Ensures( Contract.Result<Host>() != null );
@@ -56,12 +59,8 @@
         /// <summary>
         /// Runs the host using the specified application builder.
         /// </summary>
-        /// <param name="builder">The <see cref="IAppBuilder">application builder</see> the host will run with.</param>
-        /// <remarks>The default implementation will register itself as <see cref="HostMiddleware">middleware</see> with the application.</remarks>
-        public virtual void Run( IAppBuilder builder )
+        public virtual void Run()
         {
-            Arg.NotNull( builder, nameof( builder ) );
-
             // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )
                 ServiceProvider.SetCurrent( this );
@@ -73,9 +72,6 @@
             // set the default unit of work if unset
             if ( UnitOfWork.Provider == UnitOfWork.DefaultProvider )
                 UnitOfWork.Provider = new UnitOfWorkFactoryProvider( Container.GetExports<IUnitOfWorkFactory> );
-
-            // register ourself as middleware
-            builder.Use<HostMiddleware>( this );
         }
     }
 }
