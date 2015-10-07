@@ -1,10 +1,13 @@
 ﻿namespace More.Composition.Hosting
 {
     using ComponentModel;
+    using System;
+    using System.Collections.Generic;
     using System.Composition.Convention;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -33,6 +36,8 @@
         /// Runs the host.
         /// </summary>
         /// <param name="application">The <see cref="Application">application</see> associated with the host.</param>
+        /// <param name="hostedAssemblies">An <see cref="Array">array</see> of hosted, composable <see cref="Assembly">assemblies</see>.</param>
+        /// <remarks>The <see cref="Assembly">assembly</see> the <paramref name="application"/> is defined in is always added by default.</remarks>
         /// <example>This example demonstrates how to host a Windows Presentation Foundation (WPF) application.
         /// <code lang="C#">
         /// <![CDATA[
@@ -65,18 +70,64 @@
         /// ]]></code>
         /// </example>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
-        public virtual void Run( Application application )
+        public void Run( Application application, params Assembly[] hostedAssemblies )
         {
+            Arg.NotNull( application, nameof( application ) );
+            Arg.NotNull( hostedAssemblies, nameof( hostedAssemblies ) );
+            Run( application, hostedAssemblies.AsEnumerable() );
+        }
+
+        /// <summary>
+        /// Runs the host.
+        /// </summary>
+        /// <param name="application">The <see cref="Application">application</see> associated with the host.</param>
+        /// <param name="hostedAssemblies">An <see cref="IEnumerable{T}">sequence</see> of hosted, composable <see cref="Assembly">assemblies</see>.</param>
+        /// <remarks>The <see cref="Assembly">assembly</see> the <paramref name="application"/> is defined in is always added by default.</remarks>
+        /// <example>This example demonstrates how to host a Windows Presentation Foundation (WPF) application with explicitly hosted <see cref="Assembly">assemblies</see>.
+        /// <code lang="C#">
+        /// <![CDATA[
+        /// using System;
+        /// using System.ComponentModel;
+        /// using System.Composition;
+        /// using System.Composition.Hosting;
+        /// using System.Windows;
+        /// 
+        /// public class Program
+        /// {
+        ///     public class MyShellView : ShellViewBase
+        ///     {
+        ///     }
+        ///     
+        ///     public class ShowShellViewTask : ShowShellView<MyShellView>
+        ///     {
+        ///     }
+        ///     
+        ///     [STAThread]
+        ///     public static void Main()
+        ///     {
+        ///         using ( var host = new Host() )
+        ///         {
+        ///             host.Register<ShowShellView>();
+        ///             host.Run( new App(), new []{ type( MyExternalLib ).Assembly } );
+        ///         }
+        ///     }
+        /// }
+        /// ]]></code>
+        /// </example>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
+        public virtual void Run( Application application, IEnumerable<Assembly> hostedAssemblies )
+        {
+            Arg.NotNull( application, nameof( application ) );
+            Arg.NotNull( hostedAssemblies, nameof( hostedAssemblies ) );
+
             // HACK: WPF doesn't set the Application.Current property until an application object has been created.  This can cause composition issues.
             // Require this method to accept an application object to ensure it's set.  This also simplifies startup code.
 
-            Arg.NotNull( application, nameof( application ) );
+            // add hosted assemblies and guard against double registration (which can occur via Configure or using WithAppDomain)
+            var applicationAssembly = application.GetType().Assembly;
+            var assemblies = new HashSet<Assembly>( hostedAssemblies ) { applicationAssembly }.Where( a => !Configuration.IsRegistered( a ) ).ToArray();
 
-            var assembly = application.GetType().Assembly;
-
-            // guard against potential double registration (typically resultant of using WithAppDomain)
-            if ( !Configuration.IsRegistered( assembly ) )
-                Configuration.WithAssembly( assembly );
+            Configuration.WithAssemblies( assemblies );
 
             // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )

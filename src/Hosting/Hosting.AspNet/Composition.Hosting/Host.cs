@@ -9,6 +9,7 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Reflection;
 
     /// <content>
     /// Provides additional implementation specific to web applications.
@@ -59,8 +60,26 @@
         /// <summary>
         /// Runs the host using the specified application builder.
         /// </summary>
-        public virtual void Run()
+        /// <param name="hostedAssemblies">An <see cref="Array">array</see> of hosted, composable <see cref="Assembly">assemblies</see>.</param>
+        public void Run( params Assembly[] hostedAssemblies )
         {
+            Arg.NotNull( hostedAssemblies, nameof( hostedAssemblies ) );
+            Run( hostedAssemblies.AsEnumerable() );
+        }
+
+        /// <summary>
+        /// Runs the host using the specified application builder.
+        /// </summary>
+        /// <param name="hostedAssemblies">An <see cref="IEnumerable{T}">sequence</see> of hosted, composable <see cref="Assembly">assemblies</see>.</param>
+        public virtual void Run( IEnumerable<Assembly> hostedAssemblies )
+        {
+            Arg.NotNull( hostedAssemblies, nameof( hostedAssemblies ) );
+
+            // add hosted assemblies and guard against double registration (which can occur via Configure or using WithAppDomain)
+            var assemblies = new HashSet<Assembly>( hostedAssemblies ).Where( a => !Configuration.IsRegistered( a ) ).ToArray();
+
+            Configuration.WithAssemblies( assemblies );
+
             // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )
                 ServiceProvider.SetCurrent( this );

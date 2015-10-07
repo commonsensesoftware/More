@@ -19,7 +19,11 @@
   <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
  </TemplateData>
  <TemplateContent>
-  <References />
+  <References>
+   <Reference>
+    <Assembly>System.Configuration</Assembly>
+   </Reference>
+  </References>
   <ProjectItem ReplaceParameters="true">DbContext.cs</ProjectItem>
   <CustomParameters>
    <CustomParameter Name="_EFVersions" Value="EF6" />

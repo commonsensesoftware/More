@@ -35,6 +35,7 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)System.Composition\CompositionContextExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ExceptionMessage.resx">

@@ -518,7 +518,7 @@
 
             // return matching export
             object export;
-            Container.TryGetExport( serviceType, key, out export );
+            Container.SafeTryGetExport( serviceType, key, out export );
 
             return export;
 #endif
