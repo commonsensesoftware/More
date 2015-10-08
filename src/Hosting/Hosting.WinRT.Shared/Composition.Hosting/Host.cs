@@ -46,7 +46,7 @@
 
         static partial void AddPlatformSpecificConventions( ConventionBuilder builder )
         {
-            var assembly = new HostAssemblySpecification();
+            var assembly = new PublicKeyTokenSpecification( typeof( Host ) );
             var page = new PageSpecification();
             var userControl = new UserControlSpecification();
 

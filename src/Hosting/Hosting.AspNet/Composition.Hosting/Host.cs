@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Composition;
+    using System.Composition.Hosting;
     using System.Composition.Hosting.Core;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;

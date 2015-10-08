@@ -36,10 +36,10 @@
         ISpecification<T> Or( ISpecification<T> other );
 
         /// <summary>
-        /// Returns the logical compliment of the specification.
+        /// Returns the logical complement of the specification.
         /// </summary>
         /// <returns>A <see cref="ISpecification{T}">specification</see> object.</returns>
-        [SuppressMessage( "Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Not", Justification = "Represents a logical compliment operation." )]
+        [SuppressMessage( "Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Not", Justification = "Represents a logical complement operation." )]
         ISpecification<T> Not();
     }
 }

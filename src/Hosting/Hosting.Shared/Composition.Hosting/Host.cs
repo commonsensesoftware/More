@@ -278,7 +278,7 @@
         {
             Contract.Ensures( Contract.Result<ConventionBuilder>() != null );
 
-            var assembly = new HostAssemblySpecification();
+            var assembly = new PublicKeyTokenSpecification( typeof( Host ) );
             var unitOfWork = new InterfaceSpecification( typeof( IUnitOfWork<> ) );
             var unitOfWorkFactory = new InterfaceSpecification( typeof( IUnitOfWorkFactory ) );
             var repository = new InterfaceSpecification( typeof( IReadOnlyRepository<> ) );
@@ -287,7 +287,6 @@
 
             // build default conventions
             builder.ForTypesDerivedFrom<IActivity>().Export( b => b.AddMetadata( "ExportedType", t => t ) ).Export<IActivity>();
-
 #if WEB
             builder.ForTypesMatching<IUnitOfWorkFactory>( unitOfWorkFactory.IsSatisfiedBy ).Export<IUnitOfWorkFactory>().Shared( Boundary.PerRequest );
             builder.ForTypesMatching( dataAccess.IsSatisfiedBy ).ExportInterfaces( assembly.IsSatisfiedBy ).Shared( Boundary.PerRequest );

@@ -49,7 +49,7 @@
         }
 
         /// <summary>
-        /// Returns the logical compliment of the specification.
+        /// Returns the logical complement of the specification.
         /// </summary>
         /// <returns>A <see cref="ISpecification{T}">specification</see> object.</returns>
         public virtual ISpecification<T> Not()

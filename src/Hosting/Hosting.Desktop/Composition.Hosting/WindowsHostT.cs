@@ -1,6 +1,8 @@
 ﻿namespace More.Composition.Hosting
 {
     using System;
+    using System.Collections.Generic;
+    using System.Reflection;
     using System.Windows;
 
     /// <summary>
@@ -29,6 +31,8 @@
         /// Runs the host.
         /// </summary>
         /// <param name="application">The <see cref="Application">application</see> associated with the host.</param>
+        /// <param name="hostedAssemblies">An <see cref="IEnumerable{T}">sequence</see> of hosted, composable <see cref="Assembly">assemblies</see>.</param>
+        /// <remarks>The <see cref="Assembly">assembly</see> the <paramref name="application"/> is defined in is always added by default.</remarks>
         /// <example>This example demonstrates how to host a Windows Presentation Foundation (WPF) application.
         /// <code lang="C#">
         /// <![CDATA[
@@ -64,9 +68,10 @@
         /// }
         /// ]]></code>
         /// </example>
-        public override void Run( Application application )
+        public override void Run( Application application, IEnumerable<Assembly> hostedAssemblies )
         {
             Arg.NotNull( application, nameof( application ) );
+            Arg.NotNull( hostedAssemblies, nameof( hostedAssemblies ) );
 
             // setup export by convention
             Configuration.WithPart<ShowShellView<T>>();
@@ -76,7 +81,7 @@
             // have already been registered and re-registering would throw an exception
             WithConfiguration<ShowShellView<T>>();
             
-            base.Run( application );
+            base.Run( application, hostedAssemblies );
         }
     }
 }

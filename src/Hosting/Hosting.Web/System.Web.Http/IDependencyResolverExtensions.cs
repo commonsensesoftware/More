@@ -1,12 +1,12 @@
 ﻿namespace System.Web.Http
 {
+    using Collections.Generic;
+    using Dependencies;
+    using Diagnostics.CodeAnalysis;
+    using Diagnostics.Contracts;
+    using Linq;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Web.Http.Dependencies;
-    using IDependencyResolver = System.Web.Mvc.IDependencyResolver;
+    using IDependencyResolver = Mvc.IDependencyResolver;
 
     /// <summary>
     /// Provides extension methods for dependency resolvers

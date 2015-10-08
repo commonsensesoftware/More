@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading;
     using System.Web.Mvc;
+    using Web.Mvc;
     using static System.Web.HttpContext;
 
     /// <summary>
@@ -39,6 +40,7 @@
             Interlocked.CompareExchange( ref configuredHost, host, null );
 
             host.Configure( conventions.Configure );
+            host.AddService( typeof( IControllerFactory ), ( sc, t ) => new MvcControllerFactory() );
 
             DependencyResolver.SetResolver( new MvcDependencyResolver( GetHost ) );
             FilterProviders.Providers.Remove( FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().SingleOrDefault() );

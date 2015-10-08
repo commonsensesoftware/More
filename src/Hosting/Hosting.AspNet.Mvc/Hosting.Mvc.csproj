@@ -7,7 +7,7 @@
     <ProjectGuid>{B00890E5-5567-45E5-8936-679E7BFE9DEB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>More.Composition.Hosting</RootNamespace>
+    <RootNamespace>More</RootNamespace>
     <AssemblyName>More.Hosting.AspNet.Mvc</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -186,13 +186,13 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="MvcScopeDependencyResolver.cs" />
-    <Compile Include="MvcFilterAttributeFilterProvider.cs" />
-    <Compile Include="MvcModelBinderProvider.cs" />
-    <Compile Include="HostExtensions.cs" />
-    <Compile Include="MvcConventions.cs" />
+    <Compile Include="Web.Mvc\MvcControllerFactory.cs" />
+    <Compile Include="Web.Mvc\MvcDependencyResolver.cs" />
+    <Compile Include="Web.Mvc\MvcFilterAttributeFilterProvider.cs" />
+    <Compile Include="Web.Mvc\MvcModelBinderProvider.cs" />
+    <Compile Include="Composition.Hosting\HostExtensions.cs" />
+    <Compile Include="Composition.Hosting\MvcConventions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System.Web.Http\IDependencyResolverExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Composition\Composition\Composition.csproj">

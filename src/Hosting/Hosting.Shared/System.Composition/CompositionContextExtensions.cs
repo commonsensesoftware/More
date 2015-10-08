@@ -1,11 +1,13 @@
 ﻿namespace System.Composition
 {
+    using Diagnostics.CodeAnalysis;
     using Diagnostics.Contracts;
     using Hosting;
     using System;
 
     internal static class CompositionContextExtensions
     {
+        [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Not currently used on all platforms." )]
         internal static bool SafeTryGetExport( this CompositionContext context, Type exportType, string contractName, out object export )
         {
             Contract.Requires( context != null );

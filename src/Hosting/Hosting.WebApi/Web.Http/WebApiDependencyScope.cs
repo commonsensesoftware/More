@@ -1,5 +1,6 @@
-﻿namespace More.Composition.Hosting
+﻿namespace More.Web.Http
 {
+    using Composition.Hosting;
     using System;
     using System.Collections.Generic;
     using System.Web.Http.Dependencies;

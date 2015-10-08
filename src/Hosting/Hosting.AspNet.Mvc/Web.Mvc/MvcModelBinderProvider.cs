@@ -1,5 +1,6 @@
-﻿namespace More.Composition.Hosting
+﻿namespace More.Web.Mvc
 {
+    using Composition.Hosting;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;

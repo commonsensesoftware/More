@@ -1,14 +1,13 @@
-﻿namespace More.Composition.Hosting
+﻿namespace System.Composition.Hosting
 {
+    using Collections.Generic;
+    using Convention;
+    using Diagnostics.CodeAnalysis;
+    using Diagnostics.Contracts;
+    using IO;
+    using Linq;
+    using Reflection;
     using System;
-    using System.Collections.Generic;
-    using System.Composition.Convention;
-    using System.Composition.Hosting;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ContainerConfiguration"/> class.
@@ -57,7 +56,7 @@
         {
             Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ContainerConfiguration>() != null );
-            return configuration.WithPrivateAssemblies( (AttributedModelProvider) null );
+            return configuration.WithPrivateAssemblies( null );
         }
 
         /// <summary>
@@ -110,7 +109,7 @@
         {
             Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ContainerConfiguration>() != null );
-            return configuration.WithAppDomain( (AttributedModelProvider) null );
+            return configuration.WithAppDomain( null );
         }
 
         /// <summary>

@@ -15,9 +15,9 @@
     /// Represents a <see cref="ISpecification{T}">specification</see> for matching <see cref="AssemblyName">assembly names</see>
     /// according to their <see cref="M:AssemblyName.GetPublicKeyToken">public key token</see>.
     /// </summary>
-    public class PublicKeyTokenSpecification : SpecificationBase<AssemblyName>
+    public class PublicKeyTokenSpecification : SpecificationBase<AssemblyName>, ISpecification<Type>
     {
-        private readonly byte[] publicKeyToken;
+        private readonly Lazy<byte[]> publicKeyToken;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PublicKeyTokenSpecification"/> class.
@@ -34,7 +34,7 @@
         public PublicKeyTokenSpecification( string publicKeyToken )
         {
             if ( !string.IsNullOrEmpty( publicKeyToken ) )
-                this.publicKeyToken = FromHex( publicKeyToken );
+                this.publicKeyToken = new Lazy<byte[]>( () => FromHex( publicKeyToken ) );
         }
 
         /// <summary>
@@ -43,7 +43,27 @@
         /// <param name="publicKeyToken">The public key token in binary form.</param>
         public PublicKeyTokenSpecification( byte[] publicKeyToken )
         {
-            this.publicKeyToken = publicKeyToken;
+            this.publicKeyToken = new Lazy<byte[]>( () => publicKeyToken );
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PublicKeyTokenSpecification"/> class.
+        /// </summary>
+        /// <param name="assembly">The <see cref="Assembly">assembly</see> to get the public key token from.</param>
+        public PublicKeyTokenSpecification( Assembly assembly )
+        {
+            Arg.NotNull( assembly, nameof( assembly ) );
+            publicKeyToken = new Lazy<byte[]>( () => assembly.GetName().GetPublicKeyToken() );
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PublicKeyTokenSpecification"/> class.
+        /// </summary>
+        /// <param name="type">The <see cref="Type">type</see> to get the public key token from.</param>
+        public PublicKeyTokenSpecification( Type type )
+        {
+            Arg.NotNull( type, nameof( type ) );
+            publicKeyToken = new Lazy<byte[]>( () => type.GetTypeInfo().Assembly.GetName().GetPublicKeyToken() );
         }
 
         private static bool IsNull( byte[] array ) => array?.Length == 0;
@@ -75,13 +95,51 @@
 
             var otherPublicKeyToken = item.GetPublicKeyToken();
 
-            if ( IsNull( publicKeyToken ) )
+            if ( IsNull( publicKeyToken.Value ) )
                 return IsNull( otherPublicKeyToken );
 
             if ( IsNull( otherPublicKeyToken ) )
                 return false;
 
-            return publicKeyToken.SequenceEqual( otherPublicKeyToken );
+            return publicKeyToken.Value.SequenceEqual( otherPublicKeyToken );
         }
+
+        /// <summary>
+        /// Evaluates whether the specified item matches the specification.
+        /// </summary>
+        /// <param name="item">The item to evaluate.</param>
+        /// <returns>True if the specified <paramref name="item"/> matches the specification; otherwise, false.</returns>
+        public bool IsSatisfiedBy( Type item ) => IsSatisfiedBy( item.GetTypeInfo().Assembly.GetName() );
+
+        /// <summary>
+        /// Combines the current specification with the specified specification using logical 'And' semantics.
+        /// </summary>
+        /// <param name="other">The <see cref="ISpecification{T}">specification</see> to union.</param>
+        /// <returns>A unioned <see cref="ISpecification{T}">specification</see> object.</returns>
+        public ISpecification<Type> And( ISpecification<Type> other )
+        {
+            Arg.NotNull( other, nameof( other ) );
+            return new LogicalAndSpecification<Type>( this, other );
+        }
+
+        /// <summary>
+        /// Combines the current specification with the specified specification using logical 'Or' semantics.
+        /// </summary>
+        /// <param name="other">The <see cref="ISpecification{T}">specification</see> to union.</param>
+        /// <returns>A unioned <see cref="ISpecification{T}">specification</see> object.</returns>
+        public ISpecification<Type> Or( ISpecification<Type> other )
+        {
+            Arg.NotNull( other, nameof( other ) );
+            return new LogicalOrSpecification<Type>( this, other );
+        }
+
+        /// <summary>
+        /// Returns the logical complement of the specification.
+        /// </summary>
+        /// <returns>A <see cref="ISpecification{T}">specification</see> object.</returns>
+        ISpecification<Type> ISpecification<Type>.Not() => new LogicalNotSpecification<Type>( this );
+
+        [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "A specification is a specialized rule. The interface is intentionally hidden." )]
+        bool IRule<Type, bool>.Evaluate( Type item ) => IsSatisfiedBy( item );
     }
 }

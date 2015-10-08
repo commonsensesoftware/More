@@ -12,7 +12,7 @@
     {
         static partial void AddWinRTSpecificConventions( ConventionBuilder builder )
         {
-            var assembly = new HostAssemblySpecification();
+            var assembly = new PublicKeyTokenSpecification( typeof( Host ) );
             var settingsFlyout = new SettingsFlyoutSpecification();
 
             builder.ForTypesMatching( settingsFlyout.IsSatisfiedBy ).Export().Export<SettingsFlyout>().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p != null && p.Name == "Model" );

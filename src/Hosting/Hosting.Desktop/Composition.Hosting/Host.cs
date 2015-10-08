@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Composition.Convention;
+    using System.Composition.Hosting;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -24,7 +25,7 @@
 
         static partial void AddPlatformSpecificConventions( ConventionBuilder builder )
         {
-            var assembly = new HostAssemblySpecification();
+            var assembly = new PublicKeyTokenSpecification( typeof( Host ) );
             var window = new AssignableSpecification<Window>().And( new AssignableSpecification<IShellView>().Not() );
             var userControl = new AssignableSpecification<UserControl>().And( new AssignableSpecification<IShellView>().Not() );
 

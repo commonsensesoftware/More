@@ -7,7 +7,7 @@
     <ProjectGuid>{DD3DCBE6-F6DE-4297-851A-36BB3A61F354}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>More.Composition.Hosting</RootNamespace>
+    <RootNamespace>More</RootNamespace>
     <AssemblyName>More.Hosting.AspNet.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -168,14 +168,29 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Composition\DecoratorSpecification.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="HostExtensions.cs" />
-    <Compile Include="HostInitializer.cs" />
-    <Compile Include="WebApiConventions.cs" />
-    <Compile Include="WebApiDependencyResolver.cs" />
+    <Compile Include="Composition.Hosting\HostExtensions.cs" />
+    <Compile Include="Composition.Hosting\InitializeHttpConfiguration.cs" />
+    <Compile Include="SR.Designer.cs">
+      <DependentUpon>SR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="System.Web.Http.Tracing\TraceRecordExtensions.cs" />
+    <Compile Include="Web.Http.Tracing\NullTraceWriter.cs" />
+    <Compile Include="Web.Http.Tracing\PerRequestTraceWriter.cs" />
+    <Compile Include="Web.Http.Tracing\ReadOnlyRepositoryAdapterT.cs" />
+    <Compile Include="Web.Http.Tracing\RepositoryTracerT.cs" />
+    <Compile Include="Web.Http.Tracing\TracePropertyKeys.cs" />
+    <Compile Include="Web.Http.Tracing\UnitOfWorkTracerT.cs" />
+    <Compile Include="Web.Http\StreamControllerT.cs" />
+    <Compile Include="Web.Http\WebApiControllerActivator.cs" />
+    <Compile Include="Composition.Hosting\WebApiConventions.cs" />
+    <Compile Include="Web.Http\WebApiDependencyResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System.Web.Http\IDependencyResolverExtensions.cs" />
-    <Compile Include="WebApiDependencyScope.cs" />
+    <Compile Include="Web.Http\WebApiDependencyScope.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\More.snk">
@@ -202,6 +217,13 @@
       <Name>Hosting.AspNet</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
