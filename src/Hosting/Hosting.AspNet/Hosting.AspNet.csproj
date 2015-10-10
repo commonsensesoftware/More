@@ -154,6 +154,16 @@
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
       <Link>CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
+    <None Include="hosting.aspnet.nuspec">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>hosting.tt</DependentUpon>
+    </None>
+    <None Include="hosting.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>hosting.aspnet.nuspec</LastGenOutput>
+    </None>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -185,7 +195,9 @@
       <Link>More.snk</Link>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>

@@ -3,7 +3,6 @@
     using ComponentModel;
     using System;
     using System.Web.Http;
-    using System.Web.Http.Dispatcher;
     using Web.Http;
 
     /// <summary>
@@ -60,7 +59,6 @@
 
             Callback?.Invoke( config );
             config.DependencyResolver = new WebApiDependencyResolver( host );
-            config.Services.Replace( typeof( IHttpControllerActivator ), new WebApiControllerActivator( config.Services.GetHttpControllerActivator() ) );
             config.EnsureInitialized();
         }
     }

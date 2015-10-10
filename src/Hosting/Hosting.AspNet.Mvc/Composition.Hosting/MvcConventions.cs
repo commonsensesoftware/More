@@ -1,6 +1,7 @@
 ﻿namespace More.Composition.Hosting
 {
     using ComponentModel;
+    using Web.Mvc;
     using System.Composition.Convention;
     using System.Composition.Hosting;
     using System.Diagnostics.Contracts;
@@ -20,6 +21,13 @@
         {
             Contract.Requires( configuration != null );
             Contract.Requires( conventions != null );
+
+            //var assembly = new PublicKeyTokenSpecification( typeof( MvcConventions ) );
+            var assembly = typeof( MvcConventions ).Assembly;
+            var decorators = new InterfaceSpecification( typeof( IDecoratorFactory<> ) );
+
+            // export decorator factories
+            conventions.ForTypesMatching( decorators.IsSatisfiedBy ).ExportInterfaces( t => t.Assembly == assembly );
 
             // export mvc controllers
             var builder = conventions.ForTypesDerivedFrom<IController>().Export();

@@ -1,6 +1,6 @@
 ﻿namespace More.Composition.Hosting
 {
-    using More.ComponentModel;
+    using ComponentModel;
     using System;
     using System.Collections.Generic;
     using System.Composition.Hosting.Core;
@@ -44,7 +44,7 @@
         /// </summary>
         /// <param name="host">The <see cref="Host">instance</see> to create an
         /// <see cref="ExportDescriptorProvider">export descriptor provider for.</see></param>
-        /// <param name="origin">The original of the instance.</param>
+        /// <param name="origin">The origin of the instance.</param>
         internal HostExportDescriptorProvider( Host host, string origin )
         {
             Contract.Requires( host != null );

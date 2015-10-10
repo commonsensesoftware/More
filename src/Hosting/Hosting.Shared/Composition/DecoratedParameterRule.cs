@@ -4,10 +4,10 @@
     using System;
     using System.Collections.Generic;
     using System.Composition.Convention;
-    using System.Diagnostics.Contracts;
-    using System.Reflection;
-    using System.Linq;
     using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Represents a <see cref="IRule{T}">rule</see> for composing <see cref="ImportParameter">import parameters</see>.
@@ -16,12 +16,7 @@
     public class DecoratedParameterRule : IRule<ImportParameter>
     {
         private readonly HashSet<TypeInfo> decoratedTypes = new HashSet<TypeInfo>();
-
-        /// <summary>
-        /// Gets the contract name used for decorated imports.
-        /// </summary>
-        /// <value>This field always returns "Decorated".</value>
-        protected const string DecoratedContractName = "Decorated";
+        private string contractName = "Decorated";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DecoratedParameterRule"/> class.
@@ -41,6 +36,24 @@
         {
             Arg.NotNull( decoratedTypes, nameof( decoratedTypes ) );
             this.decoratedTypes.AddRange( decoratedTypes.Select( t => t.GetTypeInfo() ) );
+        }
+
+        /// <summary>
+        /// Gets or sets the contract name applied to decorated parameters.
+        /// </summary>
+        /// <value>The contract name applied to decorated parameters. The default value is "Decorated".</value>
+        public string ContractName
+        {
+            get
+            {
+                Contract.Ensures(!string.IsNullOrEmpty(contractName) );
+                return contractName;
+            }
+            set
+            {
+                Arg.NotNullOrEmpty( value, nameof( value ) );
+                contractName = value;
+            }
         }
 
         /// <summary>
@@ -111,7 +124,7 @@
             }
 
             // there must be at least one match, so apply the decorated contract name
-            item.ConventionBuilder.AsContractName( DecoratedContractName );
+            item.ConventionBuilder.AsContractName( ContractName );
         }
     }
 }

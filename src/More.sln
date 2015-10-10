@@ -233,9 +233,9 @@ Global
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
 		Hosting\Hosting.Shared\Hosting.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
 		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
-		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
+		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{abff6d49-1c8f-4da5-86ed-07033105981b}*SharedItemsImports = 4
 		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{abff6d49-1c8f-4da5-86ed-07033105981b}*SharedItemsImports = 4
 		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{11866fa8-3f80-4f2d-96b2-99faab697581}*SharedItemsImports = 4
@@ -253,10 +253,10 @@ Global
 		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{3c56d5dc-4806-42bb-a777-7d0bfe36a57e}*SharedItemsImports = 4
 		Windows\Windows.WinRT.Shared\Windows.WinRT.Shared.projitems*{b8e8a033-154f-4866-82f6-a28adcf460d6}*SharedItemsImports = 13
 		Windows\Windows.Shared\Windows.Shared.projitems*{116fcd14-4c55-418b-b925-7b1600b2b667}*SharedItemsImports = 4
-		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{05f3a2a4-a860-43b3-9bf5-984e326474ad}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{05f3a2a4-a860-43b3-9bf5-984e326474ad}*SharedItemsImports = 4
-		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
+		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{05f3a2a4-a860-43b3-9bf5-984e326474ad}*SharedItemsImports = 4
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
+		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
 		Hosting\Hosting.Shared\Hosting.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
 		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{949bd34b-b986-4a75-8ec4-48e4c909da84}*SharedItemsImports = 13
 	EndGlobalSection

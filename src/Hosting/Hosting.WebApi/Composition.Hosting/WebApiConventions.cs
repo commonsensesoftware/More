@@ -5,6 +5,7 @@
     using System.Composition.Hosting;
     using System.Diagnostics.Contracts;
     using System.Web.Http.Controllers;
+    using Web.Http.Services;
 
     internal sealed class WebApiConventions
     {
@@ -20,6 +21,13 @@
         {
             Contract.Requires( configuration != null );
             Contract.Requires( conventions != null );
+
+            //var assembly = new PublicKeyTokenSpecification( typeof( WebApiConventions ) );
+            var assembly = typeof( WebApiConventions ).Assembly;
+            var decorators = new InterfaceSpecification( typeof( IDecoratorFactory<> ) );
+
+            // export decorator factories
+            conventions.ForTypesMatching( decorators.IsSatisfiedBy ).ExportInterfaces( t => t.Assembly == assembly );
 
             // export web api controllers
             var builder = conventions.ForTypesDerivedFrom<IHttpController>().Export();

@@ -4,10 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.Composition;
-    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Reflection;
 
     /// <summary>
     /// Represents a <see cref="IServiceProvider">service provider</see> based on an <see cref="CompositionContext">composition context</see>.
@@ -62,8 +59,7 @@
         /// <paramref name="serviceType">service type</paramref> or <c>null</c> if no match is found.</returns>
         public override object GetService( Type serviceType )
         {
-            if ( serviceType == null )
-                throw new ArgumentNullException( "serviceType" );
+            Arg.NotNull( serviceType, nameof( serviceType ) );
 
             var generator = new ServiceTypeDisassembler();
             var key = generator.ExtractKey( serviceType );

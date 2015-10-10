@@ -178,14 +178,15 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="System.Web.Http.Tracing\TraceRecordExtensions.cs" />
+    <Compile Include="System.Web.Http\ApiControllerExtensions.cs" />
+    <Compile Include="Web.Http.Services\IDecoratorFactoryT.cs" />
+    <Compile Include="Web.Http.Services\IDecoratorFactoryTContract.cs" />
     <Compile Include="Web.Http.Tracing\NullTraceWriter.cs" />
-    <Compile Include="Web.Http.Tracing\PerRequestTraceWriter.cs" />
     <Compile Include="Web.Http.Tracing\ReadOnlyRepositoryAdapterT.cs" />
     <Compile Include="Web.Http.Tracing\RepositoryTracerT.cs" />
     <Compile Include="Web.Http.Tracing\TracePropertyKeys.cs" />
     <Compile Include="Web.Http.Tracing\UnitOfWorkTracerT.cs" />
     <Compile Include="Web.Http\StreamControllerT.cs" />
-    <Compile Include="Web.Http\WebApiControllerActivator.cs" />
     <Compile Include="Composition.Hosting\WebApiConventions.cs" />
     <Compile Include="Web.Http\WebApiDependencyResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

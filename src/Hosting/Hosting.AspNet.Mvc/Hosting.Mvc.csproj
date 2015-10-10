@@ -186,7 +186,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Web.Mvc\MvcControllerFactory.cs" />
+    <Compile Include="System.Web.Mvc\ControllerExtensions.cs" />
+    <Compile Include="Web.Mvc\IDecoratorFactoryT.cs" />
+    <Compile Include="Web.Mvc\IDecoratorFactoryTContract.cs" />
     <Compile Include="Web.Mvc\MvcDependencyResolver.cs" />
     <Compile Include="Web.Mvc\MvcFilterAttributeFilterProvider.cs" />
     <Compile Include="Web.Mvc\MvcModelBinderProvider.cs" />
@@ -223,6 +225,7 @@
       <Link>CustomDictionary.xml</Link>
     </CodeAnalysisDictionary>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
