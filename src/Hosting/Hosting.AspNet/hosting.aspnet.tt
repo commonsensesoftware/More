@@ -1,6 +1,6 @@
 ﻿<#@ template language="c#" hostspecific="true" #>
-<#@ output extension=".aspnet.nuspec" #>
-<#@ parameter type="System.String" name="CoreVersion" #>
+<#@ output extension=".nuspec" #>
+<#@ parameter type="System.String" name="CoreExVersion" #>
 <#@ parameter type="System.String" name="CompositionVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
  <metadata minClientVersion="2.5">
@@ -10,35 +10,28 @@
   <owners>$author$</owners>
   <frameworkAssemblies>
    <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
+   <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
   </frameworkAssemblies>
-  <title>More - UI Hosting</title>
+  <title>More - ASP.NET Hosting</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for hosting user interface applications.</summary>
-  <releaseNotes>• </releaseNotes>
+  <summary>Provides "More" patterns and practices for hosting Microsoft ASP.NET applications.</summary>
+  <releaseNotes></releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</iconUrl>
-  <tags>More Patterns Practices Web Hosting User Interface UI</tags>
+  <tags>More Patterns Practices ASP.NET Web Hosting User Interface UI</tags>
   <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More" version="<#= CoreVersion #>" />
+   <dependency id="More.Extensions" version="<#= CoreExVersion #>" />
    <dependency id="More.Composition" version="<#= CompositionVersion #>" />
   </dependencies>
  </metadata>
  <files>
   <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
-
-  <file src="..\Hosting.Store\bin\$configuration$\$id$.dll" target="lib\win81" />
-  <file src="..\Hosting.Store\bin\$configuration$\$id$.xml" target="lib\win81" />
-  <file src="..\Hosting.Store\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\win81\CodeContracts" />
-
-  <file src="..\Hosting.Phone\bin\$configuration$\$id$.dll" target="lib\portable-wp81+wpa81" />
-  <file src="..\Hosting.Phone\bin\$configuration$\$id$.xml" target="lib\portable-wp81+wpa81" />
-  <file src="..\Hosting.Phone\bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\portable-wp81+wpa81\CodeContracts" />
  </files>
 </package>

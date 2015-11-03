@@ -12,3 +12,8 @@ Version 1.1.1 Release Notes
 • Fixed project template wizards to correctly forward new user interaction parameters to item templates
 • Updated default dialog button styling for WPF item templates
 • Updated pre-packaged NuGet packages for project and item templates
+
+Version 1.2.0 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Fixed template file reference in WPF user control template
+• Updated pre-packaged NuGet packages for project and item templates

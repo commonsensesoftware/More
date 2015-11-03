@@ -22,7 +22,6 @@
             Contract.Requires( configuration != null );
             Contract.Requires( conventions != null );
 
-            //var assembly = new PublicKeyTokenSpecification( typeof( WebApiConventions ) );
             var assembly = typeof( WebApiConventions ).Assembly;
             var decorators = new InterfaceSpecification( typeof( IDecoratorFactory<> ) );
 

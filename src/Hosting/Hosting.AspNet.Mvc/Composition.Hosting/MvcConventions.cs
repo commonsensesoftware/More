@@ -22,7 +22,6 @@
             Contract.Requires( configuration != null );
             Contract.Requires( conventions != null );
 
-            //var assembly = new PublicKeyTokenSpecification( typeof( MvcConventions ) );
             var assembly = typeof( MvcConventions ).Assembly;
             var decorators = new InterfaceSpecification( typeof( IDecoratorFactory<> ) );
 

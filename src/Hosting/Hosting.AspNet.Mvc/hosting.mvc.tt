@@ -1,4 +1,6 @@
-﻿<?xml version="1.0"?>
+﻿<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".nuspec" #>
+<#@ parameter type="System.String" name="AspNetVersion" #><?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
  <metadata minClientVersion="2.5">
   <id>$id$</id>
@@ -7,25 +9,23 @@
   <owners>$author$</owners>
   <frameworkAssemblies>
    <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
-   <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
   </frameworkAssemblies>
-  <title>More - ASP.NET Hosting</title>
+  <title>More - ASP.NET MVC Hosting</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices for hosting Microsoft ASP.NET applications.</summary>
+  <summary>Provides "More" patterns and practices for hosting Microsoft ASP.NET MVC applications.</summary>
   <releaseNotes></releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
   <projectUrl>https://github.com/commonsensesoftware/more</projectUrl>
   <iconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</iconUrl>
-  <tags>More Patterns Practices ASP.NET Web Hosting User Interface UI</tags>
+  <tags>More Patterns Practices ASP.NET Web MVC Hosting User Interface UI</tags>
   <copyright>$author$</copyright>
   <references>
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More.Extensions" version="1.1.1" />
-   <dependency id="More.Composition" version="1.1.1" />
+   <dependency id="More.Hosting.AspNet" version="<#= AspNetVersion #>" />
   </dependencies>
  </metadata>
  <files>

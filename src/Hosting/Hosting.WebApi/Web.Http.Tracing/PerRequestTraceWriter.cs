@@ -1,34 +1,27 @@
 ﻿namespace More.Web.Http.Tracing
 {
     using System;
-    using System.Composition;
-    using System.Diagnostics.Contracts;
     using System.Net.Http;
     using System.Web.Http.Tracing;
 
     /// <summary>
-    /// Represents a <see cref="ITraceWriter">trace writer</see> that implements the Null-Object pattern.
+    /// Represents a trace writer using the Per-Request model.
     /// </summary>
-    [PartNotDiscoverable]
-    public sealed class NullTraceWriter : ITraceWriter
+    public sealed class PerRequestTraceWriter : ITraceWriter
     {
-        private static readonly NullTraceWriter instance = new NullTraceWriter();
-
-        private NullTraceWriter()
-        {
-        }
+        private readonly ITraceWriter traceWriter;
+        private readonly HttpRequestMessage currentRequest;
 
         /// <summary>
-        /// Gets an instance of the <see cref="ITraceWriter"/>.
+        /// Initializes a new instance of the <see cref="PerRequestTraceWriter"/> class.
         /// </summary>
-        /// <value>A thread-safe, singleton instance of the <see cref="ITraceWriter"/>.</value>
-        public static ITraceWriter Instance
+        /// <param name="traceWriter">The <see cref="ITraceWriter">trace writer</see> to decorate.</param>
+        /// <param name="request">The current <see cref="HttpRequestMessage">request</see> associated with the trace writer.</param>
+        public PerRequestTraceWriter( ITraceWriter traceWriter, HttpRequestMessage request )
         {
-            get
-            {
-                Contract.Ensures( instance != null );
-                return instance;
-            }
+            Arg.NotNull( traceWriter, nameof( traceWriter ) );
+            this.traceWriter = traceWriter;
+            currentRequest = request;
         }
 
         /// <summary>
@@ -41,8 +34,7 @@
         /// information if this method determines the trace request will be honored.  The action is expected
         /// to fill in the given <see cref="TraceRecord">trace record</see> with any information it wishes.</param>
         /// <remarks>The implementation for this instance performs no operation.</remarks>
-        public void Trace( HttpRequestMessage request, string category, TraceLevel level, Action<TraceRecord> traceAction )
-        {
-        }
+        public void Trace( HttpRequestMessage request, string category, TraceLevel level, Action<TraceRecord> traceAction ) =>
+            traceWriter.Trace( request ?? currentRequest, category, level, traceAction );
     }
 }

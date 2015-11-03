@@ -21,10 +21,13 @@
   <title>More - UI Hosting</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for hosting user interface applications.</summary>
-  <releaseNotes>• Added *.pri files for Windows Store and Windows Phone
-• Added Configure method to Host to enable container configurations
-• Added IsRegistered ContainerConfiguration extension method for the Desktop
-• Added session state persistence to Windows Store and Windows Phone when suspending</releaseNotes>
+  <releaseNotes>• ConventionBuilderExtensions to support TypesInNamespace convention
+• Added PartConventionBuilderExtensions to support SharedPerRequest convention
+• Added ConstructorSelectionRule
+• Added ImportParameter
+• Added InterfaceSpecification
+• Added NamespaceSpecification
+• Added PublicKeyTokenSpecification</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

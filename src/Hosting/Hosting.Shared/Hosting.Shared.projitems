@@ -16,7 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostExportDescriptorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfigurationContract.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\InterfaceSpecification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\PartSpecification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\ConstructorSelectionRule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\DecoratedParameterRule.cs" />
