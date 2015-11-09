@@ -11,7 +11,7 @@
   <title>More - ASP.NET MVC Hosting</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for hosting Microsoft ASP.NET MVC applications.</summary>
-  <releaseNotes></releaseNotes>
+  <releaseNotes>Fixed package dependency identifier.</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
@@ -23,7 +23,7 @@
    <reference file="$id$.dll" />
   </references>
   <dependencies>
-   <dependency id="More.Hosting.AspNet" version="1.0.1" />
+   <dependency id="More.AspNet.Hosting" version="1.0.1" />
   </dependencies>
  </metadata>
  <files>
