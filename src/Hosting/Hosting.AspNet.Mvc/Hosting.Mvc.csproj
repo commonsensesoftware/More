@@ -191,6 +191,7 @@
     <Compile Include="Web.Mvc\IDecoratorFactoryTContract.cs" />
     <Compile Include="Web.Mvc\MvcDependencyResolver.cs" />
     <Compile Include="Web.Mvc\MvcFilterAttributeFilterProvider.cs" />
+    <Compile Include="Web.Mvc\MvcModelBinderAttribute.cs" />
     <Compile Include="Web.Mvc\MvcModelBinderProvider.cs" />
     <Compile Include="Composition.Hosting\HostExtensions.cs" />
     <Compile Include="Composition.Hosting\MvcConventions.cs" />

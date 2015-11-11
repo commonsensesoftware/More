@@ -15,7 +15,7 @@
   <title>More - ASP.NET Hosting</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for hosting Microsoft ASP.NET applications.</summary>
-  <releaseNotes></releaseNotes>
+  <releaseNotes>• Fixed issue that can cause unhandled exception from CompositionContext.TryGetExport</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

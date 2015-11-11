@@ -21,13 +21,7 @@
   <title>More - UI Hosting</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for hosting user interface applications.</summary>
-  <releaseNotes>• ConventionBuilderExtensions to support TypesInNamespace convention
-• Added PartConventionBuilderExtensions to support SharedPerRequest convention
-• Added ConstructorSelectionRule
-• Added ImportParameter
-• Added InterfaceSpecification
-• Added NamespaceSpecification
-• Added PublicKeyTokenSpecification</releaseNotes>
+  <releaseNotes>• Fixed issue that can cause unhandled exception from CompositionContext.TryGetExport</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

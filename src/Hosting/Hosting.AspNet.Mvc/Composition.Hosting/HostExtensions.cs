@@ -21,12 +21,14 @@
         {
             Contract.Ensures( Contract.Result<Host>() != null );
 
-            var current = (Host) Current.Items[HostKey];
+            var context = Current;
+            var current = (Host) context.Items[HostKey];
 
             if ( current == null )
             {
                 current = configuredHost.CreatePerRequest();
-                Current.Items[HostKey] = current;
+                context.Items[HostKey] = current;
+                context.DisposeOnPipelineCompleted( current );
             }
 
             return current;
@@ -39,7 +41,7 @@
 
             Interlocked.CompareExchange( ref configuredHost, host, null );
 
-            host.Configure( conventions.Configure );
+            host.Configure( conventions.Apply );
 
             DependencyResolver.SetResolver( new MvcDependencyResolver( GetHost ) );
             FilterProviders.Providers.Remove( FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().SingleOrDefault() );

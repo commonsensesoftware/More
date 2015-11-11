@@ -51,7 +51,7 @@
         /// </summary>
         /// <param name="serviceType">The <see cref="Type">type</see> of service requested.</param>
         /// <returns>An instance of the requested <paramref name="serviceType">service type</paramref> or null if no match is found.</returns>
-        public object GetService( Type serviceType )
+        public virtual object GetService( Type serviceType )
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
 
@@ -66,7 +66,7 @@
         /// </summary>
         /// <param name="serviceType">The <see cref="Type">type</see> of service requested.</param>
         /// <returns>A <see cref="IEnumerable{T}">sequence</see> of services matching the requested <paramref name="serviceType">service type</paramref>.</returns>
-        public IEnumerable<object> GetServices( Type serviceType )
+        public virtual IEnumerable<object> GetServices( Type serviceType )
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
 

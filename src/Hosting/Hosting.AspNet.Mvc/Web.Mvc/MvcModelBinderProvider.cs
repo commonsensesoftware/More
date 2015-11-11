@@ -43,7 +43,7 @@
         /// </summary>
         /// <param name="modelType">The <see cref="Type">type</see> of model to get the model binder for.</param>
         /// <returns>The corresponding <see cref="IModelBinder">model binder</see>.</returns>
-        public IModelBinder GetBinder( Type modelType )
+        public virtual IModelBinder GetBinder( Type modelType )
         {
             Arg.NotNull( modelType, nameof( modelType ) );
             var contractName = GetModelBinderContractName( modelType );

@@ -3,12 +3,14 @@
     using ComponentModel;
     using System;
     using System.Collections.Generic;
+    using System.Composition;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Http.Services;
 
+    [PartNotDiscoverable]
     internal sealed class ReadOnlyRepositoryAdapter<T> : ObservableObject, IRepository<T>, IDecorator<IReadOnlyRepository<T>> where T : class
     {
         private static readonly Task CompletedTask = Task.FromResult( false );

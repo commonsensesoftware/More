@@ -20,7 +20,7 @@
             var config = configuration;
             var callback = configurationCallback;
 
-            host.Configure( conventions.Configure );
+            host.Configure( conventions.Apply );
             host.Configure( ( c, b ) => c.WithPart<InitializeHttpConfiguration>() );
             host.WithConfiguration<InitializeHttpConfiguration>()
                 .Configure(
