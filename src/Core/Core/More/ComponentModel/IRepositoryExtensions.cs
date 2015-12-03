@@ -123,7 +123,7 @@
         ///     var repository = new MyRepository();
         ///     var cancellationToken = new CancellationToken();
         ///     
-        ///     foreach ( var item in await repository.GetAllAsync( i => i.LastName == "Doe", cancellationToken ) )
+        ///     foreach ( var item in await repository.GetAllAsync( cancellationToken ) )
         ///         Console.WriteLine( item.ToString() );
         /// }
         /// ]]>
