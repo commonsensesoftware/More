@@ -24,7 +24,7 @@
 #if DEBUG
             catch ( Exception ex )
             {
-                Debug.WriteLine( ex.Message );
+                System.Diagnostics.Debug.WriteLine( ex.Message );
                 return false;
             }
 #else
