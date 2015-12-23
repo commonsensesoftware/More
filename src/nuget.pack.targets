@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="PrintT4Params">
 
  <PropertyGroup>
   <RootDirectory>$(MSBuildThisFileDirectory)</RootDirectory>
-  <!--<VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>-->
-  <VisualStudioVersion>14.0</VisualStudioVersion>
-  <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+  <VSToolsPath Condition=" '$(VSToolsPath)' == '' ">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
  </PropertyGroup>
 
  <UsingTask TaskName="GetPackageMetadata" AssemblyFile="$(RootDirectory)Build\bin\More.Build.Tasks.dll" />
  <UsingTask TaskName="ResolvePackageReference" AssemblyFile="$(RootDirectory)Build\bin\More.Build.Tasks.dll" />
 
  <PropertyGroup>
-  <NuGetExe>$(RootDirectory)packages\NuGet.CommandLine.2.8.6\tools\nuget.exe</NuGetExe>
+  <NuGetExe>$(RootDirectory)packages\NuGet.CommandLine.3.3.0\tools\nuget.exe</NuGetExe>
   <PackageOutDir>$(RootDirectory)NuGet</PackageOutDir>
   <NuGetPackTarget>$(ProjectPath)</NuGetPackTarget>
   <NuGetPackProperties Condition=" '$(Configuration)'=='' ">configuration=Release</NuGetPackProperties>
@@ -30,6 +29,68 @@
 
   <!-- delete any existing *.nupkg files -->
   <Delete Files="@(OldNuPkgFile)" ContinueOnError="true" />
+
+ </Target>
+
+ <ItemGroup>
+  <NuGetDependency Include="$(RootDirectory)Core\Core\Core.csproj">
+   <T4ParameterName>CoreVersion</T4ParameterName>
+  </NuGetDependency>
+  <NuGetDependency Include="$(RootDirectory)Core\CoreEx.Desktop\CoreEx.Desktop.csproj">
+   <T4ParameterName>CoreExVersion</T4ParameterName>
+  </NuGetDependency>
+  <NuGetDependency Include="$(RootDirectory)Composition\Composition\Composition.csproj">
+   <T4ParameterName>CompositionVersion</T4ParameterName>
+  </NuGetDependency>
+  <NuGetDependency Include="$(RootDirectory)UI\UI\UI.csproj">
+   <T4ParameterName>UIVersion</T4ParameterName>
+  </NuGetDependency>
+  <NuGetDependency Include="$(RootDirectory)Windows\Windows.Desktop\Windows.Desktop.csproj">
+   <T4ParameterName>PresentationVersion</T4ParameterName>
+  </NuGetDependency>
+  <NuGetDependency Include="$(RootDirectory)Hosting\Hosting.Desktop\Hosting.Desktop.csproj">
+   <T4ParameterName>HostingVersion</T4ParameterName>
+  </NuGetDependency>
+  <NuGetDependency Include="$(RootDirectory)Hosting\Hosting.AspNet\Hosting.AspNet.csproj">
+   <T4ParameterName>AspNetVersion</T4ParameterName>
+  </NuGetDependency>
+ </ItemGroup>
+
+
+ <ItemGroup>
+
+  <T4Input Include="CoreVersion">
+   <SourceProject>$(RootDirectory)Core\Core\Core.csproj</SourceProject>
+  </T4Input>
+
+  <T4Input Include="CoreExVersion">
+   <SourceProject>$(RootDirectory)Core\CoreEx.Desktop\CoreEx.Desktop.csproj</SourceProject>
+  </T4Input>
+
+ </ItemGroup>
+
+ <Target Name="ResolveNuGetPackageRef2" Outputs="%(_T4ParameterValue.Identity)">
+
+  <!--<ResolvePackageReference SourceProjectPath="%(NuGetDependency.Identity)">
+   <Output PropertyName="_T4ParameterValue" TaskParameter="SemanticVersion" />
+  </ResolvePackageReference>-->
+
+  <ResolvePackageReference SourceProjectPath="%(T4Input.SourceProject)">
+   <Output ItemName="_T4ParameterValue" TaskParameter="SemanticVersion" />
+  </ResolvePackageReference>
+  
+ </Target>
+
+ <Target Name="PrintT4Params" DependsOnTargets="ResolveNuGetPackageRef2">
+
+  <!--<ItemGroup>
+   <T4ParameterValues Include="@(T4Input)">
+    <Value>%(_T4ParameterValue.Identity)</Value>
+   </T4ParameterValues>
+  </ItemGroup>-->
+
+  <Message Text="@(T4Input)" />
+  <Message Text="%(T4ParameterValues.Identity) = %(T4ParameterValues.Value)" />
 
  </Target>
 
@@ -126,5 +187,5 @@
 
  <!-- import t4 targets so we can enable transform on build -->
  <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
- 
+
 </Project>
