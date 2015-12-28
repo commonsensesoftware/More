@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <PackAfterBuild>false</PackAfterBuild>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <NuPkgSource Include="..\..\..\..\..\Core\Core\Core.csproj">
+      <T4ParameterName>CoreVersion</T4ParameterName>
+    </NuPkgSource>
+    <NuPkgSource Include="..\..\..\..\..\Core\CoreEx.Desktop\CoreEx.Desktop.csproj">
+      <T4ParameterName>CoreExVersion</T4ParameterName>
+    </NuPkgSource>
+    <NuPkgSource Include="..\..\..\..\..\Composition\Composition\Composition.csproj">
+      <T4ParameterName>CompositionVersion</T4ParameterName>
+    </NuPkgSource>
+    <NuPkgSource Include="..\..\..\..\..\UI\UI\UI.csproj">
+      <T4ParameterName>UIVersion</T4ParameterName>
+    </NuPkgSource>
+    <NuPkgSource Include="..\..\..\..\..\Windows\Windows.Desktop\Windows.Desktop.csproj">
+      <T4ParameterName>PresentationVersion</T4ParameterName>
+    </NuPkgSource>
+    <NuPkgSource Include="..\..\..\..\..\Hosting\Hosting.Desktop\Hosting.Desktop.csproj">
+      <T4ParameterName>HostingVersion</T4ParameterName>
+    </NuPkgSource>
+  </ItemGroup>
+
+</Project>

@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -188,11 +190,13 @@
       <DependentUpon>coreex.tt</DependentUpon>
       <SubType>Designer</SubType>
     </None>
+    <None Include="coreex.desktop.nuget.props" />
     <None Include="coreex.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>coreex.desktop.nuspec</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CustomDictionary.xml">
@@ -217,8 +221,14 @@
   <Import Project="..\CoreEx.Shared\CoreEx.Shared.projitems" Label="Shared" />
   <Import Project="..\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\nuget.pack.targets" />
   <Import Project="..\..\fileversion.targets" />
+  <Import Project="..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\dotnet\More.Build.Tasks.NuGet.targets" Condition="Exists('..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\dotnet\More.Build.Tasks.NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\dotnet\More.Build.Tasks.NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\dotnet\More.Build.Tasks.NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

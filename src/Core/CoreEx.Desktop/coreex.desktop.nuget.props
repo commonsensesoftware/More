@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup>
+    <NuPkgSource Include="..\Core\Core.csproj">
+      <T4ParameterName>CoreVersion</T4ParameterName>
+    </NuPkgSource>
+  </ItemGroup>
+
+</Project>

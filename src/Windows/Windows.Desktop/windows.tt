@@ -39,8 +39,6 @@
   </dependencies>
  </metadata>
  <files>
-  <file src="bin\$configuration$\$id$.dll" target="lib\net45" />
-  <file src="bin\$configuration$\$id$.xml" target="lib\net45" />
   <file src="bin\$configuration$\CodeContracts\$id$.Contracts.dll" target="lib\net45\CodeContracts" />
 
   <file src="..\Windows.Store\bin\$configuration$\$id$.dll" target="lib\win81" />
