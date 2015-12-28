@@ -27,6 +27,9 @@ FakesAssemblies/
 /src/Validation/Validation/validation.nuspec
 /src/Windows/Windows.Desktop/windows.desktop.nuspec
 /src/Hosting/Hosting.Desktop/hosting.desktop.nuspec
+/src/Hosting/Hosting.AspNet/hosting.aspnet.nuspec
+/src/Hosting/Hosting.Mvc/hosting.mvc.nuspec
+/src/Hosting/Hosting.WebApi/hosting.webapi.nuspec
 
 # ignore generated visual studio template files
 /src/Extensions/Templates/**/*.vstemplate
@@ -34,4 +37,3 @@ FakesAssemblies/
 # ignore generated html files (typically from portability analysis)
 *.htm
 /src/TestResults
-/src/Hosting/Hosting.WebApi/hosting.webapi.nuspec

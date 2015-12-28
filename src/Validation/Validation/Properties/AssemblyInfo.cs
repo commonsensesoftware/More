@@ -7,4 +7,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct( "More.Validation" )]
 [assembly: AssemblyDescription( "The validation library for the \"More\" framework." )]
 [assembly: AssemblyVersion( "1.0.0.0" )]
-[assembly: AssemblyInformationalVersion( "1.0.1" )]
+[assembly: AssemblyInformationalVersion( "1.0.2" )]

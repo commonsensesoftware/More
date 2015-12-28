@@ -72,6 +72,7 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\More.Validation.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -123,6 +124,7 @@
     <CodeContractsRuntimeCheckingLevel>ReleaseRequires</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+    <DocumentationFile>bin\Release\More.Validation.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -216,6 +218,11 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup>
+    <NuSpecFile Include="$(ProjectName).nuspec">
+      <Visible>False</Visible>
+    </NuSpecFile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\fileversion.targets" />
   <Import Project="..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\portable-net45+win+wpa81+wp80+monoandroid+xamarinios+monotouch\More.Build.Tasks.NuGet.targets" Condition="Exists('..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\portable-net45+win+wpa81+wp80+monoandroid+xamarinios+monotouch\More.Build.Tasks.NuGet.targets')" />
@@ -224,7 +231,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\portable-net45+win+wpa81+wp80+monoandroid+xamarinios+monotouch\More.Build.Tasks.NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\More.Build.Tasks.NuGet.1.0.1\build\portable-net45+win+wpa81+wp80+monoandroid+xamarinios+monotouch\More.Build.Tasks.NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\packages\NuSpec.ReferenceGenerator.1.4.1\build\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\NuSpec.ReferenceGenerator.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NuSpec.ReferenceGenerator.1.4.1\build\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\NuSpec.ReferenceGenerator.targets'))" />
   </Target>
+  <Import Project="..\..\packages\NuSpec.ReferenceGenerator.1.4.1\build\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\NuSpec.ReferenceGenerator.targets" Condition="Exists('..\..\packages\NuSpec.ReferenceGenerator.1.4.1\build\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\NuSpec.ReferenceGenerator.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
