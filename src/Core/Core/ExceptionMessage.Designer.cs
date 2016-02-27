@@ -494,6 +494,24 @@ namespace More {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sequence contains more than one element..
+        /// </summary>
+        internal static string MoreThanOneElement {
+            get {
+                return ResourceManager.GetString("MoreThanOneElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sequence contains more than one matching element..
+        /// </summary>
+        internal static string MoreThanOneMatch {
+            get {
+                return ResourceManager.GetString("MoreThanOneMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Multiple factories have been registered for a unit of work of type &apos;{0}&apos;..
         /// </summary>
         internal static string MultipleUnitOfWorkFactory {
@@ -526,6 +544,24 @@ namespace More {
         internal static string NestedInitializationDetected {
             get {
                 return ResourceManager.GetString("NestedInitializationDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sequence contains no elements..
+        /// </summary>
+        internal static string NoElements {
+            get {
+                return ResourceManager.GetString("NoElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sequence contains no matching element..
+        /// </summary>
+        internal static string NoMatch {
+            get {
+                return ResourceManager.GetString("NoMatch", resourceCulture);
             }
         }
         
