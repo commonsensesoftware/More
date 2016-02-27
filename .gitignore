@@ -28,7 +28,7 @@ FakesAssemblies/
 /src/Windows/Windows.Desktop/windows.desktop.nuspec
 /src/Hosting/Hosting.Desktop/hosting.desktop.nuspec
 /src/Hosting/Hosting.AspNet/hosting.aspnet.nuspec
-/src/Hosting/Hosting.Mvc/hosting.mvc.nuspec
+/src/Hosting/Hosting.AspNet.Mvc/hosting.mvc.nuspec
 /src/Hosting/Hosting.WebApi/hosting.webapi.nuspec
 
 # ignore generated visual studio template files
