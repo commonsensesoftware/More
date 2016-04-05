@@ -3,9 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using System.Linq;
+    using static System.StringComparer;
 
     /// <summary>
     /// Represents a base implementation of <see cref="IEditableObject"/> with support for two-way data binding.
@@ -25,6 +24,7 @@
         /// </summary>
         protected EditableObject()
         {
+            uneditableMembers = new HashSet<string>( Ordinal );
             transaction = new Lazy<IEditTransaction>( CreateTransaction );
         }
 
@@ -45,18 +45,11 @@
         {
             Arg.NotNull( uneditableMembers, nameof( uneditableMembers ) );
 
-            this.uneditableMembers = new HashSet<string>( uneditableMembers, StringComparer.Ordinal );
+            this.uneditableMembers = new HashSet<string>( uneditableMembers, Ordinal );
             transaction = new Lazy<IEditTransaction>( CreateTransaction );
         }
 
-        private IEditTransaction Transaction
-        {
-            get
-            {
-                Contract.Ensures( Contract.Result<IEditTransaction>() != null );
-                return transaction.Value;
-            }
-        }
+        private IEditTransaction Transaction => transaction.Value;
 
         /// <summary>
         /// Gets a collection of the names of the object members that are not editable.
@@ -112,13 +105,7 @@
             }
         }
 
-        private bool UseFullRecovery
-        {
-            get
-            {
-                return RecoveryModel == EditRecoveryModel.Full;
-            }
-        }
+        private bool UseFullRecovery => RecoveryModel == EditRecoveryModel.Full;
 
         /// <summary>
         /// Creates and returns the type of edit transaction used to edit the current instance.
@@ -128,7 +115,7 @@
         protected virtual IEditTransaction CreateTransaction()
         {
             Contract.Ensures( Contract.Result<IEditTransaction>() != null );
-            return new PropertyTransaction( this, p => !uneditableMembers.Contains( p.Name ) );
+            return new PropertyTransaction( this, p => !UneditableMembers.Contains( p.Name ) );
         }
 
         /// <summary>

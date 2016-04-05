@@ -1,4 +1,5 @@
-﻿namespace More.ComponentModel
+﻿using Xunit;
+namespace More.ComponentModel
 {
     using Mocks;
     using System;
@@ -11,6 +12,11 @@
     /// </summary>
     public class EditableObjectTest
     {
+        public class UnfilteredMemberObject : EditableObject
+        {
+            public string Name { get; set; }
+        }
+
         [Fact( DisplayName = "recovery model should write expected value" )]
         public void RecoveryModelPropertyShouldBeReadWrite()
         {
@@ -116,7 +122,7 @@
         public void CancelEditShouldRollbackFieldChangesToObject()
         {
             // arrange
-            var target = new MockEditableObject( ( @this, uneditable ) => new FieldTransaction( @this, new []{ "LastModified" } ) );
+            var target = new MockEditableObject( ( @this, uneditable ) => new FieldTransaction( @this, new[] { "LastModified" } ) );
             var lastModified = target.LastModified;
 
             // act
@@ -282,6 +288,21 @@
             var target = new MockEditableObject();
             target.InvokeOnPropertyChanged( "FirstName", true );
             Assert.False( target.IsChanged );
+        }
+
+        [Fact( DisplayName = "object should cancel edit when no members are filtered" )]
+        public void ObjectShouldCancelEditWhenNoMembersAreFiltered()
+        {
+            // arrange
+            var @object = new UnfilteredMemberObject() { Name = "Bob" };
+
+            // act
+            @object.BeginEdit();
+            @object.Name = "John";
+            @object.CancelEdit();
+
+            // assert
+            Assert.Equal( "Bob", @object.Name );
         }
     }
 }
