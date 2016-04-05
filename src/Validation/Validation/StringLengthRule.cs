@@ -14,7 +14,7 @@
         private readonly string errorMessage;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringLengthRule{T}"/> class.
+        /// Initializes a new instance of the <see cref="StringLengthRule"/> class.
         /// </summary>
         /// <param name="maximumLength">The maximum length of a string allowed.</param>
         public StringLengthRule( int maximumLength )
@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringLengthRule{T}"/> class.
+        /// Initializes a new instance of the <see cref="StringLengthRule"/> class.
         /// </summary>
         /// <param name="maximumLength">The maximum length of a string allowed.</param>
         /// <param name="errorMessage">The error message associated with the rule.</param>
@@ -39,7 +39,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringLengthRule{T}"/> class.
+        /// Initializes a new instance of the <see cref="StringLengthRule"/> class.
         /// </summary>
         /// <param name="minimumLength">The minimum length of a string allowed.</param>
         /// <param name="maximumLength">The maximum length of a string allowed.</param>
@@ -53,7 +53,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StringLengthRule{T}"/> class.
+        /// Initializes a new instance of the <see cref="StringLengthRule"/> class.
         /// </summary>
         /// <param name="minimumLength">The minimum length of a string allowed.</param>
         /// <param name="maximumLength">The maximum length of a string allowed.</param>

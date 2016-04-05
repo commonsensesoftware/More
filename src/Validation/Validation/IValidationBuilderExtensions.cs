@@ -79,7 +79,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="StringLengthRule{T}">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="StringLengthRule">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -96,7 +96,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="StringLengthRule{T}">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="StringLengthRule">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -114,7 +114,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="StringLengthRule{T}">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="StringLengthRule">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -132,7 +132,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="StringLengthRule{T}">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="StringLengthRule">string length rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -230,7 +230,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="RegularExpressionRule{T}">regular expression rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="RegularExpressionRule">regular expression rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -246,7 +246,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="RegularExpressionRule{T}">regular expression rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="RegularExpressionRule">regular expression rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -264,9 +264,10 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="SizeRule">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="SizeRule{T}">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
+        /// <typeparam name="TValue">The <see cref="Type">type</see> of value to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
         /// <param name="minimumCount">The minimum count allowed.</param>
         /// <returns>The original <paramref name="builder"/>.</returns>
@@ -280,9 +281,10 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="SizeRule">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="SizeRule{T}">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
+        /// <typeparam name="TValue">The <see cref="Type">type</see> of value to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
         /// <param name="minimumCount">The minimum count allowed.</param>
         /// <param name="errorMessage">The validation error message.</param>
@@ -298,9 +300,10 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="SizeRule">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="SizeRule{T}">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
+        /// <typeparam name="TValue">The <see cref="Type">type</see> of value to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
         /// <param name="minimumCount">The minimum count allowed.</param>
         /// <param name="maximumCount">The maximum count allowed.</param>
@@ -316,9 +319,10 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="SizeRule">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="SizeRule{T}">size rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
+        /// <typeparam name="TValue">The <see cref="Type">type</see> of value to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
         /// <param name="minimumCount">The minimum count allowed.</param>
         /// <param name="maximumCount">The maximum count allowed.</param>
@@ -336,7 +340,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="CreditCardRule{T}">credit card rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="CreditCardRule">credit card rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -350,7 +354,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="CreditCardRule{T}">credit card rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="CreditCardRule">credit card rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -366,7 +370,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="EmailRule{T}">email rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="EmailRule">email rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -380,7 +384,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="EmailRule{T}">email rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="EmailRule">email rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -396,7 +400,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="PhoneRule{T}">phone rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="PhoneRule">phone rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -410,7 +414,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="PhoneRule{T}">phone rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="PhoneRule">phone rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -426,7 +430,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="UrlRule{T}">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="UrlRule">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -440,7 +444,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="UrlRule{T}">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="UrlRule">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -456,7 +460,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="UrlRule{T}">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="UrlRule">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>
@@ -471,7 +475,7 @@
         }
 
         /// <summary>
-        /// Applies the <see cref="UrlRule{T}">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
+        /// Applies the <see cref="UrlRule">URL rule</see> to the specified <see cref="IValidationBuilder{TObject,TValue}">builder</see>.
         /// </summary>
         /// <typeparam name="TObject">The <see cref="Type">type</see> of object to validate.</typeparam>
         /// <param name="builder">The extended <see cref="IValidationBuilder{TObject,TValue}"/>.</param>

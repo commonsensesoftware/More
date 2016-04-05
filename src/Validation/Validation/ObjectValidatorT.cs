@@ -100,7 +100,6 @@
         /// <summary>
         /// Validates the specified value against the provided instance and property name.
         /// </summary>
-        /// <param name="instance">The instance to validate.</param>
         /// <param name="propertyName">The name of the property to validate.</param>
         /// <param name="value">The value to validate.</param>
         /// <returns>A <see cref="IReadOnlyList{T}">read-only list</see> of <see cref="IValidationResult">validation results</see>.</returns>
