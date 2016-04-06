@@ -21,6 +21,9 @@
     </references>
     <dependencies>
       <group targetFramework="dotnet">
+        <dependency id="System.Diagnostics.Contracts" version="4.0.0" />
+        <dependency id="System.Diagnostics.Debug" version="4.0.0" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
         <dependency id="Microsoft.Composition" version="1.0.30" />
         <dependency id="System.Collections" version="4.0.0" />
         <dependency id="System.Globalization" version="4.0.0" />

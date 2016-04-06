@@ -62,6 +62,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -74,7 +75,7 @@
     /// <seealso cref=""IRepository{T}"" />
     /// <seealso cref=""IUnitOfWork{T}"" />.
     /// <content>
-    [GeneratedCode( ""More Framework"", ""1.0"" )]
+    [GeneratedCode( ""More Framework"", ""1.1"" )]
     public partial class MyDbContext
     {
 " );
@@ -103,38 +104,63 @@
         {
             if ( interfaceType.Equals( IReadOnlyRepository ) )
             {
-                if ( implementedInterfaces.Contains( IReadOnlyRepository ) )
-                    return;
+                AppendReadOnlyRepositoryImplementation( code, implementedInterfaces );
+            }
+            else if ( interfaceType.Equals( IRepository ) )
+            {
+                AppendRepositoryImplementation( code, implementedInterfaces );
+            }
+            else if ( interfaceType.Equals( IUnitOfWork ) )
+            {
+                AppendUnitOfWorkImplementation( code, implementedInterfaces );
+            }
+        }
+
+        private static void AppendReadOnlyRepositoryImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
+        {
+            if ( !implementedInterfaces.Contains( IReadOnlyRepository ) )
+            {
+                code.Append( CreateExpectedReadOnlyRepositoryCode() );
+                implementedInterfaces.Add( IReadOnlyRepository );
+            }
+        }
+
+        private static void AppendRepositoryImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
+        {
+            var hasPreceeding = false;
+
+            if ( !implementedInterfaces.Contains( INotifyPropertyChanged ) )
+            {
+                code.Append( CreateExpectedPropertyChangedCode() );
+                implementedInterfaces.Add( INotifyPropertyChanged );
+                hasPreceeding = true;
+            }
+
+            if ( !implementedInterfaces.Contains( IRepository ) && !implementedInterfaces.Contains( IUnitOfWork ) )
+            {
+                if ( hasPreceeding )
+                {
+                    code.AppendLine();
+                    code.AppendLine();
+                }
+
+                code.Append( CreateExpectedOnDiscardChangeCode() );
+            }
+
+            if ( !implementedInterfaces.Contains( IReadOnlyRepository ) )
+            {
+                if ( hasPreceeding )
+                {
+                    code.AppendLine();
+                    code.AppendLine();
+                }
 
                 code.Append( CreateExpectedReadOnlyRepositoryCode() );
                 implementedInterfaces.Add( IReadOnlyRepository );
             }
-            else if ( interfaceType.Equals( IRepository ) )
+
+            if ( !implementedInterfaces.Contains( IRepository ) )
             {
-                var hasPreceeding = false;
-
-                if ( !implementedInterfaces.Contains( INotifyPropertyChanged ) )
-                {
-                    code.Append( CreateExpectedPropertyChangedCode() );
-                    implementedInterfaces.Add( INotifyPropertyChanged );
-                    hasPreceeding = true;
-                }
-
-                if ( !implementedInterfaces.Contains( IReadOnlyRepository ) )
-                {
-                    if ( hasPreceeding )
-                    {
-                        code.AppendLine();
-                        code.AppendLine();
-                    }
-
-                    code.Append( CreateExpectedReadOnlyRepositoryCode() );
-                    implementedInterfaces.Add( IReadOnlyRepository );
-                }
-
-                if ( implementedInterfaces.Contains( IRepository ) )
-                    return;
-
                 if ( hasPreceeding )
                 {
                     code.AppendLine();
@@ -144,20 +170,32 @@
                 code.Append( CreateExpectedRepositoryCode() );
                 implementedInterfaces.Add( IRepository );
             }
-            else if ( interfaceType.Equals( IUnitOfWork ) )
-            {
-                var hasPreceeding = false;
+        }
 
-                if ( !implementedInterfaces.Contains( INotifyPropertyChanged ) )
+        private static void AppendUnitOfWorkImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
+        {
+            var hasPreceeding = false;
+
+            if ( !implementedInterfaces.Contains( INotifyPropertyChanged ) )
+            {
+                code.Append( CreateExpectedPropertyChangedCode() );
+                implementedInterfaces.Add( INotifyPropertyChanged );
+                hasPreceeding = true;
+            }
+
+            if ( !implementedInterfaces.Contains( IUnitOfWork ) && !implementedInterfaces.Contains( IRepository ) )
+            {
+                if ( hasPreceeding )
                 {
-                    code.Append( CreateExpectedPropertyChangedCode() );
-                    implementedInterfaces.Add( INotifyPropertyChanged );
-                    hasPreceeding = true;
+                    code.AppendLine();
+                    code.AppendLine();
                 }
 
-                if ( implementedInterfaces.Contains( IUnitOfWork ) )
-                    return;
+                code.Append( CreateExpectedOnDiscardChangeCode() );
+            }
 
+            if ( !implementedInterfaces.Contains( IUnitOfWork ) )
+            {
                 if ( hasPreceeding )
                 {
                     code.AppendLine();
@@ -177,6 +215,12 @@
         private void OnPropertyChanged( PropertyChangedEventArgs e ) => PropertyChanged?.Invoke( this, e );";
         }
 
+        private static string CreateExpectedOnDiscardChangeCode()
+        {
+            return
+@"        partial void OnDiscardChange( DbEntityEntry<Class1> entry );";
+        }
+
         private static string CreateExpectedReadOnlyRepositoryCode()
         {
             return
@@ -194,13 +238,7 @@
         private static string CreateExpectedRepositoryCode()
         {
             return
-@"        bool IRepository<Class1>.HasPendingChanges
-        {
-            get
-            {
-                return ChangeTracker.HasChanges();
-            }
-        }
+@"        bool IRepository<Class1>.HasPendingChanges => ChangeTracker.HasChanges();
 
         void IRepository<Class1>.Add( Class1 item )
         {
@@ -217,7 +255,9 @@
         void IRepository<Class1>.Update( Class1 item )
         {
             if ( Entry( item ).State != EntityState.Detached )
+            {
                 return;
+            }
 
             Set<Class1>().Attach( item );
             Entry( item ).State = EntityState.Modified;
@@ -239,8 +279,8 @@
                         entry.State = EntityState.Detached;
                         break;
                 }
+                OnDiscardChange( entry );
             }
-
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
@@ -254,13 +294,7 @@
         private static string CreateExpectedUnitOfWorkCode()
         {
             return
-@"        bool IUnitOfWork<Class1>.HasPendingChanges
-        {
-            get
-            {
-                return ChangeTracker.HasChanges();
-            }
-        }
+@"        bool IUnitOfWork<Class1>.HasPendingChanges => ChangeTracker.HasChanges();
 
         void IUnitOfWork<Class1>.RegisterNew( Class1 item )
         {
@@ -277,7 +311,9 @@
         void IUnitOfWork<Class1>.RegisterChanged( Class1 item )
         {
             if ( Entry( item ).State != EntityState.Detached )
+            {
                 return;
+            }
 
             Set<Class1>().Attach( item );
             Entry( item ).State = EntityState.Modified;
@@ -305,8 +341,8 @@
                         entry.State = EntityState.Detached;
                         break;
                 }
+                OnDiscardChange( entry );
             }
-
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 

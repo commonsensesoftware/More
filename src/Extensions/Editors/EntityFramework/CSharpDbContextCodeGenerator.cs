@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-namespace More.VisualStudio.Editors.EntityFramework
+﻿namespace More.VisualStudio.Editors.EntityFramework
 {
     using ComponentModel;
     using Microsoft.CodeAnalysis;
@@ -17,12 +16,11 @@ namespace More.VisualStudio.Editors.EntityFramework
     internal class CSharpDbContextCodeGenerator : ICodeGenerator
     {
         private const string Comment = "//";
-        private const string DbContext = "DbContext";
-        private const string IReadOnlyRepository = "IReadOnlyRepository";
-        private const string IRepository = "IRepository";
-        private const string IUnitOfWork = "IUnitOfWork";
-        private const string INotifyPropertyChanged = "INotifyPropertyChanged";
-
+        private const string DbContext = nameof( DbContext );
+        private const string IReadOnlyRepository = nameof( IReadOnlyRepository );
+        private const string IRepository = nameof( IRepository );
+        private const string IUnitOfWork = nameof( IUnitOfWork );
+        private const string INotifyPropertyChanged = nameof( INotifyPropertyChanged );
         private static readonly Lazy<IReadOnlyList<UsingDirectiveSyntax>> requiredUsings = new Lazy<IReadOnlyList<UsingDirectiveSyntax>>( CreateRequiredUsings );
         private static readonly Lazy<ISpecification<GenericNameSyntax>> interfaceSpecification = new Lazy<ISpecification<GenericNameSyntax>>( CreateInterfaceSpecification );
 
@@ -44,6 +42,7 @@ namespace More.VisualStudio.Editors.EntityFramework
                 UsingDirective( ParseName( "System.Collections.Generic" ).WithLeadingTrivia( space ) ),
                 UsingDirective( ParseName( "System.ComponentModel" ).WithLeadingTrivia( space ) ),
                 UsingDirective( ParseName( "System.Data.Entity" ).WithLeadingTrivia( space ) ),
+                UsingDirective( ParseName( "System.Data.Entity.Infrastructure" ).WithLeadingTrivia( space ) ),
                 UsingDirective( ParseName( "System.Linq" ).WithLeadingTrivia( space ) ),
                 UsingDirective( ParseName( "System.Threading" ).WithLeadingTrivia( space ) ),
                 UsingDirective( ParseName( "System.Threading.Tasks" ).WithLeadingTrivia( space ) )
@@ -237,7 +236,7 @@ namespace More.VisualStudio.Editors.EntityFramework
             writer.WriteLine( "/// <seealso cref=\"IRepository{T}\" />" );
             writer.WriteLine( "/// <seealso cref=\"IUnitOfWork{T}\" />." );
             writer.WriteLine( "/// <content>" );
-            writer.WriteLine( "[GeneratedCode( \"More Framework\", \"1.0\" )]" );
+            writer.WriteLine( "[GeneratedCode( \"More Framework\", \"1.1\" )]" );
             writer.WriteLine( "{0}partial class {1}", ResolveScopeModifier( @class ), className );
             writer.WriteLine( "{" );
             writer.Indent();
@@ -276,6 +275,9 @@ namespace More.VisualStudio.Editors.EntityFramework
                     if ( WritePropertyChangedImplementation( writer, implementedInterfaces ) )
                         writer.WriteLine();
 
+                    if ( WriteOnDiscardChange( writer, declaration, implementedInterfaces ) )
+                        writer.WriteLine();
+
                     if ( WriteReadOnlyRepository( writer, inheritedDeclaration, implementedInterfaces ) )
                         writer.WriteLine();
 
@@ -283,6 +285,9 @@ namespace More.VisualStudio.Editors.EntityFramework
                     break;
                 case IUnitOfWork:
                     if ( WritePropertyChangedImplementation( writer, implementedInterfaces ) )
+                        writer.WriteLine();
+
+                    if ( WriteOnDiscardChange( writer, declaration, implementedInterfaces ) )
                         writer.WriteLine();
 
                     WriteUnitOfWork( writer, declaration, implementedInterfaces );
@@ -307,6 +312,28 @@ namespace More.VisualStudio.Editors.EntityFramework
             return true;
         }
 
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "The current context is invariant" )]
+        private static bool WriteOnDiscardChange( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
+        {
+            Contract.Requires( writer != null );
+            Contract.Requires( declaration != null );
+            Contract.Requires( implementedInterfaces != null );
+
+            var discardChange = declaration.ArgumentTypeName + ".OnDiscardChange";
+
+            if ( implementedInterfaces.Contains( discardChange ) )
+                return false;
+
+            implementedInterfaces.Add( discardChange );
+            writer.WriteLine( $"partial void OnDiscardChange( DbEntityEntry<{declaration.ArgumentTypeName}> entry );" );
+            return true;
+        }
+
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "The current context is invariant" )]
         private static bool WriteReadOnlyRepository( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
         {
             Contract.Requires( writer != null );
@@ -317,23 +344,26 @@ namespace More.VisualStudio.Editors.EntityFramework
 
             implementedInterfaces.Add( declaration.TypeName );
 
-            writer.WriteLine( "async Task<IEnumerable<{1}>> {0}.GetAsync( Func<IQueryable<{1}>, IQueryable<{1}>> queryShaper, CancellationToken cancellationToken )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"async Task<IEnumerable<{declaration.ArgumentTypeName}>> {declaration.TypeName}.GetAsync( Func<IQueryable<{declaration.ArgumentTypeName}>, IQueryable<{declaration.ArgumentTypeName}>> queryShaper, CancellationToken cancellationToken )" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "return await queryShaper( Set<{0}>() ).ToArrayAsync( cancellationToken ).ConfigureAwait( false );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"return await queryShaper( Set<{declaration.ArgumentTypeName}>() ).ToArrayAsync( cancellationToken ).ConfigureAwait( false );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "async Task<TResult> {0}.GetAsync<TResult>( Func<IQueryable<{1}>, TResult> queryShaper, CancellationToken cancellationToken )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"async Task<TResult> {declaration.TypeName}.GetAsync<TResult>( Func<IQueryable<{declaration.ArgumentTypeName}>, TResult> queryShaper, CancellationToken cancellationToken )" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "return await Task<TResult>.Factory.StartNew( () => queryShaper( Set<{0}>() ), cancellationToken ).ConfigureAwait( false );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"return await Task<TResult>.Factory.StartNew( () => queryShaper( Set<{declaration.ArgumentTypeName}>() ), cancellationToken ).ConfigureAwait( false );" );
             writer.Unindent();
             writer.WriteLine( "}" );
 
             return true;
         }
 
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "The current context is invariant" )]
         private static bool WriteRepository( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
         {
             Contract.Requires( writer != null );
@@ -345,52 +375,44 @@ namespace More.VisualStudio.Editors.EntityFramework
 
             implementedInterfaces.Add( declaration.TypeName );
 
-            writer.WriteLine( "bool {0}.HasPendingChanges", declaration.TypeName );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "get" );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "return ChangeTracker.HasChanges();" );
-            writer.Unindent();
-            writer.WriteLine( "}" );
-            writer.Unindent();
-            writer.WriteLine( "}" );
+            writer.WriteLine( $"bool {declaration.TypeName}.HasPendingChanges => ChangeTracker.HasChanges();" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.Add( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.Add( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "Set<{0}>().Add( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Add( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.Remove( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.Remove( {declaration.ArgumentTypeName} item )"  );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Remove( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.Update( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.Update( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "if ( Entry( item ).State != EntityState.Detached )" );
+            writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "return;" );
             writer.Unindent();
+            writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Attach( item );" );
             writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.DiscardChanges()", declaration.TypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.DiscardChanges()" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "foreach ( var entry in ChangeTracker.Entries<{0}>() )", declaration.ArgumentTypeName );
+            writer.WriteLine( $"foreach ( var entry in ChangeTracker.Entries<{declaration.ArgumentTypeName}>() )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "switch ( entry.State )" );
@@ -410,14 +432,14 @@ namespace More.VisualStudio.Editors.EntityFramework
             writer.Unindent();
             writer.Unindent();
             writer.WriteLine( "}" );
+            writer.WriteLine( "OnDiscardChange( entry );" );
             writer.Unindent();
             writer.WriteLine( "}" );
-            writer.WriteLine();
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "async Task IRepository<{0}>.SaveChangesAsync( CancellationToken cancellationToken )", declaration.ArgumentTypeName );
+            writer.WriteLine( $"async Task IRepository<{declaration.ArgumentTypeName}>.SaveChangesAsync( CancellationToken cancellationToken )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );
@@ -428,6 +450,9 @@ namespace More.VisualStudio.Editors.EntityFramework
             return true;
         }
 
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "The current context is invariant" )]
         private static bool WriteUnitOfWork( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
         {
             Contract.Requires( writer != null );
@@ -439,49 +464,41 @@ namespace More.VisualStudio.Editors.EntityFramework
 
             implementedInterfaces.Add( declaration.TypeName );
 
-            writer.WriteLine( "bool {0}.HasPendingChanges", declaration.TypeName );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "get" );
-            writer.WriteLine( "{" );
-            writer.Indent();
-            writer.WriteLine( "return ChangeTracker.HasChanges();" );
-            writer.Unindent();
-            writer.WriteLine( "}" );
-            writer.Unindent();
-            writer.WriteLine( "}" );
+            writer.WriteLine( $"bool {declaration.TypeName}.HasPendingChanges => ChangeTracker.HasChanges();" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.RegisterNew( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.RegisterNew( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "Set<{0}>().Add( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Add( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.RegisterRemoved( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.RegisterRemoved( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "Set<{0}>().Remove( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Remove( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.RegisterChanged( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.RegisterChanged( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "if ( Entry( item ).State != EntityState.Detached )" );
+            writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "return;" );
             writer.Unindent();
+            writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "Set<{0}>().Attach( item );", declaration.ArgumentTypeName );
+            writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Attach( item );" );
             writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.Unregister( {1} item )", declaration.TypeName, declaration.ArgumentTypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.Unregister( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "Entry( item ).State = EntityState.Detached;" );
@@ -489,10 +506,10 @@ namespace More.VisualStudio.Editors.EntityFramework
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "void {0}.Rollback()", declaration.TypeName );
+            writer.WriteLine( $"void {declaration.TypeName}.Rollback()" );
             writer.WriteLine( "{" );
             writer.Indent();
-            writer.WriteLine( "foreach ( var entry in ChangeTracker.Entries<{0}>() )", declaration.ArgumentTypeName );
+            writer.WriteLine( $"foreach ( var entry in ChangeTracker.Entries<{declaration.ArgumentTypeName}>() )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "switch ( entry.State )" );
@@ -512,14 +529,14 @@ namespace More.VisualStudio.Editors.EntityFramework
             writer.Unindent();
             writer.Unindent();
             writer.WriteLine( "}" );
+            writer.WriteLine( "OnDiscardChange( entry );" );
             writer.Unindent();
             writer.WriteLine( "}" );
-            writer.WriteLine();
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine();
-            writer.WriteLine( "async Task {0}.CommitAsync( CancellationToken cancellationToken )", declaration.TypeName );
+            writer.WriteLine( $"async Task {declaration.TypeName}.CommitAsync( CancellationToken cancellationToken )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );" );

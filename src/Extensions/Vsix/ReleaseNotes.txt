@@ -17,3 +17,8 @@ Version 1.2.0 Release Notes
 -----------------------------------------------------------------------------------------------------------------------
 • Fixed template file reference in WPF user control template
 • Updated pre-packaged NuGet packages for project and item templates
+
+Version 1.2.1 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Update DbContext code generator to render partial method to support extension point
+• Updated pre-packaged NuGet packages for project and item templates

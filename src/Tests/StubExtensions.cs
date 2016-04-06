@@ -22,7 +22,7 @@
         private static void VerifyMethod( this StubObserver observer, Type declaringType, MethodCallExpression call, int times )
         {
             var calls = observer.GetCalls().Where( c => c.StubbedType.Equals( declaringType ) && c.StubbedMethod.Equals( call.Method ) ).ToArray();
-            var userMessage = string.Format( "The method {0} was expected to be called {1} time(s), but was actually called {2} time(s).", call.Method.Name, times, calls.Length );
+            var userMessage = $"The method {call.Method.Name} was expected to be called {times} time(s), but was actually called {calls.Length} time(s).";
 
             Assert.True( calls.Length == times, userMessage );
 
@@ -66,7 +66,7 @@
             var source = observer as StubObserver;
 
             if ( source == null )
-                throw new Exception( string.Format( "The type {0} was unexpected. {1} is assumed and the only {2} supported.", observer.GetType(), typeof( StubObserver ), typeof( IStubObserver ) ) );
+                throw new Exception( $"The type {observer.GetType()} was unexpected. {typeof( StubObserver )} is assumed and the only {typeof( IStubObserver )} supported." );
 
             // TODO: add support for properties when needed
 
@@ -90,9 +90,9 @@
             var observer = stub.InstanceObserver;
 
             if ( observer == null )
-                throw new Exception( string.Format( "An {0} has not been setup.", typeof( IStubObserver ) ) );
+                throw new Exception( $"An {typeof( IStubObserver )} has not been setup." );
 
-            stub.InstanceObserver.Verify<T, TResult>( expression, times );
+            stub.InstanceObserver.Verify( expression, times );
         }
     }
 }
