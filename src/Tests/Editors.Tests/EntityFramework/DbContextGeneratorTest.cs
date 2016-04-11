@@ -144,6 +144,15 @@
                     code.AppendLine();
                 }
 
+                code.Append( CreateExpectedOnAddChangeCode() );
+                code.AppendLine();
+                code.AppendLine();
+                code.Append( CreateExpectedOnRemoveChangeCode() );
+                code.AppendLine();
+                code.AppendLine();
+                code.Append( CreateExpectedOnUpdateChangeCode() );
+                code.AppendLine();
+                code.AppendLine();
                 code.Append( CreateExpectedOnDiscardChangeCode() );
             }
 
@@ -191,6 +200,15 @@
                     code.AppendLine();
                 }
 
+                code.Append( CreateExpectedOnAddChangeCode() );
+                code.AppendLine();
+                code.AppendLine();
+                code.Append( CreateExpectedOnRemoveChangeCode() );
+                code.AppendLine();
+                code.AppendLine();
+                code.Append( CreateExpectedOnUpdateChangeCode() );
+                code.AppendLine();
+                code.AppendLine();
                 code.Append( CreateExpectedOnDiscardChangeCode() );
             }
 
@@ -215,11 +233,13 @@
         private void OnPropertyChanged( PropertyChangedEventArgs e ) => PropertyChanged?.Invoke( this, e );";
         }
 
-        private static string CreateExpectedOnDiscardChangeCode()
-        {
-            return
-@"        partial void OnDiscardChange( DbEntityEntry<Class1> entry );";
-        }
+        private static string CreateExpectedOnAddChangeCode() => @"        partial void OnAdd( Class1 item );";
+
+        private static string CreateExpectedOnRemoveChangeCode() => @"        partial void OnRemove( Class1 item );";
+
+        private static string CreateExpectedOnUpdateChangeCode() => @"        partial void OnUpdate( Class1 item );";
+
+        private static string CreateExpectedOnDiscardChangeCode() => @"        partial void OnDiscardChange( DbEntityEntry<Class1> entry );";
 
         private static string CreateExpectedReadOnlyRepositoryCode()
         {
@@ -242,23 +262,25 @@
 
         void IRepository<Class1>.Add( Class1 item )
         {
+            OnAdd( item );
             Set<Class1>().Add( item );
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IRepository<Class1>.Remove( Class1 item )
         {
+            OnRemove( item );
             Set<Class1>().Remove( item );
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IRepository<Class1>.Update( Class1 item )
         {
+            OnUpdate( item );
             if ( Entry( item ).State != EntityState.Detached )
             {
                 return;
             }
-
             Set<Class1>().Attach( item );
             Entry( item ).State = EntityState.Modified;
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
@@ -268,6 +290,7 @@
         {
             foreach ( var entry in ChangeTracker.Entries<Class1>() )
             {
+                OnDiscardChange( entry );
                 switch ( entry.State )
                 {
                     case EntityState.Modified:
@@ -279,7 +302,6 @@
                         entry.State = EntityState.Detached;
                         break;
                 }
-                OnDiscardChange( entry );
             }
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
@@ -298,23 +320,25 @@
 
         void IUnitOfWork<Class1>.RegisterNew( Class1 item )
         {
+            OnAdd( item );
             Set<Class1>().Add( item );
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IUnitOfWork<Class1>.RegisterRemoved( Class1 item )
         {
+            OnRemove( item );
             Set<Class1>().Remove( item );
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }
 
         void IUnitOfWork<Class1>.RegisterChanged( Class1 item )
         {
+            OnUpdate( item );
             if ( Entry( item ).State != EntityState.Detached )
             {
                 return;
             }
-
             Set<Class1>().Attach( item );
             Entry( item ).State = EntityState.Modified;
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
@@ -330,6 +354,7 @@
         {
             foreach ( var entry in ChangeTracker.Entries<Class1>() )
             {
+                OnDiscardChange( entry );
                 switch ( entry.State )
                 {
                     case EntityState.Modified:
@@ -341,7 +366,6 @@
                         entry.State = EntityState.Detached;
                         break;
                 }
-                OnDiscardChange( entry );
             }
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }

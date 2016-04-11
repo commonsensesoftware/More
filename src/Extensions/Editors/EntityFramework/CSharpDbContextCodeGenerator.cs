@@ -275,6 +275,15 @@
                     if ( WritePropertyChangedImplementation( writer, implementedInterfaces ) )
                         writer.WriteLine();
 
+                    if ( WriteOnAdd( writer, declaration, implementedInterfaces ) )
+                        writer.WriteLine();
+
+                    if ( WriteOnRemove( writer, declaration, implementedInterfaces ) )
+                        writer.WriteLine();
+
+                    if ( WriteOnUpdate( writer, declaration, implementedInterfaces ) )
+                        writer.WriteLine();
+
                     if ( WriteOnDiscardChange( writer, declaration, implementedInterfaces ) )
                         writer.WriteLine();
 
@@ -285,6 +294,15 @@
                     break;
                 case IUnitOfWork:
                     if ( WritePropertyChangedImplementation( writer, implementedInterfaces ) )
+                        writer.WriteLine();
+
+                    if ( WriteOnAdd( writer, declaration, implementedInterfaces ) )
+                        writer.WriteLine();
+
+                    if ( WriteOnRemove( writer, declaration, implementedInterfaces ) )
+                        writer.WriteLine();
+
+                    if ( WriteOnUpdate( writer, declaration, implementedInterfaces ) )
                         writer.WriteLine();
 
                     if ( WriteOnDiscardChange( writer, declaration, implementedInterfaces ) )
@@ -309,6 +327,63 @@
             writer.WriteLine();
             writer.WriteLine( "private void OnPropertyChanged( PropertyChangedEventArgs e ) => PropertyChanged?.Invoke( this, e );" );
 
+            return true;
+        }
+
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "The current context is invariant" )]
+        private static bool WriteOnAdd( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
+        {
+            Contract.Requires( writer != null );
+            Contract.Requires( declaration != null );
+            Contract.Requires( implementedInterfaces != null );
+
+            var add = declaration.ArgumentTypeName + ".OnAdd";
+
+            if ( implementedInterfaces.Contains( add ) )
+                return false;
+
+            implementedInterfaces.Add( add );
+            writer.WriteLine( $"partial void OnAdd( {declaration.ArgumentTypeName} item );" );
+            return true;
+        }
+
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "The current context is invariant" )]
+        private static bool WriteOnRemove( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
+        {
+            Contract.Requires( writer != null );
+            Contract.Requires( declaration != null );
+            Contract.Requires( implementedInterfaces != null );
+
+            var remove = declaration.ArgumentTypeName + ".OnRemove";
+
+            if ( implementedInterfaces.Contains( remove ) )
+                return false;
+
+            implementedInterfaces.Add( remove );
+            writer.WriteLine( $"partial void OnRemove( {declaration.ArgumentTypeName} item );" );
+            return true;
+        }
+
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "The current context is invariant" )]
+        [SuppressMessage( "Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "The current context is invariant" )]
+        private static bool WriteOnUpdate( IndentingTextWriter writer, InterfaceDeclaration declaration, ICollection<string> implementedInterfaces )
+        {
+            Contract.Requires( writer != null );
+            Contract.Requires( declaration != null );
+            Contract.Requires( implementedInterfaces != null );
+
+            var update = declaration.ArgumentTypeName + ".OnUpdate";
+
+            if ( implementedInterfaces.Contains( update ) )
+                return false;
+
+            implementedInterfaces.Add( update );
+            writer.WriteLine( $"partial void OnUpdate( {declaration.ArgumentTypeName} item );" );
             return true;
         }
 
@@ -380,6 +455,7 @@
             writer.WriteLine( $"void {declaration.TypeName}.Add( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnAdd( item );" );
             writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Add( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
@@ -388,6 +464,7 @@
             writer.WriteLine( $"void {declaration.TypeName}.Remove( {declaration.ArgumentTypeName} item )"  );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnRemove( item );" );
             writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Remove( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
@@ -396,13 +473,13 @@
             writer.WriteLine( $"void {declaration.TypeName}.Update( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnUpdate( item );" );
             writer.WriteLine( "if ( Entry( item ).State != EntityState.Detached )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "return;" );
             writer.Unindent();
             writer.WriteLine( "}" );
-            writer.WriteLine();
             writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Attach( item );" );
             writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
@@ -415,6 +492,7 @@
             writer.WriteLine( $"foreach ( var entry in ChangeTracker.Entries<{declaration.ArgumentTypeName}>() )" );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnDiscardChange( entry );" );
             writer.WriteLine( "switch ( entry.State )" );
             writer.WriteLine( "{" );
             writer.Indent();
@@ -432,7 +510,6 @@
             writer.Unindent();
             writer.Unindent();
             writer.WriteLine( "}" );
-            writer.WriteLine( "OnDiscardChange( entry );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
@@ -469,6 +546,7 @@
             writer.WriteLine( $"void {declaration.TypeName}.RegisterNew( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnAdd( item );" );
             writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Add( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
@@ -477,6 +555,7 @@
             writer.WriteLine( $"void {declaration.TypeName}.RegisterRemoved( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnRemove( item );" );
             writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Remove( item );" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
             writer.Unindent();
@@ -485,13 +564,13 @@
             writer.WriteLine( $"void {declaration.TypeName}.RegisterChanged( {declaration.ArgumentTypeName} item )" );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnUpdate( item );" );
             writer.WriteLine( "if ( Entry( item ).State != EntityState.Detached )" );
             writer.WriteLine( "{" );
             writer.Indent();
             writer.WriteLine( "return;" );
             writer.Unindent();
             writer.WriteLine( "}" );
-            writer.WriteLine();
             writer.WriteLine( $"Set<{declaration.ArgumentTypeName}>().Attach( item );" );
             writer.WriteLine( "Entry( item ).State = EntityState.Modified;" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );
@@ -512,6 +591,7 @@
             writer.WriteLine( $"foreach ( var entry in ChangeTracker.Entries<{declaration.ArgumentTypeName}>() )" );
             writer.WriteLine( "{" );
             writer.Indent();
+            writer.WriteLine( "OnDiscardChange( entry );" );
             writer.WriteLine( "switch ( entry.State )" );
             writer.WriteLine( "{" );
             writer.Indent();
@@ -529,7 +609,6 @@
             writer.Unindent();
             writer.Unindent();
             writer.WriteLine( "}" );
-            writer.WriteLine( "OnDiscardChange( entry );" );
             writer.Unindent();
             writer.WriteLine( "}" );
             writer.WriteLine( "OnPropertyChanged( new PropertyChangedEventArgs( \"HasPendingChanges\" ) );" );

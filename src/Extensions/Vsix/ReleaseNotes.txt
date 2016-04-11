@@ -20,5 +20,9 @@ Version 1.2.0 Release Notes
 
 Version 1.2.1 Release Notes
 -----------------------------------------------------------------------------------------------------------------------
-• Update DbContext code generator to render partial method to support extension point
+• Updated DbContext code generator to render partial method for discard change extension point
 • Updated pre-packaged NuGet packages for project and item templates
+
+Version 1.2.2 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Updated DbContext code generator with new partial method support for add, remove, and update item extension points
