@@ -27,12 +27,7 @@
 
             var requestUri = webAuthenticate.RequestUri;
             var callbackUri = webAuthenticate.CallbackUri ?? WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
-            var options = webAuthenticate.Options;
-
-            // note: SilentMode is not internally set in the options because it is deprecated in Windows Phone
-            if ( webAuthenticate.UseSilentMode )
-                options |= WebAuthenticationOptions.SilentMode;
-
+            var options = CreateOptions( webAuthenticate );
             var result = await WebAuthenticationBroker.AuthenticateAsync( options, requestUri, callbackUri );
 
             InvokeCallbackCommand( webAuthenticate, result );

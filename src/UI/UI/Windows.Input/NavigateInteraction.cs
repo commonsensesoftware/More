@@ -1,7 +1,6 @@
 ﻿namespace More.Windows.Input
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a user interaction navigation request.

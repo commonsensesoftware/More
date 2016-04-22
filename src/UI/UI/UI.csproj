@@ -221,8 +221,10 @@
     <Compile Include="Windows.Input\InteractionRequestedEventArgs.cs" />
     <Compile Include="Windows.Input\InteractionRequestExtensions.cs" />
     <Compile Include="Windows.Input\InteractionRequestT.cs" />
+    <Compile Include="Windows.Input\IWebAuthenticationResult.cs" />
     <Compile Include="Windows.Input\NamedCommandT.cs" />
     <Compile Include="Windows.Input\NamedDataItemCommandT1T2.cs" />
+    <Compile Include="Windows.Input\NavigateInteraction.cs" />
     <Compile Include="Windows.Input\OpenFileInteraction.cs" />
     <Compile Include="Windows.Input\SelectFolderInteractionRequest.cs" />
     <Compile Include="Windows.Input\SaveFileInteractionRequest.cs" />
@@ -231,6 +233,8 @@
     <Compile Include="Windows.Input\SaveFileInteraction.cs" />
     <Compile Include="Windows.Input\SelectFolderInteraction.cs" />
     <Compile Include="Windows.Input\TextInputInteraction.cs" />
+    <Compile Include="Windows.Input\WebAuthenticateInteraction.cs" />
+    <Compile Include="Windows.Input\WebAuthenticateInteractionRequest.cs" />
     <Compile Include="Windows.Input\WindowCloseInteraction.cs" />
     <Compile Include="Windows\DefaultContinuationManager.cs" />
     <Compile Include="Windows\IContinuationManager.cs" />

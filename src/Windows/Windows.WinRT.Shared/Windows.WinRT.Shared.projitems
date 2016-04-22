@@ -57,12 +57,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Data\VirtualCollectionViewT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\FileTypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\InteractionRequestExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\IWebAuthenticationResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\NavigateInteraction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\SearchEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\SelectContactInteraction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\WebAuthenticateInteractionRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows.Input\WebAuthenticateInteraction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\NavigationBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\IActionWithAssociatedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows.Interactivity\InteractionRequestBehavior.cs" />

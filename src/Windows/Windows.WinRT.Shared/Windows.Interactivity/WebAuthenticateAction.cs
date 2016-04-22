@@ -12,6 +12,24 @@
     [CLSCompliant( false )]
     public partial class WebAuthenticateAction : System.Windows.Interactivity.TriggerAction
     {
+        private static WebAuthenticationOptions CreateOptions( WebAuthenticateInteraction interaction )
+        {
+            Contract.Requires( interaction != null );
+
+            var options = WebAuthenticationOptions.None;
+
+            if ( interaction.UseCorporateNetwork )
+                options |= WebAuthenticationOptions.UseCorporateNetwork;
+
+            if ( interaction.UseHttpPost )
+                options |= WebAuthenticationOptions.UseHttpPost;
+
+            if ( interaction.UseTitle )
+                options |= WebAuthenticationOptions.UseTitle;
+
+            return options;
+        }
+
         private static void InvokeCallbackCommand( WebAuthenticateInteraction webAuthenticate, WebAuthenticationResult authenticationResult )
         {
             Contract.Requires( webAuthenticate != null );

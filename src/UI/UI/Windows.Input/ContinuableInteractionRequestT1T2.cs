@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.Contracts;
-namespace More.Windows.Input
+﻿namespace More.Windows.Input
 {
     using System;
+    using System.Diagnostics.Contracts;
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>

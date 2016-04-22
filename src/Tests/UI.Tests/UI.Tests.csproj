@@ -85,20 +85,29 @@
     <Compile Include="Windows.Input\CancelableCommandTest.cs" />
     <Compile Include="Windows.Input\CommandInterceptorTTest.cs" />
     <Compile Include="Windows.Input\CommandTTest.cs" />
+    <Compile Include="Windows.Input\ContinuableInteractionRequestT1T2Test.cs" />
     <Compile Include="Windows.Input\CredentialInteractionTest.cs" />
     <Compile Include="Windows.Input\DataItemCommandT1T2Test.cs" />
     <Compile Include="Windows.Input\INotifyCommandChangedExtensionsTest.cs" />
     <Compile Include="Windows.Input\InteractionExtensionsTest.cs" />
     <Compile Include="Windows.Input\InteractionRequestedEventArgsTest.cs" />
+    <Compile Include="Windows.Input\InteractionRequestExtensionsTest.cs" />
     <Compile Include="Windows.Input\InteractionRequestTTest.cs" />
     <Compile Include="Windows.Input\InteractionTest.cs" />
     <Compile Include="Windows.Input\NamedCommandTTest.cs" />
     <Compile Include="Windows.Input\NamedDataItemCommandT1T2Test.cs" />
+    <Compile Include="Windows.Input\NavigateInteractionTest.cs" />
+    <Compile Include="Windows.Input\OpenFileInteractionRequestTest.cs" />
     <Compile Include="Windows.Input\OpenFileInteractionTest.cs" />
     <Compile Include="Windows.Input\PrintInteractionTest.cs" />
+    <Compile Include="Windows.Input\WebAuthenticateInteractionRequestTest.cs" />
+    <Compile Include="Windows.Input\SelectFolderInteractionRequestTest.cs" />
+    <Compile Include="Windows.Input\SaveFileInteractionRequestTest.cs" />
     <Compile Include="Windows.Input\SaveFileInteractionTest.cs" />
     <Compile Include="Windows.Input\SelectFolderInteractionTest.cs" />
     <Compile Include="Windows.Input\TextInputInteractionTest.cs" />
+    <Compile Include="Windows.Input\WebAuthenticateInteractionTest.cs" />
+    <Compile Include="Windows.Input\WindowCloseInteractionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

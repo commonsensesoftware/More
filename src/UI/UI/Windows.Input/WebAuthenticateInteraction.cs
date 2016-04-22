@@ -1,10 +1,7 @@
 ﻿namespace More.Windows.Input
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using global::Windows.Foundation.Collections;
-    using global::Windows.Security.Authentication.Web;
 
     /// <summary>
     /// Represents an interaction request to perform a web-based authentication operation.
@@ -12,7 +9,6 @@
     public partial class WebAuthenticateInteraction : Interaction
     {
         private readonly Uri requestUri;
-        private WebAuthenticationOptions options = WebAuthenticationOptions.None;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebAuthenticateInteraction"/> class.
@@ -22,19 +18,6 @@
         {
             Arg.NotNull( requestUri, nameof( requestUri ) );
             this.requestUri = requestUri;
-        }
-
-        private bool GetOption( WebAuthenticationOptions option )
-        {
-            return ( options & option ) == option;
-        }
-
-        private void SetOption( WebAuthenticationOptions option, bool value )
-        {
-            if ( value )
-                options |= option;
-            else
-                options &= ~option;
         }
 
         /// <summary>
@@ -64,14 +47,6 @@
             set;
         }
 
-        internal WebAuthenticationOptions Options
-        {
-            get
-            {
-                return options;
-            }
-        }
-
         /// <summary>
         /// Gets or sets a value indicating whether the authentication operation uses corporate network authentication.
         /// </summary>
@@ -80,14 +55,8 @@
         /// <remarks>Note the application that uses this flag must have these capabilities as well.</remarks>
         public bool UseCorporateNetwork
         {
-            get
-            {
-                return GetOption( WebAuthenticationOptions.UseCorporateNetwork );
-            }
-            set
-            {
-                SetOption( WebAuthenticationOptions.UseCorporateNetwork, value );
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -97,14 +66,8 @@
         /// <remarks>For use with single sign-on (SSO) only.</remarks>
         public bool UseHttpPost
         {
-            get
-            {
-                return GetOption( WebAuthenticationOptions.UseHttpPost );
-            }
-            set
-            {
-                SetOption( WebAuthenticationOptions.UseHttpPost, value );
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -113,14 +76,8 @@
         /// <value>Tells the web authentication broker to return the window title string of the webpage.</value>
         public bool UseTitle
         {
-            get
-            {
-                return GetOption( WebAuthenticationOptions.UseTitle );
-            }
-            set
-            {
-                SetOption( WebAuthenticationOptions.UseTitle, value );
-            }
+            get;
+            set;
         }
 
         /// <summary>

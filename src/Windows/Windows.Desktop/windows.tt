@@ -20,9 +20,9 @@
   <title>More - UI Presentation</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface presentations.</summary>
-  <releaseNotes>• Fixed TextInputDialog modality issue
-• Updated TextInputDialog default XAML template for better theming support
-• Replaced use of SetResult with TrySetResult inside interaction request extensions</releaseNotes>
+  <releaseNotes>• Moved NavigateInteraction to UI library (portable)
+• Moved WebAuthenticateInteraction to UI library (portable)
+• Moved WebAuthenticateInteractionRequest to UI library (portable)</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

@@ -5,10 +5,8 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
-    using System.Windows.Input;
-    using global::Windows.Foundation.Collections;    
+    using global::Windows.Foundation.Collections;
     using global::Windows.Security.Authentication.Web;
-    using global::Windows.UI.Xaml;
 
     /// <content>
     /// Provides additional implementation specific to Windows Phone applications.
@@ -21,7 +19,7 @@
             
             var requestUri = webAuthenticate.RequestUri;
             var callbackUri = webAuthenticate.CallbackUri ?? WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
-            var options = webAuthenticate.Options;
+            var options = CreateOptions( webAuthenticate );
             var continuationData = new ValueSet();
 
             continuationData.AddRange( webAuthenticate.ContinuationData );
@@ -45,7 +43,7 @@
                 return;
 
             var requestUri = webAuthenticate.RequestUri;
-            var options = webAuthenticate.Options;
+            var options = CreateOptions( webAuthenticate );
             var result = await WebAuthenticationBroker.AuthenticateSilentlyAsync( requestUri, options );
 
             InvokeCallbackCommand( webAuthenticate, result );
