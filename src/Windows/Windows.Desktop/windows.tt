@@ -20,9 +20,9 @@
   <title>More - UI Presentation</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface presentations.</summary>
-  <releaseNotes>• Moved NavigateInteraction to UI library (portable)
-• Moved WebAuthenticateInteraction to UI library (portable)
-• Moved WebAuthenticateInteractionRequest to UI library (portable)</releaseNotes>
+  <releaseNotes>• Moved NavigateInteraction to portable UI library
+• Moved WebAuthenticateInteraction to portable UI library
+• Moved WebAuthenticateInteractionRequest to portable UI library</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

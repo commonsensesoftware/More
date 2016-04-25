@@ -10,9 +10,9 @@
   <title>More - UI</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface applications.</summary>
-  <releaseNotes>• Added NavigateInteraction to UI library (portable)
-• Added WebAuthenticateInteraction to UI library (portable)
-• Added WebAuthenticateInteractionRequest to UI library (portable)</releaseNotes>
+  <releaseNotes>• Added NavigateInteraction
+• Added WebAuthenticateInteraction
+• Added WebAuthenticateInteractionRequest</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
