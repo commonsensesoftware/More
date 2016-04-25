@@ -260,6 +260,8 @@
     <Compile Include="More\ComponentModel\UnitOfWorkT.cs" />
     <Compile Include="More\ComponentModel\ValidatableObject.cs" />
     <Compile Include="More\Composition\ICompositionService.cs" />
+    <Compile Include="More\Configuration\ISetting.cs" />
+    <Compile Include="More\Configuration\SettingAttribute.cs" />
     <Compile Include="More\DateTimeFormatProvider.cs" />
     <Compile Include="More\DefaultAction.cs" />
     <Compile Include="More\Globalization\FiscalCalendar.cs" />
@@ -334,6 +336,9 @@
     <NuSpecFile Include="$(ProjectName).nuspec">
       <Visible>False</Visible>
     </NuSpecFile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\fileversion.targets" />

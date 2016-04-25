@@ -8,7 +8,9 @@
     <title>More Framework</title>
     <description>$description$</description>
     <summary>Provides "More" patterns and practices for a wide variety of application models.</summary>
-    <releaseNotes>• Fixed NullReferenceException in EditableObject without filtered members</releaseNotes>
+    <releaseNotes>• Setting metadata can now be supported without MEF
+• Added ISetting
+• Added SettingAttribute</releaseNotes>
     <language>en-US</language>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

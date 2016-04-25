@@ -73,7 +73,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -84,6 +86,7 @@
     <Compile Include="More\Collections.Generic\DataStructureExtensionsTest.cs" />
     <Compile Include="More\Collections.Generic\DictionaryDebugViewT1T2Test.cs" />
     <Compile Include="More\Collections.Generic\DynamicComparerTTest.cs" />
+    <Compile Include="More\Configuration\SettingAttributeTest.cs" />
     <Compile Include="System\Collections.Generic\DataStructureExtensionsTest.cs" />
     <Compile Include="System\Collections.Generic\ICollectionExtensionsTest.cs" />
     <Compile Include="System\Collections.Generic\IDictionaryExtensionsTest.cs" />
