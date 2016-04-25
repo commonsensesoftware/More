@@ -2,12 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Composition.Hosting.Core;
     using System.Diagnostics.Contracts;
-    using System.Globalization;
-    using System.Linq;
-    using System.Reflection;
+    using static SettingAttribute;
+    using static System.Composition.Hosting.Core.ExportDescriptor;
+    using static System.Globalization.CultureInfo;
 
     /// <summary>
     /// Represents an <see cref="ExportDescriptorProvider">export provider</see> for configuration settings<seealso cref="SettingAttribute"/>.
@@ -23,7 +22,7 @@
         /// </summary>
         /// <param name="locator">The <see cref="Func{T1,TResult}">function</see> used to locate a configuration value.</param>
         public ConfigurationExportProvider( Func<string, object> locator )
-            : this( locator, "ConfigurationExportProvider" )
+            : this( locator, nameof( ConfigurationExportProvider ) )
         {
         }
 
@@ -61,7 +60,7 @@
             targetType = null;
             CompositionContract constraint;
 
-            if ( !contract.TryUnwrapMetadataConstraint( "Key", out key, out constraint ) )
+            if ( !contract.TryUnwrapMetadataConstraint( nameof( SettingAttribute.Key ), out key, out constraint ) )
                 return false;
 
             targetType = constraint.ContractType;
@@ -86,22 +85,14 @@
 
             // note: SettingAttribute.NullValue is a special meant to resolve CompositionContract matching issue. If the value equals this
             // default value, then it should be treated as null. This is analogous to DBValue.Null.
-            if ( contract.TryUnwrapMetadataConstraint( "DefaultValue", out value, out constraint ) && value != SettingAttribute.NullValue )
+            if ( contract.TryUnwrapMetadataConstraint( nameof( SettingAttribute.DefaultValue ), out value, out constraint ) && value != NullValue )
                 return value;
 
             return null;
         }
 
-        private static CompositeActivator CreateActivator( Func<object> resolver, Type targetType )
-        {
-            Contract.Requires( targetType != null );
-            Contract.Ensures( Contract.Result<CompositeActivator>() != null );
-
-            var resolve = resolver;
-            var type = targetType;
-
-            return ( c, o ) => SettingAttribute.Convert( resolve(), type, CultureInfo.CurrentCulture );
-        }
+        private static CompositeActivator CreateActivator( Func<object> resolve, Type targetType ) =>
+            ( c, o ) => Convert( resolve(), targetType, CurrentCulture );
 
         /// <summary>
         /// Gets the export descriptors supported by the provider.
@@ -119,7 +110,7 @@
 
             Func<object> resolver = () => GetValue( contract, key );
             var activator = CreateActivator( resolver, targetType );
-            var descriptor = new ExportDescriptorPromise( contract, Origin, true, NoDependencies, d => ExportDescriptor.Create( activator, NoMetadata ) );
+            var descriptor = new ExportDescriptorPromise( contract, Origin, true, NoDependencies, d => Create( activator, NoMetadata ) );
             var descriptors = new[] { descriptor };
 
             return descriptors;

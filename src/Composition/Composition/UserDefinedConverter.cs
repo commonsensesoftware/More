@@ -14,10 +14,6 @@
             this.converter = converter;
         }
 
-        public object Convert( object value, Type targetType, IFormatProvider formatProvider )
-        {
-            Contract.Assume( targetType != null );
-            return converter( value, targetType, formatProvider );
-        }
+        public object Convert( object value, Type targetType, IFormatProvider formatProvider ) => converter( value, targetType, formatProvider );
     }
 }

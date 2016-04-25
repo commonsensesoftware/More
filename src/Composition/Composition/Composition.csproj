@@ -155,6 +155,7 @@
     <Compile Include="EnumConverter.cs" />
     <Compile Include="DefaultConverter.cs" />
     <Compile Include="SharedPerRequestAttribute.cs" />
+    <Compile Include="TypeExtensions.cs" />
     <Compile Include="UserDefinedConverter.cs" />
     <Compile Include="StringConverterT.cs" />
     <Compile Include="TimeSpanConverter.cs" />

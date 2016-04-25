@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Composition", "Composition", "{E767E08F-678B-408D-8378-8449A0F7887C}"
 EndProject
@@ -185,15 +185,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.AspNet", "Hosting\H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hosting.Mvc", "Hosting\Hosting.AspNet.Mvc\Hosting.Mvc.csproj", "{B00890E5-5567-45E5-8936-679E7BFE9DEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composition.Tests", "Composition.Tests\Composition.Tests.csproj", "{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{75d2e396-dbcd-4ad4-988b-2b5438e9c71b}*SharedItemsImports = 13
 		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{71f53d96-49e0-48b8-b959-be14d6ea2fdf}*SharedItemsImports = 13
 		Windows\Windows.Shared\Windows.Shared.projitems*{bfc50995-6e56-4bdf-b4df-41be95c2cf56}*SharedItemsImports = 4
 		Windows\Windows.WinRT.Shared\Windows.WinRT.Shared.projitems*{bfc50995-6e56-4bdf-b4df-41be95c2cf56}*SharedItemsImports = 4
-		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
-		Hosting\Hosting.Shared\Hosting.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
 		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
+		Hosting\Hosting.Shared\Hosting.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
+		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{f6d310ce-339c-4b5a-98ce-5d4b28bf7013}*SharedItemsImports = 4
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
 		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{f2a140c5-8779-47d5-9c44-dcf136193727}*SharedItemsImports = 4
@@ -203,9 +205,9 @@ Global
 		Hosting\Hosting.Shared\Hosting.Shared.projitems*{11866fa8-3f80-4f2d-96b2-99faab697581}*SharedItemsImports = 4
 		Windows\Windows.Shared\Windows.Shared.projitems*{7bac15c3-94f3-4630-a109-56e6872d6e8f}*SharedItemsImports = 13
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{5dcf739c-ca14-4d47-99d8-2896f8fd700c}*SharedItemsImports = 13
-		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
-		Hosting\Hosting.Shared\Hosting.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
 		Hosting\Hosting.WinRT.Shared\Hosting.WinRT.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
+		Hosting\Hosting.Shared\Hosting.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
+		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{18a0efd5-519b-44ab-a84f-80e667b756a9}*SharedItemsImports = 4
 		Hosting\Hosting.Shared\Hosting.Shared.projitems*{4c20fcb1-70cf-4962-848b-f0f779b1666a}*SharedItemsImports = 13
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{84ebe0d1-cc3d-49cf-80e8-86ce39f72430}*SharedItemsImports = 13
 		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{8d2a422e-0776-4b58-8fa4-6c4ec569aaef}*SharedItemsImports = 13
@@ -216,8 +218,8 @@ Global
 		Core\CoreEx.WinRT.Shared\CoreEx.WinRT.Shared.projitems*{05f3a2a4-a860-43b3-9bf5-984e326474ad}*SharedItemsImports = 4
 		Core\CoreEx.Shared\CoreEx.Shared.projitems*{05f3a2a4-a860-43b3-9bf5-984e326474ad}*SharedItemsImports = 4
 		Hosting\Hosting.NetFx.Shared\Hosting.NetFx.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
-		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
 		Hosting\Hosting.Shared\Hosting.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
+		Hosting\Hosting.Windows.Shared\Hosting.Windows.Shared.projitems*{dd854ecf-0cb7-4d60-a9a1-ee67913b50db}*SharedItemsImports = 4
 		Core\CoreEx.Portable.Shared\CoreEx.Portable.Shared.projitems*{949bd34b-b986-4a75-8ec4-48e4c909da84}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -733,6 +735,22 @@ Global
 		{B00890E5-5567-45E5-8936-679E7BFE9DEB}.Release|x64.Build.0 = Release|Any CPU
 		{B00890E5-5567-45E5-8936-679E7BFE9DEB}.Release|x86.ActiveCfg = Release|Any CPU
 		{B00890E5-5567-45E5-8936-679E7BFE9DEB}.Release|x86.Build.0 = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|x64.Build.0 = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Debug|x86.Build.0 = Debug|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|ARM.Build.0 = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|x64.ActiveCfg = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|x64.Build.0 = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|x86.ActiveCfg = Release|Any CPU
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -804,5 +822,6 @@ Global
 		{DD3DCBE6-F6DE-4297-851A-36BB3A61F354} = {CA4E9069-E302-494A-8745-D3BE792403E0}
 		{11866FA8-3F80-4F2D-96B2-99FAAB697581} = {CA4E9069-E302-494A-8745-D3BE792403E0}
 		{B00890E5-5567-45E5-8936-679E7BFE9DEB} = {CA4E9069-E302-494A-8745-D3BE792403E0}
+		{53D8EE99-453C-429C-854D-8F2CEC4EAD5E} = {84FB0D74-8118-4337-9E8D-7EA8C2085A11}
 	EndGlobalSection
 EndGlobal

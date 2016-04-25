@@ -1,7 +1,8 @@
 ﻿namespace More.Composition
 {
     using System;
-    using System.Diagnostics;
+    using static System.Activator;
+    using static System.Convert;
 
     internal abstract class StringConverter<T> : ITypeConverter
     {
@@ -9,9 +10,22 @@
 
         public object Convert( object value, Type targetType, IFormatProvider formatProvider )
         {
-            Debug.Assert( typeof( T ).Equals( targetType ), "The specified conversion type is not supported by the converter." );
             var input = value as string;
-            return input == null ? System.Convert.ChangeType( value, typeof( T ), formatProvider ) : Convert( input, targetType, formatProvider );
+            Type typeArg;
+
+            if ( targetType.IsNullable( out typeArg ) )
+            {
+                if ( input == null )
+                    return null;
+
+                value = Convert( input, typeArg, formatProvider );
+                return CreateInstance( targetType, value );
+            }
+
+            if ( input == null )
+                return ChangeType( value, typeof( T ), formatProvider );
+
+            return Convert( input, targetType, formatProvider );
         }
     }
 }

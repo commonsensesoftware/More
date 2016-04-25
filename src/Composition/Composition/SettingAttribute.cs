@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Composition;
     using System.Diagnostics.Contracts;
-    using System.Reflection;
 
     /// <summary>
     /// Represents the metadata for an application setting.
@@ -69,12 +68,17 @@
 
         private static IDictionary<Type, ITypeConverter> CreateDefaultConverters()
         {
+            var guidConverter = new GuidConverter();
+            var timeSpanConverter = new TimeSpanConverter();
+
             return new Dictionary<Type, ITypeConverter>()
             {
                 { typeof( object ), new DefaultConverter() },
-                { typeof( Guid ), new GuidConverter() },
+                { typeof( Guid ), guidConverter },
+                { typeof( Guid? ), guidConverter },
                 { typeof( Uri ), new UriConverter() },
-                { typeof( TimeSpan ), new TimeSpanConverter() },
+                { typeof( TimeSpan ), timeSpanConverter },
+                { typeof( TimeSpan? ), timeSpanConverter },
                 { typeof( Enum ), new EnumConverter() }
             };
         }
@@ -105,8 +109,9 @@
         /// <param name="formatProvider">The <see cref="IFormatProvider">format provider</see> used to convert the value.</param>
         /// <returns>The converted value.</returns>
         /// <remarks>Default converters are provided for the following types: <see cref="Guid"/>, <see cref="Uri"/>,
-        /// <see cref="TimeSpan"/>, and <see cref="Enum"/>. A default converter is also provided to convert all
-        /// primitive types. To register additional conversion methods, use the <see cref="SetConverter{T}"/> method.</remarks>
+        /// <see cref="TimeSpan"/>, and <see cref="Enum"/>. A default converter is provided to convert the built-in
+        /// primitive types. The applicable <see cref="Nullable{T}">nullable</see> variants of each of these types
+        /// is also supported. To register additional conversion methods, use the <see cref="SetConverter{T}"/> method.</remarks>
         public static object Convert( object value, Type targetType, IFormatProvider formatProvider )
         {
             Arg.NotNull( targetType, nameof( targetType ) );
@@ -118,24 +123,14 @@
             {
                 converters = mappedConverters.Value;
 
-                // try to resolve a defined converter
                 if ( converters.TryGetValue( targetType, out converter ) )
                     return converter.Convert( value, targetType, formatProvider );
             }
 
-            // special handling for enumerations
-            if ( typeof( Enum ).GetTypeInfo().IsAssignableFrom( targetType.GetTypeInfo() ) )
-            {
-                // there is a single type converter that handles all enumerations
-                lock ( syncRoot )
-                    converter = converters[typeof( Enum )];
+            var key = targetType.IsEnum() ? typeof( Enum ) : typeof( object );
 
-                return converter.Convert( value, targetType, formatProvider );
-            }
-
-            // default, catch-all converter
             lock ( syncRoot )
-                converter = converters[typeof( object )];
+                converter = converters[key];
 
             return converter.Convert( value, targetType, formatProvider );
         }
