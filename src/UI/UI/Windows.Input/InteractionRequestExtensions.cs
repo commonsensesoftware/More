@@ -516,6 +516,13 @@
             interaction.Commands.Clear();
             interaction.Commands.Add( new NamedCommand<IWebAuthenticationResult>( "OK", p => source.TrySetResult( p ) ) );
             interaction.Commands.Add( new NamedCommand<IWebAuthenticationResult>( "Cancel", p => source.TrySetResult( p ) ) );
+
+            if ( interaction.DefaultCommandIndex < 0 || interaction.DefaultCommandIndex > 1 )
+                interaction.DefaultCommandIndex = 0;
+
+            if ( interaction.CancelCommandIndex < 0 || interaction.CancelCommandIndex > 1 )
+                interaction.CancelCommandIndex = 1;
+
             interactionRequest.Request( interaction );
 
             return source.Task;
