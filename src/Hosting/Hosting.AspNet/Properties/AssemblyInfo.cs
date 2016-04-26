@@ -4,4 +4,4 @@
 [assembly: AssemblyProduct( "More.AspNet.Hosting" )]
 [assembly: AssemblyDescription( "The Microsoft ASP.NET hosting library for the \"More\" framework." )]
 [assembly: AssemblyVersion( "1.0.0.0" )]
-[assembly: AssemblyInformationalVersion( "1.0.2" )]
+[assembly: AssemblyInformationalVersion( "1.0.3" )]
