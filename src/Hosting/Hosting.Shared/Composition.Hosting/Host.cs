@@ -283,9 +283,8 @@
             var unitOfWorkFactory = new InterfaceSpecification( typeof( IUnitOfWorkFactory ) );
             var repository = new InterfaceSpecification( typeof( IReadOnlyRepository<> ) );
             var dataAccess = repository.Or( unitOfWork );
-            var builder = new ConventionBuilder();
+            var builder = new SettingsConventionBuilder();
 
-            // build default conventions
             builder.ForTypesDerivedFrom<IActivity>().Export( b => b.AddMetadata( "ExportedType", t => t ) ).Export<IActivity>();
 #if WEB
             builder.ForTypesMatching<IUnitOfWorkFactory>( unitOfWorkFactory.IsSatisfiedBy ).Export<IUnitOfWorkFactory>().Shared( Boundary.PerRequest );

@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Composition\InterfaceSpecification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\NamespaceSpecification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition\PublicKeyTokenSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\SettingsConventionBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionMessage.Designer.cs">
       <DependentUpon>ExceptionMessage.resx</DependentUpon>
       <DesignTime>True</DesignTime>
