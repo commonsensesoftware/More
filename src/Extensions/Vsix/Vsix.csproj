@@ -88,14 +88,27 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <!-- include solution generated packages -->
     <Content Include="..\..\NuGet\*.nupkg" Exclude="..\..\NuGet\More.AspNet.Hosting*.nupkg">
       <Link>Packages\%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <!-- the mef package must be embedded for templates to support offline scenarios -->
-    <Content Include="..\..\packages\Microsoft.Composition.1.0.30\Microsoft.Composition*.nupkg">
+   <Content Include="..\..\packages\Microsoft.Composition.1.0.30\Microsoft.Composition*.nupkg">
+    <Link>Packages\%(FileName)%(Extension)</Link>
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <IncludeInVSIX>true</IncludeInVSIX>
+   </Content>
+    <Content Include="..\..\packages\EntityFramework.6.1.3\EntityFramework*.nupkg">
+      <Link>Packages\%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+   <Content Include="..\..\packages\System.Net.Primitives.3.9.0\System.Net.Primitives*.nupkg">
+    <Link>Packages\%(FileName)%(Extension)</Link>
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <IncludeInVSIX>true</IncludeInVSIX>
+   </Content>
+    <Content Include="..\..\packages\*.4.0.0\*.4.0.0.nupkg">
       <Link>Packages\%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -117,16 +130,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Packages\EntityFramework.6.1.3.nupkg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="ReleaseNotes.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Packages\packages.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -334,9 +344,16 @@
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="BeforeBuild">
+    <PropertyGroup>
+      <PackagesRoot>$([System.IO.Path]::GetFullPath('$(ProjectDir)..\..'))</PackagesRoot>
+      <PackagesDir>$(PackagesRoot)\packages</PackagesDir>
+      <NuGetExe>$(PackagesDir)\NuGet.CommandLine.3.3.0\tools\nuget.exe</NuGetExe>
+      <PackageConfig>$(ProjectDir)Packages\packages.config</PackageConfig>
+    </PropertyGroup>
+    <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(PackageConfig)&quot; -PackagesDirectory &quot;$(PackagesDir)&quot; -SolutionDirectory &quot;$(PackagesRoot)&quot; -NonInteractive -Verbosity quiet" />
+  </Target>
 </Project>
