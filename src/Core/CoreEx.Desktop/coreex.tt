@@ -17,7 +17,7 @@
   </frameworkAssemblies>
   <title>More - Extensions</title>
   <description>$description$</description>
-  <summary>Provides "More" patterns and practices that contains platform-specific extensions.</summary>
+  <summary>Provides "More" patterns and practices that contain platform-specific extensions.</summary>
   <releaseNotes>• Added Adapt extension methods for adaptable Data Annotations types</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
