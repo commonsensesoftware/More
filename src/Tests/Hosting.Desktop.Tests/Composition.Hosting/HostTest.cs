@@ -2,9 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Composition;
-    using System.Linq;
-    using System.Threading.Tasks;
     using System.Windows;
     using Xunit;
 
@@ -13,10 +10,12 @@
     /// </summary>
     public class HostTest
     {
-        [Export]
+        public class App : Application
+        {
+        }
+
         public class StubObject
         {
-            [ImportingConstructor]
             public StubObject( [Configuration.Setting] string message )
             {
                 Message = message;
@@ -37,7 +36,7 @@
                 { "More.Composition.Hosting.HostTest+StubObject:message", "Test" },
                 { "More.Composition.Hosting.HostTest+StubObject:RetryCount", 42 }
             };
-            var app = new Application();
+            var app = new App();
             var expected = new StubObject( "Test" ) { RetryCount = 42 };
             StubObject actual;
 
@@ -45,7 +44,8 @@
 
             using ( var host = new Host( key => settings[key] ) )
             {
-                host.Run( app, typeof( HostTest ).Assembly );
+                host.Configure( ( c, b ) => b.ForType<StubObject>().Export() );
+                host.Run( app );
 
                 // act
                 actual = host.GetRequiredService<StubObject>();

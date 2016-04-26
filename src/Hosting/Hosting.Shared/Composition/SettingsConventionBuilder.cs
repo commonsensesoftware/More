@@ -3,7 +3,9 @@
     using Configuration;
     using System;
     using System.Collections.Generic;
+    using System.Composition;
     using System.Composition.Convention;
+    using System.Diagnostics.Contracts;
     using System.Reflection;
     using static System.Globalization.CultureInfo;
 
@@ -15,22 +17,42 @@
     {
         private const string ConfigKeyFormat = "{0}:{1}";
 
-        private static IEnumerable<Attribute> SwapSettingAttributeForISetting( IEnumerable<Attribute> attributes, Lazy<string> key, object literalDefaultValue )
+        private static IEnumerable<Attribute> ReplaceImportAttributeWithSettingAttribute( IEnumerable<Attribute> attributes, Lazy<string> defaultKey, object literalDefaultValue )
         {
+            Contract.Requires( attributes != null );
+            Contract.Requires( defaultKey != null );
+            Contract.Ensures( Contract.Result<IEnumerable<Attribute>>() != null );
+
+            var hasImport = false;
+            Attribute import = null;
+
             foreach ( var attribute in attributes )
             {
                 var setting = attribute as ISetting;
 
                 if ( setting == null )
                 {
-                    yield return attribute;
+                    if ( attribute is ImportAttribute )
+                        import = attribute;
+                    else
+                        yield return attribute;
                 }
                 else
                 {
+                    hasImport = true;
+
                     var defaultValue = setting.DefaultValue ?? ( literalDefaultValue ?? SettingAttribute.NullValue );
-                    yield return new SettingAttribute( key.Value ) { DefaultValue = defaultValue };
+                    var key = setting.Key;
+
+                    if ( string.IsNullOrEmpty( key ) )
+                        key = defaultKey.Value;
+
+                    yield return new SettingAttribute( key ) { DefaultValue = defaultValue };
                 }
             }
+
+            if ( !hasImport && import != null )
+                yield return import;
         }
 
         /// <summary>
@@ -41,11 +63,14 @@
         /// <returns>The list of applied attributes.</returns>
         public override IEnumerable<Attribute> GetCustomAttributes( Type reflectedType, MemberInfo member )
         {
+            Contract.Assume( reflectedType != null );
+            Contract.Assume( member != null );
+
             if ( !( member is PropertyInfo ) )
                 return base.GetCustomAttributes( reflectedType, member );
 
             var key = new Lazy<string>( () => string.Format( InvariantCulture, ConfigKeyFormat, reflectedType.FullName, member.Name ) );
-            return SwapSettingAttributeForISetting( base.GetCustomAttributes( reflectedType, member ), key, null );
+            return ReplaceImportAttributeWithSettingAttribute( base.GetCustomAttributes( reflectedType, member ), key, null );
         }
 
         /// <summary>
@@ -56,9 +81,12 @@
         /// <returns>The <see cref="IEnumerable{T}">sequence</see> of applied <see cref="Attribute">attributes</see>.</returns>
         public override IEnumerable<Attribute> GetCustomAttributes( Type reflectedType, ParameterInfo parameter )
         {
+            Contract.Assume( reflectedType != null );
+            Contract.Assume( parameter != null );
+
             var key = new Lazy<string>( () => string.Format( InvariantCulture, ConfigKeyFormat, reflectedType.FullName, parameter.Name ) );
             var literalDefaultValue = parameter.HasDefaultValue ? parameter.DefaultValue : null;
-            return SwapSettingAttributeForISetting( base.GetCustomAttributes( reflectedType, parameter ), key, literalDefaultValue );
+            return ReplaceImportAttributeWithSettingAttribute( base.GetCustomAttributes( reflectedType, parameter ), key, literalDefaultValue );
         }
     }
 }
