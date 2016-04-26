@@ -34,7 +34,7 @@
               Text="{Binding ModelType.Name, Mode=OneWay, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=true}" />
      <Button Grid.Row="2" Content="..." Command="{Binding Commands[BrowseForModel]}" Width="22" HorizontalAlignment="Right" ToolTip="Browse for a model" Margin="0,10,0,0" />
      <CheckBox Grid.Row="3" Content="Show tips in generated files" IsChecked="{Binding ShowTips}" ToolTip="Indicates whether tips are shown in the generated code files" Margin="0,10,0,0" />
-     <CheckBox Grid.Row="4" IsChecked="{Binding UseComposition}" IsThreeState="False" Content="Use composition for constructor" />
+     <CheckBox Grid.Row="4" IsChecked="{Binding AddConnectionStringParameter}" IsThreeState="False" Content="Add connection string parameter to constructor" />
      <TextBlock Grid.Row="5" Text="Select the interfaces to implement:" FontWeight="Bold" Margin="0,25,0,0" />
      <ListBox Grid.Row="6" Style="{StaticResource CheckBoxList}" ItemsSource="{Binding ImplementedInterfaces, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
     </Grid>

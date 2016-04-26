@@ -93,7 +93,7 @@
             {
                 new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "_EFVersions", ReadEntityFrameworkVersions ),
                 new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "$showTips$", ( m, s ) => m.ShowTips = GetBoolean( s, true ) ),
-                new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "$compose$", ( m, s ) => m.UseComposition = GetBoolean( s ) )
+                new Tuple<string, Action<DbContextItemTemplateWizardViewModel, string>>( "$addConnectionString$", ( m, s ) => m.AddConnectionStringParameter = GetBoolean( s ) )
             };
         }
 
@@ -104,7 +104,7 @@
             {
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "_SelectedEFVersion", m => m.SelectedEntityFrameworkVersion == null ? string.Empty : m.SelectedEntityFrameworkVersion.Id ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$showTips$", m => m.ShowTips.ToString().ToLowerInvariant() ),
-                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$compose$", m => m.UseComposition.ToString().ToLowerInvariant() ),
+                new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$addConnectionString$", m => m.AddConnectionStringParameter.ToString().ToLowerInvariant() ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$implementedInterfaces$", BuildImplementedInterfaces ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$modelNamespaceRequired$", m => ( m.ModelType.Namespace != GetReplacement( "$rootnamespace$" ) ).ToString().ToLowerInvariant() ),
                 new Tuple<string, Func<DbContextItemTemplateWizardViewModel, string>>( "$modelNamespace$", m => m.ModelType.Namespace ),

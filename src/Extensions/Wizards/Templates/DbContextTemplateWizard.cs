@@ -47,44 +47,9 @@
                     { entry.Key, entry.Value }
                 };
 
-                // provide user feedback
                 DesignTimeEnvironment.StatusBar.Text = SR.PackageInstallStatus.FormatDefault( entry.Key, entry.Value );
-
-                // install the package from the vsix location
                 installer.InstallPackagesFromVSExtensionRepository( extensionId, unzipped, skipAssemblyReferences, ignoreDependencies, Project, packageVersion );
             }
-        }
-
-        private void InstallCompositionPackagesIfNeeded( IComponentModel services, IVsPackageInstallerServices nuget, Lazy<XElement> wizardData )
-        {
-            Contract.Requires( services != null );
-            Contract.Requires( nuget != null );
-            Contract.Requires( wizardData != null );
-
-            // ensure composition is enabled
-            if ( !GetBoolean( "$compose$" ) )
-                return;
-
-            var packages = wizardData.Value;
-            var packageIds = new[] { "Microsoft.Composition", "More.Composition" };
-            var packageVersions = new Dictionary<string, string>();
-
-            // build collection of required packages and versions
-            foreach ( var packageId in packageIds )
-            {
-                if ( nuget.IsPackageInstalled( Project, packageId ) )
-                    continue;
-
-                var packageVersion = ( from element in packages.Elements( "package" )
-                                       let id = (string) element.Attribute( "id" )
-                                       where id == packageId
-                                       select (string) element.Attribute( "version" ) ).FirstOrDefault();
-
-                if ( !string.IsNullOrEmpty( packageVersion ) )
-                    packageVersions[packageId] = packageVersion;
-            }
-
-            InstallPackages( services, packages, packageVersions );
         }
 
         private void InstallEntityFrameworkPackageIfNeeded( IComponentModel services, IVsPackageInstallerServices nuget, Lazy<XElement> wizardData )
@@ -93,7 +58,6 @@
             Contract.Requires( nuget != null );
             Contract.Requires( wizardData != null );
 
-            // determine whether the package is already installed
             if ( nuget.IsPackageInstalled( Project, "EntityFramework" ) )
                 return;
 
@@ -104,7 +68,6 @@
                                    where id == selectedId
                                    select (string) element.Attribute( "version" ) ).FirstOrDefault();
 
-            // package version unknown (should only happen if there's an error in the wizard or the vstemplate)
             if ( string.IsNullOrEmpty( packageVersion ) )
                 return;
 
@@ -122,7 +85,6 @@
             var comparer = StringComparer.OrdinalIgnoreCase;
             var configFile = Project.ProjectItems.Cast<ProjectItem>().FirstOrDefault( pi => comparer.Equals( pi.Name, fileName ) );
 
-            // if a *.config file already exists, there's nothing to do
             if ( configFile != null )
                 return configFile;
 
@@ -148,27 +110,22 @@
             var configFile = GetOrCreateConfigFile();
             var sourceControl = DesignTimeEnvironment.SourceControl;
 
-            // check-out file if necessary
             if ( sourceControl.IsItemUnderSCC( configFile.Name ) && !sourceControl.IsItemCheckedOut( configFile.Name ) )
                 sourceControl.CheckOutItem( configFile.Name );
 
-            // get <connectionStrings/> element
             var path = configFile.FileNames[1];
             var xml = XDocument.Load( path );
             var configuration = xml.Root;
             var connectionStrings = configuration.Element( "connectionStrings" );
 
-            // add <connectionStrings/> element as necessary
             if ( connectionStrings == null )
             {
                 connectionStrings = new XElement( "connectionStrings" );
                 configuration.Add( connectionStrings );
             }
 
-            // try to find existing <add/> element with matching name
             var add = connectionStrings.Elements( "add" ).FirstOrDefault( e => (string) e.Attribute( "name" ) == name );
 
-            // add or update <add/> element
             if ( add == null )
             {
                 var providerName = GetString( "$providerName$", "System.Data.SqlClient" );
@@ -177,13 +134,11 @@
             }
             else
             {
-                // if a provider name isn't provided, use the current value (if any) or assume the default value
                 var providerName = GetString( "$providerName$", (string) add.Attribute( "providerName" ) ?? "System.Data.SqlClient" );
                 add.SetAttributeValue( "connectionString", cs );
                 add.SetAttributeValue( "providerName", providerName );
             }
 
-            // save changes
             xml.Save( path );
         }
 
@@ -203,7 +158,6 @@
             var nuget = services.GetService<IVsPackageInstallerServices>();
             var wizardData = new Lazy<XElement>( () => XDocument.Parse( GetString( "$packagedata$", "<packages />" ) ).Root );
 
-            InstallCompositionPackagesIfNeeded( services, nuget, wizardData );
             InstallEntityFrameworkPackageIfNeeded( services, nuget, wizardData );
             UpdateConfigFileIfNeeded();
         }
@@ -262,7 +216,6 @@
             if ( !( view.ShowDialog( shell ) ?? false ) )
                 return false;
 
-            // map model back to replacements
             mapper.Map( model, Context.Replacements );
             return true;
         }

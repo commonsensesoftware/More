@@ -29,7 +29,7 @@
    <CustomParameter Name="_EFVersions" Value="EF6" />
    <CustomParameter Name="_SelectedEFVersion" Value="" />
    <CustomParameter Name="$showTips$" Value="true" />
-   <CustomParameter Name="$compose$" Value="true" />
+   <CustomParameter Name="$addConnectionString$" Value="true" />
    <CustomParameter Name="$modelNamespaceRequired$" Value="false" />
    <CustomParameter Name="$modelNamespace$" Value="" />
    <CustomParameter Name="$implementedInterfaces$" Value="" />
@@ -37,8 +37,8 @@
    <CustomParameter Name="$connectionStringKey$" Value="" />
    <CustomParameter Name="$providerName$" Value="" />
    <!-- this set of packages is not used by directly by the nuget services, but is instead used by the custom wizard
-       to add the packages dynamically based on selected options. the package ids are not necessarily mapped to nuget. -->
-   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa'&gt;&lt;package id='EF6' version='6.1.3' /&gt;&lt;package id='Microsoft.Composition' version='1.0.30' /&gt;&lt;package id='More.Composition' version='<#= CompositionVersion #>' /&gt;&lt;/packages&gt;" />
+        to add the packages dynamically based on selected options. the package ids are not necessarily mapped to nuget. -->
+   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa'&gt;&lt;package id='EF6' version='6.1.3' /&gt;&lt;/packages&gt;" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>

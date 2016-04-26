@@ -1,14 +1,14 @@
 ﻿namespace $rootnamespace$
 {$if$($modelNamespaceRequired$ == true)
     using $modelNamespace$;$endif$
-    using More.ComponentModel;$if$($compose$ == true)
-    using More.Composition;$endif$
+    using More.ComponentModel;$if$($addConnectionString$ == true)
+    using More.Configuration;$endif$
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using System.Linq;$if$($compose$ == true)
+    using System.Linq;$if$($addConnectionString$ == true)
     using ConnectionStringSettings = System.Configuration.ConnectionStringSettings;$endif$
 
     /// <summary>
@@ -20,14 +20,14 @@
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="$safeitemrootname$"/> class.
-        /// </summary>$if$($compose$ == true)
+        /// </summary>$if$($addConnectionString$ == true)
         /// <param name="settings">The <see cref="ConnectionStringSettings">connection string settings</see> for the context.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public $safeitemrootname$( [Setting( "$connectionStringKey$" )] ConnectionStringSettings settings )
-            : base( settings?.ConnectionString )$endif$$if$($compose$ == false)
+            : base( settings?.ConnectionString )$endif$$if$($addConnectionString$ == false)
         public $safeitemrootname$()
             : base( "name=$connectionStringKey$" )$endif$
-        {$if$($compose$ == true)
+        {$if$($addConnectionString$ == true)
             Contract.Requires( settings != null );$endif$
             Database.SetInitializer<$safeitemrootname$>( null );
         }

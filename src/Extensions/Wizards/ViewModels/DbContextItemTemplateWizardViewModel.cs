@@ -31,7 +31,7 @@
         private string title;
         private int currentStep;
         private bool showTips = true;
-        private bool useComposition;
+        private bool addConnectionStringParameter;
         private bool saveToConfigurationFile = true;
         private string saveToConfigurationCaption = SR.DefaultSaveToConfigurationCaption;
         private string connectionStringName;
@@ -176,18 +176,18 @@
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether generated code uses composition.
+        /// Gets or sets a value indicating whether generated code adds a connection string parameter.
         /// </summary>
-        /// <value>True if the generated code will use composition; otherwise, false..</value>
-        public bool UseComposition
+        /// <value>True if the generated code will add a connection string parameter; otherwise, false.</value>
+        public bool AddConnectionStringParameter
         {
             get
             {
-                return useComposition;
+                return addConnectionStringParameter;
             }
             set
             {
-                SetProperty( ref useComposition, value );
+                SetProperty( ref addConnectionStringParameter, value );
             }
         }
 
