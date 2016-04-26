@@ -39,7 +39,7 @@
    Type="{Binding SelectedType, Mode=TwoWay}"
    Context="{Binding Converter={StaticResource ContextConverter}}"
    Filter="{Binding TypeFilter, Converter={StaticResource SpecToFuncConverter}}" />
-  <CheckBox IsChecked="{Binding FilterByConvention}" Content="Filter view models by convention" IsThreeState="False" Margin="10,10,0,0" Grid.Row="1" Grid.Column="1" />
+  <CheckBox IsChecked="{Binding FilterByConvention}" Content="Filter by convention" IsThreeState="False" Margin="10,10,0,0" Grid.Row="1" Grid.Column="1" />
   <ItemsControl Style="{StaticResource DialogCommands}" ItemsSource="{Binding DialogCommands}" Grid.Row="2" Grid.ColumnSpan="2" />
  </Grid>
 </Window>

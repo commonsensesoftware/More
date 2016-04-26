@@ -137,6 +137,7 @@
             var picker = new TypePicker()
             {
                 Title = e.Interaction.Title,
+                NameConvention = "Model",
                 LocalAssemblyName = Model.LocalAssemblyName,
                 SourceProject = projectInfo,
                 RestrictedBaseTypeNames =
