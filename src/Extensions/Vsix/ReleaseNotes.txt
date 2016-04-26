@@ -1,10 +1,25 @@
-﻿Version 1.1.0 Release Notes
+﻿Version 1.2.3 Release Notes
 -----------------------------------------------------------------------------------------------------------------------
-• Updated templates to use C# 6.0 syntax
-• Added template wizard support for text input user interactions
-• Added template wizard support for contact selection user interactions (Windows Store and Windows Phone)
-• Updated templates to use new async extension methods for user interactions
-• Updated Portable and Windows Phone interaction templates to use portable implementations with continuations
+• Updated WinRT template wizard references; incremented from 12.0 to 14.0 in latest Visual Studio update
+• Updated pre-packaged NuGet packages for project and item templates
+• Added missing pre-packaged NuGet packages required for portable libraries targeting "dotnet" and "netstandard"
+• Updated DbContext code generator with the new, portable SettingAttribute which does not directly depend on MEF
+• Updated DbContext template wizard verbage from "Use composition..." to "Add connection string parameter"
+• DbContext template wizard now supports filtering types by convention; names or namespaces containing "Model"
+
+Version 1.2.2 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Updated DbContext code generator with new partial method support for add, remove, and update item extension points
+
+Version 1.2.1 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Updated DbContext code generator to render partial method for discard change extension point
+• Updated pre-packaged NuGet packages for project and item templates
+
+Version 1.2.0 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Fixed template file reference in WPF user control template
+• Updated pre-packaged NuGet packages for project and item templates
 
 Version 1.1.1 Release Notes
 -----------------------------------------------------------------------------------------------------------------------
@@ -13,16 +28,10 @@ Version 1.1.1 Release Notes
 • Updated default dialog button styling for WPF item templates
 • Updated pre-packaged NuGet packages for project and item templates
 
-Version 1.2.0 Release Notes
+Version 1.1.0 Release Notes
 -----------------------------------------------------------------------------------------------------------------------
-• Fixed template file reference in WPF user control template
-• Updated pre-packaged NuGet packages for project and item templates
-
-Version 1.2.1 Release Notes
------------------------------------------------------------------------------------------------------------------------
-• Updated DbContext code generator to render partial method for discard change extension point
-• Updated pre-packaged NuGet packages for project and item templates
-
-Version 1.2.2 Release Notes
------------------------------------------------------------------------------------------------------------------------
-• Updated DbContext code generator with new partial method support for add, remove, and update item extension points
+• Updated templates to use C# 6.0 syntax
+• Added template wizard support for text input user interactions
+• Added template wizard support for contact selection user interactions (Windows Store and Windows Phone)
+• Updated templates to use new async extension methods for user interactions
+• Updated Portable and Windows Phone interaction templates to use portable implementations with continuations
