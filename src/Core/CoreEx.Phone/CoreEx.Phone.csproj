@@ -181,7 +181,7 @@
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="More\ComponentModel.DataAnnotations\ValidatorAdapter.cs" />
-    <Compile Include="More\IO\IKeyedServiceProvider.cs" />
+    <Compile Include="More\IKeyedServiceProvider.cs" />
     <Compile Include="More\IO\StorageFileAdapter.cs" />
     <Compile Include="More\IO\StorageFolderAdapter.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\CustomValidationAttribute.cs" />
