@@ -18,7 +18,7 @@
   <title>More - Extensions</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices that contain platform-specific extensions.</summary>
-  <releaseNotes>• Added Adapt extension methods for adaptable Data Annotations types</releaseNotes>
+  <releaseNotes>• Fixed issues with service type key decoration</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

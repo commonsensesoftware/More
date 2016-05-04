@@ -17,7 +17,7 @@
         {
 #if WINDOWS_PHONE_APP
             var keyedServiceProvider = serviceProvider as IKeyedServiceProvider;
-            return keyedServiceProvider == null ? null : keyedServiceProvider.GetService( serviceType, key );
+            return keyedServiceProvider?.GetService( serviceType, key );
 #else
             var generator = new ServiceTypeAssembler();
             var projectedType = generator.ApplyKey( serviceType, key );
@@ -38,9 +38,9 @@
             return ( (IEnumerable<TService>) keyedServiceProvider.GetService( multipleServicesType, key ) ) ?? Enumerable.Empty<TService>();
 #else
             var generator = new ServiceTypeAssembler();
-            var projectedType = generator.ApplyKey( serviceType, key );
-            var multipleServicesType = generator.ForMany( projectedType );
-            return ( (IEnumerable<TService>) serviceProvider.GetService( multipleServicesType ) ) ?? Enumerable.Empty<TService>();
+            var multipleServicesType = generator.ForMany( serviceType );
+            var projectedType = generator.ApplyKey( multipleServicesType, key );
+            return ( (IEnumerable<TService>) serviceProvider.GetService( projectedType ) ) ?? Enumerable.Empty<TService>();
 #endif
         }
 

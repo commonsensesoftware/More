@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using System.Linq;
 
     /// <summary>
     /// Represents a <see cref="IServiceProvider">service provider</see> that can adapt to another
@@ -43,14 +42,7 @@
             this.resolveAll = resolveAll;
         }
 
-        private ServiceTypeDisassembler Disassembler
-        {
-            get
-            {
-                Contract.Ensures( Contract.Result<ServiceTypeDisassembler>() != null );
-                return disassembler.Value;
-            }
-        }
+        private ServiceTypeDisassembler Disassembler => disassembler.Value;
 
         [SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This method should not throw exceptions for service resolution failures." )]
         private IEnumerable<object> DefaultResolveAll( Type serviceType, string key )
@@ -61,14 +53,12 @@
 
             if ( key == null )
             {
-                // add ourself when requested
                 if ( typeof( IServiceProvider ) == serviceType )
                     services.Add( this );
             }
 
             try
             {
-                // return sequence with a single element
                 var service = resolve( serviceType, key );
 
                 if ( service != null )
@@ -76,7 +66,6 @@
             }
             catch
             {
-                // do nothing if resolution fails
             }
 
             return services;
@@ -95,13 +84,11 @@
             var key = Disassembler.ExtractKey( serviceType );
             Type innerServiceType;
 
-            // return multiple services, if requested
             if ( Disassembler.IsForMany( serviceType, out innerServiceType ) )
                 return resolveAll( innerServiceType, key );
 
             if ( key == null )
             {
-                // return ourself when requested
                 if ( typeof( IServiceProvider ) == serviceType )
                     return this;
             }

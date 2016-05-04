@@ -1,6 +1,7 @@
 ﻿namespace More
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -49,14 +50,30 @@
                 {
                     new Tuple<Type, string, object>( typeof( Service1 ), null, new Service1() ),
                     new Tuple<Type, string, object>( typeof( Service2 ), null, new Service2() ),
+                    new Tuple<Type, string, object>( typeof( Service1 ), null, new Service1() )
+                };
+
+                yield return new object[] { services, typeof( Service1 ), new[] { services[0].Item3, services[2].Item3 } };
+                yield return new object[] { services, typeof( Service2 ), new[] { services[1].Item3 } };
+            }
+        }
+
+        public static IEnumerable<object[]> GetServicesWithKeyData
+        {
+            get
+            {
+                var services = new[]
+                {
+                    new Tuple<Type, string, object>( typeof( Service1 ), null, new Service1() ),
+                    new Tuple<Type, string, object>( typeof( Service2 ), null, new Service2() ),
                     new Tuple<Type, string, object>( typeof( Service3 ), "Keyed", new Service3() ),
                     new Tuple<Type, string, object>( typeof( Service1 ), null, new Service1() ),
                     new Tuple<Type, string, object>( typeof( Service3 ), "Keyed", new Service3() ),
                 };
 
-                yield return new object[] { services, typeof( IEnumerable<Service1> ), new[] { services[0].Item3, services[3].Item3 } };
-                yield return new object[] { services, typeof( IEnumerable<Service2> ), new[] { services[1].Item3 } };
-                yield return new object[] { services, typeof( IEnumerable<Service3> ), new[] { services[2].Item3, services[4].Item3 } };
+                yield return new object[] { services, typeof( Service1 ), null, new[] { services[0].Item3, services[3].Item3 } };
+                yield return new object[] { services, typeof( Service2 ), null, new[] { services[1].Item3 } };
+                yield return new object[] { services, typeof( Service3 ), "Keyed", new[] { services[2].Item3, services[4].Item3 } };
             }
         }
 
@@ -70,7 +87,7 @@
         }
 
         [Theory( DisplayName = "new service provider adapter should not allow null resolve function" )]
-        [MemberData( "NullResolveFuncData" )]
+        [MemberData( nameof( NullResolveFuncData ) )]
         public void ConstructorShouldNotAllowNullResolveFunction( Action<Func<Type, string, object>> test )
         {
             // arrange
@@ -138,7 +155,7 @@
         }
 
         [Theory( DisplayName = "get service should return expected object" )]
-        [MemberData( "GetServiceData" )]
+        [MemberData( nameof( GetServiceData ) )]
         public void GetServiceShouldReturnExpectedObject( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, object expected )
         {
             // arrange
@@ -152,16 +169,32 @@
         }
 
         [Theory( DisplayName = "get services should return expected objects" )]
-        [MemberData( "GetServicesData" )]
+        [MemberData( nameof( GetServicesData ) )]
         public void GetServicesShouldReturnExpectedObjects( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, IEnumerable<object> expected )
         {
             // arrange
             var serviceProvider = new ServiceProviderAdapter(
-                ( t, s ) => services.Where( i => i.Item1 == t && i.Item2 == s ).Select( i => i.Item3 ).FirstOrDefault(),
-                ( t, s ) => services.Where( i => i.Item1 == t && i.Item2 == s ).Select( i => i.Item3 ) );
+                ( t, k ) => services.Where( i => i.Item1.Equals( t ) && i.Item2 == k ).Select( i => i.Item3 ).FirstOrDefault(),
+                ( t, k ) => services.Where( i => i.Item1.Equals( t ) && i.Item2 == k ).Select( i => i.Item3 ) );
 
             // act
             var actual = serviceProvider.GetServices( serviceType );
+
+            // assert
+            Assert.True( expected.SequenceEqual( actual ) );
+        }
+
+        [Theory( DisplayName = "get services with key should return expected objects" )]
+        [MemberData( nameof( GetServicesWithKeyData ) )]
+        public void GetServicesWithKeyShouldReturnExpectedObjects( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, string key, IEnumerable<object> expected )
+        {
+            // arrange
+            var serviceProvider = new ServiceProviderAdapter(
+                ( t, k ) => services.Where( i => i.Item1.Equals( t ) && i.Item2 == k ).Select( i => i.Item3 ).FirstOrDefault(),
+                ( t, k ) => services.Where( i => i.Item1.Equals( t ) && i.Item2 == k ).Select( i => i.Item3 ) );
+
+            // act
+            var actual = serviceProvider.GetServices( serviceType, key );
 
             // assert
             Assert.True( expected.SequenceEqual( actual ) );

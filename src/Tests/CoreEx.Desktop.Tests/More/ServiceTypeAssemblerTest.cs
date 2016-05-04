@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.Reflection;
     using Xunit;
-    using Xunit.Extensions;
 
     /// <summary>
     /// Provides unit tests for <see cref="ServiceTypeGenerator"/>.
@@ -37,13 +36,8 @@
         public void ApplyKeyShouldReturnProjectedType( Type serviceType, string key )
         {
             var assembler = new ServiceTypeAssembler();
-            var type = assembler.ApplyKey( serviceType, key );
-
-            // unwrap nested generics
-            while ( type.IsGenericType )
-                type = type.GenericTypeArguments[0];
-
-            var actual = type.GetCustomAttribute<ServiceKeyAttribute>( false );
+            var keyedServiceType = assembler.ApplyKey( serviceType, key );
+            var actual = keyedServiceType.GetCustomAttribute<ServiceKeyAttribute>( false );
 
             Assert.NotNull( actual );
             Assert.Equal( key, actual.Key );
@@ -77,8 +71,8 @@
 
         [Theory( DisplayName = "for many should return expected type" )]
         [InlineData( typeof( ICalendarProvider ), typeof( IEnumerable<ICalendarProvider> ) )]
-        [InlineData( typeof( IEnumerable<ICalendarProvider> ), typeof( IEnumerable<ICalendarProvider> ) )]
-        [InlineData( typeof( List<Lazy<ICalendarProvider>> ), typeof( List<Lazy<ICalendarProvider>> ) )]
+        [InlineData( typeof( IDictionary<string, ICalendarProvider> ), typeof( IEnumerable<IDictionary<string, ICalendarProvider>> ) )]
+        [InlineData( typeof( Lazy<ICalendarProvider> ), typeof( IEnumerable<Lazy<ICalendarProvider>> ) )]
         public void ForManyShouldReturnExpectedType( Type serviceType, Type expected )
         {
             var assembler = new ServiceTypeAssembler();
@@ -89,12 +83,27 @@
         [Theory( DisplayName = "is for many should return expected result" )]
         [InlineData( typeof( ICalendarProvider ), false )]
         [InlineData( typeof( IEnumerable<ICalendarProvider> ), true )]
-        [InlineData( typeof( List<Lazy<ICalendarProvider>> ), true )]
+        [InlineData( typeof( IEnumerable<IDictionary<string, ICalendarProvider>> ), true )]
+        [InlineData( typeof( IEnumerable<Lazy<ICalendarProvider>> ), true )]
         public void IsForManyShouldReturnExpectedResult( Type serviceType, bool expected )
         {
             var assembler = new ServiceTypeAssembler();
             var actual = assembler.IsForMany( serviceType );
             Assert.Equal( expected, actual );
+        }
+
+        [Theory( DisplayName = "is for many should return inner type" )]
+        [InlineData( typeof( ICalendarProvider ), typeof( ICalendarProvider ), false )]
+        [InlineData( typeof( IEnumerable<ICalendarProvider> ), typeof( ICalendarProvider ), true )]
+        [InlineData( typeof( IEnumerable<IDictionary<string, ICalendarProvider>> ), typeof( IDictionary<string, ICalendarProvider> ), true )]
+        [InlineData( typeof( IEnumerable<Lazy<ICalendarProvider>> ), typeof( Lazy<ICalendarProvider> ), true )]
+        public void IsForManyShouldReturnInnerType( Type serviceType, Type innerServiceType, bool shouldBeMany )
+        {
+            var assembler = new ServiceTypeAssembler();
+            Type singleServiceType;
+            var result = assembler.IsForMany( serviceType, out singleServiceType );
+            Assert.Equal( shouldBeMany, result );
+            Assert.Equal( innerServiceType, singleServiceType );
         }
     }
 }

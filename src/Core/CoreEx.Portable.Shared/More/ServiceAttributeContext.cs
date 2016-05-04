@@ -19,12 +19,7 @@
 
         protected override IEnumerable<object> GetCustomAttributes( MemberInfo member, IEnumerable<object> declaredAttributes )
         {
-            Contract.Assume( member != null );
             Contract.Assume( declaredAttributes != null );
-
-            // the ServiceKeyAttribute can only be applied once; if it's explicitly declared, use that metadata
-            if ( declaredAttributes.OfType<ServiceKeyAttribute>().Any() )
-                return declaredAttributes;
 
             var attributes = declaredAttributes.ToList();
             attributes.Add( serviceKey );

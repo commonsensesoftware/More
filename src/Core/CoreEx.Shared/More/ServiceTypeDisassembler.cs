@@ -1,6 +1,5 @@
 ﻿namespace More
 {
-    using More.Collections.Generic;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -13,41 +12,7 @@
     /// </summary>
     public class ServiceTypeDisassembler
     {
-        private static readonly TypeInfo Enumerable = typeof( IEnumerable ).GetTypeInfo();
-        private static readonly TypeInfo EnumerableOfT = typeof( IEnumerable<> ).GetTypeInfo();
-
-        private static TypeInfo DisassembleServiceType( TypeInfo type )
-        {
-            Contract.Requires( type != null );
-            Contract.Ensures( Contract.Result<TypeInfo>() != null );
-
-            var closedTypes = new Stack<TypeInfo>().Adapt();
-            return DisassembleServiceType( type, closedTypes );
-        }
-
-        /// <summary>
-        /// Disassembles a generic service type into it's constituent types.
-        /// </summary>
-        /// <param name="type">The service <see cref="TypeInfo">type</see> to be disassembled.</param>
-        /// <param name="closedTypes">The disassembled, closed <see cref="TypeInfo">type</see> arguments.</param>
-        /// <returns>The disassembled <see cref="TypeInfo">type</see>.</returns>
-        /// <remarks>If the specified <paramref name="type"/> is not generic, then the original type is returned.</remarks>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
-        protected static TypeInfo DisassembleServiceType( TypeInfo type, IStack<TypeInfo> closedTypes )
-        {
-            Arg.NotNull( type, nameof( type ) );
-            Arg.NotNull( closedTypes, nameof( closedTypes ) );
-            Contract.Ensures( Contract.Result<TypeInfo>() != null );
-
-            while ( type.IsGenericType )
-            {
-                closedTypes.Push( type );
-                type = type.GenericTypeArguments[0].GetTypeInfo();
-            }
-
-            return type;
-        }
+        private static readonly Type EnumerableOfT = typeof( IEnumerable<> );
 
         /// <summary>
         /// Extracts the key associated with the specified service type.
@@ -58,13 +23,7 @@
         public virtual string ExtractKey( Type serviceType )
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
-
-            // find true decorated service type and extract the key from any applied attribute
-            var type = DisassembleServiceType( serviceType.GetTypeInfo() );
-            var attribute = type.GetCustomAttribute<ServiceKeyAttribute>( false );
-            var key = attribute == null ? null : attribute.Key;
-
-            return key;
+            return serviceType.GetTypeInfo().GetCustomAttribute<ServiceKeyAttribute>( false )?.Key;
         }
 
         /// <summary>
@@ -78,10 +37,6 @@
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.Result<Type>() != null );
-
-            if ( Enumerable.IsAssignableFrom( serviceType.GetTypeInfo() ) )
-                return serviceType;
-
             return EnumerableOfT.MakeGenericType( serviceType );
         }
 
@@ -93,7 +48,9 @@
         public virtual bool IsForMany( Type serviceType )
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
-            return Enumerable.IsAssignableFrom( serviceType.GetTypeInfo() );
+
+            var typeInfo = serviceType.GetTypeInfo();
+            return typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition().Equals( EnumerableOfT );
         }
 
         /// <summary>
@@ -111,11 +68,12 @@
             Contract.Ensures( Contract.ValueAtReturn( out singleServiceType ) != null );
 
             singleServiceType = serviceType;
+            var typeInfo = serviceType.GetTypeInfo();
 
-            if ( !Enumerable.IsAssignableFrom( serviceType.GetTypeInfo() ) )
+            if ( !typeInfo.IsGenericType || !typeInfo.GetGenericTypeDefinition().Equals( EnumerableOfT ) )
                 return false;
 
-            singleServiceType = DisassembleServiceType( serviceType.GetTypeInfo() ).AsType();
+            singleServiceType = typeInfo.GenericTypeArguments[0];
             return true;
         }
     }

@@ -1,8 +1,6 @@
 ﻿namespace More
 {
-    using More.Collections.Generic;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Reflection;
 
@@ -11,37 +9,6 @@
     /// </summary>
     public class ServiceTypeAssembler : ServiceTypeDisassembler
     {
-        private static Type AssembleServiceType( Type projectedType, IStack<TypeInfo> closedTypes )
-        {
-            Contract.Requires( closedTypes != null );
-            Contract.Requires( closedTypes.Count > 0 );
-            Contract.Ensures( Contract.Result<Type>() != null );
-
-            var iterator = closedTypes.GetEnumerator();
-
-            iterator.MoveNext();
-
-            var type = iterator.Current;
-            var args = type.GenericTypeArguments;
-
-            // replace original type with projected type
-            args[0] = projectedType;
-
-            // re-create the generic type
-            var assembledType = type.GetGenericTypeDefinition().MakeGenericType( args );
-
-            // walk the stack to re-create the type if it was a nested generic
-            while ( iterator.MoveNext() )
-            {
-                type = iterator.Current;
-                args = type.GenericTypeArguments;
-                args[0] = assembledType;
-                assembledType = type.GetGenericTypeDefinition().MakeGenericType( args );
-            }
-
-            return assembledType;
-        }
-
         /// <summary>
         /// Applies the provided key to the specified service type.
         /// </summary>
@@ -50,28 +17,24 @@
         /// <returns>A new <see cref="Type">type</see> which represents the original <paramref name="serviceType">service type</paramref>
         /// with an associated key.</returns>
         /// <remarks>This method dynamically creates a new <see cref="Type">type</see> which has the <see cref="ServiceKeyAttribute"/> applied.
-        /// Types that already have this attribute applied should not use this method.</remarks>
+        /// Types that already have this attribute applied will be perform no additional action.</remarks>
         public virtual Type ApplyKey( Type serviceType, string key )
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
             Contract.Ensures( Contract.Result<Type>() != null );
 
-            // short-circuit if there's nothing to do
             if ( key == null )
                 return serviceType;
 
-            // create projected type with service key
-            var closedTypes = new Stack<TypeInfo>().Adapt();
-            var type = DisassembleServiceType( serviceType.GetTypeInfo(), closedTypes );
+            var serviceTypeInfo = serviceType.GetTypeInfo();
+
+            if ( serviceTypeInfo.GetCustomAttribute<ServiceKeyAttribute>() != null )
+                return serviceType;
+
             var context = new ServiceAttributeContext( key );
-            var projectedType = context.MapType( type );
+            var keyedServiceType = context.MapType( serviceTypeInfo );
 
-            // if service type isn't generic, we're done
-            if ( !projectedType.IsGenericType )
-                return projectedType.AsType();
-
-            // re-create closed generic type with new projected type substituted
-            return AssembleServiceType( projectedType.AsType(), closedTypes );
+            return keyedServiceType.AsType();
         }
     }
 }
