@@ -28,19 +28,13 @@
         {
         }
 
-        public bool HasPendingChanges
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool HasPendingChanges => false;
 
         public void Remove( T item ) => Arg.NotNull( item, nameof( item ) );
 
         public Task SaveChangesAsync( CancellationToken cancellationToken ) => CompletedTask;
 
-        public void Update( T item ) =>Arg.NotNull( item, nameof( item ) );
+        public void Update( T item ) => Arg.NotNull( item, nameof( item ) );
 
         public Task<TResult> GetAsync<TResult>( Func<IQueryable<T>, TResult> queryShaper, CancellationToken cancellationToken )
         {
@@ -54,12 +48,6 @@
             return repository.GetAsync( queryShaper, cancellationToken );
         }
 
-        public IReadOnlyRepository<T> Inner
-        {
-            get
-            {
-                return repository;
-            }
-        }
+        public IReadOnlyRepository<T> Inner => repository;
     }
 }

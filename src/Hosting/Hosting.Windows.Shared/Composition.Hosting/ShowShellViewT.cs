@@ -2,9 +2,6 @@
 {
     using More.ComponentModel;
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Composition;
     using System.Composition.Hosting;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
@@ -61,31 +58,19 @@
         /// Gets or sets the name of the type of shell view to show.
         /// </summary>
         /// <value>The name of the <see cref="Type">type</see> of the shell view to show.</value>
-        public string ShellViewTypeName
-        {
-            get;
-            set;
-        }
+        public string ShellViewTypeName { get; set; }
 
         /// <summary>
         /// Gets or sets localization/globalization language information that applies to the shell view.
         /// </summary>
         /// <value>The language information for the shell view.  This property can be null.</value>
-        public string Language
-        {
-            get;
-            set;
-        }
+        public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets the direction that text and other user interface (UI) elements flow within the shell view.
         /// </summary>
         /// <value>The direction that text and other UI elements flow within the shell view.</value>
-        public string FlowDirection
-        {
-            get;
-            set;
-        }
+        public string FlowDirection { get; set; }
 
         private Type GetShellViewType( IServiceProvider serviceProvider )
         {
@@ -95,26 +80,21 @@
             var candidateType = ShellViewTypeName;
             Type shellViewType = null;
 
-            // determine whether a specific shell is being specified
             if ( !string.IsNullOrEmpty( candidateType ) )
             {
-                // initialization parameter indicates the requested shell
                 shellViewType = GetTypeFromTypeName( serviceProvider, candidateType );
 
                 if ( shellViewType == null )
                 {
-                    // no shell matched the requested type
                     throw new HostException( ExceptionMessage.NoCandidateShellView.FormatDefault( candidateType ) );
                 }
                 else if ( !typeof( IShellView ).GetTypeInfo().IsAssignableFrom( shellViewType.GetTypeInfo() ) )
                 {
-                    // the shell does not implement the required type
                     throw new HostException( ExceptionMessage.InvalidShellView.FormatDefault( shellViewType, typeof( IShellView ) ) );
                 }
             }
             else
             {
-                // use the default shell
                 shellViewType = typeof( T );
             }
 
@@ -130,7 +110,6 @@
 
             try
             {
-                // use the composition service to build up and export the shell view instance
                 shell = (IShellView) serviceProvider.GetService( shellViewType );
             }
             catch ( CompositionFailedException ex )
@@ -163,7 +142,7 @@
             get
             {
                 if ( string.IsNullOrEmpty( base.Name ) )
-                    base.Name = "ShowShellView";
+                    base.Name = nameof( ShowShellView<T> );
 
                 return base.Name;
             }

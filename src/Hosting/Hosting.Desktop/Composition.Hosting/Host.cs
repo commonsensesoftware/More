@@ -17,10 +17,12 @@
     /// </content>
     public partial class Host
     {
-        private static object LocateSetting( string key )
+        private static object LocateSetting( string key, Type type )
         {
-            object value = ConfigurationManager.AppSettings[key];
-            return value ?? ConfigurationManager.ConnectionStrings[key];
+            if ( typeof( ConnectionStringSettings ).IsAssignableFrom( type ) )
+                return ConfigurationManager.ConnectionStrings[key];
+
+            return ConfigurationManager.AppSettings[key];
         }
 
         static partial void AddPlatformSpecificConventions( ConventionBuilder builder )
@@ -29,8 +31,8 @@
             var window = new AssignableSpecification<Window>().And( new AssignableSpecification<IShellView>().Not() );
             var userControl = new AssignableSpecification<UserControl>().And( new AssignableSpecification<IShellView>().Not() );
 
-            builder.ForTypesMatching( window.IsSatisfiedBy ).Export().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p != null && p.Name == "Model" );
-            builder.ForTypesMatching( userControl.IsSatisfiedBy ).Export().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p != null && p.Name == "Model" );
+            builder.ForTypesMatching( window.IsSatisfiedBy ).Export().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p?.Name == "Model" );
+            builder.ForTypesMatching( userControl.IsSatisfiedBy ).Export().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p?.Name == "Model" );
         }
 
         /// <summary>
@@ -124,21 +126,17 @@
             // HACK: WPF doesn't set the Application.Current property until an application object has been created.  This can cause composition issues.
             // Require this method to accept an application object to ensure it's set.  This also simplifies startup code.
 
-            // add hosted assemblies and guard against double registration (which can occur via Configure or using WithAppDomain)
             var applicationAssembly = application.GetType().Assembly;
             var assemblies = new HashSet<Assembly>( hostedAssemblies ) { applicationAssembly }.Where( a => !Configuration.IsRegistered( a ) ).ToArray();
 
             Configuration.WithAssemblies( assemblies );
 
-            // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )
                 ServiceProvider.SetCurrent( this );
 
             try
             {
-                // build up and execute the startup activities
-                foreach ( var activity in Activities.Where( a => a.CanExecute( this ) ) )
-                    activity.Execute( this );
+                Activities.Where( a => a.CanExecute( this ) ).ForEach( a => a.Execute( this ) );
             }
             catch ( HostException ex )
             {
@@ -150,11 +148,9 @@
                 return;
             }
 
-            // set the default unit of work if unset
             if ( UnitOfWork.Provider == UnitOfWork.DefaultProvider )
                 UnitOfWork.Provider = new UnitOfWorkFactoryProvider( Container.GetExports<IUnitOfWorkFactory> );
 
-            // run the application
             if ( application.MainWindow != null )
                 application.Run( application.MainWindow );
             else

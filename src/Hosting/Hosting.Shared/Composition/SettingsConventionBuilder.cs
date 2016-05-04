@@ -63,14 +63,13 @@
         /// <returns>The list of applied attributes.</returns>
         public override IEnumerable<Attribute> GetCustomAttributes( Type reflectedType, MemberInfo member )
         {
-            Contract.Assume( reflectedType != null );
-            Contract.Assume( member != null );
+            var attributes = base.GetCustomAttributes( reflectedType, member );
 
-            if ( !( member is PropertyInfo ) )
-                return base.GetCustomAttributes( reflectedType, member );
+            if ( !( member is PropertyInfo ) || reflectedType == null )
+                return attributes;
 
-            var key = new Lazy<string>( () => string.Format( InvariantCulture, ConfigKeyFormat, reflectedType.FullName, member.Name ) );
-            return ReplaceImportAttributeWithSettingAttribute( base.GetCustomAttributes( reflectedType, member ), key, null );
+            var key = new Lazy<string>( () => string.Format( InvariantCulture, ConfigKeyFormat, ( reflectedType ?? member.DeclaringType ).FullName, member.Name ) );
+            return ReplaceImportAttributeWithSettingAttribute( attributes, key, null );
         }
 
         /// <summary>
@@ -81,10 +80,7 @@
         /// <returns>The <see cref="IEnumerable{T}">sequence</see> of applied <see cref="Attribute">attributes</see>.</returns>
         public override IEnumerable<Attribute> GetCustomAttributes( Type reflectedType, ParameterInfo parameter )
         {
-            Contract.Assume( reflectedType != null );
-            Contract.Assume( parameter != null );
-
-            var key = new Lazy<string>( () => string.Format( InvariantCulture, ConfigKeyFormat, reflectedType.FullName, parameter.Name ) );
+            var key = new Lazy<string>( () => string.Format( InvariantCulture, ConfigKeyFormat, ( reflectedType ?? parameter.Member.DeclaringType ).FullName, parameter.Name ) );
             var literalDefaultValue = parameter.HasDefaultValue ? parameter.DefaultValue : null;
             return ReplaceImportAttributeWithSettingAttribute( base.GetCustomAttributes( reflectedType, parameter ), key, literalDefaultValue );
         }

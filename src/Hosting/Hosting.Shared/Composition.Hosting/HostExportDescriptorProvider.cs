@@ -87,11 +87,9 @@
         /// <returns>A <see cref="IEnumerable{T}">sequence</see> of <see cref="ExportDescriptorPromise">export descriptor promises</see>.</returns>
         public override IEnumerable<ExportDescriptorPromise> GetExportDescriptors( CompositionContract contract, DependencyAccessor descriptorAccessor )
         {
-            // match contracts that the host itself satisfies
             if ( selfExportSpecification.IsSatisfiedBy( contract ) )
                 return new[] { ExportHostPart( contract, descriptorAccessor ) };
 
-            // match any explicitly registered services that the host satisfies
             var services = from entry in host.Registry
                            let serviceContract = new CompositionContract( entry.ServiceType, entry.Key )
                            where serviceContract.Equals( contract )

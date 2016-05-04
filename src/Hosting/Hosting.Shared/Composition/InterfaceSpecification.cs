@@ -38,8 +38,6 @@
             if ( !t1.IsPublic || t1.IsAbstract || t1.IsInterface )
                 return false;
 
-            // match types that equal, are assignable from, or implement an inherited interface
-            // that are assignable to the specification type
             var t2 = interfaceType;
             var interfaces = from @interface in t1.ImplementedInterfaces.Select( t => t.GetTypeInfo() )
                              let typeDef = @interface.IsGenericType ? @interface.GetGenericTypeDefinition().GetTypeInfo() : @interface

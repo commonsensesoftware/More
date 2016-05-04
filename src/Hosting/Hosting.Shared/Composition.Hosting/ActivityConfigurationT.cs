@@ -165,13 +165,7 @@
         /// </summary>
         /// <value>The <see cref="IActivity">activity</see> <see cref="Type">types</see> the
         /// configured <see cref="IActivity">activity</see> depends on.</value>
-        public IEnumerable<Type> Dependencies
-        {
-            get
-            {
-                return dependencies;
-            }
-        }
+        public IEnumerable<Type> Dependencies => dependencies;
 
         void IActivityConfiguration.Configure( IActivity activity )
         {

@@ -193,13 +193,7 @@
         /// Gets a value indicating whether there are any pending, uncommitted changes.
         /// </summary>
         /// <value>True if there are any pending uncommitted changes; otherwise, false.</value>
-        public virtual bool HasPendingChanges
-        {
-            get
-            {
-                return decorated.HasPendingChanges;
-            }
-        }
+        public virtual bool HasPendingChanges => decorated.HasPendingChanges;
 
         /// <summary>
         /// Removes an item from the repository.
@@ -346,21 +340,8 @@
         /// Gets the underlying decorated object.
         /// </summary>
         /// <value>The decorated <see cref="IRepository{T}"/> object.</value>
-        public IRepository<T> Inner
-        {
-            get
-            {
-                return Decorator.GetInner( decorated );
-            }
-        }
+        public IRepository<T> Inner => Decorator.GetInner( decorated );
 
-        IReadOnlyRepository<T> IDecorator<IReadOnlyRepository<T>>.Inner
-        {
-            get
-            {
-                // note: decorated object could be read-only and adapted with another decorator
-                return Decorator.GetInner<IReadOnlyRepository<T>>( decorated );
-            }
-        }
+        IReadOnlyRepository<T> IDecorator<IReadOnlyRepository<T>>.Inner => Decorator.GetInner<IReadOnlyRepository<T>>( decorated );
     }
 }

@@ -32,7 +32,7 @@
         private readonly Dictionary<Type, IActivityConfiguration> activityConfigurations = new Dictionary<Type, IActivityConfiguration>();
         private readonly Lazy<CompositionContext> container;
         private readonly Lazy<ConventionBuilder> conventionsHolder;
-        private readonly Func<string, object> configSettingLocator;
+        private readonly Func<string, Type, object> configSettingLocator;
         private bool disposed;
 
         /// <summary>
@@ -46,8 +46,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Host"/> class.
         /// </summary>
-        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T,TResult}">function</see> used to resolve composable configuration settings.</param>
-        public Host( Func<string, object> configurationSettingLocator )
+        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T1,T2,TResult}">function</see> used to resolve composable configuration settings.</param>
+        public Host( Func<string, Type, object> configurationSettingLocator )
         {
             Arg.NotNull( configurationSettingLocator, nameof( configurationSettingLocator ) );
 
@@ -139,14 +139,11 @@
             config.WithProvider( new HostExportDescriptorProvider( this, nameof( Host ) ) );
             config.WithProvider( new ConfigurationExportProvider( configSettingLocator, nameof( Host ) ) );
 
-            // run custom configurations, if any
             if ( containerConfigurations.IsValueCreated )
                 containerConfigurations.Value.ForEach( a => a( config, conventions ) );
 
             var newContainer = config.CreateContainer();
 
-            // register default services directly after the underlying container is created
-            // optimization: call base implementation because this object will never be composed
             base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
             base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
             AddPlatformSpecificDefaultServices();
@@ -183,32 +180,30 @@
             }
         }
 
-        private KeyedCollection<Type, Tuple<IActivity, IEnumerable<Type>>> GetComposedActivities()
+        private KeyedCollection<Type, Tuple<IActivity, IReadOnlyList<Type>>> GetComposedActivities()
         {
-            Contract.Ensures( Contract.Result<KeyedCollection<Type, Tuple<IActivity, IEnumerable<Type>>>>() != null );
+            Contract.Ensures( Contract.Result<KeyedCollection<Type, Tuple<IActivity, IReadOnlyList<Type>>>>() != null );
 
-            var composedActivities = new ObservableKeyedCollection<Type, Tuple<IActivity, IEnumerable<Type>>>( t => t.Item1.GetType() );
+            var composedActivities = new ObservableKeyedCollection<Type, Tuple<IActivity, IReadOnlyList<Type>>>( t => t.Item1.GetType() );
             var activityExports = Container.GetExports<ExportFactory<IActivity, ExportMetadata>>().ToArray();
 
             foreach ( var activityType in activityTypes )
             {
                 var activity = GetExportedActivity( activityExports, activityType );
                 IActivityConfiguration config;
-                Tuple<IActivity, IEnumerable<Type>> tuple;
+                IReadOnlyList<Type> dependencies;
+                Tuple<IActivity, IReadOnlyList<Type>> tuple;
 
-                // look up configuration
                 if ( activityConfigurations.TryGetValue( activityType, out config ) )
                 {
-                    // apply activity configuration
                     config.Configure( activity );
-
-                    // create pairing of activity and dependencies
-                    tuple = new Tuple<IActivity, IEnumerable<Type>>( activity, config.Dependencies.Union( activity.DependsOn() ).ToArray() );
+                    dependencies = config.Dependencies.Union( activity.DependsOn() ).ToArray();
+                    tuple = Tuple.Create( activity, dependencies );
                 }
                 else
                 {
-                    // no configuration so only consider dependencies from attribution
-                    tuple = new Tuple<IActivity, IEnumerable<Type>>( activity, activity.DependsOn().ToArray() );
+                    dependencies = activity.DependsOn().ToArray();
+                    tuple = Tuple.Create( activity, dependencies );
                 }
 
                 composedActivities.Add( tuple );
@@ -217,21 +212,18 @@
             return composedActivities;
         }
 
-        private static IEnumerable<IActivity> CorrelateActivityDependencies( KeyedCollection<Type, Tuple<IActivity, IEnumerable<Type>>> activities )
+        private static IEnumerable<IActivity> CorrelateActivityDependencies( KeyedCollection<Type, Tuple<IActivity, IReadOnlyList<Type>>> activities )
         {
             Contract.Requires( activities != null );
             Contract.Ensures( Contract.Result<IEnumerable<IActivity>>() != null );
 
-            // auto-correlate dependencies
             foreach ( var activity in activities )
             {
                 var current = activity.Item1;
                 var dependencies = activity.Item2;
 
-                // add matching dependent activity
                 foreach ( var dependency in dependencies )
                 {
-                    // the specified activity wasn't found
                     if ( !activities.Contains( dependency ) )
                         throw new HostException( ExceptionMessage.MissingDependentActivity.FormatDefault( current.Name, current.GetType(), dependency ) );
 
@@ -472,36 +464,38 @@
 
             var generator = new ServiceTypeDisassembler();
             var key = generator.ExtractKey( serviceType );
-#if WINDOWS_PHONE_APP
             return GetService( serviceType, key );
-#else
-            Type innerServiceType;
-            object service = null;
+        }
 
-            // return multiple services, if requested
+        private object GetService( Type serviceType, string key )
+        {
+            Arg.NotNull( serviceType, nameof( serviceType ) );
+            CheckDisposed();
+
+            var generator = new ServiceTypeDisassembler();
+            Type innerServiceType;
+
             if ( generator.IsForMany( serviceType, out innerServiceType ) )
             {
                 var exports = new List<object>();
 
                 if ( key == null )
                 {
-                    // if no key is specified and the requested type matches an interface we implement, add ourself
                     if ( ExportedInterfaces.Contains( innerServiceType ) )
                         exports.Add( this );
                     else if ( ExportedTypes.Contains( innerServiceType ) )
                         exports.Add( Container );
                 }
 
-                // add any matching, manually added services
-                if ( ( service = base.GetService( innerServiceType ) ) != null )
-                    exports.Add( service );
+                var services = base.GetService( serviceType ) as IEnumerable<object>;
 
-                // add matching exports
+                if ( services != null )
+                    exports.AddRange( services );
+
                 exports.AddRange( Container.GetExports( innerServiceType, key ) );
                 return exports;
             }
 
-            // if no key is specified and the requested type matches an interface we implement, return ourself
             if ( key == null )
             {
                 if ( ExportedInterfaces.Contains( serviceType ) )
@@ -510,16 +504,15 @@
                     return Container;
             }
 
-            // return any matching, manually added services
-            if ( ( service = base.GetService( serviceType ) ) != null )
+            var service = base.GetService( serviceType );
+
+            if ( service != null )
                 return service;
 
-            // return matching export
             object export;
             Container.SafeTryGetExport( serviceType, key, out export );
 
             return export;
-#endif
         }
 
         /// <summary>

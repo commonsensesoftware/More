@@ -42,7 +42,7 @@
 
             app.Startup += ( s, e ) => app.Shutdown();
 
-            using ( var host = new Host( key => settings[key] ) )
+            using ( var host = new Host( ( key, type ) => settings[key] ) )
             {
                 host.Configure( ( c, b ) => b.ForType<StubObject>().Export() );
                 host.Run( app );

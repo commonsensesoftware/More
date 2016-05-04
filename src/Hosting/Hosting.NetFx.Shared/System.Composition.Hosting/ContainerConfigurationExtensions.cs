@@ -8,6 +8,7 @@
     using Linq;
     using Reflection;
     using System;
+    using static System.StringSplitOptions;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ContainerConfiguration"/> class.
@@ -73,25 +74,19 @@
 
             var relativeSearchPath = AppDomain.CurrentDomain.RelativeSearchPath;
 
-            // exit if no probing path for private assemblies is defined
             if ( string.IsNullOrEmpty( relativeSearchPath ) )
                 return configuration;
 
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-            // find all libraries defined in probing paths
-            var assemblyFiles = from relativePath in relativeSearchPath.Split( new[] { ';' }, StringSplitOptions.RemoveEmptyEntries )
+            var assemblyFiles = from relativePath in relativeSearchPath.Split( new[] { ';' }, RemoveEmptyEntries )
                                 let path = Path.Combine( baseDirectory, relativePath )
                                 where Directory.Exists( path )
                                 from dll in Directory.GetFiles( path, "*.dll" )
                                 select dll;
-
-            // get assemblies from paths
             var assemblies = from file in assemblyFiles
                              let name = AssemblyName.GetAssemblyName( file )
                              select Assembly.Load( name );
 
-            // add all assemblies to the configuration
             configuration.WithAssemblies( assemblies, conventions );
 
             return configuration;
@@ -126,14 +121,12 @@
             Arg.NotNull( configuration, nameof( configuration ) );
             Contract.Ensures( Contract.Result<ContainerConfiguration>() != null );
 
-            // find all the executables and libraries in the current base directory
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             var assemblyFiles = Directory.GetFiles( baseDirectory, "*.exe" ).Union( Directory.GetFiles( baseDirectory, "*.dll" ) );
             var assemblies = from file in assemblyFiles
                              let name = AssemblyName.GetAssemblyName( file )
                              select Assembly.Load( name );
 
-            // add all assemblies to the configuration
             configuration.WithAssemblies( assemblies, conventions );
             configuration.WithPrivateAssemblies( conventions );
 

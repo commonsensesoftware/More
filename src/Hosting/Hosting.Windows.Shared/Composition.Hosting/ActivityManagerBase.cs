@@ -15,7 +15,6 @@
     public abstract class ActivityManagerBase : IActivityManager
     {
         private readonly IDictionary<Guid, ExportFactory<IActivity, ActivityDescriptor>> activities;
-        private readonly IReadOnlyList<IActivityDescriptor> descriptors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActivityManagerBase"/> class.
@@ -29,30 +28,21 @@
             Arg.NotNull( activities, nameof( activities ) );
 
             this.activities = activities.ToDictionary( a => new Guid( a.Metadata.Id ) );
-            descriptors = activities.Select( a => a.Metadata ).ToArray();
+            ActivityDescriptors = activities.Select( a => a.Metadata ).ToArray();
         }
 
         /// <summary>
         /// Gets a list of activity descriptors.
         /// </summary>
         /// <value>A <see cref="IReadOnlyList{T}">read-only list</see> of <see cref="IActivityDescriptor">activity descriptors</see>.</value>
-        public IReadOnlyList<IActivityDescriptor> ActivityDescriptors
-        {
-            get
-            {
-                return descriptors;
-            }
-        }
+        public IReadOnlyList<IActivityDescriptor> ActivityDescriptors { get; }
 
         /// <summary>
         /// Gets the activity with the specified identifier.
         /// </summary>
         /// <param name="activityId">The <see cref="Guid"/> representing the identifier of the activity to return.</param>
         /// <returns>An <see cref="IActivity"/> object.</returns>
-        public IActivity GetActivity( Guid activityId )
-        {
-            return activities[activityId].CreateExport().Value;
-        }
+        public IActivity GetActivity( Guid activityId ) => activities[activityId].CreateExport()?.Value;
 
         /// <summary>
         /// Gets the current activity.

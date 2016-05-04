@@ -16,8 +16,6 @@
             if ( item == null )
                 return false;
 
-            // note: a Page is a UserControl, which is handled differently; therefore,
-            // only match UserControl[s] that are not Page[s]
             var ti = item.GetTypeInfo();
             return ti.IsPublic &&
                   !ti.IsAbstract &&

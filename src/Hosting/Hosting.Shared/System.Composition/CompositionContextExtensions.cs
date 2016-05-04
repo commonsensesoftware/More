@@ -17,7 +17,7 @@
 
             try
             {
-                // even though the CompositionContext defines the TryGetExport intension, the CompositionHost may throw an exception
+                // HACK: even though the CompositionContext defines the TryGetExport intension, the CompositionHost may throw an exception
                 // if a scoped export is requested from a container that it is not scoped to a sharing boundary (ex: parent-child container)
                 return context.TryGetExport( exportType, contractName, out export );
             }

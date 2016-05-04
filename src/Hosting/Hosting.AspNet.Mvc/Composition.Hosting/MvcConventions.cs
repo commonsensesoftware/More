@@ -50,13 +50,10 @@
             var assembly = typeof( MvcConventions ).Assembly;
             var decorators = new InterfaceSpecification( typeof( IDecoratorFactory<> ) );
 
-            // export decorator factories
             conventions.ForTypesMatching( decorators.IsSatisfiedBy ).ExportInterfaces( t => t.Assembly == assembly );
 
-            // export mvc controllers
             var builder = conventions.ForTypesDerivedFrom<IController>().Export();
 
-            // if the default parameter rule is applied, then we're done
             if ( ImportParameterRule == DefaultImportParameterRule )
                 return;
 

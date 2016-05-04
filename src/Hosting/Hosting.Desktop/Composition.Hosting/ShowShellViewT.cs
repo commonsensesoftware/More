@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
 
@@ -12,8 +13,8 @@
     /// </content>
     public partial class ShowShellView<T>
     {
-        [SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "The same catch applies to several exception types." )]
-        [SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "serviceProvider", Justification = "Required to support multi-targeting with Silverlight version." )]
+        [SuppressMessage( "Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Generic type resolution failure should only yield null." )]
+        [SuppressMessage( "Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "serviceProvider", Justification = "Required to support multi-targeting." )]
         private static Type GetTypeFromTypeName( IServiceProvider serviceProvider, string typeName )
         {
             if ( string.IsNullOrEmpty( typeName ) )
@@ -23,35 +24,47 @@
             {
                 return Type.GetType( typeName, true, false );
             }
-            catch ( Exception ex )
+            catch ( TypeLoadException ex )
             {
-                // assembly resolution exceptions that allow additional processing
-                if ( ( ex is TypeLoadException ) || ( ex is System.IO.FileNotFoundException ) || ( ex is System.IO.FileLoadException ) )
-                {
-                    var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany( a => a.GetExportedTypes() );
-
-                    if ( typeName.Contains( '.' ) )
-                        return SelectType( types.Where( t => StringComparer.Ordinal.Equals( t.FullName, typeName ) ), typeName, ex );
-
-                    return SelectType( types.Where( t => StringComparer.Ordinal.Equals( t.Name, typeName ) ), typeName, ex );
-                }
-
-                // something else went wrong
+                return FindType( typeName, ex );
+            }
+            catch ( FileNotFoundException ex )
+            {
+                return FindType( typeName, ex );
+            }
+            catch ( FileLoadException ex )
+            {
+                return FindType( typeName, ex );
+            }
+            catch ( Exception )
+            {
                 return null;
             }
         }
 
+        private static Type FindType( string typeName, Exception error )
+        {
+            Contract.Requires( !string.IsNullOrEmpty( typeName ) );
+
+            var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany( a => a.GetExportedTypes() );
+            var comparer = StringComparer.Ordinal;
+
+            if ( typeName.Contains( '.' ) )
+                return SelectType( types.Where( t => comparer.Equals( t.FullName, typeName ) ), typeName, error );
+
+            return SelectType( types.Where( t => comparer.Equals( t.Name, typeName ) ), typeName, error );
+        }
+
         private static Type SelectType( IEnumerable<Type> types, string typeName, Exception ex )
         {
-            Contract.Requires( types != null, "types" );
-            Contract.Requires( !string.IsNullOrEmpty( typeName ), "typeName" );
-            Contract.Requires( ex != null, "ex" );
+            Contract.Requires( types != null );
+            Contract.Requires( !string.IsNullOrEmpty( typeName ) );
+            Contract.Requires( ex != null );
 
             var count = 0;
 
             try
             {
-                // NOTE: an exception could occur here when running a dynamic assembly (ex: unit testing)
                 count = types.Count();
             }
             catch ( NotSupportedException innerEx )

@@ -146,13 +146,7 @@
         /// Gets a value indicating whether there are any pending, uncommitted changes.
         /// </summary>
         /// <value>True if there are any pending uncommitted changes; otherwise, false.</value>
-        public bool HasPendingChanges
-        {
-            get
-            {
-                return decorated.HasPendingChanges;
-            }
-        }
+        public bool HasPendingChanges => decorated.HasPendingChanges;
 
         /// <summary>
         /// Registers a changed item.
@@ -265,12 +259,6 @@
         /// Gets the underlying decorated object.
         /// </summary>
         /// <value>The decorated <see cref="IUnitOfWork{T}"/> object.</value>
-        public IUnitOfWork<T> Inner
-        {
-            get
-            {
-                return decorated;
-            }
-        }
+        public IUnitOfWork<T> Inner => Decorator.GetInner( decorated );
     }
 }

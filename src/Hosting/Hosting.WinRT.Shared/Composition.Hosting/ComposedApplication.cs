@@ -33,13 +33,7 @@
         /// </summary>
         /// <value>The current <see cref="Host">host</see> associated with the application.
         /// This property is null prior to the application being launched.</value>
-        protected Host Host
-        {
-            get
-            {
-                return host;
-            }
-        }
+        protected Host Host => host;
 
         /// <summary>
         /// Raises the <see cref="E:Initialized"/> event.
@@ -117,7 +111,6 @@
 
             IEventBroker eventBroker;
 
-            // publish search event for the entire application
             if ( !serviceProvider.TryGetService( out eventBroker ) )
                 return;
 
@@ -143,7 +136,6 @@
 
             IEventBroker eventBroker;
 
-            // publish search event for the entire application
             if ( !serviceProvider.TryGetService( out eventBroker ) )
                 return;
 

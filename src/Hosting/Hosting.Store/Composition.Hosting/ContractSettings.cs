@@ -119,9 +119,7 @@
         {
             Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
 
-            // this is assumed to be the shell view. it's unlikely the root element will
-            // change after initialization (e.g. multiple shell views). such a scenario
-            // is not supported in this version. consider in future versions.
+            // NOTE: the root element must be a window in this version; consider enhancement in future versions
             var root = Window.Current.Content;
 
             if ( root == null )

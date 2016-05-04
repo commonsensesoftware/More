@@ -21,8 +21,8 @@
   <title>More - UI Hosting</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for hosting user interface applications.</summary>
-  <releaseNotes>• Added SettingsConventionBuilder
-• Update default Host conventions to use SettingsConventionBuilder</releaseNotes>
+  <releaseNotes>• Host now resolves settings by key and type
+• Fixed stack overflow issue resolving multiple services</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

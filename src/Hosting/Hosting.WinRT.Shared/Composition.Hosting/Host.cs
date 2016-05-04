@@ -3,6 +3,7 @@
     using ComponentModel;
     using IO;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.Design;
     using System.Composition.Convention;
     using System.Diagnostics.CodeAnalysis;
@@ -18,7 +19,7 @@
     /// </content>
     public partial class Host
     {
-        private static object LocateSetting( string key )
+        private static object LocateSetting( string key, Type type )
         {
             var data = ApplicationData.Current;
             object value;
@@ -34,7 +35,6 @@
 
         partial void AddPlatformSpecificDefaultServices()
         {
-            // optimization: call base implementation because this object will never be composed
             base.AddService( typeof( ITypeResolutionService ), ( sc, t ) => new TypeResolutionService() );
             base.AddService( typeof( ISessionStateManager ), ( sc, t ) => new LocalSessionStateManager( sc.GetRequiredService<IFileSystem>() ) );
             AddWinRTDefaultServices();
@@ -50,8 +50,8 @@
             var page = new PageSpecification();
             var userControl = new UserControlSpecification();
 
-            builder.ForTypesMatching( page.IsSatisfiedBy ).Export().Export<Page>().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p != null && p.Name == "Model" );
-            builder.ForTypesMatching( userControl.IsSatisfiedBy ).Export().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p != null && p.Name == "Model" );
+            builder.ForTypesMatching( page.IsSatisfiedBy ).Export().Export<Page>().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p?.Name == "Model" );
+            builder.ForTypesMatching( userControl.IsSatisfiedBy ).Export().ExportInterfaces( assembly.IsSatisfiedBy ).ImportProperties( p => p?.Name == "Model" );
             AddWinRTSpecificConventions( builder );
         }
 
@@ -101,15 +101,12 @@
             var assembly = application.GetType().GetTypeInfo().Assembly;
             Configuration.WithAssembly( assembly, conventionsHolder.Value );
 
-            // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )
                 ServiceProvider.SetCurrent( this );
 
             try
             {
-                // build up and execute the startup tasks
-                foreach ( var activity in Activities.Where( a => a.CanExecute( this ) ) )
-                    activity.Execute( this );
+                Activities.Where( a => a.CanExecute( this ) ).ForEach( a => a.Execute( this ) );
             }
             catch ( Exception ex )
             {
@@ -117,7 +114,6 @@
                 return;
             }
 
-            // set the default unit of work if unset
             if ( UnitOfWork.Provider == UnitOfWork.DefaultProvider )
                 UnitOfWork.Provider = new UnitOfWorkFactoryProvider( Container.GetExports<IUnitOfWorkFactory> );
         }

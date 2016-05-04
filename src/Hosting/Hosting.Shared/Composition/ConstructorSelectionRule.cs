@@ -100,30 +100,24 @@
 
         private static ConstructorInfo DefaultSelector( IEnumerable<ConstructorInfo> constructors )
         {
-            // duplicate the default behavior MEF uses
             ConstructorInfo constructor = null;
-            var attributeType = typeof( ImportingConstructorAttribute );
+            var importingConstructor = typeof( ImportingConstructorAttribute );
 
-            // find the constructor with the greatest number of parameters
             using ( var iterator = constructors.OrderByDescending( c => c.GetParameters().Length ).GetEnumerator() )
             {
-                // if there's no constructors, we're done
                 if ( !iterator.MoveNext() )
                     return constructor;
 
                 constructor = iterator.Current;
 
-                // honor ImportingConstructorAttribute. if this constructor has it applied, we're done
-                if ( constructor.CustomAttributes.Any( c => c.AttributeType == attributeType ) )
+                if ( constructor.CustomAttributes.Any( c => c.AttributeType == importingConstructor ) )
                     return constructor;
 
-                // enumerate remaining constructors and make sure we honor ImportingConstructorAttribute
-                // if it was explicitly applied to a constructor
                 while ( iterator.MoveNext() )
                 {
                     var current = iterator.Current;
 
-                    if ( current.CustomAttributes.Any( c => c.AttributeType == attributeType ) )
+                    if ( current.CustomAttributes.Any( c => c.AttributeType == importingConstructor ) )
                     {
                         constructor = current;
                         break;
@@ -144,7 +138,6 @@
                           where paramTypes.SequenceEqual( parameterTypes, TypeComparer.Instance )
                           select constructor;
 
-            // must exactly match one constructor with the same sequence of parameter types
             return matches.SingleOrDefault();
         }
 

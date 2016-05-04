@@ -63,40 +63,37 @@
 
             var generator = new ServiceTypeDisassembler();
             var key = generator.ExtractKey( serviceType );
-            object service = null;
+            Type innerServiceType;
 
-            // return multiple services, if requested
-            if ( generator.IsForMany( serviceType ) )
+            if ( generator.IsForMany( serviceType, out innerServiceType ) )
             {
                 var exports = new List<object>();
 
                 if ( key == null )
                 {
-                    // if no key is specified and the requested type matches an interface we implement, add ourself
-                    if ( IServiceContainerType.Equals( serviceType ) || IServiceProviderType.Equals( serviceType ) )
+                    if ( IServiceContainerType.Equals( innerServiceType ) || IServiceProviderType.Equals( innerServiceType ) )
                         exports.Add( this );
                 }
 
-                // add any matching, manually added services
-                if ( ( service = base.GetService( serviceType ) ) != null )
-                    exports.Add( service );
+                var services = base.GetService( serviceType ) as IEnumerable<object>;
 
-                // add matching exports
-                exports.AddRange( Context.GetExports( serviceType, key ) );
+                if ( services != null )
+                    exports.AddRange( services );
+
+                exports.AddRange( Context.GetExports( innerServiceType, key ) );
                 return exports;
             }
 
-            // if no key is specified and the requested type matches an interface we implement, return ourself
             if ( key == null && ( IServiceContainerType.Equals( serviceType ) || IServiceProviderType.Equals( serviceType ) ) )
                 return this;
 
-            // return any matching, manually added services
-            if ( ( service = base.GetService( serviceType ) ) != null )
+            var service = base.GetService( serviceType );
+
+            if ( service != null )
                 return service;
 
-            // return matching export
             object export;
-            Context.TryGetExport( serviceType, key, out export );
+            Context.SafeTryGetExport( serviceType, key, out export );
 
             return export;
         }

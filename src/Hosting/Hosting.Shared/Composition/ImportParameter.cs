@@ -1,7 +1,6 @@
 ﻿namespace More.Composition
 {
     using System;
-    using System.Collections.Generic;
     using System.Composition.Convention;
     using System.Diagnostics.Contracts;
     using System.Reflection;
@@ -35,7 +34,6 @@
         /// <value>The imported <see cref="ParameterInfo">parameter</see>.</value>
         public ParameterInfo Parameter
         {
-
             get
             {
                 Contract.Ensures( parameter != null );

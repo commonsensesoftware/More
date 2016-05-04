@@ -28,9 +28,6 @@
 
             IContinuationManager continuationManager;
 
-            // since we were already in a running state, we can attempt a continuation now;
-            // otherwise, we have to let the shell view trigger the continuation after
-            // everything has been reinitialized
             if ( Host.TryGetService( out continuationManager ) )
                 continuationManager.Continue( args );
         }

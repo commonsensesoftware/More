@@ -93,7 +93,6 @@
             {
                 if ( type.IsGenericTypeDefinition )
                 {
-                    // match generic type definitions
                     var matches = from decoratedType in decoratedTypes
                                   where decoratedType.IsGenericTypeDefinition &&
                                         decoratedType.IsAssignableFrom( type )
@@ -104,8 +103,6 @@
                 }
                 else
                 {
-                    // the import is generic, but not a generic type definition
-                    // match the type or it's type definition against decorated types
                     var typeDef = type.GetGenericTypeDefinition().GetTypeInfo();
                     var matches = from decoratedType in decoratedTypes
                                   where decoratedType.IsAssignableFrom( type ) ||
@@ -118,12 +115,10 @@
             }
             else
             {
-                // match assignable types
                 if ( !decoratedTypes.Any( t => t.IsAssignableFrom( type ) ) )
                     return;
             }
 
-            // there must be at least one match, so apply the decorated contract name
             item.ConventionBuilder.AsContractName( ContractName );
         }
     }

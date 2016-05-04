@@ -1,8 +1,6 @@
 ﻿namespace More.Composition.Hosting
 {
     using System;
-    using System.Composition.Hosting;
-    using System.Diagnostics.Contracts;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
 
@@ -23,8 +21,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FrameHost{T}"/> class.
         /// </summary>
-        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T,TResult}">function</see> used to resolve composable configuration settings.</param>
-        public FrameHost( Func<string, object> configurationSettingLocator )
+        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T1,T2,TResult}">function</see> used to resolve composable configuration settings.</param>
+        public FrameHost( Func<string, Type, object> configurationSettingLocator )
             : base( configurationSettingLocator )
         {
         }
@@ -67,20 +65,14 @@
         {
             Arg.NotNull( application, nameof( application ) );
 
-            // setup export by convention
             Configuration.WithPart<FrameShellView<T>>();
             Configuration.WithPart<ShowShellView<FrameShellView<T>>>();
 
-            // automatically register activities
-            // note: use WithConfiguration to enable tolerance to the fact that the activity
-            // could have already been registered and re-registering would throw an exception
             var taskConfig = WithConfiguration<ShowShellView<FrameShellView<T>>>();
 
-            // configure language
             if ( !string.IsNullOrEmpty( language ) )
                 taskConfig.Configure( t => t.Language = language );
 
-            // configure flow direction
             if ( !string.IsNullOrEmpty( flowDirection ) )
                 taskConfig.Configure( t => t.FlowDirection = flowDirection );
 

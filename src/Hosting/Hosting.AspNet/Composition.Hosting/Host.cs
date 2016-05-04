@@ -52,10 +52,12 @@
             return new Host( this );
         }
 
-        private static object LocateSetting( string key )
+        private static object LocateSetting( string key, Type type )
         {
-            object value = ConfigurationManager.AppSettings[key];
-            return value ?? ConfigurationManager.ConnectionStrings[key];
+            if ( typeof( ConnectionStringSettings ).IsAssignableFrom( type ) )
+                return ConfigurationManager.ConnectionStrings[key];
+
+            return ConfigurationManager.AppSettings[key];
         }
 
         /// <summary>
@@ -76,20 +78,15 @@
         {
             Arg.NotNull( hostedAssemblies, nameof( hostedAssemblies ) );
 
-            // add hosted assemblies and guard against double registration (which can occur via Configure or using WithAppDomain)
             var assemblies = new HashSet<Assembly>( hostedAssemblies ).Where( a => !Configuration.IsRegistered( a ) ).ToArray();
 
             Configuration.WithAssemblies( assemblies );
 
-            // set current service provider if unset
             if ( ServiceProvider.Current == ServiceProvider.Default )
                 ServiceProvider.SetCurrent( this );
 
-            // build up and execute the startup activities
-            foreach ( var activity in Activities.Where( a => a.CanExecute( this ) ) )
-                activity.Execute( this );
+            Activities.Where( a => a.CanExecute( this ) ).ForEach( a => a.Execute( this ) );
 
-            // set the default unit of work if unset
             if ( UnitOfWork.Provider == UnitOfWork.DefaultProvider )
                 UnitOfWork.Provider = new UnitOfWorkFactoryProvider( Container.GetExports<IUnitOfWorkFactory> );
         }

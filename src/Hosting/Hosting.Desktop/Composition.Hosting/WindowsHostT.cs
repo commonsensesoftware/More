@@ -21,8 +21,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowsHost{T}"/> class.
         /// </summary>
-        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T,TResult}">function</see> used to resolve composable configuration settings.</param>
-        public WindowsHost( Func<string, object> configurationSettingLocator )
+        /// <param name="configurationSettingLocator">The user-defined <see cref="Func{T1,T2,TResult}">function</see> used to resolve composable configuration settings.</param>
+        public WindowsHost( Func<string, Type, object> configurationSettingLocator )
             : base( configurationSettingLocator )
         {
         }
@@ -73,14 +73,8 @@
             Arg.NotNull( application, nameof( application ) );
             Arg.NotNull( hostedAssemblies, nameof( hostedAssemblies ) );
 
-            // setup export by convention
             Configuration.WithPart<ShowShellView<T>>();
-
-            // automatically register tasks
-            // note: use WithConfiguration to enable tolerance to the fact that the task could
-            // have already been registered and re-registering would throw an exception
             WithConfiguration<ShowShellView<T>>();
-            
             base.Run( application, hostedAssemblies );
         }
     }

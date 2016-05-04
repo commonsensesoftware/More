@@ -22,7 +22,6 @@
             if ( item == null )
                 return false;
 
-            // if the specified type implements IDecorator<T>, then it must be a decorator
             var matches = from @interface in item.GetInterfaces()
                           where @interface.IsGenericType &&
                                 @interface.GetGenericTypeDefinition().Equals( decoratorTypeDef )

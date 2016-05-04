@@ -14,21 +14,13 @@
         /// Gets or sets the current HTTP configuration.
         /// </summary>
         /// <value>The current <see cref="HttpConfiguration">HTTP configuration</see>.</value>
-        public HttpConfiguration Configuration
-        {
-            get;
-            set;
-        }
+        public HttpConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Get or sets the HTTP configuration callback.
         /// </summary>
         /// <value>The <see cref="Action{T}">action</see> representing the configuration callback.</value>
-        public Action<HttpConfiguration> Callback
-        {
-            get;
-            set;
-        }
+        public Action<HttpConfiguration> Callback { get; set; }
 
         /// <summary>
         /// Returns a value indicating whether the activity can be executed.

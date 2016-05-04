@@ -7,9 +7,6 @@
     /// </content>
     public partial class FrameHost<T>
     {
-        partial void OnConfigure()
-        {
-            WithConfiguration<ContractSettings>().DependsOn<ShowShellView<FrameShellView<T>>>();
-        }
+        partial void OnConfigure() => WithConfiguration<ContractSettings>().DependsOn<ShowShellView<FrameShellView<T>>>();
     }
 }

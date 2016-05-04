@@ -4,6 +4,7 @@
     using System;
     using System.Diagnostics.Contracts;
     using System.Reflection;
+    using static System.StringComparison;
 
     internal sealed class ViewModelSpecification : SpecificationBase<Type>
     {
@@ -12,9 +13,9 @@
         private static bool MatchesTypeNameOrNamespace( TypeInfo typeInfo )
         {
             Contract.Requires( typeInfo != null );
-            // matches "MyAssembly.ViewModels" or "MyViewModel", "ViewModel1" and so on
-            return typeInfo.Name.Contains( ViewModel, StringComparison.OrdinalIgnoreCase )
-                || typeInfo.Namespace.Contains( ViewModel, StringComparison.OrdinalIgnoreCase );
+
+            return typeInfo.Name.Contains( ViewModel, OrdinalIgnoreCase )
+                || typeInfo.Namespace.Contains( ViewModel, OrdinalIgnoreCase );
         }
 
         public override bool IsSatisfiedBy( Type item )

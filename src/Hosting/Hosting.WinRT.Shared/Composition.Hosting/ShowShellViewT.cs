@@ -21,7 +21,6 @@
             Func<string, bool, Type> resolveType;
             ITypeResolutionService typeResolver;
 
-            // use type resolution service if available; otherwise, failover to built-in mechanism
             if ( serviceProvider.TryGetService( out typeResolver ) )
                 resolveType = typeResolver.GetType;
             else
