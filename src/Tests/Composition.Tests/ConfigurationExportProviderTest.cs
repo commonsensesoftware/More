@@ -26,7 +26,7 @@
             // arrange
             var expected = "Test";
             var settings = new Dictionary<string, object>() { { "Setting1", expected } };
-            var exportProvider = new ConfigurationExportProvider( key => settings[key] );
+            var exportProvider = new ConfigurationExportProvider( ( key, type ) => settings[key] );
             var conventions = new ConventionBuilder();
             var configuration = new ContainerConfiguration();
             string actual = null;

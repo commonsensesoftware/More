@@ -6,5 +6,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle( "More.Composition" )]
 [assembly: AssemblyProduct( "More.Composition" )]
 [assembly: AssemblyDescription( "The composition library for the \"More\" framework." )]
-[assembly: AssemblyVersion( "1.1.0.0" )]
-[assembly: AssemblyInformationalVersion( "1.1.3" )]
+[assembly: AssemblyVersion( "1.2.0.0" )]
+[assembly: AssemblyInformationalVersion( "1.2.0" )]

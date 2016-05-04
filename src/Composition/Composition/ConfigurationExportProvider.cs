@@ -14,14 +14,14 @@
     [CLSCompliant( false )]
     public class ConfigurationExportProvider : ExportDescriptorProvider
     {
-        private readonly Func<string, object> locate;
+        private readonly Func<string, Type, object> locate;
         private readonly string origin;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationExportProvider"/> class.
         /// </summary>
-        /// <param name="locator">The <see cref="Func{T1,TResult}">function</see> used to locate a configuration value.</param>
-        public ConfigurationExportProvider( Func<string, object> locator )
+        /// <param name="locator">The <see cref="Func{T1,T2,TResult}">function</see> used to locate a configuration value.</param>
+        public ConfigurationExportProvider( Func<string,Type, object> locator )
             : this( locator, nameof( ConfigurationExportProvider ) )
         {
         }
@@ -29,9 +29,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationExportProvider"/> class.
         /// </summary>
-        /// <param name="locator">The <see cref="Func{T1,TResult}">function</see> used to locate a configuration value.</param>
+        /// <param name="locator">The <see cref="Func{T1,T2,TResult}">function</see> used to locate a configuration value.</param>
         /// <param name="origin">The origin of exported promises.</param>
-        public ConfigurationExportProvider( Func<string, object> locator, string origin )
+        public ConfigurationExportProvider( Func<string, Type, object> locator, string origin )
         {
             Arg.NotNull( locator, nameof( locator ) );
             Arg.NotNullOrEmpty( origin, nameof( origin ) );
@@ -76,23 +76,20 @@
             Contract.Requires( contract != null );
             Contract.Requires( !string.IsNullOrEmpty( key ) );
 
-            var value = locate( key );
+            var value = locate( key, contract.ContractType );
 
             if ( value != null )
                 return value;
 
             CompositionContract constraint;
 
-            // note: SettingAttribute.NullValue is a special meant to resolve CompositionContract matching issue. If the value equals this
-            // default value, then it should be treated as null. This is analogous to DBValue.Null.
             if ( contract.TryUnwrapMetadataConstraint( nameof( SettingAttribute.DefaultValue ), out value, out constraint ) && value != NullValue )
                 return value;
 
             return null;
         }
 
-        private static CompositeActivator CreateActivator( Func<object> resolve, Type targetType ) =>
-            ( c, o ) => Convert( resolve(), targetType, CurrentCulture );
+        private static CompositeActivator CreateActivator( Func<object> resolve, Type targetType ) => ( c, o ) => Convert( resolve(), targetType, CurrentCulture );
 
         /// <summary>
         /// Gets the export descriptors supported by the provider.

@@ -8,7 +8,7 @@
     <title>More - Composition</title>
     <description>$description$</description>
     <summary>Provides "More" patterns and practices for component composition.</summary>
-    <releaseNotes>• Fixed issue with coercing settings for Enum and Nullable&lt;T&gt; types</releaseNotes>
+    <releaseNotes>• Added support for resolving settings by key and type</releaseNotes>
     <language>en-US</language>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
