@@ -7,7 +7,7 @@
 
     internal static class FileTypeExtensions
     {
-        private const string FileFilterFormat = "{0} ({1})|{1}";
+        private const string FileFilterFormat = "{0} ({1})|{2}";
 
         private static IEnumerable<string> FixUpAsterisks( this IEnumerable<string> extensions )
         {
