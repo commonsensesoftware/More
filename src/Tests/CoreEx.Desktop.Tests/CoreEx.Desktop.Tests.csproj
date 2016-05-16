@@ -88,6 +88,7 @@
     <Compile Include="More\ComponentModel\ValidatableObjectTest.cs" />
     <Compile Include="More\DateTimeFormatProviderTest.cs" />
     <Compile Include="More\Globalization\GregorianFiscalCalendarTest.cs" />
+    <Compile Include="More\IO\FileSystemTest.cs" />
     <Compile Include="More\ServiceProviderAdapterTest.cs" />
     <Compile Include="More\ServiceTypeAssemblerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

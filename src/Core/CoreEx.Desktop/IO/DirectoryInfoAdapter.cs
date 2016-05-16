@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using static System.IO.Path;
+    using static System.StringComparison;
 
     internal sealed class DirectoryInfoAdapter : IFolder, IPlatformStorageItem<DirectoryInfo>
     {
@@ -18,13 +19,7 @@
             Contract.Requires( folder != null );
             this.folder = folder;
         }
-        public DirectoryInfo NativeStorageItem
-        {
-            get
-            {
-                return folder;
-            }
-        }
+        public DirectoryInfo NativeStorageItem => folder;
 
         public Task<IFile> CreateFileAsync( string desiredName )
         {
@@ -33,7 +28,6 @@
             var newFileName = Combine( folder.FullName, desiredName );
             var newFile = new FileInfo( newFileName );
 
-            // close the stream immediately; creates a zero-byte file
             using ( newFile.Create() )
             {
             }
@@ -54,10 +48,10 @@
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
 
-            var fileInfo = folder.EnumerateFiles().FirstOrDefault( f => f.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
+            var fileInfo = folder.EnumerateFiles().FirstOrDefault( f => f.Name.Equals( name, OrdinalIgnoreCase ) );
 
             if ( fileInfo == null )
-                throw new FileNotFoundException( SR.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
+                throw new FileNotFoundException( ExceptionMessage.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
 
             IFile file = new FileInfoAdapter( fileInfo );
             return Task.FromResult( file );
@@ -69,10 +63,10 @@
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
 
-            var directoryInfo = folder.EnumerateDirectories().FirstOrDefault( d => d.Name.Equals( name, StringComparison.OrdinalIgnoreCase ) );
+            var directoryInfo = folder.EnumerateDirectories().FirstOrDefault( d => d.Name.Equals( name, OrdinalIgnoreCase ) );
 
             if ( directoryInfo == null )
-                throw new DirectoryNotFoundException( SR.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
+                throw new DirectoryNotFoundException( ExceptionMessage.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
 
             IFolder result = new DirectoryInfoAdapter( directoryInfo );
             return Task.FromResult( result );
@@ -86,20 +80,17 @@
 
             try
             {
-                // we don't know if it's a folder or file; try folder first
                 return await GetFolderAsync( name ).ConfigureAwait( false );
             }
             catch ( DirectoryNotFoundException )
             {
                 try
                 {
-                    // try a file
                     return await GetFileAsync( name ).ConfigureAwait( false );
                 }
                 catch ( FileNotFoundException )
                 {
-                    // use base IOException since we don't know if the intent was for a folder or file
-                    throw new IOException( SR.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
+                    throw new IOException( ExceptionMessage.PathNotFound.FormatDefault( Combine( folder.FullName, name ) ) );
                 }
             }
         }
@@ -109,10 +100,8 @@
             var foldersTask = GetFoldersAsync();
             var filesTask = GetFilesAsync();
 
-            // get folders and files in parallel
             await Task.WhenAll( foldersTask, filesTask ).ConfigureAwait( false );
 
-            // union the results
             var folders = foldersTask.Result;
             var files = filesTask.Result;
             var count = folders.Count + files.Count;
@@ -128,29 +117,11 @@
             return items;
         }
 
-        public DateTimeOffset DateCreated
-        {
-            get
-            {
-                return folder.CreationTime;
-            }
-        }
+        public DateTimeOffset DateCreated => folder.CreationTime;
 
-        public string Name
-        {
-            get
-            {
-                return folder.Name;
-            }
-        }
+        public string Name => folder.Name;
 
-        public string Path
-        {
-            get
-            {
-                return folder.FullName;
-            }
-        }
+        public string Path => folder.FullName;
 
         public Task DeleteAsync()
         {
@@ -172,7 +143,7 @@
 
         public override bool Equals( object obj ) => Equals( obj as IStorageItem );
 
-        public bool Equals( IStorageItem other ) => ( other is IFolder ) && folder.FullName.Equals( other.Path, StringComparison.OrdinalIgnoreCase );
+        public bool Equals( IStorageItem other ) => ( other is IFolder ) && folder.FullName.Equals( other.Path, OrdinalIgnoreCase );
 
         public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode( folder.FullName );
     }

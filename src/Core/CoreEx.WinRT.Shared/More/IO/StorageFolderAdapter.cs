@@ -17,13 +17,7 @@
             this.folder = folder;
         }
 
-        public StorageFolder NativeStorageItem
-        {
-            get
-            {
-                return folder;
-            }
-        }
+        public StorageFolder NativeStorageItem => folder;
 
         public async Task<IFile> CreateFileAsync( string desiredName )
         {
@@ -80,7 +74,7 @@
             if ( folder != null )
                 return new StorageFolderAdapter( folder );
 
-            return null;
+            throw new NotSupportedException( ExceptionMessage.NativeStorageItemNotSupported.FormatDefault( item.GetType() ) );
         }
 
         public async Task<IReadOnlyList<IStorageItem>> GetItemsAsync()
@@ -96,7 +90,7 @@
                 {
                     var folder = item as StorageFolder;
 
-                    if ( folder == null )
+                    if ( folder != null )
                         items.Add( new StorageFolderAdapter( folder ) );
 
                     continue;
@@ -108,29 +102,11 @@
             return items.ToArray();
         }
 
-        public DateTimeOffset DateCreated
-        {
-            get
-            {
-                return folder.DateCreated;
-            }
-        }
+        public DateTimeOffset DateCreated => folder.DateCreated;
 
-        public string Name
-        {
-            get
-            {
-                return folder.Name;
-            }
-        }
+        public string Name => folder.Name;
 
-        public string Path
-        {
-            get
-            {
-                return folder.Path;
-            }
-        }
+        public string Path => folder.Path;
 
         public Task DeleteAsync() => folder.DeleteAsync().AsTask();
 

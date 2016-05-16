@@ -23,14 +23,12 @@
             {
                 case "ms-appdata":
                     {
-                        // ms-appdata cannot be requested without specifying a folder
                         if ( segments.Count == 0 )
                             return null;
 
                         var appData = ApplicationData.Current;
                         var name = segments.Dequeue().ToLowerInvariant();
 
-                        // determine which folder is being requested
                         switch ( name )
                         {
                             case "local":
@@ -48,15 +46,13 @@
                     }
                 case "ms-appx":
                     {
-                        // ms-appx always starts at the installed package location
                         nativeFolder = Package.Current.InstalledLocation;
                         break;
                     }
                 default:
-                    return null;
+                    throw new FileNotFoundException( ExceptionMessage.PathNotFound.FormatDefault( uri.OriginalString ) );
             }
-            
-            // traveral remainder of the path to the requested subfolder
+
             while ( segments.Count > 0 )
             {
                 var name = segments.Dequeue();

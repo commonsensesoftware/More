@@ -25,13 +25,13 @@
 
             return new Dictionary<string, Func<T, object>>()
             {
-                { "Attributes", fsi => fsi.Attributes },
-                { "CreationTime", fsi => fsi.CreationTime },
-                { "CreationTimeUtc", fsi => fsi.CreationTimeUtc },
-                { "LastAccessTime", fsi => fsi.LastAccessTime },
-                { "LastAccessTimeUtc", fsi => fsi.LastAccessTimeUtc },
-                { "LastWriteTime", fsi => fsi.LastWriteTime },
-                { "LastWriteTimeUtc", fsi => fsi.LastWriteTimeUtc },
+                { nameof( FileSystemInfo.Attributes ), fsi => fsi.Attributes },
+                { nameof( FileSystemInfo.CreationTime ), fsi => fsi.CreationTime },
+                { nameof( FileSystemInfo.CreationTimeUtc ), fsi => fsi.CreationTimeUtc },
+                { nameof( FileSystemInfo.LastAccessTime ), fsi => fsi.LastAccessTime },
+                { nameof( FileSystemInfo.LastAccessTimeUtc ), fsi => fsi.LastAccessTimeUtc },
+                { nameof( FileSystemInfo.LastWriteTime ), fsi => fsi.LastWriteTime },
+                { nameof( FileSystemInfo.LastWriteTimeUtc ), fsi => fsi.LastWriteTimeUtc },
             };
         }
 
@@ -41,13 +41,13 @@
 
             return new Dictionary<string, Action<T, object>>()
             {
-                { "Attributes", ( fsi, v ) => fsi.Attributes = (FileAttributes) v },
-                { "CreationTime", ( fsi, v ) => fsi.CreationTime = (DateTime) v },
-                { "CreationTimeUtc", ( fsi, v ) => fsi.CreationTimeUtc = (DateTime) v },
-                { "LastAccessTime", ( fsi, v ) => fsi.LastAccessTime = (DateTime) v },
-                { "LastAccessTimeUtc", ( fsi, v ) => fsi.LastAccessTimeUtc = (DateTime) v },
-                { "LastWriteTime", ( fsi, v ) => fsi.LastWriteTime = (DateTime) v },
-                { "LastWriteTimeUtc", ( fsi, v ) => fsi.LastWriteTimeUtc = (DateTime) v },
+                { nameof( FileSystemInfo.Attributes ), ( fsi, v ) => fsi.Attributes = (FileAttributes) v },
+                { nameof( FileSystemInfo.CreationTime ), ( fsi, v ) => fsi.CreationTime = (DateTime) v },
+                { nameof( FileSystemInfo.CreationTimeUtc ), ( fsi, v ) => fsi.CreationTimeUtc = (DateTime) v },
+                { nameof( FileSystemInfo.LastAccessTime ), ( fsi, v ) => fsi.LastAccessTime = (DateTime) v },
+                { nameof( FileSystemInfo.LastAccessTimeUtc ), ( fsi, v ) => fsi.LastAccessTimeUtc = (DateTime) v },
+                { nameof( FileSystemInfo.LastWriteTime ), ( fsi, v ) => fsi.LastWriteTime = (DateTime) v },
+                { nameof( FileSystemInfo.LastWriteTimeUtc ), ( fsi, v ) => fsi.LastWriteTimeUtc = (DateTime) v },
             };
         }
 
@@ -75,46 +75,19 @@
 
         protected virtual void OnAttributeReadersCreated( IDictionary<string, Func<T, object>> attributeReaders )
         {
-            Contract.Requires( attributeReaders != null );
         }
 
         protected virtual void OnAttributeWritersCreated( IDictionary<string, Action<T, object>> attributeWriters )
         {
-            Contract.Requires( attributeWriters != null );
         }
 
-        protected T StorageItem
-        {
-            get
-            {
-                Contract.Ensures( storageItem != null );
-                return storageItem;
-            }
-        }
+        protected T StorageItem => storageItem;
 
-        public DateTimeOffset DateModified
-        {
-            get
-            {
-                return storageItem.LastWriteTime;
-            }
-        }
+        public DateTimeOffset DateModified => storageItem.LastWriteTime;
 
-        public DateTimeOffset ItemDate
-        {
-            get
-            {
-                return storageItem.LastAccessTime;
-            }
-        }
+        public DateTimeOffset ItemDate => storageItem.LastAccessTime;
 
-        public virtual long Size
-        {
-            get
-            {
-                return 0L;
-            }
-        }
+        public virtual long Size => 0L;
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task<IDictionary<string, object>> RetrievePropertiesAsync( IEnumerable<string> propertiesToRetrieve )
@@ -134,11 +107,7 @@
             return Task.FromResult( properties );
         }
 
-        public Task SavePropertiesAsync()
-        {
-            // changes to properties take place immediately
-            return Task.FromResult( 0 );
-        }
+        public Task SavePropertiesAsync() => Task.FromResult( 0 );
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task SavePropertiesAsync( IEnumerable<KeyValuePair<string, object>> propertiesToSave )

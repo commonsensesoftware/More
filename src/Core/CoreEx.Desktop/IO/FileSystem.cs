@@ -18,7 +18,13 @@
         public Task<IFolder> GetFolderAsync( string path )
         {
             Arg.NotNullOrEmpty( path, nameof( path ) );
-            return Task.FromResult( new DirectoryInfo( path ).AsFolder() );
+
+            var directory = new DirectoryInfo( path );
+
+            if ( !directory.Exists )
+                throw new DirectoryNotFoundException( ExceptionMessage.PathNotFound.FormatDefault( path ) );
+
+            return Task.FromResult( directory.AsFolder() );
         }
 
         /// <summary>
@@ -30,7 +36,13 @@
         public Task<IFile> GetFileAsync( string path )
         {
             Arg.NotNullOrEmpty( path, nameof( path ) );
-            return Task.FromResult( new FileInfo( path ).AsFile() );
+
+            var file = new FileInfo( path );
+
+            if ( !file.Exists )
+                throw new FileNotFoundException( null, path );
+
+            return Task.FromResult( file.AsFile() );
         }
 
         /// <summary>
@@ -46,7 +58,13 @@
             if ( !uri.IsFile )
                 throw new FileNotFoundException( SR.InvalidFileUri );
 
-            return Task.FromResult( new FileInfo( uri.LocalPath ).AsFile() );
+            var path = uri.LocalPath;
+            var file = new FileInfo( path );
+
+            if ( !file.Exists )
+                throw new FileNotFoundException( null, path );
+
+            return Task.FromResult( file.AsFile() );
         }
     }
 }

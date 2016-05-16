@@ -17,29 +17,11 @@
             this.file = file;
         }
 
-        public StorageFile NativeStorageItem
-        {
-            get
-            {
-                return file;
-            }
-        }
+        public StorageFile NativeStorageItem => file;
 
-        public string ContentType
-        {
-            get
-            {
-                return file.ContentType;
-            }
-        }
+        public string ContentType => file.ContentType;
 
-        public string FileType
-        {
-            get
-            {
-                return file.FileType;
-            }
-        }
+        public string FileType => file.FileType;
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
@@ -76,29 +58,11 @@
 
         public Task<Stream> OpenReadWriteAsync() => file.OpenStreamForWriteAsync();
 
-        public DateTimeOffset DateCreated
-        {
-            get
-            {
-                return file.DateCreated;
-            }
-        }
+        public DateTimeOffset DateCreated => file.DateCreated;
 
-        public string Name
-        {
-            get
-            {
-                return file.Name;
-            }
-        }
+        public string Name => file.Name;
 
-        public string Path
-        {
-            get
-            {
-                return file.Path;
-            }
-        }
+        public string Path => file.Path;
 
         public Task DeleteAsync() => file.DeleteAsync().AsTask();
 

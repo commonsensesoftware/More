@@ -16,29 +16,11 @@
             this.properties = properties;
         }
 
-        public DateTimeOffset DateModified
-        {
-            get
-            {
-                return properties.DateModified;
-            }
-        }
+        public DateTimeOffset DateModified => properties.DateModified;
 
-        public DateTimeOffset ItemDate
-        {
-            get
-            {
-                return properties.ItemDate;
-            }
-        }
+        public DateTimeOffset ItemDate => properties.ItemDate;
 
-        public long Size
-        {
-            get
-            {
-                return Convert.ToInt64( properties.Size );
-            }
-        }
+        public long Size => Convert.ToInt64( properties.Size );
 
         public Task<IDictionary<string, object>> RetrievePropertiesAsync( IEnumerable<string> propertiesToRetrieve )
         {

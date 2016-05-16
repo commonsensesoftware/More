@@ -115,15 +115,6 @@ namespace More {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The path &apos;{0}&apos; was not found..
-        /// </summary>
-        internal static string PathNotFound {
-            get {
-                return ResourceManager.GetString("PathNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; property is read-only..
         /// </summary>
         internal static string PropertyIsReadOnly {

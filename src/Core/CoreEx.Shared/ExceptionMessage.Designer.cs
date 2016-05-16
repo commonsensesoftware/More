@@ -168,5 +168,27 @@ namespace More
                 return ResourceManager.GetString( "NativeFolderNotSupported", resourceCulture );
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A storage item of type &apos;{0}&apos; is not supported..
+        /// </summary>
+        internal static string NativeStorageItemNotSupported
+        {
+            get
+            {
+                return ResourceManager.GetString( "NativeStorageItemNotSupported", resourceCulture );
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The path &apos;{0}&apos; was not found..
+        /// </summary>
+        internal static string PathNotFound
+        {
+            get
+            {
+                return ResourceManager.GetString( "PathNotFound", resourceCulture );
+            }
+        }
     }
 }

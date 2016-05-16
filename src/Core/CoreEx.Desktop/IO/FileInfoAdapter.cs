@@ -6,6 +6,7 @@
     using System.IO;
     using System.Threading.Tasks;
     using static System.IO.Path;
+    using static System.Net.Mime.MediaTypeNames.Application;
 
     internal sealed class FileInfoAdapter : IFile, IPlatformStorageItem<FileInfo>
     {
@@ -18,30 +19,11 @@
             this.file = file;
         }
 
-        public FileInfo NativeStorageItem
-        {
-            get
-            {
-                return file;
-            }
-        }
+        public FileInfo NativeStorageItem => file;
 
-        public string ContentType
-        {
-            get
-            {
-                // typically not used on the desktop; just use a binary stream
-                return System.Net.Mime.MediaTypeNames.Application.Octet;
-            }
-        }
+        public string ContentType => Octet;
 
-        public string FileType
-        {
-            get
-            {
-                return file.Extension;
-            }
-        }
+        public string FileType => file.Extension;
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
@@ -89,29 +71,11 @@
 
         public Task<Stream> OpenReadWriteAsync() => Task.FromResult<Stream>( file.Open( FileMode.Open, FileAccess.ReadWrite ) );
 
-        public DateTimeOffset DateCreated
-        {
-            get
-            {
-                return file.CreationTime;
-            }
-        }
+        public DateTimeOffset DateCreated => file.CreationTime;
 
-        public string Name
-        {
-            get
-            {
-                return file.Name;
-            }
-        }
+        public string Name => file.Name;
 
-        public string Path
-        {
-            get
-            {
-                return file.FullName;
-            }
-        }
+        public string Path => file.FullName;
 
         public Task DeleteAsync()
         {

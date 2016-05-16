@@ -18,7 +18,8 @@
   <title>More - Extensions</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices that contain platform-specific extensions.</summary>
-  <releaseNotes>• Fixed issues with service type key decoration</releaseNotes>
+  <releaseNotes>• Fixed FileSystem to throw IOException for non-existent items (Desktop)
+• Fixed GetItemsAsync in IFolder adapter to add StorageFolder items (WinRT)</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
