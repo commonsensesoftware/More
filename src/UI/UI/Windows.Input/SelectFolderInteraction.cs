@@ -4,15 +4,12 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents an interaction request to select a folder.
     /// </summary>
     public class SelectFolderInteraction : Interaction
     {
-        private readonly ObservableCollection<string> fileTypeFilter = new ObservableCollection<string>();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectFolderInteraction"/> class.
         /// </summary>
@@ -30,21 +27,14 @@
             : base( title )
         {
             Arg.NotNull( fileTypeFilter, nameof( fileTypeFilter ) );
-
-            this.fileTypeFilter.AddRange( fileTypeFilter );
+            FileTypeFilter.AddRange( fileTypeFilter );
         }
 
         /// <summary>
         /// Gets the collection of file types that the folder contains.
         /// </summary>
         /// <value>A <see cref="IList{T}">list</see> of filter strings that specify the file types to display.</value>
-        public virtual IList<string> FileTypeFilter
-        {
-            get
-            {
-                return fileTypeFilter;
-            }
-        }
+        public virtual IList<string> FileTypeFilter { get; } = new ObservableCollection<string>();
 
         /// <summary>
         /// Gets or sets the selected folder.
@@ -52,10 +42,6 @@
         /// <value>The initial <see cref="IFolder">folder</see> before a selection is made or
         /// the selected <see cref="IFolder">folder</see>. This property will be <c>null</c>
         /// if the operation is cancelled.</value>
-        public IFolder Folder
-        {
-            get;
-            set;
-        }
+        public IFolder Folder { get; set; }
     }
 }

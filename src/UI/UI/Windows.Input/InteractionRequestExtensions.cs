@@ -342,7 +342,18 @@
         /// <returns>A <see cref="Task{TResult}">task</see> containing the selected <see cref="IFolder">folder</see> or <c>null</c> if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="SelectFolderInteraction">interaction</see> will always have the title "Select Folder" and will contain two <see cref="INamedCommand">commands</see>
         /// with the identifiers and names "Select" and "Cancel", respectively.</remarks>
-        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest ) => interactionRequest.RequestAsync( null, null, null );
+        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest ) => interactionRequest.RequestAsync( null, null, null, null );
+
+        /// <summary>
+        /// Requests a select folder interaction asynchronously.
+        /// </summary>
+        /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
+        /// <param name="initialFolder">The initial <see cref="IFolder">folder</see> to select.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing the selected <see cref="IFolder">folder</see> or <c>null</c> if the operation was canceled.</returns>
+        /// <remarks>The requested <see cref="SelectFolderInteraction">interaction</see> will always have the title "Select Folder" and will contain two <see cref="INamedCommand">commands</see>
+        /// with the identifiers and names "Select" and "Cancel", respectively.</remarks>
+        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest, IFolder initialFolder ) =>
+            interactionRequest.RequestAsync( initialFolder, null, null, null );
 
         /// <summary>
         /// Requests a select folder interaction asynchronously.
@@ -352,7 +363,19 @@
         /// <returns>A <see cref="Task{TResult}">task</see> containing the selected <see cref="IFolder">folder</see> or <c>null</c> if the operation was canceled.</returns>
         /// <remarks>The requested <see cref="SelectFolderInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
         /// with the identifiers and names "Select" and "Cancel", respectively.</remarks>
-        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest, string title ) => interactionRequest.RequestAsync( title, null, null );
+        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest, string title ) => interactionRequest.RequestAsync( null, title, null, null );
+
+        /// <summary>
+        /// Requests a select folder interaction asynchronously.
+        /// </summary>
+        /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
+        /// <param name="initialFolder">The initial <see cref="IFolder">folder</see> to select.</param>
+        /// <param name="title">The interaction title.</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing the selected <see cref="IFolder">folder</see> or <c>null</c> if the operation was canceled.</returns>
+        /// <remarks>The requested <see cref="SelectFolderInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see>
+        /// with the identifiers and names "Select" and "Cancel", respectively.</remarks>
+        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest, IFolder initialFolder, string title ) =>
+            interactionRequest.RequestAsync( initialFolder, title, null, null );
 
         /// <summary>
         /// Requests a select folder interaction asynchronously.
@@ -365,7 +388,22 @@
         /// <remarks>The requested <see cref="SelectFolderInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see> with the
         /// identifiers "Select" and "Cancel".</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest, string title, string acceptButtonText, string cancelButtonText )
+        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest, string title, string acceptButtonText, string cancelButtonText ) =>
+            interactionRequest.RequestAsync( null, title, acceptButtonText, cancelButtonText );
+
+        /// <summary>
+        /// Requests a select folder interaction asynchronously.
+        /// </summary>
+        /// <param name="interactionRequest">The extended <see cref="InteractionRequest{T}">interaction request</see>.</param>
+        /// <param name="initialFolder">The initial <see cref="IFolder">folder</see> to select.</param>
+        /// <param name="title">The interaction title.</param>
+        /// <param name="acceptButtonText">The text for the accept button. The default value is "Select".</param>
+        /// <param name="cancelButtonText">The text for the cancel button. The default value is "Cancel".</param>
+        /// <returns>A <see cref="Task{TResult}">task</see> containing the selected <see cref="IFolder">folder</see> or <c>null</c> if the operation was canceled.</returns>
+        /// <remarks>The requested <see cref="SelectFolderInteraction">interaction</see> will always contain two <see cref="INamedCommand">commands</see> with the
+        /// identifiers "Select" and "Cancel".</remarks>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
+        public static Task<IFolder> RequestAsync( this InteractionRequest<SelectFolderInteraction> interactionRequest, IFolder initialFolder, string title, string acceptButtonText, string cancelButtonText )
         {
             Arg.NotNull( interactionRequest, nameof( interactionRequest ) );
             Contract.Ensures( Contract.Result<Task<IFolder>>() != null );
@@ -387,6 +425,7 @@
                 Title = title,
                 DefaultCommandIndex = 0,
                 CancelCommandIndex = 1,
+                Folder = initialFolder,
                 Commands =
                 {
                     new NamedCommand<object>( "Select", acceptButtonText, p => source.TrySetResult( interaction.Folder ) ),
