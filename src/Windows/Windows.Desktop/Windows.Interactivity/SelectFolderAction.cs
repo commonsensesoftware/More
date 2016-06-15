@@ -7,10 +7,10 @@
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Windows;
-    using System.Windows.Input;
     using System.Windows.Interop;
+    using static System.Environment;
+    using static System.Windows.Window;
 
     /// <summary>
     /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to select a folder for the
@@ -18,6 +18,7 @@
     /// </summary>
     public class SelectFolderAction : System.Windows.Interactivity.TriggerAction<FrameworkElement>
     {
+        private const int WinXP = 6;
         private const string LegacyFolderBrowserDialogTypeName = "System.Windows.Forms.FolderBrowserDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
         private const string LegacyNativeWindowTypeName = "System.Windows.Forms.NativeWindow, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
         private const string LegacyWin32WindowTypeName = "System.Windows.Forms.IWin32Window, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
@@ -27,7 +28,7 @@
         /// </summary>
         /// <value>One of the <see cref="T:System.Environment+SpecialFolder"/> values. The default value is
         /// <see cref="F:System.Environment+SpecialFolder.Desktop"/>.</value>
-        public Environment.SpecialFolder RootFolder
+        public SpecialFolder RootFolder
         {
             get;
             set;
@@ -61,6 +62,7 @@
             if ( selectFolder.Folder != null )
                 dialogType.GetProperty( "SelectedPath" ).SetValue( dialog, selectFolder.Folder.Name, null );
 
+            const int OK = 1;
             var owner = CreateLegacyWindowOwner( Window.GetWindow( AssociatedObject ) );
             string selectedPath = null;
 
@@ -73,8 +75,7 @@
                 var result = method.Invoke( dialog, args );
                 var dialogResult = Convert.ToInt32( result, CultureInfo.CurrentCulture );
 
-                // capture selected path if user clicked OK
-                if ( dialogResult == 1 )
+                if ( dialogResult == OK )
                     selectedPath = (string) dialogType.GetProperty( "SelectedPath" ).GetValue( dialog, null );
             }
             finally
@@ -99,9 +100,9 @@
             dialog.RootFolder = RootFolder;
 
             if ( selectFolder.Folder != null )
-                dialog.SelectedPath = selectFolder.Folder.Name;
+                dialog.SelectedPath = selectFolder.Folder.Path;
 
-            var owner = Window.GetWindow( AssociatedObject );
+            var owner = GetWindow( AssociatedObject );
             var result = dialog.ShowDialog( owner ) ?? false;
 
             if ( result )
@@ -116,12 +117,10 @@
 
             if ( folder == null )
             {
-                // cancel
                 selectedFolder.ExecuteCancelCommand();
             }
             else
             {
-                // set selected folder and accept
                 selectedFolder.Folder = folder.AsFolder();
                 selectedFolder.ExecuteDefaultCommand();
             }
@@ -143,8 +142,7 @@
 
             DirectoryInfo folder = null;
 
-            // use legacy method for Windows XP and prior
-            if ( Environment.OSVersion.Version.Major < 6 )
+            if ( OSVersion.Version.Major < WinXP )
                 folder = LegacySelectFolder( selectFolder );
             else
                 folder = SelectFolder( selectFolder );
