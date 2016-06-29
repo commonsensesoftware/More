@@ -1,5 +1,6 @@
 ﻿namespace System
 {
+    using Collections;
     using More;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -132,7 +133,13 @@
             Contract.Ensures( Contract.Result<IEnumerable<TService>>() != null );
 
             var multipleServicesType = typeof( IEnumerable<TService> );
-            return ( (IEnumerable<TService>) serviceProvider.GetService( multipleServicesType ) ) ?? Enumerable.Empty<TService>();
+            var services = serviceProvider.GetService( multipleServicesType ) as IEnumerable;
+
+            if ( services == null )
+                yield break;
+
+            foreach ( object service in services )
+                yield return (TService) service;
         }
     }
 }

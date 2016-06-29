@@ -27,7 +27,7 @@
                 yield return new object[] { new Action<IServiceProvider>( sp => sp.GetService<object>() ) };
                 yield return new object[] { new Action<IServiceProvider>( sp => sp.GetService<object>( "Key" ) ) };
                 yield return new object[] { new Action<IServiceProvider>( sp => sp.GetServices( typeof( object ) ) ) };
-                yield return new object[] { new Action<IServiceProvider>( sp => sp.GetServices( typeof( object ), "key" ) ) };
+                yield return new object[] { new Action<IServiceProvider>( sp => sp.GetServices( typeof( object ), "Key" ) ) };
                 yield return new object[] { new Action<IServiceProvider>( sp => sp.GetServices<object>() ) };
                 yield return new object[] { new Action<IServiceProvider>( sp => sp.GetServices<object>( "Key" ) ) };
                 yield return new object[] { new Action<IServiceProvider>( sp => sp.TryGetService( typeof( object ), out service ) ) };
@@ -37,7 +37,7 @@
             }
         }
 
-         public static IEnumerable<object[]> NullServiceTypeData
+        public static IEnumerable<object[]> NullServiceTypeData
         {
             get
             {
@@ -47,42 +47,42 @@
                 yield return new object[] { new Action<IServiceProvider, Type>( ( sp, st ) => sp.GetRequiredService( st, "Key" ) ) };
                 yield return new object[] { new Action<IServiceProvider, Type>( ( sp, st ) => sp.GetService( st, "Key" ) ) };
                 yield return new object[] { new Action<IServiceProvider, Type>( ( sp, st ) => sp.GetServices( st ) ) };
-                yield return new object[] { new Action<IServiceProvider, Type>( ( sp, st ) => sp.GetServices( st, "key" ) ) };
+                yield return new object[] { new Action<IServiceProvider, Type>( ( sp, st ) => sp.GetServices( st, "Key" ) ) };
                 yield return new object[] { new Action<IServiceProvider, Type>( ( sp, st ) => sp.TryGetService( st, out service ) ) };
                 yield return new object[] { new Action<IServiceProvider, Type>( ( sp, st ) => sp.TryGetService( st, out service, "Key" ) ) };
             }
         }
 
         [Theory( DisplayName = "extension method should not allow null service provider" )]
-        [MemberData( "NullServiceProviderData" )]
+        [MemberData( nameof( NullServiceProviderData ) )]
         public void ExtensionMethodShouldNotAllowNullServiceProvider( Action<IServiceProvider> test )
         {
             // arrange
-            IServiceProvider serviceProvider = null;
+            var serviceProvider = default( IServiceProvider );
 
             // act
             var ex = Assert.Throws<ArgumentNullException>( () => test( serviceProvider ) );
 
             // assert
-            Assert.Equal( "serviceProvider", ex.ParamName );
+            Assert.Equal( nameof( serviceProvider ), ex.ParamName );
         }
 
         [Theory( DisplayName = "extension method should not allow null service type" )]
-        [MemberData( "NullServiceTypeData" )]
+        [MemberData( nameof( NullServiceTypeData ) )]
         public void ExtensionMethodShouldNotAllowNullServiceType( Action<IServiceProvider, Type> test )
         {
             // arrange
             var serviceProvider = ServiceProvider.Default;
-            Type serviceType = null;
+            var serviceType = default( Type );
 
             // act
             var ex = Assert.Throws<ArgumentNullException>( () => test( serviceProvider, serviceType ) );
 
             // assert
-            Assert.Equal( "serviceType", ex.ParamName );
+            Assert.Equal( nameof( serviceType ), ex.ParamName );
         }
 
-        [Fact( DisplayName = "get servie should return null for unavailable service" )]
+        [Fact( DisplayName = "get service should return null for unavailable service" )]
         public void GetServiceShouldReturnNullWhenRequestedServiceIsUnavailable()
         {
             var actual = ServiceProvider.Current.GetService<object>();
@@ -119,7 +119,7 @@
         public void TryGetServiceOfTShouldReturnRequestedService()
         {
             var target = ServiceProvider.Current;
-            IServiceProvider actual = null;
+            var actual = default( IServiceProvider );
             Assert.True( target.TryGetService( out actual ) );
             Assert.NotNull( actual );
             Assert.Equal( actual, target );
@@ -129,7 +129,7 @@
         public void TryGetServiceOfTShouldReturnFalseWhenRequestedServiceIsUnavailable()
         {
             var target = ServiceProvider.Current;
-            ICustomFormatter actual = null;
+            var actual = default( ICustomFormatter );
             Assert.False( target.TryGetService( out actual ) );
             Assert.Null( actual );
         }
@@ -138,7 +138,7 @@
         public void TryGetServiceShouldReturnRequestedService()
         {
             var target = ServiceProvider.Current;
-            object actual = null;
+            var actual = default( object );
             Assert.True( target.TryGetService( typeof( IServiceProvider ), out actual ) );
             Assert.NotNull( actual );
             Assert.IsAssignableFrom<IServiceProvider>( actual );
@@ -149,7 +149,7 @@
         public void TryGetServiceShouldReturnFalseWhenRequestedServiceIsUnavailable()
         {
             var target = ServiceProvider.Current;
-            object actual = null;
+            var actual = default( object );
             Assert.False( target.TryGetService( typeof( ICustomFormatter ), out actual ) );
             Assert.Null( actual );
         }
@@ -160,7 +160,7 @@
             var mock = new Mock<IServiceProvider>();
             mock.Setup( sl => sl.GetService( It.IsAny<Type>() ) ).Throws( new Exception() );
             var target = mock.Object;
-            object actual = null;
+            var actual = default( object );
 
             Assert.False( target.TryGetService( typeof( IServiceProvider ), out actual ) );
             Assert.Null( actual );
@@ -172,7 +172,7 @@
             var mock = new Mock<IServiceProvider>();
             mock.Setup( sl => sl.GetService( It.IsAny<Type>() ) ).Throws( new Exception() );
             var target = mock.Object;
-            IServiceProvider actual = null;
+            var actual = default( IServiceProvider );
 
             Assert.False( target.TryGetService( out actual ) );
             Assert.Null( actual );
@@ -183,16 +183,16 @@
         {
             // arrange
             var serviceProvider = new Mock<IServiceProvider>();
-            var expected = new[] { new object(), new object(), new object() };
+            var expected = new[] { "one", "two", "three" };
 
             serviceProvider.Setup( sp => sp.GetService( It.IsAny<Type>() ) ).Returns( expected.ToArray() );
 
             // act
-            var actual = serviceProvider.Object.GetServices( typeof( object ) );
+            var actual = serviceProvider.Object.GetServices( typeof( string ) );
 
             // assert
             Assert.True( expected.SequenceEqual( actual ) );
-            serviceProvider.Verify( sp => sp.GetService( typeof( IEnumerable<object> ) ), Times.Once() );
+            serviceProvider.Verify( sp => sp.GetService( typeof( IEnumerable<string> ) ), Times.Once() );
         }
 
         [Fact( DisplayName = "get services should return expected instances" )]
@@ -200,16 +200,16 @@
         {
             // arrange
             var serviceProvider = new Mock<IServiceProvider>();
-            var expected = new[] { new object(), new object(), new object() };
+            var expected = new[] { "one", "two", "three" };
 
             serviceProvider.Setup( sp => sp.GetService( It.IsAny<Type>() ) ).Returns( expected.ToArray() );
 
             // act
-            var actual = serviceProvider.Object.GetServices<object>();
+            var actual = serviceProvider.Object.GetServices<string>();
 
             // assert
             Assert.True( expected.SequenceEqual( actual ) );
-            serviceProvider.Verify( sp => sp.GetService( typeof( IEnumerable<object> ) ), Times.Once() );
+            serviceProvider.Verify( sp => sp.GetService( typeof( IEnumerable<string> ) ), Times.Once() );
         }
 
         [Fact( DisplayName = "get services should return empty sequence" )]

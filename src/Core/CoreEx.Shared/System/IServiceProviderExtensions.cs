@@ -1,12 +1,12 @@
 ﻿namespace System
 {
     using More;
-    using global::System;
-    using global::System.Collections.Generic;
-    using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Diagnostics.Contracts;
-    using global::System.Linq;
-    using global::System.Reflection;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IServiceProvider"/> interface.
@@ -31,17 +31,22 @@
             var keyedServiceProvider = serviceProvider as IKeyedServiceProvider;
 
             if ( keyedServiceProvider == null )
-                return Enumerable.Empty<TService>();
+                yield break;
 
             var generator = new ServiceTypeDisassembler();
             var multipleServicesType = generator.ForMany( serviceType );
-            return ( (IEnumerable<TService>) keyedServiceProvider.GetService( multipleServicesType, key ) ) ?? Enumerable.Empty<TService>();
+            var services = keyedServiceProvider.GetService( multipleServicesType, key ) as IEnumerable;
 #else
             var generator = new ServiceTypeAssembler();
             var multipleServicesType = generator.ForMany( serviceType );
             var projectedType = generator.ApplyKey( multipleServicesType, key );
-            return ( (IEnumerable<TService>) serviceProvider.GetService( projectedType ) ) ?? Enumerable.Empty<TService>();
+            var services = serviceProvider.GetService( projectedType ) as IEnumerable;
 #endif
+            if ( services == null )
+                yield break;
+
+            foreach ( object service in services )
+                yield return (TService) service;
         }
 
         /// <summary>
@@ -76,7 +81,8 @@
 
             var generator = new ServiceTypeDisassembler();
             var multipleServicesType = generator.ForMany( serviceType );
-            return ( (IEnumerable<object>) serviceProvider.GetService( multipleServicesType ) ) ?? Enumerable.Empty<object>();
+            var services = (IEnumerable<object>) serviceProvider.GetService( multipleServicesType );
+            return services ?? Enumerable.Empty<object>();
         }
 
         /// <summary>
