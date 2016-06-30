@@ -10,6 +10,8 @@
     /// </summary>
     public class SelectFolderInteraction : Interaction
     {
+        private readonly ObservableCollection<string> fileTypeFilter = new ObservableCollection<string>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectFolderInteraction"/> class.
         /// </summary>
@@ -27,14 +29,14 @@
             : base( title )
         {
             Arg.NotNull( fileTypeFilter, nameof( fileTypeFilter ) );
-            FileTypeFilter.AddRange( fileTypeFilter );
+            fileTypeFilter.AddRange( fileTypeFilter );
         }
 
         /// <summary>
         /// Gets the collection of file types that the folder contains.
         /// </summary>
         /// <value>A <see cref="IList{T}">list</see> of filter strings that specify the file types to display.</value>
-        public virtual IList<string> FileTypeFilter { get; } = new ObservableCollection<string>();
+        public virtual IList<string> FileTypeFilter => fileTypeFilter;
 
         /// <summary>
         /// Gets or sets the selected folder.
