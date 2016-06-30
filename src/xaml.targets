@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <!-- Executes a C# script (*.csx) using C# Interactive (csi.exe) after the XamlTypeInfo.g.cs files are generated, but before compilation.
+      The script will mark public types in the XamlTypeInfo.g.cs as not CLS-compliant, hide them from Intellisense, and suppress warnings about missing XML comments -->
+ <Target Name="UpdateGeneratedXamlTypeInfo" AfterTargets="MarkupCompilePass2" BeforeTargets="CoreCompile">
+
+  <PropertyGroup>
+   <CsiExe>$(MSBuildToolsPath)\csi.exe</CsiExe>
+   <CsiLibPath>$(MSBuildToolsPath)</CsiLibPath>
+   <CsiScript>$(MSBuildThisFileDirectory)fix-xaml-type-info.csx</CsiScript>
+   <XamlTypeInfoPath>$(ProjectDir)$(IntermediateOutputPath)XamlTypeInfo.g.cs</XamlTypeInfoPath>
+  </PropertyGroup>
+  
+  <Exec Command="&quot;$(CsiExe)&quot; /lib:&quot;$(CsiLibPath)&quot; &quot;$(CsiScript)&quot; &quot;$(XamlTypeInfoPath)&quot;"   />
+ 
+ </Target>
+ 
+</Project>
