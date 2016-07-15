@@ -18,7 +18,8 @@
   <title>More - Extensions</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices that contain platform-specific extensions.</summary>
-  <releaseNotes>• Fixed invalid cast in IServiceProviderExtensions.GetServices&lt;T&gt;(string key)</releaseNotes>
+  <releaseNotes>• Fixed implementation of IBasicProperties.SavePropertiesAsync (Desktop only)
+• Updated IFile.OpenReadWriteAsync to make file read/write and retry when UnauthorizedAccessException is thrown on open (Desktop only)</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>

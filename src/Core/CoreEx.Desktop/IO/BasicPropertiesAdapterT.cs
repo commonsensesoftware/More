@@ -67,7 +67,7 @@
             get
             {
                 if ( !lazyAttributeWriters.IsValueCreated )
-                    OnAttributeReadersCreated( lazyAttributeReaders.Value );
+                    OnAttributeWritersCreated( lazyAttributeWriters.Value );
 
                 return lazyAttributeWriters.Value;
             }

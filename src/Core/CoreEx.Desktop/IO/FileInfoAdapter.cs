@@ -69,7 +69,21 @@
 
         public Task<Stream> OpenReadAsync() => Task.FromResult<Stream>( file.OpenRead() );
 
-        public Task<Stream> OpenReadWriteAsync() => Task.FromResult<Stream>( file.Open( FileMode.Open, FileAccess.ReadWrite ) );
+        public Task<Stream> OpenReadWriteAsync()
+        {
+            try
+            {
+                return Task.FromResult<Stream>( file.Open( FileMode.Open, FileAccess.ReadWrite ) );
+            }
+            catch ( UnauthorizedAccessException )
+            {
+                if ( !file.IsReadOnly )
+                    throw;
+            }
+
+            file.IsReadOnly = false;
+            return Task.FromResult<Stream>( file.Open( FileMode.Open, FileAccess.ReadWrite ) );
+        }
 
         public DateTimeOffset DateCreated => file.CreationTime;
 
