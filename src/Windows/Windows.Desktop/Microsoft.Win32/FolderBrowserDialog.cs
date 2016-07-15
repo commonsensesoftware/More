@@ -4,8 +4,14 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.IO;
-    using System.Runtime.InteropServices;
     using System.Security.Permissions;
+    using static FileDialogOptions;
+    using static NativeMethods;
+    using static ShellItemDisplayName;
+    using static System.Environment;
+    using static System.Environment.SpecialFolder;
+    using static System.IO.Path;
+    using static System.Runtime.InteropServices.Marshal;
 
     /// <summary>
     /// Represents a folder browser dialog.
@@ -14,7 +20,7 @@
     {
         private string title = string.Empty;
         private string selectedPath = string.Empty;
-        private Environment.SpecialFolder rootFolder = Environment.SpecialFolder.Desktop;
+        private SpecialFolder rootFolder = Desktop;
 
         /// <summary>
         /// Gets or sets the descriptive text displayed in the dialog box title.
@@ -49,7 +55,7 @@
         [Category( "Folder Browsing" )]
         [Description( "The location of the root folder from which to start browsing. Only the specified folder and any subfolders that are beneath it will appear in the dialog box." )]
         [TypeConverter( "System.Windows.Forms.SpecialFolderEnumConverter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" )]
-        public Environment.SpecialFolder RootFolder
+        public SpecialFolder RootFolder
         {
             get
             {
@@ -57,8 +63,8 @@
             }
             set
             {
-                if ( !Enum.IsDefined( typeof( Environment.SpecialFolder ), value ) )
-                    throw new InvalidEnumArgumentException( "value", (int) value, typeof( Environment.SpecialFolder ) );
+                if ( !Enum.IsDefined( typeof( SpecialFolder ), value ) )
+                    throw new InvalidEnumArgumentException( nameof( value ), (int) value, typeof( SpecialFolder ) );
 
                 rootFolder = value;
             }
@@ -89,23 +95,24 @@
             }
         }
 
-        private static IShellItem GetFolder( Environment.SpecialFolder rootFolder, string selectedPath )
+        private static IShellItem GetFolder( SpecialFolder rootFolder, string selectedPath )
         {
             Contract.Requires( selectedPath != null );
             Contract.Ensures( Contract.Result<IShellItem>() != null );
 
-            // use root folder is no path is selected
             if ( selectedPath.Length == 0 )
-                selectedPath = Environment.GetFolderPath( rootFolder );
+            {
+                selectedPath = GetFolderPath( rootFolder );
+            }
+            else if ( !Directory.Exists( selectedPath ) )
+            {
+                if ( File.Exists( selectedPath ) )
+                    selectedPath = GetDirectoryName( selectedPath );
+                else
+                    selectedPath = GetDirectoryName( GetFolderPath( rootFolder ) );
+            }
 
-            // get folder (in case it's a file)
-            selectedPath = Path.GetDirectoryName( selectedPath );
-
-            // failover to root folder
-            if ( !Directory.Exists( selectedPath ) )
-                selectedPath = Path.GetDirectoryName( Environment.GetFolderPath( rootFolder ) );
-
-            return NativeMethods.CreateItemFromParsingName( selectedPath );
+            return CreateItemFromParsingName( selectedPath );
         }
 
         private static string GetSelectedPath( IFileOpenDialog fileDialog )
@@ -114,8 +121,8 @@
             IShellItem item;
 
             fileDialog.GetResult( out item );
-            item.GetDisplayName( ShellItemDisplayName.FileSystemPath, out path );
-            Marshal.FinalReleaseComObject( item );
+            item.GetDisplayName( FileSystemPath, out path );
+            FinalReleaseComObject( item );
 
             return path;
         }
@@ -124,7 +131,7 @@
         {
             Contract.Ensures( Contract.Result<IFileOpenDialog>() != null );
 
-            var options = FileDialogOptions.PickFolders | FileDialogOptions.ForceFileSystem | FileDialogOptions.PathMustExist;
+            var options = PickFolders | ForceFileSystem | PathMustExist;
             var dialog = new IFileOpenDialog();
             dialog.SetOptions( options );
 
@@ -138,7 +145,7 @@
         {
             Title = string.Empty;
             SelectedPath = string.Empty;
-            RootFolder = Environment.SpecialFolder.Desktop;
+            RootFolder = Desktop;
         }
 
         /// <summary>
@@ -151,7 +158,7 @@
             var path = SelectedPath;
 
             if ( string.IsNullOrEmpty( path ) )
-                path = Environment.GetFolderPath( RootFolder );
+                path = GetFolderPath( RootFolder );
 
             new FileIOPermission( FileIOPermissionAccess.PathDiscovery, path ).Demand();
         }
@@ -169,31 +176,25 @@
 
             try
             {
-                // create shell item for folder and create dialog
                 folder = GetFolder( RootFolder, SelectedPath );
                 dialog = CreateDialog();
-
-                // configure dialog
                 dialog.SetTitle( Title );
                 dialog.SetFolder( folder );
                 dialog.SetFileName( string.Empty );
 
-                // show the dialog
                 var hresult = dialog.Show( hwndOwner );
                 result = hresult == 0U;
 
-                // update the selected path if the user didn't cancel
                 if ( result )
                     SelectedPath = GetSelectedPath( dialog );
             }
             finally
             {
-                // free resources allocated by COM
                 if ( folder != null )
-                    Marshal.FinalReleaseComObject( folder );
+                    FinalReleaseComObject( folder );
 
                 if ( dialog != null )
-                    Marshal.FinalReleaseComObject( dialog );
+                    FinalReleaseComObject( dialog );
             }
 
             return result;

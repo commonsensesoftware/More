@@ -20,7 +20,7 @@
   <title>More - UI Presentation</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface presentations.</summary>
-  <releaseNotes>• Fixed initial folder selection for SelectFolderAction in desktop version</releaseNotes>
+  <releaseNotes>• Fixed initial SelectedPath in FolderBrowserDialog (Desktop only)</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
