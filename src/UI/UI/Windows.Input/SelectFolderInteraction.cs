@@ -29,7 +29,7 @@
             : base( title )
         {
             Arg.NotNull( fileTypeFilter, nameof( fileTypeFilter ) );
-            fileTypeFilter.AddRange( fileTypeFilter );
+            this.fileTypeFilter.AddRange( fileTypeFilter );
         }
 
         /// <summary>

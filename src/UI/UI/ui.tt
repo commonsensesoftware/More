@@ -10,7 +10,7 @@
   <title>More - UI</title>
   <description>$description$</description>
   <summary>Provides "More" patterns and practices for user interface applications.</summary>
-  <releaseNotes>• Added new select folder interactions to support selecting the initial folder</releaseNotes>
+  <releaseNotes>• Fixed regression in SelectFolderInteraction constructor.</releaseNotes>
   <language>en-US</language>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
   <licenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</licenseUrl>
