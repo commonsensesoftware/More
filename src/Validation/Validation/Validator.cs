@@ -8,7 +8,7 @@
     using System.Reflection;
 
     /// <summary>
-    /// Defines the behavior of an objet that can be used to validate objects, properties, and methods.
+    /// Defines the behavior of an object that can be used to validate objects, properties, and methods.
     /// </summary>
     public class Validator : IValidator
     {
