@@ -34,7 +34,7 @@
             Assert.Same( expected.GetService( typeof( object ) ), actual.GetService( typeof( object ) ) );
         }
 
-        [Fact( DisplayName = "adapt shoudl return validation result adapter" )]
+        [Fact( DisplayName = "adapt should return validation result adapter" )]
         public void AdaptShouldReturnValidationResultAdapter()
         {
             // arrange

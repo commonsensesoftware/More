@@ -5,11 +5,13 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using static System.String;
 
     /// <summary>
     /// Represents the base implementation for a validatable object.
@@ -17,6 +19,8 @@
     public abstract class ValidatableObject : ObservableObject, INotifyDataErrorInfo
     {
         private readonly MultivalueDictionary<string, IValidationResult> propertyErrors = new MultivalueDictionary<string, IValidationResult>();
+        private readonly Lazy<IValidator> validatorHolder;
+        private bool valid = true;
         private bool hasErrors;
 
         /// <summary>
@@ -24,22 +28,24 @@
         /// </summary>
         protected ValidatableObject()
         {
-            propertyErrors.CollectionChanged += ( s, e ) => HasErrors = propertyErrors.Any();
+            validatorHolder = new Lazy<IValidator>( GetDefaultValidator );
+            propertyErrors.CollectionChanged += OnPropertyErrorsChanged;
         }
 
-        private static IValidator Validator
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidatableObject"/> class.
+        /// </summary>
+        /// <param name="validator">The associated <see cref="IValidator">validator</see>.</param>
+        protected ValidatableObject( IValidator validator )
         {
-            get
-            {
-                Contract.Ensures( Contract.Result<IValidator>() != null );
-                IValidator validator;
-
-                if ( ServiceProvider.Current.TryGetService( out validator ) )
-                    return validator;
-
-                return new GenericValidator();
-            }
+            validatorHolder = new Lazy<IValidator>( () => validator );
+            propertyErrors.CollectionChanged += OnPropertyErrorsChanged;
         }
+
+        private void OnPropertyErrorsChanged( object sender, NotifyCollectionChangedEventArgs e ) =>
+            IsValid = !( HasErrors = propertyErrors.Any() );
+
+        private IValidator Validator => validatorHolder.Value;
 
         /// <summary>
         /// Creates the validation context for the current instance.
@@ -52,42 +58,48 @@
         }
 
         /// <summary>
-        /// Initializes the validation errors for the current instance.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
-        /// <remarks>This method should only be called within an object's constructor. This method
-        /// is typically used when the initial state of an object has validation errors.</remarks>
-        protected void InitializeValidationErrors()
+        /// <value>True if the object is valid; otherwise, false.</value>
+        public bool IsValid
         {
-            var results = new List<IValidationResult>();
-            var context = CreateValidationContext();
-
-            PropertyErrors.Clear();
-            HasErrors = false;
-
-            if ( Validator.TryValidateObject( this, context, results, true ) )
-                return;
-
-            foreach ( var result in results )
+            get
             {
-                foreach ( var propertyName in result.MemberNames.Where( m => !string.IsNullOrEmpty( m ) ) )
-                {
-                    PropertyErrors.SetRange( propertyName, new[] { result } );
-                    HasErrors = true;
-                }
+                return valid;
+            }
+            private set
+            {
+                base.SetProperty( ref valid, value, EqualityComparer<bool>.Default );
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Validates the current object.
         /// </summary>
-        /// <value>True if the object is valid; otherwise, false.</value>
-        public virtual bool IsValid
+        /// <returns>A <see cref="IReadOnlyList{T}">read-only list</see> of <see cref="IValidationResult">validation results</see>.</returns>
+        public IReadOnlyList<IValidationResult> Validate()
         {
-            get
+            Contract.Ensures( Contract.Result<IReadOnlyList<IValidationResult>>() != null );
+
+            var results = new List<IValidationResult>();
+            var context = CreateValidationContext();
+
+            PropertyErrors.Clear();
+
+            if ( Validator.TryValidateObject( this, context, results, validateAllProperties: true ) )
             {
-                var context = CreateValidationContext();
-                return Validator.TryValidateObject( this, context, null, true );
+                return results;
             }
+
+            foreach ( var result in results )
+            {
+                foreach ( var propertyName in result.MemberNames.Where( m => !IsNullOrEmpty( m ) ) )
+                {
+                    PropertyErrors.SetRange( propertyName, new[] { result } );
+                }
+            }
+
+            return results;
         }
 
         /// <summary>
@@ -116,8 +128,22 @@
             }
             private set
             {
-                base.SetProperty( ref hasErrors, value );
+                base.SetProperty( ref hasErrors, value, EqualityComparer<bool>.Default );
             }
+        }
+
+        private static IValidator GetDefaultValidator()
+        {
+            Contract.Ensures( Contract.Result<IValidator>() != null );
+
+            IValidator validator;
+
+            if ( !ServiceProvider.Current.TryGetService( out validator ) )
+            {
+                validator = new GenericValidator();
+            }
+
+            return validator;
         }
 
         /// <summary>
@@ -170,9 +196,9 @@
 
             var context = CreateValidationContext();
             context.MemberName = propertyName;
-            var valid = Validator.TryValidateProperty( value, context, results );
+            var result = Validator.TryValidateProperty( value, context, results );
 
-            return valid;
+            return result;
         }
 
         /// <summary>
@@ -194,22 +220,18 @@
 
             if ( IsPropertyValid( value, results, propertyName ) )
             {
-                // clear any errors on success and raise error notifications
                 if ( PropertyErrors.Remove( propertyName ) )
+                {
                     OnErrorsChanged( propertyName );
+                }
             }
             else if ( results.Count > 0 )
             {
-                // add or replace errors
                 PropertyErrors.SetRange( propertyName, results );
-
-                // raise error notifications
                 OnErrorsChanged( propertyName );
             }
 
-            // raise events
             OnPropertyChanged( propertyName );
-            OnPropertyChanged( nameof( IsValid ) );
         }
 
         /// <summary>
@@ -226,7 +248,7 @@
             Contract.Ensures( Contract.Result<IEnumerable<string>>() != null );
 
             var messages = from result in results
-                           where !string.IsNullOrEmpty( result.ErrorMessage )
+                           where !IsNullOrEmpty( result.ErrorMessage )
                            select result.ErrorMessage;
 
             return messages.ToArray().AsReadOnly();
@@ -254,18 +276,22 @@
 
             var list = new List<IValidationResult>();
 
-            if ( !string.IsNullOrEmpty( propertyName ) )
+            if ( !IsNullOrEmpty( propertyName ) )
             {
                 ICollection<IValidationResult> results;
 
                 if ( !PropertyErrors.TryGetValue( propertyName, out results ) || results == null )
+                {
                     return list.AsReadOnly();
+                }
 
                 return results.ToArray().AsReadOnly();
             }
 
             foreach ( var error in PropertyErrors )
+            {
                 list.AddRange( error.Value );
+            }
 
             return list.AsReadOnly();
         }
@@ -297,11 +323,11 @@
         ///     {
         ///         get
         ///         {
-        ///             return this.amount;
+        ///             return amount;
         ///         }
         ///         set
         ///         {
-        ///             this.SetProperty( ref this.amount, value );
+        ///             SetProperty( ref amount, value );
         ///         }
         ///     }
         /// }
@@ -323,11 +349,11 @@
         ///     {
         ///         get
         ///         {
-        ///             return this.name;
+        ///             return name;
         ///         }
         ///         set
         ///         {
-        ///             this.SetProperty( ref this.name, value, StringComparer.OrdinalIgnoreCase );
+        ///             SetProperty( ref name, value, StringComparer.OrdinalIgnoreCase );
         ///         }
         ///     }
         /// }
@@ -340,7 +366,9 @@
             Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
             if ( !OnPropertyChanging( backingField, value, comparer, propertyName ) )
+            {
                 return false;
+            }
 
             backingField = value;
             ValidateProperty( value, propertyName );

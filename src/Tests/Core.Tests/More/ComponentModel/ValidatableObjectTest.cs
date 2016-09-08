@@ -1,8 +1,8 @@
 ﻿namespace More.ComponentModel
 {
+    using Collections.Generic;
+    using DataAnnotations;
     using Moq;
-    using More.Collections.Generic;
-    using More.ComponentModel.DataAnnotations;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -21,6 +21,16 @@
             private string address;
             private DateTime hireDate = DateTime.Today;
             private DateTime? separationDate;
+
+            public MockValidatableObject()
+                : base( new Mock<IValidator>().Object )
+            {
+            }
+
+            public MockValidatableObject( IValidator validator )
+                : base( validator )
+            {
+            }
 
             public int Id
             {
@@ -92,50 +102,26 @@
                 }
             }
 
-            public int DoWork()
-            {
-                return default( int );
-            }
+            public int DoWork() => default( int );
 
-            public IMultivalueDictionary<string, IValidationResult> InvokeGetPropertyErrors()
-            {
-                return PropertyErrors;
-            }
+            public IMultivalueDictionary<string, IValidationResult> InvokeGetPropertyErrors() => PropertyErrors;
 
-            public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue )
-            {
-                return IsPropertyValid( newValue, propertyName );
-            }
+            public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue ) => IsPropertyValid( newValue, propertyName );
 
-            public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue, ICollection<IValidationResult> results )
-            {
-                return IsPropertyValid( newValue, results, propertyName );
-            }
+            public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue, ICollection<IValidationResult> results ) =>
+                IsPropertyValid( newValue, results, propertyName );
 
-            public void InvokeValidateProperty<TValue>( string propertyName, TValue newValue )
-            {
-                ValidateProperty( newValue, propertyName );
-            }
+            public void InvokeValidateProperty<TValue>( string propertyName, TValue newValue ) => ValidateProperty( newValue, propertyName );
 
-            public IEnumerable<string> InvokeFormatErrorMessages( string propertyName, IEnumerable<IValidationResult> results )
-            {
-                return FormatErrorMessages( propertyName, results );
-            }
+            public IEnumerable<string> InvokeFormatErrorMessages( string propertyName, IEnumerable<IValidationResult> results ) =>
+                FormatErrorMessages( propertyName, results );
 
-            public void InvokeSetProperty<TValue>( string propertyName, ref TValue currentValue, TValue newValue, IEqualityComparer<TValue> comparer )
-            {
+            public void InvokeSetProperty<TValue>( string propertyName, ref TValue currentValue, TValue newValue, IEqualityComparer<TValue> comparer ) =>
                 SetProperty( ref currentValue, newValue, comparer, propertyName );
-            }
 
-            public void InvokeOnErrorsChanged( string propertyName )
-            {
-                OnErrorsChanged( propertyName );
-            }
+            public void InvokeOnErrorsChanged( string propertyName ) => OnErrorsChanged( propertyName );
 
-            public void InvokeOnErrorsChanged( DataErrorsChangedEventArgs e )
-            {
-                OnErrorsChanged( e );
-            }
+            public void InvokeOnErrorsChanged( DataErrorsChangedEventArgs e ) => OnErrorsChanged( e );
         }
 
         [Fact( DisplayName = "set property should change property with comparison" )]
@@ -146,10 +132,9 @@
             var propertyChanged = false;
             var errorsChanged = false;
             var expected = "TEST";
-            var target = new MockValidatableObject();
-            var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
-            var serviceProvider = new Mock<IServiceProvider>();
+            var target = new MockValidatableObject( validator.Object );
+            var context = new Mock<IValidationContext>();
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
@@ -163,7 +148,9 @@
                            if ( c.MemberName == "Name" )
                            {
                                if ( !( valid = !string.IsNullOrEmpty( (string) v ) ) )
+                               {
                                    r.Add( new Mock<IValidationResult>().Object );
+                               }
 
                                return;
                            }
@@ -171,10 +158,6 @@
                            valid = true;
                        } )
                      .Returns( () => valid );
-
-            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
-
-            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             target.PropertyChanged += ( s, e ) => propertyChanged = true;
             target.ErrorsChanged += ( s, e ) => errorsChanged = true;
@@ -197,18 +180,15 @@
             var propertyChanged = false;
             var errorsChanged = false;
             var expected = string.Empty;
-            var target = new MockValidatableObject();
-            var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
-            var serviceProvider = new Mock<IServiceProvider>();
+            var target = new MockValidatableObject( validator.Object );
+            var context = new Mock<IValidationContext>();
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
             validator.Setup( v => v.CreateContext( It.IsAny<object>(), It.IsAny<IDictionary<object, object>>() ) )
                      .Returns( context.Object );
 
-            validator.Setup( v => v.TryValidateObject( It.IsAny<object>(), It.IsAny<IValidationContext>(), It.IsAny<ICollection<IValidationResult>>(), It.IsAny<bool>() ) )
-                     .Returns( false );
             validator.Setup( v => v.TryValidateProperty( It.IsAny<object>(), It.IsAny<IValidationContext>(), It.IsAny<ICollection<IValidationResult>>() ) )
                      .Callback<object, IValidationContext, ICollection<IValidationResult>>(
                        ( v, c, r ) =>
@@ -216,7 +196,9 @@
                            if ( c.MemberName == "Name" )
                            {
                                if ( !( valid = !string.IsNullOrEmpty( (string) v ) ) )
+                               {
                                    r.Add( new Mock<IValidationResult>().Object );
+                               }
 
                                return;
                            }
@@ -224,10 +206,6 @@
                            valid = true;
                        } )
                      .Returns( () => valid );
-
-            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
-
-            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             target.PropertyChanged += ( s, e ) => propertyChanged = true;
             target.ErrorsChanged += ( s, e ) => errorsChanged = true;
@@ -242,7 +220,6 @@
             Assert.Equal( 1, target.InvokeGetPropertyErrors().Count );
             Assert.Equal( 1, target.InvokeGetPropertyErrors()["Name"].Count );
             Assert.False( target.IsValid );
-            validator.Verify( v => v.TryValidateObject( target, context.Object, It.IsAny<ICollection<IValidationResult>>(), true ), Times.Once() );
         }
 
         [Fact( DisplayName = "set property should clear validation errors with valid value" )]
@@ -251,10 +228,9 @@
             // arrange
             var mockBackingField = "test";
             var expected = string.Empty;
-            var target = new MockValidatableObject();
-            var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
-            var serviceProvider = new Mock<IServiceProvider>();
+            var target = new MockValidatableObject( validator.Object );
+            var context = new Mock<IValidationContext>();
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
@@ -268,7 +244,9 @@
                            if ( c.MemberName == "Name" )
                            {
                                if ( !( valid = !string.IsNullOrEmpty( (string) v ) ) )
+                               {
                                    r.Add( new Mock<IValidationResult>().Object );
+                               }
 
                                return;
                            }
@@ -276,10 +254,6 @@
                            valid = true;
                        } )
                      .Returns( () => valid );
-
-            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
-
-            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             target.InvokeSetProperty( "Name", ref mockBackingField, expected, StringComparer.Ordinal );
 
@@ -349,7 +323,18 @@
         public void IsValidPropertyShouldReturnFalseWhenNamePropertyIsUnset()
         {
             // arrange
-            var target = new MockValidatableObject();
+            var result = new Mock<IValidationResult>();
+            var context = new Mock<IValidationContext>();
+            var validator = new Mock<IValidator>();
+            var target = new MockValidatableObject( validator.Object );
+
+            result.SetupGet( r => r.MemberNames ).Returns( new[] { "Test" } );
+            context.SetupProperty( c => c.MemberName );
+            validator.Setup( v => v.CreateContext( It.IsAny<object>(), It.IsAny<IDictionary<object, object>>() ) ).Returns( context.Object );
+            validator.Setup( v => v.TryValidateObject( It.IsAny<object>(), It.IsAny<IValidationContext>(), It.IsAny<ICollection<IValidationResult>>(), It.IsAny<bool>() ) )
+                     .Callback( ( object v, IValidationContext c, ICollection<IValidationResult> r, bool a ) => r.Add( result.Object ) )
+                     .Returns( false );
+            target.Validate();
 
             // act
             var valid = target.IsValid;
@@ -383,8 +368,7 @@
             // arrange
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
-            var serviceProvider = new Mock<IServiceProvider>();
-            var target = new MockValidatableObject();
+            var target = new MockValidatableObject( validator.Object );
 
             context.SetupProperty( c => c.MemberName );
             validator.Setup( v => v.CreateContext( It.IsAny<object>(), It.IsAny<IDictionary<object, object>>() ) )
@@ -392,10 +376,6 @@
 
             validator.Setup( v => v.TryValidateProperty( It.IsAny<object>(), It.IsAny<IValidationContext>(), It.IsAny<ICollection<IValidationResult>>() ) )
                      .Returns( expected );
-
-            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
-
-            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             var actual = target.InvokeIsPropertyValid( "Name", value );
@@ -413,8 +393,7 @@
             var results = new List<IValidationResult>();
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
-            var serviceProvider = new Mock<IServiceProvider>();
-            var target = new MockValidatableObject();
+            var target = new MockValidatableObject( validator.Object );
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
@@ -428,7 +407,9 @@
                              if ( c.MemberName == "Name" )
                              {
                                  if ( !( valid = !string.IsNullOrEmpty( (string) v ) ) )
+                                 {
                                      r.Add( new Mock<IValidationResult>().Object );
+                                 }
 
                                  return;
                              }
@@ -436,10 +417,6 @@
                              valid = true;
                          } )
                      .Returns( () => valid );
-
-            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
-
-            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             target.InvokeIsPropertyValid( "Name", value, results );
@@ -521,8 +498,7 @@
             // arrange
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
-            var serviceProvider = new Mock<IServiceProvider>();
-            var target = new MockValidatableObject();
+            var target = new MockValidatableObject( validator.Object );
 
             context.SetupProperty( c => c.MemberName );
             validator.Setup( v => v.CreateContext( It.IsAny<object>(), It.IsAny<IDictionary<object, object>>() ) )
@@ -531,10 +507,6 @@
             validator.Setup( v => v.TryValidateProperty( It.IsAny<object>(), It.IsAny<IValidationContext>(), It.IsAny<ICollection<IValidationResult>>() ) )
                      .Callback<object, IValidationContext, ICollection<IValidationResult>>( ( v, c, r ) => r.Add( new Mock<IValidationResult>().Object ) )
                      .Returns( false );
-
-            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
-
-            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             target.Name = string.Empty;
@@ -549,8 +521,7 @@
             // arrange
             var context = new Mock<IValidationContext>();
             var validator = new Mock<IValidator>();
-            var serviceProvider = new Mock<IServiceProvider>();
-            var target = new MockValidatableObject();
+            var target = new MockValidatableObject( validator.Object );
             var valid = false;
 
             context.SetupProperty( c => c.MemberName );
@@ -574,10 +545,6 @@
                             }
                         } )
                      .Returns( () => valid );
-
-            serviceProvider.Setup( sp => sp.GetService( It.Is<Type>( t => t == typeof( IValidator ) ) ) ).Returns( validator.Object );
-
-            ServiceProvider.SetCurrent( serviceProvider.Object );
 
             // act
             target.Name = string.Empty;

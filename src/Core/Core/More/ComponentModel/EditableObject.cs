@@ -1,9 +1,11 @@
 ﻿namespace More.ComponentModel
 {
+    using DataAnnotations;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using static EditRecoveryModel;
     using static System.StringComparer;
 
     /// <summary>
@@ -22,15 +24,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="EditableObject"/> class.
         /// </summary>
-        protected EditableObject()
-        {
-            uneditableMembers = new HashSet<string>( Ordinal );
-            transaction = new Lazy<IEditTransaction>( CreateTransaction );
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EditableObject"/> class.
-        /// </summary>
         /// <param name="uneditableMembers">An array of uneditable member names.</param>
         protected EditableObject( params string[] uneditableMembers )
             : this( (IEnumerable<string>) uneditableMembers )
@@ -42,6 +35,30 @@
         /// </summary>
         /// <param name="uneditableMembers">A <see cref="IEnumerable{T}">sequence</see> of uneditable member names.</param>
         protected EditableObject( IEnumerable<string> uneditableMembers )
+        {
+            Arg.NotNull( uneditableMembers, nameof( uneditableMembers ) );
+
+            this.uneditableMembers = new HashSet<string>( uneditableMembers, Ordinal );
+            transaction = new Lazy<IEditTransaction>( CreateTransaction );
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditableObject"/> class.
+        /// </summary>
+        /// <param name="validator">The associated <see cref="IValidator">validator</see>.</param>
+        /// <param name="uneditableMembers">An array of uneditable member names.</param>
+        protected EditableObject( IValidator validator, params string[] uneditableMembers )
+            : this( validator, (IEnumerable<string>) uneditableMembers )
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditableObject"/> class.
+        /// </summary>
+        /// <param name="validator">The associated <see cref="IValidator">validator</see>.</param>
+        /// <param name="uneditableMembers">A <see cref="IEnumerable{T}">sequence</see> of uneditable member names.</param>
+        protected EditableObject( IValidator validator, IEnumerable<string> uneditableMembers )
+            : base( validator )
         {
             Arg.NotNull( uneditableMembers, nameof( uneditableMembers ) );
 
@@ -77,7 +94,9 @@
             private set
             {
                 if ( editing == value )
+                {
                     return;
+                }
 
                 editing = value;
                 OnPropertyChanged( nameof( IsEditing ), true );
@@ -98,14 +117,16 @@
             set
             {
                 if ( recoveryModel == value )
+                {
                     return;
+                }
 
                 recoveryModel = value;
-                savepoint = value == EditRecoveryModel.Full ? Transaction.CreateSavepoint() : null;
+                savepoint = value == Full ? Transaction.CreateSavepoint() : null;
             }
         }
 
-        private bool UseFullRecovery => RecoveryModel == EditRecoveryModel.Full;
+        private bool UseFullRecovery => RecoveryModel == Full;
 
         /// <summary>
         /// Creates and returns the type of edit transaction used to edit the current instance.
@@ -201,9 +222,10 @@
         {
             Contract.Requires( e != null );
 
-            // if not suppressed, change the state
             if ( TriggersStateChange( e.PropertyName ) && !suppressStateChange )
+            {
                 IsChanged = true;
+            }
 
             base.OnPropertyChanged( e );
         }
@@ -225,7 +247,9 @@
         public void BeginEdit()
         {
             if ( IsEditing )
+            {
                 return;
+            }
 
             IsEditing = true;
             OnBeforeBeginEdit();
@@ -240,7 +264,9 @@
         public void EndEdit()
         {
             if ( !IsEditing )
+            {
                 return;
+            }
 
             OnBeforeEndEdit();
             Transaction.Commit();
@@ -255,7 +281,9 @@
         public void CancelEdit()
         {
             if ( !IsEditing )
+            {
                 return;
+            }
 
             OnBeforeCancelEdit();
             Transaction.Rollback();
@@ -272,7 +300,9 @@
             EndEdit();
 
             if ( UseFullRecovery )
+            {
                 savepoint = Transaction.CreateSavepoint();
+            }
 
             IsChanged = false;
         }
@@ -303,7 +333,9 @@
             CancelEdit();
 
             if ( UseFullRecovery && savepoint != null )
+            {
                 Transaction.Rollback( savepoint );
+            }
 
             IsChanged = false;
             OnPropertyChanged( (string) null, true );

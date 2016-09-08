@@ -2,10 +2,10 @@
 {
     using Moq;
     using More.ComponentModel;
+    using More.ComponentModel.DataAnnotations;
     using More.Mocks;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using Xunit;
 
@@ -14,6 +14,14 @@
     /// </summary>
     public class IChangeTrackingExtensionsTest
     {
+        private sealed class ValidatableObjectWithAnError : ValidatableObject
+        {
+            public ValidatableObjectWithAnError()
+            {
+                PropertyErrors.Add( "Test", new Mock<IValidationResult>().Object );
+            }
+        }
+
         [Fact( DisplayName = "is valid should not allow null" )]
         public void IsValidShouldNotAllowNullArguments()
         {
@@ -22,7 +30,7 @@
 
             // act
             var ex = Assert.Throws<ArgumentNullException>( () => items.IsValid() );
-            
+
             // assert
             Assert.Equal( "items", ex.ParamName );
         }
@@ -31,13 +39,7 @@
         public void IsValidShouldReturnFalseWhenAnyItemIsInvalid()
         {
             // arrange
-            var item1 = new Mock<ValidatableObject>();
-            var item2 = new Mock<ValidatableObject>();
-
-            item1.SetupGet( i => i.IsValid ).Returns( true );
-            item2.SetupGet( i => i.IsValid ).Returns( false );
-
-            var items = new[] { item1.Object, item2.Object };
+            var items = new[] { new Mock<ValidatableObject>().Object, new ValidatableObjectWithAnError() };
 
             // act
             var valid = items.IsValid();
@@ -50,13 +52,7 @@
         public void IsValidShouldReturnTrueAllItemsAreValid()
         {
             // arrange
-            var item1 = new Mock<ValidatableObject>();
-            var item2 = new Mock<ValidatableObject>();
-
-            item1.SetupGet( i => i.IsValid ).Returns( true );
-            item2.SetupGet( i => i.IsValid ).Returns( true );
-
-            var items = new[] { item1.Object, item2.Object };
+            var items = new[] { new Mock<ValidatableObject>().Object, new Mock<ValidatableObject>().Object };
 
             // act
             var valid = items.IsValid();
@@ -73,7 +69,7 @@
 
             // act
             var ex = Assert.Throws<ArgumentNullException>( () => items.IsChanged() );
-            
+
             // assert
             Assert.Equal( "items", ex.ParamName );
         }
@@ -114,7 +110,7 @@
 
             // act
             var ex = Assert.Throws<ArgumentNullException>( () => items.AcceptChanges() );
-            
+
             // arrange
             Assert.Equal( "items", ex.ParamName );
         }
@@ -124,7 +120,7 @@
         {
             // arrange
             var items = new[] { new MockEditableObject(), new MockEditableObject() };
-            
+
             items[0].FirstName = "test1";
             items[1].FirstName = "test2";
             items.AcceptChanges();
@@ -143,7 +139,7 @@
 
             // act
             var ex = Assert.Throws<ArgumentNullException>( () => items.RejectChanges() );
-            
+
             // assert
             Assert.Equal( "items", ex.ParamName );
         }

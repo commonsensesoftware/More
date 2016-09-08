@@ -1,13 +1,9 @@
 ﻿namespace More.ComponentModel
 {
-    using Moq;
-    using More.Collections.Generic;
     using More.ComponentModel.DataAnnotations;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
     using Xunit;
 
     /// <summary>
@@ -22,6 +18,11 @@
             private string address;
             private DateTime hireDate = DateTime.Today;
             private DateTime? separationDate;
+
+            public MockValidatableObject()
+                : base( new ValidatorAdapter() )
+            {
+            }
 
             public int Id
             {
@@ -113,6 +114,7 @@
             // hired today, but fired last year!
             target.HireDate = DateTime.Today;
             target.SeparationDate = DateTime.Today.AddYears( -1 );
+            target.Validate();
 
             // act
             var valid = target.IsValid;
@@ -129,6 +131,7 @@
 
             target.Name = "test";
             target.Address = "123 Some Place";
+            target.Validate();
 
             // act
             var valid = target.IsValid;

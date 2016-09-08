@@ -1,8 +1,7 @@
 ﻿namespace More.VisualStudio.ViewModels
 {
-    using More.Collections.Generic;
-    using More.ComponentModel;
-    using More.Windows.Input;
+    using Collections.Generic;
+    using ComponentModel;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel.DataAnnotations;
@@ -10,6 +9,7 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Reflection;
+    using Windows.Input;
 
     /// <summary>
     /// Represents the view model for the view item template wizard.
@@ -46,7 +46,7 @@
             dialogCommands.Add( new NamedCommand<object>( "1", SR.NextCaption, OnGoForward, OnCanGoForward ) );
             dialogCommands.Add( new NamedCommand<object>( "2", SR.CancelCaption, OnCancel ) );
             commands.Add( new NamedCommand<object>( "BrowseForViewModel", OnBrowseForViewModel, OnCanBrowseForViewModel ) );
-            InitializeValidationErrors();
+            Validate();
         }
 
         /// <summary>

@@ -1,18 +1,15 @@
 ﻿namespace More.VisualStudio.ViewModels
 {
-    using More.Collections.Generic;
-    using More.ComponentModel;
-    using More.ComponentModel.DataAnnotations;
-    using More.Windows.Input;
+    using Collections.Generic;
+    using ComponentModel;
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using System.Linq;
     using System.Reflection;
+    using Windows.Input;
 
     /// <summary>
     /// Represents the view model for the Entity Framework (EF) DbContext item template wizard.
@@ -58,8 +55,7 @@
 
             INotifyPropertyChanged optionChanged = implementedInterfaces;
             optionChanged.PropertyChanged += OnInterfaceOptionChanged;
-
-            InitializeValidationErrors();
+            Validate();
         }
 
         /// <summary>
@@ -139,7 +135,9 @@
                 Arg.GreaterThanOrEqualTo( value, 0, nameof( value ) );
 
                 if ( SetProperty( ref currentStep, value ) )
+                {
                     UpdateCommands();
+                }
             }
         }
 
@@ -204,7 +202,9 @@
             set
             {
                 if ( SetProperty( ref modelType, value ) )
+                {
                     UpdateCommands();
+                }
             }
         }
 
@@ -248,7 +248,9 @@
             set
             {
                 if ( SetProperty( ref selectedFrameworkVersion, value ) )
+                {
                     UpdateCommands();
+                }
             }
         }
 
@@ -278,7 +280,9 @@
             set
             {
                 if ( SetProperty( ref selectedDataSource, value ) )
+                {
                     UpdateCommands();
+                }
             }
         }
 
@@ -308,9 +312,11 @@
             set
             {
                 if ( !SetProperty( ref saveToConfigurationFile, value ) )
+                {
                     return;
+                }
 
-                RevalidateProperty( "ConnectionStringName", ConnectionStringName );
+                ValidateProperty( ConnectionStringName, nameof( ConnectionStringName ) );
                 UpdateCommands();
             }
         }
@@ -337,7 +343,7 @@
         /// Gets or sets the name associated with the connection string for the selected data source.
         /// </summary>
         /// <value>The name of the connection string associated with the <see cref="P:SelectedDataSource">selected data source</see>.</value>
-        [CustomValidation( typeof( DbContextItemTemplateWizardViewModel ), "ValidateConnectionStringName" )]
+        [CustomValidation( typeof( DbContextItemTemplateWizardViewModel ), nameof( ValidateConnectionStringName ) )]
         public string ConnectionStringName
         {
             get
@@ -347,7 +353,9 @@
             set
             {
                 if ( SetProperty( ref connectionStringName, value ) )
+                {
                     UpdateCommands();
+                }
             }
         }
 
@@ -365,45 +373,31 @@
             var model = context.ObjectInstance as DbContextItemTemplateWizardViewModel;
 
             if ( model == null )
+            {
                 return new ValidationResult( SR.InvalidObjectForValidation.FormatDefault( typeof( DbContextItemTemplateWizardViewModel ) ) );
+            }
 
             // if we're not saving the configuration, validation is not required
             if ( !model.SaveToConfigurationFile )
+            {
                 return ValidationResult.Success;
+            }
 
             // must have a name for the new connetion string
             if ( string.IsNullOrEmpty( value ) )
-                return new ValidationResult( SR.ConnectionStringNameUnspecified, new[] { "ConnectionStringName" } );
+            {
+                return new ValidationResult( SR.ConnectionStringNameUnspecified, new[] { nameof( ConnectionStringName ) } );
+            }
 
             var validator = context.GetService<IProjectItemNameValidator>();
 
             // the specified connection string name must be unique
             if ( validator != null && !validator.IsConnectionStringNameUnique( value ) )
-                return new ValidationResult( SR.ConnectionStringNameNonUnique.FormatDefault( value ), new[] { "ConnectionStringName" } );
+            {
+                return new ValidationResult( SR.ConnectionStringNameNonUnique.FormatDefault( value ), new[] { nameof( ConnectionStringName ) } );
+            }
 
             return ValidationResult.Success;
-        }
-
-        private void RevalidateProperty<TValue>( string propertyName, TValue value )
-        {
-            var results = new List<IValidationResult>();
-            var valid = IsPropertyValid( value, results, propertyName );
-
-            if ( valid )
-            {
-                // clear any errors on success and raise error notifications
-                if ( PropertyErrors.Remove( propertyName ) )
-                    OnErrorsChanged( propertyName );
-            }
-            else if ( results.Any() )
-            {
-                // add or replace errors and raise error notifications
-                PropertyErrors.SetRange( propertyName, results );
-                OnErrorsChanged( propertyName );
-            }
-
-            // raise events
-            OnPropertyChanged( "IsValid" );
         }
 
         private void UpdateCommands()
@@ -416,8 +410,10 @@
         {
             Contract.Requires( e != null );
 
-            if ( e.PropertyName == "AtLeastOneItemEnabled" || string.IsNullOrEmpty( e.PropertyName ) )
+            if ( e.PropertyName == nameof( RequiredTemplateOptionCollection.AtLeastOneItemEnabled ) || string.IsNullOrEmpty( e.PropertyName ) )
+            {
                 UpdateCommands();
+            }
         }
 
         private void OnBrowseForModel( object parameter )
@@ -434,7 +430,6 @@
                 }
             };
 
-            // request ui interaction to browse for a type
             browse.Request( interaction );
         }
 
@@ -452,7 +447,6 @@
                 }
             };
 
-            // request ui interaction to create a new data connection
             addDataConnection.Request( interaction );
         }
 
@@ -462,15 +456,14 @@
             SelectedDataSource = dataSource;
         }
 
-        private bool OnCanGoBack( object parameter )
-        {
-            return CurrentStep > 0;
-        }
+        private bool OnCanGoBack( object parameter ) => CurrentStep > 0;
 
         private void OnGoBack( object parameter )
         {
             if ( !OnCanGoBack( parameter ) )
+            {
                 return;
+            }
 
             --CurrentStep;
             dialogCommands[1].Name = SR.NextCaption;
@@ -481,18 +474,11 @@
             switch ( CurrentStep )
             {
                 case 0: // select ef version, data model, and interfaces
-                    {
-                        return ModelType != null && implementedInterfaces.AtLeastOneItemEnabled;
-                    }
+                    return ModelType != null && implementedInterfaces.AtLeastOneItemEnabled;
                 case 1: // select data source
-                    {
-                        return !SaveToConfigurationFile || SelectedDataSource != null;
-                    }
-                default:
-                    {
-                        // unknown step
-                        return false;
-                    }
+                    return !SaveToConfigurationFile || SelectedDataSource != null;
+                default: // unknown step
+                    return false;
             }
         }
 
@@ -504,22 +490,15 @@
             switch ( CurrentStep )
             {
                 case 0: // select ef version and data model
-                    {
-                        CurrentStep = 1;
-                        dialogCommands[1].Name = SR.FinishCaption;
-                        break;
-                    }
+                    CurrentStep = 1;
+                    dialogCommands[1].Name = SR.FinishCaption;
+                    break;
                 case 1: // select implemented interfaces
-                    {
-                        close.Request( new WindowCloseInteraction() );
-                        break;
-                    }
+                    close.Request( new WindowCloseInteraction() );
+                    break;
             }
         }
 
-        private void OnCancel( object parameter )
-        {
-            close.Request( new WindowCloseInteraction( true ) );
-        }
+        private void OnCancel( object parameter ) => close.Request( new WindowCloseInteraction( true ) );
     }
 }
