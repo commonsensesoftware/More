@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
 
     /// <summary>
@@ -40,7 +39,7 @@
         /// <summary>
         /// Raises the <see cref="E:PropertyChanged"/> event when all properties have changed.
         /// </summary>
-        protected void OnAllPropertiesChanged() => OnPropertyChanged( new PropertyChangedEventArgs( null ) );
+        protected void OnAllPropertiesChanged() => OnPropertyChanged( new PropertyChangedEventArgs( string.Empty ) );
 
         /// <summary>
         /// Raises the <see cref="E:PropertyChanging"/> event.
@@ -66,15 +65,17 @@
         ///     {
         ///         get
         ///         {
-        ///             return this.count;
+        ///             return count;
         ///         }
         ///         set
         ///         {
-        ///             if ( !this.OnPropertyChanging( this.count, value ) )
+        ///             if ( !OnPropertyChanging( count, value ) )
+        ///             {
         ///                 return;
+        ///             }
         ///                 
-        ///             this.count = value;
-        ///             this.OnPropertyChanged();
+        ///             count = value;
+        ///             OnPropertyChanged();
         ///         }
         ///     }
         /// }
@@ -110,15 +111,17 @@
         ///     {
         ///         get
         ///         {
-        ///             return this.name;
+        ///             return name;
         ///         }
         ///         set
         ///         {
-        ///             if ( !this.OnPropertyChanging( this.name, value, StringComparer.OrdinalIgnoreCase ) )
+        ///             if ( !OnPropertyChanging( name, value, StringComparer.OrdinalIgnoreCase ) )
+        ///             {
         ///                 return;
+        ///             }
         ///                 
-        ///             this.name = value;
-        ///             this.OnPropertyChanged();
+        ///             name = value;
+        ///             OnPropertyChanged();
         ///         }
         ///     }
         /// }
@@ -155,11 +158,11 @@
         ///     {
         ///         get
         ///         {
-        ///             return this.count;
+        ///             return count;
         ///         }
         ///         set
         ///         {
-        ///             this.SetProperty( ref this.count, value );
+        ///             this.SetProperty( ref count, value );
         ///         }
         ///     }
         /// }
@@ -196,11 +199,11 @@
         ///     {
         ///         get
         ///         {
-        ///             return this.name;
+        ///             return name;
         ///         }
         ///         set
         ///         {
-        ///             this.SetProperty( ref this.name, value, StringComparer.OrdinalIgnoreCase );
+        ///             SetProperty( ref name, value, StringComparer.OrdinalIgnoreCase );
         ///         }
         ///     }
         /// }
@@ -214,7 +217,9 @@
             Arg.NotNullOrEmpty( propertyName, nameof( propertyName ) );
 
             if ( !OnPropertyChanging( backingField, value, comparer, propertyName ) )
+            {
                 return false;
+            }
 
             backingField = value;
             OnPropertyChanged( propertyName );
