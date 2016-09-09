@@ -7,11 +7,11 @@
    <!-- local project assembly info -->
    <AssemblyInfoCode Condition=" Exists('$(ProjectDir)Properties\AssemblyInfo.cs') ">$([System.IO.File]::ReadAllText(`$(ProjectDir)Properties\AssemblyInfo.cs`))</AssemblyInfoCode>
    <!-- shared project assembly info for multi-targeting -->
-   <AssemblyInfoCode Condition=" Exists('$(ProjectDir)..\AssemblyInfo.cs') ">$([System.IO.File]::ReadAllText(`$(ProjectDir)..\AssemblyInfo.cs`))</AssemblyInfoCode>
-   <MajorAndMinorVersion Condition=" '$(AssemblyInfoCode)' != '' and '$([System.Text.RegularExpressions.Regex]::IsMatch($(AssemblyInfoCode),$(VersionPattern)))' == 'True' ">$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfoCode),$(VersionPattern)).Groups[1].Value)</MajorAndMinorVersion>
+   <AssemblyInfoCode Condition=" '$(AssemblyInfoCode)' == '' AND Exists('$(ProjectDir)..\AssemblyInfo.cs') ">$([System.IO.File]::ReadAllText(`$(ProjectDir)..\AssemblyInfo.cs`))</AssemblyInfoCode>
+   <MajorAndMinorVersion Condition=" '$(AssemblyInfoCode)' != '' AND '$([System.Text.RegularExpressions.Regex]::IsMatch($(AssemblyInfoCode),$(VersionPattern)))' == 'True' ">$([System.Text.RegularExpressions.Regex]::Match($(AssemblyInfoCode),$(VersionPattern)).Groups[1].Value)</MajorAndMinorVersion>
    <!-- assembly info for all projects -->
    <SharedAssemblyInfoCode Condition=" '$(MajorAndMinorVersion)' == '' ">$([System.IO.File]::ReadAllText(`$(ProjectDir)..\..\SharedAssemblyInfo.cs`))</SharedAssemblyInfoCode>
-   <MajorAndMinorVersion Condition=" '$(MajorAndMinorVersion)' == '' and '$(SharedAssemblyInfoCode)' != '' and '$([System.Text.RegularExpressions.Regex]::IsMatch($(SharedAssemblyInfoCode),$(VersionPattern)))' == 'True' ">$([System.Text.RegularExpressions.Regex]::Match($(SharedAssemblyInfoCode),$(VersionPattern)).Groups[1].Value)</MajorAndMinorVersion>
+   <MajorAndMinorVersion Condition=" '$(MajorAndMinorVersion)' == '' AND '$(SharedAssemblyInfoCode)' != '' AND '$([System.Text.RegularExpressions.Regex]::IsMatch($(SharedAssemblyInfoCode),$(VersionPattern)))' == 'True' ">$([System.Text.RegularExpressions.Regex]::Match($(SharedAssemblyInfoCode),$(VersionPattern)).Groups[1].Value)</MajorAndMinorVersion>
    <MajorAndMinorVersion Condition=" '$(MajorAndMinorVersion)' == '' ">1.0</MajorAndMinorVersion>
    <DaylightSavingTime>$([System.DateTime]::Now.IsDaylightSavingTime())</DaylightSavingTime>
    <FileBuildNumber>$([System.DateTime]::Today.Subtract($([System.DateTime]::Parse("1/1/2000"))).ToString("%d"))</FileBuildNumber>
