@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>b6306a38-1840-4cc5-a9d7-59bcb8db63d4</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Arg.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompletedTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharedAssemblyInfo.cs" />
+  </ItemGroup>
+</Project>

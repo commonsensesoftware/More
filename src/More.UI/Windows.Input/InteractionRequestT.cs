@@ -1,0 +1,60 @@
+﻿namespace More.Windows.Input
+{
+    using More.ComponentModel;
+    using System;
+
+    /// <summary>
+    /// Represents a user interface interaction request.
+    /// </summary>
+    /// <typeparam name="T">The <see cref="Type">type</see> of <see cref="Interaction">interaction</see> requested.</typeparam>
+    public class InteractionRequest<T> : ObservableObject, IInteractionRequest where T : Interaction
+    {
+        string id;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InteractionRequest{T}"/> class.
+        /// </summary>
+        public InteractionRequest() { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InteractionRequest{T}"/> class.
+        /// </summary>
+        /// <param name="id">The identifier associated with the request.</param>
+        public InteractionRequest( string id ) => this.id = id;
+
+        /// <summary>
+        /// Raises the <see cref="E:Requested"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="InteractionRequestedEventArgs"/> event data.</param>
+        protected virtual void OnRequested( InteractionRequestedEventArgs e )
+        {
+            Arg.NotNull( e, nameof( e ) );
+            Requested?.Invoke( this, e );
+        }
+
+        /// <summary>
+        /// Requests user interaction.
+        /// </summary>
+        /// <param name="interaction">The interaction <see cref="Interaction">interaction</see> request.</param>
+        public void Request( T interaction )
+        {
+            Arg.NotNull( interaction, nameof( interaction ) );
+            OnRequested( new InteractionRequestedEventArgs( interaction ) );
+        }
+
+        /// <summary>
+        /// Gets or sets the identifier associated with the interaction request.
+        /// </summary>
+        /// <value>The request identifier. The default value is null.</value>
+        public string Id
+        {
+            get => id;
+            set => SetProperty( ref id, value );
+        }
+
+        /// <summary>
+        /// Occurs when the user interaction is requested.
+        /// </summary>
+        public event EventHandler<InteractionRequestedEventArgs> Requested;
+    }
+}

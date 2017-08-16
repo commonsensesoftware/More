@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <PropertyGroup>
+  <SolutionDir Condition=" '$(SolutionDir)' == '' ">$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory).."))\</SolutionDir>
+  <CsiExe>$(MSBuildToolsPath)\Roslyn\csi.exe</CsiExe>
+  <CsiLibPath>$(MSBuildToolsPath)</CsiLibPath>
+ </PropertyGroup>
+
+ <!-- Executes a C# script (*.csx) using C# Interactive (csi.exe) after the XamlTypeInfo.g.cs files are generated, but before compilation.
+      The script will mark public types in the XamlTypeInfo.g.cs as not CLS-compliant, hide them from Intellisense, and suppress warnings about missing XML comments -->
+ 
+ <Target Name="UpdateGeneratedXamlTypeInfo" AfterTargets="MarkupCompilePass2" BeforeTargets="CoreCompile">
+  <PropertyGroup>
+   <XamlTypeInfoPath>$(ProjectDir)$(IntermediateOutputPath)XamlTypeInfo.g.cs</XamlTypeInfoPath>
+   <CsiScript>$(SolutionDir)tools\fix-xaml-type-info.csx</CsiScript>
+  </PropertyGroup>
+  <Exec Command="&quot;$(CsiExe)&quot; /lib:&quot;$(CsiLibPath)&quot; &quot;$(CsiScript)&quot; &quot;$(XamlTypeInfoPath)&quot;" Condition="Exists('$(XamlTypeInfoPath)')" />
+ </Target>
+
+ <!-- Executes a C# script (*.csx) using C# Interactive (csi.exe) after the [package id].[package version].nuspec file has been generated. The built-in PackTask does
+      have support for XAML resources, which is required for WINRT applications (UWP, WP, Store). This target will discover and add the required output files. The
+      following is the required package structure:
+      
+      lib
+      |
+      |__ [tfm]
+         |
+         |__ [package id]
+         |   |
+         |   |__ Themes
+         |   |   |__ Generic.xaml
+         |   |   |__ Generic.xbf
+         |   |
+         |   |__ [package id].xr.xml
+         |
+         |__ [package id].dll
+         |__ [package id].xml
+      -->
+ 
+ <Target Name="AddXamlThemeFilesToNuspec">
+
+  <PropertyGroup>
+   <CsiScript>$(SolutionDir)tools\add-nuspec-xaml-content.csx</CsiScript>
+  </PropertyGroup>
+
+  <ItemGroup>
+   <XamlThemeFile Include="$(BinPath)$(TargetFramework)\**\*.xaml;$(BinPath)$(TargetFramework)\**\*.xbf">
+    <PackagePath>lib\$(TargetFramework)\$(PackageId)\Themes\</PackagePath>
+   </XamlThemeFile>
+   <XamlThemeFile Include="$(BinPath)$(TargetFramework)\**\*.xr.xml">
+    <PackagePath>lib\$(TargetFramework)\$(PackageId)\</PackagePath>
+   </XamlThemeFile>
+  </ItemGroup>
+
+  <Exec Command="&quot;$(CsiExe)&quot; /lib:&quot;$(CsiLibPath)&quot; &quot;$(CsiScript)&quot; &quot;$(NuspecFile)&quot; &quot;%(XamlThemeFile.Identity)&quot; &quot;@(XamlThemeFile->'%(PackagePath)%(Filename)%(Extension)')&quot;" Condition=" '@(XamlThemeFile)' != '' " />
+
+ </Target>
+
+ <!-- Enumerates each supported target framework after all assemblies have been build and the initial *.nuspec file has been created
+      NOTE: It's possible to create the *.nuspec manually and pack the package that way, but the auto-generation of dependent references would be lost, which is highly valuable -->
+ 
+ <Target Name="ForEachTargetFramework" AfterTargets="Build" DependsOnTargets="GenerateNuspec" Condition=" '$(GeneratePackageOnBuild)' == 'true' AND '$(IsInnerBuild)' != 'true' ">
+
+  <!-- re-initial required properties that are otherwise no longer available -->
+  <PropertyGroup>
+   <ProjectDir Condition=" '$(ProjectDir)' == '' ">$([System.IO.Path]::GetDirectoryName('$(PackProjectInputFile)'))\</ProjectDir>
+   <NuspecFile>$(ProjectDir)$(BaseIntermediateOutputPath)$(PackageId).$(PackageVersion).nuspec</NuspecFile>
+   <AddXamlThemeFilesToNuspecProperties>
+    PackageId=$(PackageId);
+    NuspecFile=$(NuspecFile);
+    SolutionDir=$(SolutionDir);
+    CsiExe=$(CsiExe);
+    CsiLibPath=$(CsiLibPath);
+    BuildProjectReferences=false;
+    BinPath=$(ProjectDir)$(OutputPath)
+   </AddXamlThemeFilesToNuspecProperties>
+  </PropertyGroup>
+
+  <!-- run the *.csx script for each target framework with additional xaml artifacts -->
+  <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="AddXamlThemeFilesToNuspec" Properties="TargetFramework=%(_TargetFrameworks.Identity);$(AddXamlThemeFilesToNuspecProperties)" />
+  
+  <!-- HACK: now that *.nuspec contains all of the required files, explicitly invoke the pack task using the finalized *.nuspec file -->
+  <PackTask PackItem="$(PackProjectInputFile)" NuspecFile="$(NuspecFile)" PackageOutputPath="$(PackageOutputPath)" NuspecOutputPath="$(BaseIntermediateOutputPath)" />
+
+ </Target>
+
+</Project>

@@ -1,0 +1,183 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+
+ <PropertyGroup Label="Configuration">
+  <VersionPrefix>1.2.4</VersionPrefix>
+  <AssemblyVersion>1.2.0.1</AssemblyVersion>
+  <TargetFrameworks>net45;uap10.0;win81;portable-wp81+wpa81</TargetFrameworks>
+  <AssemblyName>More.UI.Presentation</AssemblyName>
+  <AssemblyTitle>More - UI Presentation</AssemblyTitle>
+  <Description>The presentation user interface library for the "More" framework.</Description>
+  <RootNamespace>More</RootNamespace>
+  <PackageTags>More;Patterns;Practices;Windows;User Interface;UI;Store;Phone;Xamarin</PackageTags>
+  <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  <SharedTargetFramework>$(TargetFramework)</SharedTargetFramework>
+  <TargetsForTfmSpecificContentInPackage>CustomContentTarget</TargetsForTfmSpecificContentInPackage>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <ReleaseNotes Include="Added support for UAP" />
+ </ItemGroup>
+
+ <Import Project="$(SolutionDir)build\project.props" />
+
+ <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <LanguageTargets>$(MSBuildToolsPath)\Microsoft.CSharp.targets</LanguageTargets>
+  <BlendSdk>$(MSBuildProgramFiles32)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\</BlendSdk>
+ </PropertyGroup>
+
+ <PropertyGroup Condition=" '$(TargetFramework)' == 'win81' ">
+  <DefineConstants>$(DefineConstants);WIN81;UAP10_0</DefineConstants>
+  <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+  <TargetPlatformVersion>8.1</TargetPlatformVersion>
+  <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
+  <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+  <SharedTargetFramework>uap10.0</SharedTargetFramework>
+  <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
+ </PropertyGroup>
+
+ <PropertyGroup Condition=" '$(TargetFramework)' == 'portable-wp81+wpa81' ">
+  <DefineConstants>$(DefineConstants);PORTABLE_WP81_WPA81;UAP10_0</DefineConstants>
+  <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
+  <TargetPlatformVersion>8.1</TargetPlatformVersion>
+  <TargetFrameworkIdentifier>WindowsPhoneApp</TargetFrameworkIdentifier>
+  <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+  <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
+ </PropertyGroup>
+
+ <PropertyGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+  <SignAssembly>false</SignAssembly>
+  <DefineConstants>$(DefineConstants);UAP10_0</DefineConstants>
+  <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
+  <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+  <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+  <TargetPlatformVersion>$(TargetPlatformMinVersion)</TargetPlatformVersion>
+  <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
+  <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+  <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <Compile Include="**\*.cs" Exclude="obj\**\*.*;Platforms\**\*.cs" />
+  <Compile Include="Platforms\$(TargetFramework)\**\*.cs" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\More\More.csproj" />
+  <ProjectReference Include="..\More.Extensions\More.Extensions.csproj" />
+  <ProjectReference Include="..\More.UI\More.UI.csproj" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <Reference Include="Microsoft.CSharp" />
+  <Reference Include="PresentationCore" />
+  <Reference Include="PresentationFramework" />
+  <Reference Include="System" />
+  <Reference Include="System.ComponentModel.DataAnnotations" />
+  <Reference Include="System.Configuration" />
+  <Reference Include="System.Core" />
+  <Reference Include="System.Net.Http" />
+  <Reference Include="System.Windows.Interactivity" HintPath="$(BlendSdk)System.Windows.Interactivity.dll" />
+  <Reference Include="System.Xaml" />
+  <Reference Include="System.Xml" />
+  <Reference Include="System.Xml.Linq" />
+  <Reference Include="UIAutomationProvider" />
+  <Reference Include="UIAutomationTypes" />
+  <Reference Include="WindowsBase" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'win81' OR '$(TargetFramework)' == 'portable-wp81+wpa81' ">
+  <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0" Name="Behaviors SDK %28XAML%29" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+  <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.0.0" />
+  <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
+  <PackageReference Include="System.Collections" Version="4.0.11" />
+  <PackageReference Include="System.ComponentModel.Annotations" Version="4.0.10" />
+  <PackageReference Include="System.Diagnostics.Debug" Version="4.0.11" />
+  <PackageReference Include="System.Diagnostics.Tools" Version="4.0.1" />
+  <PackageReference Include="System.Diagnostics.Tracing" Version="4.1.0" />
+  <PackageReference Include="System.Globalization" Version="4.0.11" />
+  <PackageReference Include="System.Globalization.Calendars" Version="4.0.1" />
+  <PackageReference Include="System.IO" Version="4.1.0" />
+  <PackageReference Include="System.ObjectModel" Version="4.0.12" />
+  <PackageReference Include="System.Private.Uri" Version="4.0.1" />
+  <PackageReference Include="System.Resources.ResourceManager" Version="4.0.1" />
+  <PackageReference Include="System.Reflection" Version="4.1.0" />
+  <PackageReference Include="System.Reflection.Extensions" Version="4.0.1" />
+  <PackageReference Include="System.Reflection.Primitives" Version="4.0.1" />
+  <PackageReference Include="System.Runtime.Extensions" Version="4.1.0" />
+  <PackageReference Include="System.Runtime" Version="4.1.0" />
+  <PackageReference Include="System.Runtime.Handles" Version="4.0.1" />
+  <PackageReference Include="System.Runtime.InteropServices" Version="4.1.0" />
+  <PackageReference Include="System.Text.Encoding" Version="4.0.11" />
+  <PackageReference Include="System.Text.Encoding.Extensions" Version="4.0.11" />
+  <PackageReference Include="System.Threading" Version="4.0.11" />
+  <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
+  <PackageReference Include="System.Threading.Timer" Version="4.0.1" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <Resource Include="Platforms\net45\More\Windows.Media.Effects\GrayscaleEffect.ps" />
+  <Page Include="Platforms\$(TargetFramework)\Themes\Generic.xaml" Generator="MSBuild:Compile" SubType="Designer" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' != 'net45' ">
+
+  <Compile Include="Platforms\winrt\**\*.cs" />
+
+  <Page Include="Platforms\$(SharedTargetFramework)\Themes\Generic.xaml">
+   <Generator>MSBuild:Compile</Generator>
+   <SubType>Designer</SubType>
+   <Link>$(PackageId)\Themes\Generic.xaml</Link>
+  </Page>
+
+  <None Include="Platforms\$(SharedTargetFramework)\Themes\Generic.xaml">
+   <Link>$(PackageId)\Themes\Generic.xaml</Link>
+   <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'win81' ">
+  <Compile Include="Platforms\uap10.0\**\*.cs" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Compile Update="ExceptionMessage.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="ExceptionMessage.resx" />
+  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <EmbeddedResource Update="ExceptionMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ExceptionMessage.Designer.cs" />
+  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
+ </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+ <Import Project="$(SolutionDir)build\xaml.targets" Label="Xaml" />
+
+ <!-- TODO: in VS 15.3 this will be the way to specify custom package folder content -->
+
+ <!--<Target Name="CustomContentTarget" Condition=" '$(TargetFramework)' != 'net45' ">
+  <ItemGroup>
+   <TfmSpecificPackageFile Include="Platforms\$(SharedTargetFramework)\Themes\Generic.xaml">
+    <PackagePath>lib\$(TargetFramework)\$(PackageId)\Themes\Generic.xaml</PackagePath>
+   </TfmSpecificPackageFile>
+   <TfmSpecificPackageFile Include="$(OutDir)**\*.xbf">
+    <PackagePath>lib\$(TargetFramework)\$(PackageId)\Themes\%(Filename)%(Extension)</PackagePath>
+   </TfmSpecificPackageFile>
+   <TfmSpecificPackageFile Include="$(OutDir)*.xr.xml">
+    <PackagePath>lib\$(TargetFramework)\$(PackageId)\%(Filename)%(Extension)</PackagePath>
+   </TfmSpecificPackageFile>
+  </ItemGroup>
+ </Target>-->
+
+ <Target Name="AdjustReferringTargetFrameworkForUAP" BeforeTargets="GetTargetFrameworkProperties">
+  <PropertyGroup Condition="'$(ReferringTargetFramework)' == '.NETCore,Version=v5.0'">
+   <ReferringTargetFramework>UAP,Version=v10.0</ReferringTargetFramework>
+  </PropertyGroup>
+ </Target>
+
+</Project>

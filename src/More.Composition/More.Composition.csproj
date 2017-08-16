@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+
+ <PropertyGroup Label="Configuration">
+  <VersionPrefix>1.2.1</VersionPrefix>
+  <AssemblyVersion>1.2.0.0</AssemblyVersion>
+  <TargetFramework>netstandard1.0</TargetFramework>
+  <AssemblyName>More.Composition</AssemblyName>
+  <AssemblyTitle>More - Composition</AssemblyTitle>
+  <Description>The composition library for the "More" framework.</Description>
+  <RootNamespace>More.Composition</RootNamespace>
+  <PackageTags>More;Patterns;Practices;Composition;MEF</PackageTags>
+  <PackageReleaseNotes>• Updated TFM to .NET Standard</PackageReleaseNotes>
+ </PropertyGroup>
+
+ <Import Project="$(SolutionDir)build\file-version.props" />
+
+ <ItemGroup>
+  <PackageReference Include="System.Diagnostics.Contracts" Version="4.0.1" />
+  <PackageReference Include="System.Composition" Version="1.0.31" />
+ </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+
+</Project>

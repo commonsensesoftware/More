@@ -1,0 +1,93 @@
+﻿namespace More.ComponentModel.DataAnnotations
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+
+    /// <summary>
+    /// Represents the context in which a validation check is performed.
+    /// </summary>
+    public class ValidationContext : IValidationContext
+    {
+        readonly IServiceProvider serviceProvider;
+        readonly Lazy<IDictionary<object, object>> items;
+        Type objectType;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationContext"/> class.
+        /// </summary>
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="items">A user-defined <see cref="IDictionary{TKey,TValue}">collection</see> of items.</param>
+        public ValidationContext( object instance, IDictionary<object, object> items ) : this( instance, ServiceProvider.Current, items ) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationContext"/> class.
+        /// </summary>
+        /// <param name="instance">The instance to validate.</param>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider">service provider</see> associated with the validation context.</param>
+        /// <param name="items">A user-defined <see cref="IDictionary{TKey,TValue}">collection</see> of items.</param>
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated with a code contract" )]
+        public ValidationContext( object instance, IServiceProvider serviceProvider, IDictionary<object, object> items )
+        {
+            Arg.NotNull( instance, nameof( instance ) );
+            Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
+
+            var dict = items;
+
+            this.serviceProvider = serviceProvider;
+            this.items = new Lazy<IDictionary<object, object>>( () => dict ?? new Dictionary<object, object>() );
+            ObjectInstance = instance;
+            ObjectType = instance.GetType();
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the member to validate.
+        /// </summary>
+        /// <value>The name of the member to validate.</value>
+        public string DisplayName { get; set; }
+
+        /// <summary>
+        /// Gets the dictionary of key/value pairs that is associated with this context.
+        /// </summary>
+        /// <value>The dictionary of the key/value pairs for this context.</value>
+        public IDictionary<object, object> Items => items.Value;
+
+        /// <summary>
+        /// Gets or sets the name of the member to validate.
+        /// </summary>
+        /// <value>The name of the member to validate.</value>
+        public string MemberName { get; set; }
+
+        /// <summary>
+        /// Gets the object to validate.
+        /// </summary>
+        /// <value>The object to validate.</value>
+        public object ObjectInstance { get; }
+
+        /// <summary>
+        /// Gets or sets the type of the object to validate.
+        /// </summary>
+        /// <value>The <see cref="Type">type</see> of the object to validate.</value>
+        public Type ObjectType
+        {
+            get
+            {
+                Contract.Ensures( objectType != null );
+                return objectType;
+            }
+            set
+            {
+                Arg.NotNull( value, nameof( value ) );
+                objectType = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a service with the specified type.
+        /// </summary>
+        /// <param name="serviceType">The <see cref="Type">type</see> of service requested.</param>
+        /// <returns>A service of the requested <paramref name="serviceType">type</paramref> or <c>null</c>.</returns>
+        public virtual object GetService( Type serviceType ) => serviceProvider.GetService( serviceType );
+    }
+}

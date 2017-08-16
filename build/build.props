@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <PropertyGroup>
+  <Company>Commonsense Software</Company>
+  <Authors>$(Company)</Authors>
+  <Copyright>Copyright © Commonsense Software 2014. All rights reserved.</Copyright>
+  <RepositoryType>git</RepositoryType>
+  <RepositoryUrl>https://github.com/commonsensesoftware/more</RepositoryUrl>
+  <PackageIconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</PackageIconUrl>
+  <PackageLicenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</PackageLicenseUrl>
+  <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  <IncludeSymbols>true</IncludeSymbols>
+  <IncludeSource>true</IncludeSource>
+  <IncludeBuildOutput>true</IncludeBuildOutput>
+  <MinClientVersion>2.5</MinClientVersion>
+  <NeutralLanguage>en</NeutralLanguage>
+  <DefaultLanguage>en-US</DefaultLanguage>
+  <SignAssembly>true</SignAssembly>
+  <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+  <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  <SolutionDir Condition=" '$(SolutionDir)' == '' ">$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory).."))\</SolutionDir>
+  <PackageOutputPath>$(SolutionDir)bin</PackageOutputPath>
+  <AssemblyOriginatorKeyFile>$(SolutionDir)tools\more.snk</AssemblyOriginatorKeyFile>
+  <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+  <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+  <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+ </PropertyGroup>
+
+ <PropertyGroup Condition=" '$(Configuration)' == 'Release' " Label="NuGet">
+  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <CodeAnalysisDictionary Include="$(SolutionDir)tools\custom-dictionary.xml" Link="custom-dictionary.xml" />
+ </ItemGroup>
+
+</Project>

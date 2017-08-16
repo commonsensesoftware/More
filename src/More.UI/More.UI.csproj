@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+ 
+ <PropertyGroup Label="Configuration">
+  <VersionPrefix>1.4.0</VersionPrefix>
+  <AssemblyVersion>1.4.0.0</AssemblyVersion>
+  <TargetFramework>netstandard1.0</TargetFramework>
+  <AssemblyName>More.UI</AssemblyName>
+  <AssemblyTitle>More - UI</AssemblyTitle>
+  <Description>The user interface foundation library for the "More" framework.</Description>
+  <RootNamespace>More</RootNamespace>
+  <PackageTags>More;Patterns;Practices;UI;User Interfaces;Model;View;MVVM;MVC;MVP</PackageTags>
+  <PackageReleaseNotes>• Updated TFM to .NET Standard
+• Updated IWebAuthenticationResult.ResponseErrorDetail to Int32</PackageReleaseNotes>
+ </PropertyGroup>
+
+ <Import Project="$(SolutionDir)build\file-version.props" />
+
+ <ItemGroup>
+  <ProjectReference Include="..\More\More.csproj" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <PackageReference Update="NETStandard.Library" Version="$(NetStandardImplicitPackageVersion)" PrivateAssets="All" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Compile Update="ExceptionMessage.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="ExceptionMessage.resx" />
+  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <EmbeddedResource Update="ExceptionMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ExceptionMessage.Designer.cs" />
+  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
+ </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+
+</Project>

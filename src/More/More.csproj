@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+
+ <PropertyGroup Label="Configuration">
+  <VersionPrefix>1.4.1</VersionPrefix>
+  <AssemblyVersion>1.4.0.0</AssemblyVersion>
+  <TargetFrameworks>netstandard1.0</TargetFrameworks>
+  <AssemblyName>More</AssemblyName>
+  <AssemblyTitle>More Framework</AssemblyTitle>
+  <Description>The core library for the "More" framework.</Description>
+  <RootNamespace>More</RootNamespace>
+  <PackageTags>More;Patterns;Practices</PackageTags>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <ReleaseNotes Include="Updated TFM to .NET Standard" />
+ </ItemGroup>
+
+ <Import Project="$(SolutionDir)build\project.props" />
+
+ <ItemGroup>
+  <PackageReference Include="System.ComponentModel" Version="4.0.1" />
+  <PackageReference Include="System.Diagnostics.Contracts" Version="4.0.1" />
+  <PackageReference Include="System.Diagnostics.Debug" Version="4.0.11" />
+  <PackageReference Include="System.Diagnostics.Tools" Version="4.0.1" />
+  <PackageReference Include="System.Globalization" Version="4.0.11" />
+  <PackageReference Include="System.Linq" Version="4.1.0" />
+  <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />
+  <PackageReference Include="System.ObjectModel" Version="4.0.12" />
+  <PackageReference Include="System.Reflection" Version="4.1.0" />
+  <PackageReference Include="System.Reflection.Extensions" Version="4.0.1" />
+  <PackageReference Include="System.Resources.ResourceManager" Version="4.0.1" />
+  <PackageReference Include="System.Runtime.Extensions" Version="4.1.0" />
+  <PackageReference Include="System.Text.RegularExpressions" Version="4.1.0" />
+  <PackageReference Include="System.Threading" Version="4.0.11" />
+  <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Compile Update="ExceptionMessage.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="ExceptionMessage.resx" />
+  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <EmbeddedResource Update="ExceptionMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ExceptionMessage.Designer.cs" />
+  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
+ </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+
+</Project>

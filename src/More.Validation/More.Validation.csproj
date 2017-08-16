@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+
+ <PropertyGroup Label="Configuration">
+  <VersionPrefix>1.0.3</VersionPrefix>
+  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  <TargetFramework>netstandard1.0</TargetFramework>
+  <AssemblyName>More.Validation</AssemblyName>
+  <AssemblyTitle>More - Validation</AssemblyTitle>
+  <Description>The validation library for the "More" framework.</Description>
+  <RootNamespace>More.ComponentModel.DataAnnotations</RootNamespace>
+  <PackageTags>More;Patterns;Practices;Validation;Annotations</PackageTags>
+  <PackageReleaseNotes>• Updated TFM to .NET Standard</PackageReleaseNotes>
+ </PropertyGroup>
+
+ <Import Project="$(SolutionDir)build\file-version.props" />
+
+ <ItemGroup>
+  <ProjectReference Include="..\More\More.csproj" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Compile Update="ValidationMessage.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="ValidationMessage.resx" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <EmbeddedResource Update="ValidationMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ValidationMessage.Designer.cs" />
+ </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+
+</Project>
