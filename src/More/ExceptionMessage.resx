@@ -272,6 +272,9 @@
   <data name="InvalidObjectType" xml:space="preserve">
     <value>Object must be of type {0}.</value>
   </data>
+  <data name="MissingRequiredKeyedService" xml:space="preserve">
+    <value>A required service of type '{0}' with a key of '{1}' could not be found.</value>
+  </data>
   <data name="MissingRequiredService" xml:space="preserve">
     <value>A required service of type '{0}' could not be found.</value>
   </data>

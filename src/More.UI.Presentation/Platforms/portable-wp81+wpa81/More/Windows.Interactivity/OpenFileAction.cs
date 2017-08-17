@@ -2,65 +2,31 @@
 {
     using More.Windows.Input;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Threading.Tasks;
     using global::Windows.Storage.Pickers;
-    using global::Windows.UI.Xaml;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Phone applications.
-    /// </content>
-    public partial class OpenFileAction
+    /// <summary>
+    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to open a file for the
+    /// <see cref="OpenFileInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// </summary>
+    [CLSCompliant( false )]
+    public partial class OpenFileAction : System.Windows.Interactivity.TriggerAction
     {
-        void OpenFiles( OpenFileInteraction interaction )
-        {
-            Contract.Requires( interaction != null );
-
-            var saveButton = interaction.DefaultCommand;
-            var dialog = new FileOpenPicker();
-
-            dialog.ContinuationData.AddRange( interaction.ContinuationData );
-            dialog.FileTypeFilter.AddRange( interaction.FileTypeFilter.FixUpExtensions() );
-            dialog.SuggestedStartLocation = SuggestedStartLocation;
-            dialog.ViewMode = ViewMode;
-
-            if ( !string.IsNullOrEmpty( SettingsIdentifier ) )
-            {
-                dialog.SettingsIdentifier = SettingsIdentifier;
-            }
-
-            if ( saveButton != null )
-            {
-                dialog.CommitButtonText = saveButton.Name;
-            }
-
-            if ( interaction.Multiselect )
-            {
-                dialog.PickMultipleFilesAndContinue();
-            }
-            else
-            {
-                dialog.PickSingleFileAndContinue();
-            }
-        }
+        /// <summary>
+        /// Gets or sets the settings identifier associated with the file open picker instance.
+        /// </summary>
+        /// <value>The settings identifier.</value>
+        public string SettingsIdentifier { get; set; }
 
         /// <summary>
-        /// Executes the action.
+        /// Gets or sets the initial location where the open file picker looks for folders to present to the user.
         /// </summary>
-        /// <param name="sender">The <see cref="FrameworkElement"/> that triggered the action.</param>
-        /// <param name="parameter">The parameter provided to the action.</param>
-        /// <returns>A <see cref="Task">task</see> representing the operation.</returns>
-        public override object Execute( object sender, object parameter )
-        {
-            var interaction = GetRequestedInteraction<OpenFileInteraction>( parameter );
+        /// <value>The identifier of the starting location.</value>
+        public PickerLocationId SuggestedStartLocation { get; set; }
 
-            if ( interaction != null )
-            {
-                OpenFiles( interaction );
-            }
-
-            return null;
-        }
+        /// <summary>
+        /// Gets or sets the view mode that the file open picker uses to display items.
+        /// </summary>
+        /// <value>One of the <see cref="ViewMode"/> values. The default value is <see cref="F:PickerViewMode.List"/>.</value>
+        public PickerViewMode ViewMode { get; set; }
     }
 }

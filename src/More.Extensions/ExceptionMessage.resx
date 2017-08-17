@@ -135,9 +135,6 @@
   <data name="ArgumentResultCalendarRange" xml:space="preserve">
     <value>The result is out of the supported range for this calendar. The result should be between {0} (Gregorian date) and {1} (Gregorian date), inclusive.</value>
   </data>
-  <data name="MissingRequiredKeyedService" xml:space="preserve">
-    <value>A required service of type '{0}' with a key of '{1}' could not be found.</value>
-  </data>
   <data name="NativeFileNotSupported" xml:space="preserve">
     <value>The specified file of type '{0}' must implement '{1}' in order to be converted to a platform-specified file.</value>
   </data>

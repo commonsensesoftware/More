@@ -5,7 +5,7 @@
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.4.0</VersionPrefix>
   <AssemblyVersion>1.4.0.0</AssemblyVersion>
-  <TargetFramework>netstandard1.0</TargetFramework>
+  <TargetFramework>netstandard1.1</TargetFramework>
   <AssemblyName>More.UI</AssemblyName>
   <AssemblyTitle>More - UI</AssemblyTitle>
   <Description>The user interface foundation library for the "More" framework.</Description>
@@ -19,10 +19,6 @@
 
  <ItemGroup>
   <ProjectReference Include="..\More\More.csproj" />
- </ItemGroup>
-
- <ItemGroup>
-  <PackageReference Update="NETStandard.Library" Version="$(NetStandardImplicitPackageVersion)" PrivateAssets="All" />
  </ItemGroup>
 
  <ItemGroup>

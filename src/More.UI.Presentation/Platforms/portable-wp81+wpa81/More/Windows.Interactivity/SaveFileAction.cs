@@ -1,56 +1,28 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using Input;
+    using Microsoft.Xaml.Interactivity;
+    using More.Windows.Input;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using global::Windows.Storage.Pickers;
+    using global::Windows.UI.Xaml;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Phone applications.
-    /// </content>
-    public partial class SaveFileAction
+    /// <summary>
+    /// Represents an <see cref="IAction">interactivity action</see> that can be used to save a file for the
+    /// <see cref="SaveFileInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// </summary>
+    [CLSCompliant( false )]
+    public partial class SaveFileAction : System.Windows.Interactivity.TriggerAction
     {
-        void SaveFile( SaveFileInteraction saveFile )
-        {
-            Contract.Requires( saveFile != null );
-
-            var dialog = new FileSavePicker();
-
-            dialog.ContinuationData.AddRange( saveFile.ContinuationData );
-            dialog.DefaultFileExtension = saveFile.DefaultFileExtension;
-            dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices.ToDictionary() );
-            dialog.SuggestedStartLocation = SuggestedStartLocation;
-
-            if ( !string.IsNullOrEmpty( saveFile.FileName ) )
-            {
-                dialog.SuggestedFileName = saveFile.FileName;
-            }
-
-            if ( !string.IsNullOrEmpty( SettingsIdentifier ) )
-            {
-                dialog.SettingsIdentifier = SettingsIdentifier;
-            }
-
-            dialog.PickSaveFileAndContinue();
-        }
+        /// <summary>
+        /// Gets or sets the settings identifier associated with the file save picker instance.
+        /// </summary>
+        /// <value>The settings identifier.</value>
+        public string SettingsIdentifier { get; set; }
 
         /// <summary>
-        /// Executes the action.
+        /// Gets or sets the initial location where the save file picker looks for folders to present to the user.
         /// </summary>
-        /// <param name="sender">The object that triggered the action.</param>
-        /// <param name="parameter">The parameter provided to the action.</param>
-        /// <returns>The result of the action. The default implementation always executes asynchronously and returns null.</returns>
-        public override object Execute( object sender, object parameter )
-        {
-            var saveFile = GetRequestedInteraction<SaveFileInteraction>( parameter );
-
-            if ( saveFile != null )
-            {
-                SaveFile( saveFile );
-            }
-
-            return null;
-        }
+        /// <value>The identifier of the starting location.</value>
+        public PickerLocationId SuggestedStartLocation { get; set; }
     }
 }

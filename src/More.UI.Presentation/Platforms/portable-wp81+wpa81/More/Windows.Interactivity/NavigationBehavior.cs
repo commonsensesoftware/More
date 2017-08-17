@@ -1,42 +1,50 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using global::Windows.Phone.UI.Input;
+    using System;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Navigation;
+    using System.Diagnostics.CodeAnalysis;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Phone applications.
-    /// </content>
-    public partial class NavigationBehavior
+    /// <summary>
+    /// Represents a behavior which supports navigation operations
+    /// </summary>
+    /// <remarks>Navigation support also includes when related hardware buttons are pressed.</remarks>
+    /// <example>This example demonstrates automatically handling navigation.
+    /// <code lang="Xaml"><![CDATA[
+    /// <Page
+    ///  x:Class="Page1"
+    ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    ///  xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    ///  xmlns:More="using:More.Windows.Interactivity">
+    /// <Interactivity:Interaction.Behaviors>
+    ///  <More:NavigationBehavior />
+    /// </Interactivity:Interaction.Behaviors>
+    /// <Grid>
+    ///  <TextBlock Text="Hello world!" />
+    /// </Grid>
+    /// </Page>
+    /// ]]></code></example>
+    [CLSCompliant( false )]
+    public partial class NavigationBehavior : System.Windows.Interactivity.Behavior<Page>
     {
-        void OnBackPressed( object sender, BackPressedEventArgs e )
-        {
-            var frame = AssociatedObject.Frame;
-
-            if ( !frame.CanGoBack )
-            {
-                return;
-            }
-
-            frame.GoBack();
-            e.Handled = true;
-        }
+        /// <summary>
+        /// Gets the navigation cache mode dependency property.
+        /// </summary>
+        /// <value>A <see cref="DependencyProperty"/> object.</value>
+        [SuppressMessage( "Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Dependency properties are immutable." )]
+        public static readonly DependencyProperty NavigationCacheModeProperty =
+            DependencyProperty.Register( "NavigationCacheMode", typeof( NavigationCacheMode ), typeof( NavigationBehavior ), new PropertyMetadata( NavigationCacheMode.Required ) );
 
         /// <summary>
-        /// Called after the behavior is attached to an <see cref="P:AssociatedObject"/>.
+        /// Gets or sets the navigation cache mode for pages with the applied behavior.
         /// </summary>
-        protected override void OnAttached()
+        /// <value>One of the <see cref="T:NavigationCacheMode"/> values. The default value is <see cref="NavigationCacheMode.Required"/>.</value>
+        public NavigationCacheMode NavigationCacheMode
         {
-            base.OnAttached();
-            AssociatedObject.NavigationCacheMode = NavigationCacheMode;
-            HardwareButtons.BackPressed += OnBackPressed;
-        }
-
-        /// <summary>
-        /// Called when the behavior is being detached from its <see cref="P:AssociatedObject"/>, but before it has actually occurred.
-        /// </summary>
-        protected override void OnDetaching()
-        {
-            HardwareButtons.BackPressed -= OnBackPressed;
-            base.OnDetaching();
+            get => (NavigationCacheMode) GetValue( NavigationCacheModeProperty );
+            set => SetValue( NavigationCacheModeProperty, value );
         }
     }
 }

@@ -494,6 +494,15 @@ namespace More {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A required service of type &apos;{0}&apos; with a key of &apos;{1}&apos; could not be found..
+        /// </summary>
+        internal static string MissingRequiredKeyedService {
+            get {
+                return ResourceManager.GetString("MissingRequiredKeyedService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A required service of type &apos;{0}&apos; could not be found..
         /// </summary>
         internal static string MissingRequiredService {

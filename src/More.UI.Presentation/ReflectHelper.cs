@@ -8,7 +8,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
-#if UAP10_0 && ( WIN81 || PORTABLE_WP81_WPA81 )
+#if UAP10_0 && ( PORTABLE_WP81_WPA81 || WIN81 || WPA81 )
     using System.Windows.Interactivity;
 #endif
     using static System.Globalization.CultureInfo;

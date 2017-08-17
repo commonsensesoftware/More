@@ -5,19 +5,21 @@
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.2.4</VersionPrefix>
   <AssemblyVersion>1.2.0.1</AssemblyVersion>
-  <TargetFrameworks>net45;uap10.0;win81;portable-wp81+wpa81</TargetFrameworks>
+  <TargetFrameworks>net45;wpa81;win81;uap10.0</TargetFrameworks>
   <AssemblyName>More.UI.Presentation</AssemblyName>
   <AssemblyTitle>More - UI Presentation</AssemblyTitle>
   <Description>The presentation user interface library for the "More" framework.</Description>
   <RootNamespace>More</RootNamespace>
   <PackageTags>More;Patterns;Practices;Windows;User Interface;UI;Store;Phone;Xamarin</PackageTags>
   <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-  <SharedTargetFramework>$(TargetFramework)</SharedTargetFramework>
+  <ThemeTargetFramework>$(TargetFramework)</ThemeTargetFramework>
   <TargetsForTfmSpecificContentInPackage>CustomContentTarget</TargetsForTfmSpecificContentInPackage>
  </PropertyGroup>
 
  <ItemGroup>
   <ReleaseNotes Include="Added support for UAP" />
+  <ReleaseNotes Include="Dropped support for Windows Phone Silverlight" />
+  
  </ItemGroup>
 
  <Import Project="$(SolutionDir)build\project.props" />
@@ -27,22 +29,22 @@
   <BlendSdk>$(MSBuildProgramFiles32)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\</BlendSdk>
  </PropertyGroup>
 
+ <PropertyGroup Condition=" '$(TargetFramework)' == 'wpa81' ">
+  <DefineConstants>$(DefineConstants);WPA81;UAP10_0</DefineConstants>
+  <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
+  <TargetPlatformVersion>8.1</TargetPlatformVersion>
+  <TargetFrameworkIdentifier>WindowsPhoneApp</TargetFrameworkIdentifier>
+  <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+  <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
+ </PropertyGroup>
+
  <PropertyGroup Condition=" '$(TargetFramework)' == 'win81' ">
   <DefineConstants>$(DefineConstants);WIN81;UAP10_0</DefineConstants>
   <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
   <TargetPlatformVersion>8.1</TargetPlatformVersion>
   <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
   <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-  <SharedTargetFramework>uap10.0</SharedTargetFramework>
-  <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
- </PropertyGroup>
-
- <PropertyGroup Condition=" '$(TargetFramework)' == 'portable-wp81+wpa81' ">
-  <DefineConstants>$(DefineConstants);PORTABLE_WP81_WPA81;UAP10_0</DefineConstants>
-  <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
-  <TargetPlatformVersion>8.1</TargetPlatformVersion>
-  <TargetFrameworkIdentifier>WindowsPhoneApp</TargetFrameworkIdentifier>
-  <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+  <ThemeTargetFramework>uap10.0</ThemeTargetFramework>
   <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
  </PropertyGroup>
 
@@ -61,6 +63,12 @@
  <ItemGroup>
   <Compile Include="**\*.cs" Exclude="obj\**\*.*;Platforms\**\*.cs" />
   <Compile Include="Platforms\$(TargetFramework)\**\*.cs" />
+ </ItemGroup>
+
+ <ItemGroup>
+   <Compile Remove="Platforms\uap10.0\More\Windows.Data\**" />
+   <EmbeddedResource Remove="Platforms\uap10.0\More\Windows.Data\**" />
+   <None Remove="Platforms\uap10.0\More\Windows.Data\**" />
  </ItemGroup>
 
  <ItemGroup>
@@ -87,7 +95,7 @@
   <Reference Include="WindowsBase" />
  </ItemGroup>
 
- <ItemGroup Condition=" '$(TargetFramework)' == 'win81' OR '$(TargetFramework)' == 'portable-wp81+wpa81' ">
+ <ItemGroup Condition=" '$(TargetFramework)' == 'wpa81' OR '$(TargetFramework)' == 'win81' ">
   <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0" Name="Behaviors SDK %28XAML%29" />
  </ItemGroup>
 
@@ -95,12 +103,11 @@
   <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.0.0" />
   <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
   <PackageReference Include="System.Collections" Version="4.0.11" />
-  <PackageReference Include="System.ComponentModel.Annotations" Version="4.0.10" />
+  <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
   <PackageReference Include="System.Diagnostics.Debug" Version="4.0.11" />
   <PackageReference Include="System.Diagnostics.Tools" Version="4.0.1" />
   <PackageReference Include="System.Diagnostics.Tracing" Version="4.1.0" />
   <PackageReference Include="System.Globalization" Version="4.0.11" />
-  <PackageReference Include="System.Globalization.Calendars" Version="4.0.1" />
   <PackageReference Include="System.IO" Version="4.1.0" />
   <PackageReference Include="System.ObjectModel" Version="4.0.12" />
   <PackageReference Include="System.Private.Uri" Version="4.0.1" />
@@ -126,15 +133,15 @@
 
  <ItemGroup Condition=" '$(TargetFramework)' != 'net45' ">
 
-  <Compile Include="Platforms\winrt\**\*.cs" />
-
-  <Page Include="Platforms\$(SharedTargetFramework)\Themes\Generic.xaml">
+  <Compile Include="Platforms\portable-wp81+wpa81\**\*.cs" />
+  
+  <Page Include="Platforms\$(ThemeTargetFramework)\Themes\Generic.xaml">
    <Generator>MSBuild:Compile</Generator>
    <SubType>Designer</SubType>
    <Link>$(PackageId)\Themes\Generic.xaml</Link>
   </Page>
 
-  <None Include="Platforms\$(SharedTargetFramework)\Themes\Generic.xaml">
+  <None Include="Platforms\$(ThemeTargetFramework)\Themes\Generic.xaml">
    <Link>$(PackageId)\Themes\Generic.xaml</Link>
    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
@@ -153,6 +160,10 @@
  <ItemGroup>
   <EmbeddedResource Update="ExceptionMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ExceptionMessage.Designer.cs" />
   <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
+ </ItemGroup>
+
+ <ItemGroup>
+   <Folder Include="Platforms\wpa81\Themes\" />
  </ItemGroup>
 
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />

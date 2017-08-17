@@ -124,9 +124,11 @@
         {
             Contract.Ensures( Contract.Result<IValidator>() != null );
 
-            if ( !ServiceProvider.Current.TryGetService( out IValidator validator ) )
+            var serviceProvider = ServiceProvider.Current;
+
+            if ( !serviceProvider.TryGetService( out IValidator validator ) )
             {
-                validator = new GenericValidator();
+                validator = new ValidatorAdapter( serviceProvider );
             }
 
             return validator;

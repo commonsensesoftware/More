@@ -3,9 +3,9 @@
  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
 
  <PropertyGroup Label="Configuration">
-  <VersionPrefix>1.0.3</VersionPrefix>
-  <AssemblyVersion>1.0.0.0</AssemblyVersion>
-  <TargetFramework>netstandard1.0</TargetFramework>
+  <VersionPrefix>1.1.0</VersionPrefix>
+  <AssemblyVersion>1.1.0.0</AssemblyVersion>
+  <TargetFramework>netstandard1.1</TargetFramework>
   <AssemblyName>More.Validation</AssemblyName>
   <AssemblyTitle>More - Validation</AssemblyTitle>
   <Description>The validation library for the "More" framework.</Description>

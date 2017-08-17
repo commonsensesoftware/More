@@ -5,7 +5,7 @@
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.2.4</VersionPrefix>
   <AssemblyVersion>1.2.0.1</AssemblyVersion>
-  <TargetFrameworks>net45;uap10.0;portable-win81+wpa81</TargetFrameworks>
+  <TargetFrameworks>net45;portable-win81+wpa81;uap10.0</TargetFrameworks>
   <AssemblyName>More.Extensions</AssemblyName>
   <AssemblyTitle>More - Extensions</AssemblyTitle>
   <Description>The platform-specific extensions for the "More" framework.</Description>
@@ -17,6 +17,7 @@
  <ItemGroup>
   <ReleaseNotes Include="Added support for UAP" />
   <ReleaseNotes Include="Dropped support for Windows Phone Silverlight" />
+  <ReleaseNotes Include="Moved cross-platform types back to 'More'" />
  </ItemGroup>
 
  <Import Project="$(SolutionDir)build\project.props" />
@@ -61,19 +62,20 @@
   <Reference Include="System.Xml.Linq" />
  </ItemGroup>
 
- <ItemGroup Condition=" '$(TargetFramework)' == 'portable-win81+wpa81' ">
-  <Compile Include="Platforms\uap10.0\**\*.cs" />
+ <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+  <Compile Include="Platforms\portable-win81+wpa81\**\*.cs" Exclude="Platforms\portable-win81+wpa81\System.Globalization\GregorianCalendar.cs" />
  </ItemGroup>
 
  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
   <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.0.0" />
   <PackageReference Include="Microsoft.Win32.Primitives" Version="4.0.1" />
   <PackageReference Include="System.Collections" Version="4.0.11" />
-  <PackageReference Include="System.ComponentModel.Annotations" Version="4.0.10" />
+  <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
   <PackageReference Include="System.Diagnostics.Debug" Version="4.0.11" />
   <PackageReference Include="System.Diagnostics.Tools" Version="4.0.1" />
   <PackageReference Include="System.Diagnostics.Tracing" Version="4.1.0" />
   <PackageReference Include="System.Globalization" Version="4.0.11" />
+  <PackageReference Include="System.Globalization.Calendars" Version="4.0.11" />
   <PackageReference Include="System.IO" Version="4.1.0" />
   <PackageReference Include="System.ObjectModel" Version="4.0.12" />
   <PackageReference Include="System.Private.Uri" Version="4.0.1" />
@@ -100,6 +102,14 @@
  <ItemGroup>
   <EmbeddedResource Update="ExceptionMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ExceptionMessage.Designer.cs" />
   <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
+ </ItemGroup>
+
+ <ItemGroup>
+   <None Update="ExceptionMessage.Designer.cs">
+     <DesignTime>True</DesignTime>
+     <AutoGen>True</AutoGen>
+     <DependentUpon>ExceptionMessage.resx</DependentUpon>
+   </None>
  </ItemGroup>
 
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />

@@ -2,74 +2,59 @@
 {
     using More.Windows.Input;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Threading.Tasks;
-    using global::Windows.Foundation.Collections;
     using global::Windows.Security.Authentication.Web;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Phone applications.
-    /// </content>
-    public partial class WebAuthenticateAction
+    /// <summary>
+    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to perform web-based authentication
+    /// <see cref="WebAuthenticateInteraction">interactions</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// </summary>
+    [CLSCompliant( false )]
+    public partial class WebAuthenticateAction : System.Windows.Interactivity.TriggerAction
     {
-        static void Authenticate( WebAuthenticateInteraction webAuthenticate )
+        static WebAuthenticationOptions CreateOptions( WebAuthenticateInteraction interaction )
+        {
+            Contract.Requires( interaction != null );
+
+            var options = WebAuthenticationOptions.None;
+
+            if ( interaction.UseCorporateNetwork )
+            {
+                options |= WebAuthenticationOptions.UseCorporateNetwork;
+            }
+
+            if ( interaction.UseHttpPost )
+            {
+                options |= WebAuthenticationOptions.UseHttpPost;
+            }
+
+            if ( interaction.UseTitle )
+            {
+                options |= WebAuthenticationOptions.UseTitle;
+            }
+
+            return options;
+        }
+
+        static void InvokeCallbackCommand( WebAuthenticateInteraction webAuthenticate, WebAuthenticationResult authenticationResult )
         {
             Contract.Requires( webAuthenticate != null );
-            
-            var requestUri = webAuthenticate.RequestUri;
-            var callbackUri = webAuthenticate.CallbackUri ?? WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
-            var options = CreateOptions( webAuthenticate );
-            var continuationData = new ValueSet();
+            Contract.Requires( authenticationResult != null );
 
-            continuationData.AddRange( webAuthenticate.ContinuationData );
+            var result = default( IWebAuthenticationResult );
 
-            WebAuthenticationBroker.AuthenticateAndContinue( requestUri, callbackUri, continuationData, options );
-        }
-
-        /// <summary>
-        /// Executes the action asynchronously.
-        /// </summary>
-        /// <param name="sender">The object that triggered the action.</param>
-        /// <param name="parameter">The parameter provided to the action.</param>
-        /// <returns>A <see cref="Task">task</see> representing the operation.</returns>
-        /// <remarks>The <see cref="P:Interaction.CancelCommand">cancel command</see> is invoked if the operation
-        /// fails or is canceled.</remarks>
-        protected override async Task ExecuteAsync( object sender, object parameter )
-        {
-            var webAuthenticate = GetRequestedInteraction<WebAuthenticateInteraction>( parameter );
-
-            if ( webAuthenticate == null || !webAuthenticate.UseSilentMode )
+            if ( authenticationResult.ResponseStatus == WebAuthenticationStatus.Success )
             {
-                return;
+                result = new WebAuthenticationResultAdapter( authenticationResult );
+                webAuthenticate.ResponseStatus = 200U;
+                webAuthenticate.ResponseData = authenticationResult.ResponseData;
+                webAuthenticate.DefaultCommand?.Execute( result );
             }
-
-            var requestUri = webAuthenticate.RequestUri;
-            var options = CreateOptions( webAuthenticate );
-            var result = await WebAuthenticationBroker.AuthenticateSilentlyAsync( requestUri, options );
-
-            InvokeCallbackCommand( webAuthenticate, result );
-        }
-
-        /// <summary>
-        /// Executes the action.
-        /// </summary>
-        /// <param name="sender">The object that triggered the action.</param>
-        /// <param name="parameter">The parameter provided to the action.</param>
-        /// <returns>The result of the action. The default implementation always executes asynchronously and returns null.</returns>
-        /// <remarks>The <see cref="P:Interaction.CancelCommand">cancel command</see> is invoked if the operation
-        /// fails or is canceled.</remarks>
-        public override object Execute( object sender, object parameter )
-        {
-            var webAuthenticate = GetRequestedInteraction<WebAuthenticateInteraction>( parameter );
-
-            if ( webAuthenticate == null || webAuthenticate.UseSilentMode )
+            else
             {
-                return base.Execute( sender, parameter );
+                webAuthenticate.ResponseStatus = authenticationResult.ResponseErrorDetail;
+                webAuthenticate.CancelCommand?.Execute( result );
             }
-
-            Authenticate( webAuthenticate );
-            return null;
         }
     }
 }
