@@ -6,7 +6,6 @@
   <VersionPrefix>1.4.1</VersionPrefix>
   <AssemblyVersion>1.4.0.0</AssemblyVersion>
   <TargetFrameworks>netstandard1.1</TargetFrameworks>
-  <AssemblyName>More</AssemblyName>
   <AssemblyTitle>More Framework</AssemblyTitle>
   <Description>The core library for the "More" framework.</Description>
   <RootNamespace>More</RootNamespace>

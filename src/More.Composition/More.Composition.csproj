@@ -6,7 +6,6 @@
   <VersionPrefix>1.2.1</VersionPrefix>
   <AssemblyVersion>1.2.0.0</AssemblyVersion>
   <TargetFramework>netstandard1.0</TargetFramework>
-  <AssemblyName>More.Composition</AssemblyName>
   <AssemblyTitle>More - Composition</AssemblyTitle>
   <Description>The composition library for the "More" framework.</Description>
   <RootNamespace>More.Composition</RootNamespace>

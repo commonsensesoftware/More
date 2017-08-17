@@ -2,7 +2,6 @@
 
  <PropertyGroup Label="Configuration">
   <TargetFramework>net452</TargetFramework>
-  <AssemblyName>More.Tests</AssemblyName>
  </PropertyGroup>
 
  <ItemGroup>

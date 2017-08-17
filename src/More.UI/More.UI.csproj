@@ -6,7 +6,6 @@
   <VersionPrefix>1.4.0</VersionPrefix>
   <AssemblyVersion>1.4.0.0</AssemblyVersion>
   <TargetFramework>netstandard1.1</TargetFramework>
-  <AssemblyName>More.UI</AssemblyName>
   <AssemblyTitle>More - UI</AssemblyTitle>
   <Description>The user interface foundation library for the "More" framework.</Description>
   <RootNamespace>More</RootNamespace>
