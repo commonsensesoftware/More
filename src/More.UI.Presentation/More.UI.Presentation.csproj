@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
- <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
 
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.2.4</VersionPrefix>
@@ -18,10 +18,10 @@
  <ItemGroup>
   <ReleaseNotes Include="Added support for UAP" />
   <ReleaseNotes Include="Dropped support for Windows Phone Silverlight" />
-  
+
  </ItemGroup>
 
- <Import Project="$(SolutionDir)build\project.props" />
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
   <LanguageTargets>$(MSBuildToolsPath)\Microsoft.CSharp.targets</LanguageTargets>
@@ -65,9 +65,9 @@
  </ItemGroup>
 
  <ItemGroup>
-   <Compile Remove="Platforms\uap10.0\More\Windows.Data\**" />
-   <EmbeddedResource Remove="Platforms\uap10.0\More\Windows.Data\**" />
-   <None Remove="Platforms\uap10.0\More\Windows.Data\**" />
+  <Compile Remove="Platforms\uap10.0\More\Windows.Data\**" />
+  <EmbeddedResource Remove="Platforms\uap10.0\More\Windows.Data\**" />
+  <None Remove="Platforms\uap10.0\More\Windows.Data\**" />
  </ItemGroup>
 
  <ItemGroup>
@@ -138,7 +138,7 @@
  <ItemGroup Condition=" '$(TargetFramework)' != 'net45' ">
 
   <Compile Include="Platforms\portable-wp81+wpa81\**\*.cs" />
-  
+
   <Page Include="Platforms\$(ThemeTargetFramework)\Themes\Generic.xaml">
    <Generator>MSBuild:Compile</Generator>
    <SubType>Designer</SubType>
@@ -167,14 +167,14 @@
  </ItemGroup>
 
  <ItemGroup>
-   <Folder Include="Platforms\wpa81\Themes\" />
+  <Folder Include="Platforms\wpa81\Themes\" />
  </ItemGroup>
 
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
- <!--<Import Project="$(SolutionDir)build\xaml.targets" Label="Xaml" />-->
+ <Import Project="$(SolutionDir)build\xaml.targets" Label="Xaml" />
 
  <!-- TODO: in VS 15.3 this will be the way to specify custom package folder content -->
-
+ <!--
  <Target Name="CustomContentTarget" Condition=" '$(TargetFramework)' != 'net45' ">
   <ItemGroup>
    <TfmSpecificPackageFile Include="Platforms\$(SharedTargetFramework)\Themes\Generic.xaml">
@@ -188,6 +188,7 @@
    </TfmSpecificPackageFile>
   </ItemGroup>
  </Target>
+ -->
 
  <Target Name="AdjustReferringTargetFrameworkForUAP" BeforeTargets="GetTargetFrameworkProperties">
   <PropertyGroup Condition="'$(ReferringTargetFramework)' == '.NETCore,Version=v5.0'">

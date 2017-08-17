@@ -31,9 +31,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "More.UI.Presentation", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{55B1D082-FC82-47E4-B101-10C98D5D6146}"
 	ProjectSection(SolutionItems) = preProject
-		build\build.props = build\build.props
+		build.props = build.props
+		build\common.props = build\common.props
 		build\file-version.props = build\file-version.props
-		build\project.props = build\project.props
+		project.props = project.props
 		build\xaml.targets = build\xaml.targets
 	EndProjectSection
 EndProject
@@ -47,7 +48,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{119BE16B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "More.Tests", "test\More.Tests\More.Tests.csproj", "{3A917CAD-688F-4D3B-9A29-3BA80E1A6C07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "More.Composition.Tests", "test\More.Composition.Tests\More.Composition.Tests.csproj", "{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "More.Composition.Tests", "test\More.Composition.Tests\More.Composition.Tests.csproj", "{53D8EE99-453C-429C-854D-8F2CEC4EAD5E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

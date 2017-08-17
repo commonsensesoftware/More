@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
- <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
 
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.2.4</VersionPrefix>
@@ -19,7 +19,7 @@
   <ReleaseNotes Include="Moved cross-platform types back to 'More'" />
  </ItemGroup>
 
- <Import Project="$(SolutionDir)build\project.props" />
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
  <PropertyGroup Condition=" '$(TargetFramework)' == 'portable-win81+wpa81' ">
   <DefineConstants>$(DefineConstants);PORTABLE_WIN81_WPA81;UAP10_0</DefineConstants>

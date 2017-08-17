@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
- <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))\build\build.props" />
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
  
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.4.0</VersionPrefix>
@@ -14,7 +14,7 @@
 • Updated IWebAuthenticationResult.ResponseErrorDetail to Int32</PackageReleaseNotes>
  </PropertyGroup>
 
- <Import Project="$(SolutionDir)build\file-version.props" />
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
  <ItemGroup>
   <ProjectReference Include="..\More\More.csproj" />
