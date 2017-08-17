@@ -1,16 +1,11 @@
-﻿using Xunit;
 namespace More.Composition
 {
+    using FluentAssertions;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="SettingAttribute"/>.
-    /// </summary>
     public class SettingAttributeTest
     {
         public static IEnumerable<object[]> PrimitiveTypeData
@@ -54,78 +49,79 @@ namespace More.Composition
             }
         }
 
-        [Theory( DisplayName = "new setting attribute should not allow null or empty key" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void ConstructorShouldNotAllowNullOrEmptyKey( string key )
+        public void new_setting_attribute_should_not_allow_null_or_empty_key( string key )
         {
             // arrange
 
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new SettingAttribute( key ) );
+            Action @new = () => new SettingAttribute( key );
 
             // assert
-            Assert.Equal( nameof( key ), ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( key ) );
         }
 
-        [Fact( DisplayName = "new setting attribute should set key" )]
-        public void ConstructorShouldSetKey()
+        [Fact]
+        public void new_setting_attribute_should_set_key()
         {
             // arrange
             var expected = "Test";
             var setting = new SettingAttribute( expected );
 
             // act
-            var actual = setting.Key;
+            var key = setting.Key;
 
             // assert
-            Assert.Equal( expected, actual );
+            key.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "default value should initially equal null setting value" )]
-        public void DefaultValueShouldEqualInitiallyEqualNullSettingValue()
+        [Fact]
+        public void default_value_should_initially_equal_null_setting_value()
         {
             // arrange
             var expected = SettingAttribute.NullValue;
             var setting = new SettingAttribute( "Test" );
 
             // act
-            var actual = setting.DefaultValue;
+            var defaultValue = setting.DefaultValue;
 
             // assert
-            Assert.Equal( expected, actual );
+            defaultValue.Should().Be( expected );
         }
 
-        [Theory( DisplayName = "convert should support converting supported primitive types" )]
+        [Theory]
         [MemberData( nameof( PrimitiveTypeData ) )]
-        public void ConvertShouldSupportConvertingSupportedPrimitiveTypes( object value, Type targetType, object expected )
+        public void convert_should_support_converting_supported_primitive_types( object value, Type targetType, object expected )
         {
             // arrange
             var formatProvider = CultureInfo.CurrentCulture;
 
             // act
-            var actual = SettingAttribute.Convert( value, targetType, formatProvider );
+            var result = SettingAttribute.Convert( value, targetType, formatProvider );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "convert should leverage user-defined conversions" )]
-        public void ConvertShouldLeverageUserDefinedConversions()
+        [Fact]
+        public void convert_should_leverage_userX2Ddefined_conversions()
         {
             // arrange
             var value = "Test";
             var expected = Tuple.Create( value );
             var targetType = typeof( Tuple<string> );
             var formatProvider = CultureInfo.CurrentCulture;
+
             SettingAttribute.SetConverter( ( o, t, p ) => Tuple.Create( o.ToString() ) );
 
             // act
-            var actual = (Tuple<string>) SettingAttribute.Convert( value, targetType, formatProvider );
+            var result = (Tuple<string>) SettingAttribute.Convert( value, targetType, formatProvider );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( expected );
         }
     }
 }

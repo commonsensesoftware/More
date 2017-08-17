@@ -1,27 +1,15 @@
-﻿namespace More.Composition
+namespace More.Composition
 {
+    using FluentAssertions;
     using System.Collections.Generic;
     using System.Composition.Convention;
     using System.Composition.Hosting;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="ConfigurationExportProvider"/>.
-    /// </summary>
     public class ConfigurationExportProviderTest
     {
-        public class ComposedObject
-        {
-            public ComposedObject( [Setting( "Setting1" )] string setting )
-            {
-                Setting = setting;
-            }
-
-            public string Setting { get; }
-        }
-
-        [Fact( DisplayName = "get export descriptors should return expected promises" )]
-        public void GetExportDescriptorsShouldReturnExpectedPromises()
+        [Fact]
+        public void get_export_descriptors_should_return_expected_promises()
         {
             // arrange
             var expected = "Test";
@@ -29,7 +17,7 @@
             var exportProvider = new ConfigurationExportProvider( ( key, type ) => settings[key] );
             var conventions = new ConventionBuilder();
             var configuration = new ContainerConfiguration();
-            string actual = null;
+            var setting = default( string );
 
             conventions.ForType<ComposedObject>().Export();
             configuration.WithPart<ComposedObject>( conventions );
@@ -38,11 +26,18 @@
             using ( var container = configuration.CreateContainer() )
             {
                 // act
-                actual = container.GetExport<ComposedObject>().Setting;
+                setting = container.GetExport<ComposedObject>().Setting;
             }
 
             // assert
-            Assert.Equal( expected, actual );
+            setting.Should().Be( expected );
+        }
+
+        public class ComposedObject
+        {
+            public ComposedObject( [Setting( "Setting1" )] string setting ) => Setting = setting;
+
+            public string Setting { get; }
         }
     }
 }

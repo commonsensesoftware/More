@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <PropertyGroup Label="Configuration">
+  <TargetFramework>net452</TargetFramework>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\..\src\More.Composition\More.Composition.csproj" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Reference Include="System" />
+ <Reference Include="Microsoft.CSharp" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <PackageReference Include="System.Composition" Version="1.0.31" />
+  <PackageReference Include="System.Runtime" Version="4.1.0" />
+  <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
+  <PackageReference Include="more.xunit" Version="2.2.2" />
+  <PackageReference Include="more.xunit.runner.visualstudio" Version="2.2.1" />
+  <PackageReference Include="FluentAssertions" Version="4.19.3" />
+  <PackageReference Include="Moq" Version="4.7.99" />
+ </ItemGroup>
+
+</Project>
