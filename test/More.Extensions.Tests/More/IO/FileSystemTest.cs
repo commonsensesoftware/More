@@ -1,4 +1,4 @@
-﻿namespace More.IO
+namespace More.IO
 {
     using System;
     using System.IO;
@@ -10,8 +10,8 @@
     /// </summary>
     public class FileSystemTest
     {
-        [Fact( DisplayName = "get folder async should return folder" )]
-        public async Task GetFolderAsyncShouldReturnFolder()
+        [Fact]
+        public async Task get_folder_async_should_return_folder()
         {
             // arrange
             var fileSystem = new FileSystem();
@@ -23,8 +23,8 @@
             Assert.NotNull( folder != null );
         }
 
-        [Fact( DisplayName = "get folder async should throw exception for non-existent folder" )]
-        public async Task GetFolderAsyncShouldThrowExceptionForNonExistentFolder()
+        [Fact]
+        public async Task get_folder_async_should_throw_exception_for_nonX2Dexistent_folder()
         {
             // arrange
             var fileSystem = new FileSystem();
@@ -36,8 +36,8 @@
 
         }
 
-        [Fact( DisplayName = "get file async should return file" )]
-        public async Task GetFileAsyncShouldReturnFile()
+        [Fact]
+        public async Task get_file_async_should_return_file()
         {
             // arrange
             var fileSystem = new FileSystem();
@@ -49,8 +49,8 @@
             Assert.NotNull( folder != null );
         }
 
-        [Fact( DisplayName = "get file async should throw exception for non-existent file" )]
-        public async Task GetFileAsyncShouldThrowExceptionForNonExistentFile()
+        [Fact]
+        public async Task get_file_async_should_throw_exception_for_nonX2Dexistent_file()
         {
             // arrange
             var fileSystem = new FileSystem();
@@ -64,8 +64,8 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact( DisplayName = "get file async should return file from uri" )]
-        public async Task GetFileAsyncShouldReturnFileFromUri()
+        [Fact]
+        public async Task get_file_async_should_return_file_from_uri()
         {
             // arrange
             var fileSystem = new FileSystem();
@@ -78,8 +78,8 @@
             Assert.NotNull( folder != null );
         }
 
-        [Fact( DisplayName = "get file async should throw exception for non-existent file from uri" )]
-        public async Task GetFileAsyncShouldThrowExceptionForNonExistentFileUri()
+        [Fact]
+        public async Task get_file_async_should_throw_exception_for_nonX2Dexistent_file_from_uri()
         {
             // arrange
             var fileSystem = new FileSystem();

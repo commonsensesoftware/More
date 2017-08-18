@@ -1,4 +1,4 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
     using System;
     using Xunit;
@@ -8,8 +8,8 @@
     /// </summary>
     public class DependsOnActivityAttributeTest
     {
-        [Fact( DisplayName = "new depends on activity attribute should not allow null type" )]
-        public void ConstructorShouldNotAllowNullActivityType()
+        [Fact]
+        public void new_depends_on_activity_attribute_should_not_allow_null_type()
         {
             // arrange
             Type activityType = null;
@@ -20,8 +20,8 @@
             // assert
             Assert.Equal( "activityType", ex.ParamName );
         }
-        [Fact( DisplayName = "new depends on activity attribute should set type" )]
-        public void ConstructorShouldSetExpectedActivityType()
+        [Fact]
+        public void new_depends_on_activity_attribute_should_set_type()
         {
             // arrange
             var expected = typeof( IActivity );

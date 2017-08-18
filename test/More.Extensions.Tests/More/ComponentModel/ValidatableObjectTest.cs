@@ -1,4 +1,4 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
     using More.ComponentModel.DataAnnotations;
     using System;
@@ -102,8 +102,8 @@
             ServiceProvider.SetCurrent( container );
         }
 
-        [Fact( DisplayName = "is valid should return false for partially valid object" )]
-        public void IsValidPropertyShouldReturnFalseWhenDatesAreInvalid()
+        [Fact]
+        public void is_valid_should_return_false_for_partially_valid_object()
         {
             // arrange
             var target = new MockValidatableObject();
@@ -123,8 +123,8 @@
             Assert.False( valid );
         }
 
-        [Fact( DisplayName = "is valid should return true for valid object" )]
-        public void IsValidPropertyShouldReturnTrueWhenObjectIsValid()
+        [Fact]
+        public void is_valid_should_return_true_for_valid_object()
         {
             // arrange
             var target = new MockValidatableObject();

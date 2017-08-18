@@ -1,4 +1,4 @@
-﻿namespace System.ComponentModel
+namespace System.ComponentModel
 {
     using System;
     using Xunit;
@@ -56,8 +56,8 @@
             }
         }
 
-        [Fact( DisplayName = "initialize should not allow null source" )]
-        public void InitializeShouldNotAllowNullParameters()
+        [Fact]
+        public void initialize_should_not_allow_null_source()
         {
             // arrange
             ISupportInitialize source = null;
@@ -69,8 +69,8 @@
             Assert.Equal( "source", ex.ParamName );
         }
 
-        [Fact( DisplayName = "initialize should return initialization scope object" )]
-        public void InitializeShouldReturnObjectThatPreventsChangesDuringItsScope()
+        [Fact]
+        public void initialize_should_return_initialization_scope_object()
         {
             // arrange
             var source = new InitializableObject();

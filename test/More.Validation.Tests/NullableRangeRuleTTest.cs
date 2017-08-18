@@ -1,16 +1,106 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
+    using static ValidationResult;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="NullableRangeRule{T}"/>.
-    /// </summary>
     public class NullableRangeRuleTTest
     {
+        [Theory]
+        [MemberData( nameof( ConstructorMaxValueData ) )]
+        public void new_nullable_range_rule_should_not_allow_max_X3C_default( Action<int> newNullableRange )
+        {
+            // arrange
+            var maximum = -1;
+
+            // act
+            Action @new = () => newNullableRange( maximum );
+
+            // assert
+            @new.ShouldThrow<ArgumentOutOfRangeException>().And.ParamName.Should().Be( nameof( maximum ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( ConstructorMinAndMaxValueData ) )]
+        public void new_nullable_range_rule_should_not_allow_max_X3C_min( Action<int, int> newNullableRange )
+        {
+            // arrange
+            var minimum = 0;
+            var maximum = -1;
+
+            // act
+            Action @new = () => newNullableRange( minimum, maximum );
+
+            // assert
+            @new.ShouldThrow<ArgumentOutOfRangeException>().And.ParamName.Should().Be( nameof( maximum ) );
+        }
+
+        [Fact]
+        public void nullable_range_rule_should_evaluate_success_for_null_value()
+        {
+            // arrange
+            var rule = new NullableRangeRule<int>( 0 );
+            var property = new Property<int?>( "Counter", null );
+
+            // act
+            var result = rule.Evaluate( property );
+
+            // assert
+            result.Should().Be( Success );
+        }
+
+        [Fact]
+        public void nullable_range_rule_should_evaluate_success_for_valid_value()
+        {
+            // arrange
+            var rule = new NullableRangeRule<int>( 10 );
+            var property = new Property<int?>( "Counter", 5 );
+
+            // act
+            var result = rule.Evaluate( property );
+
+            // assert
+            result.Should().Be( Success );
+        }
+
+        [Theory]
+        [InlineData( 0 )]
+        [InlineData( 11 )]
+        public void nullable_range_rule_should_evaluate_value_out_of_range( int value )
+        {
+            // arrange
+            var rule = new NullableRangeRule<int>( 1, 10 );
+            var property = new Property<int?>( "Counter", value );
+
+            // act
+            var result = rule.Evaluate( property );
+
+            // assert
+            result.ShouldBeEquivalentTo(
+                new
+                {
+                    ErrorMessage = "The Counter field must be between 1 and 10.",
+                    MemberNames = new[] { "Counter" }
+                } );
+        }
+
+        [Theory]
+        [MemberData( nameof( ErrorMessageData ) )]
+        public void nullable_range_rule_should_evaluate_with_custom_error_message( Func<string, NullableRangeRule<int>> @new )
+        {
+            // arrange
+            var rule = @new( "Invalid" );
+            var property = new Property<int?>( "Counter", 11 );
+
+            // act
+            var result = rule.Evaluate( property );
+
+            // assert
+            result.ErrorMessage.Should().Be( "Invalid" );
+        }
+
         public static IEnumerable<object[]> ConstructorMaxValueData
         {
             get
@@ -36,99 +126,6 @@
                 yield return new object[] { new Func<string, NullableRangeRule<int>>( msg => new NullableRangeRule<int>( 10, msg ) ) };
                 yield return new object[] { new Func<string, NullableRangeRule<int>>( msg => new NullableRangeRule<int>( 1, 10, msg ) ) };
             }
-        }
-
-        [Theory( DisplayName = "new nullable range rule should not allow max < default" )]
-        [MemberData( "ConstructorMaxValueData" )]
-        public void ConstructorShouldNotAllowMaxValueLessThanDefaultValue( Action<int> test )
-        {
-            // arrange
-            var max = -1;
-
-            // act
-            var ex = Assert.Throws<ArgumentOutOfRangeException>( () => test( max ) );
-
-            // assert
-            Assert.Equal( "maximum", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new nullable range rule should not allow max < min" )]
-        [MemberData( "ConstructorMinAndMaxValueData" )]
-        public void ConstructorShouldNotAllowMaxValueLessThanDefaultValue( Action<int, int> test )
-        {
-            // arrange
-            var min = 0;
-            var max = -1;
-
-            // act
-            var ex = Assert.Throws<ArgumentOutOfRangeException>( () => test( min, max ) );
-
-            // assert
-            Assert.Equal( "maximum", ex.ParamName );
-        }
-
-        [Fact( DisplayName = "nullable range rule should evaluate success for null value" )]
-        public void EvaluateShouldReturnSuccessForNullValue()
-        {
-            // arrange
-            var rule = new NullableRangeRule<int>( 0 );
-            var property = new Property<int?>( "Counter", null );
-            var expected = ValidationResult.Success;
-
-            // act
-            var actual = rule.Evaluate( property );
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "nullable range rule should evaluate success for valid value" )]
-        public void EvaluateShouldReturnSuccessForValidValue()
-        {
-            // arrange
-            var rule = new NullableRangeRule<int>( 10 );
-            var property = new Property<int?>( "Counter", 5 );
-            var expected = ValidationResult.Success;
-
-            // act
-            var actual = rule.Evaluate( property );
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Theory( DisplayName = "nullable range rule should evaluate value out of range" )]
-        [InlineData( 0 )]
-        [InlineData( 11 )]
-        public void EvaluateShouldReturnExpectedResultForInvalidValue( int value )
-        {
-            // arrange
-            var rule = new NullableRangeRule<int>( 1, 10 );
-            var property = new Property<int?>( "Counter", value );
-
-            // act
-            var actual = rule.Evaluate( property );
-
-            // assert
-            Assert.Equal( "The Counter field must be between 1 and 10.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "Counter", actual.MemberNames.Single() );
-        }
-
-        [Theory( DisplayName = "nullable range rule should evaluate with custom error message" )]
-        [MemberData( "ErrorMessageData" )]
-        public void EvaluateShouldReturnCustomErrorMessage( Func<string, NullableRangeRule<int>> @new )
-        {
-            // arrange
-            var expected = "Invalid";
-            var rule = @new( expected );
-            var property = new Property<int?>( "Counter", 11 );
-
-            // act
-            var actual = rule.Evaluate( property );
-
-            // assert
-            Assert.Equal( expected, actual.ErrorMessage );
         }
     }
 }

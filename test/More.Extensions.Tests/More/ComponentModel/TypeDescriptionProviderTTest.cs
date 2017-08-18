@@ -1,4 +1,4 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
     using System;
     using System.ComponentModel;
@@ -9,8 +9,8 @@
     /// </summary>
     public class TypeDescriptionProviderTTest
     {
-        [Fact( DisplayName = "new type descriptor provider should not allow null factory" )]
-        public void ConstructorShouldNotAllowNullFactory()
+        [Fact]
+        public void new_type_descriptor_provider_should_not_allow_null_factory()
         {
             // arrange
             Func<ICustomTypeDescriptor, ICustomTypeDescriptor> typeDescriptorFactory = null;
@@ -22,8 +22,8 @@
             Assert.Equal( "typeDescriptorFactory", ex.ParamName );
         }
 
-        [Fact( DisplayName = "get type descriptor should return expected value" )]
-        public void GetTypeDescriptorShouldReturnExpectedValue()
+        [Fact]
+        public void get_type_descriptor_should_return_expected_value()
         {
             // arrange
             Func<ICustomTypeDescriptor, ICustomTypeDescriptor> factory = parent =>

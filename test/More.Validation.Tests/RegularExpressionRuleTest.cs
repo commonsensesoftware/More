@@ -1,14 +1,11 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
+    using static ValidationResult;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="RegularExpressionRule"/>.
-    /// </summary>
     public class RegularExpressionRuleTest
     {
         public static IEnumerable<object[]> NullPatternData
@@ -20,94 +17,94 @@
             }
         }
 
-        [Theory( DisplayName = "new regex rule should not allow null or empty pattern" )]
-        [MemberData( "NullPatternData" )]
-        public void ConstructorShouldNotAllowNullOrEmptyPattern( Action<string> test )
+        [Theory]
+        [MemberData( nameof( NullPatternData ) )]
+        public void new_regex_rule_should_not_allow_null_or_empty_pattern( Action<string> newRegExRule )
         {
             // arrange
-            string pattern = null;
+            var pattern = default( string );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( pattern ) );
+            Action @new = () => newRegExRule( pattern );
 
             // assert
-            Assert.Equal( "pattern", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( pattern ) );
         }
 
-        [Theory( DisplayName = "new regex rule should not allow null or empty error message" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void ConstructorShouldNotAllowNullOrEmptyErrorMessage( string errorMessage )
+        public void new_regex_rule_should_not_allow_null_or_empty_error_message( string errorMessage )
         {
             // arrange
 
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new RegularExpressionRule( ".*", errorMessage ) );
+            Action @new = () => new RegularExpressionRule( ".*", errorMessage );
 
             // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( errorMessage ) );
         }
 
-        [Fact( DisplayName = "regex rule should evaluate success for null value" )]
-        public void EvaluateShouldReturnSuccessForNullValue()
+        [Fact]
+        public void regex_rule_should_evaluate_success_for_null_value()
         {
             // arrange
             var rule = new RegularExpressionRule( ".+" );
             var property = new Property<string>( "Ssn", null );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "regex rule should evaluate success for value matching pattern" )]
-        public void EvaluateShouldReturnSuccessForValueMatchingPattern()
+        [Fact]
+        public void regex_rule_should_evaluate_success_for_value_matching_pattern()
         {
             // arrange
             var rule = new RegularExpressionRule( @"\d{3}-\d{2}-\d{4}" );
             var property = new Property<string>( "Ssn", "111-22-3333" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "regex rule should evaluate expected result for value unmatched by pattern" )]
-        public void EvaluateShouldReturnExpectedResultForValueUnmatchedByPattern()
+        [Fact]
+        public void regex_rule_should_evaluate_expected_result_for_value_unmatched_by_pattern()
         {
             // arrange
             var rule = new RegularExpressionRule( @"\d{3}-\d{2}-\d{4}" );
             var property = new Property<string>( "Ssn", "111-xx-3333" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( @"The Ssn field must match the regular expression '\d{3}-\d{2}-\d{4}'.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "Ssn", actual.MemberNames.Single() );
+            result.ShouldBeEquivalentTo(
+                new
+                {
+                    ErrorMessage = @"The Ssn field must match the regular expression '\d{3}-\d{2}-\d{4}'.",
+                    MemberNames = new[] { "Ssn" }
+                } );
         }
 
-        [Fact( DisplayName = "regex rule should evaluate with custom error message" )]
-        public void EvaluateShouldReturnResultWithCustomErrorMessage()
+        [Fact]
+        public void regex_rule_should_evaluate_with_custom_error_message()
         {
             // arrange
-            var expected = "Invalid";
-            var rule = new RegularExpressionRule( @"\d{3}-\d{2}-\d{4}", expected );
+            var rule = new RegularExpressionRule( @"\d{3}-\d{2}-\d{4}", "Invalid" );
             var property = new Property<string>( "Ssn", "111-xx-3333" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Invalid" );
         }
     }
 }

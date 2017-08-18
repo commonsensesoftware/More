@@ -1,37 +1,400 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
     using Xunit;
+    using static System.UriKind;
+    using static Moq.Times;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="IValidationBuilderExtensions"/>.
-    /// </summary>
     public class IValidationBuilderExtensionsTest
     {
+        [Theory]
+        [MemberData( nameof( NullBuilderData ) )]
+        public void extension_methods_should_not_allow_null_builder( Action<IValidationBuilder<StubModel, DateTime>> test )
+        {
+            // arrange
+            var builder = default( IValidationBuilder<StubModel, DateTime> );
+
+            // act
+            Action extensionMethod = () => test( builder );
+
+            // assert
+            extensionMethod.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( builder ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( NullBuilderWithStringData ) )]
+        public void extension_methods_with_string_should_not_allow_null_builder( Action<IValidationBuilder<StubModel, string>> test )
+        {
+            // arrange
+            var builder = default( IValidationBuilder<StubModel, string> );
+
+            // act
+            Action extensionMethod = () => test( builder );
+
+            // assert
+            extensionMethod.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( builder ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( NullOrEmptyErrorMessageData ) )]
+        public void extension_methods_should_not_allow_null_or_empty_error_message( Action extensionMethod )
+        {
+            // arrange
+
+            // act
+
+            // assert
+            extensionMethod.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( "errorMessage" );
+        }
+
+        [Theory]
+        [MemberData( nameof( BuilderData ) )]
+        public void extension_method_should_apply_rule(
+            Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>> test,
+            Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>> verify )
+        {
+            // arrange
+            var builder = new Mock<IValidationBuilder<StubModel, DateTime>>();
+            var rule = default( IRule<Property<DateTime>, IValidationResult> );
+
+            builder.Setup( b => b.Apply( It.IsAny<IRule<Property<DateTime>, IValidationResult>>() ) )
+                   .Callback<IRule<Property<DateTime>, IValidationResult>>( r => rule = r )
+                   .Returns( () => builder.Object );
+
+            // act
+            var result = test( builder.Object );
+
+            // assert
+            result.Should().BeSameAs( builder.Object );
+            rule.Should().NotBeNull();
+            verify( builder, rule );
+        }
+
+        [Theory]
+        [MemberData( nameof( BuilderWithStringData ) )]
+        public void extension_method_with_string_should_apply_rule(
+            Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>> test,
+            Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>> verify )
+        {
+            // arrange
+            var builder = new Mock<IValidationBuilder<StubModel, string>>();
+            var rule = default( IRule<Property<string>, IValidationResult> );
+
+            builder.Setup( b => b.Apply( It.IsAny<IRule<Property<string>, IValidationResult>>() ) )
+                   .Callback<IRule<Property<string>, IValidationResult>>( r => rule = r )
+                   .Returns( () => builder.Object );
+
+            // act
+            var result = test( builder.Object );
+
+            // assert
+            result.Should().BeSameAs( builder.Object );
+            rule.Should().NotBeNull();
+            verify( builder, rule );
+        }
+
+        [Fact]
+        public void source_property_X3C_target_property_X3D_true()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel() { StartDate = DateTime.Today.AddDays( -1 ), EndDate = DateTime.Today };
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.StartDate ).LessThan( m => m.EndDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeTrue();
+            results.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void source_property_X3C_target_property_X3D_false()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel();
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.StartDate ).LessThan( m => m.EndDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "The StartDate field must be less than the EndDate field.",
+                        MemberNames = new []{ "StartDate", "EndDate" }
+                    }
+                } );
+        }
+
+        [Fact]
+        public void source_property_X3C_target_property_should_use_custom_error_message()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel();
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.StartDate ).LessThan( m => m.EndDate, "Invalid" );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "Invalid",
+                        MemberNames = new []{ "StartDate", "EndDate" }
+                    }
+                } );
+        }
+
+        [Fact]
+        public void source_property_X3CX3D_target_property_X3D_true()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel();
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.StartDate ).LessThanOrEqualTo( m => m.EndDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeTrue();
+            results.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void source_property_X3CX3D_target_property_X3D_false()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.StartDate ).LessThanOrEqualTo( m => m.EndDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "The StartDate field must be less than or equal to the EndDate field.",
+                        MemberNames = new []{ "StartDate", "EndDate" }
+                    }
+                } );
+        }
+
+        [Fact]
+        public void source_property_X3CX3D_target_property_should_use_custom_error_message()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.StartDate ).LessThanOrEqualTo( m => m.EndDate, "Invalid" );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "Invalid",
+                        MemberNames = new []{ "StartDate", "EndDate" }
+                    }
+                } );
+        }
+
+        [Fact]
+        public void source_property_X3E_target_property_X3D_true()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel() { StartDate = DateTime.Today.AddDays( -1 ), EndDate = DateTime.Today };
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThan( m => m.StartDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeTrue();
+            results.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void source_property_X3E_target_property_X3D_false()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel();
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThan( m => m.StartDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "The EndDate field must be greater than the StartDate field.",
+                        MemberNames = new []{ "EndDate", "StartDate" }
+                    }
+                } );
+        }
+
+        [Fact]
+        public void source_property_X3E_target_property_should_use_custom_error_message()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel();
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThan( m => m.StartDate, "Invalid" );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "Invalid",
+                        MemberNames = new []{ "EndDate", "StartDate" }
+                    }
+                } );
+        }
+
+        [Fact]
+        public void source_property_X3EX3D_target_property_X3D_true()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel();
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThanOrEqualTo( m => m.StartDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeTrue();
+            results.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void source_property_X3EX3D_target_property_X3D_false()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThanOrEqualTo( m => m.StartDate );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "The EndDate field must be greater than or equal to the StartDate field.",
+                        MemberNames = new []{ "EndDate", "StartDate" }
+                    }
+                } );
+        }
+
+        [Fact]
+        public void source_property_X3EX3D_target_property_should_use_custom_error_message()
+        {
+            // arrange
+            var validator = new Validator();
+            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
+            var context = validator.CreateContext( instance, null );
+            var results = new List<IValidationResult>();
+
+            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThanOrEqualTo( m => m.StartDate, "Invalid" );
+
+            // act
+            var valid = validator.TryValidateObject( instance, context, results );
+
+            // assert
+            valid.Should().BeFalse();
+            results.ShouldBeEquivalentTo(
+                new[]
+                {
+                    new
+                    {
+                        ErrorMessage = "Invalid",
+                        MemberNames = new []{ "EndDate", "StartDate" }
+                    }
+                } );
+        }
+
         public sealed class StubModel
         {
-            public string Text
-            {
-                get;
-                set;
-            }
+            public string Text { get; set; }
 
-            public DateTime StartDate
-            {
-                get;
-                set;
-            }
+            public DateTime StartDate { get; set; }
 
-            public DateTime EndDate
-            {
-                get;
-                set;
-            }
+            public DateTime EndDate { get; set; }
         }
 
         public static IEnumerable<object[]> NullBuilderData
@@ -77,8 +440,8 @@
                 yield return new object[] { new Action<IValidationBuilder<StubModel, string>>( b => b.StringLength( 1, 10, "Invalid" ) ) };
                 yield return new object[] { new Action<IValidationBuilder<StubModel, string>>( b => b.Url() ) };
                 yield return new object[] { new Action<IValidationBuilder<StubModel, string>>( b => b.Url( "Invalid" ) ) };
-                yield return new object[] { new Action<IValidationBuilder<StubModel, string>>( b => b.Url( UriKind.RelativeOrAbsolute ) ) };
-                yield return new object[] { new Action<IValidationBuilder<StubModel, string>>( b => b.Url( UriKind.RelativeOrAbsolute, "Invalid" ) ) };
+                yield return new object[] { new Action<IValidationBuilder<StubModel, string>>( b => b.Url( RelativeOrAbsolute ) ) };
+                yield return new object[] { new Action<IValidationBuilder<StubModel, string>>( b => b.Url( RelativeOrAbsolute, "Invalid" ) ) };
             }
         }
 
@@ -121,8 +484,8 @@
                 yield return new object[] { new Action( () => b2.StringLength( 1, 10, "" ) ) };
                 yield return new object[] { new Action( () => b2.Url( null ) ) };
                 yield return new object[] { new Action( () => b2.Url( "" ) ) };
-                yield return new object[] { new Action( () => b2.Url( UriKind.RelativeOrAbsolute, null ) ) };
-                yield return new object[] { new Action( () => b2.Url( UriKind.RelativeOrAbsolute, "" ) ) };
+                yield return new object[] { new Action( () => b2.Url( RelativeOrAbsolute, null ) ) };
+                yield return new object[] { new Action( () => b2.Url( RelativeOrAbsolute, "" ) ) };
             }
         }
 
@@ -133,42 +496,42 @@
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.GreaterThan( m => m.EndDate ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.GreaterThan( m => m.EndDate, "Invalid" ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.GreaterThanOrEqualTo( m => m.EndDate ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.GreaterThanOrEqualTo( m => m.EndDate, "Invalid" ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.LessThan( m => m.EndDate ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.LessThan( m => m.EndDate, "Invalid" ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.LessThanOrEqualTo( m => m.EndDate ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>>( b => b.LessThanOrEqualTo( m => m.EndDate, "Invalid" ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PropertyRule<StubModel, DateTime>>() ), Once() ) )
                 };
                 yield return new object[]
                 {
@@ -177,9 +540,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RangeRule<DateTime>) r;
-                            m.Verify( b => b.Apply( It.IsAny<RangeRule<DateTime>>() ), Times.Once() );
-                            Assert.Equal( DateTime.MinValue, rule.Minimum );
-                            Assert.Equal( DateTime.MaxValue, rule.Maximum );
+                            m.Verify( b => b.Apply( It.IsAny<RangeRule<DateTime>>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { Minimum = DateTime.MinValue, Maximum = DateTime.MaxValue } );
                         } )
                 };
                 yield return new object[]
@@ -189,9 +551,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RangeRule<DateTime>) r;
-                            m.Verify( b => b.Apply( It.IsAny<RangeRule<DateTime>>() ), Times.Once() );
-                            Assert.Equal( DateTime.MinValue, rule.Minimum );
-                            Assert.Equal( DateTime.MaxValue, rule.Maximum );
+                            m.Verify( b => b.Apply( It.IsAny<RangeRule<DateTime>>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { Minimum = DateTime.MinValue, Maximum = DateTime.MaxValue } );
                         } )
                 };
                 yield return new object[]
@@ -201,8 +562,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RequiredRule<DateTime>) r;
-                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Times.Once() );
-                            Assert.False( rule.AllowEmptyStrings );
+                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Once() );
+                            rule.AllowEmptyStrings.Should().BeFalse();
                         } )
                 };
                 yield return new object[]
@@ -212,8 +573,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RequiredRule<DateTime>) r;
-                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Times.Once() );
-                            Assert.False( rule.AllowEmptyStrings );
+                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Once() );
+                            rule.AllowEmptyStrings.Should().BeFalse();
                         } )
                 };
                 yield return new object[]
@@ -223,8 +584,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RequiredRule<DateTime>) r;
-                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Times.Once() );
-                            Assert.True( rule.AllowEmptyStrings );
+                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Once() );
+                            rule.AllowEmptyStrings.Should().BeTrue();
                         } )
                 };
                 yield return new object[]
@@ -234,8 +595,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RequiredRule<DateTime>) r;
-                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Times.Once() );
-                            Assert.True( rule.AllowEmptyStrings );
+                            m.Verify( b => b.Apply( It.IsAny<RequiredRule<DateTime>>() ), Once() );
+                            rule.AllowEmptyStrings.Should().BeTrue();
                         } )
                 };
             }
@@ -248,32 +609,32 @@
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.CreditCard() ),
-                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<CreditCardRule>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<CreditCardRule>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.CreditCard( "Invalid" ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<CreditCardRule>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<CreditCardRule>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Email() ),
-                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<EmailRule>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<EmailRule>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Email( "Invalid" ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<EmailRule>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<EmailRule>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Phone() ),
-                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PhoneRule>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PhoneRule>() ), Once() ) )
                 };
                 yield return new object[]
                 {
                     new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Phone( "Invalid" ) ),
-                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PhoneRule>() ), Times.Once() ) )
+                    new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>( ( m, r ) => m.Verify( b => b.Apply( It.IsAny<PhoneRule>() ), Once() ) )
                 };
                 yield return new object[]
                 {
@@ -282,8 +643,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RegularExpressionRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<RegularExpressionRule>() ), Times.Once() );
-                            Assert.Equal( ".*", rule.Pattern );
+                            m.Verify( b => b.Apply( It.IsAny<RegularExpressionRule>() ), Once() );
+                            rule.Pattern.Should().Be( ".*" );
                         } )
                 };
                 yield return new object[]
@@ -293,8 +654,8 @@
                         ( m, r ) =>
                         {
                             var rule = (RegularExpressionRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<RegularExpressionRule>() ), Times.Once() );
-                            Assert.Equal( ".*", rule.Pattern );
+                            m.Verify( b => b.Apply( It.IsAny<RegularExpressionRule>() ), Once() );
+                            rule.Pattern.Should().Be( ".*" );
                         } )
                 };
                 yield return new object[]
@@ -304,8 +665,8 @@
                         ( m, r ) =>
                         {
                             var rule = (SizeRule<string>) r;
-                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Times.Once() );
-                            Assert.Equal( 0, rule.MinimumCount );
+                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumCount = 0, MaximumCount = int.MaxValue } );
                         } )
                 };
                 yield return new object[]
@@ -315,8 +676,8 @@
                         ( m, r ) =>
                         {
                             var rule = (SizeRule<string>) r;
-                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Times.Once() );
-                            Assert.Equal( 0, rule.MinimumCount );
+                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumCount = 0, MaximumCount = int.MaxValue } );
                         } )
                 };
                 yield return new object[]
@@ -326,9 +687,8 @@
                         ( m, r ) =>
                         {
                             var rule = (SizeRule<string>) r;
-                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Times.Once() );
-                            Assert.Equal( 0, rule.MinimumCount );
-                            Assert.Equal( 10, rule.MaximumCount );
+                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumCount = 0, MaximumCount = 10 } );
                         } )
                 };
                 yield return new object[]
@@ -338,9 +698,8 @@
                         ( m, r ) =>
                         {
                             var rule = (SizeRule<string>) r;
-                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Times.Once() );
-                            Assert.Equal( 0, rule.MinimumCount );
-                            Assert.Equal( 10, rule.MaximumCount );
+                            m.Verify( b => b.Apply( It.IsAny<SizeRule<string>>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumCount = 0, MaximumCount = 10 } );
                         } )
                 };
                 yield return new object[]
@@ -350,8 +709,8 @@
                         ( m, r ) =>
                         {
                             var rule = (StringLengthRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Times.Once() );
-                            Assert.Equal( 10, rule.MaximumLength );
+                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumLength = 0, MaximumLength = 10 } );
                         } )
                 };
                 yield return new object[]
@@ -361,8 +720,8 @@
                         ( m, r ) =>
                         {
                             var rule = (StringLengthRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Times.Once() );
-                            Assert.Equal( 10, rule.MaximumLength );
+                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumLength = 0, MaximumLength = 10 } );
                         } )
                 };
                 yield return new object[]
@@ -372,9 +731,8 @@
                         ( m, r ) =>
                         {
                             var rule = (StringLengthRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Times.Once() );
-                            Assert.Equal( 1, rule.MinimumLength );
-                            Assert.Equal( 10, rule.MaximumLength );
+                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumLength = 1, MaximumLength = 10 } );
                         } )
                 };
                 yield return new object[]
@@ -384,9 +742,8 @@
                         ( m, r ) =>
                         {
                             var rule = (StringLengthRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Times.Once() );
-                            Assert.Equal( 1, rule.MinimumLength );
-                            Assert.Equal( 10, rule.MaximumLength );
+                            m.Verify( b => b.Apply( It.IsAny<StringLengthRule>() ), Once() );
+                            rule.ShouldBeEquivalentTo( new { MinimumLength = 1, MaximumLength = 10 } );
                         } )
                 };
                 yield return new object[]
@@ -396,8 +753,8 @@
                         ( m, r ) =>
                         {
                             var rule = (UrlRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Times.Once() );
-                            Assert.Equal( UriKind.Absolute, rule.Kind );
+                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Once() );
+                            rule.Kind.Should().Be( Absolute );
                         } )
                 };
                 yield return new object[]
@@ -407,368 +764,33 @@
                         ( m, r ) =>
                         {
                             var rule = (UrlRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Times.Once() );
-                            Assert.Equal( UriKind.Absolute, rule.Kind );
+                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Once() );
+                            rule.Kind.Should().Be( Absolute );
                         } )
                 };
                 yield return new object[]
                 {
-                    new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Url( UriKind.RelativeOrAbsolute ) ),
+                    new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Url( RelativeOrAbsolute ) ),
                     new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>(
                         ( m, r ) =>
                         {
                             var rule = (UrlRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Times.Once() );
-                            Assert.Equal( UriKind.RelativeOrAbsolute, rule.Kind );
+                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Once() );
+                            rule.Kind.Should().Be( RelativeOrAbsolute );
                         } )
                 };
                 yield return new object[]
                 {
-                    new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Url( UriKind.RelativeOrAbsolute, "Invalid" ) ),
+                    new Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>>( b => b.Url( RelativeOrAbsolute, "Invalid" ) ),
                     new Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>>(
                         ( m, r ) =>
                         {
                             var rule = (UrlRule) r;
-                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Times.Once() );
-                            Assert.Equal( UriKind.RelativeOrAbsolute, rule.Kind );
+                            m.Verify( b => b.Apply( It.IsAny<UrlRule>() ), Once() );
+                            rule.Kind.Should().Be( RelativeOrAbsolute );
                         } )
                 };
             }
-        }
-
-        [Theory( DisplayName = "extension methods should not allow null builder" )]
-        [MemberData( "NullBuilderData" )]
-        public void ExtensionMethodsShouldNotAllowNullBuilder( Action<IValidationBuilder<StubModel, DateTime>> test )
-        {
-            // arrange
-            IValidationBuilder<StubModel, DateTime> builder = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( builder ) );
-
-            // assert
-            Assert.Equal( "builder", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "extension methods with string should not allow null builder" )]
-        [MemberData( "NullBuilderWithStringData" )]
-        public void ExtensionMethodsWithStringShouldNotAllowNullBuilder( Action<IValidationBuilder<StubModel, string>> test )
-        {
-            // arrange
-            IValidationBuilder<StubModel, string> builder = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( builder ) );
-
-            // assert
-            Assert.Equal( "builder", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "extension methods should not allow null or empty error message" )]
-        [MemberData( "NullOrEmptyErrorMessageData" )]
-        public void ExtensionMethodsShouldNotAllowNullOrEmptyErrorMessage( Action test )
-        {
-            // arrange
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( test );
-
-            // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "extension method should apply rule" )]
-        [MemberData( "BuilderData" )]
-        public void ExtensionMethodShouldApplyRule(
-            Func<IValidationBuilder<StubModel, DateTime>, IValidationBuilder<StubModel, DateTime>> test,
-            Action<Mock<IValidationBuilder<StubModel, DateTime>>, IRule<Property<DateTime>, IValidationResult>> verify )
-        {
-            // arrange
-            var builder = new Mock<IValidationBuilder<StubModel, DateTime>>();
-            IRule<Property<DateTime>, IValidationResult> rule = null;
-
-            builder.Setup( b => b.Apply( It.IsAny<IRule<Property<DateTime>, IValidationResult>>() ) )
-                   .Callback<IRule<Property<DateTime>, IValidationResult>>( r => rule = r )
-                   .Returns( () => builder.Object );
-
-            // act
-            var result = test( builder.Object );
-
-            // assert
-            Assert.Same( result, builder.Object );
-            Assert.NotNull( rule );
-            verify( builder, rule );
-        }
-
-        [Theory( DisplayName = "extension method with string should apply rule" )]
-        [MemberData( "BuilderWithStringData" )]
-        public void ExtensionMethodWithStringShouldApplyRule(
-            Func<IValidationBuilder<StubModel, string>, IValidationBuilder<StubModel, string>> test,
-            Action<Mock<IValidationBuilder<StubModel, string>>, IRule<Property<string>, IValidationResult>> verify )
-        {
-            // arrange
-            var builder = new Mock<IValidationBuilder<StubModel, string>>();
-            IRule<Property<string>, IValidationResult> rule = null;
-
-            builder.Setup( b => b.Apply( It.IsAny<IRule<Property<string>, IValidationResult>>() ) )
-                   .Callback<IRule<Property<string>, IValidationResult>>( r => rule = r )
-                   .Returns( () => builder.Object );
-
-            // act
-            var result = test( builder.Object );
-
-            // assert
-            Assert.Same( result, builder.Object );
-            Assert.NotNull( rule );
-            verify( builder, rule );
-        }
-
-        [Fact( DisplayName = "source property < target property = true" )]
-        public void LessThanShouldEvaluateSucess()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel() { StartDate = DateTime.Today.AddDays( -1 ), EndDate = DateTime.Today };
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.StartDate ).LessThan( m => m.EndDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.True( valid );
-            Assert.Equal( 0, results.Count );
-        }
-
-        [Fact( DisplayName = "source property < target property = false" )]
-        public void LessThanShouldEvaluateExpectedResult()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel();
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.StartDate ).LessThan( m => m.EndDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( "The StartDate field must be less than the EndDate field.", results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "StartDate", "EndDate" } ) );
-        }
-
-        [Fact( DisplayName = "source property < target property should use custom error message" )]
-        public void LessThanShouldEvaluateWithCustomErrorMessage()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel();
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-            var expected = "Invalid";
-
-            validator.For<StubModel>().Property( m => m.StartDate ).LessThan( m => m.EndDate, expected );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( expected, results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "StartDate", "EndDate" } ) );
-        }
-
-        [Fact( DisplayName = "source property <= target property = true" )]
-        public void LessThanOrEqualToShouldEvaluateSuccess()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel();
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.StartDate ).LessThanOrEqualTo( m => m.EndDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.True( valid );
-            Assert.Equal( 0, results.Count );
-        }
-
-        [Fact( DisplayName = "source property <= target property = false" )]
-        public void LessThanOrEqualToShouldEvaluateExpectedResult()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.StartDate ).LessThanOrEqualTo( m => m.EndDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( "The StartDate field must be less than or equal to the EndDate field.", results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "StartDate", "EndDate" } ) );
-        }
-
-        [Fact( DisplayName = "source property <= target property should use custom error message" )]
-        public void LessThanOrEqualToShouldEvaluateWithCustomErrorMessage()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-            var expected = "Invalid";
-
-            validator.For<StubModel>().Property( m => m.StartDate ).LessThanOrEqualTo( m => m.EndDate, expected );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( expected, results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "StartDate", "EndDate" } ) );
-        }
-
-        [Fact( DisplayName = "source property > target property = true" )]
-        public void GreaterThanShouldEvaluateSuccess()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel() { StartDate = DateTime.Today.AddDays( -1 ), EndDate = DateTime.Today };
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThan( m => m.StartDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.True( valid );
-            Assert.Equal( 0, results.Count );
-        }
-
-        [Fact( DisplayName = "source property > target property = false" )]
-        public void GreaterThanShouldEvaluateExpectedResult()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel();
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThan( m => m.StartDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( "The EndDate field must be greater than the StartDate field.", results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "EndDate", "StartDate" } ) );
-        }
-
-        [Fact( DisplayName = "source property > target property should use custom error message" )]
-        public void GreaterThanShouldEvaluateWithCustomErrorMessage()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel();
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-            var expected = "Invalid";
-
-            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThan( m => m.StartDate, expected );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( expected, results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "EndDate", "StartDate" } ) );
-        }
-
-        [Fact( DisplayName = "source property >= target property = true" )]
-        public void GreaterThanOrEqualToShouldEvaluateSuccess()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel();
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThanOrEqualTo( m => m.StartDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.True( valid );
-            Assert.Equal( 0, results.Count );
-        }
-
-        [Fact( DisplayName = "source property >= target property = false" )]
-        public void GreaterThanOrEqualToShouldEvaluateExpectedResult()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-
-            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThanOrEqualTo( m => m.StartDate );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( "The EndDate field must be greater than or equal to the StartDate field.", results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "EndDate", "StartDate" } ) );
-        }
-
-        [Fact( DisplayName = "source property >= target property should use custom error message" )]
-        public void GreaterThanOrEqualToShouldEvaluateWithCustomErrorMessage()
-        {
-            // arrange
-            var validator = new Validator();
-            var instance = new StubModel() { StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays( -1 ) };
-            var context = validator.CreateContext( instance, null );
-            var results = new List<IValidationResult>();
-            var expected = "Invalid";
-
-            validator.For<StubModel>().Property( m => m.EndDate ).GreaterThanOrEqualTo( m => m.StartDate, expected );
-
-            // act
-            var valid = validator.TryValidateObject( instance, context, results );
-
-            // assert
-            Assert.False( valid );
-            Assert.Equal( 1, results.Count );
-            Assert.Equal( expected, results[0].ErrorMessage );
-            Assert.True( results[0].MemberNames.SequenceEqual( new[] { "EndDate", "StartDate" } ) );
         }
     }
 }

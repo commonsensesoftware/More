@@ -1,4 +1,4 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
     using System;
     using System.Collections.Generic;
@@ -12,8 +12,8 @@
     /// </summary>
     public class ExtensionMethodToPropertyDescriptorT1T2Test
     {
-        [Fact( DisplayName = "new extension method property descriptor should not allow null or empty name" )]
-        public void ConstructorShouldNotAllowNullOrEmptyPropertyName()
+        [Fact]
+        public void new_extension_method_property_descriptor_should_not_allow_null_or_empty_name()
         {
             Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( null, o => o ) );
             Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( "", o => o ) );
@@ -21,59 +21,59 @@
             Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( "", o => o, DefaultAction.None ) );
         }
 
-        [Fact( DisplayName = "can reset should return false" )]
-        public void CanResetValueShouldAlwaysReturnFalse()
+        [Fact]
+        public void can_reset_should_return_false()
         {
             var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
             Assert.False( target.CanResetValue( null ) );
             Assert.False( target.CanResetValue( new object() ) );
         }
 
-        [Fact( DisplayName = "should serialize value should return false" )]
-        public void ShouldSerializeValueShouldAlwaysReturnFalse()
+        [Fact]
+        public void should_serialize_value_should_return_false()
         {
             var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
             Assert.False( target.ShouldSerializeValue( null ) );
             Assert.False( target.ShouldSerializeValue( new object() ) );
         }
 
-        [Fact( DisplayName = "supports change events should return false" )]
-        public void SupportsChangeEventsShouldAlwaysReturnFalse()
+        [Fact]
+        public void supports_change_events_should_return_false()
         {
             var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
             Assert.False( target.SupportsChangeEvents );
         }
 
-        [Fact( DisplayName = "component type should return expected value" )]
-        public void ComponentTypeShouldReturnExpectedValue()
+        [Fact]
+        public void component_type_should_return_expected_value()
         {
             var target = new ExtensionMethodToPropertyDescriptor<string, object>( "Name", o => o );
             Assert.Equal( typeof( string ), target.ComponentType );
         }
 
-        [Fact( DisplayName = "property type should return expected value" )]
-        public void PropertyTypeShouldReturnExpectedValue()
+        [Fact]
+        public void property_type_should_return_expected_value()
         {
             var target = new ExtensionMethodToPropertyDescriptor<object, string>( "Name", o => o.ToString() );
             Assert.Equal( typeof( string ), target.PropertyType );
         }
 
-        [Fact( DisplayName = "is read-only should be true when mutator is unset" )]
-        public void IsReadOnlyShouldBeTrueWhenMutatorIsUnset()
+        [Fact]
+        public void is_readX2Donly_should_be_true_when_mutator_is_unset()
         {
             var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
             Assert.True( target.IsReadOnly );
         }
 
-        [Fact( DisplayName = "is read-only should be false when mutator is set" )]
-        public void IsReadOnlyShouldBeFalseWhenMutatorIsSet()
+        [Fact]
+        public void is_readX2Donly_should_be_false_when_mutator_is_set()
         {
             var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o, DefaultAction.None );
             Assert.False( target.IsReadOnly );
         }
 
-        [Fact( DisplayName = "get value should return expected value" )]
-        public void GetValueShouldReturnExpectedValue()
+        [Fact]
+        public void get_value_should_return_expected_value()
         {
             var expected = "test";
             var component = new Dictionary<string, object>() { { "Name", expected } };
@@ -82,8 +82,8 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact( DisplayName = "set value should assign expected value" )]
-        public void SetValueShouldReturnExpectedValue()
+        [Fact]
+        public void set_value_should_assign_expected_value()
         {
             var expected = "test";
             var component = new Dictionary<string, object>() { { "Name", null } };
@@ -93,8 +93,8 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact( DisplayName = "set value should throw exception when property is read-only" )]
-        public void SetValueShouldThrowExceptionWhenPropertyIsReadOnly()
+        [Fact]
+        public void set_value_should_throw_exception_when_property_is_readX2Donly()
         {
             var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
             Assert.Throws<InvalidOperationException>( () => target.SetValue( new object(), new object() ) );

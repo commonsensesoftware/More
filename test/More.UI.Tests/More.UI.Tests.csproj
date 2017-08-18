@@ -1,158 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D9FEBDDD-2304-45F2-946E-A2FD2D5C01A8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>More</RootNamespace>
-    <AssemblyName>UI.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Configuration">
+    <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <ProjectReference Include="..\..\src\More.UI\More.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.assert, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.assert.2.1.0\lib\dotnet\xunit.assert.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.core, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.1.0\lib\dotnet\xunit.core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.execution.2.1.0\lib\net45\xunit.execution.desktop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise />
-  </Choose>
+
   <ItemGroup>
-    <Compile Include="ComponentModel\ClickableItemTTest.cs" />
-    <Compile Include="ComponentModel\ExpandableItemTTest.cs" />
-    <Compile Include="ComponentModel\HierarchicalItemCollectionTTest.cs" />
-    <Compile Include="ComponentModel\HierarchicalItemTTest.cs" />
-    <Compile Include="ComponentModel\SelectableItemCollectionDebugViewTTest.cs" />
-    <Compile Include="ComponentModel\SelectableItemCollectionTTest.cs" />
-    <Compile Include="ComponentModel\SelectableItemTTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Windows.Input\AsyncCancelableCommandTest.cs" />
-    <Compile Include="Windows.Input\AsyncCommandTTest.cs" />
-    <Compile Include="Windows.Input\AsyncDataItemCommandT1T2Test.cs" />
-    <Compile Include="Windows.Input\AsyncNamedCommandTTest.cs" />
-    <Compile Include="Windows.Input\AsyncNamedDataItemCommandT1T2Test.cs" />
-    <Compile Include="Windows.Input\CancelableCommandTest.cs" />
-    <Compile Include="Windows.Input\CommandInterceptorTTest.cs" />
-    <Compile Include="Windows.Input\CommandTTest.cs" />
-    <Compile Include="Windows.Input\ContinuableInteractionRequestT1T2Test.cs" />
-    <Compile Include="Windows.Input\CredentialInteractionTest.cs" />
-    <Compile Include="Windows.Input\DataItemCommandT1T2Test.cs" />
-    <Compile Include="Windows.Input\INotifyCommandChangedExtensionsTest.cs" />
-    <Compile Include="Windows.Input\InteractionExtensionsTest.cs" />
-    <Compile Include="Windows.Input\InteractionRequestedEventArgsTest.cs" />
-    <Compile Include="Windows.Input\InteractionRequestExtensionsTest.cs" />
-    <Compile Include="Windows.Input\InteractionRequestTTest.cs" />
-    <Compile Include="Windows.Input\InteractionTest.cs" />
-    <Compile Include="Windows.Input\NamedCommandTTest.cs" />
-    <Compile Include="Windows.Input\NamedDataItemCommandT1T2Test.cs" />
-    <Compile Include="Windows.Input\NavigateInteractionTest.cs" />
-    <Compile Include="Windows.Input\OpenFileInteractionRequestTest.cs" />
-    <Compile Include="Windows.Input\OpenFileInteractionTest.cs" />
-    <Compile Include="Windows.Input\PrintInteractionTest.cs" />
-    <Compile Include="Windows.Input\WebAuthenticateInteractionRequestTest.cs" />
-    <Compile Include="Windows.Input\SelectFolderInteractionRequestTest.cs" />
-    <Compile Include="Windows.Input\SaveFileInteractionRequestTest.cs" />
-    <Compile Include="Windows.Input\SaveFileInteractionTest.cs" />
-    <Compile Include="Windows.Input\SelectFolderInteractionTest.cs" />
-    <Compile Include="Windows.Input\TextInputInteractionTest.cs" />
-    <Compile Include="Windows.Input\WebAuthenticateInteractionTest.cs" />
-    <Compile Include="Windows.Input\WindowCloseInteractionTest.cs" />
+    <PackageReference Include="System.Runtime" Version="4.1.0" />
+    <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
+    <PackageReference Include="more.xunit" Version="2.2.2" />
+    <PackageReference Include="more.xunit.runner.visualstudio" Version="2.2.1" />
+    <PackageReference Include="FluentAssertions" Version="4.19.3" />
+    <PackageReference Include="Moq" Version="4.7.99" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core\Core.csproj">
-      <Project>{1a3f1bc7-4efe-4442-868f-fb1ef9d5f23d}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\UI\UI\UI.csproj">
-      <Project>{9aca8e82-303b-4114-9e0a-84a3ad67f766}</Project>
-      <Name>UI</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

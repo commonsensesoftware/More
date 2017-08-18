@@ -1,4 +1,4 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
     using System;
     using System.Collections.Generic;
@@ -26,8 +26,8 @@
     /// </summary>
     public class CustomTypeDescriptorTTest
     {
-        [Fact( DisplayName = "get class name extension method should return expected value" )]
-        public void GetClassNameShouldReturnTypeArgumentName()
+        [Fact]
+        public void get_class_name_extension_method_should_return_expected_value()
         {
             var expected = TypeDescriptor.GetClassName( typeof( object ) );
             var target = new CustomTypeDescriptor<object>();
@@ -35,8 +35,8 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact( DisplayName = "get property owner should return expected value" )]
-        public void GetPropertyOwnerShouldReturnExpectedValue()
+        [Fact]
+        public void get_property_owner_should_return_expected_value()
         {
             var parent = TypeDescriptor.GetProvider( typeof( string ) ).GetTypeDescriptor( typeof( string ) );
             var target = new CustomTypeDescriptor<string>( parent );
@@ -45,8 +45,8 @@
             Assert.Equal( target, owner );
         }
 
-        [Fact( DisplayName = "add extension property should not allow null or empty name" )]
-        public void AddExtensionPropertyShouldNotAllowNullOrEmptyPropertyName()
+        [Fact]
+        public void add_extension_property_should_not_allow_null_or_empty_name()
         {
             var target = new CustomTypeDescriptor<object>();
             var ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( null, ObjectExtensions.GetName ) );
@@ -62,8 +62,8 @@
             Assert.Equal( "propertyName", ex.ParamName );
         }
 
-        [Fact( DisplayName = "add extension property should not allow null accessor" )]
-        public void AddExtensionPropertyShouldNotAllowNullAccessor()
+        [Fact]
+        public void add_extension_property_should_not_allow_null_accessor()
         {
             var target = new CustomTypeDescriptor<object>();
             var ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( "Name", (Func<object,string>) null ) );
@@ -73,8 +73,8 @@
             Assert.Equal( "accessor", ex.ParamName );
         }
 
-        [Fact( DisplayName = "get properties should include extension properties" )]
-        public void GetPropertiesShouldIncludeExtensionProperties()
+        [Fact]
+        public void get_properties_should_include_extension_properties()
         {
             var parent = TypeDescriptor.GetProvider( typeof( string ) ).GetTypeDescriptor( typeof( string ) );
             var target = new CustomTypeDescriptor<string>( parent );
@@ -87,8 +87,8 @@
             Assert.Equal( "Name", properties[1].Name );
         }
 
-        [Fact( DisplayName = "get properties should with filter should include extension properties" )]
-        public void GetPropertiesWithFilterShouldIncludeExtensionProperties()
+        [Fact]
+        public void get_properties_should_with_filter_should_include_extension_properties()
         {
             var target = new CustomTypeDescriptor<string>();
 

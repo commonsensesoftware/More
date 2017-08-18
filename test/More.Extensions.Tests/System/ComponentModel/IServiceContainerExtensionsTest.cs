@@ -1,4 +1,4 @@
-﻿namespace System.ComponentModel
+namespace System.ComponentModel
 {
     using Moq;
     using System;
@@ -18,8 +18,8 @@
         {
         }
 
-        [Fact( DisplayName = "add service should register callback" )]
-        public void AddServiceShouldRegisterCallback()
+        [Fact]
+        public void add_service_should_register_callback()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -33,8 +33,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), false ), Times.Once() );
         }
 
-        [Fact( DisplayName = "add service should register callback with promotion" )]
-        public void AddServiceShouldRegisterCallbackWithPromotion()
+        [Fact]
+        public void add_service_should_register_callback_with_promotion()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -48,8 +48,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), true ), Times.Once() );
         }
 
-        [Fact( DisplayName = "add service should register instance" )]
-        public void AddServiceShouldRegisterInstance()
+        [Fact]
+        public void add_service_should_register_instance()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -64,8 +64,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Times.Once() );
         }
 
-        [Fact( DisplayName = "add service should register instance with promotion" )]
-        public void AddServiceShouldRegisterInstanceWithPromotion()
+        [Fact]
+        public void add_service_should_register_instance_with_promotion()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -80,8 +80,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Times.Once() );
         }
 
-        [Fact( DisplayName = "add service should register instance" )]
-        public void AddServiceShouldRegisterInstanceOfT()
+        [Fact]
+        public void add_service_should_register_instance()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -96,8 +96,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Times.Once() );
         }
 
-        [Fact( DisplayName = "add service should register instance with promotion" )]
-        public void AddServiceShouldRegisterInstanceOfTWithPromotion()
+        [Fact]
+        public void add_service_should_register_instance_with_promotion()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -112,8 +112,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Times.Once() );
         }
 
-        [Fact( DisplayName = "remove service should unregister service type" )]
-        public void RemoveServiceShouldUnregisterServiceType()
+        [Fact]
+        public void remove_service_should_unregister_service_type()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -127,8 +127,8 @@
             target.Verify( sc => sc.RemoveService( typeof( IServiceProvider ), false ), Times.Once() );
         }
 
-        [Fact( DisplayName = "remove service should unregister service type with promotion" )]
-        public void RemoveServiceShouldUnregisterServiceTypeWithPromotion()
+        [Fact]
+        public void remove_service_should_unregister_service_type_with_promotion()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -142,8 +142,8 @@
             target.Verify( sc => sc.RemoveService( typeof( IServiceProvider ), true ), Times.Once() );
         }
 
-        [Fact( DisplayName = "replace service should re-register callback" )]
-        public void ReplaceServiceShouldReregisterCallback()
+        [Fact]
+        public void replace_service_should_reX2Dregister_callback()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -159,8 +159,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), false ), Times.Once() );
         }
 
-        [Fact( DisplayName = "replace service should re-register callback with promotion" )]
-        public void ReplaceServiceShouldReregisterCallbackWithPromotion()
+        [Fact]
+        public void replace_service_should_reX2Dregister_callback_with_promotion()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -176,8 +176,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), true ), Times.Once() );
         }
 
-        [Fact( DisplayName = "replace service should re-register instance" )]
-        public void ReplaceServiceShouldReregisterInstance()
+        [Fact]
+        public void replace_service_should_reX2Dregister_instance()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -194,8 +194,8 @@
             target.Verify( sc => sc.AddService( typeof( Foo ), foo, false ), Times.Once() );
         }
 
-        [Fact( DisplayName = "replace service should re-register instance with promotion" )]
-        public void ReplaceServiceShouldReregisterInstanceWithPromotion()
+        [Fact]
+        public void replace_service_should_reX2Dregister_instance_with_promotion()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -212,8 +212,8 @@
             target.Verify( sc => sc.AddService( typeof( Foo ), foo, true ), Times.Once() );
         }
 
-        [Fact( DisplayName = "replace service should re-register instance" )]
-        public void ReplaceServiceShouldReregisterInstanceOfT()
+        [Fact]
+        public void replace_service_should_reX2Dregister_instance()
         {
             // arrange
             var target = new Mock<IServiceContainer>();
@@ -230,8 +230,8 @@
             target.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Times.Once() );
         }
 
-        [Fact( DisplayName = "replace service should re-register instance with promotion" )]
-        public void ReplaceServiceShouldReregisterInstanceOfTWithPromotion()
+        [Fact]
+        public void replace_service_should_reX2Dregister_instance_with_promotion()
         {
             // arrange
             var target = new Mock<IServiceContainer>();

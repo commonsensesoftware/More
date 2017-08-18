@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\More.Validation\More.Validation.csproj" />
+    <ProjectReference Include="..\..\src\More.Extensions\More.Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +20,11 @@
     <PackageReference Include="more.xunit.runner.visualstudio" Version="2.2.1" />
     <PackageReference Include="FluentAssertions" Version="4.19.3" />
     <PackageReference Include="Moq" Version="4.7.99" />
+  </ItemGroup>
+
+  <ItemGroup Label="Fakes">
+    <Fakes Include="Fakes\*.fakes" />
+    <Reference Include="FakesAssemblies\*.dll" />
   </ItemGroup>
 
 </Project>

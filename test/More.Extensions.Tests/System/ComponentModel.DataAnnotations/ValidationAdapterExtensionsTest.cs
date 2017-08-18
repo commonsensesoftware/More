@@ -1,4 +1,4 @@
-﻿namespace System.ComponentModel.DataAnnotations
+namespace System.ComponentModel.DataAnnotations
 {
     using More;
     using System.Collections.Generic;
@@ -9,8 +9,8 @@
     /// </summary>
     public class ValidationAdapterExtensionsTest
     {
-        [Fact( DisplayName = "adapt should return validation context adapter" )]
-        public void AdaptShouldReturnValidationContextAdapter()
+        [Fact]
+        public void adapt_should_return_validation_context_adapter()
         {
             // arrange
             var instance = new object();
@@ -34,8 +34,8 @@
             Assert.Same( expected.GetService( typeof( object ) ), actual.GetService( typeof( object ) ) );
         }
 
-        [Fact( DisplayName = "adapt should return validation result adapter" )]
-        public void AdaptShouldReturnValidationResultAdapter()
+        [Fact]
+        public void adapt_should_return_validation_result_adapter()
         {
             // arrange
             var expected = new ValidationResult( "Invalid", new[] { "Foo", "Bar" } );

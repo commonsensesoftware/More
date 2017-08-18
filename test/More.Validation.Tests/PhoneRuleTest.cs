@@ -1,90 +1,86 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
+    using static ValidationResult;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="PhoneRule"/>.
-    /// </summary>
     public class PhoneRuleTest
     {
-        [Theory( DisplayName = "new phone rule should not allow null or empty error message" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void EvaluateShouldNotAllowNullOrEmptyErrorMessage( string errorMessage )
+        public void new_phone_rule_should_not_allow_null_or_empty_error_message( string errorMessage )
         {
             // arrange
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new PhoneRule( errorMessage ) );
+            Action @new = () => new PhoneRule( errorMessage );
 
             // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( errorMessage ) );
         }
 
-        [Fact( DisplayName = "phone rule should evaluate success for null value" )]
-        public void EvaluateShouldReturnSuccessForNullOrEmpty()
+        [Fact]
+        public void phone_rule_should_evaluate_success_for_null_value()
         {
             // arrange
-            string value = null;
+            var value = default( string );
             var rule = new PhoneRule();
             var property = new Property<string>( "Phone", value );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "phone rule should evaluate invalid value" )]
-        public void EvaluateShouldReturnExpectedResultForInvalidValue()
+        [Fact]
+        public void phone_rule_should_evaluate_invalid_value()
         {
             // arrange
             var rule = new PhoneRule();
             var property = new Property<string>( "Phone", "foo" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( "The Phone field is not a valid phone number.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "Phone", actual.MemberNames.Single() );
+            result.ShouldBeEquivalentTo(
+                new
+                {
+                    ErrorMessage = "The Phone field is not a valid phone number.",
+                    MemberNames = new[] { "Phone" }
+                } );
         }
 
-        [Fact( DisplayName = "phone rule should use custom error message" )]
-        public void EvaluateShouldUseCustomErrorMessage()
+        [Fact]
+        public void phone_rule_should_use_custom_error_message()
         {
             // arrange
-            var expected = "Test";
-            var rule = new PhoneRule( expected );
+            var rule = new PhoneRule( errorMessage: "Test" );
             var property = new Property<string>( "Phone", "425-555-abcde" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Test" );
         }
 
-        [Fact( DisplayName = "phone rule should evaluate valid value" )]
-        public void EvaluateShouldReturnExpectedResultForValidValue()
+        [Fact]
+        public void phone_rule_should_evaluate_valid_value()
         {
             // arrange
             var rule = new PhoneRule();
             var property = new Property<string>( "Phone", "916-555-5555" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
     }
 }

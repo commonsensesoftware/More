@@ -1,5 +1,6 @@
 ﻿namespace Microsoft.QualityTools.Testing.Fakes.Stubs
 {
+    using FluentAssertions;
     using System;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -12,23 +13,25 @@
     /// </summary>
     public static class StubExtensions
     {
-        private static object GetLiteral( this Expression expression )
+        static object GetLiteral( this Expression expression )
         {
             var lambda = Expression.Lambda( typeof( Func<object> ), Expression.Convert( expression, typeof( object ) ) );
             var eval = (Func<object>) lambda.Compile();
             return eval();
         }
 
-        private static void VerifyMethod( this StubObserver observer, Type declaringType, MethodCallExpression call, int times )
+        static void VerifyMethod( this StubObserver observer, Type declaringType, MethodCallExpression call, int times )
         {
             var calls = observer.GetCalls().Where( c => c.StubbedType.Equals( declaringType ) && c.StubbedMethod.Equals( call.Method ) ).ToArray();
             var userMessage = $"The method {call.Method.Name} was expected to be called {times} time(s), but was actually called {calls.Length} time(s).";
 
-            Assert.True( calls.Length == times, userMessage );
+            call.Length.Should().Be( times, userMessage );
 
             // there are no parameters to verify (e.g. no calls or multiple calls; thus the expression parameters can't be verified)
             if ( times != 1 )
+            {
                 return;
+            }
 
             var parameters = new Lazy<ParameterInfo[]>( call.Method.GetParameters );
             var args = calls[0].GetArguments();
@@ -42,11 +45,13 @@
                     // if the parameter is an out parameter, we cannot validate the value at return.
                     // IStubObserver only supports entering a method, not existing.
                     if ( parameters.Value[i].IsOut )
+                    {
                         continue;
+                    }
                 }
 
                 var expected = call.Arguments[i].GetLiteral();
-                Assert.True( object.Equals( expected, actual ), userMessage );
+                actual.Should().Be( actual, userMessage );
             }
         }
 
@@ -63,15 +68,15 @@
             Contract.Requires( observer != null );
             Contract.Requires( times >= 0 );
 
-            var source = observer as StubObserver;
+            if ( observer is StubObserver source )
+            {
+                // TODO: add support for properties when needed
+                var method = (MethodCallExpression) expression.Body;
+                source.VerifyMethod( typeof( T ), method, times );
+                return;
+            }
 
-            if ( source == null )
-                throw new Exception( $"The type {observer.GetType()} was unexpected. {typeof( StubObserver )} is assumed and the only {typeof( IStubObserver )} supported." );
-
-            // TODO: add support for properties when needed
-
-            var method = (MethodCallExpression) expression.Body;
-            source.VerifyMethod( typeof( T ), method, times );
+            throw new Exception( $"The type {observer.GetType()} was unexpected. {typeof( StubObserver )} is assumed and the only {typeof( IStubObserver )} supported." );
         }
 
         /// <summary>
@@ -90,7 +95,9 @@
             var observer = stub.InstanceObserver;
 
             if ( observer == null )
+            {
                 throw new Exception( $"An {typeof( IStubObserver )} has not been setup." );
+            }
 
             stub.InstanceObserver.Verify( expression, times );
         }

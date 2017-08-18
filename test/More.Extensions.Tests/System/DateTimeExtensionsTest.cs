@@ -1,4 +1,4 @@
-﻿namespace System
+namespace System
 {
     using More.Globalization;
     using System;
@@ -10,8 +10,8 @@
     /// </summary>
     public class DateTimeExtensionsTest
     {
-        [Fact( DisplayName = "first day of week in month with calendar should return expected result" )]
-        public void FirstDayOfWeekInMonthWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void first_day_of_week_in_month_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -20,8 +20,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "last day of week in month with calendar should return expected result" )]
-        public void LastDayOfWeekInMonthWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void last_day_of_week_in_month_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -30,8 +30,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "day of week with calendar should return expected result" )]
-        public void DayOfWeekInMonthWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void day_of_week_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -40,8 +40,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of month with calendar should return expected result" )]
-        public void StartOfMonthWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_month_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 26 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -50,8 +50,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of quarter with calendar should return expected result" )]
-        public void StartOfQuarterWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_quarter_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -60,8 +60,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of semester with calendar should return expected result" )]
-        public void StartOfSemesterWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_semester_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -70,8 +70,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of year with calendar should return expected result" )]
-        public void StartOfYearWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_year_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -80,8 +80,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of month with calendar should return expected result" )]
-        public void EndOfMonthWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_month_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -90,8 +90,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of quarter with calendar should return expected result" )]
-        public void EndOfQuarterWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_quarter_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -100,8 +100,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of semester with calendar should return expected result" )]
-        public void EndOfSemesterWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_semester_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -110,8 +110,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of year with calendar should return expected result" )]
-        public void EndOfYearWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_year_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -120,8 +120,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "week with calendar should return expected result" )]
-        public void WeekWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void week_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -129,8 +129,8 @@
             Assert.Equal( 35, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "month with calendar should return expected result" )]
-        public void MonthWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void month_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 6, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -138,8 +138,8 @@
             Assert.Equal( 12, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "quarter with calendar should return expected result" )]
-        public void QuarterWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void quarter_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -147,8 +147,8 @@
             Assert.Equal( 3, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "semester with calendar should return expected result" )]
-        public void SemesterWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void semester_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -156,8 +156,8 @@
             Assert.Equal( 2, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "year with calendar should return expected result" )]
-        public void YearWithCalendarShouldReturnExpectedResult()
+        [Fact]
+        public void year_with_calendar_should_return_expected_result()
         {
             var date = new DateTime( 2013, 7, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );

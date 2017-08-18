@@ -1,90 +1,86 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
+    using static ValidationResult;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="EmailRule"/>.
-    /// </summary>
     public class EmailRuleTest
     {
-        [Theory( DisplayName = "new email rule should not allow null or empty error message" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void EvaluateShouldNotAllowNullOrEmptyErrorMessage( string errorMessage )
+        public void new_email_rule_should_not_allow_null_or_empty_error_message( string errorMessage )
         {
             // arrange
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new EmailRule( errorMessage ) );
+            Action @new = () => new EmailRule( errorMessage );
 
             // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( errorMessage ) );
         }
 
-        [Fact( DisplayName = "email rule should evaluate success for null value" )]
-        public void EvaluateShouldReturnSuccessForNullOrEmpty()
+        [Fact]
+        public void email_rule_should_evaluate_success_for_null_value()
         {
             // arrange
-            string value = null;
+            var value = default( string );
             var rule = new EmailRule();
             var property = new Property<string>( "Email", value );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "email rule should evaluate invalid value" )]
-        public void EvaluateShouldReturnExpectedResultForInvalidValue()
+        [Fact]
+        public void email_rule_should_evaluate_invalid_value()
         {
             // arrange
             var rule = new EmailRule();
             var property = new Property<string>( "Email", "foo" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( "The Email field is not a valid e-mail address.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "Email", actual.MemberNames.Single() );
+            result.ShouldBeEquivalentTo(
+                new
+                {
+                    ErrorMessage = "The Email field is not a valid e-mail address.",
+                    MemberNames = new[] { "Email" }
+                } );
         }
 
-        [Fact( DisplayName = "email rule should use custom error message" )]
-        public void EvaluateShouldUseCustomErrorMessage()
+        [Fact]
+        public void email_rule_should_use_custom_error_message()
         {
             // arrange
-            var expected = "Test";
-            var rule = new EmailRule( expected );
+            var rule = new EmailRule( errorMessage: "Test" );
             var property = new Property<string>( "Email", "invalid" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Test" );
         }
 
-        [Fact( DisplayName = "email rule should evaluate valid value" )]
-        public void EvaluateShouldReturnExpectedResultForValidValue()
+        [Fact]
+        public void email_rule_should_evaluate_valid_value()
         {
             // arrange
             var rule = new EmailRule();
             var property = new Property<string>( "Email", "test@somewhere.com" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
     }
 }

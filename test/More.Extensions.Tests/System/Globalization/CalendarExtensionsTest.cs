@@ -1,4 +1,4 @@
-﻿namespace System.Globalization
+namespace System.Globalization
 {
     using Microsoft.QualityTools.Testing.Fakes;
     using More.Globalization;
@@ -12,8 +12,8 @@
     /// </summary>
     public class CalendarExtensionsTest
     {
-        [Fact( DisplayName = "first day of week in month should return correct result" )]
-        public void FirstDayOfWeekInMonthShouldReturnExpectedResult()
+        [Fact]
+        public void first_day_of_week_in_month_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -22,8 +22,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "last date of week in month should return correct result" )]
-        public void LastDateOfWeekInMonthShouldReturnExpectedResult()
+        [Fact]
+        public void last_date_of_week_in_month_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -32,8 +32,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "day of week in month should return correct result" )]
-        public void DayOfWeekInMonthShouldReturnExpectedResult()
+        [Fact]
+        public void day_of_week_in_month_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -42,8 +42,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of week should return correct result" )]
-        public void StartOfWeekShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_week_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -52,8 +52,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of week with first day of week should return correct result" )]
-        public void StartOfWeekWithCustomFirstDayOfWeekShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_week_with_first_day_of_week_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -62,8 +62,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of month should return correct result" )]
-        public void StartOfMonthShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_month_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 26 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -72,8 +72,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of quarter should return correct result" )]
-        public void StartOfQuarterShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_quarter_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -82,8 +82,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of semester should return correct result" )]
-        public void StartOfSemesterShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_semester_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -92,8 +92,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "start of year should return correct result" )]
-        public void StartOfYearShouldReturnExpectedResult()
+        [Fact]
+        public void start_of_year_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -102,8 +102,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of week should return correct result" )]
-        public void EndOfWeekShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_week_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -112,8 +112,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of week with first day should return correct result" )]
-        public void EndOfWeekWithCustomFirstDayOfWeekShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_week_with_first_day_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -122,8 +122,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of month should return correct result" )]
-        public void EndOfMonthShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_month_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -132,8 +132,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of quarter should return correct result" )]
-        public void EndOfQuarterShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_quarter_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -142,8 +142,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of semester should return correct result" )]
-        public void EndOfSemesterShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_semester_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -152,8 +152,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "end of year should return correct result" )]
-        public void EndOfYearShouldReturnExpectedResult()
+        [Fact]
+        public void end_of_year_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -162,8 +162,8 @@
             Assert.Equal( expected.Date, actual.Date );
         }
 
-        [Fact( DisplayName = "week should return correct result" )]
-        public void WeekShouldReturnExpectedResult()
+        [Fact]
+        public void week_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -171,8 +171,8 @@
             Assert.Equal( 35, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "week with first day should return correct result" )]
-        public void WeekWithCustomFirstDayOfWeekShouldReturnExpectedResult()
+        [Fact]
+        public void week_with_first_day_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -180,8 +180,8 @@
             Assert.Equal( 35, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "quarter should return correct result" )]
-        public void QuarterShouldReturnExpectedResult()
+        [Fact]
+        public void quarter_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -189,8 +189,8 @@
             Assert.Equal( 3, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "semester should return correct result" )]
-        public void SemesterShouldReturnExpectedResult()
+        [Fact]
+        public void semester_should_return_correct_result()
         {
             var date = new DateTime( 2013, 3, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -198,8 +198,8 @@
             Assert.Equal( 2, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "year should return correct result" )]
-        public void YearShouldReturnExpectedResult()
+        [Fact]
+        public void year_should_return_correct_result()
         {
             var date = new DateTime( 2013, 7, 1 );
             var calendar = new GregorianFiscalCalendar( 7 );
@@ -207,8 +207,8 @@
             Assert.Equal( 2014, actual ); // because fiscal calendar starts in July
         }
 
-        [Fact( DisplayName = "first month of year should return correct result" )]
-        public void FirstMonthOfYearShouldReturnExpectedResult()
+        [Fact]
+        public void first_month_of_year_should_return_correct_result()
         {
             var actual = CultureInfo.CurrentCulture.Calendar.FirstMonthOfYear();
             Assert.Equal( 1, actual );
@@ -217,8 +217,8 @@
             Assert.Equal( 7, actual );
         }
 
-        [Fact( DisplayName = "current end of month should return correct result" )]
-        public void CurrentEndOfMonthShouldReturnExpectedResult()
+        [Fact]
+        public void current_end_of_month_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -232,8 +232,8 @@
             }
         }
 
-        [Fact( DisplayName = "current end of quarter should return correct result" )]
-        public void CurrentEndOfQuarterShouldReturnExpectedResult()
+        [Fact]
+        public void current_end_of_quarter_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -247,8 +247,8 @@
             }
         }
 
-        [Fact( DisplayName = "curent end of semester should return correct result" )]
-        public void CurrentEndOfSemesterShouldReturnExpectedResult()
+        [Fact]
+        public void curent_end_of_semester_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -262,8 +262,8 @@
             }
         }
 
-        [Fact( DisplayName = "current end of week should return correct result" )]
-        public void CurrentEndOfWeekShouldReturnExpectedResult()
+        [Fact]
+        public void current_end_of_week_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -277,8 +277,8 @@
             }
         }
 
-        [Fact( DisplayName = "current end of week with start day should return correct result" )]
-        public void CurrentEndOfWeekWithCustomStartShouldReturnExpectedResult()
+        [Fact]
+        public void current_end_of_week_with_start_day_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -292,8 +292,8 @@
             }
         }
 
-        [Fact( DisplayName = "current end of year should return correct result" )]
-        public void CurrentEndOfYearShouldReturnExpectedResult()
+        [Fact]
+        public void current_end_of_year_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -307,8 +307,8 @@
             }
         }
 
-        [Fact( DisplayName = "current first day of week in month should return correct result" )]
-        public void CurrentFirstDayOfWeekInMonthShouldReturnExpectedResult()
+        [Fact]
+        public void current_first_day_of_week_in_month_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -322,8 +322,8 @@
             }
         }
 
-        [Fact( DisplayName = "current last day of week in month should return correct result" )]
-        public void CurrentLastDayOfWeekInMonthShouldReturnExpectedResult()
+        [Fact]
+        public void current_last_day_of_week_in_month_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -337,8 +337,8 @@
             }
         }
 
-        [Fact( DisplayName = "current quarter should return correct result" )]
-        public void CurrentQuarterShouldReturnExpectedResult()
+        [Fact]
+        public void current_quarter_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -352,8 +352,8 @@
             }
         }
 
-        [Fact( DisplayName = "current semester should return correct result" )]
-        public void CurrentSemesterShouldReturnExpectedResult()
+        [Fact]
+        public void current_semester_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -367,8 +367,8 @@
             }
         }
 
-        [Fact( DisplayName = "current start of month should return correct result" )]
-        public void CurrentStartOfMonthShouldReturnExpectedResult()
+        [Fact]
+        public void current_start_of_month_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -382,8 +382,8 @@
             }
         }
 
-        [Fact( DisplayName = "current start of quarter should return correct result" )]
-        public void CurrentStartOfQuarterShouldReturnExpectedResult()
+        [Fact]
+        public void current_start_of_quarter_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -397,8 +397,8 @@
             }
         }
 
-        [Fact( DisplayName = "current start of semester should return correct result" )]
-        public void CurrentStartOfSemesterShouldReturnExpectedResult()
+        [Fact]
+        public void current_start_of_semester_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -412,8 +412,8 @@
             }
         }
 
-        [Fact( DisplayName = "current start of week should return correct result" )]
-        public void CurrentStartOfWeekShouldReturnExpectedResult()
+        [Fact]
+        public void current_start_of_week_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -427,8 +427,8 @@
             }
         }
 
-        [Fact( DisplayName = "current start of week with start day should return correct result" )]
-        public void CurrentStartOfWeekWithCustomStartShouldReturnExpectedResult()
+        [Fact]
+        public void current_start_of_week_with_start_day_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -442,8 +442,8 @@
             }
         }
 
-        [Fact( DisplayName = "current start of year should return correct result" )]
-        public void CurrentStartOfYearShouldReturnExpectedResult()
+        [Fact]
+        public void current_start_of_year_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -457,8 +457,8 @@
             }
         }
 
-        [Fact( DisplayName = "current week should return correct result" )]
-        public void CurrentWeekShouldReturnExpectedResult()
+        [Fact]
+        public void current_week_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -472,8 +472,8 @@
             }
         }
 
-        [Fact( DisplayName = "current week with start day should return correct result" )]
-        public void CurrentWeekWithCustomStartShouldReturnExpectedResult()
+        [Fact]
+        public void current_week_with_start_day_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {
@@ -487,8 +487,8 @@
             }
         }
 
-        [Fact( DisplayName = "current year should return correct result" )]
-        public void CurrentYearShouldReturnExpectedResult()
+        [Fact]
+        public void current_year_should_return_correct_result()
         {
             using ( ShimsContext.Create() )
             {

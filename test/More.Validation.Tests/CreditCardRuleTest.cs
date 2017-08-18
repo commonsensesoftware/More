@@ -1,90 +1,86 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
+    using static ValidationResult;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="CreditCardRule"/>.
-    /// </summary>
     public class CreditCardRuleTest
     {
-        [Theory( DisplayName = "new credit card rule should not allow null or empty error message" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void EvaluateShouldNotAllowNullOrEmptyErrorMessage( string errorMessage )
+        public void new_credit_card_rule_should_not_allow_null_or_empty_error_message( string errorMessage )
         {
             // arrange
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new CreditCardRule( errorMessage ) );
+            Action @new = () => new CreditCardRule( errorMessage );
 
             // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( errorMessage ) );
         }
 
-        [Fact( DisplayName = "credit card rule should evaluate success for null value" )]
-        public void EvaluateShouldReturnSuccessForNull()
+        [Fact]
+        public void credit_card_rule_should_evaluate_success_for_null_value()
         {
             // arrange
-            string value = null;
+            var value = default( string );
             var rule = new CreditCardRule();
             var property = new Property<string>( "CreditCard", value );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "credit card rule should evaluate invalid value" )]
-        public void EvaluateShouldReturnExpectedResultForInvalidValue()
+        [Fact]
+        public void credit_card_rule_should_evaluate_invalid_value()
         {
             // arrange
             var rule = new CreditCardRule();
             var property = new Property<string>( "CreditCard", "1234-5678-9012-3456" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( "The CreditCard field is not a valid credit card number.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "CreditCard", actual.MemberNames.Single() );
+            result.ShouldBeEquivalentTo(
+                new
+                {
+                    ErrorMessage = "The CreditCard field is not a valid credit card number.",
+                    MemberNames = new[] { "CreditCard" }
+                } );
         }
 
-        [Fact( DisplayName = "credit card rule should use custom error message" )]
-        public void EvaluateShouldUseCustomErrorMessage()
+        [Fact]
+        public void credit_card_rule_should_use_custom_error_message()
         {
             // arrange
-            var expected = "Test";
-            var rule = new CreditCardRule( expected );
+            var rule = new CreditCardRule( errorMessage: "Test" );
             var property = new Property<string>( "CreditCard", "1234-5678-9012-3456" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Test" );
         }
 
-        [Fact( DisplayName = "credit card rule should evaluate valid value" )]
-        public void EvaluateShouldReturnExpectedResultForValidValue()
+        [Fact]
+        public void credit_card_rule_should_evaluate_valid_value()
         {
             // arrange
             var rule = new CreditCardRule();
             var property = new Property<string>( "CreditCard", "4028-4816-3063-7116" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
     }
 }

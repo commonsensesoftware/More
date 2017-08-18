@@ -1,4 +1,4 @@
-﻿namespace More.Globalization
+namespace More.Globalization
 {
     using System;
     using System.Collections.Generic;
@@ -11,8 +11,8 @@
     /// </summary>
     public class GregorianFiscalCalendarTest
     {
-        [Fact( DisplayName = "new gregorian fiscal calendar should not allow invalid epoch" )]
-        public void ConstructorsShouldNotAcceptInvalidEpochMonth()
+        [Fact]
+        public void new_gregorian_fiscal_calendar_should_not_allow_invalid_epoch()
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>( () => new GregorianFiscalCalendar( 0 ) );
             Assert.Equal( "epochMonth", ex.ParamName );
@@ -21,14 +21,14 @@
             Assert.Equal( "epochMonth", ex.ParamName );
         }
 
-        [Fact( DisplayName = "new gregorian fiscal calendar should set expected epoch" )]
-        public void EpochMonthPropertyShouldEqualConstructorParameter()
+        [Fact]
+        public void new_gregorian_fiscal_calendar_should_set_expected_epoch()
         {
             Assert.Equal( 7, new GregorianFiscalCalendar( 7 ).EpochMonth );
         }
 
-        [Fact( DisplayName = "get day of year should return correct day" )]
-        public void GetDayOfYearShouldReturnCorrectDay()
+        [Fact]
+        public void get_day_of_year_should_return_correct_day()
         {
             var target = new GregorianFiscalCalendar( 7 );
 
@@ -39,8 +39,8 @@
             Assert.Equal( 365, target.GetDayOfYear( new DateTime( 2011, 6, 30 ) ) );
         }
 
-        [Fact( DisplayName = "get days in month should return correct result" )]
-        public void GetDaysInMonthShouldReturnCorrectCount()
+        [Fact]
+        public void get_days_in_month_should_return_correct_result()
         {
             var target = new GregorianFiscalCalendar( 7 );
             var calendar = new GregorianCalendar();
@@ -51,8 +51,8 @@
             Assert.Equal( calendar.GetDaysInMonth( 2011, 6 ), target.GetDaysInMonth( 2011, 12 ) );
         }
 
-        [Fact( DisplayName = "get days in year should return correct result" )]
-        public void GetDaysInYearShouldReturnCorrectCount()
+        [Fact]
+        public void get_days_in_year_should_return_correct_result()
         {
             var target = new GregorianFiscalCalendar( 7 );
             var calendar = new GregorianCalendar();
@@ -61,8 +61,8 @@
                 Assert.Equal( calendar.GetDaysInYear( year ), target.GetDaysInYear( year ) );
         }
 
-        [Fact( DisplayName = "get month should return correct offset" )]
-        public void GetMonthShouldReturnCorrectOffset()
+        [Fact]
+        public void get_month_should_return_correct_offset()
         {
             var target = new GregorianFiscalCalendar( 7 );
             var mappings = new List<Tuple<int, int>>()
@@ -88,8 +88,8 @@
             }
         }
 
-        [Fact( DisplayName = "get year should return correct result" )]
-        public void GetYearShouldReturnCorrectFiscalYear()
+        [Fact]
+        public void get_year_should_return_correct_result()
         {
             var target = new GregorianFiscalCalendar( 7 );
 
@@ -101,8 +101,8 @@
             Assert.Equal( 2012, target.GetYear( new DateTime( 2011, 7, 1 ) ) );
         }
 
-        [Fact( DisplayName = "is leap year should return correct result" )]
-        public void IsLeapYearShouldReturnCorrectValueForFiscalYear()
+        [Fact]
+        public void is_leap_year_should_return_correct_result()
         {
             var target = new GregorianFiscalCalendar( 7 );
             var calendar = new GregorianCalendar();
@@ -111,8 +111,8 @@
                 Assert.Equal( calendar.IsLeapYear( year - 1 ) | calendar.IsLeapYear( year ), target.IsLeapYear( year ) );
         }
 
-        [Fact( DisplayName = "to date time should convert from fiscal to calendar date time" )]
-        public void ToDateTimeShouldConvertFromFiscalToCalendarDateTime()
+        [Fact]
+        public void to_date_time_should_convert_from_fiscal_to_calendar_date_time()
         {
             var target = new GregorianFiscalCalendar( 7 );
 
@@ -124,8 +124,8 @@
             Assert.Equal( new DateTime( 2011, 7, 1 ), target.ToDateTime( 2012, 1, 1, 0, 0, 0, 0 ) );
         }
 
-        [Fact( DisplayName = "get week of year should return correct result" )]
-        public void GetWeekOfYearShouldReturnCorrectValueForFiscalYear()
+        [Fact]
+        public void get_week_of_year_should_return_correct_result()
         {
             var target = new GregorianFiscalCalendar( 7 );
 

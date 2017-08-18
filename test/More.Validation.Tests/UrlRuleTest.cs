@@ -1,134 +1,128 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
+    using static ValidationResult;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="UrlRule"/>.
-    /// </summary>
     public class UrlRuleTest
     {
-        [Theory( DisplayName = "new url rule should not allow null or empty error message" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void EvaluateShouldNotAllowNullOrEmptyErrorMessage( string errorMessage )
+        public void new_url_rule_should_not_allow_null_or_empty_error_message( string errorMessage )
         {
             // arrange
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new UrlRule( errorMessage ) );
+            Action @new = () => new UrlRule( errorMessage );
 
             // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( errorMessage ) );
         }
 
-        [Theory( DisplayName = "new url rule with kind should not allow null or empty error message" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void EvaluateWithKindShouldNotAllowNullOrEmptyErrorMessage( string errorMessage )
+        public void new_url_rule_with_kind_should_not_allow_null_or_empty_error_message( string errorMessage )
         {
             // arrange
             var kind = UriKind.RelativeOrAbsolute;
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new UrlRule( kind, errorMessage ) );
+            Action @new = () => new UrlRule( kind, errorMessage );
 
             // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( errorMessage ) );
         }
-        [Fact( DisplayName = "url rule should evaluate success for null value" )]
-        public void EvaluateShouldReturnSuccessForNullOrEmpty()
+        [Fact]
+        public void url_rule_should_evaluate_success_for_null_value()
         {
             // arrange
             string value = null;
             var rule = new UrlRule();
             var property = new Property<string>( "Url", value );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "url rule should evaluate invalid value" )]
-        public void EvaluateShouldReturnExpectedResultForInvalidValue()
+        [Fact]
+        public void url_rule_should_evaluate_invalid_value()
         {
             // arrange
             var rule = new UrlRule();
             var property = new Property<string>( "Url", "foo" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( "The Url field is not a valid fully-qualified http, https, or ftp URL.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "Url", actual.MemberNames.Single() );
+            result.ShouldBeEquivalentTo(
+                new
+                {
+                    ErrorMessage = "The Url field is not a valid fully-qualified http, https, or ftp URL.",
+                    MemberNames = new[] { "Url" }
+                } );
         }
 
-        [Fact( DisplayName = "url rule should use custom error message" )]
-        public void EvaluateShouldUseCustomErrorMessage()
+        [Fact]
+        public void url_rule_should_use_custom_error_message()
         {
             // arrange
-            var expected = "Test";
-            var rule = new UrlRule( expected );
+            var rule = new UrlRule( errorMessage: "Invalid" );
             var property = new Property<string>( "Url", "tempuri.org" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Invalid" );
         }
 
-        [Fact( DisplayName = "url rule should use custom error message" )]
-        public void EvaluateWithKindShouldUseCustomErrorMessage()
+        [Fact]
+        public void url_rule_with_kind_should_use_custom_error_message()
         {
             // arrange
-            var expected = "Test";
-            var rule = new UrlRule( UriKind.Absolute, expected );
+            var rule = new UrlRule( UriKind.Absolute, errorMessage: "Invalid" );
             var property = new Property<string>( "Url", "tempuri.org" );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Invalid" );
         }
 
-        [Fact( DisplayName = "url rule should evaluate valid value" )]
-        public void EvaluateShouldReturnExpectedResultForValidValue()
+        [Fact]
+        public void url_rule_should_evaluate_valid_value()
         {
             // arrange
             var rule = new UrlRule();
             var property = new Property<string>( "Url", "http://tempuri.org" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "url rule with kind should evaluate valid value" )]
-        public void EvaluateWithKindShouldReturnExpectedResultForValidValue()
+        [Fact]
+        public void url_rule_with_kind_should_evaluate_valid_value()
         {
             // arrange
             var rule = new UrlRule( UriKind.Relative );
             var property = new Property<string>( "Url", "/api/helloworld" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
     }
 }

@@ -1,119 +1,154 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using Moq;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
     using System.Linq.Expressions;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="PropertyValidator{TObject,TValue}"/>.
-    /// </summary>
     public class PropertyValidatorT1T2Test
     {
-        [Fact( DisplayName = "new property validator should not allow null expression" )]
-        public void ConstructorShouldNotAllowNullPropertyExpression()
+        [Fact]
+        public void new_property_validator_should_not_allow_null_expression()
         {
             // arrange
-            Expression<Func<IComponent, ISite>> propertyExpression = null;
+            var propertyExpression = default( Expression<Func<IComponent, ISite>> );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new PropertyValidator<IComponent, ISite>( propertyExpression, "Site" ) );
+            Action @new = () => new PropertyValidator<IComponent, ISite>( propertyExpression, "Site" );
 
             // assert
-            Assert.Equal( "propertyExpression", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyExpression ) );
         }
 
-        [Theory( DisplayName = "new property validator should not allow null or empty property name" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void ConstructorShouldNotAllowNullPropertyName( string propertyName )
+        public void new_property_validator_should_not_allow_null_or_empty_property_name( string propertyName )
         {
             // arrange
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new PropertyValidator<IComponent, ISite>( c => c.Site, propertyName ) );
+            Action @new = () => new PropertyValidator<IComponent, ISite>( c => c.Site, propertyName );
 
             // assert
-            Assert.Equal( "propertyName", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyName ) );
         }
 
-        [Fact( DisplayName = "apply should return self" )]
-        public void ApplyShouldReturnSelf()
+        [Fact]
+        public void apply_should_return_self()
         {
             // arrange
-            var expected = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
+            var validator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
 
             // act
-            var actual = expected.Apply( new RequiredRule<ISite>() );
+            var builder = validator.Apply( new RequiredRule<ISite>() );
 
             // assert
-            Assert.Same( expected, actual );
+            builder.Should().BeSameAs( validator );
         }
 
-        [Fact( DisplayName = "validate value should evaluate value" )]
-        public void ValidateValueShouldEvaluateValue()
+        [Fact]
+        public void validate_value_should_evaluate_value()
         {
             // arrange
             var propertyValidator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
+            var value = default( ISite );
             IPropertyValidator validator = propertyValidator;
-            IPropertyValidator<IComponent> validatorOfT = propertyValidator;
-            ISite value = null;
 
             propertyValidator.Apply( new RequiredRule<ISite>() );
 
             // act
-            var actual1 = validator.ValidateValue( value );
-            var actual2 = validatorOfT.ValidateValue( value );
+            var result = validator.ValidateValue( value );
 
             // assert
-            Assert.Equal( 1, actual1.Count );
-            Assert.Equal( 1, actual2.Count );
+            result.Should().HaveCount( 1 );
         }
 
-        [Fact( DisplayName = "validate object should not allow null instance" )]
-        public void ValidateObjectShouldNotAllowNullInstance()
+        [Fact]
+        public void generic_validate_value_should_evaluate_value()
         {
             // arrange
             var propertyValidator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
-            IPropertyValidator validator = propertyValidator;
-            IPropertyValidator<IComponent> validatorOfT = propertyValidator;
-            IComponent instance = null;
-            
+            var value = default( ISite );
+            IPropertyValidator<IComponent> validator = propertyValidator;
+
+            propertyValidator.Apply( new RequiredRule<ISite>() );
+
             // act
-            var ex1 = Assert.Throws<ArgumentNullException>( () => validator.ValidateObject( instance ) );
-            var ex2 = Assert.Throws<ArgumentNullException>( () => validatorOfT.ValidateObject( instance ) );
+            var result = validator.ValidateValue( value );
 
             // assert
-            Assert.Equal( "instance", ex1.ParamName );
-            Assert.Equal( "instance", ex2.ParamName );
+            result.Should().HaveCount( 1 );
         }
 
-        [Fact( DisplayName = "validate object should evaluate instance" )]
-        public void ValidateObjectShouldEvaluateInstance()
+        [Fact]
+        public void validate_object_should_not_allow_null_instance()
+        {
+            // arrange
+            var propertyValidator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
+            var instance = default( IComponent );
+            IPropertyValidator validator = propertyValidator;
+
+            // act
+            Action validateObject = () => validator.ValidateObject( instance );
+
+            // assert
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( instance ) );
+        }
+
+        [Fact]
+        public void generic_validate_object_should_not_allow_null_instance()
+        {
+            // arrange
+            var propertyValidator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
+            var instance = default( IComponent );
+            IPropertyValidator<IComponent> validator = propertyValidator;
+
+            // act
+            Action validateObject = () => validator.ValidateObject( instance );
+
+            // assert
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( instance ) );
+        }
+
+        [Fact]
+        public void validate_object_should_evaluate_instance()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
             var propertyValidator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
             IPropertyValidator validator = propertyValidator;
-            IPropertyValidator<IComponent> validatorOfT = propertyValidator;
 
             propertyValidator.Apply( new RequiredRule<ISite>() );
 
             // act
-            var actual1 = validator.ValidateObject( instance );
-            var actual2 = validatorOfT.ValidateObject( instance );
+            var results = validator.ValidateObject( instance );
 
             // assert
-            Assert.Equal( 1, actual1.Count );
-            Assert.Equal( 1, actual2.Count );
+            results.Should().HaveCount( 1 );
         }
 
-        [Fact( DisplayName = "validate value should return expected result for incompatible value" )]
-        public void ValidateValueShouldReturnExpectedResultForIncompatibleValue()
+        [Fact]
+        public void generic_validate_object_should_evaluate_instance()
+        {
+            // arrange
+            var instance = new Mock<IComponent>().Object;
+            var propertyValidator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
+            IPropertyValidator<IComponent> validator = propertyValidator;
+
+            propertyValidator.Apply( new RequiredRule<ISite>() );
+
+            // act
+            var results = validator.ValidateObject( instance );
+
+            // assert
+            results.Should().HaveCount( 1 );
+        }
+
+        [Fact]
+        public void validate_value_should_return_expected_result_for_incompatible_value()
         {
             // arrange
             IPropertyValidator validator = new PropertyValidator<IComponent, ISite>( c => c.Site, "Site" );
@@ -121,29 +156,25 @@
             var value = new object();
 
             // act
-            var actual = validator.ValidateValue( value );
+            var results = validator.ValidateValue( value );
 
             // assert
-            Assert.Equal( 1, actual.Count );
-            Assert.Equal( errorMessage, actual[0].ErrorMessage );
-            Assert.Equal( "Site", actual[0].MemberNames.Single() );
+            results.ShouldBeEquivalentTo( new[] { new { ErrorMessage = errorMessage, MemberNames = new[] { "Site" } } } );
         }
 
-        [Fact( DisplayName = "validate value should return expected result for non-null value" )]
-        public void ValidateValueShouldReturnExpectedResultForNonNullValue()
+        [Fact]
+        public void validate_value_should_return_expected_result_for_nonX2Dnull_value()
         {
             // arrange
             IPropertyValidator validator = new PropertyValidator<ISite, bool>( s => s.DesignMode, "DesignMode" );
             var errorMessage = "The DesignMode field of type System.Boolean cannot be validated with a null value.";
-            object value = null;
+            var value = default( object );
 
             // act
-            var actual = validator.ValidateValue( value );
+            var results = validator.ValidateValue( value );
 
             // assert
-            Assert.Equal( 1, actual.Count );
-            Assert.Equal( errorMessage, actual[0].ErrorMessage );
-            Assert.Equal( "DesignMode", actual[0].MemberNames.Single() );
+            results.ShouldBeEquivalentTo( new[] { new { ErrorMessage = errorMessage, MemberNames = new[] { "DesignMode" } } } );
         }
     }
 }

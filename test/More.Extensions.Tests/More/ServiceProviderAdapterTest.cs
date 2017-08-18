@@ -1,4 +1,4 @@
-﻿namespace More
+namespace More
 {
     using System;
     using System.Collections;
@@ -86,9 +86,9 @@
             }
         }
 
-        [Theory( DisplayName = "new service provider adapter should not allow null resolve function" )]
+        [Theory]
         [MemberData( nameof( NullResolveFuncData ) )]
-        public void ConstructorShouldNotAllowNullResolveFunction( Action<Func<Type, string, object>> test )
+        public void new_service_provider_adapter_should_not_allow_null_resolve_function( Action<Func<Type, string, object>> test )
         {
             // arrange
             Func<Type, string, object> resolve = null;
@@ -100,8 +100,8 @@
             Assert.Equal( "resolve", ex.ParamName );
         }
 
-        [Fact( DisplayName = "new service provider adapter should not allow null resolve all function" )]
-        public void ConstructorShouldNotAllowNullResolveAllFunction()
+        [Fact]
+        public void new_service_provider_adapter_should_not_allow_null_resolve_all_function()
         {
             // arrange
             Func<Type, string, IEnumerable<object>> resolveAll = null;
@@ -113,8 +113,8 @@
             Assert.Equal( "resolveAll", ex.ParamName );
         }
 
-        [Fact( DisplayName = "get service should not all null service type" )]
-        public void GetServiceShouldNotAllowNullServiceType()
+        [Fact]
+        public void get_service_should_not_all_null_service_type()
         {
             // arrange
             var serviceProvider = new ServiceProviderAdapter( ( t, s ) => new object() );
@@ -127,8 +127,8 @@
             Assert.Equal( "serviceType", ex.ParamName );
         }
 
-        [Fact( DisplayName = "get service should return self when requested" )]
-        public void GetServiceShouldReturnSelfWhenRequested()
+        [Fact]
+        public void get_service_should_return_self_when_requested()
         {
             // arrange
             var serviceProvider = new ServiceProviderAdapter( ( t, s ) => null );
@@ -140,8 +140,8 @@
             Assert.Same( serviceProvider, actual );
         }
 
-        [Fact( DisplayName = "get services should return self when requested" )]
-        public void GetServicesShouldReturnSelfWhenRequested()
+        [Fact]
+        public void get_services_should_return_self_when_requested()
         {
             // arrange
             var serviceProvider = new ServiceProviderAdapter( ( t, s ) => null );
@@ -154,9 +154,9 @@
             Assert.True( expected.SequenceEqual( actual ) );
         }
 
-        [Theory( DisplayName = "get service should return expected object" )]
+        [Theory]
         [MemberData( nameof( GetServiceData ) )]
-        public void GetServiceShouldReturnExpectedObject( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, object expected )
+        public void get_service_should_return_expected_object( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, object expected )
         {
             // arrange
             var serviceProvider = new ServiceProviderAdapter( ( t, s ) => services.Where( i => i.Item1 == t && i.Item2 == s ).Select( i => i.Item3 ).FirstOrDefault() );
@@ -168,9 +168,9 @@
             Assert.Equal( expected, actual );
         }
 
-        [Theory( DisplayName = "get services should return expected objects" )]
+        [Theory]
         [MemberData( nameof( GetServicesData ) )]
-        public void GetServicesShouldReturnExpectedObjects( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, IEnumerable<object> expected )
+        public void get_services_should_return_expected_objects( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, IEnumerable<object> expected )
         {
             // arrange
             var serviceProvider = new ServiceProviderAdapter(
@@ -184,9 +184,9 @@
             Assert.True( expected.SequenceEqual( actual ) );
         }
 
-        [Theory( DisplayName = "get services with key should return expected objects" )]
+        [Theory]
         [MemberData( nameof( GetServicesWithKeyData ) )]
-        public void GetServicesWithKeyShouldReturnExpectedObjects( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, string key, IEnumerable<object> expected )
+        public void get_services_with_key_should_return_expected_objects( IReadOnlyList<Tuple<Type, string, object>> services, Type serviceType, string key, IEnumerable<object> expected )
         {
             // arrange
             var serviceProvider = new ServiceProviderAdapter(

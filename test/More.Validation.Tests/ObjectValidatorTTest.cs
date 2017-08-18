@@ -1,105 +1,134 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="ObjectValidator{T}"/>.
-    /// </summary>
     public class ObjectValidatorTTest
     {
-        [Fact( DisplayName = "property should not allow null expression" )]
-        public void PropertyShouldNotAllowNullExpression()
+        [Fact]
+        public void property_should_not_allow_null_expression()
         {
             // arrange
             var validator = new ObjectValidator<IComponent>();
-            Expression<Func<IComponent, ISite>> propertyExpression = null;
+            var propertyExpression = default( Expression<Func<IComponent, ISite>> );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.Property( propertyExpression ) );
+            Action property = () => validator.Property( propertyExpression );
 
             // assert
-            Assert.Equal( "propertyExpression", ex.ParamName );
+            property.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyExpression ) );
         }
 
-        [Fact( DisplayName = "property should return same builder for expression" )]
-        public void PropertyShouldReturnSameBuilderForExpression()
+        [Fact]
+        public void property_should_return_same_builder_for_expression()
         {
             // arrange
             var validator = new ObjectValidator<IComponent>();
 
             // act
-            var expected = validator.Property( c => c.Site );
-            var actual = validator.Property( c => c.Site );
+            var first = validator.Property( c => c.Site );
+            var second = validator.Property( c => c.Site );
 
             // assert
-            Assert.Same( expected, actual );
+            second.Should().BeSameAs( first );
         }
 
-        [Fact( DisplayName = "validate object should not allow null instance" )]
-        public void ValidateObjectShouldNotAllowNullInstance()
+        [Fact]
+        public void validate_object_should_not_allow_null_instance()
         {
             // arrange
-            IComponent instance = null;
-            var objectValidator = new ObjectValidator<IComponent>();
-            IObjectValidator<IComponent> validatorOfT = objectValidator;
-            IObjectValidator validator = objectValidator;
+            var instance = default( IComponent );
+            IObjectValidator validator = new ObjectValidator<IComponent>();
 
             // act
-            var ex1 = Assert.Throws<ArgumentNullException>( () => validatorOfT.ValidateObject( instance ) );
-            var ex2 = Assert.Throws<ArgumentNullException>( () => validator.ValidateObject( instance ) );
+            Action validateObject = () => validator.ValidateObject( instance );
 
             // assert
-            Assert.Equal( "instance", ex1.ParamName );
-            Assert.Equal( "instance", ex2.ParamName );
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( instance ) );
         }
 
-        [Fact( DisplayName = "validate object should not allow null instance" )]
-        public void ValidateObjectWithPropertyNamesShouldNotAllowNullInstance()
+        [Fact]
+        public void generic_validate_object_should_not_allow_null_instance()
         {
             // arrange
-            IComponent instance = null;
+            var instance = default( IComponent );
+            IObjectValidator<IComponent> validator = new ObjectValidator<IComponent>();
+
+            // act
+            Action validateObject = () => validator.ValidateObject( instance );
+
+            // assert
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( instance ) );
+        }
+
+        [Fact]
+        public void validate_object_should_not_allow_null_instance_with_property_names()
+        {
+            // arrange
+            var instance = default( IComponent );
             var propertyNames = new[] { "Site" };
-            var objectValidator = new ObjectValidator<IComponent>();
-            IObjectValidator<IComponent> validatorOfT = objectValidator;
-            IObjectValidator validator = objectValidator;
+            IObjectValidator validator = new ObjectValidator<IComponent>();
 
             // act
-            var ex1 = Assert.Throws<ArgumentNullException>( () => validatorOfT.ValidateObject( instance, propertyNames ) );
-            var ex2 = Assert.Throws<ArgumentNullException>( () => validator.ValidateObject( instance, propertyNames ) );
+            Action validateObject = () => validator.ValidateObject( instance, propertyNames );
 
             // assert
-            Assert.Equal( "instance", ex1.ParamName );
-            Assert.Equal( "instance", ex2.ParamName );
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( instance ) );
         }
 
-        [Fact( DisplayName = "validate object should not allow null property names" )]
-        public void ValidateObjectShouldNotAllowNullPropertyNames()
+        [Fact]
+        public void generic_validate_object_should_not_allow_null_instance_with_property_names()
+        {
+            // arrange
+            var instance = default( IComponent );
+            var propertyNames = new[] { "Site" };
+            IObjectValidator<IComponent> validator = new ObjectValidator<IComponent>();
+
+            // act
+            Action validateObject = () => validator.ValidateObject( instance, propertyNames );
+
+            // assert
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( instance ) );
+        }
+
+        [Fact]
+        public void validate_object_should_not_allow_null_property_names()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
-            IEnumerable<string> propertyNames = null;
-            var objectValidator = new ObjectValidator<IComponent>();
-            IObjectValidator<IComponent> validatorOfT = objectValidator;
-            IObjectValidator validator = objectValidator;
+            var propertyNames = default( IEnumerable<string> );
+            IObjectValidator validator = new ObjectValidator<IComponent>();
 
             // act
-            var ex1 = Assert.Throws<ArgumentNullException>( () => validatorOfT.ValidateObject( instance, propertyNames ) );
-            var ex2 = Assert.Throws<ArgumentNullException>( () => validator.ValidateObject( instance, propertyNames ) );
+            Action validateObject = () => validator.ValidateObject( instance, propertyNames );
 
             // assert
-            Assert.Equal( "propertyNames", ex1.ParamName );
-            Assert.Equal( "propertyNames", ex2.ParamName );
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyNames ) );
         }
 
-        [Fact( DisplayName = "validate object should validate all properties" )]
-        public void ValidateObjectShouldValidateAllProperties()
+        [Fact]
+        public void generic_validate_object_should_not_allow_null_property_names()
+        {
+            // arrange
+            var instance = new Mock<IComponent>().Object;
+            var propertyNames = default( IEnumerable<string> );
+            IObjectValidator<IComponent> validator = new ObjectValidator<IComponent>();
+
+            // act
+            Action validateObject = () => validator.ValidateObject( instance, propertyNames );
+
+            // assert
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyNames ) );
+        }
+
+        [Fact]
+        public void validate_object_should_validate_all_properties()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
@@ -108,15 +137,14 @@
             validator.Property( c => c.Site ).Required();
 
             // act
-            var actual = validator.ValidateObject( instance );
+            var results = validator.ValidateObject( instance );
 
             // assert
-            Assert.Equal( 1, actual.Count );
-            Assert.Equal( "Site", actual[0].MemberNames.Single() );
+            results.Single().MemberNames.Single().Should().Be( "Site" );
         }
 
-        [Fact( DisplayName = "validate object should validate specified properties" )]
-        public void ValidateObjectShouldValidateSpecifiedProperties()
+        [Fact]
+        public void validate_object_should_validate_specified_properties()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
@@ -126,31 +154,30 @@
             validator.Property( c => c.Site ).Required();
 
             // act
-            var actual = validator.ValidateObject( instance, propertyNames );
+            var results = validator.ValidateObject( instance, propertyNames );
 
             // assert
-            Assert.Equal( 1, actual.Count );
-            Assert.Equal( "Site", actual[0].MemberNames.Single() );
+            results.Single().MemberNames.Single().Should().Be( "Site" );
         }
 
-        [Theory( DisplayName = "validate property should not allow null or empty property name" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void ValidatePropertyShouldNotAllowNullOrEmptyPropertyName( string propertyName )
+        public void validate_property_should_not_allow_null_or_empty_property_name( string propertyName )
         {
             // arrange
             var validator = new ObjectValidator<IComponent>();
-            object value = null;
+            var value = default( object );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.ValidateProperty( propertyName, value ) );
+            Action validateProperty = () => validator.ValidateProperty( propertyName, value );
 
             // assert
-            Assert.Equal( "propertyName", ex.ParamName );
+            validateProperty.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyName ) );
         }
 
-        [Fact( DisplayName = "validate property should return expected result" )]
-        public void ValidatePropertyShouldReturnExpectedResult()
+        [Fact]
+        public void validate_property_should_return_expected_result()
         {
             // arrange
             var validator = new ObjectValidator<IComponent>();
@@ -158,11 +185,10 @@
             validator.Property( c => c.Site ).Required();
 
             // act
-            var actual = validator.ValidateProperty( "Site", null );
+            var results = validator.ValidateProperty( "Site", null );
 
             // assert
-            Assert.Equal( 1, actual.Count );
-            Assert.Equal( "Site", actual[0].MemberNames.Single() );
+            results.Single().MemberNames.Single().Should().Be( "Site" );
         }
     }
 }

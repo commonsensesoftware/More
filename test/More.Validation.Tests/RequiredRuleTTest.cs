@@ -1,138 +1,135 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
+    using static ValidationResult;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="RequiredRule{T}"/>.
-    /// </summary>
     public class RequiredRuleTTest
     {
-        [Theory( DisplayName = "new required rule should not allow null or empty error message" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void ConstructorShouldNotAllowNullOrEmptyErrorMessage( string errorMessage )
+        public void new_required_rule_should_not_allow_null_or_empty_error_message( string errorMessage )
         {
             // arrange
 
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new RequiredRule<object>( errorMessage ) );
+            Action @new = () => new RequiredRule<object>( errorMessage );
 
             // assert
-            Assert.Equal( "errorMessage", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( errorMessage ) );
         }
 
-        [Fact( DisplayName = "required rule should return success for non-null value" )]
-        public void EvaluateShouldReturnSuccessForNonNullValue()
+        [Fact]
+        public void required_rule_should_return_success_for_nonX2Dnull_value()
         {
             // arrange
             var rule = new RequiredRule<object>();
             var property = new Property<object>( "Object", new object() );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "required rule should return success for non-null string" )]
-        public void EvaluateShouldReturnSuccessForNonNullString()
+        [Fact]
+        public void required_rule_should_return_success_for_nonX2Dnull_string()
         {
             // arrange
             var rule = new RequiredRule<string>();
             var property = new Property<string>( "Text", "Valid" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "required rule should return success for empty string" )]
-        public void EvaluateShouldReturnSuccessForEmptyString()
+        [Fact]
+        public void required_rule_should_return_success_for_empty_string()
         {
             // arrange
             var rule = new RequiredRule<string>() { AllowEmptyStrings = true };
             var property = new Property<string>( "Text", "" );
-            var expected = ValidationResult.Success;
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual );
+            result.Should().Be( Success );
         }
 
-        [Fact( DisplayName = "required rule should return expected result for null value" )]
-        public void EvaluateShouldReturnExpectedResultForNullValue()
+        [Fact]
+        public void required_rule_should_return_expected_result_for_null_value()
         {
             // arrange
             var rule = new RequiredRule<object>();
             var property = new Property<object>( "Object", null );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( "The Object field is required.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "Object", actual.MemberNames.Single() );
+            result.ShouldBeEquivalentTo(
+                new
+                {
+                    ErrorMessage = "The Object field is required.",
+                    MemberNames = new[] { "Object" }
+                } );
         }
 
-        [Theory( DisplayName = "required rule should return expected result for null or empty string" )]
+        [Theory]
         [InlineData( null )]
         [InlineData( "" )]
-        public void EvaluateShouldReturnExpectedResultForNullOrEmptyString( string value )
+        public void required_rule_should_return_expected_result_for_null_or_empty_string( string value )
         {
             // arrange
             var rule = new RequiredRule<string>();
             var property = new Property<string>( "Text", value );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( "The Text field is required.", actual.ErrorMessage );
-            Assert.Equal( 1, actual.MemberNames.Count() );
-            Assert.Equal( "Text", actual.MemberNames.Single() );
+            result.ShouldBeEquivalentTo(
+               new
+               {
+                   ErrorMessage = "The Text field is required.",
+                   MemberNames = new[] { "Text" }
+               } );
         }
 
-        [Fact( DisplayName = "required rule should return result with custom error message" )]
-        public void EvaluateShouldReturnResultWithCustomErrorMessage()
+        [Fact]
+        public void required_rule_should_return_result_with_custom_error_message()
         {
             // arrange
-            var expected = "Invalid";
-            var rule = new RequiredRule<object>( expected );
+            var rule = new RequiredRule<object>( errorMessage: "Invalid" );
             var property = new Property<object>( "Object", null );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Invalid" );
         }
 
-        [Fact( DisplayName = "required rule should return result with custom error message" )]
-        public void EvaluateShouldReturnResultWithCustomErrorMessageForString()
+        [Fact]
+        public void required_rule_should_return_result_with_custom_error_message_for_string()
         {
             // arrange
-            var expected = "Invalid";
-            var rule = new RequiredRule<string>( expected );
+            var rule = new RequiredRule<string>( errorMessage: "Invalid" );
             var property = new Property<string>( "Text", null );
 
             // act
-            var actual = rule.Evaluate( property );
+            var result = rule.Evaluate( property );
 
             // assert
-            Assert.Equal( expected, actual.ErrorMessage );
+            result.ErrorMessage.Should().Be( "Invalid" );
         }
     }
 }

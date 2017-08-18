@@ -1,147 +1,129 @@
-﻿namespace More.ComponentModel.DataAnnotations
+namespace More.ComponentModel.DataAnnotations
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="Validator"/>.
-    /// </summary>
     public class ValidatorTest
     {
-        public static IEnumerable<object[]> ComponentData
-        {
-            get
-            {
-                var component1 = new Mock<IComponent>();
-                var component2 = new Mock<IComponent>();
-
-                component2.SetupProperty( c => c.Site, new Mock<ISite>().Object );
-
-                yield return new object[] { component1.Object, 1, false };
-                yield return new object[] { component2.Object, 0, true };
-            }
-        }
-
-        [Fact( DisplayName = "for should return same validator for type" )]
-        public void ForShouldReturnSameValidatorForType()
+        [Fact]
+        public void for_should_return_same_validator_for_type()
         {
             // arrange
             var validator = new Validator();
-            var expected = validator.For<IComponent>();
+            var first = validator.For<IComponent>();
 
             // act
-            var actual = validator.For<IComponent>();
+            var second = validator.For<IComponent>();
 
             // assert
-            Assert.Same( expected, actual );
+            second.Should().BeSameAs( first );
         }
 
-        [Fact( DisplayName = "create context should not allow null instance" )]
-        public void CreateContextShouldNotAllowNullInstance()
+        [Fact]
+        public void create_context_should_not_allow_null_instance()
         {
             // arrange
-            object instance = null;
+            var instance = default( object );
             var validator = new Validator();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.CreateContext( instance, null ) );
+            Action createContext = () => validator.CreateContext( instance, null );
 
             // assert
-            Assert.Equal( "instance", ex.ParamName );
+            createContext.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( instance ) );
         }
 
-        [Fact( DisplayName = "validate object should not allow null context" )]
-        public void ValidationObjectShouldNotAllowNullContext()
+        [Fact]
+        public void validate_object_should_not_allow_null_context()
         {
             // arrange
-            IValidationContext context = null;
+            var validationContext = default( IValidationContext );
             var validator = new Validator();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.ValidateObject( null, context ) );
+            Action validateObject = () => validator.ValidateObject( null, validationContext );
 
             // assert
-            Assert.Equal( "validationContext", ex.ParamName );
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( validationContext ) );
         }
 
-        [Fact( DisplayName = "validate object should not allow null context" )]
-        public void ValidationObjectForAllPropertiesShouldNotAllowNullContext()
+        [Fact]
+        public void validate_object_should_not_allow_null_context_for_all_properties()
         {
             // arrange
-            IValidationContext context = null;
+            var validationContext = default( IValidationContext );
             var validator = new Validator();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.ValidateObject( null, context, true ) );
+            Action validateObject = () => validator.ValidateObject( null, validationContext, true );
 
             // assert
-            Assert.Equal( "validationContext", ex.ParamName );
+            validateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( validationContext ) );
         }
 
-        [Fact( DisplayName = "try validate object should not allow null context" )]
-        public void TryValidationObjectShouldNotAllowNullContext()
+        [Fact]
+        public void try_validate_object_should_not_allow_null_context()
         {
             // arrange
-            IValidationContext context = null;
+            var validationContext = default( IValidationContext );
             var validator = new Validator();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.TryValidateObject( null, context, null ) );
+            Action tryValidateObject = () => validator.TryValidateObject( null, validationContext, null );
 
             // assert
-            Assert.Equal( "validationContext", ex.ParamName );
+            tryValidateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( validationContext ) );
         }
 
-        [Fact( DisplayName = "try validate object should not allow null context" )]
-        public void TryValidationObjectForAllPropertiesShouldNotAllowNullContext()
+        [Fact]
+        public void try_validate_object_should_not_allow_null_context_for_all_properties()
         {
             // arrange
-            IValidationContext context = null;
+            var validationContext = default( IValidationContext );
             var validator = new Validator();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.TryValidateObject( null, context, null, true ) );
+            Action tryValidateObject = () => validator.TryValidateObject( null, validationContext, null, true );
 
             // assert
-            Assert.Equal( "validationContext", ex.ParamName );
+            tryValidateObject.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( validationContext ) );
         }
 
-        [Fact( DisplayName = "validate property should not allow null context" )]
-        public void ValidationPropertyShouldNotAllowNullContext()
+        [Fact]
+        public void validate_property_should_not_allow_null_context()
         {
             // arrange
-            IValidationContext context = null;
+            var validationContext = default( IValidationContext );
             var validator = new Validator();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.ValidateProperty( null, context ) );
+            Action validateProperty = () => validator.ValidateProperty( null, validationContext );
 
             // assert
-            Assert.Equal( "validationContext", ex.ParamName );
+            validateProperty.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( validationContext ) );
         }
 
-        [Fact( DisplayName = "try validate property should not allow null context" )]
-        public void TryValidationPropertyShouldNotAllowNullContext()
+        [Fact]
+        public void try_validate_property_should_not_allow_null_context()
         {
             // arrange
-            IValidationContext context = null;
+            var validationContext = default( IValidationContext );
             var validator = new Validator();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => validator.TryValidateProperty( null, context, null ) );
+            Action tryValidateProperty = () => validator.TryValidateProperty( null, validationContext, null );
 
             // assert
-            Assert.Equal( "validationContext", ex.ParamName );
+            tryValidateProperty.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( validationContext ) );
         }
 
-        [Theory( DisplayName = "try validate object should return expected result" )]
-        [MemberData( "ComponentData" )]
-        public void TryValidateObjectShouldReturnExpectedResult( IComponent instance, int resultCount, bool expected )
+        [Theory]
+        [MemberData( nameof( ComponentData ) )]
+        public void try_validate_object_should_return_expected_result( IComponent instance, int resultCount, bool expected )
         {
             // arrange
             var validator = new Validator();
@@ -151,18 +133,18 @@
             validator.For<IComponent>().Property( c => c.Site ).Required();
 
             // act
-            var actual = validator.TryValidateObject( instance, context, results );
+            var valid = validator.TryValidateObject( instance, context, results );
 
             // assert
-            Assert.Equal( expected, actual );
-            Assert.Equal( resultCount, results.Count );
+            valid.Should().Be( expected );
+            results.Should().HaveCount( resultCount );
         }
 
-        [Fact( DisplayName = "try validate object should return true for null instance" )]
-        public void TryValidateObjectShouldReturnTrueForNullInstance()
+        [Fact]
+        public void try_validate_object_should_return_true_for_null_instance()
         {
             // arrange
-            IComponent instance = null;
+            var instance = default( IComponent );
             var validator = new Validator();
             var context = validator.CreateContext( new Mock<IComponent>().Object, null );
             var results = new List<IValidationResult>();
@@ -173,12 +155,12 @@
             var valid = validator.TryValidateObject( instance, context, results );
 
             // assert
-            Assert.True( valid );
-            Assert.Equal( 0, results.Count );
+            valid.Should().BeTrue();
+            results.Should().BeEmpty();
         }
 
-        [Fact( DisplayName = "try validate object should return true for instance without rules" )]
-        public void TryValidateObjectShouldReturnTrueForInstanceWithoutRules()
+        [Fact]
+        public void try_validate_object_should_return_true_for_instance_without_rules()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
@@ -190,13 +172,13 @@
             var valid = validator.TryValidateObject( instance, context, results );
 
             // assert
-            Assert.True( valid );
-            Assert.Equal( 0, results.Count );
+            valid.Should().BeTrue();
+            results.Should().BeEmpty();
         }
 
-        [Theory( DisplayName = "try validate property should return expected result" )]
-        [MemberData( "ComponentData" )]
-        public void TryValidatePropertyShouldReturnExpectedResult( IComponent instance, int resultCount, bool expected )
+        [Theory]
+        [MemberData( nameof( ComponentData ) )]
+        public void try_validate_property_should_return_expected_result( IComponent instance, int resultCount, bool expected )
         {
             // arrange
             var validator = new Validator();
@@ -208,15 +190,15 @@
             context.MemberName = "Site";
 
             // act
-            var actual = validator.TryValidateProperty( value, context, results );
+            var valid = validator.TryValidateProperty( value, context, results );
 
             // assert
-            Assert.Equal( expected, actual );
-            Assert.Equal( resultCount, results.Count );
+            valid.Should().Be( expected );
+            results.Should().HaveCount( resultCount );
         }
 
-        [Fact( DisplayName = "try validate property should return true for type without rules" )]
-        public void TryValidatePropertyShouldReturnTrueForTypeWithoutRules()
+        [Fact]
+        public void try_validate_property_should_return_true_for_type_without_rules()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
@@ -229,12 +211,12 @@
             var valid = validator.TryValidateProperty( value, context, results );
 
             // assert
-            Assert.True( valid );
-            Assert.Equal( 0, results.Count );
+            valid.Should().BeTrue();
+            results.Should().BeEmpty();
         }
 
-        [Fact( DisplayName = "validate object should throw exception for invalid object" )]
-        public void ValidateObjectShouldThrowExceptionForInvalidObject()
+        [Fact]
+        public void validate_object_should_throw_exception_for_invalid_object()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
@@ -245,15 +227,14 @@
             validator.For<IComponent>().Property( c => c.Site ).Required();
 
             // act
-            var ex = Assert.Throws<ValidationException>( () => validator.ValidateObject( instance, context ) );
+            Action validateObject = () => validator.ValidateObject( instance, context );
 
             // assert
-            Assert.Equal( "Site", ex.ValidationResult.MemberNames.First() );
-            Assert.Null( ex.Value );
+            validateObject.ShouldThrow<ValidationException>().And.ValidationResult.MemberNames.Should().Equal( new[] { "Site" } );
         }
 
-        [Fact( DisplayName = "validate object should throw exception for invalid value" )]
-        public void ValidatePropertyShouldThrowExceptionForInvalidValue()
+        [Fact]
+        public void validate_object_should_throw_exception_for_invalid_value()
         {
             // arrange
             var instance = new Mock<IComponent>().Object;
@@ -266,11 +247,27 @@
             context.MemberName = "Site";
 
             // act
-            var ex = Assert.Throws<ValidationException>( () => validator.ValidateProperty( value, context ) );
+            Action validateObject = () => validator.ValidateProperty( value, context );
 
             // assert
-            Assert.Equal( "Site", ex.ValidationResult.MemberNames.First() );
-            Assert.Equal( value, ex.Value );
+            validateObject.ShouldThrow<ValidationException>().And
+                          .ShouldBeEquivalentTo(
+                            new { ValidationResult = new { MemberNames = new[] { "Site" } }, Value = value },
+                            options => options.ExcludingMissingMembers() );
+        }
+
+        public static IEnumerable<object[]> ComponentData
+        {
+            get
+            {
+                var component1 = new Mock<IComponent>();
+                var component2 = new Mock<IComponent>();
+
+                component2.SetupProperty( c => c.Site, new Mock<ISite>().Object );
+
+                yield return new object[] { component1.Object, 1, false };
+                yield return new object[] { component2.Object, 0, true };
+            }
         }
     }
 }

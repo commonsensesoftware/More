@@ -1,4 +1,4 @@
-﻿namespace System
+namespace System
 {
     using Moq;
     using More;
@@ -58,9 +58,9 @@
             }
         }
 
-        [Theory( DisplayName = "extension method should not allow null service provider" )]
+        [Theory]
         [MemberData( nameof( NullServiceProviderData ) )]
-        public void ExtensionMethodShouldNotAllowNullServiceProvider( Action<IServiceProvider> test )
+        public void extension_method_should_not_allow_null_service_provider( Action<IServiceProvider> test )
         {
             // arrange
             var serviceProvider = default( IServiceProvider );
@@ -72,9 +72,9 @@
             Assert.Equal( nameof( serviceProvider ), ex.ParamName );
         }
 
-        [Theory( DisplayName = "extension method should not allow null service type" )]
+        [Theory]
         [MemberData( nameof( NullServiceTypeData ) )]
-        public void ExtensionMethodShouldNotAllowNullServiceType( Action<IServiceProvider, Type> test )
+        public void extension_method_should_not_allow_null_service_type( Action<IServiceProvider, Type> test )
         {
             // arrange
             var serviceProvider = ServiceProvider.Default;
@@ -87,15 +87,15 @@
             Assert.Equal( nameof( serviceType ), ex.ParamName );
         }
 
-        [Fact( DisplayName = "get service should return null for unavailable service" )]
-        public void GetServiceShouldReturnNullWhenRequestedServiceIsUnavailable()
+        [Fact]
+        public void get_service_should_return_null_for_unavailable_service()
         {
             var actual = ServiceProvider.Current.GetService<object>();
             Assert.Null( actual );
         }
 
-        [Fact( DisplayName = "get required service should return requested service" )]
-        public void GetRequiredServiceShouldReturnRequestedService()
+        [Fact]
+        public void get_required_service_should_return_requested_service()
         {
             var target = ServiceProvider.Current;
             var actual = target.GetRequiredService( typeof( IServiceProvider ) );
@@ -105,23 +105,23 @@
             Assert.NotNull( actual );
         }
 
-        [Fact( DisplayName = "get required service should throw exception for unavailable service" )]
-        public void GetRequiredServiceShouldThrowExceptionWhenRequestedServiceIsUnavailable()
+        [Fact]
+        public void get_required_service_should_throw_exception_for_unavailable_service()
         {
             Assert.Throws<NotSupportedException>( () => ServiceProvider.Current.GetRequiredService<object>() );
             Assert.Throws<NotSupportedException>( () => ServiceProvider.Current.GetRequiredService( typeof( object ) ) );
         }
 
-        [Fact( DisplayName = "get service should return expected service" )]
-        public void GetServiceShouldReturnRequestedService()
+        [Fact]
+        public void get_service_should_return_expected_service()
         {
             var target = ServiceProvider.Current;
             var actual = target.GetService<IServiceProvider>();
             Assert.Equal( actual, target );
         }
 
-        [Fact( DisplayName = "try get service should return expected service" )]
-        public void TryGetServiceOfTShouldReturnRequestedService()
+        [Fact]
+        public void try_get_service_should_return_expected_service()
         {
             var target = ServiceProvider.Current;
             var actual = default( IServiceProvider );
@@ -130,8 +130,8 @@
             Assert.Equal( actual, target );
         }
 
-        [Fact( DisplayName = "try get service should return false for unavailable service" )]
-        public void TryGetServiceOfTShouldReturnFalseWhenRequestedServiceIsUnavailable()
+        [Fact]
+        public void try_get_service_should_return_false_for_unavailable_service()
         {
             var target = ServiceProvider.Current;
             var actual = default( ICustomFormatter );
@@ -139,8 +139,8 @@
             Assert.Null( actual );
         }
 
-        [Fact( DisplayName = "try get service should return expected service" )]
-        public void TryGetServiceShouldReturnRequestedService()
+        [Fact]
+        public void try_get_service_should_return_expected_service()
         {
             var target = ServiceProvider.Current;
             var actual = default( object );
@@ -150,8 +150,8 @@
             Assert.Equal( actual, target );
         }
 
-        [Fact( DisplayName = "try get service should return false when service is unavailable" )]
-        public void TryGetServiceShouldReturnFalseWhenRequestedServiceIsUnavailable()
+        [Fact]
+        public void try_get_service_should_return_false_when_service_is_unavailable()
         {
             var target = ServiceProvider.Current;
             var actual = default( object );
@@ -159,8 +159,8 @@
             Assert.Null( actual );
         }
 
-        [Fact( DisplayName = "try get service should handle exception" )]
-        public void TryGetServiceShouldHandleException()
+        [Fact]
+        public void try_get_service_should_handle_exception()
         {
             var mock = new Mock<IServiceProvider>();
             mock.Setup( sl => sl.GetService( It.IsAny<Type>() ) ).Throws( new Exception() );
@@ -171,8 +171,8 @@
             Assert.Null( actual );
         }
 
-        [Fact( DisplayName = "try get service should handle exception" )]
-        public void TryGetServiceOfTShouldHandleException()
+        [Fact]
+        public void try_get_service_should_handle_exception()
         {
             var mock = new Mock<IServiceProvider>();
             mock.Setup( sl => sl.GetService( It.IsAny<Type>() ) ).Throws( new Exception() );
@@ -183,8 +183,8 @@
             Assert.Null( actual );
         }
 
-        [Fact( DisplayName = "get services should return expected instances" )]
-        public void GetServicesShouldReturnExpectedInstances()
+        [Fact]
+        public void get_services_should_return_expected_instances()
         {
             // arrange
             var serviceProvider = new Mock<IServiceProvider>();
@@ -200,8 +200,8 @@
             serviceProvider.Verify( sp => sp.GetService( typeof( IEnumerable<string> ) ), Times.Once() );
         }
 
-        [Fact( DisplayName = "get services should return expected instances" )]
-        public void GetServicesOfTShouldReturnExpectedInstances()
+        [Fact]
+        public void get_services_should_return_expected_instances()
         {
             // arrange
             var serviceProvider = new Mock<IServiceProvider>();
@@ -217,8 +217,8 @@
             serviceProvider.Verify( sp => sp.GetService( typeof( IEnumerable<string> ) ), Times.Once() );
         }
 
-        [Fact( DisplayName = "get services should return empty sequence" )]
-        public void GetServicesShouldReturnEmptySequence()
+        [Fact]
+        public void get_services_should_return_empty_sequence()
         {
             // arrange
             var serviceProvider = new Mock<IServiceProvider>();
@@ -233,8 +233,8 @@
             serviceProvider.Verify( sp => sp.GetService( typeof( IEnumerable<object> ) ), Times.Once() );
         }
 
-        [Fact( DisplayName = "get services should return empty sequence" )]
-        public void GetServicesOfTShouldReturnEmptySequence()
+        [Fact]
+        public void get_services_should_return_empty_sequence()
         {
             // arrange
             var serviceProvider = new Mock<IServiceProvider>();

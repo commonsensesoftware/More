@@ -1,4 +1,4 @@
-﻿namespace More
+namespace More
 {
     using More.Globalization;
     using System;
@@ -207,9 +207,9 @@
             }
         }
 
-        [Theory( DisplayName = "date time format provider should not allow null format" )]
+        [Theory]
         [MemberData( "NullDateTimeFormatData" )]
-        public void ConstructorsShouldNotAllowNullDateTimeFormat( Action<DateTimeFormatInfo> test )
+        public void date_time_format_provider_should_not_allow_null_format( Action<DateTimeFormatInfo> test )
         {
             // arrange
             DateTimeFormatInfo dateTimeFormat = null;
@@ -221,9 +221,9 @@
             Assert.Equal( "dateTimeFormat", ex.ParamName );
         }
 
-        [Theory( DisplayName = "date time provider should not allow null calendar" )]
+        [Theory]
         [MemberData( "NullCalendarData" )]
-        public void ConstructorsShouldNotAllowNullCalendar( Action<Calendar> test )
+        public void date_time_provider_should_not_allow_null_calendar( Action<Calendar> test )
         {
             // arrange
             Calendar calendar = null;
@@ -235,9 +235,9 @@
             Assert.Equal( "calendar", ex.ParamName );
         }
 
-        [Theory( DisplayName = "get format should return null for unsupported types" )]
+        [Theory]
         [MemberData( "UnsupportedFormatTypesData" )]
-        public void GetFormatShouldReturnNullForUnsupportedFormatTypes( DateTimeFormatProvider provider, Type formatType )
+        public void get_format_should_return_null_for_unsupported_types( DateTimeFormatProvider provider, Type formatType )
         {
             // arrange
 
@@ -248,9 +248,9 @@
             Assert.Null( actual );
         }
 
-        [Theory( DisplayName = "get format should return expected provider" )]
+        [Theory]
         [MemberData( "GetFormatData" )]
-        public void GetFormatShouldReturnCorrectFormatProvider( DateTimeFormatProvider provider, Type formatType, object expected )
+        public void get_format_should_return_expected_provider( DateTimeFormatProvider provider, Type formatType, object expected )
         {
             // arrange
 
@@ -261,9 +261,9 @@
             Assert.Same( expected, actual );
         }
 
-        [Theory( DisplayName = "format should allow null or empty format string" )]
+        [Theory]
         [MemberData( "DateTimeFormatProvidersData" )]
-        public void FormatShouldAllowNullOrEmptyFormatString( DateTimeFormatProvider provider )
+        public void format_should_allow_null_or_empty_format_string( DateTimeFormatProvider provider )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -280,9 +280,9 @@
             Assert.Equal( expected, actual[1] );
         }
 
-        [Theory( DisplayName = "format should return original format when argument cannot be formatted" )]
+        [Theory]
         [MemberData( "DateTimeFormatProvidersData" )]
-        public void FormatShouldReturnOriginalStringFormatWhenArgumentCannotBeFormatted( DateTimeFormatProvider provider )
+        public void format_should_return_original_format_when_argument_cannot_be_formatted( DateTimeFormatProvider provider )
         {
             // arrange
             var expected = new string[] { "d", new object().ToString() };
@@ -298,9 +298,9 @@
             Assert.Equal( expected[1], actual[1] );
         }
 
-        [Theory( DisplayName = "format should not allow malformed literal strings" )]
+        [Theory]
         [MemberData( "MalformedLiteralStringsData" )]
-        public void FormatShouldNotAllowMalformedLiteralStrings( DateTimeFormatProvider provider, string format )
+        public void format_should_not_allow_malformed_literal_strings( DateTimeFormatProvider provider, string format )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -309,9 +309,9 @@
             Assert.Throws<FormatException>( () => provider.Format( format, date, null ) );
         }
 
-        [Theory( DisplayName = "format should return expected built-in custom format string" )]
+        [Theory]
         [MemberData( "BuiltInCustomFormatStringData" )]
-        public void FormatShouldReturnCorrectBuiltInCustomFormatString( DateTimeFormatProvider provider, string format )
+        public void format_should_return_expected_builtX2Din_custom_format_string( DateTimeFormatProvider provider, string format )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -324,9 +324,9 @@
             Assert.Equal( expected, actual );
         }
 
-        [Theory( DisplayName = "format semester should return expected string" )]
+        [Theory]
         [MemberData( "SemesterFormatData" )]
-        public void FormatShouldReturnCorrectSemesterFormatString( DateTimeFormatProvider provider, string format, string expected )
+        public void format_semester_should_return_expected_string( DateTimeFormatProvider provider, string format, string expected )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -338,9 +338,9 @@
             Assert.Equal( expected, actual );
         }
 
-        [Theory( DisplayName = "format quarter should return expected string" )]
+        [Theory]
         [MemberData( "QuarterFormatData" )]
-        public void FormatShouldReturnCorrectQuarterFormatString( DateTimeFormatProvider provider, string format, string expected )
+        public void format_quarter_should_return_expected_string( DateTimeFormatProvider provider, string format, string expected )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -352,9 +352,9 @@
             Assert.Equal( expected, actual );
         }
 
-        [Theory( DisplayName = "format should return expected custom format string" )]
+        [Theory]
         [MemberData( "CustomFormatData" )]
-        public void FormatShouldReturnCorrectCustomFormatString( Func<DateTime, string> test, string expected )
+        public void format_should_return_expected_custom_format_string( Func<DateTime, string> test, string expected )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -366,9 +366,9 @@
             Assert.Equal( expected, actual );
         }
 
-        [Theory( DisplayName = "format should return expected custom format string with custom calendar" )]
+        [Theory]
         [MemberData( "CustomFormatAndCalendarData" )]
-        public void FormatShouldReturnCorrectCustomFormatStringWithCustomCalendar( Func<DateTime, DateTimeFormatProvider, string> test, string expected )
+        public void format_should_return_expected_custom_format_string_with_custom_calendar( Func<DateTime, DateTimeFormatProvider, string> test, string expected )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -381,9 +381,9 @@
             Assert.Equal( expected, actual );
         }
 
-        [Theory( DisplayName = "string format should return custom format string with multiple parameters" )]
+        [Theory]
         [MemberData( "MultipleFormatParameterData" )]
-        public void StringFormatShouldReturnCorrectCustomFormatStringWithMultipleFormatParameters( DateTimeFormatProvider provider, string format, object arg, string expected )
+        public void string_format_should_return_custom_format_string_with_multiple_parameters( DateTimeFormatProvider provider, string format, object arg, string expected )
         {
             // arrange
             var date = new DateTime( 2010, 9, 29 );
@@ -396,8 +396,8 @@
             Assert.Equal( expected, actual );
         }
 
-        [Fact( DisplayName = "format should return custom string with escape sequence" )]
-        public void FormatShouldReturnCorrectCustomStringFormatContainingEscapeSequence()
+        [Fact]
+        public void format_should_return_custom_string_with_escape_sequence()
         {
             // arrange
             var provider = new DateTimeFormatProvider( new GregorianFiscalCalendar( 7 ) );
