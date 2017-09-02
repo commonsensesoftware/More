@@ -1,76 +1,244 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
+    using FluentAssertions;
+    using Moq;
     using More.Windows.Input;
     using System;
     using System.Collections.Generic;
+    using System.Windows.Input;
     using Xunit;
+    using static Moq.Times;
 
-    /// <summary>
-    /// Provides unit tests for the <see cref="ClickableItem{T}"/> class.
-    /// </summary>
     public class ClickableItemTTest
     {
-        [Fact( DisplayName = "new clickable item should set expected properties" )]
-        public void ConstructorShouldSetExpectedProperties()
+        public static IEnumerable<object[]> ConstructorData
         {
+            get
+            {
+                yield return new object[] { new Func<string, ICommand, ClickableItem<string>>( ( v, c ) => new ClickableItem<string>( v, c ) ) };
+                yield return new object[] { new Func<string, ICommand, ClickableItem<string>>( ( v, c ) => new ClickableItem<string>( v, c, EqualityComparer<string>.Default ) ) };
+            }
+        }
+
+        [Theory]
+        [MemberData( nameof( ConstructorData ) )]
+        public void new_clickable_item_should_set_expected_properties( Func<string, ICommand, ClickableItem<string>> @new )
+        {
+            // arrange
             var command = new Command<string>( Console.WriteLine );
-            var target = new ClickableItem<string>( "test", command );
 
-            Assert.Equal( "test", target.Value );
-            Assert.IsType<CommandInterceptor<object>>( target.Click );
+            // act
+            var item = @new( "test", command );
 
-            target = new ClickableItem<string>( "test", command, EqualityComparer<string>.Default );
-            Assert.Equal( "test", target.Value );
-            Assert.IsType<CommandInterceptor<object>>( target.Click );
+            // assert
+            item.Value.Should().Be( "test" );
+            item.Click.Should().BeOfType<CommandInterceptor<object>>();
         }
 
-        [Fact( DisplayName = "perform click should execute command" )]
-        public void PerformClickShouldExecuteCommand()
+        [Fact]
+        public void perform_click_should_execute_command()
         {
-            var clicked = false;
-            var command = new Command<string>(
-                p =>
-                {
-                    Assert.Null( p );
-                    clicked = true;
-                } );
-            var target = new ClickableItem<string>( "test", command );
+            // arrange
+            var click = new Mock<Action<object>>();
+            var command = new Command<string>( click.Object );
+            var item = new ClickableItem<string>( "test", command );
 
-            target.PerformClick();
-            Assert.True( clicked );
+            click.Setup( f => f( It.IsAny<object>() ) );
+            item.MonitorEvents();
 
-            clicked = false;
-            command = new Command<string>(
-                p =>
-                {
-                    Assert.Equal( "test2", p );
-                    clicked = true;
-                } );
-            target = new ClickableItem<string>( "test", command );
-            target.PerformClick( "test2" );
-            Assert.True( clicked );
+            // act
+            item.PerformClick();
+
+            // assert
+            click.Verify( f => f( null ), Once() );
+            item.ShouldRaise( nameof( item.Clicked ) );
         }
 
-        [Fact( DisplayName = "equals should return expected result" )]
-        public void EqualsShouldReturnExpectedResult()
+        [Fact]
+        public void perform_click_should_execute_command_with_parameter()
         {
-            var target = new ClickableItem<string>( "test", new Command<string>( Console.WriteLine ) );
+            // arrange
+            var click = new Mock<Action<object>>();
+            var command = new Command<string>( click.Object );
+            var item = new ClickableItem<string>( "test", command );
 
-            Assert.True( target == new ClickableItem<string>( "test", new Command<string>( Console.WriteLine ) ) );
-            Assert.True( target != new ClickableItem<string>( "test1", new Command<string>( Console.WriteLine ) ) );
-            Assert.True( target.Equals( new ClickableItem<string>( "test", new Command<string>( Console.WriteLine ) ) ) );
-            Assert.False( target.Equals( new ClickableItem<string>( "test1", new Command<string>( Console.WriteLine ) ) ) );
-            Assert.True( target.Equals( (object) new ClickableItem<string>( "test", new Command<string>( Console.WriteLine ) ) ) );
-            Assert.False( target.Equals( (object) new ClickableItem<string>( "test1", new Command<string>( Console.WriteLine ) ) ) );
+            click.Setup( f => f( It.IsAny<object>() ) );
+            item.MonitorEvents();
 
-            target = new ClickableItem<string>( "test", new Command<string>( Console.WriteLine ), StringComparer.OrdinalIgnoreCase );
+            // act
+            item.PerformClick( "param" );
 
-            Assert.True( target == new ClickableItem<string>( "TEST", new Command<string>( Console.WriteLine ) ) );
-            Assert.True( target != new ClickableItem<string>( "TEST1", new Command<string>( Console.WriteLine ) ) );
-            Assert.True( target.Equals( new ClickableItem<string>( "TEST", new Command<string>( Console.WriteLine ) ) ) );
-            Assert.False( target.Equals( new ClickableItem<string>( "TEST1", new Command<string>( Console.WriteLine ) ) ) );
-            Assert.True( target.Equals( (object) new ClickableItem<string>( "TEST", new Command<string>( Console.WriteLine ) ) ) );
-            Assert.False( target.Equals( (object) new ClickableItem<string>( "TEST1", new Command<string>( Console.WriteLine ) ) ) );
+            // assert
+            click.Verify( f => f( "param" ), Once() );
+            item.ShouldRaise( nameof( item.Clicked ) );
+        }
+
+        [Fact]
+        public void X3DX3D_should_equate_equal_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            var other = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void X3DX3D_should_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ), StringComparer.OrdinalIgnoreCase );
+            var other = new ClickableItem<string>( "TEST", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void X3DX3D_should_not_equate_unequal_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            var other = new ClickableItem<string>( "abc", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ne_should_not_equate_equal_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            var other = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ne_should_not_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ), StringComparer.OrdinalIgnoreCase );
+            var other = new ClickableItem<string>( "TEST", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ne_should_equate_unequal_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            var other = new ClickableItem<string>( "abc", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            var other = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ), StringComparer.OrdinalIgnoreCase );
+            var other = new ClickableItem<string>( "TEST", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_unequal_items()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            var other = new ClickableItem<string>( "abc", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_objects()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            object other = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_caseX2Dinsensitive_objects()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ), StringComparer.OrdinalIgnoreCase );
+            object other = new ClickableItem<string>( "TEST", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_unequal_objects()
+        {
+            // arrange
+            var item = new ClickableItem<string>( "test", new Command<string>( DefaultAction.None ) );
+            object other = new ClickableItem<string>( "abc", new Command<string>( DefaultAction.None ) );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
         }
     }
 }

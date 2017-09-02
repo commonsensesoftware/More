@@ -1,18 +1,13 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="WebAuthenticateInteractionRequest"/>.
-    /// </summary>
     public class WebAuthenticateInteractionRequestTest
     {
-        [Fact( DisplayName = "request should set continuation" )]
-        public void RequestShouldSetContinuation()
+        [Fact]
+        public void request_should_set_continuation()
         {
             // arrange
             var expected = "WebAuthenticate";
@@ -22,10 +17,10 @@
 
             // act
             interactionRequest.Request( interaction );
-            var actual = (string) interaction.ContinuationData["Continuation"];
+            var continuationData = (string) interaction.ContinuationData["Continuation"];
 
             // assert
-            Assert.Equal( expected, actual );
+            continuationData.Should().Be( expected );
         }
     }
 }

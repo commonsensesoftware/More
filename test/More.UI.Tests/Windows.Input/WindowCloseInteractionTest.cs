@@ -1,62 +1,49 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using FluentAssertions;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="WindowCloseInteraction"/>.
-    /// </summary>
     public class WindowCloseInteractionTest
     {
-        [Fact( DisplayName = "new window close interaction should set canceled" )]
-        public void ConstructorShouldSetCanceled()
+        [Fact]
+        public void new_window_close_interaction_should_set_canceled()
         {
             // arrange
-            var expected = true;
-            var interaction = new WindowCloseInteraction( expected );
+            var interaction = new WindowCloseInteraction( canceled: true );
 
             // act
-            var actual = interaction.Canceled;
+            var canceled = interaction.Canceled;
 
             // assert
-            Assert.Equal( expected, actual );
+            canceled.Should().BeTrue();
         }
 
-        [Fact( DisplayName = "new window close interaction should set title, content, and canceled" )]
-        public void ConstructorShouldSetTitleContentAndCanceled()
+        [Fact]
+        public void new_window_close_interaction_should_set_titleX2C_contentX2C_and_canceled()
         {
             // arrange
-            var expectedTitle = "Test";
-            var expectedContent = new object();
-            var expectedCanceled = true;
-            var interaction = new WindowCloseInteraction( expectedTitle, expectedContent, expectedCanceled );
+            var content = new object();
 
             // act
-            var actualTitle = interaction.Title;
-            var actualContent = interaction.Content;
-            var actualCanceled = interaction.Canceled;
+            var interaction = new WindowCloseInteraction( "Test", content, canceled: true );
 
             // assert
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedContent, actualContent );
-            Assert.Equal( expectedCanceled, actualCanceled );
+            interaction.ShouldBeEquivalentTo( new { Title = "Test", Content = content, Canceled = true }, o => o.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "canceled should raise property changed" )]
-        public void CanceledShouldRaisePropertyChangedEvent()
+        [Fact]
+        public void canceled_should_raise_property_changed()
         {
             // arrange
             var interaction = new WindowCloseInteraction();
-            var property = nameof( WindowCloseInteraction.Canceled );
+
+            interaction.MonitorEvents();
 
             // act
-            Assert.PropertyChanged( interaction, property, () => interaction.Canceled = true );
+            interaction.Canceled = true;
 
             // assert
-            Assert.True( interaction.Canceled );
+            interaction.ShouldRaisePropertyChangeFor( i => i.Canceled );
         }
     }
 }

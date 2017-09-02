@@ -326,7 +326,7 @@
         /// <summary>
         /// Returns a value indicating whether the current instance is equal to the specified object.
         /// </summary>
-        /// <param name="obj">The <see cref="Object">object</see> to evaluate.</param>
+        /// <param name="obj">The <see cref="object">object</see> to evaluate.</param>
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj ) => Equals( obj as HierarchicalItem<T> );
 
@@ -336,8 +336,7 @@
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            // if the hash code has been manually set, use that value
-            // instead of recomputing a new hash
+            // note: if the hash code has been manually set, use that value instead of recomputing a new hash
 
             if ( hashCode != null )
             {
@@ -372,7 +371,7 @@
         /// <param name="obj2">The <see cref="HierarchicalItem{T}"/> to compare against.</param>
         /// <returns>True if <paramref name="obj1"/> equals <paramref name="obj2"/>; otherwise, false.</returns>
         public static bool operator ==( HierarchicalItem<T> obj1, HierarchicalItem<T> obj2 ) =>
-            Equals( obj1, null ) ? Equals( obj2, null ) : obj1.Equals( obj2 );
+            ReferenceEquals( obj1, null ) ? ReferenceEquals( obj2, null ) : obj1.Equals( obj2 );
 
         /// <summary>
         /// Returns a value indicating whether the specified objects are not equal.
@@ -381,7 +380,7 @@
         /// <param name="obj2">The <see cref="HierarchicalItem{T}"/> to compare against.</param>
         /// <returns>True if <paramref name="obj1"/> does not equal <paramref name="obj2"/>; otherwise, false.</returns>
         public static bool operator !=( HierarchicalItem<T> obj1, HierarchicalItem<T> obj2 ) =>
-            Equals( obj1, null ) ? !Equals( obj2, null ) : !obj1.Equals( obj2 );
+            ReferenceEquals( obj1, null ) ? !ReferenceEquals( obj2, null ) : !obj1.Equals( obj2 );
 
         /// <summary>
         /// Gets the item value.
@@ -531,7 +530,7 @@
         /// </summary>
         /// <param name="other">The <see cref="HierarchicalItem{T}"/> to evaluate.</param>
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
-        public bool Equals( HierarchicalItem<T> other ) => !Equals( other, null ) && GetHashCode().Equals( other.GetHashCode() );
+        public bool Equals( HierarchicalItem<T> other ) => !ReferenceEquals( other, null ) && GetHashCode().Equals( other.GetHashCode() );
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it MAY not consider item Depth." )]
         bool IEquatable<IClickableItem<T>>.Equals( IClickableItem<T> other )
@@ -544,7 +543,7 @@
             var otherItem = other as HierarchicalItem<T>;
 
             // we can compare values, but this may not be the same item if it's at a different depth
-            return !Equals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
+            return !ReferenceEquals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it MAY not consider item Depth." )]
@@ -558,7 +557,7 @@
             var otherItem = other as HierarchicalItem<T>;
 
             // we can compare values, but this may not be the same item if it's at a different depth
-            return !Equals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
+            return !ReferenceEquals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
         }
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it MAY not consider item Depth." )]
@@ -572,7 +571,7 @@
             var otherItem = other as HierarchicalItem<T>;
 
             // we can compare values, but this may not be the same item if it's at a different depth
-            return !Equals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
+            return !ReferenceEquals( otherItem, null ) ? GetHashCode().Equals( other.GetHashCode() ) : Comparer.Equals( Value, other.Value );
         }
 
         // we can compare values, but this may not be the same item if it's at a different depth

@@ -1,56 +1,51 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="PrintInteraction"/>.
-    /// </summary>
     public class PrintInteractionTest
     {
-        [Fact( DisplayName = "new print interaction should not allow null" )]
-        public void ConstructorShouldNotAllowNullTitle()
+        [Fact]
+        public void new_print_interaction_should_not_allow_null()
         {
             // arrange
-            string title = null;
+            var title = default( string );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new PrintInteraction( title ) );
+            Action @new = () => new PrintInteraction( title );
 
             // assert
-            Assert.Equal( "title", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( title ) );
         }
 
-        [Fact( DisplayName = "new print interaction should set title" )]
-        public void ConstructorShouldSetTitle()
+        [Fact]
+        public void new_print_interaction_should_set_title()
         {
             // arrange
             var expected = "test";
 
             // act
             var interaction = new PrintInteraction( expected );
-            var actual = interaction.Title;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.Title.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "print preview should write expected value" )]
-        public void PrintPreviewShouldWriteExpectedValue()
+        [Fact]
+        public void print_preview_should_write_expected_value()
         {
             // arrange
-            var expected = true;
             var interaction = new PrintInteraction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "PrintPreview", () => interaction.PrintPreview = expected );
-            var actual = interaction.PrintPreview;
+            interaction.PrintPreview = true;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.PrintPreview.Should().BeTrue();
+            interaction.ShouldRaisePropertyChangeFor( i => i.PrintPreview );
         }
     }
 }

@@ -1,132 +1,135 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="CredentialInteraction"/>.
-    /// </summary>
     public class CredentialInteractionTest
     {
-        [Fact( DisplayName = "new credential interaction should not allow null title" )]
-        public void ConstructorShouldNotAllowNullTitle()
+        [Fact]
+        public void new_credential_interaction_should_not_allow_null_title()
         {
             // arrange
-            string title = null;
+            var title = default( string );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new CredentialInteraction( title ) );
+            Action @new = () => new CredentialInteraction( title );
 
             // assert
-            Assert.Equal( "title", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( title ) );
         }
 
-        [Fact( DisplayName = "new credential interaction should set title" )]
-        public void ConstructorShouldSetTitle()
+        [Fact]
+        public void new_credential_interaction_should_set_title()
         {
             // arrange
             var expected = "Test";
 
             // act
             var interaction = new CredentialInteraction( expected );
-            var actual = interaction.Title;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.Title.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "saved by credential manager should write expected value" )]
-        public void SavedByCredentialManagerShouldWriteExpectedValue()
+        [Fact]
+        public void saved_by_credential_manager_should_write_expected_value()
         {
             // arrange
-            var expected = true;
             var interaction = new CredentialInteraction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "SavedByCredentialManager", () => interaction.SavedByCredentialManager = expected );
-            var actual = interaction.SavedByCredentialManager;
+            interaction.SavedByCredentialManager = true;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.SavedByCredentialManager.Should().BeTrue();
+            interaction.ShouldRaisePropertyChangeFor( i => i.SavedByCredentialManager );
         }
 
-
-        [Fact( DisplayName = "user elected to save credential should write expected value" )]
-        public void UserElectedToSaveCredentialShouldWriteExpectedValue()
+        [Fact]
+        public void user_elected_to_save_credential_should_write_expected_value()
         {
             // arrange
-            var expected = true;
             var interaction = new CredentialInteraction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "UserElectedToSaveCredential", () => interaction.UserElectedToSaveCredential = expected );
-            var actual = interaction.UserElectedToSaveCredential;
+            interaction.UserElectedToSaveCredential = true;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.UserElectedToSaveCredential.Should().BeTrue();
+            interaction.ShouldRaisePropertyChangeFor( i => i.UserElectedToSaveCredential );
         }
 
-        [Fact( DisplayName = "credential should write expected value" )]
-        public void CredentialShouldWriteExpectedValue()
+        [Fact]
+        public void credential_should_write_expected_value()
         {
             // arrange
-            var expected = new byte[]{ 1, 2, 3 };
+            var expected = new byte[] { 1, 2, 3 };
             var interaction = new CredentialInteraction();
 
-            // act
-            Assert.PropertyChanged( interaction, "Credential", () => interaction.Credential = expected );
-            var actual = interaction.Credential;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "domain name should write expected value" )]
-        public void DomainNameShouldWriteExpectedValue()
-        {
-            // arrange
-            var expected = "Test";
-            var interaction = new CredentialInteraction();
+            interaction.MonitorEvents();
 
             // act
-            Assert.PropertyChanged( interaction, "DomainName", () => interaction.DomainName = expected );
-            var actual = interaction.DomainName;
+            interaction.Credential = expected;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.Credential.Should().Equal( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.Credential );
         }
 
-        [Fact( DisplayName = "user name should write expected value" )]
-        public void UserNameShouldWriteExpectedValue()
+        [Fact]
+        public void domain_name_should_write_expected_value()
         {
             // arrange
             var expected = "Test";
             var interaction = new CredentialInteraction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "UserName", () => interaction.UserName = expected );
-            var actual = interaction.UserName;
+            interaction.DomainName = expected;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.DomainName.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.DomainName );
         }
 
-        [Fact( DisplayName = "password should write expected value" )]
-        public void PasswordShouldWriteExpectedValue()
+        [Fact]
+        public void user_name_should_write_expected_value()
         {
             // arrange
             var expected = "Test";
             var interaction = new CredentialInteraction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "Password", () => interaction.Password = expected );
-            var actual = interaction.Password;
+            interaction.UserName = expected;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.UserName.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.UserName );
+        }
+
+        [Fact]
+        public void password_should_write_expected_value()
+        {
+            // arrange
+            var expected = "Test";
+            var interaction = new CredentialInteraction();
+
+            interaction.MonitorEvents();
+
+            // act
+            interaction.Password = expected;
+
+            // assert
+            interaction.Password.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.Password );
         }
     }
 }

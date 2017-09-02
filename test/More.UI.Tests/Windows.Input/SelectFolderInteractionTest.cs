@@ -1,42 +1,34 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using FluentAssertions;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="SelectFolderInteraction"/>.
-    /// </summary>
     public class SelectFolderInteractionTest
     {
-        [Fact( DisplayName = "new select folder interaction should set title" )]
-        public void ConstructorShouldSetTitle()
+        [Fact]
+        public void new_select_folder_interaction_should_set_title()
         {
             // arrange
             var expected = "test";
 
             // act
             var interaction = new SelectFolderInteraction( expected );
-            var actual = interaction.Title;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.Title.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "new select folder interaction should add file type filter" )]
-        public void ConstructorShouldAddFileTypeFilters()
+        [Fact]
+        public void new_select_folder_interaction_should_add_file_type_filter()
         {
             // arrange
             var expected = new[] { "*.*", "*.txt", "*.csv" };
 
             // act
             var interaction = new SelectFolderInteraction( "", expected );
-            var actual = interaction.FileTypeFilter;
 
             // assert
-            Assert.Equal( expected.AsEnumerable(), actual.AsEnumerable() );
+            interaction.FileTypeFilter.Should().Equal( expected );
         }
     }
 }

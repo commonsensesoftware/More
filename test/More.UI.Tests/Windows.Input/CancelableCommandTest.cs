@@ -1,18 +1,136 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="CancelableCommand"/>.
-    /// </summary>
     public class CancelableCommandTest
     {
+        [Theory]
+        [MemberData( nameof( IdData ) )]
+        public void new_named_data_item_command_should_set_id( Func<string, CancelableCommand> @new )
+        {
+            // arrange
+            var id = "42";
+
+            // act
+            var command = @new( id );
+
+            // assert
+            command.Id.Should().Be( id );
+        }
+
+        [Theory]
+        [MemberData( nameof( NameData ) )]
+        public void new_named_item_command_should_not_allow_null_name( Func<string, CancelableCommand> test )
+        {
+            // arrange
+            var name = default( string );
+
+            // act
+            Action @new = () => test( name );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( name ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( NameData ) )]
+        public void new_named_item_command_should_not_allow_empty_name( Func<string, CancelableCommand> test )
+        {
+            // arrange
+            var name = "";
+
+            // act
+            Action @new = () => test( name );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( name ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( NameData ) )]
+        public void new_named_item_command_should_set_name( Func<string, CancelableCommand> @new )
+        {
+            // arrange
+            var name = "Test";
+
+            // act
+            var command = @new( name );
+
+            // assert
+            command.Name.Should().Be( name );
+        }
+
+        [Theory]
+        [MemberData( nameof( ExecuteMethodData ) )]
+        public void new_named_item_command_should_not_allow_null_execute_method( Func<Action<CancelEventArgs>, CancelableCommand> test )
+        {
+            // arrange
+            var executeMethod = default( Action<CancelEventArgs> );
+
+            // act
+            Action @new = () => test( executeMethod );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( executeMethod ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( CanExecuteMethodData ) )]
+        public void new_named_item_command_should_not_allow_null_can_execute_method( Func<Func<CancelEventArgs, bool>, CancelableCommand> test )
+        {
+            // arrange
+            var canExecuteMethod = default( Func<object, bool> );
+
+            // act
+            Action @new = () => test( canExecuteMethod );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( canExecuteMethod ) );
+        }
+
+        [Fact]
+        public void execute_should_invoke_callback()
+        {
+            // arrange
+            var parameter = new CancelEventArgs();
+            var execute = new Mock<Action<CancelEventArgs>>();
+            var command = new CancelableCommand( "Cancel", execute.Object );
+
+            execute.Setup( f => f( It.IsAny<CancelEventArgs>() ) );
+            command.MonitorEvents();
+
+            // act
+            command.Execute( parameter );
+
+            // assert
+            execute.Verify( f => f( parameter ), Times.Once() );
+            command.ShouldRaise( nameof( command.Executed ) );
+        }
+
+        [Fact]
+        public void execute_should_invoke_callback_and_cancel()
+        {
+            // arrange
+            var parameter = new CancelEventArgs();
+            var execute = new Mock<Action<CancelEventArgs>>();
+            var command = new CancelableCommand( "Cancel", execute.Object );
+
+            execute.Setup( f => f( It.IsAny<CancelEventArgs>() ) ).Callback( ( CancelEventArgs e ) => e.Cancel = true );
+            command.MonitorEvents();
+
+            // act
+            command.Execute( parameter );
+
+            // assert
+            execute.Verify( f => f( parameter ), Times.Once() );
+            command.ShouldNotRaise( nameof( command.Executed ) );
+        }
+
         public static IEnumerable<object[]> IdData
         {
             get
@@ -51,117 +169,6 @@
                 yield return new object[] { new Func<Func<CancelEventArgs, bool>, CancelableCommand>( canExecute => new CancelableCommand( "Test", DefaultAction.None, canExecute ) ) };
                 yield return new object[] { new Func<Func<CancelEventArgs, bool>, CancelableCommand>( canExecute => new CancelableCommand( "1", "Test", DefaultAction.None, canExecute ) ) };
             }
-        }
-
-        [Theory( DisplayName = "new named data item command should set id" )]
-        [MemberData( "IdData" )]
-        public void ConstructorShouldSetId( Func<string, CancelableCommand> @new )
-        {
-            // arrange
-            var expected = "42";
-
-            // act
-            var command = @new( expected );
-            var actual = command.Id;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Theory( DisplayName = "new named item command should not allow null name" )]
-        [MemberData( "NameData" )]
-        public void ConstructorShouldNotAllowNullName( Func<string, CancelableCommand> test )
-        {
-            // arrange
-            string name = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( name ) );
-
-            // assert
-            Assert.Equal( "name", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new named item command should not allow empty name" )]
-        [MemberData( "NameData" )]
-        public void ConstructorShouldNotAllowEmptyName( Func<string, CancelableCommand> test )
-        {
-            // arrange
-            var name = "";
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( name ) );
-
-            // assert
-            Assert.Equal( "name", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new named item command should set name" )]
-        [MemberData( "NameData" )]
-        public void ConstructorShouldSetName( Func<string, CancelableCommand> @new )
-        {
-            // arrange
-            var expected = "Test";
-
-            // act
-            var command = @new( expected );
-            var actual = command.Name;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Theory( DisplayName = "new named item command should not allow null execute method" )]
-        [MemberData( "ExecuteMethodData" )]
-        public void ConstructorShouldNotAllowNullExecuteMethod( Func<Action<CancelEventArgs>, CancelableCommand> test )
-        {
-            // arrange
-            Action<CancelEventArgs> executeMethod = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( executeMethod ) );
-
-            // assert
-            Assert.Equal( "executeMethod", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new named item command should not allow null can execute method" )]
-        [MemberData( "CanExecuteMethodData" )]
-        public void ConstructorShouldNotAllowNullCanExecuteMethod( Func<Func<CancelEventArgs, bool>, CancelableCommand> test )
-        {
-            // arrange
-            Func<object, bool> canExecuteMethod = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( canExecuteMethod ) );
-
-            // assert
-            Assert.Equal( "canExecuteMethod", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "execute should invoke callback" )]
-        [InlineData( false, true )]
-        [InlineData( true, false )]
-        public void ExecuteShouldInvokeCallback( bool shouldCancel, bool expected )
-        {
-            // arrange
-            var parameter = new CancelEventArgs();
-            var execute = new Mock<Action<CancelEventArgs>>();
-
-            execute.Setup( f => f( It.IsAny<CancelEventArgs>() ) )
-                   .Callback( ( CancelEventArgs e ) => e.Cancel = shouldCancel );
-
-            var command = new CancelableCommand( "Cancel", execute.Object );
-            var actual = false;
-
-            command.Executed += ( s, e ) => actual = true;
-
-            // act
-            command.Execute( parameter );
-
-            // assert
-            Assert.Equal( expected, actual );
-            execute.Verify( f => f( parameter ), Times.Once() );
         }
     }
 }

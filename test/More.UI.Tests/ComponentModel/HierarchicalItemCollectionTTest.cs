@@ -1,15 +1,161 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
+    using FluentAssertions;
     using More.Collections.Generic;
     using System.Linq;
     using Xunit;
+    using static HierarchicalItemSelectionModes;
 
-    /// <summary>
-    /// Provides unit tests for the <see cref="HierarchicalItemCollection{T}"/> class.
-    /// </summary>
     public class HierarchicalItemCollectionTTest
     {
-        private static Node<string> CreateNodeHierarchy()
+        [Fact]
+        public void new_hierarchical_collection_should_be_tree_with_single_root()
+        {
+            // arrange
+
+            // act
+            var collection = new HierarchicalItemCollection<string>( CreateNodeHierarchy() );
+
+            // assert
+            collection.Should().HaveCount( 1 );
+            collection[0].IsSelected.Should().BeFalse();
+            collection[0].Should().HaveCount( 3 );
+        }
+
+        [Fact]
+        public void new_hierarchical_collection_should_be_fan_with_multiple_roots()
+        {
+            // arrange
+
+            // act
+            var collection = new HierarchicalItemCollection<string>( CreateNodeHierarchy().ToArray() );
+
+            // assert
+            collection.Should().HaveCount( 3 );
+            collection.All( i => i.IsSelected.Value ).Should().BeFalse();
+        }
+
+        [Fact]
+        public void items_should_cycle_through_selection_states()
+        {
+            // arrange
+            var collection = new HierarchicalItemCollection<string>( CreateNodeHierarchy() ) { SelectionMode = All | Synchronize };
+
+            // act : select all items
+            collection[0].IsSelected = true;
+
+            // assert
+            collection[0].IsSelected.Should().BeTrue();
+            collection[0][0].IsSelected.Should().BeTrue();
+            collection[0][1].IsSelected.Should().BeTrue();
+            collection[0][2].IsSelected.Should().BeTrue();
+            collection.SelectedItems.Should().HaveCount( 13 );
+
+            // act: unselect a child item
+            collection[0][0][0].IsSelected = false;
+
+            // assert
+            collection[0][0][0].IsSelected.Should().BeFalse();
+
+            collection[0][0].IsSelected.Should().BeNull();
+            collection[0].IsSelected.Should().BeNull();
+            collection.SelectedItems.Should().HaveCount( 10 );
+
+            // act : unselect all items
+            collection[0].IsSelected = false;
+            collection[0].IsSelected.Should().BeFalse();
+            collection[0][0].IsSelected.Should().BeFalse();
+            collection[0][1].IsSelected.Should().BeFalse();
+            collection[0][2].IsSelected.Should().BeFalse();
+            collection.SelectedItems.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void items_should_cycle_through_selection_states_when_only_leaves_are_selected()
+        {
+            // arrange
+            var collection = new HierarchicalItemCollection<string>( CreateNodeHierarchy() ) { SelectionMode = Leaf | Synchronize };
+
+            // act : select all items
+            collection[0].IsSelected = true;
+
+            // assert
+            collection[0].IsSelected.Should().BeTrue();
+            collection[0][0].IsSelected.Should().BeTrue();
+            collection[0][1].IsSelected.Should().BeTrue();
+            collection[0][2].IsSelected.Should().BeTrue();
+            collection[0][0][0].IsSelected.Should().BeTrue();
+            collection[0][0][1].IsSelected.Should().BeTrue();
+            collection[0][0][2].IsSelected.Should().BeTrue();
+            collection.SelectedItems.Should().HaveCount( 9 );
+
+            // act : unselect a child item
+            collection[0][0][0].IsSelected = false;
+
+            // assert
+            collection[0][0][0].IsSelected.Should().BeFalse();
+            collection[0][0].IsSelected.Should().BeNull();
+            collection[0].IsSelected.Should().BeNull();
+            collection.SelectedItems.Should().HaveCount( 8 );
+
+            // act : unselect all items
+            collection[0].IsSelected = false;
+
+            // assert
+            collection[0].IsSelected.Should().BeFalse();
+            collection[0][0].IsSelected.Should().BeFalse();
+            collection[0][1].IsSelected.Should().BeFalse();
+            collection[0][2].IsSelected.Should().BeFalse();
+            collection[0][0][0].IsSelected.Should().BeFalse();
+            collection.SelectedItems.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void collection_should_be_synchronized_with_source()
+        {
+            // arrange
+            var source = CreateNodeHierarchy();
+            var newItem = new Node<string>( "Item 1.4" );
+            var collection = new HierarchicalItemCollection<string>( source ) { SelectionMode = All | Synchronize };
+
+            // act : select all items
+            collection[0].IsSelected = true;
+
+            // assert
+            collection.SelectedItems.Should().HaveCount( 13 );
+
+            // act : add new item, which should cause parent update and unselection of items due to indeterminate state
+            source[0].Add( newItem );
+
+            // assert
+            collection.SelectedItems.Should().HaveCount( 11 );
+            collection[0][0][3].Value.Should().Be( newItem.Value );
+            collection[0].IsSelected.Should().BeNull();
+
+            // act : select new item, which should make entire path selected
+            collection[0][0][3].IsSelected = true;
+
+            // assert
+            collection.SelectedItems.Should().HaveCount( 14 );
+            collection[0].IsSelected.Should().BeTrue();
+            collection[0][0][3].IsSelected.Should().BeTrue();
+
+            // act : unselect item to revert state
+            collection[0][0][3].IsSelected = false;
+
+            // assert
+            collection.SelectedItems.Should().HaveCount( 11 );
+            collection[0].IsSelected.Should().BeNull();
+
+            // act : remove a source item should cause the hierarchy to update
+            source[0].Remove( newItem );
+
+            // assert
+            collection.SelectedItems.Should().HaveCount( 13 );
+            collection[0].IsSelected.Should().BeTrue();
+        }
+
+        static Node<string> CreateNodeHierarchy()
         {
             return new Node<string>( "Root Item" )
             {
@@ -32,132 +178,6 @@
                     new Node<string>( "Item 3.3" )
                 }
             };
-        }
-
-        [Fact( DisplayName = "new hierarchical collection should be tree with single root" )]
-        public void CollectionShouldResembleTreeWhenRootNodeIsProvided()
-        {
-            var target = new HierarchicalItemCollection<string>( CreateNodeHierarchy() );
-            Assert.Equal( 1, target.Count );
-            Assert.Equal( false, target[0].IsSelected );
-            Assert.Equal( 3, target[0].Count );
-        }
-
-        [Fact( DisplayName = "new hierarchical collection should be fan with multiple roots" )]
-        public void CollectionShouldResembleFanWhenMultipleRootNodesAreProvided()
-        {
-            var target = new HierarchicalItemCollection<string>( CreateNodeHierarchy().ToList() );
-            Assert.Equal( 3, target[0].Count );
-            Assert.Equal( false, target[0].IsSelected );
-            Assert.Equal( false, target[1].IsSelected );
-            Assert.Equal( false, target[2].IsSelected );
-        }
-
-        [Fact( DisplayName = "items should have correct selection state" )]
-        public void ItemsShouldHaveTheCorrectSelectionStateInTheCollection()
-        {
-            var target = new HierarchicalItemCollection<string>( CreateNodeHierarchy() );
-            target.SelectionMode = HierarchicalItemSelectionModes.All | HierarchicalItemSelectionModes.Synchronize;
-
-            // select all items
-            target[0].IsSelected = true;
-
-            Assert.Equal( true, target[0].IsSelected );
-            Assert.Equal( true, target[0][0].IsSelected );
-            Assert.Equal( true, target[0][1].IsSelected );
-            Assert.Equal( true, target[0][2].IsSelected );
-            Assert.Equal( 13, target.SelectedItems.Count );
-
-            // unselect a child item
-            target[0][0][0].IsSelected = false;
-
-            Assert.Equal( false, target[0][0][0].IsSelected );
-            Assert.Null( target[0][0].IsSelected );
-            Assert.Null( target[0].IsSelected );
-            Assert.Equal( 10, target.SelectedItems.Count );
-
-            // unselect all items
-            target[0].IsSelected = false;
-
-            Assert.Equal( false, target[0].IsSelected );
-            Assert.Equal( false, target[0][0].IsSelected );
-            Assert.Equal( false, target[0][1].IsSelected );
-            Assert.Equal( false, target[0][2].IsSelected );
-            Assert.Equal( 0, target.SelectedItems.Count );
-        }
-
-        [Fact( DisplayName = "only leaves should be selected" )]
-        public void OnlyLeafItemsShouldBeSelectedInCollection()
-        {
-            var target = new HierarchicalItemCollection<string>( CreateNodeHierarchy() );
-            target.SelectionMode = HierarchicalItemSelectionModes.Leaf | HierarchicalItemSelectionModes.Synchronize;
-
-            // select all items
-            target[0].IsSelected = true;
-
-            Assert.Equal( true, target[0].IsSelected );
-            Assert.Equal( true, target[0][0].IsSelected );
-            Assert.Equal( true, target[0][1].IsSelected );
-            Assert.Equal( true, target[0][2].IsSelected );
-            Assert.Equal( true, target[0][0][0].IsSelected );
-            Assert.Equal( true, target[0][0][1].IsSelected );
-            Assert.Equal( true, target[0][0][2].IsSelected );
-            Assert.Equal( 9, target.SelectedItems.Count );
-
-            // unselect a child item
-            target[0][0][0].IsSelected = false;
-
-            Assert.Equal( false, target[0][0][0].IsSelected );
-            Assert.Null( target[0][0].IsSelected );
-            Assert.Null( target[0].IsSelected );
-            Assert.Equal( 8, target.SelectedItems.Count );
-
-            // unselect all items
-            target[0].IsSelected = false;
-
-            Assert.Equal( false, target[0].IsSelected );
-            Assert.Equal( false, target[0][0].IsSelected );
-            Assert.Equal( false, target[0][1].IsSelected );
-            Assert.Equal( false, target[0][2].IsSelected );
-            Assert.Equal( false, target[0][0][0].IsSelected );
-            Assert.Equal( 0, target.SelectedItems.Count );
-        }
-
-        [Fact( DisplayName = "collection should be in-sync with source" )]
-        public void CollectionShouldBeInSyncWithSourceNodeCollection()
-        {
-            var source = CreateNodeHierarchy();
-            var newItem = new Node<string>( "Item 1.4" );
-            var target = new HierarchicalItemCollection<string>( source )
-            {
-                SelectionMode = HierarchicalItemSelectionModes.All | HierarchicalItemSelectionModes.Synchronize
-            };
-
-            // select all items
-            target[0].IsSelected = true;
-            Assert.Equal( 13, target.SelectedItems.Count );
-
-            // add new item (should cause parent update and unselection of items due to indeterminate state)
-            source[0].Add( newItem );
-            Assert.Equal( 11, target.SelectedItems.Count );
-            Assert.Equal( "Item 1.4", target[0][0][3].Value );
-            Assert.Null( target[0].IsSelected );
-
-            // select new item, which should make entire path selected
-            target[0][0][3].IsSelected = true;
-            Assert.Equal( 14, target.SelectedItems.Count );
-            Assert.Equal( true, target[0][0][3].IsSelected );
-            Assert.Equal( true, target[0].IsSelected );
-
-            // unselect item to revert state
-            target[0][0][3].IsSelected = false;
-            Assert.Equal( 11, target.SelectedItems.Count );
-            Assert.Null( target[0].IsSelected );
-
-            // remove a source item should cause the hierarchy to update
-            source[0].Remove( newItem );
-            Assert.Equal( 13, target.SelectedItems.Count );
-            Assert.Equal( true, target[0].IsSelected );
         }
     }
 }

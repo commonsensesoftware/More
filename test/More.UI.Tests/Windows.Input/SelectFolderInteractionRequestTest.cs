@@ -1,18 +1,12 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using FluentAssertions;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="SelectFolderInteractionRequest"/>.
-    /// </summary>
     public class SelectFolderInteractionRequestTest
     {
-        [Fact( DisplayName = "request should set continuation" )]
-        public void RequestShouldSetContinuation()
+        [Fact]
+        public void request_should_set_continuation()
         {
             // arrange
             var expected = "SelectFolder";
@@ -21,10 +15,10 @@
 
             // act
             interactionRequest.Request( interaction );
-            var actual = (string) interaction.ContinuationData["Continuation"];
+            var continuationData = (string) interaction.ContinuationData["Continuation"];
 
             // assert
-            Assert.Equal( expected, actual );
+            continuationData.Should().Be( expected );
         }
     }
 }

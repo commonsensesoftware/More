@@ -1,16 +1,13 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="AsyncCommand{T}"/>.
-    /// </summary>
     public class AsyncCommandTTest
     {
         public static IEnumerable<object[]> ExecuteMethodData
@@ -22,63 +19,59 @@
             }
         }
 
-        [Theory( DisplayName = "new command should not allow null execute method" )]
-        [MemberData( "ExecuteMethodData" )]
-        public void ConstructorShouldNotAllowNullExecuteMethod( Func<Func<object, Task>, AsyncCommand<object>> test )
+        [Theory]
+        [MemberData( nameof( ExecuteMethodData ) )]
+        public void new_command_should_not_allow_null_execute_method( Func<Func<object, Task>, AsyncCommand<object>> test )
         {
             // arrange
-            Func<object, Task> executeAsyncMethod = null;
+            var executeAsyncMethod = default( Func<object, Task> );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( executeAsyncMethod ) );
+            Action @new = () => test( executeAsyncMethod );
 
             // assert
-            Assert.Equal( "executeAsyncMethod", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( executeAsyncMethod ) );
         }
 
-        [Fact( DisplayName = "new command should not allow null can execute method" )]
-        public void ConstructorShouldNotAllowNullCanExecuteMethod()
+        [Fact]
+        public void new_command_should_not_allow_null_can_execute_method()
         {
             // arrange
-            Func<object, bool> canExecuteMethod = null;
+            var canExecuteMethod = default( Func<object, bool> );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new AsyncCommand<object>( p => Task.FromResult( 0 ), canExecuteMethod ) );
+            Action @new = () => new AsyncCommand<object>( p => Task.FromResult( 0 ), canExecuteMethod );
 
             // assert
-            Assert.Equal( "canExecuteMethod", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( canExecuteMethod ) );
         }
 
-        [Fact( DisplayName = "execute should invoke callback" )]
-        public void ExecuteShouldInvokeCallback()
+        [Fact]
+        public void execute_should_invoke_callback()
         {
             // arrange
             var execute = new Mock<Func<object, Task>>();
+            var command = new AsyncCommand<object>( execute.Object );
 
             execute.Setup( f => f( It.IsAny<object>() ) ).Returns( Task.FromResult( 0 ) );
-
-            var command = new AsyncCommand<object>( execute.Object );
-            var executed = false;
-
-            command.Executed += ( s, e ) => executed = true;
+            command.MonitorEvents();
 
             // act
             command.Execute();
 
             // assert
-            Assert.True( executed );
             execute.Verify( f => f( null ), Times.Once() );
+            command.ShouldRaise( nameof( command.Executed ) );
         }
 
-        [Fact( DisplayName = "can execute should invoke callback" )]
-        public void CanExecuteShouldInvokeCallback()
+        [Fact]
+        public void can_execute_should_invoke_callback()
         {
             // arrange
             var canExecute = new Mock<Func<object, bool>>();
+            var command = new AsyncCommand<object>( p => Task.FromResult( 0 ), canExecute.Object );
 
             canExecute.Setup( f => f( It.IsAny<object>() ) ).Returns( true );
-
-            var command = new AsyncCommand<object>( p => Task.FromResult( 0 ), canExecute.Object );
 
             // act
             command.CanExecute();
@@ -87,20 +80,19 @@
             canExecute.Verify( f => f( null ), Times.Once() );
         }
 
-        [Fact( DisplayName = "raise can execute changed should raise event" )]
-        public void RaiseCanExecuteChangedShouldRaiseEvent()
+        [Fact]
+        public void raise_can_execute_changed_should_raise_event()
         {
             // arrange
-            var raised = false;
             var command = new AsyncCommand<object>( p => Task.FromResult( 0 ) );
 
-            command.CanExecuteChanged += ( s, e ) => raised = true;
+            command.MonitorEvents();
 
             // act
             command.RaiseCanExecuteChanged();
 
             // assert
-            Assert.True( raised );
+            command.ShouldRaise( nameof( command.CanExecuteChanged ) );
         }
     }
 }

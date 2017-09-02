@@ -1,16 +1,13 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using System.Windows.Input;
     using Xunit;
+    using static Moq.Times;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="DataItemCommand{TParameter,TItem}"/>.
-    /// </summary>
     public class DataItemCommandT1T2Test
     {
         public static IEnumerable<object[]> ExecuteMethodData
@@ -22,6 +19,33 @@
             }
         }
 
+        [Theory]
+        [MemberData( nameof( ExecuteMethodData ) )]
+        public void new_data_item_command_should_not_allow_null_execute_method( Func<Action<object, object>, DataItemCommand<object, object>> newDataItemCommand )
+        {
+            // arrange
+            var executeMethod = default( Action<object, object> );
+
+            // act
+            Action @new = () => newDataItemCommand( executeMethod );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( executeMethod ) );
+        }
+
+        [Fact]
+        public void new_data_item_command_should_not_allow_null_can_execute_method()
+        {
+            // arrange
+            var canExecuteMethod = default( Func<object, object, bool> );
+
+            // act
+            Action @new = () => new DataItemCommand<object, object>( DefaultAction.None, canExecuteMethod, null );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( canExecuteMethod ) );
+        }
+
         public static IEnumerable<object[]> DataItemData
         {
             get
@@ -31,82 +55,52 @@
             }
         }
 
-        [Theory( DisplayName = "new data item command should not allow null execute method" )]
-        [MemberData( "ExecuteMethodData" )]
-        public void ConstructorShouldNotAllowNullExecuteMethod( Func<Action<object, object>, DataItemCommand<object, object>> test )
-        {
-            // arrange
-            Action<object, object> executeMethod = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( executeMethod ) );
-
-            // assert
-            Assert.Equal( "executeMethod", ex.ParamName );
-        }
-
-        [Fact( DisplayName = "new data item command should not allow null can execute method" )]
-        public void ConstructorShouldNotAllowNullCanExecuteMethod()
-        {
-            // arrange
-            Func<object, object, bool> canExecuteMethod = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new DataItemCommand<object, object>( DefaultAction.None, canExecuteMethod, null ) );
-
-            // assert
-            Assert.Equal( "canExecuteMethod", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new data item command should set data item" )]
-        [MemberData( "DataItemData" )]
-        public void ConstructorShouldSetDataItem( Func<object, DataItemCommand<object, object>> @new )
+        [Theory]
+        [MemberData( nameof( DataItemData ) )]
+        public void new_data_item_command_should_set_data_item( Func<object, DataItemCommand<object, object>> @new )
         {
             // arrange
             var expected = new object();
 
             // act
             var command = @new( expected );
-            var actual = command.Item;
 
             // assert
-            Assert.Same( expected, actual );
+            command.Item.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "execute should invoke callback" )]
-        public void ExecuteShouldInvokeCallback()
+        [Fact]
+        public void execute_should_invoke_callback()
         {
             // arrange
             var dataItem = new object();
             var execute = new Mock<Action<object, object>>();
+            var command = new DataItemCommand<object, object>( execute.Object, dataItem );
 
             execute.Setup( f => f( It.IsAny<object>(), It.IsAny<object>() ) );
-
-            var command = new DataItemCommand<object, object>( execute.Object, dataItem );
 
             // act
             command.Execute();
 
             // assert
-            execute.Verify( f => f( dataItem, null ), Times.Once() );
+            execute.Verify( f => f( dataItem, null ), Once() );
         }
 
-        [Fact( DisplayName = "can execute should invoke callback" )]
-        public void CanExecuteShouldInvokeCallback()
+        [Fact]
+        public void can_execute_should_invoke_callback()
         {
             // arrange
             var dataItem = new object();
             var canExecute = new Mock<Func<object, object, bool>>();
+            var command = new DataItemCommand<object, object>( DefaultAction.None, canExecute.Object, dataItem );
 
             canExecute.Setup( f => f( It.IsAny<object>(), It.IsAny<object>() ) ).Returns( true );
-
-            var command = new DataItemCommand<object, object>( DefaultAction.None, canExecute.Object, dataItem );
 
             // act
             command.CanExecute();
 
             // assert
-            canExecute.Verify( f => f( dataItem, null ), Times.Once() );
+            canExecute.Verify( f => f( dataItem, null ), Once() );
         }
     }
 }

@@ -1,113 +1,127 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
-    using System;
-    using System.Collections.Generic;
+    using FluentAssertions;
     using System.ComponentModel;
-    using System.Linq;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for the <see cref="SelectableItemCollection{T}"/> class.
-    /// </summary>
     public class SelectableItemCollectionTTest
     {
-        [Fact( DisplayName = "item in collection should select and unselect" )]
-        public void ShouldSelectItemInCollection()
+        [Fact]
+        public void value_in_collection_should_select_item()
         {
             // arrange
-            var target = new SelectableItemCollection<string>( new[] { "1", "2", "3" } );
-
-            // act - select
-            target[1].IsSelected = true;
-
-            // assert - selected
-            Assert.Equal( 1, target.SelectedItems.Count );
-            Assert.Equal( 1, target.SelectedValues.Count );
-            Assert.Equal( "2", target.SelectedItems[0].Value );
-            Assert.Equal( "2", target.SelectedValues[0] );
-            
-            // act - unselect
-            target.SelectedItems[0].IsSelected = false;
-
-            // assert - unselected
-            Assert.Equal( 0, target.SelectedItems.Count );
-            Assert.Equal( 0, target.SelectedValues.Count );
-        }
-
-        [Fact( DisplayName = "selected value should select item" )]
-        public void ShouldSelectValueInCollection()
-        {
-            // arrange
-            var target = new SelectableItemCollection<string>( new[] { "1", "2", "3" } );
-            var expectedProperties = new[] { "Count", "Item[]" };
-            var actualProperties = new List<string>();
-
-            ( (INotifyPropertyChanged) target.SelectedValues ).PropertyChanged += ( s, e ) => actualProperties.Add( e.PropertyName );
-
-            // act            
-            target.SelectedValues.Add( "2" );
-
-            // assert
-            Assert.Equal( 1, target.SelectedItems.Count );
-            Assert.Equal( "2", target.SelectedValues[0] );
-            Assert.Equal( "2", target.SelectedItems[0].Value );
-            Assert.True( actualProperties.SequenceEqual( expectedProperties ) );
-        }
-
-        [Fact( DisplayName = "clear should unselect values" )]
-        public void ShouldUnselectValueInCollectionOnClear()
-        {
-            // arrange
-            var target = new SelectableItemCollection<string>( new[] { "1", "2", "3" } );
-            var expectedProperties = new[] { "Count", "Item[]" };
-            var actualProperties = new List<string>();
-
-            target.SelectedValues.Add( "2" );
-            ( (INotifyPropertyChanged) target.SelectedValues ).PropertyChanged += ( s, e ) => actualProperties.Add( e.PropertyName );
+            var collection = new SelectableItemCollection<string>( new[] { "1", "2", "3" } );
 
             // act
-            target.SelectedValues.Clear();
+            collection[1].IsSelected = true;
 
             // assert
-            Assert.Equal( 0, target.SelectedItems.Count );
-            Assert.True( actualProperties.SequenceEqual( expectedProperties ) );
+            collection.SelectedValues.Should().Equal( new[] { "2" } );
+            collection.SelectedItems.ShouldBeEquivalentTo( new[] { new { Value = "2" } }, o => o.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "item should select all items in collection" )]
-        public void ShouldSelectAllItemsInCollection()
+        [Fact]
+        public void value_in_collection_should_unselect_item()
         {
             // arrange
-            var target = new SelectableItemCollection<string>( new[] { "1", "2", "3" }, "All" );
+            var collection = new SelectableItemCollection<string>( new[] { "1", "2", "3" } );
 
-            // assert - initial state
-            Assert.Equal( "All", target[0].Value );
-            Assert.Equal( 4, target.Count );
-            Assert.Equal( 0, target.SelectedItems.Count );
-            Assert.Equal( 0, target.SelectedValues.Count );
+            collection[1].IsSelected = true;
 
-            // act - select all items
-            target[0].IsSelected = true;
+            // act
+            collection.SelectedItems[0].IsSelected = false;
 
-            // assert - all items selected
-            Assert.Equal( true, target[0].IsSelected );
-            Assert.Equal( 3, target.SelectedItems.Count );
-            Assert.Equal( 3, target.SelectedValues.Count );
+            // assert
+            collection.SelectedValues.Should().BeEmpty();
+            collection.SelectedItems.Should().BeEmpty();
+        }
 
-            // act - unselect one item, which causes the 'All' item to be indeterminate (null)
-            target.SelectedItems[0].IsSelected = false;
+        [Fact]
+        public void selected_value_should_select_item()
+        {
+            // arrange
+            var collection = new SelectableItemCollection<string>( new[] { "1", "2", "3" } );
+            var selectedValues = collection.SelectedValues;
 
-            // assert - item unselected
-            Assert.Null( target[0].IsSelected );
-            Assert.Equal( 2, target.SelectedItems.Count );
-            Assert.Equal( 2, target.SelectedValues.Count );
+            selectedValues.MonitorEvents<INotifyPropertyChanged>();
 
-            // act - unselect all items
-            target[0].IsSelected = false;
+            // act            
+            collection.SelectedValues.Add( "2" );
 
-            // assert - all items unselected
-            Assert.Equal( false, target[0].IsSelected );
-            Assert.Equal( 0, target.SelectedItems.Count );
-            Assert.Equal( 0, target.SelectedValues.Count );
+            // assert
+            selectedValues.Should().Equal( new[] { "2" } );
+            selectedValues.ShouldRaisePropertyChangeFor( c => c.Count );
+            selectedValues.ShouldRaise( "PropertyChanged" ).WithArgs<PropertyChangedEventArgs>( e => e.PropertyName == "Item[]" );
+            collection.SelectedItems.ShouldBeEquivalentTo( new[] { new { Value = "2" } }, o => o.ExcludingMissingMembers() );
+        }
+
+        [Fact]
+        public void clear_should_unselect_values()
+        {
+            // arrange
+            var collection = new SelectableItemCollection<string>( new[] { "1", "2", "3" } );
+            var selectedValues = collection.SelectedValues;
+
+            collection.SelectedValues.Add( "2" );
+            selectedValues.MonitorEvents<INotifyPropertyChanged>();
+
+            // act
+            collection.SelectedValues.Clear();
+
+            // assert
+            collection.SelectedValues.Should().BeEmpty();
+            collection.SelectedItems.Should().BeEmpty();
+            selectedValues.ShouldRaisePropertyChangeFor( c => c.Count );
+            selectedValues.ShouldRaise( "PropertyChanged" ).WithArgs<PropertyChangedEventArgs>( e => e.PropertyName == "Item[]" );
+        }
+
+        [Fact]
+        public void item_should_select_all_items_in_collection()
+        {
+            // arrange
+            var collection = new SelectableItemCollection<string>( new[] { "1", "2", "3" }, "All" );
+
+            // act
+            collection[0].IsSelected = true;
+
+            // assert
+            collection[0].IsSelected.Should().BeTrue();
+            collection.SelectedValues.Should().HaveCount( 3 );
+            collection.SelectedItems.Should().HaveCount( 3 );
+        }
+
+        [Fact]
+        public void item_should_unselect_all_items_in_collection()
+        {
+            // arrange
+            var collection = new SelectableItemCollection<string>( new[] { "1", "2", "3" }, "All" );
+
+            collection[0].IsSelected = true;
+
+            // act
+            collection[0].IsSelected = false;
+
+            // assert
+            collection[0].IsSelected.Should().BeFalse();
+            collection.SelectedValues.Should().BeEmpty();
+            collection.SelectedItems.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void item_should_be_indeterminate_when_a_childe_item_is_unselected_in_collection()
+        {
+            // arrange
+            var collection = new SelectableItemCollection<string>( new[] { "1", "2", "3" }, "All" );
+
+            collection[0].IsSelected = true;
+
+            // act
+            collection.SelectedItems[0].IsSelected = false;
+
+            // assert
+            collection[0].IsSelected.Should().BeNull();
+            collection.SelectedValues.Should().HaveCount( 2 );
+            collection.SelectedItems.Should().HaveCount( 2 );
         }
     }
 }

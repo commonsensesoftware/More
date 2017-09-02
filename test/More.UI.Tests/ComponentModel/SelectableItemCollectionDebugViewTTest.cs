@@ -1,62 +1,59 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
-    using System;
+    using FluentAssertions;
     using System.Collections.Generic;
     using System.Linq;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="SelectableItemCollectionDebugView{T}"/>.
-    /// </summary>
     public class SelectableItemCollectionDebugViewTTest
     {
-        [Fact( DisplayName = "items should return expected results" )]
-        public void ItemsPropertyShouldReturnExpectedResults()
+        [Fact]
+        public void items_should_return_expected_results()
         {
             // arrange
             var expected = new[] { "1", "2", "3" };
             var collection = new SelectableItemCollection<string>( expected );
-            var target = new SelectableItemCollectionDebugView<string>( collection );
+            var debugView = new SelectableItemCollectionDebugView<string>( collection );
 
             // act
-            var actual = target.Items.Select( i => i.Value );
+            var values = debugView.Items.Select( i => i.Value );
 
             // assert
-            Assert.True( actual.SequenceEqual( expected ) );
+            values.Should().Equal( expected );
         }
 
-        [Fact( DisplayName = "selected values should return expected results" )]
-        public void SelectedValuesPropertyShouldReturnExpectedResults()
+        [Fact]
+        public void selected_values_should_return_expected_results()
         {
             // arrange
             var expected = new[] { "1", "2", "3" };
             var collection = new SelectableItemCollection<string>( expected );
-            var target = new SelectableItemCollectionDebugView<string>( collection );
+            var debugView = new SelectableItemCollectionDebugView<string>( collection );
 
             collection.ForEach( i => i.IsSelected = true );
 
             // act
-            var actual = target.SelectedValues;
+            var selectedValues = debugView.SelectedValues;
 
             // assert
-            Assert.True( actual.SequenceEqual( expected ) );
+            selectedValues.Should().Equal( expected );
         }
 
-        [Fact( DisplayName = "selected items should return expected results" )]
-        public void SelectedItemsPropertyShouldReturnExpectedResults()
+        [Fact]
+        public void selected_items_should_return_expected_results()
         {
             // arrange
             var items = new[] { "1", "2", "3" };
             var collection = new SelectableItemCollection<string>( items );
-            var target = new SelectableItemCollectionDebugView<string>( collection );
+            var debugView = new SelectableItemCollectionDebugView<string>( collection );
 
             collection.ForEach( i => i.IsSelected = true );
 
             // act
-            var actual = target.SelectedItems;
+            var selectedItems = debugView.SelectedItems;
 
             // assert
-            Assert.True( actual.SequenceEqual( collection ) );
+            selectedItems.Should().Equal( collection );
         }
     }
 }

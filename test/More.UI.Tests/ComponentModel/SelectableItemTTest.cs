@@ -1,73 +1,279 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
+    using FluentAssertions;
     using System;
+    using System.Collections.Generic;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for the <see cref="SelectableItem{T}"/> class.
-    /// </summary>
     public class SelectableItemTTest
     {
-        [Fact( DisplayName = "new selectable item should set expected properties" )]
-        public void ConstructorShouldSetExpectedProperties()
+        public static IEnumerable<object[]> ConstructorData
         {
-            var target = new SelectableItem<string>( "test" );
-
-            Assert.Equal( "test", target.Value );
-            Assert.NotNull( target.IsSelected );
-            Assert.Equal( false, target.IsSelected );
-
-            target = new SelectableItem<string>( true, "test" );
-            Assert.Equal( "test", target.Value );
-            Assert.Equal( true, target.IsSelected );
-
-            target = new SelectableItem<string>( "test", StringComparer.OrdinalIgnoreCase );
-            Assert.Equal( "test", target.Value );
-            Assert.NotNull( target.IsSelected );
-            Assert.Equal( false, target.IsSelected );
-
-            target = new SelectableItem<string>( true, "test", StringComparer.OrdinalIgnoreCase );
-            Assert.Equal( "test", target.Value );
-            Assert.Equal( true, target.IsSelected );
+            get
+            {
+                yield return new object[] { new Func<SelectableItem<string>>( () => new SelectableItem<string>( "test" ) ), new bool?( false ) };
+                yield return new object[] { new Func<SelectableItem<string>>( () => new SelectableItem<string>( true, "test" ) ), new bool?( true ) };
+                yield return new object[] { new Func<SelectableItem<string>>( () => new SelectableItem<string>( "test", StringComparer.OrdinalIgnoreCase ) ), new bool?( false ) };
+                yield return new object[] { new Func<SelectableItem<string>>( () => new SelectableItem<string>( true, "test", StringComparer.OrdinalIgnoreCase ) ), new bool?( true ) };
+            }
         }
 
-        [Fact( DisplayName = "item should select and unselect" )]
-        public void ShouldSelectedAndUnselect()
+        [Theory]
+        [MemberData( nameof( ConstructorData ) )]
+        public void new_selectable_item_should_set_expected_properties( Func<SelectableItem<string>> @new, bool? selected )
         {
-            var target = new SelectableItem<string>( "test" );
+            // arrange
 
-            Assert.Equal( "test", target.Value );
-            Assert.NotNull( target.IsSelected );
-            Assert.PropertyChanged( target, "IsSelected", () => target.IsSelected = true );
-            Assert.Equal( true, target.IsSelected );
+            // act
+            var item = @new();
 
-            target.Unselect.Execute( null );
-            Assert.Equal( false, target.IsSelected );
-
-            target.Select.Execute( null );
-            Assert.Equal( true, target.IsSelected );
+            // assert
+            item.ShouldBeEquivalentTo( new { Value = "test", IsSelected = selected }, o => o.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "equals should return expected result" )]
-        public void EqualsShouldReturnExpectedResult()
+        [Fact]
+        public void item_should_not_be_selected_by_default()
         {
-            var target = new SelectableItem<string>( "test" );
+            // arrange
+            var item = new SelectableItem<string>( "test" );
 
-            Assert.True( target == new SelectableItem<string>( "test" ) );
-            Assert.True( target != new SelectableItem<string>( "test1" ) );
-            Assert.True( target.Equals( new SelectableItem<string>( "test" ) ) );
-            Assert.False( target.Equals( new SelectableItem<string>( "test1" ) ) );
-            Assert.True( target.Equals( (object) new SelectableItem<string>( "test" ) ) );
-            Assert.False( target.Equals( (object) new SelectableItem<string>( "test1" ) ) );
+            // act
 
-            target = new SelectableItem<string>( "test", StringComparer.OrdinalIgnoreCase );
 
-            Assert.True( target == new SelectableItem<string>( "TEST" ) );
-            Assert.True( target != new SelectableItem<string>( "TEST1" ) );
-            Assert.True( target.Equals( new SelectableItem<string>( "TEST" ) ) );
-            Assert.False( target.Equals( new SelectableItem<string>( "TEST1" ) ) );
-            Assert.True( target.Equals( (object) new SelectableItem<string>( "TEST" ) ) );
-            Assert.False( target.Equals( (object) new SelectableItem<string>( "TEST1" ) ) );
+            // assert
+            item.IsSelected.Should().BeFalse();
+        }
+
+        [Fact]
+        public void item_should_select_using_property()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+
+            item.MonitorEvents();
+
+            // act
+            item.IsSelected = true;
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Selected ) );
+        }
+
+        [Fact]
+        public void item_should_select_using_command()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+
+            item.MonitorEvents();
+
+            // act
+            item.Select.Execute( null );
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Selected ) );
+        }
+
+        [Fact]
+        public void item_should_unselect_using_property()
+        {
+            // arrange
+            var item = new SelectableItem<string>( true, "test" );
+
+            item.MonitorEvents();
+
+            // act
+            item.IsSelected = false;
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Unselected ) );
+        }
+
+        [Fact]
+        public void item_should_unselect_using_command()
+        {
+            // arrange
+            var item = new SelectableItem<string>( true, "test" );
+
+            item.MonitorEvents();
+
+            // act
+            item.Unselect.Execute( null );
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Unselected ) );
+        }
+
+        [Fact]
+        public void X3DX3D_should_equate_equal_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            var other = new SelectableItem<string>( "test" );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void X3DX3D_should_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test", StringComparer.OrdinalIgnoreCase );
+            var other = new SelectableItem<string>( "TEST" );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void X3DX3D_should_not_equate_unequal_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            var other = new SelectableItem<string>( "abc" );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ne_should_not_equate_equal_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            var other = new SelectableItem<string>( "test" );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ne_should_not_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test", StringComparer.OrdinalIgnoreCase );
+            var other = new SelectableItem<string>( "TEST" );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ne_should_equate_unequal_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            var other = new SelectableItem<string>( "abc" );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            var other = new SelectableItem<string>( "test" );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test", StringComparer.OrdinalIgnoreCase );
+            var other = new SelectableItem<string>( "TEST" );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_unequal_items()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            var other = new SelectableItem<string>( "abc" );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_objects()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            object other = new SelectableItem<string>( "test" );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_caseX2Dinsensitive_objects()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test", StringComparer.OrdinalIgnoreCase );
+            object other = new SelectableItem<string>( "TEST" );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_unequal_objects()
+        {
+            // arrange
+            var item = new SelectableItem<string>( "test" );
+            object other = new SelectableItem<string>( "abc" );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
         }
     }
 }

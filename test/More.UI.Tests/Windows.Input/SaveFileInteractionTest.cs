@@ -1,16 +1,156 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="SaveFileInteraction"/>.
-    /// </summary>
     public class SaveFileInteractionTest
     {
+        [Theory]
+        [MemberData( nameof( TitleData ) )]
+        public void new_save_file_interaction_should_not_allow_null_title( Func<string, SaveFileInteraction> newSaveFileInteraction )
+        {
+            // arrange
+            var title = default( string );
+
+            // act
+            Action @new = () => newSaveFileInteraction( title );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( title ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( DefaultExtData ) )]
+        public void new_save_file_interaction_should_not_allow_null_default_extension( Func<string, SaveFileInteraction> newSaveFileInteraction )
+        {
+            // arrange
+            var defaultFileExtension = default( string );
+
+            // act
+            Action @new = () => newSaveFileInteraction( defaultFileExtension );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( defaultFileExtension ) );
+        }
+
+        [Fact]
+        public void new_save_file_interaction_should_not_allow_null_suggested_file_name()
+        {
+            // arrange
+            var suggestedFileName = default( string );
+
+            // act
+            Action @new = () => new SaveFileInteraction( "", "", suggestedFileName );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( suggestedFileName ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( TitleData ) )]
+        public void new_save_file_interaction_should_set_title( Func<string, SaveFileInteraction> @new )
+        {
+            // arrange
+            var expected = "test";
+
+            // act
+            var interaction = @new( expected );
+
+            // assert
+            interaction.Title.Should().Be( expected );
+        }
+
+        [Theory]
+        [MemberData( nameof( DefaultExtData ) )]
+        public void new_save_file_interaction_should_set_default_extension( Func<string, SaveFileInteraction> @new )
+        {
+            // arrange
+            var expected = "*.txt";
+
+            // act
+            var interaction = @new( expected );
+
+            // assert
+            interaction.DefaultFileExtension.Should().Be( expected );
+        }
+
+        [Fact]
+        public void new_save_file_interaction_should_set_suggested_file_name()
+        {
+            // arrange
+            var expected = "test";
+
+            // act
+            var interaction = new SaveFileInteraction( "", "", expected );
+
+            // assert
+            interaction.FileName.Should().Be( expected );
+        }
+
+        [Fact]
+        public void default_file_extension_should_not_allow_null()
+        {
+            // arrange
+            var value = default( string );
+            var interaction = new SaveFileInteraction();
+
+            // act
+            Action setDefaultFileExtension = () => interaction.DefaultFileExtension = value;
+
+            // assert
+            setDefaultFileExtension.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( value ) );
+        }
+
+        [Fact]
+        public void default_file_extension_should_write_expected_value()
+        {
+            // arrange
+            var expected = "*.txt";
+            var interaction = new SaveFileInteraction();
+
+            interaction.MonitorEvents();
+
+            // act
+            interaction.DefaultFileExtension = expected;
+
+            // assert
+            interaction.DefaultFileExtension.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.DefaultFileExtension );
+        }
+
+        [Fact]
+        public void file_name_should_not_allow_null()
+        {
+            // arrange
+            var value = default( string );
+            var interaction = new SaveFileInteraction();
+
+            // act
+            Action setFileName = () => interaction.FileName = value;
+
+            // assert
+            setFileName.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( value ) );
+        }
+
+        [Fact]
+        public void file_name_should_write_expected_value()
+        {
+            // arrange
+            var expected = "test";
+            var interaction = new SaveFileInteraction();
+
+            interaction.MonitorEvents();
+
+            // act
+            interaction.FileName = expected;
+
+            // assert
+            interaction.FileName.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.FileName );
+        }
+
         public static IEnumerable<object[]> TitleData
         {
             get
@@ -28,149 +168,6 @@
                 yield return new object[] { new Func<string, SaveFileInteraction>( ext => new SaveFileInteraction( "", ext ) ) };
                 yield return new object[] { new Func<string, SaveFileInteraction>( ext => new SaveFileInteraction( "", ext, "" ) ) };
             }
-        }
-
-        [Theory( DisplayName = "new save file interaction should not allow null title" )]
-        [MemberData( "TitleData" )]
-        public void ConstructorShouldNotAllowNullTitle( Func<string, SaveFileInteraction> test )
-        {
-            // arrange
-            string title = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( title ) );
-
-            // assert
-            Assert.Equal( "title", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new save file interaction should not allow null default extension" )]
-        [MemberData( "DefaultExtData" )]
-        public void ConstructorShouldNotAllowNullDefaultExtension( Func<string, SaveFileInteraction> test )
-        {
-            // arrange
-            string defaultFileExtension = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( defaultFileExtension ) );
-
-            // assert
-            Assert.Equal( "defaultFileExtension", ex.ParamName );
-        }
-
-        [Fact( DisplayName = "new save file interaction should not allow null suggested file name" )]
-        public void ConstructorShouldNotAllowNullSuggestedFileName()
-        {
-            // arrange
-            string suggestedFileName = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new SaveFileInteraction( "", "", suggestedFileName ) );
-
-            // assert
-            Assert.Equal( "suggestedFileName", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new save file interaction should set title" )]
-        [MemberData( "TitleData" )]
-        public void ConstructorShouldSetTitle( Func<string, SaveFileInteraction> @new )
-        {
-            // arrange
-            var expected = "test";
-
-            // act
-            var interaction = @new( expected );
-            var actual = interaction.Title;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Theory( DisplayName = "new save file interaction should set default extension" )]
-        [MemberData( "DefaultExtData" )]
-        public void ConstructorShouldSetDefaultExtension( Func<string, SaveFileInteraction> @new )
-        {
-            // arrange
-            var expected = "*.txt";
-
-            // act
-            var interaction = @new( expected );
-            var actual = interaction.DefaultFileExtension;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "new save file interaction should set suggested file name" )]
-        public void ConstructorShouldSetSuggestedFileName()
-        {
-            // arrange
-            var expected = "test";
-
-            // act
-            var interaction = new SaveFileInteraction( "", "", expected );
-            var actual = interaction.FileName;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "default file extension should not allow null" )]
-        public void DefaultFileExtensionShouldNotAllowNull()
-        {
-            // arrange
-            string value = null;
-            var interaction = new SaveFileInteraction();
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => interaction.DefaultFileExtension = value );
-
-            // assert
-            Assert.Equal( "value", ex.ParamName );
-        }
-
-        [Fact( DisplayName = "default file extension should write expected value" )]
-        public void DefaultFileExtensionShouldWriteExpectedValue()
-        {
-            // arrange
-            var expected = "*.txt";
-            var interaction = new SaveFileInteraction();
-
-            // act
-            Assert.PropertyChanged( interaction, "DefaultFileExtension", () => interaction.DefaultFileExtension = expected );
-            var actual = interaction.DefaultFileExtension;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "file name should not allow null" )]
-        public void FileNameShouldNotAllowNull()
-        {
-            // arrange
-            string value = null;
-            var interaction = new SaveFileInteraction();
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => interaction.FileName = value );
-
-            // assert
-            Assert.Equal( "value", ex.ParamName );
-        }
-
-        [Fact( DisplayName = "file name should write expected value" )]
-        public void FileNameShouldWriteExpectedValue()
-        {
-            // arrange
-            var expected = "test";
-            var interaction = new SaveFileInteraction();
-
-            // act
-            Assert.PropertyChanged( interaction, "FileName", () => interaction.FileName = expected );
-            var actual = interaction.FileName;
-
-            // assert
-            Assert.Equal( expected, actual );
         }
     }
 }

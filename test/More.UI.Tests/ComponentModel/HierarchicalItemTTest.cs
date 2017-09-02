@@ -1,173 +1,506 @@
-﻿namespace More.ComponentModel
+namespace More.ComponentModel
 {
+    using FluentAssertions;
+    using Moq;
     using More.Collections.Generic;
     using More.Windows.Input;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using Xunit;
+    using static Moq.Times;
 
-    /// <summary>
-    /// Provides unit tests for the <see cref="HierarchicalItem{T}"/> class.
-    /// </summary>
     public class HierarchicalItemTTest
     {
-        [Fact( DisplayName = "new hierarchical item should set expected properties" )]
-        public void ConstructorShouldSetExpectedProperties()
+        public static IEnumerable<object[]> ConstructorData
         {
-            var command = new Command<string>( Console.WriteLine );
-            var target = new HierarchicalItem<string>( "test", command );
-
-            Assert.Equal( "test", target.Value );
-            Assert.Null( target.IsSelected );
-            Assert.IsType<CommandInterceptor<object>>( target.Click );
-
-            target = new HierarchicalItem<string>( "test", command, EqualityComparer<string>.Default );
-            Assert.Equal( "test", target.Value );
-            Assert.Null( target.IsSelected );
-            Assert.IsType<CommandInterceptor<object>>( target.Click );
-
-            target = new HierarchicalItem<string>( "test", true, command );
-            Assert.Equal( "test", target.Value );
-            Assert.Equal( true, target.IsSelected );
-            Assert.IsType<CommandInterceptor<object>>( target.Click );
-
-            target = new HierarchicalItem<string>( "test", true, command, EqualityComparer<string>.Default );
-            Assert.Equal( "test", target.Value );
-            Assert.Equal( true, target.IsSelected );
-            Assert.IsType<CommandInterceptor<object>>( target.Click );
+            get
+            {
+                var command = new Command<string>( DefaultAction.None );
+                yield return new object[] { new Func<HierarchicalItem<string>>( () => new HierarchicalItem<string>( "test", command ) ), default( bool? ) };
+                yield return new object[] { new Func<HierarchicalItem<string>>( () => new HierarchicalItem<string>( "test", command, EqualityComparer<string>.Default ) ), default( bool? ) };
+                yield return new object[] { new Func<HierarchicalItem<string>>( () => new HierarchicalItem<string>( "test", true, command ) ), new bool?( true ) };
+                yield return new object[] { new Func<HierarchicalItem<string>>( () => new HierarchicalItem<string>( "test", true, command, EqualityComparer<string>.Default ) ), new bool?( true ) };
+            }
         }
 
-        [Fact( DisplayName = "perform click should execute command" )]
-        public void PerformClickShouldExecuteCommand()
+        [Theory]
+        [MemberData( nameof( ConstructorData ) )]
+        public void new_hierarchical_item_should_set_expected_properties( Func<HierarchicalItem<string>> @new, bool? selected )
         {
-            var clicked = false;
-            var command = new Command<string>(
-                p =>
-                {
-                    Assert.Null( p );
-                    clicked = true;
-                } );
-            var target = new HierarchicalItem<string>( "test", command );
+            // arrange
 
-            target.PerformClick();
-            Assert.True( clicked );
+            // act
+            var item = @new();
 
-            clicked = false;
-            command = new Command<string>(
-                p =>
-                {
-                    Assert.Equal( "test2", p );
-                    clicked = true;
-                } );
-            target = new HierarchicalItem<string>( "test", command );
-            target.PerformClick( "test2" );
-            Assert.True( clicked );
+            // assert
+            item.Value.Should().Be( "test" );
+            item.IsSelected.Should().Be( selected );
+            item.Click.Should().BeOfType<CommandInterceptor<object>>();
         }
 
-        [Fact( DisplayName = "item should select and unselect" )]
-        public void ShouldSelectedAndUnselect()
+        [Fact]
+        public void perform_click_should_execute_command()
         {
-            var target = new HierarchicalItem<string>( "test", new Command<string>( Console.WriteLine ) );
+            // arrange
+            var click = new Mock<Action<string>>();
+            var command = new Command<string>( click.Object );
+            var item = new HierarchicalItem<string>( "test", command );
 
-            Assert.Equal( "test", target.Value );
-            Assert.Null( target.IsSelected );
-            Assert.PropertyChanged( target, "IsSelected", () => target.IsSelected = true );
-            Assert.True( target.IsSelected.Value );
+            click.Setup( f => f( It.IsAny<string>() ) );
+            item.MonitorEvents();
 
-            target.Unselect.Execute( null );
-            Assert.False( target.IsSelected.Value );
+            // act
+            item.PerformClick();
 
-            target.Select.Execute( null );
-            Assert.True( target.IsSelected.Value );
+            // assert
+            click.Verify( f => f( null ), Once() );
+            item.ShouldRaise( nameof( item.Clicked ) );
         }
 
-        [Fact( DisplayName = "equals should return expected result" )]
-        public void EqualsShouldReturnExpectedResult()
+        [Fact]
+        public void perform_click_should_execute_command_with_parameter()
         {
-            var command = new Command<string>( Console.WriteLine );
-            var target = new HierarchicalItem<string>( "test", command );
-            var child = new HierarchicalItem<string>( "test", command );
+            // arrange
+            var click = new Mock<Action<string>>();
+            var command = new Command<string>( click.Object );
+            var item = new HierarchicalItem<string>( "test", command );
 
-            target.Add( child );
+            click.Setup( f => f( It.IsAny<string>() ) );
+            item.MonitorEvents();
 
-            Assert.True( target == new HierarchicalItem<string>( "test", command ) );
-            Assert.True( target != new HierarchicalItem<string>( "test1", command ) );
-            Assert.True( target.Equals( new HierarchicalItem<string>( "test", command ) ) );
-            Assert.False( target.Equals( new HierarchicalItem<string>( "test1", command ) ) );
-            Assert.True( target.Equals( (object) new HierarchicalItem<string>( "test", command ) ) );
-            Assert.False( target.Equals( (object) new HierarchicalItem<string>( "test1", command ) ) );
+            // act
+            item.PerformClick( "param" );
 
-            Assert.False( child == target );
-            Assert.True( child != target );
-            Assert.False( child.Equals( target ) );
-            Assert.False( child.Equals( (object) target ) );
+            // assert
+            click.Verify( f => f( "param" ), Once() );
+            item.ShouldRaise( nameof( item.Clicked ) );
+        }
 
+        [Fact]
+        public void item_selection_state_should_be_indeterminate_by_default()
+        {
+            // arrange
+            var item = new HierarchicalItem<string>( "test", new Command<string>( DefaultAction.None ) );
+
+            // act
+
+
+            // assert
+            item.IsSelected.Should().BeNull();
+        }
+
+        [Fact]
+        public void item_should_be_selected_using_property()
+        {
+            // arrange
+            var item = new HierarchicalItem<string>( "test", new Command<string>( DefaultAction.None ) );
+
+            item.MonitorEvents();
+            ( (INotifyPropertyChanged) item ).MonitorEvents<INotifyPropertyChanged>();
+
+            // act
+            item.IsSelected = true;
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Selected ) );
+        }
+
+        [Fact]
+        public void item_should_be_selected_using_command()
+        {
+            // arrange
+            var item = new HierarchicalItem<string>( "test", new Command<string>( DefaultAction.None ) );
+
+            item.MonitorEvents();
+            ( (INotifyPropertyChanged) item ).MonitorEvents<INotifyPropertyChanged>();
+
+            // act
+            item.Select.Execute( null );
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Selected ) );
+        }
+
+        [Fact]
+        public void item_should_be_unselected_using_property()
+        {
+            // arrange
+            var item = new HierarchicalItem<string>( "test", true, new Command<string>( DefaultAction.None ) );
+
+            item.MonitorEvents();
+            ( (INotifyPropertyChanged) item ).MonitorEvents<INotifyPropertyChanged>();
+
+            // act
+            item.IsSelected = false;
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Unselected ) );
+        }
+
+        [Fact]
+        public void item_should_be_unselected_using_command()
+        {
+            // arrange
+            var item = new HierarchicalItem<string>( "test", true, new Command<string>( DefaultAction.None ) );
+
+            item.MonitorEvents();
+            ( (INotifyPropertyChanged) item ).MonitorEvents<INotifyPropertyChanged>();
+
+            // act
+            item.Unselect.Execute( null );
+
+            // assert
+            item.ShouldRaisePropertyChangeFor( i => i.IsSelected );
+            item.ShouldRaise( nameof( item.Unselected ) );
+        }
+
+        [Theory]
+        [InlineData( 0 )]
+        [InlineData( 1 )]
+        [InlineData( 2 )]
+        [InlineData( 3 )]
+        public void item_depth_should_return_correct_level( int depth )
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+
+            // act
+            for ( var i = 0; i < depth; i++ )
+            {
+                var value = ( i + 1 ).ToString();
+                var newItem = new HierarchicalItem<string>( value, command );
+
+                item.Add( newItem );
+                item = newItem;
+            }
+
+            // assert
+            item.Depth.Should().Be( depth );
+        }
+
+        [Theory]
+        [InlineData( 0 )]
+        [InlineData( 1 )]
+        [InlineData( 2 )]
+        [InlineData( 3 )]
+        public void parent_should_return_correct_object( int depth )
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var parent = default( HierarchicalItem<string> );
+
+            // act
+            for ( var i = 0; i < depth; i++ )
+            {
+                var value = ( i + 1 ).ToString();
+                var newItem = new HierarchicalItem<string>( value, command );
+
+                item.Add( newItem );
+                parent = newItem.Parent;
+                item = newItem;
+            }
+
+            // assert
+            item.Parent.Should().BeSameAs( parent );
+        }
+
+        [Fact]
+        public void items_with_equal_values_at_different_depths_should_yield_different_hash_codes()
+        {
+            // arrange
+            var comparer = new DynamicComparer<Tuple<int, string>>( tuple => tuple.Item1.GetHashCode() );
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<Tuple<int, string>>( Tuple.Create( 1, "0" ), command, comparer )
+            {
+                new HierarchicalItem<Tuple<int, string>>( Tuple.Create( 1, "1" ), command, comparer )
+            };
+            var other = new HierarchicalItem<Tuple<int, string>>( Tuple.Create( 1, "2" ), command, comparer );
+
+            // act
+            item[0].Add( other );
+
+            // assert
+            item.Depth.Should().NotBe( other.Depth );
+            item.GetHashCode().Should().NotBe( other.GetHashCode() );
+        }
+
+        [Fact]
+        public void items_with_different_values_and_depths_should_yield_different_hash_codes()
+        {
+            // arrange
+            var comparer = new DynamicComparer<Tuple<int, string>>( tuple => tuple.Item1.GetHashCode() );
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<Tuple<int, string>>( Tuple.Create( 2, "0" ), command, comparer )
+            {
+                new HierarchicalItem<Tuple<int, string>>( Tuple.Create( 1, "1" ), command, comparer )
+            };
+            var other = new HierarchicalItem<Tuple<int, string>>( Tuple.Create( 0, "2" ), command, comparer );
+
+            // act
+            item[0].Add( other );
+
+            // assert
+            item.Depth.Should().NotBe( other.Depth );
+            item.GetHashCode().Should().NotBe( other.GetHashCode() );
+        }
+
+        [Fact]
+        public void X3DX3D_should_equate_equal_items()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "test", command );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void X3DX3D_should_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
             var comparer = StringComparer.OrdinalIgnoreCase;
-            target = new HierarchicalItem<string>( "test", command, comparer );
+            var item = new HierarchicalItem<string>( "test", command, comparer );
+            var other = new HierarchicalItem<string>( "TEST", command, comparer );
 
-            Assert.True( target == new HierarchicalItem<string>( "TEST", command, comparer ) );
-            Assert.True( target != new HierarchicalItem<string>( "TEST1", command, comparer ) );
-            Assert.True( target.Equals( new HierarchicalItem<string>( "TEST", command, comparer ) ) );
-            Assert.False( target.Equals( new HierarchicalItem<string>( "TEST1", command, comparer ) ) );
-            Assert.True( target.Equals( (object) new HierarchicalItem<string>( "TEST", command, comparer ) ) );
-            Assert.False( target.Equals( (object) new HierarchicalItem<string>( "TEST1", command, comparer ) ) );
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeTrue();
         }
 
-        [Fact( DisplayName = "item depth should return correct level" )]
-        public void DepthPropertyShouldReturnCorrectLevel()
+        [Fact]
+        public void X3DX3D_should_not_equate_unequal_items()
         {
-            var command = new Command<string>( Console.WriteLine );
-            var target = new HierarchicalItem<string>( "test", command );
-            Assert.Equal( 0, target.Depth );
-            target.Add( new HierarchicalItem<string>( "1", command ) );
-            Assert.Equal( 1, target[0].Depth );
-            target[0].Add( new HierarchicalItem<string>( "2", command ) );
-            Assert.Equal( 2, target[0][0].Depth );
-            target[0][0].Add( new HierarchicalItem<string>( "3", command ) );
-            Assert.Equal( 3, target[0][0][0].Depth );
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "abc", command );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeFalse();
         }
 
-        [Fact( DisplayName = "parent should return correct object" )]
-        public void ParentPropertyShouldReturnCorrectObject()
+        [Fact]
+        public void X3DX3D_should_not_equate_equal_values_for_items_at_different_depths()
         {
-            var command = new Command<string>( Console.WriteLine );
-            var target = new HierarchicalItem<string>( "test", command );
-            Assert.Null( target.Parent );
-            target.Add( new HierarchicalItem<string>( "1", command ) );
-            Assert.Equal( target, target[0].Parent );
-            target[0].Add( new HierarchicalItem<string>( "2", command ) );
-            Assert.Equal( target[0], target[0][0].Parent );
-            target[0][0].Add( new HierarchicalItem<string>( "3", command ) );
-            Assert.Equal( target[0][0], target[0][0][0].Parent );
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "test", command );
+
+            item.Add( other );
+
+            // act
+            var result = item == other;
+
+            // assert
+            result.Should().BeFalse();
         }
 
-        [Fact( DisplayName = "items with equal values at different depths should yield different hash codes" )]
-        public void TwoItemsWithTheSameValueAtDifferentDepthsShouldYieldDifferentHashCodes()
+        [Fact]
+        public void ne_should_not_equate_equal_items()
         {
-            var comparer = new DynamicComparer<Tuple<int, string>>( tuple => tuple.Item1.GetHashCode() );
-            var command = new Command<string>( Console.WriteLine );
-            var item1 = new HierarchicalItem<Tuple<int, string>>( new Tuple<int, string>( 1, "0" ), command, comparer );
-            item1.Add( new HierarchicalItem<Tuple<int, string>>( new Tuple<int, string>( 1, "1" ), command, comparer ) );
-            var item2 = new HierarchicalItem<Tuple<int, string>>( new Tuple<int, string>( 1, "2" ), command, comparer );
-            item1[0].Add( item2 );
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "test", command );
 
-            Assert.Equal( item1.Value.Item1, item2.Value.Item1 );
-            Assert.NotEqual( item1.Depth, item2.Depth );
-            Assert.NotEqual( item1.GetHashCode(), item2.GetHashCode() );
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeFalse();
         }
 
-        [Fact( DisplayName = "items with different values and depths should yield different hash codes" )]
-        public void WhenValueAndDepthOfTwoItemsAreUnequalTheyShouldYieldDifferentHashCodes()
+        [Fact]
+        public void ne_should_not_equate_equal_caseX2Dinsensitive_items()
         {
-            var comparer = new DynamicComparer<Tuple<int, string>>( tuple => tuple.Item1.GetHashCode() );
-            var command = new Command<string>( Console.WriteLine );
-            var item1 = new HierarchicalItem<Tuple<int, string>>( new Tuple<int, string>( 2, "0" ), command, comparer );
-            item1.Add( new HierarchicalItem<Tuple<int, string>>( new Tuple<int, string>( 1, "1" ), command, comparer ) );
-            var item2 = new HierarchicalItem<Tuple<int, string>>( new Tuple<int, string>( 0, "2" ), command, comparer );
-            item1[0].Add( item2 );
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var comparer = StringComparer.OrdinalIgnoreCase;
+            var item = new HierarchicalItem<string>( "test", command, comparer );
+            var other = new HierarchicalItem<string>( "TEST", command, comparer );
 
-            Assert.NotEqual( item1.Depth, item2.Depth );
-            Assert.NotEqual( item1.GetHashCode(), item2.GetHashCode() );
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ne_should_equate_unequal_items()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "abc", command );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ne_should_not_equate_equal_values_for_items_at_different_depths()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "test", command );
+
+            item.Add( other );
+
+            // act
+            var result = item != other;
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_items()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "test", command );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_caseX2Dinsensitive_items()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var comparer = StringComparer.OrdinalIgnoreCase;
+            var item = new HierarchicalItem<string>( "test", command, comparer );
+            var other = new HierarchicalItem<string>( "TEST", command, comparer );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_unequal_items()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "abc", command );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_equal_values_for_items_at_different_depths()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var other = new HierarchicalItem<string>( "test", command );
+
+            item.Add( other );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_objects()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            object other = new HierarchicalItem<string>( "test", command );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_equate_equal_caseX2Dinsensitive_objects()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var comparer = StringComparer.OrdinalIgnoreCase;
+            var item = new HierarchicalItem<string>( "test", command, comparer );
+            object other = new HierarchicalItem<string>( "TEST", command, comparer );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_unequal_objects()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            object other = new HierarchicalItem<string>( "abc", command );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void equals_should_not_equate_equal_values_for_objects_at_different_depths()
+        {
+            // arrange
+            var command = new Command<string>( DefaultAction.None );
+            var item = new HierarchicalItem<string>( "test", command );
+            var child = new HierarchicalItem<string>( "test", command );
+            object other = child;
+
+            item.Add( child );
+
+            // act
+            var result = item.Equals( other );
+
+            // assert
+            result.Should().BeFalse();
         }
     }
 }

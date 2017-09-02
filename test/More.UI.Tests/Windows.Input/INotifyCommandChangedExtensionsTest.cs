@@ -1,32 +1,29 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="INotifyCommandChangedExtensions"/>.
-    /// </summary>
     public class INotifyCommandChangedExtensionsTest
     {
-        [Fact( DisplayName = "raise can execute changed should not allow null commands" )]
-        public void RaiseCanExecuteChangedShouldNotAllowNullCommands()
+        [Fact]
+        public void raise_can_execute_changed_should_not_allow_null_commands()
         {
             // arrange
-            IEnumerable<INotifyCommandChanged> commands = null;
+            var commands = default( IEnumerable<INotifyCommandChanged> );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => commands.RaiseCanExecuteChanged() );
+            Action raiseCanExecuteChanged = () => commands.RaiseCanExecuteChanged();
 
             // assert
-            Assert.Equal( "commands", ex.ParamName );
+            raiseCanExecuteChanged.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( commands ) );
         }
 
-        [Fact( DisplayName = "raise can execute changed should invoke commands" )]
-        public void RaiseCanExecuteChangedShouldInvokeCommands()
+        [Fact]
+        public void raise_can_execute_changed_should_invoke_commands()
         {
             // arrange
             var mocks = new List<Mock<INotifyCommandChanged>>()

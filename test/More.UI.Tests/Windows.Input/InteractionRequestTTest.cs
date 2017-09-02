@@ -1,61 +1,54 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using FluentAssertions;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="InteractionRequest{T}"/>.
-    /// </summary>
     public class InteractionRequestTTest
     {
-        [Fact( DisplayName = "new interaction request should set id" )]
-        public void ConstructorShouldSetId()
+        [Fact]
+        public void new_interaction_request_should_set_id()
         {
             // arrange
             var expected = "42";
-            var request = new InteractionRequest<Interaction>( expected );
 
             // act
-            var actual = request.Id;
+            var request = new InteractionRequest<Interaction>( expected );
 
             // assert
-            Assert.Equal( expected, actual );
+            request.Id.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "id should write expected value" )]
-        public void IdShouldWriteExpectedValue()
+        [Fact]
+        public void id_should_write_expected_value()
         {
             // arrange
             var expected = "42";
             var request = new InteractionRequest<Interaction>();
 
+            request.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( request, "Id", () => request.Id = expected );
-            var actual = request.Id;
+            request.Id = expected;
 
             // assert
-            Assert.Equal( expected, actual );
+            request.Id.Should().Be( expected );
+            request.ShouldRaisePropertyChangeFor( r => r.Id );
         }
 
-        [Fact( DisplayName = "request should raise event" )]
-        public void RequestShouldRaiseEvent()
+        [Fact]
+        public void request_should_raise_event()
         {
             // arrange
             var expected = new Interaction();
             var request = new InteractionRequest<Interaction>();
-            Interaction actual = null;
 
-            request.Requested += ( s, e ) => actual = e.Interaction;
+            request.MonitorEvents();
 
             // act
             request.Request( expected );
 
             // assert
-            Assert.Same( expected, actual );
-
+            request.ShouldRaise( nameof( request.Requested ) ).WithArgs<InteractionRequestedEventArgs>( e => e.Interaction == expected );
         }
     }
 }

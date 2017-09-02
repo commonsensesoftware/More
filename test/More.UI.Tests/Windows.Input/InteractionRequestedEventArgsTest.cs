@@ -1,41 +1,35 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="InteractionRequestedEventArgs"/>.
-    /// </summary>
     public class InteractionRequestedEventArgsTest
     {
-        [Fact( DisplayName = "new interaction requested event args should not allow null interaction" )]
-        public void ConstructorShouldNotAllowNullInteraction()
+        [Fact]
+        public void new_interaction_requested_event_args_should_not_allow_null_interaction()
         {
             // arrange
-            Interaction interaction = null;
+            var interaction = default( Interaction );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new InteractionRequestedEventArgs( interaction ) );
+            Action @new = () => new InteractionRequestedEventArgs( interaction );
 
             // assert
-            Assert.Equal( "interaction", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( interaction ) );
         }
 
-        [Fact( DisplayName = "new interaction requested event args should set interaction" )]
-        public void ConstructorShouldSetInteraction()
+        [Fact]
+        public void new_interaction_requested_event_args_should_set_interaction()
         {
             // arrange
             var expected = new Interaction();
-            var args = new InteractionRequestedEventArgs( expected );
 
             // act
-            var actual = args.Interaction;
+            var args = new InteractionRequestedEventArgs( expected );
 
             // assert
-            Assert.Same( expected, actual );
+            args.Interaction.Should().Be( expected );
         }
     }
 }

@@ -1,16 +1,102 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="OpenFileInteraction"/>.
-    /// </summary>
     public class OpenFileInteractionTest
     {
+        [Theory]
+        [MemberData( nameof( TitleData ) )]
+        public void new_open_file_interaction_should_not_allow_null_title( Func<string, OpenFileInteraction> newOpenFileInteraction )
+        {
+            // arrange
+            var title = default( string );
+
+            // act
+            Action @new = () => newOpenFileInteraction( title );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( title ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( FileTypeFilterData ) )]
+        public void new_open_file_interaction_should_not_allow_null_file_type_filter( Func<FileType[], OpenFileInteraction> newOpenFileInteraction )
+        {
+            // arrange
+            var fileTypeFilter = default( FileType[] );
+
+            // act
+            Action @new = () => newOpenFileInteraction( fileTypeFilter );
+
+            // assert
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( fileTypeFilter ) );
+        }
+
+        [Theory]
+        [MemberData( nameof( TitleData ) )]
+        public void new_open_file_interaction_should_set_title( Func<string, OpenFileInteraction> @new )
+        {
+            // arrange
+            var expected = "test";
+
+            // act
+            var interaction = @new( expected );
+
+            // assert
+            interaction.Title.Should().Be( expected );
+        }
+
+        [Theory]
+        [MemberData( nameof( FileTypeFilterData ) )]
+        public void new_open_file_interaction_should_set_file_type_filter( Func<FileType[], OpenFileInteraction> @new )
+        {
+            // arrange
+            var expected = new[]
+            {
+                new FileType( "Text Files", ".txt" ),
+                new FileType( "Comma-Separated Values Files", ".csv" ),
+                new FileType( "All Files", ".*" )
+            };
+
+            // act
+            var interaction = @new( expected );
+
+            // assert
+            interaction.FileTypeFilter.Should().Equal( expected );
+        }
+
+        [Fact]
+        public void new_open_file_interaction_should_set_multiselect_option()
+        {
+            // arrange
+            var multiselect = true;
+
+            // act
+            var interaction = new OpenFileInteraction( "", multiselect );
+
+            // assert
+            interaction.Multiselect.Should().BeTrue();
+        }
+
+        [Fact]
+        public void multiselect_should_write_expected_value()
+        {
+            // arrange
+            var interaction = new OpenFileInteraction();
+
+            interaction.MonitorEvents();
+
+            // act
+            interaction.Multiselect = true;
+
+            // assert
+            interaction.Multiselect.Should().BeTrue();
+            interaction.ShouldRaisePropertyChangeFor( i => i.Multiselect );
+        }
+
         public static IEnumerable<object[]> TitleData
         {
             get
@@ -27,98 +113,6 @@
                 yield return new object[] { new Func<FileType[], OpenFileInteraction>( fileTypeFilter => new OpenFileInteraction( "", fileTypeFilter ) ) };
                 yield return new object[] { new Func<FileType[], OpenFileInteraction>( fileTypeFilter => new OpenFileInteraction( "", false, fileTypeFilter ) ) };
             }
-        }
-
-        [Theory( DisplayName = "new open file interaction should not allow null title" )]
-        [MemberData( "TitleData" )]
-        public void ConstructorShouldNotAllowNullTitle( Func<string, OpenFileInteraction> test )
-        {
-            // arrange
-            string title = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( title ) );
-
-            // assert
-            Assert.Equal( "title", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new open file interaction should not allow null file type filter" )]
-        [MemberData( "FileTypeFilterData" )]
-        public void ConstructorShouldNotAllowNullFileTypeFilter( Func<FileType[], OpenFileInteraction> test )
-        {
-            // arrange
-            FileType[] fileTypeFilter = null;
-
-            // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( fileTypeFilter ) );
-
-            // assert
-            Assert.Equal( "fileTypeFilter", ex.ParamName );
-        }
-
-        [Theory( DisplayName = "new open file interaction should set title" )]
-        [MemberData( "TitleData" )]
-        public void ConstructorShouldSetTitle( Func<string, OpenFileInteraction> @new )
-        {
-            // arrange
-            var expected = "test";
-
-            // act
-            var interaction = @new( expected );
-            var actual = interaction.Title;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Theory( DisplayName = "new open file interaction should set file type filter" )]
-        [MemberData( "FileTypeFilterData" )]
-        public void ConstructorShouldSetFileTypeFilter( Func<FileType[], OpenFileInteraction> @new )
-        {
-            // arrange
-            var expected = new[]
-            {
-                new FileType( "Text Files", ".txt" ),
-                new FileType( "Comma-Separated Values Files", ".csv" ),
-                new FileType( "All Files", ".*" )
-            };
-
-            // act
-            var interaction = @new( expected );
-            var actual = interaction.FileTypeFilter;
-
-            // assert
-            Assert.Equal( expected.AsEnumerable(), actual.AsEnumerable() );
-        }
-
-        [Fact( DisplayName = "new open file interaction should set multiselect option" )]
-        public void ConstructorShouldSetMultiselectOption()
-        {
-            // arrange
-            var expected = true;
-
-            // act
-            var interaction = new OpenFileInteraction( "", expected );
-            var actual = interaction.Multiselect;
-
-            // assert
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "multiselect should write expected value" )]
-        public void MultiselectShouldWriteExpectedValue()
-        {
-            // arrange
-            var expected = true;
-            var interaction = new OpenFileInteraction();
-
-            // act
-            Assert.PropertyChanged( interaction, "Multiselect", () => interaction.Multiselect = expected );
-            var actual = interaction.Multiselect;
-
-            // assert
-            Assert.Equal( expected, actual );
         }
     }
 }

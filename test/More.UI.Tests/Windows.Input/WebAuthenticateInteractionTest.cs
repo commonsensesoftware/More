@@ -1,28 +1,23 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="WebAuthenticateInteraction"/>.
-    /// </summary>
     public class WebAuthenticateInteractionTest
     {
-        [Fact( DisplayName = "new web authentication interaction should set request uri" )]
-        public void ConstructorShouldSetRequestUri()
+        [Fact]
+        public void new_web_authentication_interaction_should_set_request_uri()
         {
             // arrange
             var expected = new Uri( "http://tempuri.org" );
             var interaction = new WebAuthenticateInteraction( expected );
 
             // act
-            var actual = interaction.RequestUri;
+            var value = interaction.RequestUri;
 
             // assert
-            Assert.Equal( expected, actual );
+            value.Should().Be( expected );
         }
     }
 }

@@ -1,130 +1,105 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using Moq;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
     using Xunit;
+    using static Moq.Times;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="InteractionExtensions"/>.
-    /// </summary>
     public class InteractionExtensionsTest
     {
-        [Fact( DisplayName = "execute default command should not allow null interaction" )]
-        public void ExecuteDefaultCommandShouldNotAllowNullInteraction()
+        [Fact]
+        public void execute_default_command_should_not_allow_null_interaction()
         {
             // arrange
-            Interaction interaction = null;
+            var interaction = default( Interaction );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => interaction.ExecuteDefaultCommand() );
+            Action executeDefaultCommand = () => interaction.ExecuteDefaultCommand();
 
             // assert
-            Assert.Equal( "interaction", ex.ParamName );
+            executeDefaultCommand.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( interaction ) );
         }
 
-        [Fact( DisplayName = "execute default command should execute expected command" )]
-        public void ExecuteDefaultCommandShouldExecuteExpectedCommand()
+        [Fact]
+        public void execute_default_command_should_execute_expected_command()
         {
             // arrange
             var command = new Mock<INamedCommand>();
+            var interaction = new Interaction() { DefaultCommandIndex = 0, Commands = { command.Object } };
 
             command.Setup( c => c.CanExecute( It.IsAny<object>() ) ).Returns( true );
             command.Setup( c => c.Execute( It.IsAny<object>() ) );
-
-            var interaction = new Interaction()
-            {
-                DefaultCommandIndex = 0,
-                Commands = { command.Object }
-            };
 
             // act
             interaction.ExecuteDefaultCommand();
 
             // assert
-            command.Verify( c => c.Execute( null ), Times.Once() );
+            command.Verify( c => c.Execute( null ), Once() );
         }
 
-        [Fact( DisplayName = "execute default command should not execute disabled command" )]
-        public void ExecuteDefaultCommandShouldExecuteDisabledCommand()
+        [Fact]
+        public void execute_default_command_should_not_execute_disabled_command()
         {
             // arrange
             var command = new Mock<INamedCommand>();
+            var interaction = new Interaction() { DefaultCommandIndex = 0, Commands = { command.Object } };
 
             command.Setup( c => c.CanExecute( It.IsAny<object>() ) ).Returns( false );
             command.Setup( c => c.Execute( It.IsAny<object>() ) );
-
-            var interaction = new Interaction()
-            {
-                DefaultCommandIndex = 0,
-                Commands = { command.Object }
-            };
 
             // act
             interaction.ExecuteDefaultCommand();
 
             // assert
-            command.Verify( c => c.Execute( null ), Times.Never() );
+            command.Verify( c => c.Execute( null ), Never() );
         }
 
-        [Fact( DisplayName = "execute cancel command should not allow null interaction" )]
-        public void ExecuteCancelCommandShouldNotAllowNullInteraction()
+        [Fact]
+        public void execute_cancel_command_should_not_allow_null_interaction()
         {
             // arrange
-            Interaction interaction = null;
+            var interaction = default( Interaction );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => interaction.ExecuteCancelCommand() );
+            Action executeCancelCommand = () => interaction.ExecuteCancelCommand();
 
             // assert
-            Assert.Equal( "interaction", ex.ParamName );
+            executeCancelCommand.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( interaction ) );
         }
 
-        [Fact( DisplayName = "execute cancel command should execute expected command" )]
-        public void ExecuteCancelCommandShouldExecuteExpectedCommand()
+        [Fact]
+        public void execute_cancel_command_should_execute_expected_command()
         {
             // arrange
             var command = new Mock<INamedCommand>();
+            var interaction = new Interaction() { CancelCommandIndex = 0, Commands = { command.Object } };
 
             command.Setup( c => c.CanExecute( It.IsAny<object>() ) ).Returns( true );
             command.Setup( c => c.Execute( It.IsAny<object>() ) );
 
-            var interaction = new Interaction()
-            {
-                CancelCommandIndex = 0,
-                Commands = { command.Object }
-            };
-
             // act
             interaction.ExecuteCancelCommand();
 
             // assert
-            command.Verify( c => c.Execute( null ), Times.Once() );
+            command.Verify( c => c.Execute( null ), Once() );
         }
 
-        [Fact( DisplayName = "execute cancel command should not execute disabled command" )]
-        public void ExecuteCancelCommandShouldExecuteDisabledCommand()
+        [Fact]
+        public void execute_cancel_command_should_not_execute_disabled_command()
         {
             // arrange
             var command = new Mock<INamedCommand>();
+            var interaction = new Interaction() { CancelCommandIndex = 0, Commands = { command.Object } };
 
             command.Setup( c => c.CanExecute( It.IsAny<object>() ) ).Returns( false );
             command.Setup( c => c.Execute( It.IsAny<object>() ) );
 
-            var interaction = new Interaction()
-            {
-                CancelCommandIndex = 0,
-                Commands = { command.Object }
-            };
-
             // act
             interaction.ExecuteCancelCommand();
 
             // assert
-            command.Verify( c => c.Execute( null ), Times.Never() );
+            command.Verify( c => c.Execute( null ), Never() );
         }
     }
 }

@@ -88,7 +88,7 @@
         /// <param name="obj2">The <see cref="IClickableItem{T}"/> to compare against.</param>
         /// <returns>True if <paramref name="obj1"/> equals <paramref name="obj2"/>; otherwise, false.</returns>
         public static bool operator ==( ClickableItem<T> obj1, IClickableItem<T> obj2 ) =>
-            Equals( obj1, null ) ? Equals( obj2, null ) : obj1.Equals( obj2 );
+            ReferenceEquals( obj1, null ) ? ReferenceEquals( obj2, null ) : obj1.Equals( obj2 );
 
         /// <summary>
         /// Returns a value indicating whether the specified objects are not equal.
@@ -97,7 +97,7 @@
         /// <param name="obj2">The <see cref="IClickableItem{T}"/> to compare against.</param>
         /// <returns>True if <paramref name="obj1"/> does not equal <paramref name="obj2"/>; otherwise, false.</returns>
         public static bool operator !=( ClickableItem<T> obj1, IClickableItem<T> obj2 ) =>
-            Equals( obj1, null ) ? !Equals( obj2, null ) : !obj1.Equals( obj2 );
+            ReferenceEquals( obj1, null ) ? !ReferenceEquals( obj2, null ) : !obj1.Equals( obj2 );
 
         /// <summary>
         /// Gets the value of the item.
@@ -121,7 +121,7 @@
         /// </summary>
         /// <param name="other">The <see cref="IClickableItem{T}"/> to evaluate.</param>
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
-        public bool Equals( IClickableItem<T> other ) => !Equals( other, null ) && Comparer.Equals( Value, other.Value );
+        public bool Equals( IClickableItem<T> other ) => !ReferenceEquals( other, null ) && Comparer.Equals( Value, other.Value );
 
         /// <summary>
         /// Returns a value indicating whether the current instance is equal to the specified value.

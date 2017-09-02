@@ -1,129 +1,122 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using Moq;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="Interaction"/>.
-    /// </summary>
     public class InteractionTest
     {
-        public static IEnumerable<object[]> TitleData
-        {
-            get
-            {
-                yield return new object[] { new Func<string, Interaction>( title => new Interaction( title ) ) };
-                yield return new object[] { new Func<string, Interaction>( title => new Interaction( title, (object) null ) ) };
-            }
-        }
-
-        [Theory( DisplayName = "new interation should not allow null title" )]
-        [MemberData( "TitleData" )]
-        public void ConstructorShouldNotAllowTitle( Func<string, Interaction> test )
+        [Theory]
+        [MemberData( nameof( TitleData ) )]
+        public void new_interation_should_not_allow_null_title( Func<string, Interaction> newInteraction )
         {
             // arrange
-            string title = null;
+            var title = default( string );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => test( title ) );
+            Action @new = () => newInteraction( title );
 
             // assert
-            Assert.Equal( "title", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( title ) );
         }
 
-        [Theory( DisplayName = "new interation should set title" )]
-        [MemberData( "TitleData" )]
-        public void ConstructorShouldSetTitle( Func<string,Interaction> @new )
+        [Theory]
+        [MemberData( nameof( TitleData ) )]
+        public void new_interation_should_set_title( Func<string, Interaction> @new )
         {
             // arrange
             var expected = "Title";
-            
+
             // act
             var interaction = @new( expected );
-            var actual = interaction.Title;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.Title.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "title should not allow null" )]
-        public void TitleShouldNotAllowNull()
+        [Fact]
+        public void title_should_not_allow_null()
         {
             // arrange
+            var value = default( string );
             var interaction = new Interaction();
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => interaction.Title = null );
+            Action setTitle = () => interaction.Title = value;
 
             // assert
-            Assert.Equal( "value", ex.ParamName );
+            setTitle.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( value ) );
         }
 
-        [Fact( DisplayName = "title should write expected value" )]
-        public void TitleShouldWriteExpectedValue()
+        [Fact]
+        public void title_should_write_expected_value()
         {
             // arrange
             var expected = "Test";
             var interaction = new Interaction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "Title", () => interaction.Title = expected );
-            var actual = interaction.Title;
+            interaction.Title = expected;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.Title.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.Title );
         }
 
-        [Fact( DisplayName = "new interaction should set content" )]
-        public void ConstructorShouldSetContent()
+        [Fact]
+        public void new_interaction_should_set_content()
         {
             // arrange
             var expected = new object();
 
             // act
             var interaction = new Interaction( "Test", expected );
-            var actual = interaction.Content;
 
             // assert
-            Assert.Same( expected, actual );
+            interaction.Content.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "content should write expected value" )]
-        public void ContentShouldWriteExpectedValue()
+        [Fact]
+        public void content_should_write_expected_value()
         {
             // arrange
             var expected = new object();
             var interaction = new Interaction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "Content", () => interaction.Content = expected );
-            var actual = interaction.Content;
+            interaction.Content = expected;
 
             // assert
-            Assert.Same( expected, actual );
+            interaction.Content.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.Content );
         }
 
-        [Fact( DisplayName = "default command index should write expected value" )]
-        public void DefaultCommandIndexShouldWriteExpectedValue()
+        [Fact]
+        public void default_command_index_should_write_expected_value()
         {
             // arrange
             var expected = 0;
             var interaction = new Interaction();
 
+            interaction.MonitorEvents();
+
             // act
-            Assert.PropertyChanged( interaction, "DefaultCommandIndex", () => interaction.DefaultCommandIndex = expected );
+            interaction.DefaultCommandIndex = expected;
             var actual = interaction.DefaultCommandIndex;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.DefaultCommandIndex.Should().Be( expected );
+            interaction.ShouldRaisePropertyChangeFor( i => i.DefaultCommandIndex );
         }
 
-        [Fact( DisplayName = "default command should return expected command" )]
-        public void DefaultCommandShouldReturnExpectedCommand()
+        [Fact]
+        public void default_command_should_return_expected_command()
         {
             // arrange
             var expected = new Mock<INamedCommand>().Object;
@@ -138,30 +131,28 @@
             };
 
             // act
-            Assert.PropertyChanged( interaction, "DefaultCommand", () => interaction.DefaultCommandIndex = 1 );
-            var actual = interaction.DefaultCommand;
+            interaction.DefaultCommandIndex = 1;
 
             // assert
-            Assert.Same( expected, actual );
+            interaction.DefaultCommand.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "cancel command index should write expected value" )]
-        public void CancelCommandIndexShouldWriteExpectedValue()
+        [Fact]
+        public void cancel_command_index_should_write_expected_value()
         {
             // arrange
             var expected = 0;
             var interaction = new Interaction();
 
             // act
-            Assert.PropertyChanged( interaction, "CancelCommandIndex", () => interaction.CancelCommandIndex = expected );
-            var actual = interaction.CancelCommandIndex;
+            interaction.CancelCommandIndex = expected;
 
             // assert
-            Assert.Equal( expected, actual );
+            interaction.CancelCommandIndex.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "cancel command should return expected command" )]
-        public void CancelCommandShouldReturnExpectedCommand()
+        [Fact]
+        public void cancel_command_should_return_expected_command()
         {
             // arrange
             var expected = new Mock<INamedCommand>().Object;
@@ -176,11 +167,19 @@
             };
 
             // act
-            Assert.PropertyChanged( interaction, "CancelCommand", () => interaction.CancelCommandIndex = 2 );
-            var actual = interaction.CancelCommand;
+            interaction.CancelCommandIndex = 2;
 
             // assert
-            Assert.Same( expected, actual );
+            interaction.CancelCommand.Should().Be( expected );
+        }
+
+        public static IEnumerable<object[]> TitleData
+        {
+            get
+            {
+                yield return new object[] { new Func<string, Interaction>( title => new Interaction( title ) ) };
+                yield return new object[] { new Func<string, Interaction>( title => new Interaction( title, null ) ) };
+            }
         }
     }
 }

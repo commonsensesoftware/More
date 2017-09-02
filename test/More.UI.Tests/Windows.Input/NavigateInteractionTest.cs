@@ -1,45 +1,34 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using FluentAssertions;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="NavigateInteraction"/>.
-    /// </summary>
     public class NavigateInteractionTest
     {
-        [Fact( DisplayName = "new navigation interaction should set title" )]
-        public void ConstructorShouldSetTitle()
+        [Fact]
+        public void new_navigation_interaction_should_set_title()
         {
             // arrange
             var expected = "Test";
+
+            // act
             var interaction = new NavigateInteraction( expected );
 
-            // act
-            var actual = interaction.Title;
-
             // assert
-            Assert.Equal( expected, actual );
+            interaction.Title.Should().Be( expected );
         }
 
-        [Fact( DisplayName = "new navigation interaction should set title and content" )]
-        public void ConstructorShouldSetTitleAndContent()
+        [Fact]
+        public void new_navigation_interaction_should_set_title_and_content()
         {
             // arrange
-            var expectedTitle = "Test";
-            var expectedContent = new object();
-            var interaction = new NavigateInteraction( expectedTitle, expectedContent );
+            var content = new object();
 
             // act
-            var actualTitle = interaction.Title;
-            var actualContent = interaction.Content;
+            var interaction = new NavigateInteraction( "Test", content );
 
             // assert
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedContent, actualContent );
+            interaction.ShouldBeEquivalentTo( new { Title = "Test", Content = content }, o => o.ExcludingMissingMembers() );
         }
     }
 }

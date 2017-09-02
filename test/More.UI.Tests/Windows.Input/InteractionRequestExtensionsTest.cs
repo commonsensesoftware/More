@@ -1,797 +1,674 @@
-﻿namespace More.Windows.Input
+namespace More.Windows.Input
 {
+    using FluentAssertions;
     using IO;
     using Moq;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="InteractionRequestExtensions"/>.
-    /// </summary>
     public class InteractionRequestExtensionsTest
     {
-        [Fact( DisplayName = "alert async should request title and message" )]
-        public async Task AlertAsyncShouldReturnTitleAndMessage()
+        [Fact]
+        public async Task alert_async_should_request_title_and_message()
         {
             // arrange
-            var expectedTitle = "Test";
-            var expectedMessage = "This is a test.";
-            var expectedButton = "OK";
-            string actualTitle = null;
-            string actualMessage = null;
-            string actualButton = null;
             var interactionRequest = new InteractionRequest<Interaction>();
+            var args = default( InteractionRequestedEventArgs );
 
-            interactionRequest.Requested += ( s, e ) =>
-            {
-                actualTitle = e.Interaction.Title;
-                actualMessage = (string) e.Interaction.Content;
-                actualButton = e.Interaction.DefaultCommand.Name;
-                e.Interaction.ExecuteDefaultCommand();
-            };
+            interactionRequest.Requested += ( s, e ) => ( args = e ).Interaction.ExecuteDefaultCommand();
 
             // act
-            await interactionRequest.AlertAsync( expectedTitle, expectedMessage );
+            await interactionRequest.AlertAsync( "Test", "This is a test." );
 
             // assert
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedMessage, actualMessage );
-            Assert.Equal( expectedButton, actualButton );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+                new
+                {
+                    Title = "Test",
+                    Content = "This is a test.",
+                    DefaultCommand = new { Name = "OK" }
+                },
+                options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "alert async should request title, message, and button" )]
-        public async Task AlertAsyncShouldReturnTitleMessageAndButton()
+        [Fact]
+        public async Task alert_async_should_request_titleX2C_messageX2C_and_button()
         {
             // arrange
-            var expectedTitle = "Test";
-            var expectedMessage = "This is a test.";
-            var expectedButton = "Accept";
-            string actualTitle = null;
-            string actualMessage = null;
-            string actualButton = null;
             var interactionRequest = new InteractionRequest<Interaction>();
+            var args = default( InteractionRequestedEventArgs );
 
-            interactionRequest.Requested += ( s, e ) =>
-            {
-                actualTitle = e.Interaction.Title;
-                actualMessage = (string) e.Interaction.Content;
-                actualButton = e.Interaction.DefaultCommand.Name;
-                e.Interaction.ExecuteDefaultCommand();
-            };
+            interactionRequest.Requested += ( s, e ) => ( args = e ).Interaction.ExecuteDefaultCommand();
 
             // act
-            await interactionRequest.AlertAsync( expectedTitle, expectedMessage, expectedButton );
+            await interactionRequest.AlertAsync( "Test", "This is a test.", "Accept" );
 
             // assert
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedMessage, actualMessage );
-            Assert.Equal( expectedButton, actualButton );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Test",
+                  Content = "This is a test.",
+                  DefaultCommand = new { Name = "Accept" }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "confirm async should request prompt" )]
-        public async Task ConfirmAsyncShouldRequestPrompt()
+        [Fact]
+        public async Task confirm_async_should_request_prompt()
         {
             // arrange
-            var expectedTitle = string.Empty;
-            var expectedPrompt = "Continue?";
-            var expectedAccept = "OK";
-            var expectedCancel = "Cancel";
-            string actualTitle = null;
-            string actualPrompt = null;
-            string actualAccept = null;
-            string actualCancel = null;
             var interactionRequest = new InteractionRequest<Interaction>();
+            var args = default( InteractionRequestedEventArgs );
 
-            interactionRequest.Requested += ( s, e ) =>
-            {
-                actualTitle = e.Interaction.Title;
-                actualPrompt = (string) e.Interaction.Content;
-                actualAccept = e.Interaction.DefaultCommand.Name;
-                actualCancel = e.Interaction.CancelCommand.Name;
-                e.Interaction.ExecuteDefaultCommand();
-            };
+            interactionRequest.Requested += ( s, e ) => ( args = e ).Interaction.ExecuteDefaultCommand();
 
             // act
-            var response = await interactionRequest.ConfirmAsync( expectedPrompt );
+            var response = await interactionRequest.ConfirmAsync( "Continue?" );
 
             // assert
-            Assert.True( response );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedPrompt, actualPrompt );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            response.Should().BeTrue();
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "",
+                  Content = "Continue?",
+                  DefaultCommand = new { Name = "OK" },
+                  CancelCommand = new { Name = "Cancel" },
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "confirm async should request prompt and title" )]
-        public async Task ConfirmAsyncShouldRequestPromptAndTitle()
+        [Fact]
+        public async Task confirm_async_should_request_prompt_and_title()
         {
             // arrange
-            var expectedTitle = "Question";
-            var expectedPrompt = "Continue?";
-            var expectedAccept = "OK";
-            var expectedCancel = "Cancel";
-            string actualTitle = null;
-            string actualPrompt = null;
-            string actualAccept = null;
-            string actualCancel = null;
             var interactionRequest = new InteractionRequest<Interaction>();
+            var args = default( InteractionRequestedEventArgs );
 
-            interactionRequest.Requested += ( s, e ) =>
-            {
-                actualTitle = e.Interaction.Title;
-                actualPrompt = (string) e.Interaction.Content;
-                actualAccept = e.Interaction.DefaultCommand.Name;
-                actualCancel = e.Interaction.CancelCommand.Name;
-                e.Interaction.ExecuteCancelCommand();
-            };
+            interactionRequest.Requested += ( s, e ) => ( args = e ).Interaction.ExecuteCancelCommand();
 
             // act
-            var response = await interactionRequest.ConfirmAsync( expectedPrompt, expectedTitle );
+            var response = await interactionRequest.ConfirmAsync( "Continue?", "Question" );
 
             // assert
-            Assert.False( response );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedPrompt, actualPrompt );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            response.Should().BeFalse();
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Question",
+                  Content = "Continue?",
+                  DefaultCommand = new { Name = "OK" },
+                  CancelCommand = new { Name = "Cancel" },
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "confirm async should request title, prompt, and buttons" )]
-        public async Task ConfirmAsyncShouldRequestTitlePromptAndButtons()
+        [Fact]
+        public async Task confirm_async_should_request_titleX2C_promptX2C_and_buttons()
         {
             // arrange
-            var expectedTitle = "Question";
-            var expectedPrompt = "Are you sure?";
-            var expectedAccept = "Yes";
-            var expectedCancel = "No";
-            string actualTitle = null;
-            string actualPrompt = null;
-            string actualAccept = null;
-            string actualCancel = null;
             var interactionRequest = new InteractionRequest<Interaction>();
+            var args = default( InteractionRequestedEventArgs );
 
-            interactionRequest.Requested += ( s, e ) =>
-            {
-                actualTitle = e.Interaction.Title;
-                actualPrompt = (string) e.Interaction.Content;
-                actualAccept = e.Interaction.DefaultCommand.Name;
-                actualCancel = e.Interaction.CancelCommand.Name;
-                e.Interaction.ExecuteDefaultCommand();
-            };
+            interactionRequest.Requested += ( s, e ) => ( args = e ).Interaction.ExecuteDefaultCommand();
 
             // act
-            var response = await interactionRequest.ConfirmAsync( expectedPrompt, expectedTitle, expectedAccept, expectedCancel );
+            var response = await interactionRequest.ConfirmAsync( "Are you sure?", "Question", "Yes", "No" );
 
             // assert
-            Assert.True( response );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedPrompt, actualPrompt );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            response.Should().BeTrue();
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Question",
+                  Content = "Are you sure?",
+                  DefaultCommand = new { Name = "Yes" },
+                  CancelCommand = new { Name = "No" },
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request single file async should request open files with file filter" )]
-        public async Task RequestSingleFileAsyncShouldRequestOpenFilesWithFileFilter()
+        [Fact]
+        public async Task request_single_file_async_should_request_open_files_with_file_filter()
         {
             // arrange
-            var expectedTitle = "Open File";
-            var expectedAccept = "Open";
-            var expectedCancel = "Cancel";
-            var expectedFileFilter = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileFilter = null;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new OpenFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (OpenFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileFilter = interaction.FileTypeFilter;
-                interaction.Files.Add( expectedFile );
+                var interaction = (OpenFileInteraction) ( args = e ).Interaction;
+                interaction.Files.Add( file );
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFile = await interactionRequest.RequestSingleFileAsync( expectedFileFilter );
+            var openedFile = await interactionRequest.RequestSingleFileAsync( new[] { new FileType( "Text Files", ".txt" ) } );
 
             // assert
-            Assert.Equal( expectedFile, actualFile );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileFilter.Single().Name, actualFileFilter.Single().Name );
-            Assert.True( expectedFileFilter.Single().Extensions.SequenceEqual( actualFileFilter.Single().Extensions ) );
+            openedFile.Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Open File",
+                  DefaultCommand = new { Name = "Open" },
+                  CancelCommand = new { Name = "Cancel" },
+                  Multiselect = false,
+                  Files = new[] { file },
+                  FileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request single file async should request open files with title and file filter" )]
-        public async Task RequestSingleFileAsyncShouldRequestOpenFilesWithTitleAndFileFilter()
+        [Fact]
+        public async Task request_single_file_async_should_request_open_files_with_title_and_file_filter()
         {
             // arrange
-            var expectedTitle = "Open";
-            var expectedAccept = "Open";
-            var expectedCancel = "Cancel";
-            var expectedFileFilter = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileFilter = null;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new OpenFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (OpenFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileFilter = interaction.FileTypeFilter;
-                interaction.Files.Add( expectedFile );
+                var interaction = (OpenFileInteraction) ( args = e ).Interaction;
+                interaction.Files.Add( file );
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFile = await interactionRequest.RequestSingleFileAsync( expectedTitle, expectedFileFilter );
+            var openedFile = await interactionRequest.RequestSingleFileAsync( "Open", new[] { new FileType( "Text Files", ".txt" ) } );
 
             // assert
-            Assert.Equal( expectedFile, actualFile );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileFilter.Single().Name, actualFileFilter.Single().Name );
-            Assert.True( expectedFileFilter.Single().Extensions.SequenceEqual( actualFileFilter.Single().Extensions ) );
+            openedFile.Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Open",
+                  DefaultCommand = new { Name = "Open" },
+                  CancelCommand = new { Name = "Cancel" },
+                  Multiselect = false,
+                  Files = new[] { file },
+                  FileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request multiple files async should request open files with file filter" )]
-        public async Task RequestMultipleFilesAsyncShouldRequestOpenFilesWithFileFilter()
+        [Fact]
+        public async Task request_multiple_files_async_should_request_open_files_with_file_filter()
         {
             // arrange
-            var expectedTitle = "Open File";
-            var expectedAccept = "Open";
-            var expectedCancel = "Cancel";
-            var expectedFileFilter = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileFilter = null;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new OpenFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (OpenFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileFilter = interaction.FileTypeFilter;
-                interaction.Files.Add( expectedFile );
+                var interaction = (OpenFileInteraction) ( args = e ).Interaction;
+                interaction.Files.Add( file );
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFiles = await interactionRequest.RequestMultipleFilesAsync( expectedFileFilter );
+            var openedFiles = await interactionRequest.RequestMultipleFilesAsync( new[] { new FileType( "Text Files", ".txt" ) } );
 
             // assert
-            Assert.Equal( expectedFile, actualFiles.Single() );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileFilter.Single().Name, actualFileFilter.Single().Name );
-            Assert.True( expectedFileFilter.Single().Extensions.SequenceEqual( actualFileFilter.Single().Extensions ) );
+            openedFiles.Single().Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Open File",
+                  DefaultCommand = new { Name = "Open" },
+                  CancelCommand = new { Name = "Cancel" },
+                  Multiselect = true,
+                  Files = new[] { file },
+                  FileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request multiple files async should request open files with title and file filter" )]
-        public async Task RequestMultipleFilesAsyncShouldRequestOpenFilesWithTitleAndFileFilter()
+        [Fact]
+        public async Task request_multiple_files_async_should_request_open_files_with_title_and_file_filter()
         {
             // arrange
-            var expectedTitle = "Open";
-            var expectedAccept = "Open";
-            var expectedCancel = "Cancel";
-            var expectedFileFilter = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileFilter = null;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new OpenFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (OpenFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileFilter = interaction.FileTypeFilter;
-                interaction.Files.Add( expectedFile );
+                var interaction = (OpenFileInteraction) ( args = e ).Interaction;
+                interaction.Files.Add( file );
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFiles = await interactionRequest.RequestMultipleFilesAsync( expectedTitle, expectedFileFilter );
+            var openedFiles = await interactionRequest.RequestMultipleFilesAsync( "Open", new[] { new FileType( "Text Files", ".txt" ) } );
 
             // assert
-            Assert.Equal( expectedFile, actualFiles.Single() );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileFilter.Single().Name, actualFileFilter.Single().Name );
-            Assert.True( expectedFileFilter.Single().Extensions.SequenceEqual( actualFileFilter.Single().Extensions ) );
+            openedFiles.Single().Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Open",
+                  DefaultCommand = new { Name = "Open" },
+                  CancelCommand = new { Name = "Cancel" },
+                  Multiselect = true,
+                  Files = new[] { file },
+                  FileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request open files with title, buttons, and file filter" )]
-        public async Task RequestAsyncShouldRequestOpenFilesWithTitleButtonsAndFileFilter()
+        [Fact]
+        public async Task request_async_should_request_open_files_with_titleX2C_buttonsX2C_and_file_filter()
         {
             // arrange
-            var expectedTitle = "Open";
-            var expectedAccept = "Select";
-            var expectedCancel = "Close";
-            var expectedFileFilter = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileFilter = null;
+            var multiselect = false;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new OpenFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (OpenFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileFilter = interaction.FileTypeFilter;
-                interaction.Files.Add( expectedFile );
+                var interaction = (OpenFileInteraction) ( args = e ).Interaction;
+                interaction.Files.Add( file );
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFiles = await interactionRequest.RequestAsync( expectedTitle, expectedAccept, expectedCancel, expectedFileFilter, false );
+            var openedFiles = await interactionRequest.RequestAsync( "Open", "Select", "Close", new[] { new FileType( "Text Files", ".txt" ) }, multiselect );
 
             // assert
-            Assert.Equal( expectedFile, actualFiles.Single() );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileFilter.Single().Name, actualFileFilter.Single().Name );
-            Assert.True( expectedFileFilter.Single().Extensions.SequenceEqual( actualFileFilter.Single().Extensions ) );
+            openedFiles.Single().Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Open",
+                  DefaultCommand = new { Name = "Select" },
+                  CancelCommand = new { Name = "Close" },
+                  Multiselect = false,
+                  Files = new[] { file },
+                  FileTypeFilter = new[] { new FileType( "Text Files", ".txt" ) }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request save files with file choices" )]
-        public async Task RequestAsyncShouldRequestSaveFileWithFileChoices()
+        [Fact]
+        public async Task request_async_should_request_save_files_with_file_choices()
         {
             // arrange
-            var expectedTitle = "Save File";
-            var expectedAccept = "Save";
-            var expectedCancel = "Cancel";
-            var expectedFileChoices = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileChoices = null;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new SaveFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (SaveFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileChoices = interaction.FileTypeChoices;
-                interaction.SavedFile = expectedFile;
+                var interaction = (SaveFileInteraction) ( args = e ).Interaction;
+                interaction.SavedFile = file;
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFile = await interactionRequest.RequestAsync( expectedFileChoices );
+            var savedFile = await interactionRequest.RequestAsync( new[] { new FileType( "Text Files", ".txt" ) } );
 
             // assert
-            Assert.Equal( expectedFile, actualFile );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileChoices.Single().Name, actualFileChoices.Single().Name );
-            Assert.True( expectedFileChoices.Single().Extensions.SequenceEqual( actualFileChoices.Single().Extensions ) );
+            savedFile.Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Save File",
+                  DefaultCommand = new { Name = "Save" },
+                  CancelCommand = new { Name = "Cancel" },
+                  FileTypeChoices = new[] { new FileType( "Text Files", ".txt" ) },
+                  SavedFile = file
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request save file with title and file choices" )]
-        public async Task RequestAsyncShouldRequestSaveFileWithTitleAndFileChoices()
+        [Fact]
+        public async Task request_async_should_request_save_file_with_title_and_file_choices()
         {
             // arrange
-            var expectedTitle = "Save";
-            var expectedAccept = "Save";
-            var expectedCancel = "Cancel";
-            var expectedFileChoices = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileChoices = null;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new SaveFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (SaveFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileChoices = interaction.FileTypeChoices;
-                interaction.SavedFile = expectedFile;
+                var interaction = (SaveFileInteraction) ( args = e ).Interaction;
+                interaction.SavedFile = file;
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFile = await interactionRequest.RequestAsync( expectedTitle, expectedFileChoices );
+            var savedFile = await interactionRequest.RequestAsync( "Save", new[] { new FileType( "Text Files", ".txt" ) } );
 
             // assert
-            Assert.Equal( expectedFile, actualFile );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileChoices.Single().Name, actualFileChoices.Single().Name );
-            Assert.True( expectedFileChoices.Single().Extensions.SequenceEqual( actualFileChoices.Single().Extensions ) );
+            savedFile.Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Save",
+                  DefaultCommand = new { Name = "Save" },
+                  CancelCommand = new { Name = "Cancel" },
+                  FileTypeChoices = new[] { new FileType( "Text Files", ".txt" ) },
+                  SavedFile = file
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request save file with title, buttons, and file choices" )]
-        public async Task RequestAsyncShouldRequestSaveFileWithTitleButtonsAndFileChoices()
+        [Fact]
+        public async Task request_async_should_request_save_file_with_titleX2C_buttonsX2C_and_file_choices()
         {
             // arrange
-            var expectedTitle = "Save";
-            var expectedAccept = "Select";
-            var expectedCancel = "Close";
-            var expectedFileChoices = new[] { new FileType( "Text Files", ".txt" ) };
-            var expectedFile = new Mock<IFile>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
-            IEnumerable<FileType> actualFileChoices = null;
+            var file = new Mock<IFile>().Object;
             var interactionRequest = new SaveFileInteractionRequest( DefaultAction.None );
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (SaveFileInteraction) e.Interaction;
-
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                actualFileChoices = interaction.FileTypeChoices;
-                interaction.SavedFile = expectedFile;
+                var interaction = (SaveFileInteraction) ( args = e ).Interaction;
+                interaction.SavedFile = file;
                 interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFile = await interactionRequest.RequestAsync( expectedTitle, expectedAccept, expectedCancel, expectedFileChoices );
+            var savedFile = await interactionRequest.RequestAsync( "Save", "Select", "Close", new[] { new FileType( "Text Files", ".txt" ) } );
 
             // assert
-            Assert.Equal( expectedFile, actualFile );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
-            Assert.Equal( expectedFileChoices.Single().Name, actualFileChoices.Single().Name );
-            Assert.True( expectedFileChoices.Single().Extensions.SequenceEqual( actualFileChoices.Single().Extensions ) );
+            savedFile.Should().Be( file );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Save",
+                  DefaultCommand = new { Name = "Select" },
+                  CancelCommand = new { Name = "Close" },
+                  FileTypeChoices = new[] { new FileType( "Text Files", ".txt" ) },
+                  SavedFile = file
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request select folder" )]
-        public async Task RequestAsyncShouldRequestSelectFolder()
+        [Fact]
+        public async Task request_async_should_request_select_folder()
         {
             // arrange
-            var expectedTitle = "Select Folder";
-            var expectedAccept = "Select";
-            var expectedCancel = "Cancel";
-            var expectedFolder = new Mock<IFolder>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
+            var folder = new Mock<IFolder>().Object;
             var interactionRequest = new InteractionRequest<SelectFolderInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                actualTitle = e.Interaction.Title;
-                actualAccept = e.Interaction.DefaultCommand.Name;
-                actualCancel = e.Interaction.CancelCommand.Name;
-                ( (SelectFolderInteraction) e.Interaction ).Folder = expectedFolder;
-                e.Interaction.ExecuteDefaultCommand();
+                var interaction = (SelectFolderInteraction) ( args = e ).Interaction;
+                interaction.Folder = folder;
+                interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFolder = await interactionRequest.RequestAsync();
+            var selectedFolder = await interactionRequest.RequestAsync();
 
             // assert
-            Assert.Equal( expectedFolder, actualFolder );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            selectedFolder.Should().Be( folder );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Select Folder",
+                  DefaultCommand = new { Name = "Select" },
+                  CancelCommand = new { Name = "Cancel" },
+                  Folder = folder
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request select folder with title" )]
-        public async Task RequestAsyncShouldRequestSelectFolderWithTitle()
+        [Fact]
+        public async Task request_async_should_request_select_folder_with_title()
         {
             // arrange
-            var expectedTitle = "Pick Folder";
-            var expectedAccept = "Select";
-            var expectedCancel = "Cancel";
-            var expectedFolder = new Mock<IFolder>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
+            var folder = new Mock<IFolder>().Object;
             var interactionRequest = new InteractionRequest<SelectFolderInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                actualTitle = e.Interaction.Title;
-                actualAccept = e.Interaction.DefaultCommand.Name;
-                actualCancel = e.Interaction.CancelCommand.Name;
-                ( (SelectFolderInteraction) e.Interaction ).Folder = expectedFolder;
+                var interaction = (SelectFolderInteraction) ( args = e ).Interaction;
+                interaction.Folder = folder;
                 e.Interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFolder = await interactionRequest.RequestAsync( expectedTitle );
+            var selectedFolder = await interactionRequest.RequestAsync( "Pick Folder" );
 
             // assert
-            Assert.Equal( expectedFolder, actualFolder );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            selectedFolder.Should().Be( folder );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Pick Folder",
+                  DefaultCommand = new { Name = "Select" },
+                  CancelCommand = new { Name = "Cancel" },
+                  Folder = folder
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request select folder with title and buttons" )]
-        public async Task RequestAsyncShouldRequestSelectFolderWithTitleAndButtons()
+        [Fact]
+        public async Task request_async_should_request_select_folder_with_title_and_buttons()
         {
             // arrange
-            var expectedTitle = "Select";
-            var expectedAccept = "Pick";
-            var expectedCancel = "Close";
-            var expectedFolder = new Mock<IFolder>().Object;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
+            var folder = new Mock<IFolder>().Object;
             var interactionRequest = new InteractionRequest<SelectFolderInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                actualTitle = e.Interaction.Title;
-                actualAccept = e.Interaction.DefaultCommand.Name;
-                actualCancel = e.Interaction.CancelCommand.Name;
-                ( (SelectFolderInteraction) e.Interaction ).Folder = expectedFolder;
+                var interaction = (SelectFolderInteraction) ( args = e ).Interaction;
+                interaction.Folder = folder;
                 e.Interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualFolder = await interactionRequest.RequestAsync( expectedTitle, expectedAccept, expectedCancel );
+            var selectedFolder = await interactionRequest.RequestAsync( "Select", "Pick", "Close" );
 
             // assert
-            Assert.Equal( expectedFolder, actualFolder );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            selectedFolder.Should().Be( folder );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Select",
+                  DefaultCommand = new { Name = "Pick" },
+                  CancelCommand = new { Name = "Close" },
+                  Folder = folder
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request text input with prompt" )]
-        public async Task RequestAsyncShouldRequestTextInputWithPrompt()
+        [Fact]
+        public async Task request_async_should_request_text_input_with_prompt()
         {
             // arrange
-            var expectedPrompt = "Input Box";
-            var expectedTitle = "";
-            var expectedAccept = "OK";
-            var expectedCancel = "Cancel";
-            var expectedResponse = "Test";
-            string actualPrompt = null;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
             var interactionRequest = new InteractionRequest<TextInputInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (TextInputInteraction) e.Interaction;
-
-                actualPrompt = (string) interaction.Content;
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                interaction.Response = expectedResponse;
-                e.Interaction.ExecuteDefaultCommand();
+                var interaction = (TextInputInteraction) ( args = e ).Interaction;
+                interaction.Response = "Test";
+                interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualResponse = await interactionRequest.RequestAsync( expectedPrompt );
+            var response = await interactionRequest.RequestAsync( "Enter someting:" );
 
             // assert
-            Assert.Equal( expectedResponse, actualResponse );
-            Assert.Equal( expectedPrompt, actualPrompt );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            response.Should().Be( "Test" );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "",
+                  Content = "Enter someting:",
+                  Response = "Test",
+                  DefaultResponse = "",
+                  DefaultCommand = new { Name = "OK" },
+                  CancelCommand = new { Name = "Cancel" }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request text input with prompt and title" )]
-        public async Task RequestAsyncShouldRequestTextInputWithPromptAndTitle()
+        [Fact]
+        public async Task request_async_should_request_text_input_with_prompt_and_title()
         {
             // arrange
-            var expectedPrompt = "Input Box";
-            var expectedTitle = "Enter something:";
-            var expectedAccept = "OK";
-            var expectedCancel = "Cancel";
-            var expectedResponse = "Test";
-            string actualPrompt = null;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
             var interactionRequest = new InteractionRequest<TextInputInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (TextInputInteraction) e.Interaction;
-
-                actualPrompt = (string) interaction.Content;
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
-                interaction.Response = expectedResponse;
-                e.Interaction.ExecuteDefaultCommand();
+                var interaction = (TextInputInteraction) ( args = e ).Interaction;
+                interaction.Response = "Test";
+                interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualResponse = await interactionRequest.RequestAsync( expectedTitle, expectedPrompt );
+            var response = await interactionRequest.RequestAsync( "Input Box", "Enter someting:" );
 
             // assert
-            Assert.Equal( expectedResponse, actualResponse );
-            Assert.Equal( expectedPrompt, actualPrompt );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            response.Should().Be( "Test" );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Input Box",
+                  Content = "Enter something:",
+                  Response = "Test",
+                  DefaultResponse = "",
+                  DefaultCommand = new { Name = "OK" },
+                  CancelCommand = new { Name = "Cancel" }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request text input with prompt, title, and default response" )]
-        public async Task RequestAsyncShouldRequestTextInputWithPromptTitleAndDefaultResponse()
+        [Fact]
+        public async Task request_async_should_request_text_input_with_promptX2C_titleX2C_and_default_response()
         {
             // arrange
-            var expectedPrompt = "Input Box";
-            var expectedTitle = "Enter something:";
-            var expectedAccept = "OK";
-            var expectedCancel = "Cancel";
-            var expectedResponse = "Test";
-            string actualPrompt = null;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
             var interactionRequest = new InteractionRequest<TextInputInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (TextInputInteraction) e.Interaction;
-
-                actualPrompt = (string) interaction.Content;
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
+                var interaction = (TextInputInteraction) ( args = e ).Interaction;
                 interaction.Response = interaction.DefaultResponse;
-                e.Interaction.ExecuteDefaultCommand();
+                interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualResponse = await interactionRequest.RequestAsync( expectedTitle, expectedPrompt, expectedResponse );
+            var response = await interactionRequest.RequestAsync( "Input Box", "Enter something:", "Test" );
 
             // assert
-            Assert.Equal( expectedResponse, actualResponse );
-            Assert.Equal( expectedPrompt, actualPrompt );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            response.Should().Be( "Test" );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Input Box",
+                  Content = "Enter something:",
+                  Response = "Test",
+                  DefaultResponse = "Test",
+                  DefaultCommand = new { Name = "OK" },
+                  CancelCommand = new { Name = "Cancel" }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request text input with prompt, title, default response, and buttons" )]
-        public async Task RequestAsyncShouldRequestTextInputWithPromptTitleDefaultResponseAndButtons()
+        [Fact]
+        public async Task request_async_should_request_text_input_with_promptX2C_titleX2C_default_responseX2C_and_buttons()
         {
             // arrange
-            var expectedPrompt = "Input Box";
-            var expectedTitle = "Enter something:";
-            var expectedAccept = "Accept";
-            var expectedCancel = "Close";
-            var expectedResponse = "Test";
-            string actualPrompt = null;
-            string actualTitle = null;
-            string actualAccept = null;
-            string actualCancel = null;
             var interactionRequest = new InteractionRequest<TextInputInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
             interactionRequest.Requested += ( s, e ) =>
             {
-                var interaction = (TextInputInteraction) e.Interaction;
-
-                actualPrompt = (string) interaction.Content;
-                actualTitle = interaction.Title;
-                actualAccept = interaction.DefaultCommand.Name;
-                actualCancel = interaction.CancelCommand.Name;
+                var interaction = (TextInputInteraction) ( args = e ).Interaction;
                 interaction.Response = interaction.DefaultResponse;
-                e.Interaction.ExecuteDefaultCommand();
+                interaction.ExecuteDefaultCommand();
             };
 
             // act
-            var actualResponse = await interactionRequest.RequestAsync(
-                                            expectedTitle,
-                                            expectedPrompt, 
-                                            expectedResponse,
-                                            expectedAccept,
-                                            expectedCancel );
+            var response = await interactionRequest.RequestAsync(
+                                            "Input Box",
+                                            "Enter something:",
+                                            "Test",
+                                            "Accept",
+                                            "Close" );
 
             // assert
-            Assert.Equal( expectedResponse, actualResponse );
-            Assert.Equal( expectedPrompt, actualPrompt );
-            Assert.Equal( expectedTitle, actualTitle );
-            Assert.Equal( expectedAccept, actualAccept );
-            Assert.Equal( expectedCancel, actualCancel );
+            response.Should().Be( "Test" );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  Title = "Input Box",
+                  Content = "Enter something:",
+                  Response = "Test",
+                  DefaultResponse = "Test",
+                  DefaultCommand = new { Name = "Accept" },
+                  CancelCommand = new { Name = "Close" }
+              },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should request authentication with request uri and callback uri" )]
-        public async Task RequestAsyncShouldRequestAuthenticationWithRequestUriAndCallbackUri()
+        [Fact]
+        public async Task request_async_should_request_authentication_with_request_uri_and_callback_uri()
         {
             // arrange
-            var expectedRequestUri = new Uri( "http://tempuri.org" );
-            var expectedCallbackUri = new Uri( "http://tempuri.org/callback" );
-            var expectedResult = new Mock<IWebAuthenticationResult>().Object;
-            Uri actualRequestUri = null;
-            Uri actualCallbackUri = null;
+            var requestUrl = new Uri( "http://tempuri.org" );
+            var callbackUrl = new Uri( "http://tempuri.org/callback" );
+            var webAuthenticationResult = new Mock<IWebAuthenticationResult>().Object;
             var interactionRequest = new InteractionRequest<WebAuthenticateInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
-            interactionRequest.Requested += ( s, e ) =>
-            {
-                var interaction = (WebAuthenticateInteraction) e.Interaction;
-
-                actualRequestUri = interaction.RequestUri;
-                actualCallbackUri = interaction.CallbackUri;
-                interaction.DefaultCommand.Execute( expectedResult );
-            };
+            interactionRequest.Requested += ( s, e ) => ( args = e ).Interaction.DefaultCommand.Execute( webAuthenticationResult );
 
             // act
-            var actualResult = await interactionRequest.RequestAsync( expectedRequestUri, expectedCallbackUri );
+            var result = await interactionRequest.RequestAsync( requestUrl, callbackUrl );
 
             // assert
-            Assert.Equal( expectedResult, actualResult );
-            Assert.Equal( expectedRequestUri, actualRequestUri );
-            Assert.Equal( expectedCallbackUri, actualCallbackUri );
+            result.Should().Be( webAuthenticationResult );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new { RequestUri = requestUrl, CallbackUri = callbackUrl },
+              options => options.ExcludingMissingMembers() );
         }
 
-        [Fact( DisplayName = "request async should replace user-defined commands" )]
-        public async Task RequestAsyncShouldReplaceUserDefinedCommands()
+        [Fact]
+        public async Task request_async_should_replace_userX2Ddefined_commands()
         {
             // arrange
             var interaction = new WebAuthenticateInteraction( new Uri( "http://tempuri.org" ) )
             {
                 DefaultCommandIndex = 0,
-                Commands =
-                {
-                    new NamedCommand<object>( "Authenticate", DefaultAction.None )
-                }
+                Commands = { new NamedCommand<object>( "Authenticate", DefaultAction.None ) }
             };
+            var webAuthenticationResult = new Mock<IWebAuthenticationResult>().Object;
             var interactionRequest = new InteractionRequest<WebAuthenticateInteraction>();
+            var args = default( InteractionRequestedEventArgs );
 
-            interactionRequest.Requested += ( s, e ) =>
-                interaction.DefaultCommand.Execute( new Mock<IWebAuthenticationResult>().Object );
+            interactionRequest.Requested += ( s, e ) => ( args = e ).Interaction.DefaultCommand.Execute( webAuthenticationResult );
 
             // act
             var result = await interactionRequest.RequestAsync( interaction );
 
             // assert
-            Assert.NotNull( result );
-            Assert.Equal( 2, interaction.Commands.Count );
-            Assert.Equal( 0, interaction.DefaultCommandIndex );
-            Assert.Equal( 1, interaction.CancelCommandIndex );
+            result.Should().Be( webAuthenticationResult );
+            args.Interaction.Should().ShouldBeEquivalentTo(
+              new
+              {
+                  DefaultCommandIndex = 0,
+                  CancelCommandIndex = 1
+              },
+              options => options.ExcludingMissingMembers() );
+            args.Interaction.Commands.Should().HaveCount( 2 );
         }
     }
 }
