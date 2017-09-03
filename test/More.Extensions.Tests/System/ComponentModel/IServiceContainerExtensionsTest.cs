@@ -4,248 +4,242 @@ namespace System.ComponentModel
     using System;
     using System.ComponentModel.Design;
     using Xunit;
+    using static Moq.Times;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="IServiceContainerExtensions"/>.
-    /// </summary>
     public class IServiceContainerExtensionsTest
     {
-        private interface IFoo
-        {
-        }
-
-        private sealed class Foo : IFoo
-        {
-        }
-
         [Fact]
         public void add_service_should_register_callback()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.AddService<IFoo, Foo>( ( t, sc ) => new Foo() );
+            container.Object.AddService<IFoo, Foo>( ( t, sc ) => new Foo() );
 
             // assert
-            target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), false ), Times.Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), false ), Once() );
         }
 
         [Fact]
         public void add_service_should_register_callback_with_promotion()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.AddService<IFoo, Foo>( ( t, sc ) => new Foo(), true );
+            container.Object.AddService<IFoo, Foo>( ( t, sc ) => new Foo(), true );
 
             // assert
-            target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), true ), Times.Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), true ), Once() );
         }
 
         [Fact]
         public void add_service_should_register_instance()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             IFoo foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.AddService( foo );
+            container.Object.AddService( foo );
 
             // assert
-            target.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Times.Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Once() );
         }
 
         [Fact]
         public void add_service_should_register_instance_with_promotion()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             IFoo foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.AddService( foo, true );
+            container.Object.AddService( foo, true );
 
             // assert
-            target.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Times.Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Once() );
         }
 
         [Fact]
-        public void add_service_should_register_instance()
+        public void add_service_should_register_instance_with_type_mapping()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             var foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.AddService<IFoo, Foo>( foo );
+            container.Object.AddService<IFoo, Foo>( foo );
 
             // assert
-            target.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Times.Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Once() );
         }
 
         [Fact]
-        public void add_service_should_register_instance_with_promotion()
+        public void add_service_should_register_instance_with_type_mapping_and_promotion()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             var foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<object>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.AddService<IFoo, Foo>( foo, true );
+            container.Object.AddService<IFoo, Foo>( foo, true );
 
             // assert
-            target.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Times.Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Once() );
         }
 
         [Fact]
         public void remove_service_should_unregister_service_type()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
 
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.RemoveService<IServiceProvider>();
+            container.Object.RemoveService<IServiceProvider>();
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( IServiceProvider ), false ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( IServiceProvider ), false ), Once() );
         }
 
         [Fact]
         public void remove_service_should_unregister_service_type_with_promotion()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
 
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.RemoveService<IServiceProvider>( true );
+            container.Object.RemoveService<IServiceProvider>( true );
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( IServiceProvider ), true ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( IServiceProvider ), true ), Once() );
         }
 
         [Fact]
         public void replace_service_should_reX2Dregister_callback()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.ReplaceService<IFoo, Foo>( ( t, sc ) => new Foo() );
+            container.Object.ReplaceService<IFoo, Foo>( ( t, sc ) => new Foo() );
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( IFoo ), false ), Times.Once() );
-            target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), false ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( IFoo ), false ), Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), false ), Once() );
         }
 
         [Fact]
         public void replace_service_should_reX2Dregister_callback_with_promotion()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.ReplaceService<IFoo, Foo>( ( t, sc ) => new Foo(), true );
+            container.Object.ReplaceService<IFoo, Foo>( ( t, sc ) => new Foo(), true );
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( IFoo ), true ), Times.Once() );
-            target.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), true ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( IFoo ), true ), Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), It.IsAny<ServiceCreatorCallback>(), true ), Once() );
         }
 
         [Fact]
         public void replace_service_should_reX2Dregister_instance()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             var foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.ReplaceService( foo );
+            container.Object.ReplaceService( foo );
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( Foo ), false ), Times.Once() );
-            target.Verify( sc => sc.AddService( typeof( Foo ), foo, false ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( Foo ), false ), Once() );
+            container.Verify( sc => sc.AddService( typeof( Foo ), foo, false ), Once() );
         }
 
         [Fact]
         public void replace_service_should_reX2Dregister_instance_with_promotion()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             var foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.ReplaceService( foo, true );
+            container.Object.ReplaceService( foo, true );
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( Foo ), true ), Times.Once() );
-            target.Verify( sc => sc.AddService( typeof( Foo ), foo, true ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( Foo ), true ), Once() );
+            container.Verify( sc => sc.AddService( typeof( Foo ), foo, true ), Once() );
         }
 
         [Fact]
-        public void replace_service_should_reX2Dregister_instance()
+        public void replace_service_should_reX2Dregister_instance_with_type_mapping()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             var foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.ReplaceService<IFoo, Foo>( foo, false );
+            container.Object.ReplaceService<IFoo, Foo>( foo, false );
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( IFoo ), false ), Times.Once() );
-            target.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( IFoo ), false ), Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), foo, false ), Once() );
         }
 
         [Fact]
-        public void replace_service_should_reX2Dregister_instance_with_promotion()
+        public void replace_service_should_reX2Dregister_instance_with_type_mapping_and_promotion()
         {
             // arrange
-            var target = new Mock<IServiceContainer>();
+            var container = new Mock<IServiceContainer>();
             var foo = new Foo();
 
-            target.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
-            target.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.AddService( It.IsAny<Type>(), It.IsAny<ServiceCreatorCallback>(), It.IsAny<bool>() ) );
+            container.Setup( sc => sc.RemoveService( It.IsAny<Type>(), It.IsAny<bool>() ) );
 
             // act
-            target.Object.ReplaceService<IFoo, Foo>( foo, true );
+            container.Object.ReplaceService<IFoo, Foo>( foo, true );
 
             // assert
-            target.Verify( sc => sc.RemoveService( typeof( IFoo ), true ), Times.Once() );
-            target.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Times.Once() );
+            container.Verify( sc => sc.RemoveService( typeof( IFoo ), true ), Once() );
+            container.Verify( sc => sc.AddService( typeof( IFoo ), foo, true ), Once() );
         }
+
+        interface IFoo { }
+
+        sealed class Foo : IFoo { }
     }
 }

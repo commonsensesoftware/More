@@ -1,103 +1,138 @@
 namespace More.ComponentModel
 {
+    using FluentAssertions;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Xunit;
 
-    internal static class ObjectExtensions
-    {
-        internal static string GetName( this object obj )
-        {
-            return obj.GetType().Name;
-        }
-
-        internal static void SetName( this object obj, string value )
-        {
-            // no-op; for testing purposes andy you can't actually change the name of an object
-        }
-    }
-
-    /// <summary>
-    /// Provides unit tests for <see cref="CustomTypeDescriptor{T}"/>.
-    /// </summary>
     public class CustomTypeDescriptorTTest
     {
         [Fact]
         public void get_class_name_extension_method_should_return_expected_value()
         {
-            var expected = TypeDescriptor.GetClassName( typeof( object ) );
-            var target = new CustomTypeDescriptor<object>();
-            var actual = target.GetClassName();
-            Assert.Equal( expected, actual );
+            // arrange
+            var descriptor = new CustomTypeDescriptor<object>();
+
+            // act
+            var className = descriptor.GetClassName();
+
+            // assert
+            className.Should().Be( TypeDescriptor.GetClassName( typeof( object ) ) );
         }
 
         [Fact]
         public void get_property_owner_should_return_expected_value()
         {
+            // arrange
             var parent = TypeDescriptor.GetProvider( typeof( string ) ).GetTypeDescriptor( typeof( string ) );
-            var target = new CustomTypeDescriptor<string>( parent );
-            var property = target.GetProperties().Cast<PropertyDescriptor>().First();
-            var owner = target.GetPropertyOwner( property );
-            Assert.Equal( target, owner );
+            var descriptor = new CustomTypeDescriptor<string>( parent );
+            var property = descriptor.GetProperties().Cast<PropertyDescriptor>().First();
+
+            // act
+            var owner = descriptor.GetPropertyOwner( property );
+
+            // assert
+            owner.Should().BeSameAs( descriptor );
+        }
+
+        [Theory]
+        [InlineData( null )]
+        [InlineData( "" )]
+        public void add_readX2Donly_extension_property_should_not_allow_null_or_empty_name( string propertyName )
+        {
+            // arrange
+            var descriptor = new CustomTypeDescriptor<object>();
+
+            // act
+            Action addExtensionProperty = () => descriptor.AddExtensionProperty( null, ObjectExtensions.GetName );
+
+            // assert
+            addExtensionProperty.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyName ) );
+        }
+
+        [Theory]
+        [InlineData( null )]
+        [InlineData( "" )]
+        public void add_extension_property_should_not_allow_null_or_empty_name( string propertyName )
+        {
+            // arrange
+            var descriptor = new CustomTypeDescriptor<object>();
+
+            // act
+            Action addExtensionProperty = () => descriptor.AddExtensionProperty( null, ObjectExtensions.GetName, ObjectExtensions.SetName );
+
+            // assert
+            addExtensionProperty.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( propertyName ) );
         }
 
         [Fact]
-        public void add_extension_property_should_not_allow_null_or_empty_name()
+        public void add_readX2Donly_extension_property_should_not_allow_null_accessor()
         {
-            var target = new CustomTypeDescriptor<object>();
-            var ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( null, ObjectExtensions.GetName ) );
-            Assert.Equal( "propertyName", ex.ParamName );
+            // arrange
+            var accessor = default( Func<object, string> );
+            var descriptor = new CustomTypeDescriptor<object>();
 
-            ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( "", ObjectExtensions.GetName ) );
-            Assert.Equal( "propertyName", ex.ParamName );
+            // act
+            Action addExtensionProperty = () => descriptor.AddExtensionProperty( "Name", accessor );
 
-            ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( null, ObjectExtensions.GetName, ObjectExtensions.SetName ) );
-            Assert.Equal( "propertyName", ex.ParamName );
-
-            ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( "", ObjectExtensions.GetName, ObjectExtensions.SetName ) );
-            Assert.Equal( "propertyName", ex.ParamName );
+            // assert
+            addExtensionProperty.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( accessor ) );
         }
 
         [Fact]
         public void add_extension_property_should_not_allow_null_accessor()
         {
-            var target = new CustomTypeDescriptor<object>();
-            var ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( "Name", (Func<object,string>) null ) );
-            Assert.Equal( "accessor", ex.ParamName );
+            // arrange
+            var accessor = default( Func<object, string> );
+            var descriptor = new CustomTypeDescriptor<object>();
 
-            ex = Assert.Throws<ArgumentNullException>( () => target.AddExtensionProperty( "Name", (Func<object, string>) null, ObjectExtensions.SetName ) );
-            Assert.Equal( "accessor", ex.ParamName );
+            // act
+            Action addExtensionProperty = () => descriptor.AddExtensionProperty( "Name", accessor, ObjectExtensions.SetName );
+
+            // assert
+            addExtensionProperty.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( accessor ) );
         }
 
         [Fact]
         public void get_properties_should_include_extension_properties()
         {
+            // arrange
             var parent = TypeDescriptor.GetProvider( typeof( string ) ).GetTypeDescriptor( typeof( string ) );
-            var target = new CustomTypeDescriptor<string>( parent );
+            var descriptor = new CustomTypeDescriptor<string>( parent );
 
-            target.AddExtensionProperty( "Name", ObjectExtensions.GetName );
+            descriptor.AddExtensionProperty( "Name", ObjectExtensions.GetName );
 
-            var properties = target.GetProperties();
+            // act
+            var properties = descriptor.GetProperties().Cast<PropertyDescriptor>().Select( p => p.Name  ).ToArray();
 
-            Assert.Equal( 2, properties.Count );
-            Assert.Equal( "Name", properties[1].Name );
+            // assert
+            properties.Should().Equal( new[] { nameof( string.Length ), "Name" } );
         }
 
         [Fact]
         public void get_properties_should_with_filter_should_include_extension_properties()
         {
-            var target = new CustomTypeDescriptor<string>();
+            // arrange
+            var descriptor = new CustomTypeDescriptor<string>();
 
-            target.AddExtensionProperty( "Name", ObjectExtensions.GetName, ObjectExtensions.SetName );
+            descriptor.AddExtensionProperty( "Name", ObjectExtensions.GetName, ObjectExtensions.SetName );
 
-            var properties = target.GetProperties( null );
+            // act
+            var properties = descriptor.GetProperties( null ).Cast<PropertyDescriptor>().Select( p => p.Name ).ToArray();
 
-            Assert.Equal( 1, properties.Count );
-            Assert.Equal( "Name", properties[0].Name );
+            // assert
+            properties.Should().Equal( new[] { "Name" } );
         }
+    }
+
+    /// <summary>
+    /// For unit test only; extension method classes must be public or internal.
+    /// </summary>
+    static class ObjectExtensions
+    {
+        internal static string GetName( this object obj ) => obj.GetType().Name;
+
+        internal static void SetName( this object obj, string value ) { }
     }
 }

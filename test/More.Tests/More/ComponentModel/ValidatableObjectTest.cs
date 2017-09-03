@@ -1,9 +1,9 @@
 namespace More.ComponentModel
 {
-    using Collections.Generic;
     using DataAnnotations;
     using FluentAssertions;
     using Moq;
+    using More.Tests.Mocks;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -321,6 +321,42 @@ namespace More.ComponentModel
             validatableObject.InvokeGetPropertyErrors().Should().HaveCount( 2 );
         }
 
+        [Fact]
+        public void is_valid_should_return_false_for_partially_valid_object()
+        {
+            // arrange
+            var validatableObject = new MockValidatableObject( new ValidatorAdapter() )
+            {
+                Name = "test",
+                Address = "123 Some Place",
+                HireDate = DateTime.Today,
+                SeparationDate = DateTime.Today.AddYears( -1 )
+            };
+
+            // act
+            validatableObject.Validate();
+
+            // assert
+            validatableObject.IsValid.Should().BeFalse();
+        }
+
+        [Fact]
+        public void is_valid_should_return_true_for_valid_object()
+        {
+            // arrange
+            var validatableObject = new MockValidatableObject( new ValidatorAdapter() )
+            {
+                Name = "test",
+                Address = "123 Some Place"
+            };
+            
+            // act
+            validatableObject.Validate();
+
+            // assert
+            validatableObject.IsValid.Should().BeTrue();
+        }
+
         IValidator DefaultValidator { get; }
 
         IValidationContext DefaultValidationContext { get; }
@@ -347,80 +383,6 @@ namespace More.ComponentModel
             DefaultValidator = validator.Object;
             DefaultValidationContext = context.Object;
             DefaultSubject = new MockValidatableObject( DefaultValidator );
-        }
-
-        public class MockValidatableObject : ValidatableObject
-        {
-            int id;
-            string name;
-            string address;
-            DateTime hireDate = DateTime.Today;
-            DateTime? separationDate;
-
-            public MockValidatableObject() : base( new Mock<IValidator>().Object ) { }
-
-            public MockValidatableObject( IValidator validator ) : base( validator ) { }
-
-            public int Id
-            {
-                get => id;
-                set => SetProperty( ref id, value );
-            }
-
-            /// <summary>
-            /// [Required]
-            /// [StringLength( 50 )]
-            /// </summary>
-            /// <remarks>Data Annotations is not currently portable.</remarks>
-            public string Name
-            {
-                get => name;
-                set => SetProperty( ref name, value );
-            }
-
-            /// <summary>
-            /// [Required]
-            /// [StringLength( 250 )]
-            /// </summary>
-            /// <remarks>Data Annotations is not currently portable.</remarks>
-            public string Address
-            {
-                get => address;
-                set => SetProperty( ref address, value );
-            }
-
-            public DateTime HireDate
-            {
-                get => hireDate;
-                set => SetProperty( ref hireDate, value );
-            }
-
-            public DateTime? SeparationDate
-            {
-                get => separationDate;
-                set => SetProperty( ref separationDate, value );
-            }
-
-            public int DoWork() => default( int );
-
-            public IMultivalueDictionary<string, IValidationResult> InvokeGetPropertyErrors() => PropertyErrors;
-
-            public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue ) => IsPropertyValid( newValue, propertyName );
-
-            public bool InvokeIsPropertyValid<TValue>( string propertyName, TValue newValue, ICollection<IValidationResult> results ) =>
-                IsPropertyValid( newValue, results, propertyName );
-
-            public void InvokeValidateProperty<TValue>( string propertyName, TValue newValue ) => ValidateProperty( newValue, propertyName );
-
-            public IEnumerable<string> InvokeFormatErrorMessages( string propertyName, IEnumerable<IValidationResult> results ) =>
-                FormatErrorMessages( propertyName, results );
-
-            public void InvokeSetProperty<TValue>( string propertyName, ref TValue currentValue, TValue newValue, IEqualityComparer<TValue> comparer ) =>
-                SetProperty( ref currentValue, newValue, comparer, propertyName );
-
-            public void InvokeOnErrorsChanged( string propertyName ) => OnErrorsChanged( propertyName );
-
-            public void InvokeOnErrorsChanged( DataErrorsChangedEventArgs e ) => OnErrorsChanged( e );
         }
     }
 }

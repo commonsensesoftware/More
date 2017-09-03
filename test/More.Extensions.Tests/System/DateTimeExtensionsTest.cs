@@ -1,168 +1,233 @@
 namespace System
 {
+    using FluentAssertions;
     using More.Globalization;
     using System;
     using System.Globalization;
     using Xunit;
+    using static System.DayOfWeek;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="DateTimeExtensions"/>.
-    /// </summary>
     public class DateTimeExtensionsTest
     {
         [Fact]
         public void first_day_of_week_in_month_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 3, 4 );
-            var actual = date.FirstDayOfWeekInMonth( DayOfWeek.Monday, calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var firstDayOfWeekInMonth = date.FirstDayOfWeekInMonth( Monday, FiscalCalendar ).Date;
+
+            // assert
+            firstDayOfWeekInMonth.Should().Be( expected );
         }
 
         [Fact]
         public void last_day_of_week_in_month_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 3, 29 );
-            var actual = date.LastDayOfWeekInMonth( DayOfWeek.Friday, calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var lastDayOfWeekInMonth = date.LastDayOfWeekInMonth( Friday, FiscalCalendar ).Date;
+
+            // assert
+            lastDayOfWeekInMonth.Should().Be( expected );
         }
 
         [Fact]
         public void day_of_week_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 3, 11 );
-            var actual = date.DayOfWeekInMonth( 2, DayOfWeek.Monday, calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var dayOfWeekInMonth = date.DayOfWeekInMonth( 2, Monday, FiscalCalendar ).Date;
+
+            // assert
+            dayOfWeekInMonth.Should().Be( expected );
         }
 
         [Fact]
         public void start_of_month_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 26 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 3, 1 );
-            var actual = date.StartOfMonth( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var startOfMonth = date.StartOfMonth( FiscalCalendar ).Date;
+
+            // assert
+            startOfMonth.Should().Be( expected );
         }
 
         [Fact]
         public void start_of_quarter_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 1, 1 );
-            var actual = date.StartOfQuarter( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var startOfQuarter = date.StartOfQuarter( FiscalCalendar ).Date;
+
+            // assert
+            startOfQuarter.Should().Be( expected );
         }
 
         [Fact]
         public void start_of_semester_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 1, 1 );
-            var actual = date.StartOfSemester( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var startOfSemester = date.StartOfSemester( FiscalCalendar ).Date;
+
+            // assert
+            startOfSemester.Should().Be( expected );
         }
 
         [Fact]
         public void start_of_year_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var expected = new DateTime( 2012, 7, 1 ); // because fiscal calendar starts in July
-            var actual = date.StartOfYear( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+            var expected = new DateTime( 2012, 7, 1 );
+
+            // act
+            var startOfYear = date.StartOfYear( FiscalCalendar ).Date;
+
+            // assert
+            startOfYear.Should().Be( expected );
         }
 
         [Fact]
         public void end_of_month_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 3, 31 );
-            var actual = date.EndOfMonth( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var endOfMonth = date.EndOfMonth( FiscalCalendar ).Date;
+
+            // assert
+            endOfMonth.Should().Be( expected );
         }
 
         [Fact]
         public void end_of_quarter_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
             var expected = new DateTime( 2013, 3, 31 );
-            var actual = date.EndOfQuarter( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+
+            // act
+            var endOfQuarter = date.EndOfQuarter( FiscalCalendar ).Date;
+
+            // assert
+            endOfQuarter.Should().Be( expected );
         }
 
         [Fact]
         public void end_of_semester_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var expected = new DateTime( 2013, 6, 30 ); // because fiscal calendar starts in July
-            var actual = date.EndOfSemester( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+            var expected = new DateTime( 2013, 6, 30 );
+
+            // act
+            var endOfSemester = date.EndOfSemester( FiscalCalendar ).Date;
+
+            // assert
+            endOfSemester.Should().Be( expected );
         }
 
         [Fact]
         public void end_of_year_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var expected = new DateTime( 2013, 6, 30 ); // because fiscal calendar starts in July
-            var actual = date.EndOfYear( calendar );
-            Assert.Equal( expected.Date, actual.Date );
+            var expected = new DateTime( 2013, 6, 30 );
+
+            // act
+            var endOfYear = date.EndOfYear( FiscalCalendar ).Date;
+
+            // assert
+            endOfYear.Should().Be( expected );
         }
 
         [Fact]
         public void week_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var actual = date.Week( calendar, DayOfWeek.Sunday );
-            Assert.Equal( 35, actual ); // because fiscal calendar starts in July
+
+            // act
+            var week = date.Week( FiscalCalendar, Sunday );
+
+            // assert
+            week.Should().Be( 35 );
         }
 
         [Fact]
         public void month_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 6, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var actual = date.Month( calendar );
-            Assert.Equal( 12, actual ); // because fiscal calendar starts in July
+
+            // act
+            var month = date.Month( FiscalCalendar );
+
+            // assert
+            month.Should().Be( 12 );
         }
 
         [Fact]
         public void quarter_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var actual = date.Quarter( calendar );
-            Assert.Equal( 3, actual ); // because fiscal calendar starts in July
+
+            // act
+            var quarter = date.Quarter( FiscalCalendar );
+
+            // assert
+            quarter.Should().Be( 3 );
         }
 
         [Fact]
         public void semester_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 3, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var actual = date.Semester( calendar );
-            Assert.Equal( 2, actual ); // because fiscal calendar starts in July
+
+            // act
+            var semester = date.Semester( FiscalCalendar );
+
+            // assert
+            semester.Should().Be( 2 );
         }
 
         [Fact]
         public void year_with_calendar_should_return_expected_result()
         {
+            // arrange
             var date = new DateTime( 2013, 7, 1 );
-            var calendar = new GregorianFiscalCalendar( 7 );
-            var actual = date.Year( calendar );
-            Assert.Equal( 2014, actual ); // because fiscal calendar starts in July
+
+            // act
+            var year = date.Year( FiscalCalendar );
+
+            // assert
+            year.Should().Be( 2014 );
         }
+
+        Calendar FiscalCalendar { get; } = new GregorianFiscalCalendar( 7 );
     }
 }

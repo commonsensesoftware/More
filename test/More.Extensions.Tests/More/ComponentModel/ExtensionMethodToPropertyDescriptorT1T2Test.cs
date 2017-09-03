@@ -1,15 +1,10 @@
 namespace More.ComponentModel
 {
+    using FluentAssertions;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="ExtensionMethodToPropertyDescriptor{TObject,TValue}"/>.
-    /// </summary>
     public class ExtensionMethodToPropertyDescriptorT1T2Test
     {
         [Fact]
@@ -21,83 +16,149 @@ namespace More.ComponentModel
             Assert.Throws<ArgumentException>( () => new ExtensionMethodToPropertyDescriptor<object, object>( "", o => o, DefaultAction.None ) );
         }
 
-        [Fact]
-        public void can_reset_should_return_false()
+        [Theory]
+        [MemberData( nameof( PropertyValues ) )]
+        public void can_reset_should_return_false( object component )
         {
-            var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
-            Assert.False( target.CanResetValue( null ) );
-            Assert.False( target.CanResetValue( new object() ) );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
+
+            // act
+            var result = descriptor.CanResetValue( component );
+
+            // assert
+            result.Should().BeFalse();
         }
 
-        [Fact]
-        public void should_serialize_value_should_return_false()
+        [Theory]
+        [MemberData( nameof( PropertyValues ) )]
+        public void should_serialize_value_should_return_false( object component )
         {
-            var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
-            Assert.False( target.ShouldSerializeValue( null ) );
-            Assert.False( target.ShouldSerializeValue( new object() ) );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
+
+            // act
+            var result = descriptor.ShouldSerializeValue( component );
+
+            // assert
+            result.Should().BeFalse();
         }
 
         [Fact]
         public void supports_change_events_should_return_false()
         {
-            var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
-            Assert.False( target.SupportsChangeEvents );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
+
+            // act
+            var result = descriptor.SupportsChangeEvents;
+
+            // assert
+            result.Should().BeFalse();
         }
 
         [Fact]
         public void component_type_should_return_expected_value()
         {
-            var target = new ExtensionMethodToPropertyDescriptor<string, object>( "Name", o => o );
-            Assert.Equal( typeof( string ), target.ComponentType );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<string, object>( "Name", o => o );
+
+            // act
+            var componentType = descriptor.ComponentType;
+
+            // assert
+            componentType.Should().Be( typeof( string ) );
         }
 
         [Fact]
         public void property_type_should_return_expected_value()
         {
-            var target = new ExtensionMethodToPropertyDescriptor<object, string>( "Name", o => o.ToString() );
-            Assert.Equal( typeof( string ), target.PropertyType );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<object, string>( "Name", o => o.ToString() );
+
+            // act
+            var propertyType = descriptor.PropertyType;
+
+            // assert
+            propertyType.Should().Be( typeof( string ) );
         }
 
         [Fact]
         public void is_readX2Donly_should_be_true_when_mutator_is_unset()
         {
-            var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
-            Assert.True( target.IsReadOnly );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
+
+            // act
+            var readOnly = descriptor.IsReadOnly;
+
+            // assert
+            readOnly.Should().BeTrue();
         }
 
         [Fact]
         public void is_readX2Donly_should_be_false_when_mutator_is_set()
         {
-            var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o, DefaultAction.None );
-            Assert.False( target.IsReadOnly );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o, DefaultAction.None );
+
+            // act
+            var readOnly = descriptor.IsReadOnly;
+
+            // assert
+            readOnly.Should().BeFalse();
         }
 
         [Fact]
         public void get_value_should_return_expected_value()
         {
-            var expected = "test";
-            var component = new Dictionary<string, object>() { { "Name", expected } };
-            var target = new ExtensionMethodToPropertyDescriptor<IDictionary<string, object>, object>( "Name", c => c["Name"] );
-            var actual = target.GetValue( component );
-            Assert.Equal( expected, actual );
+            // arrange
+            var name = "test";
+            var component = new Dictionary<string, object>() { ["Name"] = name };
+            var descriptor = new ExtensionMethodToPropertyDescriptor<IDictionary<string, object>, object>( "Name", c => c["Name"] );
+
+            // act
+            var result = descriptor.GetValue( component );
+
+            // assert
+            result.Should().Be( name );
         }
 
         [Fact]
         public void set_value_should_assign_expected_value()
         {
-            var expected = "test";
-            var component = new Dictionary<string, object>() { { "Name", null } };
-            var target = new ExtensionMethodToPropertyDescriptor<IDictionary<string, object>, object>( "Name", c => c["Name"], ( c, v ) => c["Name"] = v );
-            target.SetValue( component, expected );
-            var actual = target.GetValue( component );
-            Assert.Equal( expected, actual );
+            // arrange
+            var value = "test";
+            var component = new Dictionary<string, object>() { ["Name"] = null };
+            var descriptor = new ExtensionMethodToPropertyDescriptor<IDictionary<string, object>, object>( "Name", c => c["Name"], ( c, v ) => c["Name"] = v );
+
+            // act
+            descriptor.SetValue( component, value );
+
+            // assert
+            component["Name"].Should().Be( value );
         }
 
         [Fact]
         public void set_value_should_throw_exception_when_property_is_readX2Donly()
         {
-            var target = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
-            Assert.Throws<InvalidOperationException>( () => target.SetValue( new object(), new object() ) );
+            // arrange
+            var descriptor = new ExtensionMethodToPropertyDescriptor<object, object>( "Name", o => o );
+
+            // act
+            Action setValue = () => descriptor.SetValue( new object(), new object() );
+
+            // assert
+            setValue.ShouldThrow<InvalidOperationException>();
+        }
+
+        public static IEnumerable<object[]> PropertyValues
+        {
+            get
+            {
+                yield return new object[] { default( object ) };
+                yield return new object[] { new object() };
+            }
         }
     }
 }

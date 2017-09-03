@@ -1,13 +1,11 @@
 namespace More.IO
 {
+    using FluentAssertions;
     using System;
     using System.IO;
     using System.Threading.Tasks;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="FileSystem"/>.
-    /// </summary>
     public class FileSystemTest
     {
         [Fact]
@@ -20,20 +18,20 @@ namespace More.IO
             var folder = await fileSystem.GetFolderAsync( @"C:\Windows" );
 
             // assert
-            Assert.NotNull( folder != null );
+            folder.Should().NotBeNull();
         }
 
         [Fact]
-        public async Task get_folder_async_should_throw_exception_for_nonX2Dexistent_folder()
+        public void get_folder_async_should_throw_exception_for_nonX2Dexistent_folder()
         {
             // arrange
             var fileSystem = new FileSystem();
 
             // act
-            var ex = await Assert.ThrowsAsync<DirectoryNotFoundException>( () => fileSystem.GetFolderAsync( @"C:\blah" ) );
+            Func<Task> getFolderAsync = () => fileSystem.GetFolderAsync( @"C:\blah" );
 
             // assert
-
+            getFolderAsync.ShouldThrow<DirectoryNotFoundException>();
         }
 
         [Fact]
@@ -46,22 +44,21 @@ namespace More.IO
             var folder = await fileSystem.GetFileAsync( @"C:\Windows\notepad.exe" );
 
             // assert
-            Assert.NotNull( folder != null );
+            folder.Should().NotBeNull();
         }
 
         [Fact]
-        public async Task get_file_async_should_throw_exception_for_nonX2Dexistent_file()
+        public void get_file_async_should_throw_exception_for_nonX2Dexistent_file()
         {
             // arrange
             var fileSystem = new FileSystem();
-            var expected = @"C:\blah\foo.txt";
+            var fileName = @"C:\blah\foo.txt";
 
             // act
-            var ex = await Assert.ThrowsAsync<FileNotFoundException>( () => fileSystem.GetFileAsync( expected ) );
-            var actual = ex.FileName;
+            Func<Task> getFileAsync = () => fileSystem.GetFileAsync( fileName );
 
             // assert
-            Assert.Equal( expected, actual );
+            getFileAsync.ShouldThrow<FileNotFoundException>().And.FileName.Should().Be( fileName );
         }
 
         [Fact]
@@ -75,23 +72,22 @@ namespace More.IO
             var folder = await fileSystem.GetFileAsync( uri );
 
             // assert
-            Assert.NotNull( folder != null );
+            folder.Should().NotBeNull();
         }
 
         [Fact]
-        public async Task get_file_async_should_throw_exception_for_nonX2Dexistent_file_from_uri()
+        public void get_file_async_should_throw_exception_for_nonX2Dexistent_file_from_uri()
         {
             // arrange
             var fileSystem = new FileSystem();
-            var expected = @"C:\blah\foo.txt";
-            var uri = new Uri( $"file:///{expected}" );
+            var fileName = @"C:\blah\foo.txt";
+            var uri = new Uri( "file:///" + fileName );
 
             // act
-            var ex = await Assert.ThrowsAsync<FileNotFoundException>( () => fileSystem.GetFileAsync( uri ) );
-            var actual = ex.FileName;
+            Action getFileAsync = () => fileSystem.GetFileAsync( uri );
 
             // assert
-            Assert.Equal( expected, actual );
+            getFileAsync.ShouldThrow<FileNotFoundException>().And.FileName.Should().Be( fileName );
         }
     }
 }

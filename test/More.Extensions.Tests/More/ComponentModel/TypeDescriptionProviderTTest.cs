@@ -1,25 +1,23 @@
 namespace More.ComponentModel
 {
+    using FluentAssertions;
     using System;
     using System.ComponentModel;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="TypeDescriptionProvider{T}"/>.
-    /// </summary>
     public class TypeDescriptionProviderTTest
     {
         [Fact]
         public void new_type_descriptor_provider_should_not_allow_null_factory()
         {
             // arrange
-            Func<ICustomTypeDescriptor, ICustomTypeDescriptor> typeDescriptorFactory = null;
+            var typeDescriptorFactory = default( Func<ICustomTypeDescriptor, ICustomTypeDescriptor> );
 
             // act
-            var ex = Assert.Throws<ArgumentNullException>( () => new TypeDescriptionProvider<object>( typeDescriptorFactory ) );
-            
+            Action @new = () => new TypeDescriptionProvider<object>( typeDescriptorFactory );
+
             // assert
-            Assert.Equal( "typeDescriptorFactory", ex.ParamName );
+            @new.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( typeDescriptorFactory ) );
         }
 
         [Fact]
@@ -32,14 +30,13 @@ namespace More.ComponentModel
                 descriptor.AddExtensionProperty( "Name", s => s.GetType().Name );
                 return descriptor;
             };
-            var target = new TypeDescriptionProvider<string>( factory );
+            var provider = new TypeDescriptionProvider<string>( factory );
 
             // act
-            var actual = target.GetTypeDescriptor( typeof( string ), "" );
-            
+            var result = provider.GetTypeDescriptor( typeof( string ), "" );
+
             // assert
-            Assert.NotNull( actual );
-            Assert.IsType( typeof( CustomTypeDescriptor<string> ), actual );
+            result.Should().BeOfType<CustomTypeDescriptor<string>>();
         }
     }
 }

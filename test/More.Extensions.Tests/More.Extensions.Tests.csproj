@@ -1,30 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup Label="Configuration">
-    <TargetFramework>net452</TargetFramework>
-  </PropertyGroup>
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(test.props))" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\More.Extensions\More.Extensions.csproj" />
-  </ItemGroup>
+ <PropertyGroup Label="Configuration">
+  <TargetFramework>net452</TargetFramework>
+ </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
+ <ItemGroup>
+  <ProjectReference Include="..\..\src\More.Extensions\More.Extensions.csproj" />
+ </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Runtime" Version="4.1.0" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
-    <PackageReference Include="more.xunit" Version="2.2.2" />
-    <PackageReference Include="more.xunit.runner.visualstudio" Version="2.2.1" />
-    <PackageReference Include="FluentAssertions" Version="4.19.3" />
-    <PackageReference Include="Moq" Version="4.7.99" />
-  </ItemGroup>
+ <ItemGroup>
+  <Reference Include="Microsoft.CSharp" />
+  <Reference Include="Microsoft.QualityTools.Testing.Fakes">
+   <HintPath>$(PublicAssemblies)Microsoft.QualityTools.Testing.Fakes.dll</HintPath>
+  </Reference>
+  <Reference Include="System" />
+ </ItemGroup>
 
-  <ItemGroup Label="Fakes">
-    <Fakes Include="Fakes\*.fakes" />
-    <Reference Include="FakesAssemblies\*.dll" />
-  </ItemGroup>
+ <ItemGroup>
+  <PackageReference Include="FluentAssertions" Version="4.19.3" />
+  <PackageReference Include="Moq" Version="4.7.99" />
+  <PackageReference Include="more.xunit" Version="2.2.3" />
+  <PackageReference Include="more.xunit.runner.visualstudio" Version="2.2.3" />
+  <PackageReference Include="System.Runtime" Version="4.1.0" />
+  <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
+ </ItemGroup>
+
+ <ItemGroup Label="Fakes">
+  <Fakes Include="Fakes\*.fakes" />
+  <Reference Include="FakesAssemblies\*.dll" Visible="false" />
+ </ItemGroup>
 
 </Project>

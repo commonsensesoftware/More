@@ -1,12 +1,9 @@
 namespace System
 {
     using FluentAssertions;
-    using More.Globalization;
-    using System;
-    using System.Globalization;
     using Xunit;
-    using static System.DayOfWeek;
     using static System.DateTime;
+    using static System.DayOfWeek;
     using static System.Globalization.CultureInfo;
     using static System.TimeSpan;
 
