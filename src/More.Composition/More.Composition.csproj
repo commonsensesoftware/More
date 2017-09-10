@@ -10,14 +10,17 @@
   <Description>The composition library for the "More" framework.</Description>
   <RootNamespace>More.Composition</RootNamespace>
   <PackageTags>More;Patterns;Practices;Composition;MEF</PackageTags>
-  <PackageReleaseNotes>• Updated TFM to .NET Standard</PackageReleaseNotes>
  </PropertyGroup>
+
+ <ItemGroup>
+  <ReleaseNotes Include="Updated TFM to .NET Standard" />
+ </ItemGroup>
 
  <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
  <ItemGroup>
-  <PackageReference Include="System.Diagnostics.Contracts" Version="4.0.1" />
   <PackageReference Include="System.Composition" Version="1.0.31" />
+  <PackageReference Include="System.Diagnostics.Contracts" Version="4.0.1" />
  </ItemGroup>
 
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />

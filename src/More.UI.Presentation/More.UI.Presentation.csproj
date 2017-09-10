@@ -18,7 +18,6 @@
  <ItemGroup>
   <ReleaseNotes Include="Added support for UAP" />
   <ReleaseNotes Include="Dropped support for Windows Phone Silverlight" />
-
  </ItemGroup>
 
  <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
@@ -71,7 +70,6 @@
  </ItemGroup>
 
  <ItemGroup>
-  <ProjectReference Include="..\More\More.csproj" />
   <ProjectReference Include="..\More.Extensions\More.Extensions.csproj" />
   <ProjectReference Include="..\More.UI\More.UI.csproj" />
  </ItemGroup>

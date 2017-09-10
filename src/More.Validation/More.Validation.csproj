@@ -10,8 +10,11 @@
   <Description>The validation library for the "More" framework.</Description>
   <RootNamespace>More.ComponentModel.DataAnnotations</RootNamespace>
   <PackageTags>More;Patterns;Practices;Validation;Annotations</PackageTags>
-  <PackageReleaseNotes>• Updated TFM to .NET Standard</PackageReleaseNotes>
  </PropertyGroup>
+
+ <ItemGroup>
+  <ReleaseNotes Include="Updated TFM to .NET Standard" />
+ </ItemGroup>
 
  <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
