@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(test.props))" />
+
+ <PropertyGroup Label="Configuration">
+  <TargetFramework>net452</TargetFramework>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\..\src\More.UI.Hosting\More.UI.Hosting.csproj" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Reference Include="PresentationFramework" />
+  <Reference Include="WindowsBase" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <PackageReference Include="FluentAssertions" Version="4.19.3" />
+  <PackageReference Include="Moq" Version="4.7.99" />
+  <PackageReference Include="more.xunit" Version="2.2.3" />
+  <PackageReference Include="more.xunit.runner.visualstudio" Version="2.2.3" />
+ </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>65c7bc3e-a283-4466-a3f5-51f2ae043e84</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>More</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\CompositionContextServiceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System.Composition.Hosting\ContainerConfigurationExtensions.cs" />
+  </ItemGroup>
+</Project>

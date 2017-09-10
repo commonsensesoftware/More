@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
+ 
+ <PropertyGroup Label="Configuration">
+  <VersionPrefix>1.1.2</VersionPrefix>
+  <AssemblyVersion>1.1.0.0</AssemblyVersion>
+  <TargetFramework>net45</TargetFramework>
+  <AssemblyTitle>More - ASP.NET MVC Hosting</AssemblyTitle>
+  <Description>The Microsoft ASP.NET MVC hosting library for the "More" framework.</Description>
+  <RootNamespace>More</RootNamespace>
+  <PackageTags>More;Patterns;Practices;Hosting;aspnet;mvc;ui;User Interface</PackageTags>
+ </PropertyGroup>
+
+ <!-- 
+ <ItemGroup>
+  <ReleaseNotes Include="" />
+ </ItemGroup>
+ -->
+ 
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
+
+ <ItemGroup>
+  <Reference Include="System.Web" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\More.AspNet.Hosting\More.AspNet.Hosting.csproj" />
+ </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+
+</Project>

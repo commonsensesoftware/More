@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
+ 
+ <PropertyGroup Label="Configuration">
+  <VersionPrefix>1.1.0</VersionPrefix>
+  <AssemblyVersion>1.1.0.0</AssemblyVersion>
+  <TargetFramework>net45</TargetFramework>
+  <AssemblyTitle>More - ASP.NET Hosting</AssemblyTitle>
+  <Description>Provides "More" patterns and practices for hosting Microsoft ASP.NET applications.</Description>
+  <RootNamespace>More</RootNamespace>
+  <PackageTags>More;Patterns;Practices;aspnet;Web;Hosting;User Interface;UI</PackageTags>
+  <DefineConstants>$(DefineConstants);ASPNET</DefineConstants>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <ReleaseNotes Include="Host now resolves settings by key and type" />
+  <ReleaseNotes Include="Fixed stack overflow issue resolving multiple services" />
+ </ItemGroup>
+
+ <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
+
+ <ItemGroup>
+  <Reference Include="System.Configuration" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\More.Composition\More.Composition.csproj" />
+  <ProjectReference Include="..\More.UI.Presentation\More.UI.Presentation.csproj" />
+ </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+ <Import Project="..\Shared.Hosting\Shared.Hosting.projitems" Label="Shared" />
+ <Import Project="..\Shared.Hosting.NetFx\Shared.Hosting.NetFx.projitems" Label="Shared" />
+ <ItemGroup>
+   <Compile Update="C:\Dev\Projects\More\src\Shared.Hosting\ExceptionMessage.Designer.cs">
+     <DesignTime>True</DesignTime>
+     <AutoGen>True</AutoGen>
+     <DependentUpon>ExceptionMessage.resx</DependentUpon>
+   </Compile>
+   <Compile Update="C:\Dev\Projects\More\src\Shared.Hosting\SR.Designer.cs">
+     <DesignTime>True</DesignTime>
+     <AutoGen>True</AutoGen>
+     <DependentUpon>SR.resx</DependentUpon>
+   </Compile>
+ </ItemGroup>
+ <ItemGroup>
+   <EmbeddedResource Update="C:\Dev\Projects\More\src\Shared.Hosting\ExceptionMessage.resx">
+     <Generator>ResXFileCodeGenerator</Generator>
+     <LastGenOutput>ExceptionMessage.Designer.cs</LastGenOutput>
+   </EmbeddedResource>
+   <EmbeddedResource Update="C:\Dev\Projects\More\src\Shared.Hosting\SR.resx">
+     <Generator>ResXFileCodeGenerator</Generator>
+     <LastGenOutput>SR.Designer.cs</LastGenOutput>
+   </EmbeddedResource>
+ </ItemGroup>
+
+</Project>

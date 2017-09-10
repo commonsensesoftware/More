@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>3c9d9fae-5de1-46ab-95f0-474da80c7e0c</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>More</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ActivityAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ActivityConfigurationT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\Host.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostExportDescriptorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\IActivityConfigurationContract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\PartSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\ConstructorSelectionRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\DecoratedParameterRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\ImportParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\InterfaceSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\NamespaceSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\PublicKeyTokenSpecification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition\SettingsConventionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionMessage.Designer.cs">
+      <DependentUpon>ExceptionMessage.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SR.Designer.cs">
+      <DependentUpon>SR.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)System.Composition.Convention\ConventionBuilderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System.Composition.Convention\PartConventionBuilderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System.Composition\CompositionContextExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ExceptionMessage.resx">
+      <LastGenOutput>ExceptionMessage.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SR.resx">
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
