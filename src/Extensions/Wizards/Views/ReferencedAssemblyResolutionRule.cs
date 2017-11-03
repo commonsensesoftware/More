@@ -46,13 +46,13 @@
 
             try
             {
-                Debug.WriteLine( "Attempting to load assembly '{0}' into a reflection-only context from {1}.", new[] { item.Name, location } );
+                Debug.WriteLine( "Attempting to load assembly '{0}' into a reflection-only context from {1}.", item.Name, location);
                 return Assembly.ReflectionOnlyLoadFrom( location );
             }
             catch
             {
                 // resolution failed
-                Debug.WriteLine( "Failed to load assembly '{0}' into a reflection-only context.", new[] { item.Name } );
+                Debug.WriteLine( "Failed to load assembly '{0}' into a reflection-only context.", item.Name);
                 return null;
             }
         }
