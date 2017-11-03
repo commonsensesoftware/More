@@ -66,11 +66,11 @@
             // if the assembly is found, load it in the reflection-only context
             if ( string.IsNullOrEmpty( path ) )
             {
-                Debug.WriteLine( "Failed to load assembly '{0}' into a reflection-only context.", new[] { e.NamespaceName } );
+                Debug.WriteLine( "Failed to load assembly '{0}' into a reflection-only context.", e.NamespaceName);
             }
             else
             {
-                Debug.WriteLine( "Attempting to load assembly '{0}' into a reflection-only context from {1}.", new[] { e.NamespaceName, path } );
+                Debug.WriteLine( "Attempting to load assembly '{0}' into a reflection-only context from {1}.", e.NamespaceName, path);
                 e.ResolvedAssemblies.Add( Assembly.ReflectionOnlyLoadFrom( path ) );
             }
         }
