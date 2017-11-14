@@ -1,0 +1,55 @@
+<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".vstemplate" #>
+<#@ parameter type="System.String" name="More" #>
+<#@ parameter type="System.String" name="More_UI" #>
+<#@ parameter type="System.String" name="More_UI_Presentation" #><?xml version="1.0" encoding="utf-8" ?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+ <TemplateData>
+  <DefaultName>UserControl.xaml</DefaultName>
+  <Name>User Control View (More)</Name>
+  <Icon Package="{b3bae735-386c-4030-8329-ef48eeda4036}" ID="4594" />
+  <Description>A Windows Presentation Foundation user control which represents a view in the Model-View-ViewModel pattern.</Description>
+  <TemplateID>More.WPF.CSharp.UserControl</TemplateID>
+  <TemplateGroupID>WPF</TemplateGroupID>
+  <ProjectType>CSharp</ProjectType>
+  <SortOrder>10</SortOrder>
+  <ShowByDefault>true</ShowByDefault>
+  <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+ </TemplateData>
+ <TemplateContent>
+  <References />
+  <ProjectItem SubType="Designer" TargetFileName="$fileinputname$.xaml" OpenInEditor="true" ReplaceParameters="true" CustomTool="MSBuild:Compile">UserControl1.xaml</ProjectItem>
+  <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" OpenInEditor="false" ReplaceParameters="true">UserControl1.xaml.cs</ProjectItem>
+  <CustomParameters>
+   <CustomParameter Name="_views" Value="UserControlOnly,ImplementIViewT,ImplementIViewTT" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WpfInteractionViewModel.zip|FrameworkVersion=4.5" />
+   <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput" />
+   <CustomParameter Name="$showTips$" Value="true" />
+   <CustomParameter Name="$hasviewmodel$" Value="true" />
+   <CustomParameter Name="$enableOpenFile$" Value="false" />
+   <CustomParameter Name="$enableSaveFile$" Value="false" />
+   <CustomParameter Name="$enableSelectFolder$" Value="false" />
+   <CustomParameter Name="$enableTextInput$" Value="false" />
+   <CustomParameter Name="$interfaceoption$" Value="2" />
+   <CustomParameter Name="$viewmodel$" Value="" />
+   <CustomParameter Name="$viewmodelnamespace$" Value="" />
+  </CustomParameters>
+ </TemplateContent>
+ <WizardExtension>
+  <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+  <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+ </WizardExtension>
+ <WizardData>
+  <packages repository="extension" repositoryId="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa">
+   <package id="More" version="<#= More #>" />
+   <package id="More.UI" version="<#= More_UI #>" />
+   <package id="More.UI.Presentation" version="<#= More_UI_Presentation #>" />
+  </packages>
+ </WizardData>
+ <WizardExtension>
+  <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
+  <FullClassName>More.VisualStudio.Templates.ViewTemplateWizard</FullClassName>
+ </WizardExtension>
+</VSTemplate>

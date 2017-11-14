@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
- <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
- 
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.1.2</VersionPrefix>
   <AssemblyVersion>1.1.0.0</AssemblyVersion>
@@ -17,8 +15,6 @@
   <ReleaseNotes Include="" />
  </ItemGroup>
  -->
-
- <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
  <ItemGroup>
   <Reference Include="System.Net.Http" />

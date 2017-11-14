@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <PropertyGroup Label="NuGet">
+  <RepositoryType>git</RepositoryType>
+  <RepositoryUrl>https://github.com/commonsensesoftware/more</RepositoryUrl>
+  <PackageIconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</PackageIconUrl>
+  <PackageLicenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</PackageLicenseUrl>
+  <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  <IncludeSymbols>true</IncludeSymbols>
+  <IncludeSource>true</IncludeSource>
+  <IncludeBuildOutput>true</IncludeBuildOutput>
+  <MinClientVersion>2.5</MinClientVersion>
+  <PackageOutputPath>$(MSBuildThisFileDirectory)..\bin</PackageOutputPath>
+  <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+ </PropertyGroup>
+
+ <ItemGroup Label="NuGet">
+  <!-- allow build-specific, one-time release notes from the command-line without modifying the source project -->
+  <ReleaseNotes Include="$(BuildReleaseNotes.Split('|'))" />
+ </ItemGroup>
+
+ <PropertyGroup Condition=" '$(Configuration)' == 'Release' " Label="NuGet">
+  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+ </PropertyGroup>
+
+</Project>

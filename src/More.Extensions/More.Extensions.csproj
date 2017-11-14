@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
- <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
-
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.2.4</VersionPrefix>
   <AssemblyVersion>1.2.0.1</AssemblyVersion>
-  <TargetFrameworks>net45;portable-win81+wpa81;uap10.0</TargetFrameworks>
+  <TargetFrameworks>net45;netstandard1.5;uap10.0</TargetFrameworks>
   <AssemblyTitle>More - Extensions</AssemblyTitle>
   <Description>The platform-specific extensions for the "More" framework.</Description>
   <RootNamespace>More</RootNamespace>
@@ -15,22 +13,15 @@
 
  <ItemGroup>
   <ReleaseNotes Include="Added support for UAP" />
+  <ReleaseNotes Include="Added support for .NET Standard 1.5" />
+  <ReleaseNotes Include="Dropped support for Windows 8.1" />
+  <ReleaseNotes Include="Dropped support for Windows Phone 8.1" />
   <ReleaseNotes Include="Dropped support for Windows Phone Silverlight" />
   <ReleaseNotes Include="Moved cross-platform types back to 'More'" />
  </ItemGroup>
 
-  <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
-
- <PropertyGroup Condition=" '$(TargetFramework)' == 'portable-win81+wpa81' ">
-  <DefineConstants>$(DefineConstants);PORTABLE_WIN81_WPA81;UAP10_0</DefineConstants>
-  <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
-  <TargetPlatformVersion>8.1</TargetPlatformVersion>
-  <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
-  <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-  <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
- </PropertyGroup>
-
  <PropertyGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+  <NoWarn>NU1608</NoWarn>
   <DefineConstants>$(DefineConstants);UAP10_0</DefineConstants>
   <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
   <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
@@ -40,11 +31,6 @@
   <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
  </PropertyGroup>
-
- <ItemGroup>
-  <Compile Include="**\*.cs" Exclude="obj\**\*.*;Platforms\**\*.cs" />
-  <Compile Include="Platforms\$(TargetFramework)\**\*.cs" />
- </ItemGroup>
 
  <ItemGroup>
   <ProjectReference Include="..\More\More.csproj" />
@@ -61,8 +47,12 @@
   <Reference Include="System.Xml.Linq" />
  </ItemGroup>
 
- <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
-  <Compile Include="Platforms\portable-win81+wpa81\**\*.cs" Exclude="Platforms\portable-win81+wpa81\System.Globalization\GregorianCalendar.cs" />
+ <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
+  <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+  <PackageReference Include="System.ComponentModel.EventBasedAsync" Version="4.0.11" />
+  <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.1.0" />
+  <PackageReference Include="System.Globalization.Calendars" Version="4.0.1" />
+  <PackageReference Include="System.Reflection.Extensions" Version="4.0.1" />
  </ItemGroup>
 
  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
@@ -96,6 +86,19 @@
   <PackageReference Include="System.Text.RegularExpressions" Version="4.1.0" />
   <PackageReference Include="System.Threading" Version="4.0.11" />
   <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
+ </ItemGroup>
+ 
+ <ItemGroup>
+  <Compile Include="**\*.cs" Exclude="obj\**\*.*;Platforms\**\*.cs" />
+  <Compile Include="Platforms\$(TargetFramework)\**\*.cs" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <Compile Include="Platforms\netstandard1.5\**\*.cs" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
+  <Compile Include="Platforms\uap10.0\System\ComponentModel\**\*.cs" />
  </ItemGroup>
 
  <ItemGroup>

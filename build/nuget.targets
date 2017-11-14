@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <Target Name="GenerateReleaseNotes" AfterTargets="BeforeBuild" Label="NuGet">
+
+  <PropertyGroup>
+   <ReleaseNoteCount>@(ReleaseNotes->Count())</ReleaseNoteCount>
+   <PackageReleaseNotes Condition=" $(ReleaseNoteCount) &lt; 2 " >@(ReleaseNotes->'%(Identity)')</PackageReleaseNotes>
+   <PackageReleaseNotes Condition=" $(ReleaseNoteCount) &gt; 1 " >@(ReleaseNotes->'• %(Identity)','%0D%0A')</PackageReleaseNotes>
+  </PropertyGroup>
+
+ </Target>
+ 
+ <Target Name="ResolvePackageVersion" Outputs="$(PackageVersion)" Label="NuGet">
+
+   <!-- this target is used to read the package version from a referenced project, which is needed for item and project template projects. -->
+   <PropertyGroup>
+     <PackageVersion>$(Version)</PackageVersion>
+   </PropertyGroup>
+
+ </Target>
+
+  <Target Name="ResolvePackageReferences" Outputs="@(PackageReference)" Label="NuGet">
+
+    <!-- recursively call this target for every target platform and enumerate all nuget packages -->
+    <ItemGroup Condition=" '$(IsInnerBuild)' != 'true' ">
+      <_TargetFrameworks Include="$(TargetFrameworks.Split(';'))" />
+    </ItemGroup>
+
+    <MSBuild Projects="$(MSBuildProjectFullPath)"
+             Targets="ResolvePackageReferences"
+             Properties="TargetFramework=%(_TargetFrameworks.Identity);IsInnerBuild=true"
+             UnloadProjectsOnCompletion="true"
+             Condition=" '$(IsInnerBuild)' != 'true' ">
+      <Output TaskParameter="TargetOutputs" ItemName="PackageReference" />
+    </MSBuild>
+
+  </Target>
+  
+</Project>

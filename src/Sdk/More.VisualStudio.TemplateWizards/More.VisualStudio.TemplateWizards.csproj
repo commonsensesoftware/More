@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <PropertyGroup Label="Configuration">
+  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  <TargetFrameworks>net46</TargetFrameworks>
+  <RootNamespace>More.VisualStudio</RootNamespace>
+  <AssemblyTitle>More - Visual Studio Template Wizards</AssemblyTitle>
+  <Description>The standard template wizards for the "More" framework used by Microsoft Visual Studio.</Description>
+  <LanguageTargets>$(MSBuildToolsPath)\Microsoft.CSharp.targets</LanguageTargets>
+  <BlendSdk>$(MSBuildProgramFiles32)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\</BlendSdk>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <Reference Include="EntityFramework" HintPath="$(VSAPPIDDIR)EntityFramework.dll" Private="False" />
+  <Reference Include="EntityFramework.SqlServer" HintPath="$(VSAPPIDDIR)EntityFramework.SqlServer.dll" Private="False" />
+  <Reference Include="Microsoft.CSharp" />
+  <Reference Include="Microsoft.VisualStudio.DataTools.Interop" HintPath="$(VSAPPIDDIR)Microsoft.VisualStudio.DataTools.Interop.dll" Private="False" EmbedInteropTypes="False" />
+  <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface" HintPath="$(VSAPPIDDIR)PublicAssemblies\Microsoft.VisualStudio.TemplateWizardInterface.dll" Private="False" EmbedInteropTypes="False" />
+  <Reference Include="Microsoft.VSDesigner" HintPath="$(VSAPPIDDIR)Microsoft.VSDesigner.dll" Private="False" EmbedInteropTypes="False" />
+  <Reference Include="PresentationCore" />
+  <Reference Include="PresentationFramework" />
+
+  <!-- TODO: clone/duplicate the type picker dialog and then remove this dependency -->
+  <Reference Include="System.Activities.Presentation" />
+
+  <Reference Include="System.ComponentModel.DataAnnotations" />
+  <Reference Include="System.Data" />
+  <Reference Include="System.Data.Entity" />
+  <Reference Include="System.Windows.Interactivity" HintPath="$(BlendSdk)System.Windows.Interactivity.dll" />
+  <Reference Include="System.Xaml" />
+  <Reference Include="System.Xml.Linq" />
+  <Reference Include="System.Xml" />
+  <Reference Include="VsWebSite.Interop" HintPath="$(VSAPPIDDIR)PublicAssemblies\VsWebSite.Interop.dll" Private="False" EmbedInteropTypes="False" />
+  <Reference Include="WindowsBase" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <PackageReference Include="EnvDTE80" Version="8.0.0" Private="False" EmbedInteropTypes="False" />
+  <PackageReference Include="Microsoft.CodeAnalysis" Version="2.3.2" />
+  <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="14.0.25424 " />
+  <PackageReference Include="Microsoft.VisualStudio.Data.Core" Version="9.0.21022" />
+  <PackageReference Include="Microsoft.VisualStudio.Data.Services" Version="9.0.21022" />
+  <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.8.0" Version="8.0.50727" />
+  <PackageReference Include="NuGet.VisualStudio" Version="3.3.0" />
+  <PackageReference Include="VSLangProj80" Version="8.0.50727" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\..\More.UI.Presentation\More.UI.Presentation.csproj" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Page Include="Themes\Theme.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+  <Page Include="Views\*.xaml" SubType="Designer" Generator="MSBuild:Compile" DependentUpon="%(Filename)%(Extension).cs" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Compile Update="Views\*.xaml.cs" DependentUpon="%(Filename)" />
+  <Compile Update="*.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)')).resx" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <EmbeddedResource Update="*.resx" Generator="ResXFileCodeGenerator" LastGenOutput="%(Filename).Designer.cs" />
+ </ItemGroup>
+
+ <!-- Work around to fix Intellisense file generation for XAML projects
+      REF: https://github.com/dotnet/project-system/issues/2488
+  -->
+ <Target Name="WorkaroundForXAMLIntellisenseBuildIssue" AfterTargets="_CheckCompileDesignTimePrerequisite">
+  <PropertyGroup>
+   <BuildingProject>false</BuildingProject>
+  </PropertyGroup>
+ </Target>
+
+ <Import Project="..\..\Shared\Shared.projitems" Label="Shared" />
+ <Import Project="..\Shared.VisualStudio\Shared.VisualStudio.projitems" Label="Shared" />
+
+</Project>

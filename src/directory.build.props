@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Common">
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+
+  <ImportGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' ">
+    <Import Project="..\build\common.props" />
+    <Import Project="..\build\signing.props" />
+    <!-- TODO: enable code analysis -->
+    <Import Project="..\build\code-analysis.props" Condition="false" />
+    <Import Project="..\build\nuget.props" />
+  </ImportGroup>
+
+</Project>

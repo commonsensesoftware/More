@@ -1,31 +1,48 @@
 ﻿namespace More.Windows.Interactivity
 {
     using Input;
+    using Microsoft.Xaml.Interactivity;
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Diagnostics.Contracts;
+    using System.IO;
     using System.Threading.Tasks;
+    using IFile = IO.IFile;
     using global::Windows.Foundation;
     using global::Windows.Storage;
     using global::Windows.Storage.Pickers;
-    using IFile = IO.IFile;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Store applications.
-    /// </content>
-    public partial class SaveFileAction : System.Windows.Interactivity.TriggerAction
+    /// <summary>
+    /// Represents an <see cref="IAction">interactivity action</see> that can be used to save a file for the
+    /// <see cref="SaveFileInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// </summary>
+    [CLSCompliant( false )]
+    public class SaveFileAction : System.Windows.Interactivity.TriggerAction
     {
+        /// <summary>
+        /// Gets or sets the settings identifier associated with the file save picker instance.
+        /// </summary>
+        /// <value>The settings identifier.</value>
+        public string SettingsIdentifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the initial location where the save file picker looks for folders to present to the user.
+        /// </summary>
+        /// <value>The identifier of the starting location.</value>
+        public PickerLocationId SuggestedStartLocation { get; set; }
+
         IAsyncOperation<StorageFile> SaveFileAsync( SaveFileInteraction saveFile )
         {
             Contract.Requires( saveFile != null );
             Contract.Ensures( Contract.Result<IAsyncOperation<StorageFile>>() != null );
 
-            var dialog = new FileSavePicker();
+            var dialog = new FileSavePicker()
+            {
+                DefaultFileExtension = saveFile.DefaultFileExtension,
+                SuggestedStartLocation = SuggestedStartLocation,
+            };
 
-            dialog.DefaultFileExtension = saveFile.DefaultFileExtension;
             dialog.FileTypeChoices.AddRange( saveFile.FileTypeChoices.ToDictionary() );
-            dialog.SuggestedStartLocation = SuggestedStartLocation;
 
             if ( !string.IsNullOrEmpty( saveFile.FileName ) )
             {

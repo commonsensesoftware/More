@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <PropertyGroup Label="VisualStudio">
-    <SolutionDir Condition=" '$(SolutionDir)' == '' ">$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory).."))\</SolutionDir>
-    <PublicAssemblies>$(MSBuildProgramFiles32)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\</PublicAssemblies>
-  </PropertyGroup>
-
-</Project>

@@ -48,16 +48,5 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# ignore generated nuspec files
-/src/Core/CoreEx.Desktop/coreex.desktop.nuspec
-/src/UI/UI/ui.nuspec
-/src/UI/UIEx.Desktop/uiex.desktop.nuspec
-/src/Validation/Validation/validation.nuspec
-/src/Windows/Windows.Desktop/windows.desktop.nuspec
-/src/Hosting/Hosting.Desktop/hosting.desktop.nuspec
-/src/Hosting/Hosting.AspNet/hosting.aspnet.nuspec
-/src/Hosting/Hosting.AspNet.Mvc/hosting.mvc.nuspec
-/src/Hosting/Hosting.WebApi/hosting.webapi.nuspec
-
 # ignore generated visual studio template files
-/src/Extensions/Templates/**/*.vstemplate
+/src/Sdk/Templates/**/*.vstemplate

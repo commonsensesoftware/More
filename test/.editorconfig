@@ -1,0 +1,14 @@
+# https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+
+# test methods should use all lowercase characters
+[*Test.cs]
+
+dotnet_naming_symbols.test_methods.applicable_kinds           = method
+dotnet_naming_symbols.test_methods.applicable_accessibilities = public
+
+dotnet_naming_style.test_methods.capitalization = all_lower
+dotnet_naming_style.test_methods.word_separator = _
+
+dotnet_naming_rule.test_methods.style    = test_methods
+dotnet_naming_rule.test_methods.symbols  = test_methods
+dotnet_naming_rule.test_methods.severity = none

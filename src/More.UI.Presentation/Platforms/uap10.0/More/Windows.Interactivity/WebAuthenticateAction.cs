@@ -2,13 +2,18 @@
 {
     using More.Windows.Input;
     using System;
+    using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
     using global::Windows.Security.Authentication.Web;
+    using static global::Windows.Security.Authentication.Web.WebAuthenticationOptions;
+    using static global::Windows.Security.Authentication.Web.WebAuthenticationStatus;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Store applications.
-    /// </content>
-    public partial class WebAuthenticateAction
+    /// <summary>
+    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to perform web-based authentication
+    /// <see cref="WebAuthenticateInteraction">interactions</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// </summary>
+    [CLSCompliant( false )]
+    public class WebAuthenticateAction : System.Windows.Interactivity.TriggerAction
     {
         /// <summary>
         /// Executes the action asynchronously.
@@ -33,6 +38,51 @@
             var result = await WebAuthenticationBroker.AuthenticateAsync( options, requestUri, callbackUri );
 
             InvokeCallbackCommand( webAuthenticate, result );
+        }
+
+        static WebAuthenticationOptions CreateOptions( WebAuthenticateInteraction interaction )
+        {
+            Contract.Requires( interaction != null );
+
+            var options = None;
+
+            if ( interaction.UseCorporateNetwork )
+            {
+                options |= UseCorporateNetwork;
+            }
+
+            if ( interaction.UseHttpPost )
+            {
+                options |= UseHttpPost;
+            }
+
+            if ( interaction.UseTitle )
+            {
+                options |= UseTitle;
+            }
+
+            return options;
+        }
+
+        static void InvokeCallbackCommand( WebAuthenticateInteraction webAuthenticate, WebAuthenticationResult authenticationResult )
+        {
+            Contract.Requires( webAuthenticate != null );
+            Contract.Requires( authenticationResult != null );
+
+            var result = default( IWebAuthenticationResult );
+
+            if ( authenticationResult.ResponseStatus == Success )
+            {
+                result = new WebAuthenticationResultAdapter( authenticationResult );
+                webAuthenticate.ResponseStatus = 200U;
+                webAuthenticate.ResponseData = authenticationResult.ResponseData;
+                webAuthenticate.DefaultCommand?.Execute( result );
+            }
+            else
+            {
+                webAuthenticate.ResponseStatus = authenticationResult.ResponseErrorDetail;
+                webAuthenticate.CancelCommand?.Execute( result );
+            }
         }
     }
 }

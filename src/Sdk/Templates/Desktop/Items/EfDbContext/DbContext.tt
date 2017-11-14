@@ -1,0 +1,58 @@
+﻿<#@ template language="c#" hostspecific="true" #>
+<#@ output extension=".vstemplate" #>
+<#@ parameter type="System.String" name="More" #>
+<#@ parameter type="System.String" name="More_Composition" #><?xml version="1.0" encoding="utf-8" ?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+ <TemplateData>
+  <DefaultName>DbContext.cs</DefaultName>
+  <Name>EF DbContext Generator (More)</Name>
+  <Description>A project item for creating an EF DbContext with scaffolding for IReadOnlyRepository&lt;T&gt;, IRepository&lt;T&gt;, and IUnitOfWork&lt;T&gt;.</Description>
+  <Icon Package="{8889e051-b7f9-4781-bb33-2a36a9bdb3a5}" ID="502" />
+  <TemplateID>More.EF.CSharp.DbContext</TemplateID>
+  <ProjectType>CSharp</ProjectType>
+  <SortOrder>10</SortOrder>
+  <ProvideDefaultName>true</ProvideDefaultName>
+  <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+  <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+  <CreateInPlace>false</CreateInPlace>
+  <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+  <NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+ </TemplateData>
+ <TemplateContent>
+  <References>
+   <Reference>
+    <Assembly>System.Configuration</Assembly>
+   </Reference>
+  </References>
+  <ProjectItem ReplaceParameters="true">DbContext.cs</ProjectItem>
+  <CustomParameters>
+   <CustomParameter Name="_EFVersions" Value="EF6" />
+   <CustomParameter Name="_SelectedEFVersion" Value="" />
+   <CustomParameter Name="$showTips$" Value="true" />
+   <CustomParameter Name="$addConnectionString$" Value="true" />
+   <CustomParameter Name="$modelNamespaceRequired$" Value="false" />
+   <CustomParameter Name="$modelNamespace$" Value="" />
+   <CustomParameter Name="$implementedInterfaces$" Value="" />
+   <CustomParameter Name="$connectionString$" Value="" />
+   <CustomParameter Name="$connectionStringKey$" Value="" />
+   <CustomParameter Name="$providerName$" Value="" />
+   <!-- this set of packages is not used by directly by the nuget services, but is instead used by the custom wizard
+        to add the packages dynamically based on selected options. the package ids are not necessarily mapped to nuget. -->
+   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa'&gt;&lt;package id='EF6' version='6.1.3' /&gt;&lt;/packages&gt;" />
+  </CustomParameters>
+ </TemplateContent>
+ <WizardExtension>
+  <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+  <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+ </WizardExtension>
+ <WizardData>
+  <packages repository="extension" repositoryId="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa">
+   <package id="More" version="<#= More #>" />
+   <package id="More.Composition" version="<#= More_Composition #>" />
+  </packages>
+ </WizardData>
+ <WizardExtension>
+  <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
+  <FullClassName>More.VisualStudio.Templates.DbContextTemplateWizard</FullClassName>
+ </WizardExtension>
+</VSTemplate>

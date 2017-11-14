@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <!-- REF: https://msdn.microsoft.com/en-us/magazine/mt493251.aspx -->
+  <Metadata>
+    <Identity Id="More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa" Version="1.2.3" Language="en-US" Publisher="Commonsense Software" />
+    <DisplayName>More Framework</DisplayName>
+    <Description xml:space="preserve">The More framework is a collection of patterns and practices for creating robust solutions using the Microsoft .NET Framework.  Features include comphrensive extensions for collections, data structures, component models, view models, composition, and other intrinsic concepts not present in the Microsoft .NET Framework Base Class Library (BCL). The core libraries are portable across Windows Desktop, Windows Store, Windows Phone, Xamarin Android, and Xamarin iOS projects.</Description>
+    <MoreInfo>http://github.com/commonsensesoftware/more</MoreInfo>
+    <License>LICENSE</License>
+    <GettingStartedGuide>http://commonsensesoftware.github.io/More/</GettingStartedGuide>
+    <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
+    <Icon>Icon.png</Icon>
+    <PreviewImage>Preview.png</PreviewImage>
+    <Tags>More Design Patterns Practices Windows WPF UWP UAP Store Extensions Composition UI MVVM</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Version="[15.0,16.0)" Id="Microsoft.VisualStudio.Community" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.6,)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio Core Editor" />
+  </Prerequisites>
+  <Assets>
+    <!-- package definition registry entries -->
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="References.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="Generators.pkgdef" />
+
+    <!-- assemblies -->
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="More.VisualStudio.TemplateWizards" Path="|More.VisualStudio.TemplateWizards|" AssemblyName="|More.VisualStudio.TemplateWizards;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="More.VisualStudio.Editors" Path="|More.VisualStudio.Editors|" AssemblyName="|More.VisualStudio.Editors;AssemblyName|" />
+
+    <!-- desktop item and project templates -->
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="EfDbContext" d:TargetPath="|EfDbContext;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfUserControlView" d:TargetPath="|WpfUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowView" d:TargetPath="|WpfWindowView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowShellView" d:TargetPath="|WpfWindowShellView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfWindowViewModel" d:TargetPath="|WpfWindowViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfInteractionViewModel" d:TargetPath="|WpfInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="WpfChildWindowViewModel" d:TargetPath="|WpfChildWindowViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="WpfApplication" d:TargetPath="|WpfApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+
+    <!-- uwp item and project templates -->
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UwpBlankPageView" d:TargetPath="|UwpBlankPageView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UwpInteractionViewModel" d:TargetPath="|UwpInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UwpPageViewModel" d:TargetPath="|UwpPageViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UwpUserControlView" d:TargetPath="|UwpUserControlView;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="UwpBlankApplication" d:TargetPath="|UwpBlankApplication;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+
+    <!-- item templates -->
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UaViewModel" d:TargetPath="|UaViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="UaInteractionViewModel" d:TargetPath="|UaInteractionViewModel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+  </Assets>
+</PackageManifest>

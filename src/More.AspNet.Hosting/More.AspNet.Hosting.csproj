@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
- <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
- 
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.1.0</VersionPrefix>
   <AssemblyVersion>1.1.0.0</AssemblyVersion>
@@ -18,8 +16,6 @@
   <ReleaseNotes Include="Fixed stack overflow issue resolving multiple services" />
  </ItemGroup>
 
- <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
-
  <ItemGroup>
   <Reference Include="System.Configuration" />
  </ItemGroup>
@@ -29,9 +25,6 @@
   <ProjectReference Include="..\More.UI.Presentation\More.UI.Presentation.csproj" />
  </ItemGroup>
 
- <Import Project="..\Shared\Shared.projitems" Label="Shared" />
- <Import Project="..\Shared.Hosting\Shared.Hosting.projitems" Label="Shared" />
- <Import Project="..\Shared.Hosting.NetFx\Shared.Hosting.NetFx.projitems" Label="Shared" />
  <ItemGroup>
    <Compile Update="C:\Dev\Projects\More\src\Shared.Hosting\ExceptionMessage.Designer.cs">
      <DesignTime>True</DesignTime>
@@ -44,6 +37,7 @@
      <DependentUpon>SR.resx</DependentUpon>
    </Compile>
  </ItemGroup>
+
  <ItemGroup>
    <EmbeddedResource Update="C:\Dev\Projects\More\src\Shared.Hosting\ExceptionMessage.resx">
      <Generator>ResXFileCodeGenerator</Generator>
@@ -54,5 +48,9 @@
      <LastGenOutput>SR.Designer.cs</LastGenOutput>
    </EmbeddedResource>
  </ItemGroup>
+
+ <Import Project="..\Shared\Shared.projitems" Label="Shared" />
+ <Import Project="..\Shared.Hosting\Shared.Hosting.projitems" Label="Shared" />
+ <Import Project="..\Shared.Hosting.NetFx\Shared.Hosting.NetFx.projitems" Label="Shared" />
 
 </Project>

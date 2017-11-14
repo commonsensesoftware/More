@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(build.directory.props))" />
+  <PropertyGroup>
+    <ProjectGuid>{1D8DF605-17E2-40A0-AAED-2BB8E753C101}</ProjectGuid>
+    <RootNamespace>UaInteractionViewModel</RootNamespace>
+    <AssemblyName>UaInteractionViewModel</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility" Private="False" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="InteractionViewModel.cs" />
+    <None Include="UaInteractionViewModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UaInteractionViewModel.vstemplate</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <VSTemplate Include="UaInteractionViewModel.vstemplate">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UaInteractionViewModel.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <OutputSubPath>More\Code</OutputSubPath>
+    </VSTemplate>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\More.UI\More.UI.csproj">
+      <Project>{2eff43e7-d20d-405e-bbc4-4b0f73a0c0b6}</Project>
+      <Name>More.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\More\More.csproj">
+      <Project>{9b520263-9a97-4bfd-8358-63e3d6d4b344}</Project>
+      <Name>More</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(build.directory.targets))" />
+</Project>

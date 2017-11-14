@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
- <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
- 
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.4.0</VersionPrefix>
   <AssemblyVersion>1.4.0.0</AssemblyVersion>
@@ -16,8 +14,6 @@
   <ReleaseNotes Include="Updated TFM to .NET Standard" />
   <ReleaseNotes Include="Updated IWebAuthenticationResult.ResponseErrorDetail to Int32" />
  </ItemGroup>
-
- <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
  <ItemGroup>
   <ProjectReference Include="..\More\More.csproj" />

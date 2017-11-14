@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <PropertyGroup Label="Configuration">
+  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  <TargetFrameworks>net46</TargetFrameworks>
+  <AssemblyTitle>More - Visual Studio Editors</AssemblyTitle>
+  <Description>The editors and code generators for the "More" framework used by Microsoft Visual Studio.</Description>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <PackageReference Include="EnvDTE" Version="8.0.0" />
+  <PackageReference Include="Microsoft.CodeAnalysis" Version="2.3.2" />
+  <PackageReference Include="Microsoft.VisualStudio.Designer.Interfaces" Version="1.1.4322" />
+  <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.0.23205" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\..\More.Extensions\More.Extensions.csproj" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
+ </ItemGroup>
+
+ <Import Project="..\..\Shared\Shared.projitems" Label="Shared" />
+ <Import Project="..\Shared.VisualStudio\Shared.VisualStudio.projitems" Label="Shared" />
+
+</Project>

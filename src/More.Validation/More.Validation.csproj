@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$([MSBuild]::GetPathOfFileAbove(build.props))" />
-
  <PropertyGroup Label="Configuration">
   <VersionPrefix>1.1.0</VersionPrefix>
   <AssemblyVersion>1.1.0.0</AssemblyVersion>
@@ -15,8 +13,6 @@
  <ItemGroup>
   <ReleaseNotes Include="Updated TFM to .NET Standard" />
  </ItemGroup>
-
- <Import Project="$([MSBuild]::GetPathOfFileAbove(project.props))" />
 
  <ItemGroup>
   <ProjectReference Include="..\More\More.csproj" />

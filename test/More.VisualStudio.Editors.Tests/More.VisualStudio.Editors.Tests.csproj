@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <PropertyGroup Label="Configuration">
+  <TargetFramework>net46</TargetFramework>
+  <RootNamespace>More</RootNamespace>
+ </PropertyGroup>
+
+ <ItemGroup>
+  <ProjectReference Include="..\..\src\Sdk\More.VisualStudio.Editors\More.VisualStudio.Editors.csproj" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <Reference Include="Microsoft.CSharp" />
+  <Reference Include="Microsoft.QualityTools.Testing.Fakes">
+   <HintPath>$(VSAPPIDDIR)PublicAssemblies\Microsoft.QualityTools.Testing.Fakes.dll</HintPath>
+  </Reference>
+  <Reference Include="System" />
+ </ItemGroup>
+
+ <ItemGroup>
+  <PackageReference Include="FluentAssertions" Version="4.19.4" />
+  <PackageReference Include="Moq" Version="4.7.145" />
+  <PackageReference Include="more.xunit" Version="2.3.1" />
+  <PackageReference Include="more.xunit.runner.visualstudio" Version="2.3.1" />
+ </ItemGroup>
+
+ <ItemGroup Label="Fakes">
+  <Fakes Include="Fakes\*.fakes" />
+  <Reference Include="FakesAssemblies\*.dll" Visible="false" />
+ </ItemGroup>
+
+</Project>

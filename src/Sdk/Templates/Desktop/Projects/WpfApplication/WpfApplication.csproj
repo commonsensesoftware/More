@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(build.directory.props))" />
+  <PropertyGroup>
+    <ProjectGuid>{66188710-03DD-4226-A6CA-1D2BE072CD02}</ProjectGuid>
+    <RootNamespace>WpfApplication</RootNamespace>
+    <AssemblyName>WpfApplication</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility" Private="False" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </None>
+    <None Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Program.cs" />
+    <None Include="Properties\AssemblyInfo.cs" />
+    <None Include="Properties\Resources.Designer.cs" />
+    <None Include="Properties\Resources.resx" />
+    <None Include="Properties\Settings.settings" />
+    <None Include="Properties\Settings.Designer.cs" />
+    <None Include="WpfApplication.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>WpfApplication.vstemplate</LastGenOutput>
+    </None>
+    <None Include="WpfApp.csproj">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\More\More.csproj">
+      <Project>{9b520263-9a97-4bfd-8358-63e3d6d4b344}</Project>
+      <Name>More</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\More.Extensions\More.Extensions.csproj">
+      <Project>{919c38a9-81e0-4313-bf0e-7a555e213c1f}</Project>
+      <Name>More.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\More.Composition\More.Composition.csproj">
+      <Project>{adc50572-efa2-413c-8c49-949a2c8e592a}</Project>
+      <Name>More.Composition</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\More.UI\More.UI.csproj">
+      <Project>{2eff43e7-d20d-405e-bbc4-4b0f73a0c0b6}</Project>
+      <Name>More.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\More.UI.Presentation\More.UI.Presentation.csproj">
+      <Project>{41767f21-6af5-481d-9d1f-6bcff03a7df0}</Project>
+      <Name>More.UI.Presentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\More.UI.Hosting\More.UI.Hosting.csproj">
+      <Project>{6dc79878-80b2-4dcc-97e5-2c9535dfc8b3}</Project>
+      <Name>More.UI.Hosting</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <VSTemplate Include="WpfApplication.vstemplate">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WpfApplication.tt</DependentUpon>
+      <OutputSubPath>More\Windows Classic Desktop</OutputSubPath>
+    </VSTemplate>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(build.directory.targets))" />
+</Project>

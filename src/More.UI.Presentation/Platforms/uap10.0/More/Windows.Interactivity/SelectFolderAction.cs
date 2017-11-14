@@ -6,29 +6,49 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Threading.Tasks;
-    using System.Windows.Input;
+    using IFolder = More.IO.IFolder;
     using global::Windows.Foundation;
     using global::Windows.Storage;
     using global::Windows.Storage.Pickers;
-    using global::Windows.UI.Xaml;
-    using IFolder = More.IO.IFolder;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Store applications.
-    /// </content>
-    public partial class SelectFolderAction : System.Windows.Interactivity.TriggerAction
+    /// <summary>
+    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to select a folder for the
+    /// <see cref="SelectFolderInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// </summary>
+    [CLSCompliant( false )]
+    public class SelectFolderAction : System.Windows.Interactivity.TriggerAction
     {
+        /// <summary>
+        /// Gets or sets the settings identifier associated with the file open picker instance.
+        /// </summary>
+        /// <value>The settings identifier.</value>
+        public string SettingsIdentifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the initial location where the folder picker looks for folders to present to the user.
+        /// </summary>
+        /// <value>The identifier of the starting location.</value>
+        public PickerLocationId SuggestedStartLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the view mode that the file open picker uses to display items.
+        /// </summary>
+        /// <value>One of the <see cref="ViewMode"/> values. The default value is <see cref="F:PickerViewMode.List"/>.</value>
+        public PickerViewMode ViewMode { get; set; }
+
         IAsyncOperation<StorageFolder> SelectFolderAsync( SelectFolderInteraction selectFolder )
         {
             Contract.Requires( selectFolder != null );
             Contract.Ensures( Contract.Result<IAsyncOperation<StorageFolder>>() != null );
 
             var commitButton = selectFolder.DefaultCommand;
-            var dialog = new FolderPicker();
+            var dialog = new FolderPicker
+            {
+                SuggestedStartLocation = SuggestedStartLocation,
+                ViewMode = ViewMode,
+            };
 
             dialog.FileTypeFilter.AddRange( selectFolder.FileTypeFilter );
-            dialog.SuggestedStartLocation = SuggestedStartLocation;
-            dialog.ViewMode = ViewMode;
 
             if ( dialog.FileTypeFilter.Count == 0 )
             {
