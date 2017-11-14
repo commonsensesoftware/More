@@ -115,10 +115,10 @@ namespace More
             reified.Should().NotBeNull().And.BeAssignableTo<Func<string, bool>>();
         }
 
-        public bool Fact1( string arg1 ) => default( bool );
+        bool Fact1( string arg1 ) => default( bool );
 
-        public static bool Fact2( string arg1 ) => default( bool );
+        static bool Fact2( string arg1 ) => default( bool );
 
-        public void Fact3( object arg1 ) { }
+        void Fact3( object arg1 ) { }
     }
 }

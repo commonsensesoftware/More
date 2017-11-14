@@ -54,11 +54,24 @@ namespace More.ComponentModel
         }
 
         [Theory]
-        [InlineData( null, typeof( ArgumentNullException ) )]
-        [InlineData( "", typeof( ArgumentNullException ) )]
-        [InlineData( "abc", typeof( ArgumentException ) )]
-        [InlineData( "00000000-0000-0000-0000-000000000000", typeof( ArgumentException ) )]
-        public void id_should_not_allow_invalid_value( string value, Type exceptionType )
+        [InlineData( null )]
+        [InlineData( "" )]
+        public void id_should_not_allow_null_or_empty( string value )
+        {
+            // arrange
+            var descriptor = new ActivityDescriptor();
+
+            // act
+            Action setId = () => descriptor.Id = value;
+
+            // assert
+            setId.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be( nameof( value ) );
+        }
+
+        [Theory]
+        [InlineData( "abc" )]
+        [InlineData( "00000000-0000-0000-0000-000000000000" )]
+        public void id_should_not_allow_invalid_value( string value )
         {
             // arrange
             var descriptor = new ActivityDescriptor();

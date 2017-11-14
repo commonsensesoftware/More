@@ -107,9 +107,6 @@ namespace More.ComponentModel
         [InlineData( 25, false )]
         [InlineData( -1, false )]
         [InlineData( 100, true )]
-        [InlineData( 25, false )]
-        [InlineData( -1, false )]
-        [InlineData( 100, true )]
         public void is_satisfied_by_should_evaluate_specification( int item, bool expected )
         {
             // NOTE: this test verifies the behavior of the following types:

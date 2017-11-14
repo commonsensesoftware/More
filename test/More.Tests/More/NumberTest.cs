@@ -197,7 +197,7 @@ namespace More
         [InlineData( Currency, "$1.00" )]
         [InlineData( Default, "1" )]
         [InlineData( Integer, "1" )]
-        [InlineData( Percent, "100.00 %" )]
+        [InlineData( Percent, "100.00%" )]
         public void number_to_string_should_return_text_by_style( NumberStyle numberStyle, string expected )
         {
             // arrange
@@ -215,7 +215,7 @@ namespace More
         [InlineData( Currency, "$1.00" )]
         [InlineData( Default, "1" )]
         [InlineData( Integer, "1" )]
-        [InlineData( Percent, "100.00 %" )]
+        [InlineData( Percent, "100.00%" )]
         public void number_to_string_should_return_text_by_style_with_format_provider( NumberStyle numberStyle, string expected )
         {
             // arrange
