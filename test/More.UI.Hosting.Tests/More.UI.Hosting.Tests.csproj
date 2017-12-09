@@ -14,11 +14,4 @@
   <Reference Include="WindowsBase" />
  </ItemGroup>
 
- <ItemGroup>
-  <PackageReference Include="FluentAssertions" Version="4.19.4" />
-  <PackageReference Include="Moq" Version="4.7.145" />
-  <PackageReference Include="more.xunit" Version="2.3.1" />
-  <PackageReference Include="more.xunit.runner.visualstudio" Version="2.3.1" />
- </ItemGroup>
-
 </Project>
