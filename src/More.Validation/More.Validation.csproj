@@ -18,14 +18,6 @@
   <ProjectReference Include="..\More\More.csproj" />
  </ItemGroup>
 
- <ItemGroup>
-  <Compile Update="ValidationMessage.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="ValidationMessage.resx" />
- </ItemGroup>
-
- <ItemGroup>
-  <EmbeddedResource Update="ValidationMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ValidationMessage.Designer.cs" />
- </ItemGroup>
-
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 
 </Project>

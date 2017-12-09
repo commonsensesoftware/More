@@ -28,14 +28,6 @@
   <ProjectReference Include="..\More.AspNet.Hosting\More.AspNet.Hosting.csproj" />
  </ItemGroup>
 
- <ItemGroup>
-  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
- </ItemGroup>
-
- <ItemGroup>
-  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
- </ItemGroup>
-
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 
 </Project>

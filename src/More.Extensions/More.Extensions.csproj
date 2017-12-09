@@ -101,24 +101,6 @@
   <Compile Include="Platforms\uap10.0\System\ComponentModel\**\*.cs" />
  </ItemGroup>
 
- <ItemGroup>
-  <Compile Update="ExceptionMessage.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="ExceptionMessage.resx" />
-  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
- </ItemGroup>
-
- <ItemGroup>
-  <EmbeddedResource Update="ExceptionMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ExceptionMessage.Designer.cs" />
-  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
- </ItemGroup>
-
- <ItemGroup>
-   <None Update="ExceptionMessage.Designer.cs">
-     <DesignTime>True</DesignTime>
-     <AutoGen>True</AutoGen>
-     <DependentUpon>ExceptionMessage.resx</DependentUpon>
-   </None>
- </ItemGroup>
-
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 
  <Target Name="AdjustReferringTargetFrameworkForUAP" BeforeTargets="GetTargetFrameworkProperties">

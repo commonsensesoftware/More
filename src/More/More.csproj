@@ -35,16 +35,6 @@
   <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
  </ItemGroup>
 
- <ItemGroup>
-  <Compile Update="ExceptionMessage.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="ExceptionMessage.resx" />
-  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
- </ItemGroup>
-
- <ItemGroup>
-  <EmbeddedResource Update="ExceptionMessage.resx" Generator="ResXFileCodeGenerator" LastGenOutput="ExceptionMessage.Designer.cs" />
-  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
- </ItemGroup>
-
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 
 </Project>
