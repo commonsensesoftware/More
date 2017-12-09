@@ -1,5 +1,6 @@
 ﻿namespace More.VisualStudio.Editors.EntityFramework
 {
+    using FluentAssertions;
     using More.ComponentModel;
     using System;
     using System.Collections.Generic;
@@ -8,17 +9,82 @@
     using System.Text;
     using Xunit;
 
-    /// <summary>
-    /// Provides unit tests for <see cref="DbContextGenerator"/>.
-    /// </summary>
     public class DbContextGeneratorTest : CodeGeneratorUnitTest<DbContextGenerator>
     {
-        private static readonly Type INotifyPropertyChanged = typeof( INotifyPropertyChanged );
-        private static readonly Type IReadOnlyRepository = typeof( IReadOnlyRepository<> );
-        private static readonly Type IRepository = typeof( IRepository<> );
-        private static readonly Type IUnitOfWork = typeof( IUnitOfWork<> );
+        static readonly Type INotifyPropertyChanged = typeof( INotifyPropertyChanged );
+        static readonly Type IReadOnlyRepository = typeof( IReadOnlyRepository<> );
+        static readonly Type IRepository = typeof( IRepository<> );
+        static readonly Type IUnitOfWork = typeof( IUnitOfWork<> );
 
-        private static string CreateFileContent( params Type[] interfaceTypes )
+        [Fact]
+        public void generate_should_write_code_for_IReadOnlyRepositoryX3CTX3E()
+        {
+            // arrange
+            var path = @"C:\temp\MyDbContext.cs";
+            var content = CreateFileContent( IReadOnlyRepository );
+            var defaultNamespace = "ClassLibrary1";
+            var expected = CreateExpected( IReadOnlyRepository );
+
+            // act
+            var result = Generate( path, content, defaultNamespace, out var generatedContent );
+
+            // assert
+            result.Should().Be( 0 );
+            generatedContent.Should().Be( expected );
+        }
+
+        [Fact]
+        public void generate_should_write_code_for_IRepositoryX3CTX3E()
+        {
+            // arrange
+            var path = @"C:\temp\MyDbContext.cs";
+            var content = CreateFileContent( IRepository );
+            var defaultNamespace = "ClassLibrary1";
+            var expected = CreateExpected( IRepository );
+
+            // act
+            var result = Generate( path, content, defaultNamespace, out var generatedContent );
+
+            // assert
+            result.Should().Be( 0 );
+            generatedContent.Should().Be( expected );
+        }
+
+        [Fact]
+        public void generate_should_write_code_for_IUnitOfWorkX3CTX3E()
+        {
+            // arrange
+            var path = @"C:\temp\MyDbContext.cs";
+            var content = CreateFileContent( IUnitOfWork );
+            var defaultNamespace = "ClassLibrary1";
+            var expected = CreateExpected( IUnitOfWork );
+
+            // act
+            var result = Generate( path, content, defaultNamespace, out var generatedContent );
+
+            // assert
+            result.Should().Be( 0 );
+            generatedContent.Should().Be( expected );
+        }
+
+        [Fact]
+        public void generate_should_write_code_for_multiple_interfaces()
+        {
+            // arrange
+            var path = @"C:\temp\MyDbContext.cs";
+            var content = CreateFileContent( IReadOnlyRepository, IRepository, IUnitOfWork );
+            var defaultNamespace = "ClassLibrary1";
+            var expected = CreateExpected( IReadOnlyRepository, IRepository, IUnitOfWork );
+
+            // act
+            var result = Generate( path, content, defaultNamespace, out var generatedContent );
+
+            // assert
+            result.Should().Be( 0 );
+            generatedContent.Should().Be( expected );
+        }
+
+        static string CreateFileContent( params Type[] interfaceTypes )
         {
             var codeFormat =
 @"namespace ClassLibrary1
@@ -38,18 +104,23 @@
             foreach ( var interfaceType in interfaceTypes )
             {
                 if ( interfaceType.Equals( IReadOnlyRepository ) )
+                {
                     interfaces.Append( ", IReadOnlyRepository<Class1>" );
+                }
                 else if ( interfaceType.Equals( IRepository ) )
+                {
                     interfaces.Append( ", IRepository<Class1>" );
+                }
                 else if ( interfaceType.Equals( IUnitOfWork ) )
+                {
                     interfaces.Append( ", IUnitOfWork<Class1>" );
+                }
             }
 
-            var code = string.Format( codeFormat, interfaces );
-            return code;
+            return string.Format( codeFormat, interfaces );
         }
 
-        private static string CreateExpected( params Type[] interfaceTypes )
+        static string CreateExpected( params Type[] interfaceTypes )
         {
             var code = new StringBuilder();
 
@@ -69,13 +140,13 @@
     using ConnectionStringSettings = System.Configuration.ConnectionStringSettings;
 
     /// <content>
-    /// Provides auto-generated interfaces for the <see cref=""MyDbContext"" /> class. To add addition interfaces,
-    /// implement the interface in the main source file.
+    /// Provides auto-generated interfaces for the <see cref=""MyDbContext"" /> class. To add additional interfaces,
+    /// declare the interface to implement in the main source file.
     /// <seealso cref=""IReadOnlyRepository{T}"" />
     /// <seealso cref=""IRepository{T}"" />
     /// <seealso cref=""IUnitOfWork{T}"" />.
     /// <content>
-    [GeneratedCode( ""More Framework"", ""1.1"" )]
+    [GeneratedCode( ""More Framework"", ""1.2"" )]
     public partial class MyDbContext
     {
 " );
@@ -100,7 +171,7 @@
             return code.ToString();
         }
 
-        private static void AppendInterfaceImplementation( StringBuilder code, Type interfaceType, ICollection<Type> implementedInterfaces )
+        static void AppendInterfaceImplementation( StringBuilder code, Type interfaceType, ICollection<Type> implementedInterfaces )
         {
             if ( interfaceType.Equals( IReadOnlyRepository ) )
             {
@@ -116,7 +187,7 @@
             }
         }
 
-        private static void AppendReadOnlyRepositoryImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
+        static void AppendReadOnlyRepositoryImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
         {
             if ( !implementedInterfaces.Contains( IReadOnlyRepository ) )
             {
@@ -125,7 +196,7 @@
             }
         }
 
-        private static void AppendRepositoryImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
+        static void AppendRepositoryImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
         {
             var hasPreceeding = false;
 
@@ -181,7 +252,7 @@
             }
         }
 
-        private static void AppendUnitOfWorkImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
+        static void AppendUnitOfWorkImplementation( StringBuilder code, ICollection<Type> implementedInterfaces )
         {
             var hasPreceeding = false;
 
@@ -225,7 +296,7 @@
             }
         }
 
-        private static string CreateExpectedPropertyChangedCode()
+        static string CreateExpectedPropertyChangedCode()
         {
             return
 @"        public event PropertyChangedEventHandler PropertyChanged;
@@ -233,15 +304,15 @@
         private void OnPropertyChanged( PropertyChangedEventArgs e ) => PropertyChanged?.Invoke( this, e );";
         }
 
-        private static string CreateExpectedOnAddChangeCode() => @"        partial void OnAdd( Class1 item );";
+        static string CreateExpectedOnAddChangeCode() => @"        partial void OnAdd( Class1 item );";
 
-        private static string CreateExpectedOnRemoveChangeCode() => @"        partial void OnRemove( Class1 item );";
+        static string CreateExpectedOnRemoveChangeCode() => @"        partial void OnRemove( Class1 item );";
 
-        private static string CreateExpectedOnUpdateChangeCode() => @"        partial void OnUpdate( Class1 item );";
+        static string CreateExpectedOnUpdateChangeCode() => @"        partial void OnUpdate( Class1 item );";
 
-        private static string CreateExpectedOnDiscardChangeCode() => @"        partial void OnDiscardChange( DbEntityEntry<Class1> entry );";
+        static string CreateExpectedOnDiscardChangeCode() => @"        partial void OnDiscardChange( DbEntityEntry<Class1> entry );";
 
-        private static string CreateExpectedReadOnlyRepositoryCode()
+        static string CreateExpectedReadOnlyRepositoryCode()
         {
             return
 @"        async Task<IEnumerable<Class1>> IReadOnlyRepository<Class1>.GetAsync( Func<IQueryable<Class1>, IQueryable<Class1>> queryShaper, CancellationToken cancellationToken )
@@ -255,7 +326,7 @@
         }";
         }
 
-        private static string CreateExpectedRepositoryCode()
+        static string CreateExpectedRepositoryCode()
         {
             return
 @"        bool IRepository<Class1>.HasPendingChanges => ChangeTracker.HasChanges();
@@ -313,7 +384,7 @@
         }";
         }
 
-        private static string CreateExpectedUnitOfWorkCode()
+        static string CreateExpectedUnitOfWorkCode()
         {
             return
 @"        bool IUnitOfWork<Class1>.HasPendingChanges => ChangeTracker.HasChanges();
@@ -375,62 +446,6 @@
             await SaveChangesAsync( cancellationToken ).ConfigureAwait( false );
             OnPropertyChanged( new PropertyChangedEventArgs( ""HasPendingChanges"" ) );
         }";
-        }
-
-        [Fact( DisplayName = "generate should write code for IReadOnlyRepository<T>" )]
-        public void GenerateShouldReturnExpectedOutputForIReadOnlyRepository()
-        {
-            var path = @"C:\temp\MyDbContext.cs";
-            var content = CreateFileContent( IReadOnlyRepository );
-            var defaultNamespace = "ClassLibrary1";
-            var expected = CreateExpected( IReadOnlyRepository );
-            string actual;
-            var result = Generate( path, content, defaultNamespace, out actual );
-
-            Assert.Equal( 0, result );
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "generate should write code for IRepository<T>" )]
-        public void GenerateShouldReturnExpectedOutputForIRepository()
-        {
-            var path = @"C:\temp\MyDbContext.cs";
-            var content = CreateFileContent( IRepository );
-            var defaultNamespace = "ClassLibrary1";
-            var expected = CreateExpected( IRepository );
-            string actual;
-            var result = Generate( path, content, defaultNamespace, out actual );
-
-            Assert.Equal( 0, result );
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "generate should write code for IUnitOfWork<T>" )]
-        public void GenerateShouldReturnExpectedOutputForIUnitOfWork()
-        {
-            var path = @"C:\temp\MyDbContext.cs";
-            var content = CreateFileContent( IUnitOfWork );
-            var defaultNamespace = "ClassLibrary1";
-            var expected = CreateExpected( IUnitOfWork );
-            string actual;
-            var result = Generate( path, content, defaultNamespace, out actual );
-
-            Assert.Equal( 0, result );
-            Assert.Equal( expected, actual );
-        }
-
-        [Fact( DisplayName = "generate should write code for multiple interfaces" )]
-        public void GenerateShouldReturnExpectedOutputForMultipleInterfaces()
-        {
-            var path = @"C:\temp\MyDbContext.cs";
-            var content = CreateFileContent( IReadOnlyRepository, IRepository, IUnitOfWork );
-            var defaultNamespace = "ClassLibrary1";
-            var expected = CreateExpected( IReadOnlyRepository, IRepository, IUnitOfWork );
-            string actual;
-            var result = Generate( path, content, defaultNamespace, out actual );
-
-            Assert.Equal( 0, result );
-            Assert.Equal( expected, actual );
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace More.VisualStudio.Editors
 {
+    using FluentAssertions;
     using Microsoft.VisualStudio.Designer.Interfaces;
     using Microsoft.VisualStudio.OLE.Interop.Fakes;
     using Microsoft.VisualStudio.Shell.Interop;
@@ -10,6 +11,7 @@
     using System.Diagnostics.Contracts;
     using System.Runtime.InteropServices;
     using Xunit;
+    using static System.IntPtr;
     using IObjectWithSite = Microsoft.VisualStudio.OLE.Interop.IObjectWithSite;
 
     /// <summary>
@@ -18,10 +20,10 @@
     /// <typeparam name="T">The <see cref="Type">type</see> of <see cref="CodeGenerator">code generator</see> to test.</typeparam>
     public abstract class CodeGeneratorUnitTest<T> where T : CodeGenerator, new()
     {
-        private const int NoInterface = -2147467262;
-        private readonly Dictionary<Guid, Lazy<object>> services = new Dictionary<Guid, Lazy<object>>();
-        private readonly StubIServiceProvider serviceProvider = new StubIServiceProvider();
-        private string fileExtension = "cs";
+        const int NoInterface = -2147467262;
+        readonly Dictionary<Guid, Lazy<object>> services = new Dictionary<Guid, Lazy<object>>();
+        readonly StubIServiceProvider serviceProvider = new StubIServiceProvider();
+        string fileExtension = "cs";
 
         protected CodeGeneratorUnitTest()
         {
@@ -29,28 +31,30 @@
             RegisterService( CreateCodeDomProvider );
         }
 
-        private int QueryService( ref Guid guidService, ref Guid riid, out IntPtr ppvObject )
+        int QueryService( ref Guid guidService, ref Guid riid, out IntPtr ppvObject )
         {
-            ppvObject = IntPtr.Zero;
+            ppvObject = Zero;
 
-            Lazy<object> service;
-
-            if ( !services.TryGetValue( guidService, out service ) )
+            if ( !services.TryGetValue( guidService, out var service ) )
+            {
                 return NoInterface;
+            }
 
             ppvObject = Marshal.GetIUnknownForObject( service.Value );
             return 0;
         }
 
-        private IVSMDCodeDomProvider CreateCodeDomProvider()
+        IVSMDCodeDomProvider CreateCodeDomProvider()
         {
             var codeProvider = new Mock<CodeDomProvider>();
             var provider = new Mock<IVSMDCodeDomProvider>();
             var ext = LanguageFileExtension;
 
-            // the CodeDomProvider does not include the leading period; strip it as necessary
+            // note: the CodeDomProvider does not include the leading period; strip it as necessary
             if ( ext[0] == '.' )
+            {
                 ext = ext.Substring( 1 );
+            }
 
             codeProvider.SetupGet( cp => cp.FileExtension ).Returns( ext );
             provider.SetupGet( p => p.CodeDomProvider ).Returns( codeProvider.Object );
@@ -101,56 +105,70 @@
 
         protected int Generate( string filePath, string fileContent, string defaultNamespace, IVsGeneratorProgress progress, out string generatedContent )
         {
-            generatedContent = null;
-
             IVsSingleFileGenerator generator = CreateCodeGenerator();
             var output = new IntPtr[1];
-            var outputSize = 0U;
-            var result = generator.Generate( filePath, fileContent, defaultNamespace, output, out outputSize, progress );
+            var result = generator.Generate( filePath, fileContent, defaultNamespace, output, out var outputSize, progress );
 
             if ( result == 0 )
             {
                 // if successful, ensure the pointer is not null and then free the allocated memory
-                Assert.NotEqual( IntPtr.Zero, output[0] );
+                output[0].Should().NotBe( Zero );
                 generatedContent = Marshal.PtrToStringAnsi( output[0], (int) outputSize );
                 Marshal.FreeCoTaskMem( output[0] );
+            }
+            else
+            {
+                generatedContent = null;
             }
 
             return result;
         }
 
         [Fact]
-        public virtual void DefaultExtensionPropertyShouldReturnExpectedValue()
+        public virtual void default_extension_property_should_return_expected_value()
         {
+            // arrange
             var expected = LanguageFileExtension;
 
             if ( expected[0] == '.' )
+            {
                 expected = ".g" + expected;
+            }
             else
+            {
                 expected = ".g." + expected;
+            }
 
+            // act
             var generator = CreateCodeGenerator();
-            var actual = generator.DefaultExtension;
 
-            Assert.Equal( expected, actual );
+            // assert
+            generator.DefaultExtension.Should().Be( expected );
         }
 
         [Fact]
-        public virtual void DefaultExtensionMethodShouldReturnExpectedValue()
+        public virtual void default_extension_method_should_return_expected_value()
         {
+            // arrange
             var expected = LanguageFileExtension;
 
             if ( expected[0] == '.' )
+            {
                 expected = ".g" + expected;
+            }
             else
+            {
                 expected = ".g." + expected;
+            }
 
             IVsSingleFileGenerator generator = CreateCodeGenerator();
-            string actual;
-            var result = generator.DefaultExtension( out actual );
 
-            Assert.Equal( 0, result );
-            Assert.Equal( expected, actual );
+            // act
+            var result = generator.DefaultExtension( out var defaultExtension );
+
+            // assert
+            result.Should().Be( 0 );
+            defaultExtension.Should().Be( expected );
         }
     }
 }
