@@ -18,14 +18,6 @@
   <ProjectReference Include="..\..\More.Extensions\More.Extensions.csproj" />
  </ItemGroup>
 
- <ItemGroup>
-  <Compile Update="SR.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="SR.resx" />
- </ItemGroup>
-
- <ItemGroup>
-  <EmbeddedResource Update="SR.resx" Generator="ResXFileCodeGenerator" LastGenOutput="SR.Designer.cs" />
- </ItemGroup>
-
  <Import Project="..\..\Shared\Shared.projitems" Label="Shared" />
  <Import Project="..\Shared.VisualStudio\Shared.VisualStudio.projitems" Label="Shared" />
 

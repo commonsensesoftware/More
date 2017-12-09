@@ -56,11 +56,6 @@
 
  <ItemGroup>
   <Compile Update="Views\*.xaml.cs" DependentUpon="%(Filename)" />
-  <Compile Update="*.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="$([System.IO.Path]::GetFileNameWithoutExtension('%(Filename)')).resx" />
- </ItemGroup>
-
- <ItemGroup>
-  <EmbeddedResource Update="*.resx" Generator="ResXFileCodeGenerator" LastGenOutput="%(Filename).Designer.cs" />
  </ItemGroup>
 
  <!-- Work around to fix Intellisense file generation for XAML projects

@@ -227,8 +227,8 @@
             WriteUsings( writer, usings );
             writer.WriteLine();
             writer.WriteLine( "/// <content>" );
-            writer.WriteLine( "/// Provides auto-generated interfaces for the <see cref=\"{0}\" /> class. To add addition interfaces,", className );
-            writer.WriteLine( "/// implement the interface in the main source file." );
+            writer.WriteLine( "/// Provides auto-generated interfaces for the <see cref=\"{0}\" /> class. To add additional interfaces,", className );
+            writer.WriteLine( "/// declare the interface to implement in the main source file." );
             writer.WriteLine( "/// <seealso cref=\"IReadOnlyRepository{T}\" />" );
             writer.WriteLine( "/// <seealso cref=\"IRepository{T}\" />" );
             writer.WriteLine( "/// <seealso cref=\"IUnitOfWork{T}\" />." );
