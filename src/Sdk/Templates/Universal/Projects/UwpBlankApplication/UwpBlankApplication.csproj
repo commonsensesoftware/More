@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="$([MSBuild]::GetPathOfFileAbove(directory.build.props))" />
   <PropertyGroup>
     <ProjectGuid>{9776E03C-DA9A-49C9-A8BE-7542DA645896}</ProjectGuid>
     <RootNamespace>UwpBlankApplication</RootNamespace>
@@ -14,7 +13,8 @@
     <None Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </None>
-    <None Include="AssemblyInfo.cs" />
+    <None Include="Properties\Default.rd.xml" />
+    <None Include="Properties\AssemblyInfo.cs" />
     <None Include="Application.csproj" />
     <None Include="BlankApp.png" />
     <None Include="Assets\*.png" />
@@ -34,14 +34,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <VSTemplate Include="UwpBlankApplication.vstemplate">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UwpBlankApplication.tt</DependentUpon>
-      <OutputSubPath>More\Windows Universal</OutputSubPath>
-    </VSTemplate>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\More.Composition\More.Composition.csproj">
@@ -69,7 +61,14 @@
       <Name>More</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <VSTemplate Include="UwpBlankApplication.vstemplate">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UwpBlankApplication.tt</DependentUpon>
+      <OutputSubPath>More\Windows Universal</OutputSubPath>
+    </VSTemplate>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$([MSBuild]::GetPathOfFileAbove(directory.build.targets))" />
 </Project>
