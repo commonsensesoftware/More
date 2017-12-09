@@ -1,0 +1,8 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 
+ <ImportGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' ">
+   <Import Project="..\..\build\resource.targets" />
+   <Import Project="..\..\build\file-version.targets" />
+ </ImportGroup>
+
+</Project>

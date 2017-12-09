@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{76E2D18B-6442-4925-87BE-C2DB655DDC06}"
 	ProjectSection(SolutionItems) = preProject
@@ -45,6 +45,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{55B1D082
 		build\file-version.targets = build\file-version.targets
 		build\nuget.props = build\nuget.props
 		build\nuget.targets = build\nuget.targets
+		build\resource.targets = build\resource.targets
 		build\signing.props = build\signing.props
 		build\xaml.targets = build\xaml.targets
 	EndProjectSection
@@ -52,6 +53,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{119BE16B-0AAF-4EED-B024-2B346BCF9AE1}"
 	ProjectSection(SolutionItems) = preProject
 		tools\add-nuspec-xaml-content.csx = tools\add-nuspec-xaml-content.csx
+		tools\code-analysis.ruleset = tools\code-analysis.ruleset
 		tools\custom-dictionary.xml = tools\custom-dictionary.xml
 		tools\fix-xaml-type-info.csx = tools\fix-xaml-type-info.csx
 		tools\more.snk = tools\more.snk
@@ -84,6 +86,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sdk", "sdk", "{D0583F9C-0F69-4790-8709-CD5865F78947}"
 	ProjectSection(SolutionItems) = preProject
 		src\Sdk\directory.build.props = src\Sdk\directory.build.props
+		src\Sdk\directory.build.targets = src\Sdk\directory.build.targets
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "More.VisualStudio.Editors", "src\Sdk\More.VisualStudio.Editors\More.VisualStudio.Editors.csproj", "{F9754EA4-4C31-49FC-A912-F12FB8AD364C}"
@@ -92,8 +95,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared.VisualStudio", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{0687A3A3-837C-4DC6-A454-6B7918DEECC4}"
 	ProjectSection(SolutionItems) = preProject
-		src\Sdk\Templates\build.directory.props = src\Sdk\Templates\build.directory.props
-		src\Sdk\Templates\build.directory.targets = src\Sdk\Templates\build.directory.targets
+		src\Sdk\Templates\directory.build.props = src\Sdk\Templates\directory.build.props
+		src\Sdk\Templates\directory.build.targets = src\Sdk\Templates\directory.build.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{C96BE909-046B-472E-9BF8-FC0ECF18DDC1}"
