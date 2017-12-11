@@ -7,11 +7,11 @@
     /// <summary>
     /// Represents a command that support change notification.
     /// </summary>
-    /// <remarks>This interface supports commands that can trigger re-evaluation of the <see cref="M:ICommand.CanExecute"/> method.</remarks>
+    /// <remarks>This interface supports commands that can trigger re-evaluation of the <see cref="ICommand.CanExecute"/> method.</remarks>
     public interface INotifyCommandChanged : ICommand
     {
         /// <summary>
-        /// Raises the <see cref="E:ICommand.CanExecuteChanged"/> event.
+        /// Raises the <see cref="ICommand.CanExecuteChanged"/> event.
         /// </summary>
         [SuppressMessage( "Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Allows the command to be forcibly re-evaluated from an external source." )]
         void RaiseCanExecuteChanged();

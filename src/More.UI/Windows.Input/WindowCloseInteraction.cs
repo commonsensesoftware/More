@@ -12,13 +12,16 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowCloseInteraction"/> class.
         /// </summary>
-        public WindowCloseInteraction() : base() { }
+        public WindowCloseInteraction() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowCloseInteraction"/> class.
         /// </summary>
         /// <param name="canceled">Indicates whether the interaction was canceled.</param>
-        public WindowCloseInteraction( bool canceled ) : base() => this.canceled = canceled;
+        public WindowCloseInteraction( bool canceled )
+        {
+            this.canceled = canceled;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowCloseInteraction"/> class.

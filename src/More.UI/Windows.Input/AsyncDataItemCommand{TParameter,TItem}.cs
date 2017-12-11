@@ -32,9 +32,7 @@
         /// <param name="executeAsyncMethod">The <see cref="Func{T,TResult}"/> representing the asynchronous execute method.</param>
         /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
         public AsyncDataItemCommand( Func<TItem, TParameter, Task> executeAsyncMethod, TItem dataItem )
-            : this( executeAsyncMethod, DefaultFunc.CanExecute, dataItem )
-        {
-        }
+            : this( executeAsyncMethod, DefaultFunc.CanExecute, dataItem ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AsyncDataItemCommand{TParameter,TItem}"/> class.
@@ -72,10 +70,7 @@
         public TItem Item
         {
             get => item;
-            protected set
-            {
-                SetProperty( ref item, value, Comparer );
-            }
+            protected set => SetProperty( ref item, value, Comparer );
         }
 
         /// <summary>
@@ -91,7 +86,7 @@
         /// <param name="parameter">The associated parameter with the command.</param>
         public override async void Execute( TParameter parameter )
         {
-            await executeAsyncMethod( Item, parameter );
+            await executeAsyncMethod( Item, parameter ).ConfigureAwait( true );
             OnExecuted( EventArgs.Empty );
         }
     }

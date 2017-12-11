@@ -51,8 +51,8 @@
                 DefaultCommandIndex = 0,
                 Commands =
                 {
-                    new NamedCommand<object>( "OK", acknowledgeButtonText, p => source.TrySetResult( null ) )
-                }
+                    new NamedCommand<object>( "OK", acknowledgeButtonText, p => source.TrySetResult( null ) ),
+                },
             };
             interactionRequest.Request( interaction );
 
@@ -123,8 +123,8 @@
                 Commands =
                 {
                     new NamedCommand<object>( "OK",  acceptButtonText, p => source.TrySetResult( true ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( false ) )
-                }
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( false ) ),
+                },
             };
 
             interactionRequest.Request( interaction );
@@ -141,7 +141,7 @@
         /// with the identifiers and names "Open" and "Cancel", respectively.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for IEnumerable<T> with a generic argument." )]
         public static async Task<IFile> RequestSingleFileAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, IEnumerable<FileType> fileTypeFilter ) =>
-            ( await interactionRequest.RequestAsync( null, null, null, fileTypeFilter, false ) ).FirstOrDefault();
+            ( await interactionRequest.RequestAsync( null, null, null, fileTypeFilter, false ).ConfigureAwait( true ) ).FirstOrDefault();
 
         /// <summary>
         /// Requests an open file interaction for a single file asynchronously.
@@ -154,7 +154,7 @@
         /// with the identifiers and names "Open" and "Cancel", respectively.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for IEnumerable<T> with a generic argument." )]
         public static async Task<IFile> RequestSingleFileAsync( this InteractionRequest<OpenFileInteraction> interactionRequest, string title, IEnumerable<FileType> fileTypeFilter ) =>
-            ( await interactionRequest.RequestAsync( title, null, null, fileTypeFilter, false ) ).FirstOrDefault();
+            ( await interactionRequest.RequestAsync( title, null, null, fileTypeFilter, false ).ConfigureAwait( true ) ).FirstOrDefault();
 
         /// <summary>
         /// Requests an open file interaction for multiple files asynchronously.
@@ -251,8 +251,8 @@
                 Commands =
                 {
                     new NamedCommand<object>( "Open", acceptButtonText, p => source.TrySetResult( interaction.Files ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( NoFiles ) )
-                }
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( NoFiles ) ),
+                },
             };
 
             interaction.FileTypeFilter.AddRange( fileTypeFilter );
@@ -334,8 +334,8 @@
                 Commands =
                 {
                     new NamedCommand<object>( "Save", acceptButtonText, p => source.TrySetResult( interaction.SavedFile ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) )
-                }
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) ),
+                },
             };
 
             var defaultExt = ( from choice in fileTypeChoices
@@ -455,8 +455,8 @@
                 Commands =
                 {
                     new NamedCommand<object>( "Select", acceptButtonText, p => source.TrySetResult( interaction.Folder ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) )
-                }
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) ),
+                },
             };
 
             interactionRequest.Request( interaction );
@@ -540,8 +540,8 @@
                 Commands =
                 {
                     new NamedCommand<object>( "OK", acceptButtonText, p => source.TrySetResult( interaction.Response ) ),
-                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) )
-                }
+                    new NamedCommand<object>( "Cancel", cancelButtonText, p => source.TrySetResult( null ) ),
+                },
             };
 
             interactionRequest.Request( interaction );

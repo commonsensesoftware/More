@@ -23,6 +23,6 @@
         /// <summary>
         /// Indicates that the selected state of the parent and children of the current item are synchronized.
         /// </summary>
-        Synchronize
+        Synchronize,
     }
 }

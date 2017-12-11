@@ -59,7 +59,7 @@
         {
             parameter = parameter ?? new CancelEventArgs();
 
-            await executeAsyncMethod( parameter );
+            await executeAsyncMethod( parameter ).ConfigureAwait( true );
 
             if ( !parameter.Cancel )
             {

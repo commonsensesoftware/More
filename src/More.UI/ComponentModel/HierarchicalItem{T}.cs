@@ -93,7 +93,7 @@
 
             this.comparer = comparer;
             this.selected = selected;
-            click = new CommandInterceptor<object>( clickCommand, p => OnClicked( EventArgs.Empty ) );
+            click = new CommandInterceptor<object>( clickCommand, OnSourceClicked );
             Select = new Command<object>( p => IsSelected = true );
             Unselect = new Command<object>( p => IsSelected = false );
             Expand = new Command<object>( p => IsExpanded = true );
@@ -337,7 +337,6 @@
         public override int GetHashCode()
         {
             // note: if the hash code has been manually set, use that value instead of recomputing a new hash
-
             if ( hashCode != null )
             {
                 return hashCode.Value;
@@ -577,5 +576,7 @@
         // we can compare values, but this may not be the same item if it's at a different depth
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This method is hidden because it WILL not consider item Depth." )]
         bool IEquatable<T>.Equals( T other ) => Comparer.Equals( Value, other );
+
+        void OnSourceClicked( object parameter ) => OnClicked( EventArgs.Empty );
     }
 }

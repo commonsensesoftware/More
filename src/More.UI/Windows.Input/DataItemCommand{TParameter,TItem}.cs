@@ -16,7 +16,7 @@
     /// using System;
     /// using System.Windows;
     /// using System.Windows.Input;
-    /// 
+    ///
     /// var person = new Person(){ FirstName = "John", LastName = "Doe" }
     /// var command = new DataItemCommand<string, Person>( ( item, parameter ) => item.FirstName = parameter, person );
     /// var button = new Button();

@@ -102,7 +102,7 @@
         /// <summary>
         /// Returns a value indicating whether the current instance is equal to the specified object.
         /// </summary>
-        /// <param name="obj">The <see cref="Object">object</see> to evaluate.</param>
+        /// <param name="obj">The <see cref="object">object</see> to evaluate.</param>
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj ) => Equals( obj as ISelectableItem<T> );
 

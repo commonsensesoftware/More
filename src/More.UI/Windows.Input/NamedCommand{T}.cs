@@ -4,60 +4,50 @@
     using System.Diagnostics.Contracts;
 
     /// <summary>
-    /// Represents an observable, named command with an associated data item<seealso cref="AsyncNamedDataItemCommand{TParameter, TItem}"/>.
+    /// Represents a named command<seealso cref="AsyncNamedCommand{T}"/>.
     /// </summary>
-    /// <typeparam name="TParameter">The <see cref="Type">type</see> of parameter passed to the command.</typeparam>
-    /// <typeparam name="TItem">The <see cref="Type">type</see> of item associated with the command.</typeparam>
-    public class NamedDataItemCommand<TParameter, TItem> : DataItemCommand<TParameter, TItem>, INamedCommand
+    /// <typeparam name="T">The <see cref="Type">type</see> of parameter associated with the command.</typeparam>
+    public class NamedCommand<T> : Command<T>, INamedCommand
     {
         string id;
         string name;
         string desc = string.Empty;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamedDataItemCommand{TParameter,TItem}"/> class.
-        /// </summary>
-        protected NamedDataItemCommand() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NamedDataItemCommand{TParameter,TItem}"/> class.
+        /// Initializes a new instance of the <see cref="NamedCommand{T}"/> class.
         /// </summary>
         /// <param name="name">The command name.</param>
         /// <param name="executeMethod">The <see cref="Action{T}"/> representing the execute method.</param>
-        /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
-        public NamedDataItemCommand( string name, Action<TItem, TParameter> executeMethod, TItem dataItem )
-            : this( null, name, executeMethod, DefaultFunc.CanExecute, dataItem ) { }
+        public NamedCommand( string name, Action<T> executeMethod )
+            : this( null, name, executeMethod, DefaultFunc.CanExecute ) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamedDataItemCommand{TParameter,TItem}"/> class.
+        /// Initializes a new instance of the <see cref="NamedCommand{T}"/> class.
         /// </summary>
         /// <param name="id">The command identifier.</param>
         /// <param name="name">The command name.</param>
         /// <param name="executeMethod">The <see cref="Action{T}"/> representing the execute method.</param>
-        /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
-        public NamedDataItemCommand( string id, string name, Action<TItem, TParameter> executeMethod, TItem dataItem )
-            : this( id, name, executeMethod, DefaultFunc.CanExecute, dataItem ) { }
+        public NamedCommand( string id, string name, Action<T> executeMethod )
+            : this( id, name, executeMethod, DefaultFunc.CanExecute ) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamedDataItemCommand{TParameter,TItem}"/> class.
+        /// Initializes a new instance of the <see cref="NamedCommand{T}"/> class.
         /// </summary>
         /// <param name="name">The command name.</param>
         /// <param name="executeMethod">The <see cref="Action{T}"/> representing the execute method.</param>
-        /// <param name="canExecuteMethod">The <see cref="Func{T1,T2,TResult}"/> representing the can execute method.</param>
-        /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
-        public NamedDataItemCommand( string name, Action<TItem, TParameter> executeMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
-            : this( null, name, executeMethod, canExecuteMethod, dataItem ) { }
+        /// <param name="canExecuteMethod">The <see cref="Func{T1,T2}"/> representing the can execute method.</param>
+        public NamedCommand( string name, Action<T> executeMethod, Func<T, bool> canExecuteMethod )
+            : this( null, name, executeMethod, canExecuteMethod ) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamedDataItemCommand{TParameter,TItem}"/> class.
+        /// Initializes a new instance of the <see cref="NamedCommand{T}"/> class.
         /// </summary>
         /// <param name="id">The command identifier.</param>
         /// <param name="name">The command name.</param>
         /// <param name="executeMethod">The <see cref="Action{T}"/> representing the execute method.</param>
-        /// <param name="canExecuteMethod">The <see cref="Func{T1,T2,TResult}"/> representing the can execute method.</param>
-        /// <param name="dataItem">The item of type <typeparamref name="TItem"/> associated with the command.</param>
-        public NamedDataItemCommand( string id, string name, Action<TItem, TParameter> executeMethod, Func<TItem, TParameter, bool> canExecuteMethod, TItem dataItem )
-            : base( executeMethod, canExecuteMethod, dataItem )
+        /// <param name="canExecuteMethod">The <see cref="Func{T1,T2}"/> representing the can execute method.</param>
+        public NamedCommand( string id, string name, Action<T> executeMethod, Func<T, bool> canExecuteMethod )
+            : base( executeMethod, canExecuteMethod )
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
 
@@ -105,7 +95,7 @@
         /// Gets or sets the identifier associated with the command.
         /// </summary>
         /// <value>The command identifier. If this property is unset, the default
-        /// value is the <see cref="P:Name">name</see> of the command.</value>
+        /// value is the <see cref="Name">name</see> of the command.</value>
         public string Id
         {
             get

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Represents a user interface interaction request that supports continuation.
@@ -25,7 +24,6 @@
         /// </summary>
         /// <param name="continuationManager">The <see cref="IContinuationManager">continuation manager</see> used to register continuations.</param>
         /// <param name="continuation">The interaction continuation <see cref="Action{T}">action</see>.</param>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0" )]
         public ContinuableInteractionRequest( IContinuationManager continuationManager, Action<TArg> continuation )
         {
             Arg.NotNull( continuationManager, nameof( continuationManager ) );
@@ -47,7 +45,6 @@
         /// <param name="id">The interaction request identifier.</param>
         /// <param name="continuationManager">The <see cref="IContinuationManager">continuation manager</see> used to register continuations.</param>
         /// <param name="continuation">The interaction continuation <see cref="Action{T}">action</see>.</param>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public ContinuableInteractionRequest( string id, IContinuationManager continuationManager, Action<TArg> continuation ) : base( id )
         {
             Arg.NotNull( continuationManager, nameof( continuationManager ) );
@@ -71,7 +68,6 @@
         /// Sets any applicable continuation data when an interaction is requested.
         /// </summary>
         /// <param name="interaction">The <typeparamref name="TInteraction">interaction</typeparamref> to set the continuation data for.</param>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void SetContinuationData( TInteraction interaction )
         {
             Arg.NotNull( interaction, nameof( interaction ) );
@@ -79,10 +75,9 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Requested"/> event.
+        /// Raises the <see cref="IInteractionRequest.Requested"/> event.
         /// </summary>
         /// <param name="e">The <see cref="InteractionRequestedEventArgs"/> event data.</param>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected override void OnRequested( InteractionRequestedEventArgs e )
         {
             Arg.NotNull( e, nameof( e ) );

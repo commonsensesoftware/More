@@ -47,16 +47,16 @@
             this.command = command;
             this.preAction = preAction;
             this.postAction = postAction;
-            this.command.CanExecuteChanged += ( s, e ) => OnCanExecuteChanged( e );
+            this.command.CanExecuteChanged += OnSourceCanExecuteChanged;
 
             if ( command is INotifyCommandChanged notifyCommand )
             {
-                notifyCommand.Executed += ( s, e ) => OnExecuted( e );
+                notifyCommand.Executed += OnSourceExecuted;
             }
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Executed"/> event.
+        /// Raises the <see cref="Executed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExecuted( EventArgs e )
@@ -120,5 +120,9 @@
         /// Occurs when the command has been executed.
         /// </summary>
         public event EventHandler<EventArgs> Executed;
+
+        void OnSourceCanExecuteChanged( object sender, EventArgs e ) => OnCanExecuteChanged( e );
+
+        void OnSourceExecuted( object sender, EventArgs e ) => OnExecuted( e );
     }
 }

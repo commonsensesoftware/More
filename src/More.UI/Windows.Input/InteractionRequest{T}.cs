@@ -23,7 +23,7 @@
         public InteractionRequest( string id ) => this.id = id;
 
         /// <summary>
-        /// Raises the <see cref="E:Requested"/> event.
+        /// Raises the <see cref="Requested"/> event.
         /// </summary>
         /// <param name="e">The <see cref="InteractionRequestedEventArgs"/> event data.</param>
         protected virtual void OnRequested( InteractionRequestedEventArgs e )

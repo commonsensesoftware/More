@@ -106,7 +106,7 @@
         /// Gets or sets the identifier associated with the command.
         /// </summary>
         /// <value>The command identifier. If this property is unset, the default
-        /// value is the <see cref="P:Name">name</see> of the command.</value>
+        /// value is the <see cref="Name">name</see> of the command.</value>
         public string Id
         {
             get

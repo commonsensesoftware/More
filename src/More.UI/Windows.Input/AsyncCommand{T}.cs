@@ -17,7 +17,7 @@
     /// using System;
     /// using System.Windows;
     /// using System.Windows.Input;
-    /// 
+    ///
     /// var command = new Command<string>( parameter => Task.Run( () => Console.WriteLine( parameter ) ) );
     /// var button = new Button();
     /// button.Command = command;
@@ -59,7 +59,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Executed"/> event.
+        /// Raises the <see cref="Executed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnExecuted( EventArgs e )
@@ -81,7 +81,7 @@
         /// <param name="parameter">The associated parameter with the command.</param>
         public virtual async void Execute( T parameter )
         {
-            await executeAsyncMethod( parameter );
+            await executeAsyncMethod( parameter ).ConfigureAwait( true );
             OnExecuted( EventArgs.Empty );
         }
 

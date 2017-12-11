@@ -1,6 +1,5 @@
 ﻿namespace More.ComponentModel
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Diagnostics.Contracts;
@@ -20,19 +19,19 @@
         /// <summary>
         /// Sets the current content with the specified content.
         /// </summary>
-        /// <param name="content">The <see cref="Object">object</see> representing the content to set.</param>
+        /// <param name="content">The <see cref="object">object</see> representing the content to set.</param>
         void SetContent( object content );
 
         /// <summary>
         /// Adds the specified content to the current content.
         /// </summary>
-        /// <param name="content">The <see cref="Object">object</see> representing the content to add.</param>
+        /// <param name="content">The <see cref="object">object</see> representing the content to add.</param>
         void AddToContent( object content );
 
         /// <summary>
         /// Removes the specified content from the current content.
         /// </summary>
-        /// <param name="content">The <see cref="Object">object</see> representing the content to remove.</param>
+        /// <param name="content">The <see cref="object">object</see> representing the content to remove.</param>
         void RemoveFromContent( object content );
 
         /// <summary>

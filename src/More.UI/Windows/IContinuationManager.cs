@@ -1,8 +1,8 @@
 ﻿namespace More.Windows
 {
     using System;
-    using System.Diagnostics.Contracts;
     using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior of a continuation manager.

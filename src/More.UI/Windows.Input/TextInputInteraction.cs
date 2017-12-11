@@ -15,11 +15,11 @@
     /// using System.Diagnostics;
     /// using System.Windows;
     /// using System.Windows.Input;
-    /// 
+    ///
     /// public class MyViewModel
     /// {
     ///     private readonly InteractionRequest<TextInputNotification> getInput = new InteractionRequest<TextInputNotification>();
-    ///     
+    ///
     ///     public IInteractionRequest InputInteraction
     ///     {
     ///         get
@@ -27,11 +27,11 @@
     ///             return this.getInput;
     ///         }
     ///     }
-    ///     
+    ///
     ///     public void PromptUserForInput()
     ///     {
     ///         TextInputInteraction interaction = null;
-    ///         
+    ///
     ///         interaction = new TextInputInteraction()
     ///         {
     ///             Title = "Feedback",
@@ -45,7 +45,7 @@
     ///                 new NamedCommand<object>( "Cancel", p => {} )
     ///             }
     ///         };
-    ///         
+    ///
     ///         this.getInput.Request( interaction );
     ///     }
     /// }

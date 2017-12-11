@@ -11,10 +11,10 @@
     public class FileType
     {
         readonly string name;
-        IReadOnlyList<string> extensions;
+        readonly IReadOnlyList<string> extensions;
 
         /// <summary>
-        /// Instantiates a new instance of the <see cref="FileType" /> class.
+        /// Initializes a new instance of the <see cref="FileType" /> class.
         /// </summary>
         /// <param name="name">The file type name.</param>
         /// <param name="extensions">A <see cref="IEnumerable{T}">sequence</see> of related file extensions.</param>
@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Instantiates a new instance of the <see cref="FileType" /> class.
+        /// Initializes a new instance of the <see cref="FileType" /> class.
         /// </summary>
         /// <param name="name">The file type name.</param>
         /// <param name="extensions">A <see cref="IEnumerable{T}">sequence</see> of related file extensions.</param>

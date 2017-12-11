@@ -34,7 +34,7 @@
             Arg.NotNull( clickCommand, nameof( clickCommand ) );
             Arg.NotNull( comparer, nameof( comparer ) );
 
-            Click = new CommandInterceptor<object>( p => OnClicked( EventArgs.Empty ), clickCommand );
+            Click = new CommandInterceptor<object>( MediateClick, clickCommand );
             Value = value;
             this.comparer = comparer;
         }
@@ -65,7 +65,7 @@
         /// <summary>
         /// Returns a value indicating whether the current instance is equal to the specified object.
         /// </summary>
-        /// <param name="obj">The <see cref="Object">object</see> to evaluate.</param>
+        /// <param name="obj">The <see cref="object">object</see> to evaluate.</param>
         /// <returns>True if the specified object equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj ) => Equals( obj as IClickableItem<T> );
 
@@ -129,5 +129,7 @@
         /// <param name="other">The other <typeparamref name="T">value</typeparamref> to evaluate.</param>
         /// <returns>True if the specified value equals the current instance; otherwise, false.</returns>
         public bool Equals( T other ) => Comparer.Equals( Value, other );
+
+        void MediateClick( object parameter ) => OnClicked( EventArgs.Empty );
     }
 }

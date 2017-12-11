@@ -122,15 +122,15 @@
         /// <summary>
         /// Gets the default command based on available commands and specified default command index.
         /// </summary>
-        /// <value>A <see cref="INamedCommand">command</see> based on the <see cref="P:DefaultCommandIndex">default command index</see>
-        /// in the available <see cref="P:Commands">commands</see>.</value>
+        /// <value>A <see cref="INamedCommand">command</see> based on the <see cref="DefaultCommandIndex">default command index</see>
+        /// in the available <see cref="Commands">commands</see>.</value>
         public virtual INamedCommand DefaultCommand => Commands.ElementAtOrDefault( DefaultCommandIndex );
 
         /// <summary>
         /// Gets the cancel command based on available commands and specified cancel command index.
         /// </summary>
-        /// <value>A <see cref="INamedCommand">command</see> based on the <see cref="P:CancelCommandIndex">cancel command index</see>
-        /// in the available <see cref="P:Commands">commands</see>. If the <see cref="P:CancelCommandIndex">cancel command index</see>
+        /// <value>A <see cref="INamedCommand">command</see> based on the <see cref="CancelCommandIndex">cancel command index</see>
+        /// in the available <see cref="Commands">commands</see>. If the <see cref="CancelCommandIndex">cancel command index</see>
         /// is less than zero, the cancel command is assumed to be the last command; otherwise, null is returned.</value>
         public virtual INamedCommand CancelCommand => Commands.ElementAtOrDefault( CancelCommandIndex );
 

@@ -15,8 +15,8 @@
     /// Represents a hierarchy of items.
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> for item in the collection.</typeparam>
-    /// <example>This example demonstrates how to define a <see cref="T:System.Windows.Controls.UserControl"/> with a
-    /// <see cref="T:System.Windows.Controls.TreeView"/> control.
+    /// <example>This example demonstrates how to define a System.Windows.Controls.UserControl with a
+    /// System.Windows.Controls.TreeView control.
     /// <code lang="Xaml">
     /// <![CDATA[
     /// <UserControl x:Class="MyProject.MyUserControl"
@@ -36,13 +36,13 @@
     /// </UserControl>
     /// ]]></code></example>
     /// <example>This example demonstrates how to create a <see cref="HierarchicalItemCollection{T}"/> that can be data bound to the
-    /// <see cref="T:System.Windows.Controls.UserControl"/> in the previous example.
+    /// System.Windows.Controls.UserControl in the previous example.
     /// <code lang="C#"><![CDATA[
     /// using System;
     /// using System.Collections.Generic;
     /// using System.ComponentModel;
     /// using System.Windows.Controls;
-    /// 
+    ///
     /// public partial class MyUserControl : UserControl
     /// {
     ///     public HierarchicalItemCollection<string> Items
@@ -50,7 +50,7 @@
     ///         get;
     ///         private set;
     ///     }
-    ///     
+    ///
     ///     public MyUserControl()
     ///     {
     ///         this.InitializeComponent();
@@ -81,14 +81,14 @@
     ///     }
     /// }
     /// ]]></code></example>
-    /// <example>This example is identical to the previous example except that it sets the <see cref="P:HierarchicalItemCollection{T}.SelectionMode"/> to
-    /// <see cref="T:HierarchicalItemSelectionModes.Leaf"/>, which only adds leaf items to the <see cref="P:HierarchicalItemCollection{T}.SelectedItems"/> collection.
+    /// <example>This example is identical to the previous example except that it sets the <see cref="HierarchicalItemCollection{T}.SelectionMode"/> to
+    /// <see cref="HierarchicalItemSelectionModes.Leaf"/>, which only adds leaf items to the <see cref="HierarchicalItemCollection{T}.SelectedItems"/> collection.
     /// <code lang="C#"><![CDATA[
     /// using System;
     /// using System.Collections.Generic;
     /// using System.ComponentModel;
     /// using System.Windows.Controls;
-    /// 
+    ///
     /// public partial class MyUserControl : UserControl
     /// {
     ///     public HierarchicalItemCollection<string> Items
@@ -96,7 +96,7 @@
     ///         get;
     ///         private set;
     ///     }
-    ///     
+    ///
     ///     public MyUserControl()
     ///     {
     ///         this.InitializeComponent();
@@ -556,43 +556,35 @@
             switch ( e.Action )
             {
                 case NotifyCollectionChangedAction.Add:
+                    if ( e.NewItems != null )
                     {
-                        if ( e.NewItems != null )
-                        {
-                            AddItemsForNodes( parent, e.NewItems.OfType<Node<T>>() );
-                        }
-
-                        break;
+                        AddItemsForNodes( parent, e.NewItems.OfType<Node<T>>() );
                     }
+
+                    break;
                 case NotifyCollectionChangedAction.Remove:
+                    if ( e.OldItems != null )
                     {
-                        if ( e.OldItems != null )
-                        {
-                            RemoveItemsForNodes( parent, e.OldItems.OfType<Node<T>>() );
-                        }
-
-                        break;
+                        RemoveItemsForNodes( parent, e.OldItems.OfType<Node<T>>() );
                     }
+
+                    break;
                 case NotifyCollectionChangedAction.Replace:
+                    if ( e.OldItems != null && e.NewItems != null )
                     {
-                        if ( e.OldItems != null && e.NewItems != null )
-                        {
-                            SetItemsForNodes( parent, e.NewStartingIndex, e.NewItems.OfType<Node<T>>() );
-                        }
-
-                        break;
+                        SetItemsForNodes( parent, e.NewStartingIndex, e.NewItems.OfType<Node<T>>() );
                     }
+
+                    break;
                 case NotifyCollectionChangedAction.Reset:
+                    parent.Clear();
+
+                    if ( SynchronizeSelections )
                     {
-                        parent.Clear();
-
-                        if ( SynchronizeSelections )
-                        {
-                            parent.IsSelected = parent.IsSelected ?? false;
-                        }
-
-                        break;
+                        parent.IsSelected = parent.IsSelected ?? false;
                     }
+
+                    break;
             }
         }
 
@@ -602,53 +594,47 @@
             Contract.Requires( sender != null );
             Contract.Requires( e != null );
 
+            var items = default( IEnumerable<HierarchicalItem<T>> );
+
             switch ( e.Action )
             {
                 case NotifyCollectionChangedAction.Add:
+                    if ( e.NewItems != null )
                     {
-                        if ( e.NewItems != null )
-                        {
-                            e.NewItems.OfType<Node<T>>().ForEach( n => Add( CreateItem( n ) ) );
-                        }
-
-                        break;
+                        e.NewItems.OfType<Node<T>>().ForEach( n => Add( CreateItem( n ) ) );
                     }
+
+                    break;
                 case NotifyCollectionChangedAction.Remove:
+                    if ( e.OldItems == null )
                     {
-                        if ( e.OldItems == null )
-                        {
-                            break;
-                        }
-
-                        var items = from node in e.OldItems.OfType<Node<T>>()
-                                    from item in Items
-                                    where Equals( node.Value, item.Value )
-                                    select item;
-
-                        items.ToList().ForEach( i => Remove( i ) );
                         break;
                     }
+
+                    items = from node in e.OldItems.OfType<Node<T>>()
+                            from item in Items
+                            where Equals( node.Value, item.Value )
+                            select item;
+
+                    items.ToArray().ForEach( i => Remove( i ) );
+                    break;
                 case NotifyCollectionChangedAction.Replace:
+                    items = from node in e.OldItems.OfType<Node<T>>()
+                            from item in Items
+                            where Equals( node.Value, item.Value )
+                            select item;
+
+                    items.ToArray().ForEach( i => Remove( i ) );
+
+                    if ( e.NewItems != null )
                     {
-                        var items = from node in e.OldItems.OfType<Node<T>>()
-                                    from item in Items
-                                    where Equals( node.Value, item.Value )
-                                    select item;
-
-                        items.ToList().ForEach( i => Remove( i ) );
-
-                        if ( e.NewItems != null )
-                        {
-                            e.NewItems.OfType<Node<T>>().ForEach( n => Add( CreateItem( n ) ) );
-                        }
-
-                        break;
+                        e.NewItems.OfType<Node<T>>().ForEach( n => Add( CreateItem( n ) ) );
                     }
+
+                    break;
                 case NotifyCollectionChangedAction.Reset:
-                    {
-                        Clear();
-                        break;
-                    }
+                    Clear();
+                    break;
             }
         }
 
@@ -662,15 +648,11 @@
             switch ( e.PropertyName )
             {
                 case "IsLeaf":
-                    {
-                        OnItemIsLeafChanged( item );
-                        break;
-                    }
+                    OnItemIsLeafChanged( item );
+                    break;
                 case "IsSelected":
-                    {
-                        OnItemIsSelectedChanged( item );
-                        break;
-                    }
+                    OnItemIsSelectedChanged( item );
+                    break;
             }
         }
 
@@ -769,7 +751,6 @@
                 Contract.Assume( item != null );
                 owner.SelectWithoutEvents( item, true );
             }
-
         }
     }
 }

@@ -93,7 +93,7 @@
         /// <![CDATA[
         /// using System;
         /// using System.Windows.Input;
-        /// 
+        ///
         /// public void DemoFileTypeChoices()
         /// {
         ///     var saveFile = new SaveFileNotification( "Save" );

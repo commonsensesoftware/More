@@ -35,7 +35,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the callback Uniform Resource Indicator (URI) that indicates the completion of the web authentication. 
+        /// Gets or sets the callback Uniform Resource Indicator (URI) that indicates the completion of the web authentication.
         /// </summary>
         /// <value>The callback <see cref="Uri">URI</see> that indicates the completion of the web authentication.
         /// The broker matches this <see cref="Uri">URI</see> against every <see cref="Uri">URI</see> that it is about to navigate to.</value>

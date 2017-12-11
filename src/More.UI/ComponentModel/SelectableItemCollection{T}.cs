@@ -24,7 +24,7 @@
     /// using System.Windows;
     /// using System.Windows.Controls;
     /// using System.Windows.Data;
-    /// 
+    ///
     /// public class Book
     /// {
     ///     public string Isbn
@@ -32,14 +32,14 @@
     ///         get;
     ///         set;
     ///     }
-    ///     
+    ///
     ///     public string Name
     ///     {
     ///         get;
     ///         set;
     ///     }
     /// }
-    /// 
+    ///
     /// public class LibraryViewModel
     /// {
     ///     public SelectableItemCollection<Book> Books
@@ -47,30 +47,30 @@
     ///         get;
     ///         private set;
     ///     }
-    ///     
+    ///
     ///     public ICommand CheckOut
     ///     {
     ///         get;
     ///         private set;
     ///     }
-    ///     
+    ///
     ///     private void OnCheckOut( object parameter )
     ///     {
     ///         foreach ( var book in this.Books.SelectedValues )
     ///             ; // TODO: invoke service to check out book
     ///     }
-    ///     
+    ///
     ///     public LibraryViewModel( IEnumerable<Book> books )
     ///     {
     ///         this.Books = new SelectableItemCollection<Book>( books );
     ///         this.CheckOut = new Command<object>( this.OnCheckOut );
     ///     }
     /// }
-    /// 
+    ///
     /// public partial class MyUserControl : UserControl
     /// {
     ///     private readonly LibraryViewModel viewModel;
-    ///     
+    ///
     ///     public MyUserControl()
     ///     {
     ///         this.InitializeComponent();
@@ -86,8 +86,8 @@
     /// }
     /// ]]></code></example>
     /// <example>This example expands upon the previous example and demonstrates how to also specify a item that will automatically
-    /// select or unselect all items.  The 'All' item itself will never be included in the <see cref="P:SelectedItems"/> or
-    /// <see cref="P:SelectedValues"/> properties.
+    /// select or unselect all items.  The 'All' item itself will never be included in the <see cref="SelectedItems"/> or
+    /// <see cref="SelectedValues"/> properties.
     /// <code lang="C#"><![CDATA[
     /// using System;
     /// using System.Collections.Generic;
@@ -96,7 +96,7 @@
     /// using System.Windows;
     /// using System.Windows.Controls;
     /// using System.Windows.Data;
-    /// 
+    ///
     /// public class Book
     /// {
     ///     public string Isbn
@@ -104,14 +104,14 @@
     ///         get;
     ///         set;
     ///     }
-    ///     
+    ///
     ///     public string Name
     ///     {
     ///         get;
     ///         set;
     ///     }
     /// }
-    /// 
+    ///
     /// public class LibraryViewModel
     /// {
     ///     public SelectableItemCollection<Book> Books
@@ -119,30 +119,30 @@
     ///         get;
     ///         private set;
     ///     }
-    ///     
+    ///
     ///     public ICommand CheckOut
     ///     {
     ///         get;
     ///         private set;
     ///     }
-    ///     
+    ///
     ///     private void OnCheckOut( object parameter )
     ///     {
     ///         foreach ( var book in this.Books.SelectedValues )
     ///             ; // TODO: invoke service to check out book
     ///     }
-    ///     
+    ///
     ///     public LibraryViewModel( IEnumerable<Book> books )
     ///     {
     ///         this.Books = new SelectableItemCollection<Book>( books, new Book(){ Name = "(Select All)" } );
     ///         this.CheckOut = new Command<object>( this.OnCheckOut );
     ///     }
     /// }
-    /// 
+    ///
     /// public partial class MyUserControl : UserControl
     /// {
     ///     private readonly LibraryViewModel viewModel;
-    ///     
+    ///
     ///     public MyUserControl()
     ///     {
     ///         this.InitializeComponent();
@@ -313,12 +313,12 @@
         /// using System.Windows;
         /// using System.Windows.Controls;
         /// using System.Windows.Data;
-        /// 
+        ///
         /// public class MyModel
         /// {
         ///     private readonly Collection<string> items = new Collection<string>();
         ///     private readonly Collection<string> selectedItems = new Collection<string>();
-        ///     
+        ///
         ///     public IList<string> Items
         ///     {
         ///         get
@@ -326,7 +326,7 @@
         ///             return this.items;
         ///         }
         ///     }
-        ///     
+        ///
         ///     public IList<string> SelectedItems
         ///     {
         ///         get
@@ -335,27 +335,27 @@
         ///         }
         ///     }
         /// }
-        /// 
+        ///
         /// public partial class MyUserControl : UserControl
         /// {
         ///     private readonly MyModel model = new MyModel();
-        ///     
+        ///
         ///     public MyUserControl()
         ///     {
         ///         this.InitializeComponent();
-        ///         
+        ///
         ///         this.model.Items.Add( "One" );
         ///         this.model.Items.Add( "Two" );
         ///         this.model.Items.Add( "Three" );
-        ///         
+        ///
         ///         // create collection of selectable items
         ///         var collection = new SelectableItemCollection<string>( this.model.Items );
-        ///         
+        ///
         ///         // create mediator that pushes changes back to the model
         ///         // note: since the model didn't use ObservableCollection<string>
         ///         // changes are one-way. direct model changes are not reflected.
         ///         collection.CreateSelectedValuesMediator( this.model.SelectedItems );
-        /// 
+        ///
         ///         this.DataContext = collection;
         ///     }
         /// }
@@ -440,28 +440,22 @@
                 switch ( e.Action )
                 {
                     case NotifyCollectionChangedAction.Add:
+                        if ( e.NewItems != null )
                         {
-                            if ( e.NewItems != null )
-                            {
-                                targetCollection.AddRange( e.NewItems.OfType<TItem>() );
-                            }
-
-                            break;
+                            targetCollection.AddRange( e.NewItems.OfType<TItem>() );
                         }
+
+                        break;
                     case NotifyCollectionChangedAction.Remove:
+                        if ( e.OldItems != null )
                         {
-                            if ( e.OldItems != null )
-                            {
-                                targetCollection.RemoveRange( e.OldItems.OfType<TItem>() );
-                            }
+                            targetCollection.RemoveRange( e.OldItems.OfType<TItem>() );
+                        }
 
-                            break;
-                        }
+                        break;
                     case NotifyCollectionChangedAction.Reset:
-                        {
-                            targetCollection.Clear();
-                            break;
-                        }
+                        targetCollection.Clear();
+                        break;
                 }
 
                 // re-enable events
@@ -482,28 +476,22 @@
                 switch ( e.Action )
                 {
                     case NotifyCollectionChangedAction.Add:
+                        if ( e.NewItems != null )
                         {
-                            if ( e.NewItems != null )
-                            {
-                                source.AddRange( e.NewItems.OfType<TItem>() );
-                            }
-
-                            break;
+                            source.AddRange( e.NewItems.OfType<TItem>() );
                         }
+
+                        break;
                     case NotifyCollectionChangedAction.Remove:
+                        if ( e.OldItems != null )
                         {
-                            if ( e.OldItems != null )
-                            {
-                                source.RemoveRange( e.OldItems.OfType<TItem>() );
-                            }
+                            source.RemoveRange( e.OldItems.OfType<TItem>() );
+                        }
 
-                            break;
-                        }
+                        break;
                     case NotifyCollectionChangedAction.Reset:
-                        {
-                            source.Clear();
-                            break;
-                        }
+                        source.Clear();
+                        break;
                 }
 
                 // re-enable events
@@ -724,37 +712,29 @@
                 switch ( e.Action )
                 {
                     case NotifyCollectionChangedAction.Add:
+                        if ( e.NewItems != null )
                         {
-                            if ( e.NewItems != null )
-                            {
-                                AddNewItems( e.NewItems.OfType<TItem>() );
-                            }
-
-                            break;
+                            AddNewItems( e.NewItems.OfType<TItem>() );
                         }
+
+                        break;
                     case NotifyCollectionChangedAction.Remove:
+                        if ( e.OldItems != null )
                         {
-                            if ( e.OldItems != null )
-                            {
-                                RemoveOldItems( e.OldItems.OfType<TItem>() );
-                            }
-
-                            break;
+                            RemoveOldItems( e.OldItems.OfType<TItem>() );
                         }
+
+                        break;
                     case NotifyCollectionChangedAction.Replace:
+                        if ( ( e.OldItems != null && e.OldItems.Count > 0 ) && ( e.NewItems != null && e.NewItems.Count > 0 ) )
                         {
-                            if ( ( e.OldItems != null && e.OldItems.Count > 0 ) && ( e.NewItems != null && e.NewItems.Count > 0 ) )
-                            {
-                                ReplaceItems( e.NewStartingIndex, e.NewItems.OfType<TItem>() );
-                            }
+                            ReplaceItems( e.NewStartingIndex, e.NewItems.OfType<TItem>() );
+                        }
 
-                            break;
-                        }
+                        break;
                     case NotifyCollectionChangedAction.Reset:
-                        {
-                            Clear();
-                            break;
-                        }
+                        Clear();
+                        break;
                 }
             }
 
@@ -826,7 +806,6 @@
                 owner.selectAllItem.SetSelectedWithoutEvents( false );
                 owner.Items.Add( owner.selectAllItem );
             }
-
         }
 
         /// <summary>
