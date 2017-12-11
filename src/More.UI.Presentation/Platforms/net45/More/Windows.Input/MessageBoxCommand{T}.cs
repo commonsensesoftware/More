@@ -2,9 +2,7 @@
 {
     using More.ComponentModel;
     using System;
-    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
     using System.Windows;
 
     /// <summary>
@@ -112,9 +110,7 @@
             {
                 Arg.NotNullOrEmpty( value, nameof( value ) );
 
-                MessageBoxResult result;
-
-                if ( !Enum.TryParse( value, true, out result ) || result == MessageBoxResult.None )
+                if ( !Enum.TryParse( value, true, out MessageBoxResult result ) || result == MessageBoxResult.None )
                 {
                     throw new ArgumentOutOfRangeException( nameof( value ) );
                 }

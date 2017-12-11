@@ -15,6 +15,6 @@
         /// <summary>
         /// Indicates that frozen items are positioned at the beginning of a collection.
         /// </summary>
-        Beginning
+        Beginning,
     }
 }

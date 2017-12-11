@@ -9,7 +9,7 @@
     /// <summary>
     /// Provides extension methods for the <see cref="MediaContent{T}"/> class.
     /// </summary>
-    public static class MediaContentTExtensions
+    public static class MediaContentExtensions
     {
         /// <summary>
         /// Returns the media content from the specified embedded resource asynchronously.
