@@ -5,7 +5,6 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="build.directory.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -55,12 +54,12 @@
     <Content Include="$([MSBuild]::GetPathOfFileAbove(LICENSE))" Link="LICENSE" CopyToOutputDirectory="Always" IncludeInVSIX="true" />
     <Content Include="ReleaseNotes.txt" CopyToOutputDirectory="Always" IncludeInVSIX="true" />
     <None Include="app.config" />
+    <None Include="packages.build.config" />
     <None Include="packages.config" />
-    <None Include="packages.build.config" DependentUpon="packages.build.tt" AutoGen="True" DesignTime="True" />
-    <None Include="packages.build.tt" LastGenOutput="packages.build.config" Generator="TextTemplatingFileGenerator" SubType="Designer" />
     <None Include="source.extension.vsixmanifest" SubType="Designer" />
-    <None Include="build.directory.props" />
-    <None Include="build.directory.targets" />
+    <None Include="directory.build.targets">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <!-- wizards and editors -->
@@ -90,5 +89,4 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="build.directory.targets" />
 </Project>

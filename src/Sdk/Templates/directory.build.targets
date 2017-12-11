@@ -15,6 +15,7 @@
 
   </Target>
 
+  <Import Project="..\..\..\build\nuget.targets" />
   <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" Condition="Exists('$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets') " />
 
 </Project>

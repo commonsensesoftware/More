@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Target Name="RestorePackagesRequiredForVsix" BeforeTargets="BeforeBuild">
+  <Target Name="RestorePackagesForVsix" BeforeTargets="BeforeBuild">
     
     <PropertyGroup>
       <SolutionDir Condition=" '$(SolutionDir)' == '' OR '$(SolutionDir)' == '*Undefined*' ">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), more.sln))</SolutionDir>
@@ -21,42 +21,28 @@
     
     <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(PackageConfig)&quot; -PackagesDirectory &quot;$(PackagesDir)&quot; -SolutionDirectory &quot;$(SolutionDir)&quot; -NonInteractive -Verbosity quiet" />
 
-    <ItemGroup>
-      <Content Include="$(SolutionDir)\bin\*.nupkg" Exclude="$(SolutionDir)\bin\More.AspNet.Hosting*.nupkg">
-        <Link>Packages\%(FileName)%(Extension)</Link>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        <IncludeInVSIX>true</IncludeInVSIX>
-      </Content>
-      <Content Include="$(PackagesDir)\*.nupkg">
-        <Link>Packages\%(FileName)%(Extension)</Link>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        <IncludeInVSIX>true</IncludeInVSIX>
-      </Content>
-    </ItemGroup>
-  
   </Target>
 
-  <Target Name="BuildPackagesConfigElements" Condition=" '@(ProjectReference)' != '' ">
-
-    <MSBuild Projects="%(ProjectReference.Identity)"
-             Targets="ResolvePackageReferences"
-  	         UnloadProjectsOnCompletion="true"
-  	         Condition=" '%(ProjectReference.ReferenceOutputAssembly)' == 'false' ">
-      <Output TaskParameter="TargetOutputs" ItemName="PackageReference" />
-    </MSBuild>
-
+  <Target Name="IncludeExternalPackagesForVsix" AfterTargets="RestorePackagesForVsix">
+    
     <ItemGroup>
-      <DistinctPackageReference Include="@(PackageReference->Distinct())" />
+      
+      <!-- solution-generated packages -->
+      <Content Include="$(SolutionDir)\bin\*.nupkg" Exclude="$(SolutionDir)\bin\*.symbols.nupkg;$(SolutionDir)\bin\More.AspNet.Hosting*.nupkg">
+        <Link>Packages\%(FileName)%(Extension)</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <IncludeInVSIX>true</IncludeInVSIX>
+      </Content>
+
+      <!-- externally restored packages -->
+      <Content Include="$(PackagesDir)\**\*.nupkg">
+        <Link>Packages\%(FileName)%(Extension)</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <IncludeInVSIX>true</IncludeInVSIX>
+      </Content>
+      
     </ItemGroup>
-
-    <PropertyGroup>
-      <PackagesConfigLines>@(DistinctPackageReference->'  &lt;package id=&quot;%(Identity)&quot; version=&quot;%(Version)&quot; /&gt;','%0D%0A')</PackagesConfigLines>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <T4ParameterValues Include="PackageElements" Value="$(PackagesConfigLines)" />
-    </ItemGroup>
-
+    
   </Target>
 
   <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" Condition="Exists('$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets') " />
