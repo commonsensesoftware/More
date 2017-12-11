@@ -2,7 +2,6 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using System.IO;
     using System.Reflection;
 
     static class AssemblyNameExtensions
@@ -12,9 +11,8 @@
             Contract.Requires( assemblyName != null );
 
             var codebase = assemblyName.CodeBase;
-            Uri location;
 
-            if ( !Uri.TryCreate( codebase, UriKind.Absolute, out location ) )
+            if ( !Uri.TryCreate( codebase, UriKind.Absolute, out var location ) )
             {
                 return null;
             }

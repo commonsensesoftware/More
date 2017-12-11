@@ -3,6 +3,8 @@
 
   <ImportGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' ">
     <Import Project="..\..\build\common.props" />
+    <Import Project="..\..\build\signing.props" />
+    <Import Project="..\..\build\code-analysis.props" />
   </ImportGroup>
 
 </Project>
