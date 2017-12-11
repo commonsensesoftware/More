@@ -7,6 +7,8 @@
     /// <summary>
     /// Defines the behavior of a validation builder.
     /// </summary>
+    /// <typeparam name="TObject">The <see cref="Type">type</see> of object.</typeparam>
+    /// <typeparam name="TValue">The <see cref="Type">type</see> of property value.</typeparam>
     [ContractClass( typeof( IValidationBuilderContract<,> ) )]
     public interface IValidationBuilder<TObject, TValue> : IPropertyValidator<TObject>
     {

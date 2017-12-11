@@ -17,7 +17,7 @@
         /// Initializes a new instance of the <see cref="NullableRangeRule{T}"/> class.
         /// </summary>
         /// <param name="maximum">The maximum range value.</param>
-        /// <remarks>The <see cref="P:Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
+        /// <remarks>The <see cref="Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
         public NullableRangeRule( T maximum )
         {
             Arg.GreaterThanOrEqualTo( maximum, default( T ), nameof( maximum ) );
@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="maximum">The maximum range value.</param>
         /// <param name="errorMessage">The error message associated with the rule.</param>
-        /// <remarks>The <see cref="P:Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
+        /// <remarks>The <see cref="Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
         public NullableRangeRule( T maximum, string errorMessage )
         {
             Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );

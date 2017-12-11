@@ -199,7 +199,7 @@
 
             if ( results.Count > 0 )
             {
-                throw new ValidationException( results.First(), null );
+                throw new ValidationException( results[0], null );
             }
         }
 

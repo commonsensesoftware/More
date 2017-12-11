@@ -9,6 +9,7 @@
     /// <summary>
     /// Defines the behavior of a typed object validator.
     /// </summary>
+    /// <typeparam name="T">The <see cref="Type">type</see> of object to validate.</typeparam>
     [ContractClass( typeof( IObjectValidatorContract<> ) )]
     public interface IObjectValidator<T> : IObjectValidator
     {

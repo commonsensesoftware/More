@@ -12,14 +12,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlRule"/> class.
         /// </summary>
-        /// <remarks>This constructor creates a rule to evaluate <see cref="F:UriKind.Absolute">absolute</see> URLs.</remarks>
+        /// <remarks>This constructor creates a rule to evaluate <see cref="UriKind.Absolute">absolute</see> URLs.</remarks>
         public UrlRule() : this( UriKind.Absolute ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlRule"/> class.
         /// </summary>
         /// <param name="errorMessage">The error message associated with the rule.</param>
-        /// <remarks>This constructor creates a rule to evaluate <see cref="F:UriKind.Absolute">absolute</see> URLs.</remarks>
+        /// <remarks>This constructor creates a rule to evaluate <see cref="UriKind.Absolute">absolute</see> URLs.</remarks>
         public UrlRule( string errorMessage ) : this()
         {
             Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
@@ -43,13 +43,12 @@
 
             Kind = kind;
             this.errorMessage = errorMessage;
-
         }
 
         /// <summary>
         /// Gets the kind of URL this rule evaluates against.
         /// </summary>
-        /// <value>One of the <see cref="UriKind"/> values. The default value is <see cref="F:UriKind.Absolute"/>.</value>
+        /// <value>One of the <see cref="UriKind"/> values. The default value is <see cref="UriKind.Absolute"/>.</value>
         public UriKind Kind { get; }
 
         /// <summary>

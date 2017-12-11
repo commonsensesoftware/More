@@ -21,6 +21,7 @@
             Contract.Ensures( Contract.Result<IReadOnlyList<IValidationResult>>() != null );
             return null;
         }
+
         IReadOnlyList<IValidationResult> IObjectValidator.ValidateProperty( string propertyName, object value )
         {
             Contract.Requires<ArgumentNullException>( !string.IsNullOrEmpty( propertyName ), nameof( propertyName ) );

@@ -26,7 +26,7 @@
             Arg.NotNull( instance, nameof( instance ) );
             Contract.Ensures( Contract.Result<IRule<Property<TValue>, IValidationResult>>() != null );
 
-            var instanceRule = rule as IPerInstanceRule<TObject,TValue>;
+            var instanceRule = rule as IPerInstanceRule<TObject, TValue>;
             return instanceRule == null ? rule : instanceRule.GetPerInstance( instance );
         }
     }

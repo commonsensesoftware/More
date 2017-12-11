@@ -20,7 +20,7 @@
         /// Initializes a new instance of the <see cref="SizeRule{T}"/> class.
         /// </summary>
         /// <param name="minimumCount">The minimum count.</param>
-        /// <remarks>The <see cref="P:Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
+        /// <remarks>The <see cref="MinimumCount"/> range value is the default value of <typeparamref name="T"/>.</remarks>
         public SizeRule( int minimumCount )
         {
             Arg.GreaterThanOrEqualTo( minimumCount, 0, nameof( minimumCount ) );
@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="minimumCount">The minimum count.</param>
         /// <param name="errorMessage">The error message associated with the rule.</param>
-        /// <remarks>The <see cref="P:Minimum"/> range value is the default value of <typeparamref name="T"/>.</remarks>
+        /// <remarks>The <see cref="MinimumCount"/> range value is the default value of <typeparamref name="T"/>.</remarks>
         public SizeRule( int minimumCount, string errorMessage )
         {
             Arg.NotNullOrEmpty( errorMessage, nameof( errorMessage ) );
