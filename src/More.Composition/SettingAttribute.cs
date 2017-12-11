@@ -13,15 +13,15 @@
     [AttributeUsage( AttributeTargets.Property | AttributeTargets.Parameter )]
     public sealed class SettingAttribute : ImportAttribute
     {
-        readonly static Lazy<IDictionary<Type, ITypeConverter>> mappedConverters = new Lazy<IDictionary<Type, ITypeConverter>>( CreateDefaultConverters );
-        readonly static object syncRoot = new object();
+        static readonly Lazy<IDictionary<Type, ITypeConverter>> mappedConverters = new Lazy<IDictionary<Type, ITypeConverter>>( CreateDefaultConverters );
+        static readonly object syncRoot = new object();
         object defaultValue = NullValue;
 
         /// <summary>
-        /// Gets a value that can be used to represent null for the <see cref="P:DefaultValue">default value</see>.
+        /// Gets a value that can be used to represent null for the <see cref="DefaultValue">default value</see>.
         /// </summary>
-        /// <value>An <see cref="Object">object</see> that represents <c>null</c>.</value>
-        /// <remarks>This field is used to ensure the <see cref="P:DefaultValue"/> property is not actually null,
+        /// <value>An <see cref="object">object</see> that represents <c>null</c>.</value>
+        /// <remarks>This field is used to ensure the <see cref="DefaultValue"/> property is not actually null,
         /// which can cause an exception in the Managed Extensibility Framework under certain conditions.</remarks>
         public static readonly object NullValue = new object();
 
@@ -75,7 +75,7 @@
                 { typeof( Uri ), new UriConverter() },
                 { typeof( TimeSpan ), timeSpanConverter },
                 { typeof( TimeSpan? ), timeSpanConverter },
-                { typeof( Enum ), new EnumConverter() }
+                { typeof( Enum ), new EnumConverter() },
             };
         }
 
@@ -88,7 +88,7 @@
         /// <see cref="TimeSpan"/>, and <see cref="Enum"/>. A default converter is also provided to convert all
         /// primitive types. If a <paramref name="converter"/> is provided that maps to <see cref="Enum"/>, it will
         /// become the default converter for all enumerations. If a <paramref name="converter"/> is provided that
-        /// maps to <see cref="Object"/>, it will become the fallback converter for all conversions.</remarks>
+        /// maps to <see cref="object"/>, it will become the fallback converter for all conversions.</remarks>
         public static void SetConverter<TValue>( Func<object, Type, IFormatProvider, TValue> converter )
         {
             Arg.NotNull( converter, nameof( converter ) );
