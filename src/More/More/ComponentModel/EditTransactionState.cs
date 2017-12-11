@@ -25,6 +25,6 @@
         /// <summary>
         /// Indicates an edit transaction was rolled back.
         /// </summary>
-        RolledBack
+        RolledBack,
     }
 }

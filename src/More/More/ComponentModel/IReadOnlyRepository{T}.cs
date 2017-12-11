@@ -29,13 +29,13 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var index = 0;
         ///     var repository = new MyRepository();
         ///     var cancellationToken = new CancellationToken();
-        ///     
+        ///
         ///     foreach ( var item in await repository.GetAsync( q => q.Where( i => i.FirstName.StartsWith( "Jo" ) ).OrderBy( i => i.LastName ), cancellationToken );
         ///         Console.WriteLine( i => i.ToString() );
         /// }

@@ -8,15 +8,15 @@
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// Provides extension methods for the <see cref="String"/> class.
+    /// Provides extension methods for the <see cref="string"/> class.
     /// </summary>
     public static class StringExtensions
     {
         /// <summary>
         /// Returns whether the current string contains the specified other string.
         /// </summary>
-        /// <param name="current">The <see cref="String">string</see> to evaluate.</param>
-        /// <param name="value">The <see cref="String">string</see> to search for.</param>
+        /// <param name="current">The <see cref="string">string</see> to evaluate.</param>
+        /// <param name="value">The <see cref="string">string</see> to search for.</param>
         /// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
         /// <returns>True if the current string contains the specified other string; otherwise, false.</returns>
         [Pure]
@@ -130,7 +130,7 @@
         /// </summary>
         /// <param name="value">The string to split.</param>
         /// <param name="pattern">The regular expression pattern to match.</param>
-        /// <returns>A <see cref="String"/> array.</returns>
+        /// <returns>A <see cref="string"/> array.</returns>
         [Pure]
         public static string[] Split( this string value, string pattern )
         {
@@ -147,7 +147,7 @@
         /// <param name="value">The string to split.</param>
         /// <param name="pattern">The regular expression pattern to match.</param>
         /// <param name="options">A bitwise OR combination of <see cref="RegexOptions"/> enumeration values.</param>
-        /// <returns>A <see cref="String"/> array.</returns>
+        /// <returns>A <see cref="string"/> array.</returns>
         [Pure]
         public static string[] Split( this string value, string pattern, RegexOptions options )
         {
@@ -165,8 +165,8 @@
         /// <param name="pattern">The regular expression pattern to match.</param>
         /// <param name="replacement">The replacement string.</param>
         /// <param name="options">A bitwise OR combination of <see cref="RegexOptions"/> enumeration values.</param>
-        /// <returns>A new <see cref="String">string</see> that is identical to the input string, except that a replacement <see cref="String">string</see>
-        /// takes the place of each matched <see cref="String">string</see>.</returns>
+        /// <returns>A new <see cref="string">string</see> that is identical to the input string, except that a replacement <see cref="string">string</see>
+        /// takes the place of each matched <see cref="string">string</see>.</returns>
         [Pure]
         public static string Replace( this string value, string pattern, string replacement, RegexOptions options )
         {
@@ -180,11 +180,11 @@
         /// <summary>
         /// Returns a new string in which all occurrences of a specified string within the current instance are replaced with another specified string.
         /// </summary>
-        /// <param name="current">The <see cref="String">string</see> to make replacements in.</param>
+        /// <param name="current">The <see cref="string">string</see> to make replacements in.</param>
         /// <param name="oldValue">The old value to match.</param>
         /// <param name="newValue">The new replacement value.</param>
         /// <param name="comparisonType">The type of <see cref="StringComparison">string comparison</see> to use.</param>
-        /// <returns>A new <see cref="String">string</see> containing the result of the replacement operation.</returns>
+        /// <returns>A new <see cref="string">string</see> containing the result of the replacement operation.</returns>
         [Pure]
         public static string Replace( this string current, string oldValue, string newValue, StringComparison comparisonType )
         {
@@ -219,9 +219,9 @@
         /// <summary>
         /// Formats the specified string using the specified format and arguments.
         /// </summary>
-        /// <param name="format">The extended format <see cref="String"/>.</param>
-        /// <param name="args">An array of <see cref="Object"/> containing the ordinal format parameters, if any.</param>
-        /// <returns>A formatted <see cref="String"/>.</returns>
+        /// <param name="format">The extended format <see cref="string"/>.</param>
+        /// <param name="args">An array of <see cref="object"/> containing the ordinal format parameters, if any.</param>
+        /// <returns>A formatted <see cref="string"/>.</returns>
         /// <remarks>This method uses the <see cref="CultureInfo.InvariantCulture"/> for the <see cref="IFormatProvider"/>.</remarks>
         [Pure]
         public static string FormatInvariant( this string format, params object[] args )
@@ -234,9 +234,9 @@
         /// <summary>
         /// Formats the specified string using the specified format and arguments.
         /// </summary>
-        /// <param name="format">The extended format <see cref="String"/>.</param>
-        /// <param name="args">An array of <see cref="Object"/> containing the ordinal format parameters, if any.</param>
-        /// <returns>A formatted <see cref="String"/>.</returns>
+        /// <param name="format">The extended format <see cref="string"/>.</param>
+        /// <param name="args">An array of <see cref="object"/> containing the ordinal format parameters, if any.</param>
+        /// <returns>A formatted <see cref="string"/>.</returns>
         /// <remarks>This method uses the <see cref="CultureInfo.CurrentCulture"/> for the <see cref="IFormatProvider"/>.</remarks>
         [Pure]
         public static string FormatDefault( this string format, params object[] args )
@@ -249,9 +249,9 @@
         /// <summary>
         /// Returns the specified length of characters from the lefthand side of the provided string.
         /// </summary>
-        /// <param name="value">The extended <see cref="String">string</see>.</param>
+        /// <param name="value">The extended <see cref="string">string</see>.</param>
         /// <param name="length">The length of the new string.</param>
-        /// <returns>A <see cref="String">string</see> containing the leftmost characters of the provided length.</returns>
+        /// <returns>A <see cref="string">string</see> containing the leftmost characters of the provided length.</returns>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static string Left( this string value, int length )
@@ -267,9 +267,9 @@
         /// <summary>
         /// Returns the specified length of characters from the righthand side of the provided string.
         /// </summary>
-        /// <param name="value">The extended <see cref="String">string</see>.</param>
+        /// <param name="value">The extended <see cref="string">string</see>.</param>
         /// <param name="length">The length of the new string.</param>
-        /// <returns>A <see cref="String">string</see> containing the rightmost characters of the provided length.</returns>
+        /// <returns>A <see cref="string">string</see> containing the rightmost characters of the provided length.</returns>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static string Right( this string value, int length )

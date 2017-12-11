@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts; 
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior of a dictionary which associates multiple values with a single key.
@@ -12,7 +12,7 @@
     /// </summary>
     /// <typeparam name="TKey">The <see cref="Type">type</see> of item key.</typeparam>
     /// <typeparam name="TValue">The <see cref="Type">type</see> of item value.</typeparam>
-    [ContractClass( typeof( IMultivalueDictionaryContract<,> ) )] 
+    [ContractClass( typeof( IMultivalueDictionaryContract<,> ) )]
     public interface IMultivalueDictionary<TKey, TValue> : IDictionary<TKey, ICollection<TValue>>
     {
         /// <summary>

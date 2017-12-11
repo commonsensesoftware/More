@@ -5,7 +5,6 @@
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using static NumberStyle;
-    using static System.Decimal;
     using static System.Globalization.CultureInfo;
 
     /// <summary>
@@ -17,95 +16,95 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="Byte">byte</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <param name="value">The <see cref="byte">byte</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         public Number( byte value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="Int16">short</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <param name="value">The <see cref="short">short</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         public Number( short value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
         /// <param name="value">The <see cref="int">int</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         public Number( int value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="Int64">long</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <param name="value">The <see cref="long">long</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         public Number( long value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="SByte">sbyte</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <param name="value">The <see cref="sbyte">sbyte</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         [CLSCompliant( false )]
         public Number( sbyte value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="UInt16">ushort</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <param name="value">The <see cref="ushort">ushort</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         [CLSCompliant( false )]
         public Number( ushort value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="UInt32">uint</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <param name="value">The <see cref="uint">uint</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         [CLSCompliant( false )]
         public Number( uint value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="UInt64">ulong</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Integer"/>.</remarks>
+        /// <param name="value">The <see cref="ulong">ulong</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Integer"/>.</remarks>
         [CLSCompliant( false )]
         public Number( ulong value ) : this( new decimal( value ), Integer ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="Single">float</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Default"/>.</remarks>
+        /// <param name="value">The <see cref="float">float</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Default"/>.</remarks>
         public Number( float value ) : this( new decimal( value ), Default ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="Double">double</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Default"/>.</remarks>
+        /// <param name="value">The <see cref="double">double</see> value to encapsulate.</param>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Default"/>.</remarks>
         public Number( double value ) : this( new decimal( value ), Default ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
         /// <param name="value">The <see cref="Decimal">decimal</see> value to encapsulate.</param>
-        /// <remarks>This constructor always sets the <see cref="P:Number.NumberStyle"/> property to <see cref="T:Default"/>.</remarks>
+        /// <remarks>This constructor always sets the <see cref="NumberStyle"/> property to <see cref="Default"/>.</remarks>
         public Number( decimal value ) : this( value, Default ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="Single">float</see> value to encapsulate.</param>
+        /// <param name="value">The <see cref="float">float</see> value to encapsulate.</param>
         /// <param name="style">One of the <see cref="NumberStyle"/> values.</param>
         public Number( float value, NumberStyle style ) : this( new decimal( value ), style ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Number"/> structure.
         /// </summary>
-        /// <param name="value">The <see cref="Double">double</see> value to encapsulate.</param>
+        /// <param name="value">The <see cref="double">double</see> value to encapsulate.</param>
         /// <param name="style">One of the <see cref="NumberStyle"/> values.</param>
         public Number( double value, NumberStyle style ) : this( new decimal( value ), style ) { }
 
@@ -133,10 +132,10 @@
         public NumberStyle NumberStyle { get; }
 
         /// <summary>
-        /// Converts the numeric value of this instance to its equivalent <see cref="String">string</see> representation, using the specified format.
+        /// Converts the numeric value of this instance to its equivalent <see cref="string">string</see> representation, using the specified format.
         /// </summary>
-        /// <param name="format">A <see cref="String">string</see> containing the format specification.</param>
-        /// <returns>A <see cref="String">string</see> representation of the value of this instance as specified by the <paramref name="format"/>.</returns>
+        /// <param name="format">A <see cref="string">string</see> containing the format specification.</param>
+        /// <returns>A <see cref="string">string</see> representation of the value of this instance as specified by the <paramref name="format"/>.</returns>
         [Pure]
         public string ToString( string format )
         {
@@ -146,10 +145,10 @@
         }
 
         /// <summary>
-        /// Converts the numeric value of this instance to its equivalent <see cref="String">string</see> representation using the specified culture-specific format information.
+        /// Converts the numeric value of this instance to its equivalent <see cref="string">string</see> representation using the specified culture-specific format information.
         /// </summary>
         /// <param name="formatProvider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
-        /// <returns>The <see cref="String">string</see> representation of the value of this instance as specified by the <paramref name="formatProvider">provider</paramref>.</returns>
+        /// <returns>The <see cref="string">string</see> representation of the value of this instance as specified by the <paramref name="formatProvider">provider</paramref>.</returns>
         [Pure]
         public string ToString( IFormatProvider formatProvider )
         {
@@ -169,9 +168,9 @@
         }
 
         /// <summary>
-        /// Converts a numeric <see cref="String">string</see> representation to its <see cref="Number"/> equivalent using the specified style.
+        /// Converts a numeric <see cref="string">string</see> representation to its <see cref="Number"/> equivalent using the specified style.
         /// </summary>
-        /// <param name="text">A <see cref="String">string</see> containing a number to convert.</param>
+        /// <param name="text">A <see cref="string">string</see> containing a number to convert.</param>
         /// <param name="style">One of the <see cref="NumberStyle"/> values indicating the style of the parsed number.</param>
         /// <returns>The <see cref="Number"/> equivalent to the value contained in the string as specified by <paramref name="style"/>.</returns>
         [Pure]
@@ -183,9 +182,9 @@
         }
 
         /// <summary>
-        /// Converts a numeric <see cref="String">string</see> representation its <see cref="Number"/> equivalent using the specified style and culture-specific format.
+        /// Converts a numeric <see cref="string">string</see> representation its <see cref="Number"/> equivalent using the specified style and culture-specific format.
         /// </summary>
-        /// <param name="text">A <see cref="String">string</see> containing a number to convert.</param>
+        /// <param name="text">A <see cref="string">string</see> containing a number to convert.</param>
         /// <param name="style">One of the <see cref="NumberStyle"/> values indicating the style of the parsed number.</param>
         /// <param name="formatProvider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
         /// <returns>The <see cref="Number"/> equivalent to the value contained in the string as specified by <paramref name="style"/> and <paramref name="formatProvider">provider</paramref>.</returns>
@@ -198,27 +197,27 @@
         }
 
         /// <summary>
-        /// Converts a numeric <see cref="String">string</see> representation to its <see cref="Number"/> equivalent using the specified style.
+        /// Converts a numeric <see cref="string">string</see> representation to its <see cref="Number"/> equivalent using the specified style.
         /// A return value indicates whether the conversion succeeded or failed.
         /// </summary>
-        /// <param name="text">A <see cref="String">string</see> containing a number to convert.</param>
+        /// <param name="text">A <see cref="string">string</see> containing a number to convert.</param>
         /// <param name="style">One of the <see cref="NumberStyle"/> values indicating the style of the parsed number.</param>
         /// <param name="result">When this method returns, it contains the <see cref="Number"/> equivalent to the numeric value if the conversion succeeded or zero if the conversion failed.
-        /// The conversion fails if the input parameter is null, is not in a compliant format, or represents a number less than <see cref="P:Decimal.MinValue"/> or greater than <see cref="P:Decimal.MaxValue"/>.
+        /// The conversion fails if the input parameter is null, is not in a compliant format, or represents a number less than <see cref="decimal.MinValue"/> or greater than <see cref="decimal.MaxValue"/>.
         /// This parameter is passed uninitialized.</param>
         /// <returns>True if the conversion was successful; otherwise, false.</returns>
         [Pure]
         public static bool TryParse( string text, NumberStyle style, out Number result ) => TryParse( text, style, CurrentCulture, out result );
 
         /// <summary>
-        /// Converts a numeric <see cref="String">string</see> representation to its <see cref="Number"/> equivalent using the specified style and culture-specific format.
+        /// Converts a numeric <see cref="string">string</see> representation to its <see cref="Number"/> equivalent using the specified style and culture-specific format.
         /// A return value indicates whether the conversion succeeded or failed.
         /// </summary>
-        /// <param name="text">A <see cref="String">string</see> containing a number to convert.</param>
+        /// <param name="text">A <see cref="string">string</see> containing a number to convert.</param>
         /// <param name="style">One of the <see cref="NumberStyle"/> values indicating the style of the parsed number.</param>
         /// <param name="formatProvider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
         /// <param name="result">When this method returns, it contains the <see cref="Number"/> equivalent to the numeric value if the conversion succeeded or zero if the conversion failed.
-        /// The conversion fails if the input parameter is null, is not in a compliant format, or represents a number less than <see cref="P:Decimal.MinValue"/> or greater than <see cref="P:Decimal.MaxValue"/>.
+        /// The conversion fails if the input parameter is null, is not in a compliant format, or represents a number less than <see cref="decimal.MinValue"/> or greater than <see cref="decimal.MaxValue"/>.
         /// This parameter is passed uninitialized.</param>
         /// <returns>True if the conversion was successful; otherwise, false.</returns>
         [Pure]
@@ -240,7 +239,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the addition of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number Add( Number number1, Number number2 ) => new Number( number1.Value + number2.Value, number1.NumberStyle );
 
@@ -250,7 +249,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the difference of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number Subtract( Number number1, Number number2 ) => new Number( number1.Value - number2.Value, number1.NumberStyle );
 
@@ -260,7 +259,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the product of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number Multiply( Number number1, Number number2 ) => new Number( number1.Value * number2.Value, number1.NumberStyle );
 
@@ -270,7 +269,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the division of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number Divide( Number number1, Number number2 ) => new Number( number1.Value / number2.Value, number1.NumberStyle );
 
@@ -280,7 +279,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the remainder of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number Mod( Number number1, Number number2 ) => new Number( number1.Value % number2.Value, number1.NumberStyle );
 
@@ -312,7 +311,7 @@
         /// <summary>
         /// Returns a value indicating whether the specified object equals the current instance.
         /// </summary>
-        /// <param name="obj">The <see cref="Object">object</see> to evaluate.</param>
+        /// <param name="obj">The <see cref="object">object</see> to evaluate.</param>
         /// <returns>True if the current instance equals the specified object; otherwise, false.</returns>
         public override bool Equals( object obj )
         {
@@ -331,23 +330,24 @@
         public override int GetHashCode() => Value.GetHashCode();
 
         /// <summary>
-        /// Returns the <see cref="String">string</see> representation of the current instance.
+        /// Returns the <see cref="string">string</see> representation of the current instance.
         /// </summary>
-        /// <returns>The <see cref="String">string</see> representation of the current instance.</returns>
+        /// <returns>The <see cref="string">string</see> representation of the current instance.</returns>
         public override string ToString() => ToString( CurrentCulture );
 
         /// <summary>
-        /// Returns the implicit conversion of the current number to its <see cref="Decimal">decimal</see> equivalent.
+        /// Returns the implicit conversion of the current number to its <see cref="decimal">decimal</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="Decimal">decimal</see> structure.</returns>
+        /// <returns>A <see cref="decimal">decimal</see> structure.</returns>
         [Pure]
         public static implicit operator decimal( Number number ) => number.Value;
 
+#pragma warning disable CA2225 // Operator overloads have named alternates
         /// <summary>
         /// Converts an 8-bit unsigned integer into a <see cref="Number"/>.
         /// </summary>
-        /// <param name="value">The <see cref="Byte">byte</see> to convert.</param>
+        /// <param name="value">The <see cref="byte">byte</see> to convert.</param>
         /// <returns>A <see cref="Number"/> structure.</returns>
         [Pure]
         public static implicit operator Number( byte value ) => new Number( value );
@@ -355,7 +355,7 @@
         /// <summary>
         /// Converts a 16-bit signed integer into a <see cref="Number"/>.
         /// </summary>
-        /// <param name="value">The <see cref="Int16">short</see> to convert.</param>
+        /// <param name="value">The <see cref="short">short</see> to convert.</param>
         /// <returns>A <see cref="Number"/> structure.</returns>
         [Pure]
         public static implicit operator Number( short value ) => new Number( value );
@@ -371,7 +371,7 @@
         /// <summary>
         /// Converts a 64-bit signed integer into a <see cref="Number"/>.
         /// </summary>
-        /// <param name="value">The <see cref="Int64">long</see> to convert.</param>
+        /// <param name="value">The <see cref="long">long</see> to convert.</param>
         /// <returns>A <see cref="Number"/> structure.</returns>
         [Pure]
         public static implicit operator Number( long value ) => new Number( value );
@@ -379,7 +379,7 @@
         /// <summary>
         /// Converts an 8-bit signed integer into a <see cref="Number"/>.
         /// </summary>
-        /// <param name="value">The <see cref="SByte">sbyte</see> to convert.</param>
+        /// <param name="value">The <see cref="sbyte">sbyte</see> to convert.</param>
         /// <returns>A <see cref="Number"/> structure.</returns>
         [Pure]
         [CLSCompliant( false )]
@@ -388,7 +388,7 @@
         /// <summary>
         /// Converts a 16-bit unsigned integer into a <see cref="Number"/>.
         /// </summary>
-        /// <param name="value">The <see cref="Int16">ushort</see> to convert.</param>
+        /// <param name="value">The <see cref="short">ushort</see> to convert.</param>
         /// <returns>A <see cref="Number"/> structure.</returns>
         [Pure]
         [CLSCompliant( false )]
@@ -406,43 +406,44 @@
         /// <summary>
         /// Converts a 64-bit unsigned integer into a <see cref="Number"/>.
         /// </summary>
-        /// <param name="value">The <see cref="Int64">ulong</see> to convert.</param>
+        /// <param name="value">The <see cref="long">ulong</see> to convert.</param>
         /// <returns>A <see cref="Number"/> structure.</returns>
         [Pure]
         [CLSCompliant( false )]
         public static implicit operator Number( ulong value ) => new Number( value );
+#pragma warning restore CA2225 // Operator overloads have named alternates
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="Single">float</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="float">float</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="Single">float</see> structure.</returns>
+        /// <returns>A <see cref="float">float</see> structure.</returns>
         [Pure]
-        public static explicit operator float( Number number ) => ToSingle( number.Value );
+        public static explicit operator float( Number number ) => decimal.ToSingle( number.Value );
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="Double">double</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="double">double</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="Double">double</see> structure.</returns>
+        /// <returns>A <see cref="double">double</see> structure.</returns>
         [Pure]
-        public static explicit operator double( Number number ) => ToDouble( number.Value );
+        public static explicit operator double( Number number ) => decimal.ToDouble( number.Value );
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="Byte">byte</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="byte">byte</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="Byte">byte</see> structure.</returns>
+        /// <returns>A <see cref="byte">byte</see> structure.</returns>
         [Pure]
-        public static explicit operator byte( Number number ) => ToByte( number.Value );
+        public static explicit operator byte( Number number ) => decimal.ToByte( number.Value );
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="Int16">short</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="short">short</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="Int16">short</see> structure.</returns>
+        /// <returns>A <see cref="short">short</see> structure.</returns>
         [Pure]
-        public static explicit operator short( Number number ) => ToInt16( number.Value );
+        public static explicit operator short( Number number ) => decimal.ToInt16( number.Value );
 
         /// <summary>
         /// Returns the explicit conversion of the current number to its <see cref="int">int</see> equivalent.
@@ -450,51 +451,51 @@
         /// <param name="number">The <see cref="Number"/> to convert.</param>
         /// <returns>A <see cref="int">int</see> structure.</returns>
         [Pure]
-        public static explicit operator int( Number number ) => ToInt32( number.Value );
+        public static explicit operator int( Number number ) => decimal.ToInt32( number.Value );
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="Int64">long</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="long">long</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="Int64">long</see> structure.</returns>
+        /// <returns>A <see cref="long">long</see> structure.</returns>
         [Pure]
-        public static explicit operator long( Number number ) => ToInt64( number.Value );
+        public static explicit operator long( Number number ) => decimal.ToInt64( number.Value );
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="SByte">sbyte</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="sbyte">sbyte</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="SByte">sbyte</see> structure.</returns>
-        [Pure]
-        [CLSCompliant( false )]
-        public static explicit operator sbyte( Number number ) => ToSByte( number.Value );
-
-        /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="UInt16">ushort</see> equivalent.
-        /// </summary>
-        /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="UInt16">ushort</see> structure.</returns>
+        /// <returns>A <see cref="sbyte">sbyte</see> structure.</returns>
         [Pure]
         [CLSCompliant( false )]
-        public static explicit operator ushort( Number number ) => ToUInt16( number.Value );
+        public static explicit operator sbyte( Number number ) => decimal.ToSByte( number.Value );
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="UInt32">uint</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="ushort">ushort</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="UInt32">uint</see> structure.</returns>
+        /// <returns>A <see cref="ushort">ushort</see> structure.</returns>
         [Pure]
         [CLSCompliant( false )]
-        public static explicit operator uint( Number number ) => ToUInt32( number.Value );
+        public static explicit operator ushort( Number number ) => decimal.ToUInt16( number.Value );
 
         /// <summary>
-        /// Returns the explicit conversion of the current number to its <see cref="UInt64">ulong</see> equivalent.
+        /// Returns the explicit conversion of the current number to its <see cref="uint">uint</see> equivalent.
         /// </summary>
         /// <param name="number">The <see cref="Number"/> to convert.</param>
-        /// <returns>A <see cref="UInt64">ulong</see> structure.</returns>
+        /// <returns>A <see cref="uint">uint</see> structure.</returns>
         [Pure]
         [CLSCompliant( false )]
-        public static explicit operator ulong( Number number ) => ToUInt64( number.Value );
+        public static explicit operator uint( Number number ) => decimal.ToUInt32( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="ulong">ulong</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="ulong">ulong</see> structure.</returns>
+        [Pure]
+        [CLSCompliant( false )]
+        public static explicit operator ulong( Number number ) => decimal.ToUInt64( number.Value );
 
         /// <summary>
         /// Returns the equality of two <see cref="Number"/> structures.
@@ -570,7 +571,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the addition of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number operator +( Number number1, Number number2 ) => Add( number1, number2 );
 
@@ -580,7 +581,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the difference of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number operator -( Number number1, Number number2 ) => Subtract( number1, number2 );
 
@@ -598,7 +599,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the product of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number operator *( Number number1, Number number2 ) => Multiply( number1, number2 );
 
@@ -608,7 +609,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the division of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number operator /( Number number1, Number number2 ) => Divide( number1, number2 );
 
@@ -618,7 +619,7 @@
         /// <param name="number1">The first <see cref="Number"/>.</param>
         /// <param name="number2">The second <see cref="Number"/>.</param>
         /// <returns>A <see cref="Number"/> containing the remainder of the two structures.</returns>
-        /// <remarks>If the <see cref="P:Number.NumberStyle"/> do not match, the <see cref="P:Number.NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
+        /// <remarks>If the <see cref="NumberStyle"/> do not match, the <see cref="NumberStyle"/> from the left-hand side of the operation is preserved.</remarks>
         [Pure]
         public static Number operator %( Number number1, Number number2 ) => Mod( number1, number2 );
 
@@ -640,7 +641,7 @@
         /// <summary>
         /// Compares the current instance to the specified object.
         /// </summary>
-        /// <param name="obj">The <see cref="Object">object</see> to compare against.</param>
+        /// <param name="obj">The <see cref="object">object</see> to compare against.</param>
         /// <returns>A signed number indicating the relative values of this instance and the specified value.  A value less than zero indicates the current instance is less than the
         /// specified object.  A value greater than zero indicates the current instance is greater than the specified object.  A value of zero indicates the objects are equal.</returns>
         public int CompareTo( object obj )
@@ -656,13 +657,103 @@
         /// <summary>
         /// Converts the numeric value of this instance to its equivalent <see cref="string">string</see> representation using the specified format and culture-specific format information.
         /// </summary>
-        /// <param name="format">A <see cref="String">string</see> containing the format specification.</param>
+        /// <param name="format">A <see cref="string">string</see> containing the format specification.</param>
         /// <param name="formatProvider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
-        /// <returns>The <see cref="String">string</see> representation of the value of this instance as specified by the <paramref name="format"/> and <paramref name="formatProvider">provider</paramref>.</returns>
+        /// <returns>The <see cref="string">string</see> representation of the value of this instance as specified by the <paramref name="format"/> and <paramref name="formatProvider">provider</paramref>.</returns>
         public string ToString( string format, IFormatProvider formatProvider )
         {
             Arg.NotNullOrEmpty( format, nameof( format ) );
             return Value.ToString( format, formatProvider );
         }
+
+        /// <summary>
+        /// Returns the implicit conversion of the current number to its <see cref="decimal">decimal</see> equivalent.
+        /// </summary>
+        /// <returns>A <see cref="decimal">decimal</see> structure.</returns>
+        public decimal ToDecimal() => Value;
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="float">float</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="float">float</see> structure.</returns>
+        [Pure]
+        public static float ToSingle( Number number ) => decimal.ToSingle( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="double">double</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="double">double</see> structure.</returns>
+        [Pure]
+        public static double ToDouble( Number number ) => decimal.ToDouble( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="byte">byte</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="byte">byte</see> structure.</returns>
+        [Pure]
+        public static byte ToByte( Number number ) => decimal.ToByte( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="short">short</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="short">short</see> structure.</returns>
+        [Pure]
+        public static short ToInt16( Number number ) => decimal.ToInt16( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="int">int</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="int">int</see> structure.</returns>
+        [Pure]
+        public static int ToInt32( Number number ) => decimal.ToInt32( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="long">long</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="long">long</see> structure.</returns>
+        [Pure]
+        public static long ToInt64( Number number ) => decimal.ToInt64( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="sbyte">sbyte</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="sbyte">sbyte</see> structure.</returns>
+        [Pure]
+        [CLSCompliant( false )]
+        public static sbyte ToSByte( Number number ) => decimal.ToSByte( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="ushort">ushort</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="ushort">ushort</see> structure.</returns>
+        [Pure]
+        [CLSCompliant( false )]
+        public static ushort ToUInt16( Number number ) => decimal.ToUInt16( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="uint">uint</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="uint">uint</see> structure.</returns>
+        [Pure]
+        [CLSCompliant( false )]
+        public static uint ToUInt32( Number number ) => decimal.ToUInt32( number.Value );
+
+        /// <summary>
+        /// Returns the explicit conversion of the current number to its <see cref="ulong">ulong</see> equivalent.
+        /// </summary>
+        /// <param name="number">The <see cref="Number"/> to convert.</param>
+        /// <returns>A <see cref="ulong">ulong</see> structure.</returns>
+        [Pure]
+        [CLSCompliant( false )]
+        public static ulong ToUInt64( Number number ) => decimal.ToUInt64( number.Value );
     }
 }

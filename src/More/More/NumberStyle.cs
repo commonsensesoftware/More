@@ -30,6 +30,6 @@
         /// <summary>
         /// Indicates the number is a percent.
         /// </summary>
-        Percent
+        Percent,
     }
 }

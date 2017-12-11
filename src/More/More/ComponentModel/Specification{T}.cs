@@ -12,7 +12,7 @@
     /// using System;
     /// using System.Collections.Generic;
     /// using System.Linq;
-    /// 
+    ///
     /// var checkedOut = new Specification<Book>( book => book.IsCheckedOut );
     /// var overdue = new Specification<Book>( book => book.ReturnDate >= DateTime.Today );
     /// var noticeSent = new Specification<Book>( book => book.NoticeMailed );

@@ -25,7 +25,7 @@
 
             try
             {
-                return await folder.GetFileAsync( name );
+                return await folder.GetFileAsync( name ).ConfigureAwait( false );
             }
             catch ( IOException )
             {
@@ -55,7 +55,7 @@
 
             try
             {
-                return await folder.GetFolderAsync( name );
+                return await folder.GetFolderAsync( name ).ConfigureAwait( false );
             }
             catch ( IOException )
             {
@@ -85,7 +85,7 @@
 
             try
             {
-                return await folder.GetItemAsync( name );
+                return await folder.GetItemAsync( name ).ConfigureAwait( false );
             }
             catch ( IOException )
             {

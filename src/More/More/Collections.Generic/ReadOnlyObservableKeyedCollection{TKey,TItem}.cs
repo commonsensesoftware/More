@@ -34,12 +34,12 @@
 
             if ( collection is INotifyPropertyChanged notifyProperty )
             {
-                notifyProperty.PropertyChanged += ( s, e ) => OnPropertyChanged( e );
+                notifyProperty.PropertyChanged += SourcePropertyChanged;
             }
 
             if ( collection is INotifyCollectionChanged notifyCollection )
             {
-                notifyCollection.CollectionChanged += ( s, e ) => OnCollectionChanged( e );
+                notifyCollection.CollectionChanged += OnInnerCollectionChanged;
             }
         }
 
@@ -160,7 +160,7 @@
         bool ICollection<TItem>.Remove( TItem item ) => throw new NotSupportedException( ExceptionMessage.CollectionReadOnly );
 
         /// <summary>
-        /// Returns an enumerator for the collection. 
+        /// Returns an enumerator for the collection.
         /// </summary>
         /// <returns>An <see cref="IEnumerable{T}"/> object.</returns>
         public virtual IEnumerator<TItem> GetEnumerator() => Items.GetEnumerator();
@@ -210,10 +210,14 @@
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "This is for legacy support." )]
         object ICollection.SyncRoot => ( (ICollection) Items ).SyncRoot;
 
+        void SourcePropertyChanged( object sender, PropertyChangedEventArgs e ) => OnPropertyChanged( e );
+
+        void OnInnerCollectionChanged( object sender, NotifyCollectionChangedEventArgs e ) => OnCollectionChanged( e );
+
         /// <summary>
         /// Occurs when a property value has changed.
         /// </summary>
-        /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have changed by using either <c>null</c>or <see cref="F:String.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
+        /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have changed by using either <c>null</c>or <see cref="string.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>

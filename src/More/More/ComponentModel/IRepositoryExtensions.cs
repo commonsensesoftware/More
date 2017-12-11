@@ -30,12 +30,12 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var index = 0;
         ///     var repository = new MyRepository();
-        ///     
+        ///
         ///     foreach ( var item in await repository.GetAsync( q => q.Where( i => i.FirstName.StartsWith( "Jo" ) ).OrderBy( i => i.LastName ) );
         ///         Console.WriteLine( i => i.ToString() );
         /// }
@@ -83,11 +83,11 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var repository = new MyRepository();
-        ///     
+        ///
         ///     foreach ( var item in await repository.GetAllAsync( i => i.LastName == "Doe" ) )
         ///         Console.WriteLine( item.ToString() );
         /// }
@@ -117,12 +117,12 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var repository = new MyRepository();
         ///     var cancellationToken = new CancellationToken();
-        ///     
+        ///
         ///     foreach ( var item in await repository.GetAllAsync( cancellationToken ) )
         ///         Console.WriteLine( item.ToString() );
         /// }
@@ -153,7 +153,7 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var repository = new MyRepository();
@@ -189,7 +189,7 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var repository = new MyRepository();
@@ -225,7 +225,7 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var repository = new MyRepository();
@@ -261,7 +261,7 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var repository = new MyRepository();
@@ -278,7 +278,7 @@
             Arg.NotNull( predicate, nameof( predicate ) );
             Contract.Ensures( Contract.Result<Task<T>>() != null );
 
-            var items = await repository.GetAsync( q => q.Where( predicate ), cancellationToken );
+            var items = await repository.GetAsync( q => q.Where( predicate ), cancellationToken ).ConfigureAwait( false );
             return items.SingleOrDefault();
         }
 
@@ -298,16 +298,16 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var index = 0;
         ///     var repository = new MyRepository();
         ///     var items = await repository.PaginateAsync( index, 10 );
         ///     var retrieved = items.Count;
-        ///     
+        ///
         ///     items.ForEach( i => Console.WriteLine( i.ToString() ) );
-        ///     
+        ///
         ///     while ( retrieved < items.TotalCount )
         ///     {
         ///         items = await repository.PaginateAsync( ++index, 10 );
@@ -345,7 +345,7 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var index = 0;
@@ -353,9 +353,9 @@
         ///     var cancellationToken = new CancellationToken();
         ///     var items = await repository.PaginateAsync( index, 10, cancellationToken );
         ///     var retrieved = items.Count;
-        ///     
+        ///
         ///     items.ForEach( i => Console.WriteLine( i.ToString() ) );
-        ///     
+        ///
         ///     while ( retrieved < items.TotalCount )
         ///     {
         ///         items = await repository.PaginateAsync( ++index, 10, cancellationToken );
@@ -375,7 +375,7 @@
             Arg.GreaterThanOrEqualTo( pageIndex, 0, nameof( pageIndex ) );
             Arg.GreaterThan( pageSize, 0, nameof( pageSize ) );
 
-            var groups = await repository.GetAsync( q => q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } ), cancellationToken );
+            var groups = await repository.GetAsync( q => q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } ), cancellationToken ).ConfigureAwait( false );
 
             var result = groups.FirstOrDefault();
 
@@ -404,16 +404,16 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var index = 0;
         ///     var repository = new MyRepository();
         ///     var items = await repository.PaginateAsync( q => q.OrderBy( i => LastName ), index, 10 );
         ///     var retrieved = items.Count;
-        ///     
+        ///
         ///     items.ForEach( i => Console.WriteLine( i.ToString() ) );
-        ///     
+        ///
         ///     while ( retrieved < items.TotalCount )
         ///     {
         ///         items = await repository.PaginateAsync( q => q.OrderBy( i => LastName ), ++index, 10 );
@@ -452,7 +452,7 @@
         /// using System.Linq;
         /// using System.Threading;
         /// using System.Threading.Tasks;
-        /// 
+        ///
         /// public async static void Main()
         /// {
         ///     var index = 0;
@@ -460,9 +460,9 @@
         ///     var cancellationToken = new CancellationToken();
         ///     var items = await repository.PaginateAsync( q => q.OrderBy( i => LastName ), index, 10, cancellationToken );
         ///     var retrieved = items.Count;
-        ///     
+        ///
         ///     items.ForEach( i => Console.WriteLine( i.ToString() ) );
-        ///     
+        ///
         ///     while ( retrieved < items.TotalCount )
         ///     {
         ///         items = await repository.PaginateAsync( q => q.OrderBy( i => LastName ), ++index, 10, cancellationToken );
@@ -488,7 +488,7 @@
                                     var q = queryShaper( query );
                                     return q.Between( pageIndex, pageSize ).GroupBy( g => new { Total = q.Count() } );
                                 },
-                                cancellationToken );
+                                cancellationToken ).ConfigureAwait( false );
 
             var result = groups.FirstOrDefault();
 

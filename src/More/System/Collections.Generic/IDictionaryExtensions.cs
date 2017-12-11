@@ -51,7 +51,7 @@
         /// <exception cref="ArgumentNullException">
         /// <para>The <paramref name="dictionary"/> parameter is <see langkeyword="null">null</see></para>
         /// <para>- or -</para>
-        /// <para>The <paramref name="key">key</paramref> parmeter is <c>null</c>or <see cref="F:String.Empty"/></para>
+        /// <para>The <paramref name="key">key</paramref> parmeter is <c>null</c>or <see cref="string.Empty"/></para>
         /// <para>- or -</para>
         /// <para>The <paramref name="newValue">new value</paramref> parameter is <see langkeyword="null">null</see></para>
         /// </exception>
@@ -94,7 +94,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Skip( "Key2", "Key4" );
         /// }
         /// ]]>
@@ -131,7 +131,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Skip( StringComparer.Ordinal, "Key2", "Key4" );
         /// }
         /// ]]>
@@ -169,7 +169,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Skip( new []{ "Key2", "Key4" } );
         /// }
         /// ]]>
@@ -206,7 +206,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Skip( new []{ "Key2", "Key4" }, StringComparer.Ordinal );
         /// }
         /// ]]>
@@ -261,7 +261,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Take( "Key2", "Key4" );
         /// }
         /// ]]>
@@ -298,7 +298,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Take( StringComparer.Ordinal, "Key2", "Key4" );
         /// }
         /// ]]>
@@ -336,7 +336,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Take( new []{ "Key2", "Key4" } );
         /// }
         /// ]]>
@@ -373,7 +373,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var trimmed = orignal.Take( new []{ "Key2", "Key4" }, StringComparer.Ordinal );
         /// }
         /// ]]>
@@ -422,14 +422,14 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var otherDictionary = new Dictionary<string, int>()
         /// {
         ///     { "Key1", 0 },
         ///     { "Key3", 0 },
         ///     { "Key6", 6 }
         /// };
-        /// 
+        ///
         /// // contains Key1 - Key6 (keys that already exist on the left-hand are ignored from the right-hand side)
         /// var unioned = dictionary.Union( otherDictionary );
         /// }
@@ -467,14 +467,14 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// var otherDictionary = new Dictionary<string, int>()
         /// {
         ///     { "Key1", 0 },
         ///     { "Key3", 0 },
         ///     { "Key6", 6 }
         /// };
-        /// 
+        ///
         /// // contains Key1 - Key6 (keys that already exist on the left-hand are ignored from the right-hand side)
         /// var unioned = dictionary.Union( otherDictionary, StringComparer.Ordinal );
         /// }
@@ -526,7 +526,7 @@
         ///     { "KeyD", 2 },
         ///     { "KeyE", 3 }
         /// };
-        /// 
+        ///
         /// // KeyA and KeyC are removed and a new KeyA is added with value 1 (from the original KeyA)
         /// var reduced = dictionary.Reduce( "KeyA", "KeyC", "KeyA" );
         /// }
@@ -567,7 +567,7 @@
         ///     { "Key4", 4 },
         ///     { "Key5", 5 }
         /// };
-        /// 
+        ///
         /// // Key4 and Key5 are removed and Key9 is added
         /// var reduced = dictionary.Reduce( "Key4", "Key5", "Key9", ( v1, v2 ) => v1 + v2 );
         /// }

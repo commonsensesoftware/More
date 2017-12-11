@@ -19,7 +19,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="UriComparer"/> class.
         /// </summary>
-        /// <remarks>This constructor uses <see cref="T:UriComponents.AbsoluteUri"/>, <see cref="T:UriFormat.Unescaped"/>,
+        /// <remarks>This constructor uses <see cref="UriComponents.AbsoluteUri"/>, <see cref="UriFormat.Unescaped"/>,
         /// and is not case sensitive.</remarks>
         public UriComparer() : this( AbsoluteUri, Unescaped, true ) { }
 
@@ -49,7 +49,7 @@
         /// </summary>
         /// <value>A <see cref="UriComparer"/> object.</value>
         /// <remarks>This property returns a comparer that evaluates <see cref="Uri"/> objects based on their
-        /// unescaped, <see cref="P:Uri.AbsoluteUri">absolute URI</see> properties with case sensitivity.</remarks>
+        /// unescaped, <see cref="Uri.AbsoluteUri">absolute URI</see> properties with case sensitivity.</remarks>
         public static UriComparer Ordinal
         {
             get
@@ -64,7 +64,7 @@
         /// </summary>
         /// <value>A <see cref="UriComparer"/> object.</value>
         /// <remarks>This property returns a comparer that evaluates <see cref="Uri"/> objects based on their
-        /// unescaped, <see cref="P:Uri.AbsoluteUri">absolute URI</see> properties with case insensitivity.</remarks>
+        /// unescaped, <see cref="Uri.AbsoluteUri">absolute URI</see> properties with case insensitivity.</remarks>
         public static UriComparer OrdinalIgnoreCase
         {
             get
@@ -116,7 +116,7 @@
         /// </summary>
         /// <param name="obj">The <see cref="Uri"/> object to get a hash code for.</param>
         /// <returns>A hash code.</returns>
-        /// <remarks>This method returns the default implementation of <see cref="M:Uri.GetHashCode"/>.</remarks>
+        /// <remarks>This method returns the default implementation of <see cref="Uri.GetHashCode"/>.</remarks>
         public virtual int GetHashCode( Uri obj ) => obj == null ? 0 : obj.GetHashCode();
 
         bool IEqualityComparer.Equals( object x, object y ) => Equals( (Uri) x, (Uri) y );

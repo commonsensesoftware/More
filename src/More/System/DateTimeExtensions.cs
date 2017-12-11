@@ -281,7 +281,7 @@
         /// <param name="calendar">The type of <see cref="Calendar"/> used.</param>
         /// <param name="firstDayOfWeek">The <see cref="DayOfWeek"/> representing the first day of the week for the calendar.</param>
         /// <returns>The week of the year.</returns>
-        /// <remarks>The <see cref="CalendarWeekRule">calendar week rule</see> is based on the <see cref="P:CultureInfo.CurrentCulture">current culture</see>.</remarks>
+        /// <remarks>The <see cref="CalendarWeekRule">calendar week rule</see> is based on the <see cref="CultureInfo.CurrentCulture">current culture</see>.</remarks>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public static int Week( this DateTime date, Calendar calendar, DayOfWeek firstDayOfWeek )

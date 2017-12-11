@@ -18,21 +18,21 @@
         /// <param name="desiredName">The desired name of the file to create.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing the created <see cref="IFile">file</see>.</returns>
         Task<IFile> CreateFileAsync( string desiredName );
-        
+
         /// <summary>
         /// Creates a new folder in the current folder.
         /// </summary>
         /// <param name="desiredName">The desired name of the folder to create.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing the created <see cref="IFolder">folder</see>.</returns>
         Task<IFolder> CreateFolderAsync( string desiredName );
-        
+
         /// <summary>
         /// Gets the specified file from the current folder.
         /// </summary>
         /// <param name="name">The name (or path relative to the current folder) of the file to retrieve.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing the retrieved <see cref="IFile">file</see>.</returns>
         Task<IFile> GetFileAsync( string name );
-        
+
         /// <summary>
         /// Gets the files from the current folder.
         /// </summary>
@@ -57,7 +57,7 @@
         [SuppressMessage( "Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Required for generics." )]
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is an asynchronous, non-deterministic method." )]
         Task<IReadOnlyList<IFolder>> GetFoldersAsync();
-        
+
         /// <summary>
         /// Gets the specified item from the current folder.
         /// </summary>

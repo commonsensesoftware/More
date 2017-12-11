@@ -78,7 +78,7 @@
         /// Raises the <see cref="PropertyChanged"/> event.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
-        protected void OnPropertyChanged( string propertyName ) =>             OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
+        protected void OnPropertyChanged( string propertyName ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event.
@@ -112,15 +112,15 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs:Action"/> as <see cref="T:NotifyCollectionChangedAction.Reset"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Reset"/></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -154,15 +154,15 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs:Action"/> as <see cref="T:NotifyCollectionChangedAction.Add"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Add"/></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -195,15 +195,15 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs:Action"/> as <see cref="T:NotifyCollectionChangedAction.Remove"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Remove"/></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -238,11 +238,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs:Action"/> as <see cref="T:NotifyCollectionChangedAction.Replace"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Replace"/></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -276,11 +276,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName">property name</see> as "Item[]"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs:Action"/> as <see cref="T:NotifyCollectionChangedAction.Move"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Move"/></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -306,7 +306,7 @@
         /// Occurs when a property value has changed.
         /// </summary>
         /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have
-        /// changed by using either <c>null</c>or <see cref="F:String.Empty"/> as the property
+        /// changed by using either <c>null</c>or <see cref="string.Empty"/> as the property
         /// name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
 

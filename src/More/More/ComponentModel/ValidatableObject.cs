@@ -135,13 +135,13 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:ErrorsChanged"/> event for the supplied property name.
+        /// Raises the <see cref="ErrorsChanged"/> event for the supplied property name.
         /// </summary>
         /// <param name="propertyName">The name of the property that contains an error.</param>
         protected void OnErrorsChanged( string propertyName ) => OnErrorsChanged( new DataErrorsChangedEventArgs( propertyName ) );
 
         /// <summary>
-        /// Raises the <see cref="E:ErrorsChanged"/> event.
+        /// Raises the <see cref="ErrorsChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="DataErrorsChangedEventArgs"/> event data.</param>
         protected virtual void OnErrorsChanged( DataErrorsChangedEventArgs e )
@@ -256,7 +256,7 @@
         /// Gets the validation results for a specified property or for the entire object.
         /// </summary>
         /// <param name="propertyName">The name of the property to retrieve validation results for, or null or an
-        /// <see cref="F:String.Empty">empty string</see> to retrieve errors for the entire object.</param>
+        /// <see cref="string.Empty">empty string</see> to retrieve errors for the entire object.</param>
         /// <returns>A <see cref="IEnumerable{T}">sequence</see> of <see cref="IValidationResult">validation results</see> for the property or object.</returns>
         public IEnumerable<IValidationResult> GetErrors( string propertyName )
         {
@@ -299,11 +299,11 @@
         /// using System;
         /// using System.ComponentModel;
         /// using System.ComponentModel.DataAnnotations;
-        /// 
+        ///
         /// public class MyObject : ValidatableObject
         /// {
         ///     private int amount;
-        ///     
+        ///
         ///     [Range( 0, 25 )]
         ///     public int Amount
         ///     {
@@ -324,11 +324,11 @@
         /// using System;
         /// using System.ComponentModel;
         /// using System.ComponentModel.DataAnnotations;
-        /// 
+        ///
         /// public class MyObject : ValidatableObject
         /// {
         ///     private string name;
-        ///     
+        ///
         ///     [Required]
         ///     [StringLength( 50 )]
         ///     public string Name

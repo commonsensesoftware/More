@@ -98,7 +98,7 @@
         /// Gets or sets the edit recovery model for the object.
         /// </summary>
         /// <value>One of the <see cref="EditRecoveryModel"/> values.</value>
-        /// <remarks>This property does not raise <see cref="E:PropertyChanged"/> by default.</remarks>
+        /// <remarks>This property does not raise <see cref="INotifyPropertyChanged.PropertyChanged"/> by default.</remarks>
         public virtual EditRecoveryModel RecoveryModel
         {
             get => recoveryModel;
@@ -137,13 +137,13 @@
         /// Occurs after the changes to the object have been committed.
         /// </summary>
         /// <remarks>Note to inheritors: the base class does not have an implementation and does not need to be called.</remarks>
-        protected virtual void OnAfterEndEdit()        {        }
+        protected virtual void OnAfterEndEdit() { }
 
         /// <summary>
         /// Occurs when the changes to the object are about to be canceled.
         /// </summary>
         /// <remarks>Note to inheritors: the base class does not have an implementation and does not need to be called.</remarks>
-        protected virtual void OnBeforeCancelEdit()        {        }
+        protected virtual void OnBeforeCancelEdit() { }
 
         /// <summary>
         /// Occurs after the changes to the object have been canceled.
@@ -153,21 +153,21 @@
         /// <summary>
         /// Occurs when the object is about to be edited.
         /// </summary>
-        protected virtual void OnBeforeBeginEdit()        {        }
+        protected virtual void OnBeforeBeginEdit() { }
 
         /// <summary>
         /// Occurs after editing on the object has begun.
         /// </summary>
         /// <remarks>Note to inheritors: the base class does not have an implementation and does not need to be called.</remarks>
-        protected virtual void OnAfterBeginEdit()        {        }
+        protected virtual void OnAfterBeginEdit() { }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.  A null or empty string indicates that all properties have changed.</param>
         /// <param name="suppressStateChange">Indicates whether the property changed event should trigger state change.</param>
-        /// <remarks>The <see cref="P:IsChanged"/> property is to true whenever a property change is detected.  This overload can be used to
-        /// raise <see cref="E:PropertyChanged"/> without triggering a state change.</remarks>
+        /// <remarks>The <see cref="IsChanged"/> property is to true whenever a property change is detected.  This overload can be used to
+        /// raise <see cref="INotifyPropertyChanged.PropertyChanged"/> without triggering a state change.</remarks>
         protected void OnPropertyChanged( string propertyName, bool suppressStateChange ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ), suppressStateChange );
 
         /// <summary>
@@ -179,13 +179,14 @@
         /// <remarks>Some properties of an editable object support change notification, but to not
         /// change the state of the object.  An editable object should not indicate it has changed
         /// state when one of these properties change.  The following properties do not trigger
-        /// a state change in the default implementation: <see cref="P:IsChanged"/>, <see cref="P:IsEditing"/>,
-        /// <see cref="P:RecoveryModel"/>, <see cref="P:IsValid"/>, <see cref="P:Error"/>, and
-        /// <see cref="P:HasErrors"/>. When all properties change, a state change is assumed to be true.</remarks>
+        /// a state change in the default implementation: <see cref="IsChanged"/>, <see cref="IsEditing"/>,
+        /// <see cref="RecoveryModel"/>, <see cref="ValidatableObject.IsValid"/>, and
+        /// <see cref="ValidatableObject.HasErrors"/>. When all properties change, a state change is assumed to be true.</remarks>
         protected virtual bool TriggersStateChange( string propertyName )
         {
             switch ( propertyName )
             {
+#pragma warning disable SA1025 // Code should not contain multiple whitespace in a row
                 case nameof( IsChanged ):       // IChangeTracking.IsChanged
                 case nameof( IsEditing ):       // EditableObject.IsEditing
                 case nameof( RecoveryModel ):   // EditableObject.IsEditing
@@ -193,12 +194,15 @@
                 case nameof( HasErrors ):       // INotifyDataErrorInfo.HasErrors
                 case "Error":                   // IDataErrorInfo.Error
                     return false;
+#pragma warning restore SA1025 // Code should not contain multiple whitespace in a row
             }
 
             return true;
         }
 
+#pragma warning disable CA2222 // Do not decrease inherited member visibility
         void OnPropertyChanged( PropertyChangedEventArgs e, bool suppressStateChange )
+#pragma warning restore CA2222 // Do not decrease inherited member visibility
         {
             Contract.Requires( e != null );
 
@@ -300,7 +304,7 @@
         /// <summary>
         /// Rejects any modifications made to the object and resets its state to unchanged.
         /// </summary>
-        /// <remarks>All changes are rejected since the last call to <see cref="M:AcceptChanges"/>.  If <see cref="M:AcceptChanges"/> has never
+        /// <remarks>All changes are rejected since the last call to <see cref="AcceptChanges"/>.  If <see cref="AcceptChanges"/> has never
         /// been called, then the state of the object reverts to its original initialization state.</remarks>
         public virtual void RejectChanges()
         {

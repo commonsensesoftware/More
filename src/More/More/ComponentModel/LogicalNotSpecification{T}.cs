@@ -1,7 +1,7 @@
 ﻿namespace More.ComponentModel
 {
     using System;
-    using System.Diagnostics.Contracts; 
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Represents a specification that models a logical complement to another specification <seealso cref="Specification{T}"/>.
@@ -30,7 +30,7 @@
             get
             {
                 Contract.Ensures( Contract.Result<ISpecification<T>>() != null );
-                Contract.Assume( complement != null ); 
+                Contract.Assume( complement != null );
                 return complement;
             }
         }

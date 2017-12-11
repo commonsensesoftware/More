@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Defines the behavior of a resource locator. 
+    /// Defines the behavior of a resource locator.
     /// </summary>
     [ContractClass( typeof( IResourceLocatorContract ))]
     public interface IResourceLocator

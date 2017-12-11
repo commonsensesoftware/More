@@ -13,21 +13,23 @@
     [SuppressMessage( "Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "This is an appropriate name." )]
     [SuppressMessage( "Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A queue is a well-known collection type." )]
     [ContractClass( typeof( IQueueContract<> ) )]
-    public interface IQueue<T> : IEnumerable<T>, ICollection
+#pragma warning disable CA1010 // Collections should implement generic interface
+    public interface IQueue<T> : IReadOnlyCollection<T>, ICollection
+#pragma warning restore CA1010 // Collections should implement generic interface
     {
         /// <summary>
         /// Returns the item at the begining of the <see cref="IQueue{T}" /> without removing it.
         /// </summary>
-        /// <remarks>This method is similar to the <see cref="M:IQueue{T}.Dequeue"/> method, but
-        /// <see cref="M:IQueue{T}.Peek"/> does not modify the <see cref="IQueue{T}" />.</remarks>
+        /// <remarks>This method is similar to the <see cref="IQueue{T}.Dequeue"/> method, but
+        /// <see cref="IQueue{T}.Peek"/> does not modify the <see cref="IQueue{T}" />.</remarks>
         /// <returns>The item at the beginning of the <see cref="IQueue{T}" />.</returns>
         T Peek();
 
         /// <summary>
         /// Removes and returns the item at the beginning of the <see cref="IQueue{T}"/>.
         /// </summary>
-        /// <remarks>This method is similar to the <see cref="M:IQueue{T}.Peek"/> method, but
-        /// <see cref="M:IQueue{T}.Peek"/> does not modify the <see cref="IQueue{T}" />.</remarks>
+        /// <remarks>This method is similar to the <see cref="IQueue{T}.Peek"/> method, but
+        /// <see cref="IQueue{T}.Peek"/> does not modify the <see cref="IQueue{T}" />.</remarks>
         /// <returns>The item removed from the beginning of the <see cref="IQueue{T}" />.</returns>
         T Dequeue();
 
@@ -48,7 +50,7 @@
         /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="ObservableQueue{T}" />. The <see cref="Array" /> must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <remarks>The items are copied onto the array in first-in-first-out (FIFO) order, similar to the order of the items returned
-        /// by a succession of calls to <see cref="M:IQueue{T}.Dequeue"/>.</remarks>
+        /// by a succession of calls to <see cref="IQueue{T}.Dequeue"/>.</remarks>
         void CopyTo( T[] array, int arrayIndex );
 
         /// <summary>

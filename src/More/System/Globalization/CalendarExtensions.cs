@@ -145,7 +145,7 @@
         /// <param name="calendar">The <see cref="Calendar"/> to get the start of the week from.</param>
         /// <param name="date">The <see cref="DateTime"/> to get the start of the week for.</param>
         /// <returns>A <see cref="DateTime"/> structure.</returns>
-        /// <remarks>The first day of the week is based on the <see cref="P:CultureInfo.CurrentCulture">current culture</see>.</remarks>
+        /// <remarks>The first day of the week is based on the <see cref="CultureInfo.CurrentCulture">current culture</see>.</remarks>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime StartOfWeek( this Calendar calendar, DateTime date )
@@ -338,7 +338,7 @@
         /// <param name="calendar">The <see cref="Calendar"/> to get the end of the week from.</param>
         /// <param name="date">The <see cref="DateTime"/> to get the end of the week for.</param>
         /// <returns>A <see cref="DateTime"/> structure.</returns>
-        /// <remarks>The first day of the week is based on the <see cref="P:CultureInfo.CurrentCulture">current culture</see>.</remarks>
+        /// <remarks>The first day of the week is based on the <see cref="CultureInfo.CurrentCulture">current culture</see>.</remarks>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static DateTime EndOfWeek( this Calendar calendar, DateTime date )
@@ -499,7 +499,7 @@
         /// </summary>
         /// <param name="calendar">The <see cref="Calendar"/> to get the week from.</param>
         /// <returns>The current week of the year.</returns>
-        /// <remarks>The first day of the week is based on the <see cref="P:CultureInfo.CurrentCulture">current culture</see>.</remarks>
+        /// <remarks>The first day of the week is based on the <see cref="CultureInfo.CurrentCulture">current culture</see>.</remarks>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int CurrentWeek( this Calendar calendar )
@@ -532,7 +532,7 @@
         /// <param name="calendar">The <see cref="Calendar"/> to get the week from.</param>
         /// <param name="date">The <see cref="DateTime"/> to get the week of the year from.</param>
         /// <returns>The week of the year.</returns>
-        /// <remarks>The first day of the week is based on the <see cref="P:CultureInfo.CurrentCulture">current culture</see>.</remarks>
+        /// <remarks>The first day of the week is based on the <see cref="CultureInfo.CurrentCulture">current culture</see>.</remarks>
         [Pure]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static int Week( this Calendar calendar, DateTime date )

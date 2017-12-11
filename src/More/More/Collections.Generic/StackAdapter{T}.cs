@@ -11,7 +11,9 @@
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> of elements in the stack.</typeparam>
     [SuppressMessage( "Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is an adapter for a stack." )]
+#pragma warning disable CA1010 // Collections should implement generic interface
     public sealed class StackAdapter<T> : IStack<T>
+#pragma warning restore CA1010 // Collections should implement generic interface
     {
         readonly Stack<T> stack;
 

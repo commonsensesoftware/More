@@ -128,6 +128,7 @@
         /// Returns all services of the given type.
         /// </summary>
         /// <typeparam name="TService">The <see cref="Type">type</see> of service requested.</typeparam>
+        /// <param name="serviceProvider">The extended <see cref="IServiceProvider"/> object.</param>
         /// <returns>A <see cref="IEnumerable{T}">sequence</see> of services of the requested <typeparamref name="TService">type</typeparamref>.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
@@ -359,7 +360,7 @@
                 yield break;
             }
 
-            foreach ( object service in services )
+            foreach ( var service in services )
             {
                 yield return (TService) service;
             }

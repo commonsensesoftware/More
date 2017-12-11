@@ -282,7 +282,7 @@
         /// Occurs when a property value has changed.
         /// </summary>
         /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have
-        /// changed by using either <c>null</c>or <see cref="F:String.Empty"/> as the property
+        /// changed by using either <c>null</c>or <see cref="string.Empty"/> as the property
         /// name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -328,11 +328,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs.Acton"/> as <see cref="T:NotifyCollectionChangedAction.Remove"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Remove"/></description>
         ///     </item>
         /// </list>
         /// </para>
@@ -348,7 +348,7 @@
 
             var index = PopItem( out var local );
 
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, local, index ) );
 
             return local;
@@ -373,11 +373,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs.Acton"/> as <see cref="T:NotifyCollectionChangedAction.Add"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Add"/></description>
         ///     </item>
         /// </list>
         /// </para>
@@ -386,7 +386,7 @@
         {
             var index = PushItem( item );
 
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
         }
 
@@ -485,11 +485,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs.Acton"/> as <see cref="T:NotifyCollectionChangedAction.Reset"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Reset"/></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -499,7 +499,7 @@
             Array.Clear( items, 0, size );
             size = 0;
             version++;
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 

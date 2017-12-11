@@ -17,7 +17,7 @@
         protected ObservableObject() { }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event for the supplied property name.
+        /// Raises the <see cref="PropertyChanged"/> event for the supplied property name.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed. The default value is the name of the
         /// member the method is invoked from<seealso cref="CallerMemberNameAttribute"/>.</param>
@@ -25,7 +25,7 @@
         protected void OnPropertyChanged( [CallerMemberName] string propertyName = null ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// Raises the <see cref="PropertyChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected virtual void OnPropertyChanged( PropertyChangedEventArgs e )
@@ -35,12 +35,12 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event when all properties have changed.
+        /// Raises the <see cref="PropertyChanged"/> event when all properties have changed.
         /// </summary>
         protected void OnAllPropertiesChanged() => OnPropertyChanged( new PropertyChangedEventArgs( string.Empty ) );
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanging"/> event.
+        /// Occurs when a property is about to change.
         /// </summary>
         /// <typeparam name="TValue">The <see cref="Type">type</see> of property value.</typeparam>
         /// <param name="backingField">The value of the property backing field.</param>
@@ -48,17 +48,17 @@
         /// <param name="propertyName">The name of the property that changed. The default value is the name of the
         /// member the method is invoked from<seealso cref="CallerMemberNameAttribute"/>.</param>
         /// <returns>True if the property is changing; otherwise false.</returns>
-        /// <remarks>Value comparisons are performed using <see cref="M:IEquatable{T}.Equals"/> when implemented; otherwise, <see cref="M:Object.Equals"/> is used.  In addition,
-        /// values of type <see cref="String">string</see> leverage the <see cref="P:StringComparer.Ordinal"/>.</remarks>
+        /// <remarks>Value comparisons are performed using <see cref="IEquatable{T}.Equals"/> when implemented; otherwise, <see cref="object.Equals(object)"/> is used.  In addition,
+        /// values of type <see cref="string">string</see> leverage the <see cref="StringComparer.Ordinal"/>.</remarks>
         /// <example>This example illustrates testing whether a property is changing.
         /// <code lang="C#"><![CDATA[
         /// using System;
         /// using System.ComponentModel;
-        /// 
+        ///
         /// public class MyObject : ObservableObject
         /// {
         ///     private int count;
-        ///     
+        ///
         ///     public int Count
         ///     {
         ///         get
@@ -71,7 +71,7 @@
         ///             {
         ///                 return;
         ///             }
-        ///                 
+        ///
         ///             count = value;
         ///             OnPropertyChanged();
         ///         }
@@ -87,7 +87,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanging"/> event.
+        /// Occurs when a property is about to change.
         /// </summary>
         /// <typeparam name="TValue">The <see cref="Type">type</see> of property value.</typeparam>
         /// <param name="backingField">The value of the property backing field.</param>
@@ -96,15 +96,15 @@
         /// <param name="propertyName">The name of the property that changed. The default value is the name of the
         /// member the method is invoked from<seealso cref="CallerMemberNameAttribute"/>.</param>
         /// <returns>True if the property is changing; otherwise false.</returns>
-        /// <example>This example illustrates testing whether a property is changing while considering <see cref="String">string</see> casing.
+        /// <example>This example illustrates testing whether a property is changing while considering <see cref="string">string</see> casing.
         /// <code lang="C#"><![CDATA[
         /// using System;
         /// using System.ComponentModel;
-        /// 
+        ///
         /// public class MyObject : ObservableObject
         /// {
         ///     private string name;
-        ///     
+        ///
         ///     public string Name
         ///     {
         ///         get
@@ -117,7 +117,7 @@
         ///             {
         ///                 return;
         ///             }
-        ///                 
+        ///
         ///             name = value;
         ///             OnPropertyChanged();
         ///         }
@@ -147,11 +147,11 @@
         /// <code lang="C#"><![CDATA[
         /// using System;
         /// using System.ComponentModel;
-        /// 
+        ///
         /// public class MyObject : ObservableObject
         /// {
         ///     private int count;
-        ///     
+        ///
         ///     public int Count
         ///     {
         ///         get
@@ -188,11 +188,11 @@
         /// <code lang="C#"><![CDATA[
         /// using System;
         /// using System.ComponentModel;
-        /// 
+        ///
         /// public class MyObject : ObservableObject
         /// {
         ///     private string name;
-        ///     
+        ///
         ///     public string Name
         ///     {
         ///         get
@@ -228,7 +228,7 @@
         /// Occurs when a property value changes.
         /// </summary>
         /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have changed by using either
-        /// <c>null</c>or <see cref="F:String.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
+        /// <c>null</c>or <see cref="string.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

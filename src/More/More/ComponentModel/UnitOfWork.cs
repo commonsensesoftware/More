@@ -53,8 +53,8 @@
         /// Gets default the <see cref="IUnitOfWorkFactoryProvider">unit of work factory provider</see> used for all units of work.
         /// </summary>
         /// <value>A <see cref="IUnitOfWorkFactoryProvider">unit of work factory provider</see>.</value>
-        /// <remarks>This property typically only used to evaluate whether the current <see cref="P:Provider">provider</see> is
-        /// the default provider or to reset the current <see cref="P:Provider">provider</see> back to its default state.</remarks>
+        /// <remarks>This property typically only used to evaluate whether the current <see cref="Provider">provider</see> is
+        /// the default provider or to reset the current <see cref="Provider">provider</see> back to its default state.</remarks>
         public static IUnitOfWorkFactoryProvider DefaultProvider
         {
             get

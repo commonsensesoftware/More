@@ -13,6 +13,7 @@ static class Arg
         {
             throw new ArgumentNullException( paramName );
         }
+
         Contract.EndContractBlock();
     }
 
@@ -25,6 +26,7 @@ static class Arg
         {
             throw new ArgumentNullException( paramName );
         }
+
         Contract.EndContractBlock();
     }
 

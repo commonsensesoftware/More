@@ -16,21 +16,21 @@
         /// <param name="value">The extended, formattable object of type <typeparamref name="TFormattable"/>.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/> used to format the value.</param>
         /// <param name="format">The string format applied to the value.</param>
-        /// <returns>The formatted <see cref="String">string</see> representation of the value.</returns>
-        /// <remarks>This method differs from <see cref="M:IFormattable.ToString(T:String,T:IFormatProvider)"/> by leveraging <see cref="ICustomFormatter"/>
+        /// <returns>The formatted <see cref="string">string</see> representation of the value.</returns>
+        /// <remarks>This method differs from <see cref="IFormattable.ToString(string,IFormatProvider)"/> by leveraging <see cref="ICustomFormatter"/>
         /// if the supplied <see cref="IFormatProvider"/> supports it.</remarks>
         /// <example>This example demonstrates how using the an implementation of ToString which will leverage the <see cref="ICustomFormatter"/> interface.
         /// <code lang="C#">
         /// <![CDATA[
         /// using System;
         /// using System.Globalization;
-        /// 
+        ///
         /// var calendar = new GregorianFiscalCalendar( 7 );
         /// var formatProvider = new DateTimeFormatProvider( calendar );
         /// var dateTime = new DateTime( 2010, 7, 1 );
-        /// 
+        ///
         /// Console.WriteLine( dateTime.ToString( formatProvider, "'FY'yy, SSS, qqq, 'M'M, 'D'd" ) );
-        /// 
+        ///
         /// // prints: "FY11, H1, Q1, M1, D1"
         /// }
         /// ]]>
@@ -40,7 +40,7 @@
         {
             Arg.NotNull( value, nameof( value ) );
             Arg.NotNullOrEmpty( format, nameof( format ) );
-            Contract.Ensures( Contract.Result<string>() != null ); 
+            Contract.Ensures( Contract.Result<string>() != null );
 
             if ( formatProvider == null )
             {

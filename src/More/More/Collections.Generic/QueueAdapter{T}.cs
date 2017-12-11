@@ -11,7 +11,9 @@
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> of elements in the queue.</typeparam>
     [SuppressMessage( "Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is an adapter for a queue." )]
+#pragma warning disable CA1010 // Collections should implement generic interface
     public sealed class QueueAdapter<T> : IQueue<T>
+#pragma warning restore CA1010 // Collections should implement generic interface
     {
         readonly Queue<T> queue;
 
@@ -59,12 +61,12 @@
         /// Adds an object to the end of the <see cref="IQueue{T}">queue</see>.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="IQueue{T}">queue</see>.</param>
-        public void Enqueue( T item ) =>             queue.Enqueue( item );
+        public void Enqueue( T item ) => queue.Enqueue( item );
 
         /// <summary>
         /// Removes all objects from the <see cref="QueueAdapter{T}">queue</see>.
         /// </summary>
-        public void Clear() =>             queue.Clear();
+        public void Clear() => queue.Clear();
 
         /// <summary>
         /// Copies the elements of the <see cref="QueueAdapter{T}">queue</see> to an <see cref="Array">array</see>,
@@ -72,7 +74,7 @@
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="Array">array</see> that is the destination of the elements
         /// copied from the <see cref="QueueAdapter{T}">queue</see>. The <see cref="Array">array</see> must have zero-based indexing.</param>
-        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>        
+        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <remarks>
         /// <para>The elements are copied onto the array in first-in-first-out (FIFO) order, similar to the order
         /// of the elements returned by a succession of calls to <see cref="Dequeue"/>.</para>
@@ -81,7 +83,7 @@
         public void CopyTo( T[] array, int arrayIndex )
         {
             Arg.NotNull( array, nameof( array ) );
-            Arg.InRange( arrayIndex, 0, array.Length + Count, nameof(arrayIndex) );
+            Arg.InRange( arrayIndex, 0, array.Length + Count, nameof( arrayIndex ) );
 
             queue.CopyTo( array, arrayIndex );
         }
@@ -104,7 +106,7 @@
         IEnumerator IEnumerable.GetEnumerator() => queue.GetEnumerator();
 
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Handled by the adapted object." )]
-        void ICollection.CopyTo( Array array, int index ) =>             ( (ICollection) queue ).CopyTo( array, index );
+        void ICollection.CopyTo( Array array, int index ) => ( (ICollection) queue ).CopyTo( array, index );
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="QueueAdapter{T}">queue</see>.

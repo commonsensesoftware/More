@@ -13,21 +13,23 @@ namespace More.Collections.Generic
     [SuppressMessage( "Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "This is an appropriate name." )]
     [SuppressMessage( "Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A stack is a well-known collection type." )]
     [ContractClass( typeof( IStackContract<> ) )]
-    public interface IStack<T> : IEnumerable<T>, ICollection
+#pragma warning disable CA1010 // Collections should implement generic interface
+    public interface IStack<T> : IReadOnlyCollection<T>, ICollection
+#pragma warning restore CA1010 // Collections should implement generic interface
     {
         /// <summary>
         /// Returns the item at the top of the <see cref="IStack{T}" /> without removing it.
         /// </summary>
-        /// <remarks>This method is similar to the <see cref="M:IStack{T}.Pop"/> method, but
-        /// <see cref="M:IStack{T}.Peek"/> does not modify the <see cref="IStack{T}" />.</remarks>
+        /// <remarks>This method is similar to the <see cref="IStack{T}.Pop"/> method, but
+        /// <see cref="IStack{T}.Peek"/> does not modify the <see cref="IStack{T}" />.</remarks>
         /// <returns>The item at the top of the <see cref="IStack{T}" />.</returns>
         T Peek();
 
         /// <summary>
         /// Removes and returns the item at the top of the <see cref="IStack{T}" />.
         /// </summary>
-        /// <remarks>This method is similar to the <see cref="M:IStack{T}.Peek"/> method, but
-        /// <see cref="M:IStack{T}.Peek"/> does not modify the <see cref="IStack{T}" />.</remarks>
+        /// <remarks>This method is similar to the <see cref="IStack{T}.Peek"/> method, but
+        /// <see cref="IStack{T}.Peek"/> does not modify the <see cref="IStack{T}" />.</remarks>
         /// <returns>The item removed from the top of the <see cref="IStack{T}" />.</returns>
         T Pop();
 

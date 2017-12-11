@@ -57,6 +57,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{119BE16B
 		tools\custom-dictionary.xml = tools\custom-dictionary.xml
 		tools\fix-xaml-type-info.csx = tools\fix-xaml-type-info.csx
 		tools\more.snk = tools\more.snk
+		tools\stylecop.json = tools\stylecop.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "More.Tests", "test\More.Tests\More.Tests.csproj", "{3A917CAD-688F-4D3B-9A29-3BA80E1A6C07}"

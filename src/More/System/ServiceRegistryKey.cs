@@ -61,7 +61,7 @@
         /// <summary>
         /// Returns a value indicating whether the specified object equals the current instance.
         /// </summary>
-        /// <param name="obj">The other <see cref="Object">object</see> to evaluate for equality.</param>
+        /// <param name="obj">The other <see cref="object">object</see> to evaluate for equality.</param>
         /// <returns>True if the <paramref name="obj">object</paramref> equals the current instance; otherwise, false.</returns>
         public override bool Equals( object obj ) => Equals( obj as ServiceRegistryKey );
 

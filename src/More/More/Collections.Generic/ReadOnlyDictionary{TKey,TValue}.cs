@@ -39,7 +39,7 @@
 
             if ( dictionary is INotifyCollectionChanged collectionChanged )
             {
-                collectionChanged.CollectionChanged += ( s, e ) => OnCollectionChanged( e );
+                collectionChanged.CollectionChanged += OnInnerCollectionChanged;
             }
         }
 
@@ -293,6 +293,8 @@
                 return syncRoot;
             }
         }
+
+        void OnInnerCollectionChanged( object sender, NotifyCollectionChangedEventArgs e ) => OnCollectionChanged( e );
 
         /// <summary>
         /// Occurs when a property value has changed.

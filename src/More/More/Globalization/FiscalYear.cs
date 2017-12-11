@@ -73,7 +73,7 @@
         /// <summary>
         /// Returns the string equivalent of the current instance.
         /// </summary>
-        /// <returns>A <see cref="String"/> object.</returns>
+        /// <returns>A <see cref="string"/> object.</returns>
         public override string ToString() =>
             string.Format( CurrentCulture, "FirstDay = {0:d}, LastDay = {1:d}", FirstDay, LastDay );
     }

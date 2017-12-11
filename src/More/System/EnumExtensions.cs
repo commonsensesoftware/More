@@ -21,16 +21,16 @@
         /// <code lang="C#"><![CDATA[
         /// using System;
         /// using System.ComponentModel.DataAnnotations;
-        /// 
+        ///
         /// public enum WeekPart
         /// {
         ///    [Display( Name = "First Day of the Week" )]
         ///    FirstDayOfWeek,
-        ///    
+        ///
         ///    [Display( Name = "Last Day of the Week" )]
         ///    LastDayOfWeek
         /// }
-        /// 
+        ///
         /// Console.WriteLine( WeekPart.FirstDayOfWeek.GetDisplayName() );
         /// ]]></code>
         /// </example>
@@ -54,23 +54,23 @@
         /// </summary>
         /// <param name="enumValue">The <see cref="Enum">enumeration</see> to get a description from.</param>
         /// <returns>The description for the enumeration or the enumeration name if no description is defined.</returns>
-        /// <remarks>The description value will first be evaluated from the <see cref="P:DisplayAttribute.Description"/> property.</remarks>
+        /// <remarks>The description value will first be evaluated from the <see cref="DisplayAttribute.Description"/> property.</remarks>
         /// <example>This example demonstrates to define and retrieve the description for an enumeration. The DescriptionAttribute can only
         /// be used in a Windows Desktop application.
         /// <code lang="C#"><![CDATA[
         /// using System;
         /// using System.ComponentModel;
         /// using System.ComponentModel.DataAnnotations;
-        /// 
+        ///
         /// public enum WeekPart
         /// {
         ///    [Display( Description = "First Day of the Week" )]
         ///    FirstDayOfWeek,
-        ///    
+        ///
         ///    [Display( Description = "Last Day of the Week" )]
         ///    LastDayOfWeek
         /// }
-        /// 
+        ///
         /// Console.WriteLine( WeekPart.FirstDayOfWeek.GetDescription() );
         /// ]]></code>
         /// </example>

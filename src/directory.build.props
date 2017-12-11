@@ -8,8 +8,7 @@
   <ImportGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' ">
     <Import Project="..\build\common.props" />
     <Import Project="..\build\signing.props" />
-    <!-- TODO: enable code analysis -->
-    <Import Project="..\build\code-analysis.props" Condition="false" />
+    <Import Project="..\build\code-analysis.props" />
     <Import Project="..\build\nuget.props" />
   </ImportGroup>
 

@@ -27,14 +27,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberTransaction{T}"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <remarks>All public, supported members are enlisted.</remarks>
         protected MemberTransaction( object target ) : this( target, member => true, SnapshotStrategy.Default ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberTransaction{T}"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
         /// <remarks>All public, supported members are enlisted.</remarks>
@@ -43,7 +43,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberTransaction{T}"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="memberNames">A <see cref="IEnumerable{T}">sequence</see> of member names to enlist in the transaction.</param>
         protected MemberTransaction( object target, IEnumerable<string> memberNames )
             : this( target, member => ( memberNames ?? Enumerable.Empty<string>() ).Contains( member.Name ), SnapshotStrategy.Default )
@@ -54,7 +54,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberTransaction{T}"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="memberNames">A <see cref="IEnumerable{T}">sequence</see> of member names to enlist in the transaction.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
@@ -67,14 +67,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberTransaction{T}"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="memberFilter">A <see cref="Func{T1,TResult}">function</see> used to filter transacted members.</param>
         protected MemberTransaction( object target, Func<T, bool> memberFilter ) : this( target, memberFilter, SnapshotStrategy.Default ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberTransaction{T}"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="memberFilter">A <see cref="Func{T1,TResult}">function</see> used to filter transacted members.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
@@ -105,7 +105,7 @@
         /// <summary>
         /// Gets the object this instance is a transaction for.
         /// </summary>
-        /// <value>The transacted <see cref="Object">object</see>.</value>
+        /// <value>The transacted <see cref="object">object</see>.</value>
         protected object Instance
         {
             get
@@ -190,7 +190,7 @@
         /// Creates and returns a state key for the specified member.
         /// </summary>
         /// <param name="member">The member of type <typeparamref name="T"/> to create a state key for.</param>
-        /// <returns>A <see cref="String">string</see> representing the state key.</returns>
+        /// <returns>A <see cref="string">string</see> representing the state key.</returns>
         protected virtual string CreateStateKey( T member )
         {
             Arg.NotNull( member, nameof( member ) );

@@ -1,12 +1,12 @@
 ﻿namespace More.ComponentModel
 {
     using System;
-    using System.Diagnostics.Contracts; 
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Defines the behavior of an edit transaction.
     /// </summary>
-    [ContractClass( typeof( IEditTransactionContract ) )] 
+    [ContractClass( typeof( IEditTransactionContract ) )]
     public interface IEditTransaction
     {
         /// <summary>

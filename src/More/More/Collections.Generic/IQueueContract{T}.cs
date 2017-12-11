@@ -39,6 +39,8 @@
 
         IEnumerator IEnumerable.GetEnumerator() => null;
 
+        int IReadOnlyCollection<T>.Count => default( int );
+
         void ICollection.CopyTo( Array array, int index ) { }
 
         int ICollection.Count => default( int );

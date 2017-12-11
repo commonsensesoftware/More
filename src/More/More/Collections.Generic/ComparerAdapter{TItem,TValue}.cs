@@ -14,12 +14,12 @@
     /// <code lang="C#"><![CDATA[
     /// using System;
     /// using System.Collections.Generic;
-    /// 
+    ///
     /// var people = new List<Person>();
     /// people.Add( new Person(){ FirstName = "Bob", LastName = "Smith" };
     /// people.Add( new Person(){ FirstName = "John", LastName = "Doe" };
     /// people.Add( new Person(){ FirstName = "Bill", LastName = "Mei" };
-    /// 
+    ///
     /// var comparer = new ComparerAdapter<Person, string>( StringComparer.OrdinalIgnoreCase, person => person.LastName );
     /// people.Sort( comparer );
     /// ]]></code>
@@ -32,8 +32,8 @@
         /// Initializes a new instance of the <see cref="ComparerAdapter{TItem,TValue}"/> class.
         /// </summary>
         /// <param name="selector">The <see cref="Func{T1,TResult}"/> used to select a value for comparison.</param>
-        /// <remarks>This constructor uses <see cref="T:Comparer{T}"/> as the adapted <see cref="IComparer{T}">comparer</see>
-        /// and <see cref="M:EqualityComparer{T}.GetHashCode"/> as the default hash code provider.</remarks>
+        /// <remarks>This constructor uses <see cref="Comparer{T}"/> as the adapted <see cref="IComparer{T}">comparer</see>
+        /// and <see cref="EqualityComparer{T}.GetHashCode"/> as the default hash code provider.</remarks>
         public ComparerAdapter( Func<TItem, TValue> selector )
             : this( Comparer<TValue>.Default, selector, EqualityComparer<TValue>.Default.GetHashCode ) { }
 
@@ -42,7 +42,7 @@
         /// </summary>
         /// <param name="comparer">The <see cref="IComparer{TItem}"/> used to compare values.</param>
         /// <param name="selector">The <see cref="Func{T1,TResult}"/> used to select a value for comparison.</param>
-        /// <remarks>This constructor uses <see cref="M:EqualityComparer{T}.GetHashCode"/> as the default hash code provider.</remarks>
+        /// <remarks>This constructor uses <see cref="EqualityComparer{T}.GetHashCode"/> as the default hash code provider.</remarks>
         public ComparerAdapter( IComparer<TValue> comparer, Func<TItem, TValue> selector )
             : this( comparer, selector, EqualityComparer<TValue>.Default.GetHashCode ) { }
 
@@ -142,7 +142,7 @@
         /// </summary>
         /// <param name="obj">The object of type <typeparamref name="TItem"/> to get a hash code for.</param>
         /// <returns>A hash code.</returns>
-        /// <remarks>This method returns the default implementation of <see cref="M:Object.GetHashCode"/>.</remarks>
+        /// <remarks>This method returns the default implementation of <see cref="object.GetHashCode"/>.</remarks>
         public virtual int GetHashCode( TItem obj ) => obj == null ? 0 : EqualityComparer.GetHashCode( obj );
 
         int IComparer.Compare( object x, object y ) => Compare( (TItem) x, (TItem) y );

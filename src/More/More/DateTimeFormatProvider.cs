@@ -7,8 +7,8 @@
     using System.Globalization;
     using System.Linq;
     using System.Text;
-    using static System.Globalization.DateTimeFormatInfo;
     using static System.Globalization.CultureInfo;
+    using static System.Globalization.DateTimeFormatInfo;
 
     /// <summary>
     /// Represents a custom date and time format provider, which supports the standard date and time format specifiers as well as
@@ -95,15 +95,15 @@
     /// <code lang="C#">
     /// <![CDATA[
     /// using System;
-    /// 
+    ///
     /// var formatProvider = new DateTimeFormatProvider();
     /// var dateTime = new DateTime( 2010, 7, 1 );
-    /// 
+    ///
     /// Console.WriteLine( string.Format( formatProvider, "{0:'FY'y, 'H'S, 'Q'q, 'M'M, 'D'd}", dateTime ) );
     /// Console.WriteLine( string.Format( formatProvider, "{0:'FY'yy, 'H'SS, 'Q'qq, 'M'MM, 'D'dd}", dateTime ) );
     /// Console.WriteLine( string.Format( formatProvider, "{0:'FY'yyy, SSS, qqq, MMM, 'D'd}", dateTime ) );
     /// Console.WriteLine( string.Format( formatProvider, "{0:'Fiscal Year' yyyy, SSSS, qqqq, MMMM, d}", dateTime ) );
-    /// 
+    ///
     /// // prints:
     /// // "FY10, H2, Q3, M7, D1"
     /// // "FY10, H02, Q03, M07, D01"
@@ -120,9 +120,11 @@
         /// </summary>
         sealed class DateTimeFormatToken
         {
+#pragma warning disable SA1401 // Fields should be private
             internal readonly string Format;
             internal readonly bool IsLiteral;
             internal readonly bool IsInvalid;
+#pragma warning restore SA1401 // Fields should be private
 
             internal DateTimeFormatToken( string format ) : this( format, false, false ) { }
 
@@ -373,7 +375,7 @@
         /// Gets the calendar associated with the format provider.
         /// </summary>
         /// <value>A <see cref="Calendar"/> object.</value>
-        /// <remarks>The <see cref="P:DateTimeFormatInfo.Calendar"/> cannot be assigned to a custom calendar.  This property provides the
+        /// <remarks>The <see cref="DateTimeFormatInfo.Calendar"/> cannot be assigned to a custom calendar.  This property provides the
         /// ability to use a custom calendar if one is specified in the constructor.</remarks>
         protected Calendar Calendar
         {
@@ -441,7 +443,7 @@
         /// <param name="value">The <see cref="DateTime"/> to format the year for.</param>
         /// <param name="format">The format string for the year segment of the date.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/> used to apply the format.</param>
-        /// <returns>A formatted <see cref="String">string</see> representing the year.</returns>
+        /// <returns>A formatted <see cref="string">string</see> representing the year.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatYearPart( DateTime value, string format, IFormatProvider formatProvider )
         {
@@ -468,7 +470,7 @@
         /// <param name="value">The <see cref="DateTime"/> to format the semester for.</param>
         /// <param name="format">The format string for the semester segment of the date.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/> used to apply the format.</param>
-        /// <returns>A formatted <see cref="String">string</see> representing the semester.</returns>
+        /// <returns>A formatted <see cref="string">string</see> representing the semester.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatSemesterPart( DateTime value, string format, IFormatProvider formatProvider )
         {
@@ -495,7 +497,7 @@
         /// <param name="value">The <see cref="DateTime"/> to format the quarter for.</param>
         /// <param name="format">The format string for the quarter segment of the date.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/> used to apply the format.</param>
-        /// <returns>A formatted <see cref="String">string</see> representing the quarter.</returns>
+        /// <returns>A formatted <see cref="string">string</see> representing the quarter.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatQuarterPart( DateTime value, string format, IFormatProvider formatProvider )
         {
@@ -522,7 +524,7 @@
         /// <param name="value">The <see cref="DateTime"/> to format the month for.</param>
         /// <param name="format">The format string for the month segment of the date.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/> used to apply the format.</param>
-        /// <returns>A formatted <see cref="String">string</see> representing the month.</returns>
+        /// <returns>A formatted <see cref="string">string</see> representing the month.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatMonthPart( DateTime value, string format, IFormatProvider formatProvider )
         {
@@ -533,7 +535,6 @@
             // When the ordinal month value is needed, we differ to the calendar; otherwise, we
             // just use the default DateTime.Month because the DateTimeFormatInfo does not understand
             // translated months (ex: a custom calendar such as GregorianFiscalCalendar)
-
             switch ( format.Length )
             {
                 case 1: // M
@@ -554,7 +555,7 @@
         /// <param name="value">The <see cref="DateTime"/> to format.</param>
         /// <param name="format">The format string for the date segment.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/> used to apply the format.</param>
-        /// <returns>A formatted <see cref="String">string</see> representing the date part indicated by the format string.</returns>
+        /// <returns>A formatted <see cref="string">string</see> representing the date part indicated by the format string.</returns>
         /// <remarks>This method is invoked for all standard date part formats that are not overriden such as day, time, and time zone.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract" )]
         protected virtual string FormatDatePart( DateTime value, string format, IFormatProvider formatProvider )
@@ -599,7 +600,7 @@
         /// <param name="format">The format string to apply to the argument.</param>
         /// <param name="arg">The argument to format.</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/> used to format the argument.</param>
-        /// <returns>A <see cref="String">string</see> represeting the formatted argument.</returns>
+        /// <returns>A <see cref="string">string</see> represeting the formatted argument.</returns>
         public virtual string Format( string format, object arg, IFormatProvider formatProvider )
         {
             if ( !( arg is DateTime ) )

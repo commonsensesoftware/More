@@ -71,7 +71,7 @@
         /// Returns the zero-based index of the element in the sequence.
         /// </summary>
         /// <param name="sequence">The <see cref="IEnumerable">sequence</see> to search.</param>
-        /// <param name="item">The <see cref="Object"/> item to locate.</param>
+        /// <param name="item">The <see cref="object"/> item to locate.</param>
         /// <returns>The zero-based index the specified item or -1 if no match is found.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]
         public static int IndexOf( this IEnumerable sequence, object item ) => IndexOf( sequence, item, EqualityComparer<object>.Default );
@@ -80,7 +80,7 @@
         /// Returns the zero-based index of the element in the sequence.
         /// </summary>
         /// <param name="sequence">The <see cref="IEnumerable"/> to search.</param>
-        /// <param name="item">The <see cref="Object"/> value to locate.</param>
+        /// <param name="item">The <see cref="object"/> value to locate.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer"/> used to compare items for equality.</param>
         /// <returns>The zero-based index the specified item or -1 if no match is found.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by code contract." )]

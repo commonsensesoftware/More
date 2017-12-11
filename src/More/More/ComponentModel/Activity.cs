@@ -21,23 +21,6 @@
     [DebuggerDisplay( "IsCompleted = {IsCompleted}, Name = {Name}" )]
     public abstract class Activity : ObservableObject, IActivity
     {
-        sealed class ActivityMetadata
-        {
-            internal readonly Guid Id;
-            internal string Name;
-            internal string Description;
-
-            internal ActivityMetadata( Guid id, string name, string description )
-            {
-                Contract.Requires( !string.IsNullOrEmpty( name ) );
-                Contract.Requires( description != null );
-
-                Id = id;
-                Name = name;
-                Description = description;
-            }
-        }
-
         readonly Lazy<ActivityMetadata> metadata;
         readonly ObservableCollection<IActivity> dependencies = new ObservableCollection<IActivity>();
         Guid? instanceId;
@@ -128,7 +111,7 @@
         /// Logs a message with the specified format and format arguments.
         /// </summary>
         /// <param name="format">The format of the message to log.</param>
-        /// <param name="args">An array of type <see cref="Object"/> containing the formatting arguments.</param>
+        /// <param name="args">An array of type <see cref="object"/> containing the formatting arguments.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "args", Justification = "Consistency; same name as parameter in String.Format." )]
         protected void Log( string format, object[] args )
         {
@@ -204,7 +187,6 @@
             switch ( e.Action )
             {
                 case NotifyCollectionChangedAction.Add:
-                    {
                         if ( e.NewItems == null )
                         {
                             break;
@@ -216,9 +198,7 @@
                         }
 
                         break;
-                    }
                 case NotifyCollectionChangedAction.Remove:
-                    {
                         if ( e.OldItems == null )
                         {
                             break;
@@ -230,9 +210,7 @@
                         }
 
                         break;
-                    }
                 case NotifyCollectionChangedAction.Replace:
-                    {
                         if ( e.OldItems != null )
                         {
                             foreach ( var oldItem in e.OldItems.OfType<IActivity>() )
@@ -251,7 +229,6 @@
                         }
 
                         break;
-                    }
             }
 
             OnCanExecuteChanged( EventArgs.Empty );
@@ -260,7 +237,7 @@
         /// <summary>
         /// Returns a value indicating whether the current instance equals the specified object.
         /// </summary>
-        /// <param name="obj">The <see cref="Object"/> to evaluate.</param>
+        /// <param name="obj">The <see cref="object"/> to evaluate.</param>
         /// <returns>True if the current instance equals the specified object; otherwise, false.</returns>
         public override bool Equals( object obj ) => Equals( obj as IActivity );
 
@@ -389,7 +366,7 @@
         /// </summary>
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> associated with the activity.</param>
         /// <returns>True if the activity can execute; otherwise, false.</returns>
-        /// <remarks>The default implementation returns true if all <see cref="P:Dependencies"/> are completed; otherwise, false.</remarks>
+        /// <remarks>The default implementation returns true if all <see cref="Dependencies"/> are completed; otherwise, false.</remarks>
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "serviceProvider", Justification = "False positive" )]
         public virtual bool CanExecute( IServiceProvider serviceProvider )
         {
@@ -429,8 +406,9 @@
             {
                 return false;
             }
-            else if ( !GetType().Equals( other.GetType() ) ) // must be the same type of activity
+            else if ( !GetType().Equals( other.GetType() ) )
             {
+                // must be the same type of activity
                 return false;
             }
 
@@ -440,19 +418,38 @@
         /// <summary>
         /// Returns a value indicating whether the activity can execute.
         /// </summary>
-        /// <param name="parameter">A parameter <see cref="Object"/> pass to the command.</param>
+        /// <param name="parameter">A parameter <see cref="object"/> pass to the command.</param>
         /// <returns>True if the activity can execute; otherwise, false.</returns>
         bool ICommand.CanExecute( object parameter ) => CanExecute( (IServiceProvider) parameter );
 
         /// <summary>
         /// Executes the activity.
         /// </summary>
-        /// <param name="parameter">A parameter <see cref="Object"/> pass to the command.</param>
+        /// <param name="parameter">A parameter <see cref="object"/> pass to the command.</param>
         void ICommand.Execute( object parameter ) => Execute( (IServiceProvider) parameter );
 
         /// <summary>
         /// Occurs when the ability for the activity to execute has changed.
         /// </summary>
         public event EventHandler CanExecuteChanged;
+
+        sealed class ActivityMetadata
+        {
+#pragma warning disable SA1401 // Fields should be private
+            internal readonly Guid Id;
+            internal string Name;
+            internal string Description;
+#pragma warning restore SA1401 // Fields should be private
+
+            internal ActivityMetadata( Guid id, string name, string description )
+            {
+                Contract.Requires( !string.IsNullOrEmpty( name ) );
+                Contract.Requires( description != null );
+
+                Id = id;
+                Name = name;
+                Description = description;
+            }
+        }
     }
 }

@@ -13,14 +13,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <remarks>All public, supported fields are enlisted.</remarks>
         public FieldTransaction( object target ) : base( target ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
         /// <remarks>All public, supported fields are enlisted.</remarks>
@@ -29,14 +29,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="fieldNames">A <see cref="IEnumerable{FieldInfo}">sequence</see> of field names to enlist in the transaction.</param>
         public FieldTransaction( object target, IEnumerable<string> fieldNames ) : base( target, fieldNames ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="fieldNames">A <see cref="IEnumerable{FieldInfo}">sequence</see> of field names to enlist in the transaction.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
@@ -46,14 +46,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="filter">A <see cref="Func{T1,TResult}">function</see> used to filter transacted fields.</param>
         public FieldTransaction( object target, Func<FieldInfo, bool> filter ) : base( target, filter ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="filter">A <see cref="Func{T1,TResult}">function</see> used to filter transacted fields.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>

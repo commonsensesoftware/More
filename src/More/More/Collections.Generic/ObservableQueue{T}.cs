@@ -124,14 +124,14 @@
         public ObservableQueue( IEqualityComparer<T> comparer ) : this( EmptyArray, comparer ) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObservableQueue{T}" /> class that contains elements copied from the specified 
+        /// Initializes a new instance of the <see cref="ObservableQueue{T}" /> class that contains elements copied from the specified
         /// sequence and has sufficient capacity to accommodate the number of elements copied.
         /// </summary>
         /// <param name="sequence">The sequence whose elements are copied to the new <see cref="ObservableQueue{T}">stack</see>.</param>
         public ObservableQueue( IEnumerable<T> sequence ) : this( sequence, EqualityComparer<T>.Default ) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObservableQueue{T}" /> class that contains elements copied from the specified 
+        /// Initializes a new instance of the <see cref="ObservableQueue{T}" /> class that contains elements copied from the specified
         /// sequence and has sufficient capacity to accommodate the number of elements copied.
         /// </summary>
         /// <param name="sequence">The sequence whose elements are copied to the new <see cref="ObservableQueue{T}">stack</see>.</param>
@@ -332,7 +332,7 @@
         /// Occurs when a property value has changed.
         /// </summary>
         /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have
-        /// changed by using either <c>null</c>or <see cref="F:String.Empty"/> as the
+        /// changed by using either <c>null</c>or <see cref="string.Empty"/> as the
         /// property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -379,11 +379,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs.Acton"/> as <see cref="T:NotifyCollectionChangedAction.Remove"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Remove"/></description>
         ///     </item>
         /// </list>
         /// </para>
@@ -399,7 +399,7 @@
 
             T local;
             var index = DequeueItem( out local );
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, local, index ) );
             return local;
         }
@@ -425,11 +425,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs.Acton"/> as <see cref="T:NotifyCollectionChangedAction.Add"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Add"/></description>
         ///     </item>
         /// </list>
         /// </para>
@@ -437,7 +437,7 @@
         public virtual void Enqueue( T item )
         {
             var index = EnqueueItem( item );
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, item, index ) );
         }
 
@@ -461,7 +461,7 @@
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="Array">array</see> that is the destination of the elements
         /// copied from the <see cref="ObservableQueue{T}">queue</see>. The <see cref="Array">array</see> must have zero-based indexing.</param>
-        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>        
+        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <remarks>
         /// <para>The elements are copied onto the array in first-in-first-out (FIFO) order, similar to the order
         /// of the elements returned by a succession of calls to <see cref="Dequeue"/>.</para>
@@ -543,11 +543,11 @@
         ///     </listheader>
         ///     <item>
         ///         <term><see cref="PropertyChanged"/></term>
-        ///         <description>The <see cref="P:PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
+        ///         <description>The <see cref="PropertyChangedEventArgs.PropertyName"/> as "Count"</description>
         ///     </item>
         ///     <item>
         ///         <term><see cref="CollectionChanged"/></term>
-        ///         <description>The <see cref="P:NotifyCollectionChangedEventArgs.Acton"/> as <see cref="T:NotifyCollectionChangedAction.Reset"/></description>
+        ///         <description>The <see cref="NotifyCollectionChangedEventArgs.Action"/> as <see cref="NotifyCollectionChangedAction.Reset"/></description>
         ///     </item>
         /// </list>
         /// </remarks>
@@ -568,7 +568,7 @@
             size = 0;
             version++;
 
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 

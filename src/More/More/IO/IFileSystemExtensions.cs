@@ -25,7 +25,7 @@
 
             try
             {
-                return await fileSystem.GetFileAsync( path );
+                return await fileSystem.GetFileAsync( path ).ConfigureAwait( false );
             }
             catch ( IOException )
             {
@@ -55,7 +55,7 @@
 
             try
             {
-                return await fileSystem.GetFileAsync( uri );
+                return await fileSystem.GetFileAsync( uri ).ConfigureAwait( false );
             }
             catch ( IOException )
             {
@@ -85,7 +85,7 @@
 
             try
             {
-                return await fileSystem.GetFolderAsync( path );
+                return await fileSystem.GetFolderAsync( path ).ConfigureAwait( false );
             }
             catch ( IOException )
             {

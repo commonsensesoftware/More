@@ -13,14 +13,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <remarks>All public, supported properties are enlisted.</remarks>
         public PropertyTransaction( object target ) : base( target ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
         /// <remarks>All public, supported properties are enlisted.</remarks>
@@ -29,7 +29,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="propertyNames">A <see cref="IEnumerable{PropertyInfo}">sequence</see> of property names to enlist in the transaction.</param>
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "propertyNames", Justification = "False positive" )]
         [SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "propertyNames[]", Justification = "False positive" )]
@@ -38,7 +38,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="propertyNames">A <see cref="IEnumerable{PropertyInfo}">sequence</see> of property names to enlist in the transaction.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>
@@ -48,14 +48,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="filter">A <see cref="Func{T1,TResult}">function</see> used to filter transacted properties.</param>
         public PropertyTransaction( object target, Func<PropertyInfo, bool> filter ) : base( target, filter ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyTransaction"/> class.
         /// </summary>
-        /// <param name="target">The target <see cref="Object">object</see> for the transaction.</param>
+        /// <param name="target">The target <see cref="object">object</see> for the transaction.</param>
         /// <param name="filter">A <see cref="Func{T1,TResult}">function</see> used to filter transacted properties.</param>
         /// <param name="editSnapshotStrategy">The <see cref="IEditSnapshotStrategy">edit snapshot strategy</see> used to
         /// snapshot savepoint values.</param>

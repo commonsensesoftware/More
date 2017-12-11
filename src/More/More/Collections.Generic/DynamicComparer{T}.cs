@@ -15,14 +15,14 @@
     /// <code lang="C#"><![CDATA[
     /// using System;
     /// using System.Collections.Generic;
-    /// 
+    ///
     /// var people = new List<Person>();
     /// people.Add( new Person(){ FirstName = "Bob", LastName = "Smith" };
     /// people.Add( new Person(){ FirstName = "John", LastName = "Doe" };
     /// people.Add( new Person(){ FirstName = "Bill", LastName = "Mei" };
-    /// 
+    ///
     /// var ascending = new DynamicComparer<Person>( ( p1, p2 ) => StringComparer.Ordinal.Compare( p1.LastName, p2.LastName ) );
-    /// 
+    ///
     /// people.Sort( ascending );
     /// ]]></code>
     /// </example>
@@ -100,7 +100,7 @@
         /// </summary>
         /// <param name="obj">The object of type <typeparamref name="T"/> to get a hash code for.</param>
         /// <returns>A hash code.</returns>
-        /// <remarks>This method returns the default implementation of <see cref="M:Object.GetHashCode"/>.</remarks>
+        /// <remarks>This method returns the default implementation of <see cref="object.GetHashCode"/>.</remarks>
         public int GetHashCode( T obj ) => getHashCode( obj );
 
         int IComparer.Compare( object x, object y ) => Compare( (T) x, (T) y );

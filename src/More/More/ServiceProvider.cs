@@ -36,9 +36,9 @@
         /// Gets the default service provider.
         /// </summary>
         /// <value>The default <see cref="IServiceProvider">service provider</see> object.</value>
-        /// <remarks>This property typically only used to evaluate whether the <see cref="P:Current">current</see>
+        /// <remarks>This property typically only used to evaluate whether the <see cref="Current">current</see>
         /// <see cref="IServiceProvider">service provider</see> is the default <see cref="IServiceProvider">service provider</see> or to
-        /// <see cref="M:SetCurrent">set the current</see> <see cref="IServiceProvider">service provider</see> back to its default instance.</remarks>
+        /// <see cref="SetCurrent(IServiceProvider)">set the current</see> <see cref="IServiceProvider">service provider</see> back to its default instance.</remarks>
         public static IServiceProvider Default
         {
             get
@@ -52,7 +52,7 @@
         /// Gets the current service provider.
         /// </summary>
         /// <value>The current <see cref="IServiceProvider">service provider</see> object. The default
-        /// value is the <see cref="P:Default">default</see> <see cref="IServiceProvider">service provider</see>.</value>
+        /// value is the <see cref="Default">default</see> <see cref="IServiceProvider">service provider</see>.</value>
         public static IServiceProvider Current
         {
             get

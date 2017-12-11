@@ -287,7 +287,7 @@
         /// <![CDATA[
         /// using System;
         /// using System.Collections.Generic;
-        /// 
+        ///
         /// public static void Main( params string[] args )
         /// {
         ///     // create nested sequences of nodes
@@ -299,7 +299,7 @@
         ///         },
         ///         new Node<string>( "1.2" )
         ///     };
-        ///     
+        ///
         ///     // flatten all nodes, including the root, and write them to the console
         ///     node.SelfAndFlatten().ForEach( n => Console.WriteLine( n.Value ) );
         /// }
@@ -336,7 +336,7 @@
         /// <![CDATA[
         /// using System;
         /// using System.Collections.Generic;
-        /// 
+        ///
         /// public static void Main( params string[] args )
         /// {
         ///     // create nested sequences of nodes
@@ -348,7 +348,7 @@
         ///         },
         ///         new Node<string>( "1.2" )
         ///     };
-        ///     
+        ///
         ///     // flatten all children and write them to the console
         ///     node.Flatten().ForEach( n => Console.WriteLine( n.Value ) );
         /// }
@@ -372,7 +372,6 @@
             // different from the other versions of Flatten, which could be confusing to consumers.
             //
             // return sequence.Union( sequence.SelectMany( i => i.Flatten() ) );
-
             return sequence.SelectMany( i => new[] { i }.Union( i.Flatten() ) );
         }
 
@@ -389,26 +388,26 @@
         /// <![CDATA[
         /// using System;
         /// using System.Collections.Generic;
-        /// 
+        ///
         /// public class TreeNode<T>
         /// {
         ///     private readonly List<TreeNode<T>> children = new List<TreeNode<T>>();
-        /// 
+        ///
         ///     public TreeNode()
         ///     {
         ///     }
-        ///     
+        ///
         ///     public TreeNode( T value )
         ///     {
         ///         this.Value = value;
         ///     }
-        /// 
+        ///
         ///     public T Value
         ///     {
         ///         get;
         ///         set;
         ///     }
-        ///     
+        ///
         ///     public IList<TreeNode<T>> Children
         ///     {
         ///         get
@@ -417,7 +416,7 @@
         ///         }
         ///     }
         /// }
-        /// 
+        ///
         /// public static void Main( params string[] args )
         /// {
         ///     var root = new TreeNode<string>( "1" )
@@ -436,11 +435,11 @@
         ///     };
         ///     var nodes = new List<TreeNode<string>>();
         ///     nodes.Add( root );
-        ///     
+        ///
         ///     // flatten all nodes in the list, their children, and write them to the console
         ///     nodes.Flatten( n => n.Children ).ForEach( n => Console.WriteLine( n.Value ) );
         /// }
-        /// 
+        ///
         /// ]]>
         /// </code>
         /// <para>
@@ -464,7 +463,6 @@
             // different from the other versions of Flatten, which could be confusing to developers.
             //
             // return sequence.Union( sequence.SelectMany( i => selector( i ).Flatten( selector ) ) );
-
             return sequence.SelectMany( i => new[] { i }.Union( selector( i ).Flatten( selector ) ) );
         }
     }

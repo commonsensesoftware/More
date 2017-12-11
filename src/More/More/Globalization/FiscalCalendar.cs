@@ -65,13 +65,13 @@
         /// <summary>
         /// Gets the earliest date and time supported by <see cref="FiscalCalendar" /> object.
         /// </summary>
-        /// <value>The earliest date and time supported by this calendar. The default is <see cref="F:System.DateTime.MinValue" />.</value>
+        /// <value>The earliest date and time supported by this calendar. The default is <see cref="System.DateTime.MinValue" />.</value>
         public override DateTime MinSupportedDateTime => calendarYears.First().FirstDay;
 
         /// <summary>
-        /// Gets the latest date and time supported by this <see cref="T:System.Globalization.Calendar" /> object.
+        /// Gets the latest date and time supported by this <see cref="System.Globalization.Calendar" /> object.
         /// </summary>
-        /// <value>The latest date and time supported by this calendar. The default is <see cref="F:System.DateTime.MaxValue" />.</value>
+        /// <value>The latest date and time supported by this calendar. The default is <see cref="System.DateTime.MaxValue" />.</value>
         public override DateTime MaxSupportedDateTime => calendarYears.Last().LastDay;
 
         /// <summary>
