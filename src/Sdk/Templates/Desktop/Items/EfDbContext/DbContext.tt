@@ -52,7 +52,7 @@
   </packages>
  </WizardData>
  <WizardExtension>
-  <Assembly>More.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
+  <Assembly>More.VisualStudio.TemplateWizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5e67f9a3da787917</Assembly>
   <FullClassName>More.VisualStudio.Templates.DbContextTemplateWizard</FullClassName>
  </WizardExtension>
 </VSTemplate>
