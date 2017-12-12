@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
  <PropertyGroup Label="Configuration">
-  <VersionPrefix>1.2.1</VersionPrefix>
-  <AssemblyVersion>1.2.0.0</AssemblyVersion>
+  <VersionPrefix>1.3.0</VersionPrefix>
+  <AssemblyVersion>1.3.0.0</AssemblyVersion>
   <TargetFramework>netstandard1.0</TargetFramework>
   <AssemblyTitle>More - Composition</AssemblyTitle>
   <Description>The composition library for the "More" framework.</Description>

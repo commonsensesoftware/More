@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
  <PropertyGroup Label="Configuration">
-  <VersionPrefix>1.2.4</VersionPrefix>
-  <AssemblyVersion>1.2.0.1</AssemblyVersion>
+  <VersionPrefix>1.3.0</VersionPrefix>
+  <AssemblyVersion>1.3.0.0</AssemblyVersion>
   <TargetFrameworks>net45;netstandard1.5;uap10.0</TargetFrameworks>
   <AssemblyTitle>More - Extensions</AssemblyTitle>
   <Description>The platform-specific extensions for the "More" framework.</Description>

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
  <PropertyGroup Label="Configuration">
-  <VersionPrefix>1.1.2</VersionPrefix>
-  <AssemblyVersion>1.1.0.0</AssemblyVersion>
+  <VersionPrefix>1.2.0</VersionPrefix>
+  <AssemblyVersion>1.2.0.0</AssemblyVersion>
   <TargetFramework>net45</TargetFramework>
   <AssemblyTitle>More - ASP.NET Web API Hosting</AssemblyTitle>
   <Description>The Microsoft ASP.NET Web API hosting library for the "More" framework.</Description>
