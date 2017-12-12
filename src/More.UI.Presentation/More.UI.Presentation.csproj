@@ -96,18 +96,15 @@
   <Compile Include="**\*.cs" Exclude="obj\**\*.*;Platforms\**\*.cs" />
   <Compile Include="Platforms\$(TargetFramework)\**\*.cs" />
  </ItemGroup>
- 
+
  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-  <Resource Include="Platforms\net45\More\Windows.Media.Effects\GrayscaleEffect.ps" />
-  <Page Include="Platforms\$(TargetFramework)\Themes\Generic.xaml" Generator="MSBuild:Compile" SubType="Designer" />
+  <Resource Include="Platforms\net45\More\Windows.Media.Effects\GrayscaleEffect.ps" Link="More\Windows.Media.Effects\GrayscaleEffect.ps" />
+  <Page Include="Platforms\$(TargetFramework)\Themes\Generic.xaml" Generator="MSBuild:Compile" SubType="Designer" Link="Themes\Generic.xaml" />
  </ItemGroup>
 
  <ItemGroup Condition=" '$(TargetFramework)' != 'net45' ">
 
-  <Page Include="Platforms\$(TargetFramework)\Themes\Generic.xaml">
-   <Generator>MSBuild:Compile</Generator>
-   <SubType>Designer</SubType>
-  </Page>
+  <Page Include="Platforms\$(TargetFramework)\Themes\Generic.xaml" Generator="MSBuild:Compile" SubType="Designer" />
 
  </ItemGroup>
 
