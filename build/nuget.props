@@ -20,7 +20,7 @@
   <ReleaseNotes Include="$(BuildReleaseNotes.Split('|'))" />
  </ItemGroup>
 
- <PropertyGroup Condition=" '$(Configuration)' == 'Release' " Label="NuGet">
+ <PropertyGroup Label="NuGet">
   <GenerateDocumentationFile>true</GenerateDocumentationFile>
   <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
  </PropertyGroup>
