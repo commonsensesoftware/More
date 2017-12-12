@@ -21,7 +21,11 @@
 
         protected ReplacementsMapper() : this( default( Project ) ) { }
 
-        protected ReplacementsMapper( Project project ) => windowPhoneApp = project == null ? new Lazy<bool>( () => false ) : new Lazy<bool>( Project.IsWindowsPhoneApp );
+        protected ReplacementsMapper( Project project )
+        {
+            Project = project;
+            windowPhoneApp = project == null ? new Lazy<bool>( () => false ) : new Lazy<bool>( Project.IsWindowsPhoneApp );
+        }
 
         protected Project Project { get; }
 
@@ -197,7 +201,7 @@
 
             foreach ( var binder in binders )
             {
-                if ( replacements.TryGetValue( binder.Key, out var value ) )
+                if ( !binder.IsWriteOnly && replacements.TryGetValue( binder.Key, out var value ) )
                 {
                     binder.AssignTo( model, value );
                 }
@@ -215,7 +219,7 @@
 
             foreach ( var binder in binders )
             {
-                if ( replacements.ContainsKey( binder.Key ) )
+                if ( !binder.IsReadOnly && replacements.ContainsKey( binder.Key ) )
                 {
                     replacements[binder.Key] = binder.AssignFrom( model );
                 }

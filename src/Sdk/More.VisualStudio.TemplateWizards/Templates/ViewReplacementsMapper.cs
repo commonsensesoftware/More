@@ -12,6 +12,8 @@
     [SuppressMessage( "Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Required by the VS template wizard engine." )]
     sealed class ViewReplacementsMapper : ReplacementsMapper<ViewItemTemplateWizardViewModel>
     {
+        const int CreateNewViewModel = 1;
+        const int SelectExistingViewModel = 2;
         const string ViewModelNamespace = "{0}.ViewModels";
         const string OptionNameResKey = "{0}Option";
         const string OptionDescResKey = "View{0}OptionDesc";
@@ -99,9 +101,9 @@
 
             switch ( model.ViewModelOption )
             {
-                case 1: // create new view model
+                case CreateNewViewModel:
                     return model.ViewModelName;
-                case 2: // select existing view model
+                case SelectExistingViewModel:
                     return model.ViewModelType.Name;
             }
 
@@ -115,17 +117,15 @@
 
             switch ( model.ViewModelOption )
             {
-                case 1: // create new view model
+                case CreateNewViewModel:
                     {
                         string rootNamespace = null;
 
-                        // get root namespace from project
                         if ( Project != null )
                         {
                             rootNamespace = Project.GetRootNamespace();
                         }
 
-                        // if empty or unset in the project, try getting the root namespace from replacement parameters
                         if ( string.IsNullOrEmpty( rootNamespace ) )
                         {
                             rootNamespace = GetReplacement( "$rootnamespace$" );
@@ -133,7 +133,7 @@
 
                         return ViewModelNamespace.FormatInvariant( rootNamespace );
                     }
-                case 2: // select existing view model
+                case SelectExistingViewModel:
                     {
                         return model.ViewModelType.Namespace;
                     }

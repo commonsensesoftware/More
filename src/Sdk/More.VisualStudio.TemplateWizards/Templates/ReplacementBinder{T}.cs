@@ -23,6 +23,7 @@
                 }
                 else
                 {
+                    this.assignFrom = m => default( string );
                     IsReadOnly = true;
                 }
             }
