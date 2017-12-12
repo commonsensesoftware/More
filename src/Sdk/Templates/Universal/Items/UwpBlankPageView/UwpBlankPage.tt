@@ -26,7 +26,7 @@
   <ProjectItem SubType="Code" TargetFileName="$fileinputname$.xaml.cs" ReplaceParameters="true">BlankPage.xaml.cs</ProjectItem>
   <CustomParameters>
    <CustomParameter Name="_views" Value="PageOnly,ImplementIViewT,ImplementIViewTT" />
-   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\WsPageViewModel.zip" />
+   <CustomParameter Name="_viewModelTemplateName" Value="More\Code\1033\UwpPageViewModel.zip" />
    <CustomParameter Name="_interactions" Value="OpenFile,SaveFile,SelectFolder,TextInput,SelectContact" />
    <CustomParameter Name="_contracts" Value="Settings,Search,AppSearch,Share,AppShare" />
    <CustomParameter Name="$showTips$" Value="true" />
