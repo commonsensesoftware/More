@@ -51,8 +51,8 @@
         /// </summary>
         /// <param name="context">An <see cref="ITypeDescriptorContext"/> that provides a format context.</param>
         /// <param name="culture">The <see cref="CultureInfo"/> to use as the current culture.</param>
-        /// <param name="value">The <see cref="Object"/> to convert.</param>
-        /// <returns>An <see cref="Object"/> that represents the converted value.</returns>
+        /// <param name="value">The <see cref="object"/> to convert.</param>
+        /// <returns>An <see cref="object"/> that represents the converted value.</returns>
         public override object ConvertFrom( ITypeDescriptorContext context, CultureInfo culture, object value )
         {
             if ( value == null )

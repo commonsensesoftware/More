@@ -51,12 +51,12 @@
         }
 
         /// <summary>
-        /// Returns a <see cref="Panel">panel</see> defined in the <see cref="P:ItemsControl.ItemPanelTemplate">item panel template</see> for an <see cref="ItemsControl">items control</see>.
+        /// Returns a <see cref="Panel">panel</see> defined in the <see cref="ItemsControl.ItemsPanel">item panel template</see> for an <see cref="ItemsControl">items control</see>.
         /// </summary>
         /// <typeparam name="TPanel">The <see cref="Type">type</see> of panel to retrieve.</typeparam>
         /// <param name="control">The <see cref="ItemsControl"/> to get the <see cref="Panel">panel</see> from.</param>
         /// <returns>A <see cref="Panel">panel</see> object of type <typeparamref name="TPanel"/>.</returns>
-        /// <remarks>This method may return null if the control has not be loaded into the visual tree.  This method should only be leveraged after the <see cref="E:UIElement.Loaded"/> event.</remarks>
+        /// <remarks>This method may return null if the control has not be loaded into the visual tree.  This method should only be leveraged after the Loaded event.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Only valid for ItemsControl controls." )]
         public static TPanel GetItemsPanel<TPanel>( this ItemsControl control ) where TPanel : Panel
         {

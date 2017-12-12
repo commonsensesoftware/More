@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
+    using global::Windows.Storage.Streams;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using global::Windows.Storage.Streams;
 
     /// <summary>
     /// Defines the behavior of a search suggestion request.

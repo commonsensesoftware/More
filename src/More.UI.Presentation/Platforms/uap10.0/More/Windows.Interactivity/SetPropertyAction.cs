@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using System;
     using global::Windows.UI.Xaml;
+    using System;
 
     /// <content>
     /// Provides additional implementation specific to Windows Runtime applications.

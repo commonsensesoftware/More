@@ -22,7 +22,7 @@
     /// Represents an application composition host.
     /// </summary>
     [SuppressMessage( "Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Service containers and locators may have high coupling." )]
-    public partial class Host : ServiceContainer, ICompositionService, IDisposable
+    public partial class Host : ServiceContainer, ICompositionService
     {
         static readonly Type[] ExportedInterfaces = new[] { typeof( IServiceContainer ), typeof( ICompositionService ), typeof( IServiceProvider ) };
         static readonly Type[] ExportedTypes = new[] { typeof( CompositionContext ), typeof( CompositionHost ) };
@@ -145,8 +145,8 @@
 
             var newContainer = config.CreateContainer();
 
-            base.AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
-            base.AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
+            AddService( typeof( IFileSystem ), ( sc, t ) => new FileSystem() );
+            AddService( typeof( IValidator ), ( sc, t ) => new ValidatorAdapter() );
             AddPlatformSpecificDefaultServices();
 
             return newContainer;
@@ -313,7 +313,7 @@
         /// using System.Composition;
         /// using System.Composition.Hosting;
         /// using System;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     [STAThread]
@@ -346,7 +346,7 @@
         /// using System.Composition;
         /// using System.Composition.Hosting;
         /// using System;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     [STAThread]
@@ -401,19 +401,19 @@
         /// using System.ComponentModel;
         /// using System.Composition;
         /// using System.Composition.Hosting;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     [STAThread]
         ///     public static void Main()
         ///     {
         ///         var configRoot = new Uri( "myconfig.xml", UriKind.Relative );
-        ///         
+        ///
         ///         using ( var host = new Host() )
         ///         {
         ///             // register startup activity
         ///             host.Register<LoadConfiguration>();
-        ///             
+        ///
         ///             // get configuration and define new configuration operation
         ///             host.WithConfiguration<LoadConfiguration>().Configure( lc => lc.ConfigurationRoot = configRoot );
         ///         }
@@ -456,14 +456,14 @@
             CheckDisposed();
 
             var @new = callback;
-            ServiceCreatorCallback composedCallback = ( c, t ) =>
+            object ComposeCallback( IServiceContainer container, Type type )
             {
-                var instance = @new( c, t );
+                var instance = @new( container, type );
                 Container.SatisfyImports( instance );
                 return instance;
-            };
+            }
 
-            base.AddService( serviceType, composedCallback, promote );
+            base.AddService( serviceType, ComposeCallback, promote );
         }
 
         /// <summary>
@@ -482,7 +482,9 @@
             return GetService( serviceType, key );
         }
 
+#pragma warning disable CA2222 // Do not decrease inherited member visibility
         object GetService( Type serviceType, string key )
+#pragma warning restore CA2222 // Do not decrease inherited member visibility
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
             CheckDisposed();

@@ -1,9 +1,9 @@
 ﻿namespace System.Windows.Data
 {
+    using global::Windows.UI.Xaml.Data;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml.Data;
 
     /// <summary>
     /// Provides extension methods for the <see cref="Binding"/> class.

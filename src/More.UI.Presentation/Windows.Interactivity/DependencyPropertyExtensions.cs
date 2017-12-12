@@ -3,9 +3,9 @@
     using System;
     using System.Diagnostics.Contracts;
 #if UAP10_0
-    using System.Windows.Data;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
+    using System.Windows.Data;
 #else
     using System.Windows;
     using System.Windows.Data;

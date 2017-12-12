@@ -1,5 +1,7 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.Storage.Pickers;
+    using global::Windows.UI.Xaml;
     using Input;
     using System;
     using System.Collections.Generic;
@@ -8,12 +10,10 @@
     using System.Linq;
     using System.Threading.Tasks;
     using IFile = IO.IFile;
-    using global::Windows.UI.Xaml;
-    using global::Windows.Storage.Pickers;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to open a file for the
-    /// <see cref="OpenFileInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to open a file for the
+    /// <see cref="OpenFileInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     [CLSCompliant( false )]
     public class OpenFileAction : System.Windows.Interactivity.TriggerAction
@@ -33,7 +33,7 @@
         /// <summary>
         /// Gets or sets the view mode that the file open picker uses to display items.
         /// </summary>
-        /// <value>One of the <see cref="ViewMode"/> values. The default value is <see cref="F:PickerViewMode.List"/>.</value>
+        /// <value>One of the <see cref="ViewMode"/> values. The default value is <see cref="PickerViewMode.List"/>.</value>
         public PickerViewMode ViewMode { get; set; }
 
         async Task<IReadOnlyList<IFile>> OpenFilesAsync( OpenFileInteraction openFile )
@@ -72,7 +72,7 @@
                 return new[] { file.AsFile() };
             }
 
-            return new IFile[0];
+            return Array.Empty<IFile>();
         }
 
         static void InvokeCallbackCommand( OpenFileInteraction openFile, IReadOnlyList<IFile> files )
@@ -106,7 +106,7 @@
                 return;
             }
 
-            var files = await OpenFilesAsync( openFile );
+            var files = await OpenFilesAsync( openFile ).ConfigureAwait( true );
             InvokeCallbackCommand( openFile, files );
         }
     }

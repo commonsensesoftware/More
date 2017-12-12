@@ -42,7 +42,7 @@
         /// <summary>
         /// Evaluates the rule.
         /// </summary>
-        /// <param name="item">The <see cref="String">string</see> to evalute.</param>
+        /// <param name="item">The <see cref="string">string</see> to evalute.</param>
         /// <returns>True if the rule is satisified; otherwise, false.</returns>
         public virtual bool Evaluate( string item ) =>
             !IsNullOrEmpty( RegexPattern ) && IsMatch( item, RegexPattern, Singleline );

@@ -1,19 +1,19 @@
 ﻿namespace More.Windows.Input
 {
+    using global::Windows.ApplicationModel.Contacts;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Threading.Tasks;
     using System.Linq;
-    using global::Windows.ApplicationModel.Contacts;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Provides extension methods for the <see cref="InteractionRequest{T}"/> class.
     /// </summary>
     public static class InteractionRequestExtensions
     {
-        static readonly IReadOnlyList<ContactFieldType> DefaultDesiredFields = new ContactFieldType[0];
-        static readonly IList<Contact> NoContacts = new Contact[0];
+        static readonly IReadOnlyList<ContactFieldType> DefaultDesiredFields = Array.Empty<ContactFieldType>();
+        static readonly IList<Contact> NoContacts = Array.Empty<Contact>();
 
         /// <summary>
         /// Requests a single contact selection interaction asynchronously.
@@ -87,8 +87,8 @@
                 Commands =
                 {
                     new NamedCommand<object>( "Select", selectButtonText, p => source.TrySetResult( interaction.Contacts.FirstOrDefault() ) ),
-                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.TrySetResult( null ) )
-                }
+                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.TrySetResult( null ) ),
+                },
             };
 
             interaction.DesiredFields.AddRange( desiredFields );
@@ -172,8 +172,8 @@
                 Commands =
                 {
                     new NamedCommand<object>( "Select", selectButtonText, p => source.TrySetResult( interaction.Contacts ) ),
-                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.TrySetResult( NoContacts ) )
-                }
+                    new NamedCommand<object>( "Cancel", SR.CancelCaption, p => source.TrySetResult( NoContacts ) ),
+                },
             };
 
             interaction.DesiredFields.AddRange( desiredFields );

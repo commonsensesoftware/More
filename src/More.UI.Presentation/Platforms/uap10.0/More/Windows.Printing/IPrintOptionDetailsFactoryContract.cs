@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Printing
 {
+    using global::Windows.Graphics.Printing;
+    using global::Windows.Graphics.Printing.OptionDetails;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using global::Windows.Graphics.Printing;
-    using global::Windows.Graphics.Printing.OptionDetails;
 
     /// <summary>
     /// Provides the code contract definition for the <see cref="IPrintOptionDetailsFactory"/> class.

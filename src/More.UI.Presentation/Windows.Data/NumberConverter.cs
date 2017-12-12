@@ -18,14 +18,14 @@
     /// Represents a value converter for <see cref="Number"/> values.
     /// </summary>
     /// <example>This example demonstrates how to define declarative rules to select how a <see cref="Number"/> should be formatted
-    /// according to its <see cref="P:Number.NumberStyle"/> property.
+    /// according to its <see cref="NumberStyle"/> property.
     /// <code lang="Xaml"><![CDATA[
     /// <UserControl
     ///  x:Class="MyUserControl"
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    ///  
+    ///
     /// <More:NumberConverter x:Key="NumberConverter">
     ///   <More:NumberStyleRule NumberStyle="Integer" Format="N0" />
     ///   <More:NumberStyleRule NumberStyle="Percent" Format="#,##0.##%;(#,##0.##%)" />
@@ -35,11 +35,11 @@
     ///     </More.NumberStyleRule.ValueConverter>
     ///   </More:NumberStyleRule>
     /// </More:NumberConverter>
-    /// 
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding SomeNumber, Converter={StaticResource NumberConverter}}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
 #if UAP10_0
@@ -72,7 +72,7 @@
         /// <summary>
         /// Gets or sets the default string format associated with the number style.
         /// </summary>
-        /// <value>A <see cref="String">string</see> representing the number format to apply.  This property can be null.</value>
+        /// <value>A <see cref="string">string</see> representing the number format to apply.  This property can be null.</value>
         public string DefaultFormat { get; set; }
 
         /// <summary>
@@ -162,7 +162,9 @@
             var supported = typeof( object ).Equals( targetType ) || typeof( string ).Equals( targetType ) || typeof( Number ).Equals( targetType );
 
             if ( !supported )
+            {
                 throw new ArgumentException( ExceptionMessage.UnsupportedConversionType.FormatDefault( targetType ), nameof( targetType ) );
+            }
 
             if ( value != null )
             {

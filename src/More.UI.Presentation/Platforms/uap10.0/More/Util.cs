@@ -1,13 +1,13 @@
 ﻿namespace More
 {
+    using global::Windows.UI.ViewManagement;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
     using More.Windows.Controls;
     using System;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Reflection;
-    using global::Windows.UI.ViewManagement;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
 
     static partial class Util
     {
@@ -20,7 +20,6 @@
 
             // HACK: overcomes a WinRT bug/limitation that may prevent data binding to custom dependency properties
             // that use interface types.
-
             if ( typeof( TExpected ).GetTypeInfo().IsValueType || e.OldValue == null || e.OldValue is TExpected )
             {
                 return (TExpected) e.OldValue;
@@ -35,7 +34,6 @@
 
             // HACK: overcomes a WinRT bug/limitation that may prevent data binding to custom dependency properties
             // that use interface types.
-
             if ( typeof( TExpected ).GetTypeInfo().IsValueType || e.NewValue == null || e.NewValue is TExpected )
             {
                 return (TExpected) e.NewValue;

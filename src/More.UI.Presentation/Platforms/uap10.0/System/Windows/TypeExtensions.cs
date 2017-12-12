@@ -24,7 +24,7 @@
         {
             Arg.NotNull( type, nameof( type ) );
             Contract.Ensures( Contract.Result<Uri>() != null );
-            
+
             var resourceName = XamlResourceNameFormat.FormatInvariant( type.FullName.Replace( '.', '/' ) );
             var uri = new Uri( resourceName, UriKind.Absolute );
 
@@ -34,7 +34,7 @@
         [SuppressMessage( "Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Not used by all platforms." )]
         internal static Type GetNestedPropertyType( this Type parentType, string propertyPath )
         {
-            Contract.Requires( parentType != null ); 
+            Contract.Requires( parentType != null );
 
             if ( parentType == null )
             {

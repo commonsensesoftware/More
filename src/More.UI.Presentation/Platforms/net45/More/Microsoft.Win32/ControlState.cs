@@ -6,6 +6,6 @@
     {
         Inactive,
         Enabled,
-        Visible
+        Visible,
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Media
 {
+    using global::Windows.UI.Xaml.Markup;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Threading.Tasks;
-    using global::Windows.UI.Xaml.Markup;
 
     /// <summary>
     /// Represents XAML media content.
@@ -22,7 +22,7 @@
         {
             using ( var reader = new StreamReader( stream ) )
             {
-                var xaml = await reader.ReadToEndAsync();
+                var xaml = await reader.ReadToEndAsync().ConfigureAwait( false );
                 return (T) XamlReader.Load( xaml );
             }
         }

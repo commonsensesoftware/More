@@ -8,8 +8,8 @@
     using Linq;
     using Reflection;
     using System;
-    using static System.StringSplitOptions;
     using static System.Reflection.BindingFlags;
+    using static System.StringSplitOptions;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ContainerConfiguration"/> class.
@@ -102,7 +102,7 @@
         /// </summary>
         /// <param name="configuration">The extended <see cref="ContainerConfiguration">container configuration</see>.</param>
         /// <returns>The original <see cref="ContainerConfiguration">container configuration</see>.</returns>
-        /// <remarks>This method calls the <see cref="M:WithPrivateAssemblies"/> extension method to add assemblies in any
+        /// <remarks>This method calls the <see cref="WithPrivateAssemblies(ContainerConfiguration, AttributedModelProvider)"/> extension method to add assemblies in any
         /// defined relative probing paths.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ContainerConfiguration WithAppDomain( this ContainerConfiguration configuration )
@@ -118,7 +118,7 @@
         /// <param name="configuration">The extended <see cref="ContainerConfiguration">container configuration</see>.</param>
         /// <param name="conventions">Conventions represented by a <see cref="AttributedModelProvider" /> or null.</param>
         /// <returns>The original <see cref="ContainerConfiguration">container configuration</see>.</returns>
-        /// <remarks>This method calls the <see cref="M:WithPrivateAssemblies"/> extension method to add assemblies in any
+        /// <remarks>This method calls the <see cref="WithPrivateAssemblies(ContainerConfiguration, AttributedModelProvider)"/> extension method to add assemblies in any
         /// defined relative probing paths.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static ContainerConfiguration WithAppDomain( this ContainerConfiguration configuration, AttributedModelProvider conventions )

@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Data
 {
-    using System.ComponentModel;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
 #if UAP10_0
     using global::Windows.UI;
 #else

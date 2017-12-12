@@ -28,7 +28,7 @@
 
         public string FileType => NativeStorageItem.Extension;
 
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract.")]
+        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public Task CopyAndReplaceAsync( IFile fileToReplace )
         {
             Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
@@ -55,7 +55,7 @@
             Arg.NotNull( fileToReplace, nameof( fileToReplace ) );
 
             var destinationFileName = fileToReplace.Path;
-            await fileToReplace.DeleteAsync();
+            await fileToReplace.DeleteAsync().ConfigureAwait( false );
             NativeStorageItem.MoveTo( destinationFileName );
             open = () => NativeStorageItem.Open( FileMode.Open, FileAccess.ReadWrite );
         }

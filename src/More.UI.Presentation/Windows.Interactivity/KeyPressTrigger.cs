@@ -25,7 +25,7 @@
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:Interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
     ///  xmlns:More="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.More">
-    ///  
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <StackPanel Orientation="Horizontal">
     ///   <TextBlock Text="Search text: " />
@@ -41,7 +41,7 @@
     ///   </TextBox>
     ///  </StackPanel>
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
 #if UAP10_0
@@ -58,7 +58,7 @@
         /// <summary>
         /// Gets or sets the key that invokes the trigger.
         /// </summary>
-        /// <value>The <see cref="Key">key</see> associated with the trigger.  The default value is <see cref="T:Key.Enter">ENTER</see>.</value>
+        /// <value>The <see cref="Key">key</see> associated with the trigger.  The default value is <see cref="Key.Enter">ENTER</see>.</value>
         public Key Key { get; set; }
 
         void OnKeyUp( object sender, KeyEventArgs e )

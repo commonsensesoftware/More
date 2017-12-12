@@ -22,9 +22,9 @@
     /// using System.Windows;
     /// using System.Windows.Controls;
     /// using System.Windows.Input;
-    /// 
+    ///
     /// public class Program
-    /// {   
+    /// {
     ///     public static void Main( param string[] args )
     ///     {
     ///         var messageBox = new MessageDialog()
@@ -36,7 +36,7 @@
     ///                 new NamedCommand<object>( "OK", p => { } )
     ///             }
     ///         };
-    ///         
+    ///
     ///         messageBox.ShowDialog();
     ///     }
     /// }
@@ -50,9 +50,9 @@
     /// using System.Windows;
     /// using System.Windows.Controls;
     /// using System.Windows.Input;
-    /// 
+    ///
     /// public class Program
-    /// {   
+    /// {
     ///     public static void Main( param string[] args )
     ///     {
     ///         var messageBox = new MessageDialog()
@@ -67,7 +67,7 @@
     ///                 new NamedCommand<object>( "No", p => { } )
     ///             }
     ///         };
-    ///         
+    ///
     ///         messageBox.ShowDialog();
     ///     }
     /// }
@@ -184,7 +184,7 @@
         /// Gets or sets the default command index.
         /// </summary>
         /// <value>The default command index, which is the zero-based index of the
-        /// <see cref="P:Commands">command</see> that is invoked when the ENTER key
+        /// <see cref="Commands">command</see> that is invoked when the ENTER key
         /// is pressed. The default value is -1, which indicates there is no default
         /// command.</value>
         public int DefaultCommandIndex
@@ -205,7 +205,7 @@
         /// Gets or sets the cancel command index.
         /// </summary>
         /// <value>The cancel command index, which is the zero-based index of the
-        /// <see cref="P:Commands">command</see> that is invoked when the ESC key
+        /// <see cref="Commands">command</see> that is invoked when the ESC key
         /// is pressed. The default value is -1, which indicates there is no cancel
         /// command.</value>
         public int CancelCommandIndex
@@ -327,17 +327,13 @@
             switch ( e.Key )
             {
                 case Key.Enter:
-                    {
-                        e.Handled = true;
-                        ExecuteCommand( DefaultCommandIndex );
-                        break;
-                    }
+                    e.Handled = true;
+                    ExecuteCommand( DefaultCommandIndex );
+                    break;
                 case Key.Escape:
-                    {
-                        e.Handled = true;
-                        ExecuteCommand( CancelCommandIndex );
-                        break;
-                    }
+                    e.Handled = true;
+                    ExecuteCommand( CancelCommandIndex );
+                    break;
             }
 
             base.OnKeyUp( e );

@@ -37,6 +37,6 @@
         /// Indicates the default column builder order.
         /// </summary>
         /// <value>The default value is <see cref="DisplayIndex"/> and <see cref="Ascending"/>.</value>
-        Default = DisplayIndex | Ascending
+        Default = DisplayIndex | Ascending,
     }
 }

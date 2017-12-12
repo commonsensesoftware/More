@@ -1,11 +1,11 @@
 ﻿namespace More.Windows.Controls
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
     using global::Windows.Foundation;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Media;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Represents a control that applies a layout transformation to its Content.
@@ -78,9 +78,9 @@
         /// <summary>
         /// Applies the layout transform on the control content.
         /// </summary>
-        /// <remarks>This method should only used in advanced scenarios (like animating the LayoutTransform). 
+        /// <remarks>This method should only used in advanced scenarios (like animating the LayoutTransform).
         /// This method should be used to notify the control that some aspect of its
-        /// <see cref="P:LayoutTransform"/> property has changed. 
+        /// <see cref="LayoutTransform"/> property has changed.
         /// </remarks>
         public void ApplyLayoutTransform() => ProcessTransform( LayoutTransform );
 
@@ -105,7 +105,6 @@
 
             // NOTE: WPF equivalent of this entire method:
             // return transform.Value;
-
             if ( transform is TransformGroup transformGroup )
             {
                 var groupMatrix = Matrix.Identity;

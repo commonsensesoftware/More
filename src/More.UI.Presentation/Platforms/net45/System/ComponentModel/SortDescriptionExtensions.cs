@@ -4,7 +4,6 @@
     using More.Windows.Data;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -176,16 +175,16 @@
         /// using System.Windows;
         /// using System.Windows.Controls;
         /// using System.Windows.Data;
-        /// 
+        ///
         /// public partial class MyUserControl : UserControl
         /// {
         ///     private readonly List<MyData> items = new List<MyData>();
-        ///     internal DataPager DataPager; 
-        ///     
+        ///     internal DataPager DataPager;
+        ///
         ///     private void Task<PagedItemCollection<MyData>> GetMyDataAsync( PagingArguments args )
         ///     {
         ///         // TODO: populate the list
-        ///         
+        ///
         ///         IEnumerable<MyData> pagedItems = this.items;
         ///
         ///         if ( args.SortDescriptions.Any() )
@@ -194,10 +193,10 @@
         ///         }
         ///
         ///         pagedItems = pagedItems.Skip( args.InitialIndex ).Take( args.PageSize ).ToArray();
-        ///         
+        ///
         ///         return Task.FromResult( new PagedItemCollection<MyData>( pagedItems, this.items.Count ) );
         ///     }
-        ///     
+        ///
         ///     public MyUserControl()
         ///     {
         ///         this.InitializeComponent();
@@ -216,19 +215,13 @@
             switch ( sortDescription.Direction )
             {
                 case ListSortDirection.Ascending:
-                    {
-                        sortMethod = ordered ? nameof( Queryable.ThenBy ) : nameof( Queryable.OrderBy );
-                        break;
-                    }
+                    sortMethod = ordered ? nameof( Queryable.ThenBy ) : nameof( Queryable.OrderBy );
+                    break;
                 case ListSortDirection.Descending:
-                    {
-                        sortMethod = ordered ? nameof( Queryable.ThenByDescending ) : nameof( Queryable.OrderByDescending );
-                        break;
-                    }
+                    sortMethod = ordered ? nameof( Queryable.ThenByDescending ) : nameof( Queryable.OrderByDescending );
+                    break;
                 default:
-                    {
-                        return sequence;
-                    }
+                    return sequence;
             }
 
             return InvokeEnumerable<T>( sequence, sortMethod, sortDescription.PropertyName, ordered );
@@ -253,31 +246,31 @@
         /// using System.Windows;
         /// using System.Windows.Controls;
         /// using System.Windows.Data;
-        /// 
+        ///
         /// public partial class MyUserControl : UserControl
         /// {
         ///     private readonly MyEntityContext context = new MyEntityContext();
-        ///     internal DataPager DataPager; 
-        ///     
+        ///     internal DataPager DataPager;
+        ///
         ///     private async void Task<PagedItemCollection<MyData>> GetMyDataAsync( PagingArguments args )
         ///     {
         ///         // build data query
         ///         var query = from data in this.context.MyDataCollection
         ///                     select data;
-        ///                     
+        ///
         ///         // apply sort description
         ///         if ( args.SortDescriptions.Any() )
         ///         {
         ///             query = query.ApplySortDescription( args.SortDescriptions.First() );
         ///         }
-        ///         
+        ///
         ///         // make the query a paged request
         ///         query = query.Skip( args.InitialIndex ).Take( args.PageSize );
         ///
         ///         // include the total number of items that match the query
         ///         var service = ( (DataServiceQuery<MyData>) query ).IncludeTotalCount();
         ///         IEnumerable<MyData> result = null;
-        ///         
+        ///
         ///         try
         ///         {
         ///             result = await Task<IEnumerable<MyData>>.Factory.FromAsync( service.BeginExecute, service.EndExecute );
@@ -288,11 +281,11 @@
         ///             MessageBox.Show( ex.Message ) );
         ///             return new PagedCollection<MyData>( Enumerable.Empty<MyData>(), 0L );
         ///         }
-        ///         
+        ///
         ///         var response = result as QueryOperationResponse<MyData>;
         ///         return new PagedCollection<MyData>( response.ToArray(), response.TotalCount );
         ///     }
-        ///     
+        ///
         ///     public MyUserControl()
         ///     {
         ///         this.InitializeComponent();
@@ -312,33 +305,29 @@
             switch ( sortDescription.Direction )
             {
                 case ListSortDirection.Ascending:
+                    if ( ordered = IsQueryableOrdered( sequence.Expression ) )
                     {
-                        if ( ordered = IsQueryableOrdered( sequence.Expression ) )
-                        {
-                            sortMethod = nameof( Queryable.ThenBy );
-                        }
-                        else
-                        {
-                            sortMethod = nameof( Queryable.OrderBy );
-                        }
-                        break;
+                        sortMethod = nameof( Queryable.ThenBy );
                     }
+                    else
+                    {
+                        sortMethod = nameof( Queryable.OrderBy );
+                    }
+
+                    break;
                 case ListSortDirection.Descending:
+                    if ( ordered = IsQueryableOrdered( sequence.Expression ) )
                     {
-                        if ( ordered = IsQueryableOrdered( sequence.Expression ) )
-                        {
-                            sortMethod = nameof( Queryable.ThenByDescending );
-                        }
-                        else
-                        {
-                            sortMethod = nameof( Queryable.OrderByDescending );
-                        }
-                        break;
+                        sortMethod = nameof( Queryable.ThenByDescending );
                     }
+                    else
+                    {
+                        sortMethod = nameof( Queryable.OrderByDescending );
+                    }
+
+                    break;
                 default:
-                    {
-                        return sequence;
-                    }
+                    return sequence;
             }
 
             return InvokeQueryable<T>( sequence, sortMethod, sortDescription.PropertyName, ordered );
@@ -363,19 +352,19 @@
         /// using System.Windows;
         /// using System.Windows.Controls;
         /// using System.Windows.Data;
-        /// 
+        ///
         /// public partial class MyUserControl : UserControl
         /// {
         ///     private readonly List<MyData> items = new List<MyData>();
-        ///     internal DataPager DataPager; 
-        ///     
+        ///     internal DataPager DataPager;
+        ///
         ///     private void Task<PagedItemCollection<MyData>> GetMyDataAsync( PagingArguments args )
         ///     {
         ///         // TODO: populate the list
         ///         var pagedItems = this.items.ApplySortDescriptions( args.SortDescriptions ).Skip( args.InitialIndex ).Take( args.PageSize ).ToArray();
         ///         return Task.FromResult( new PagedItemCollection<MyData>( pagedItems, this.items.Count ) );
         ///     }
-        ///     
+        ///
         ///     public MyUserControl()
         ///     {
         ///         this.InitializeComponent();
@@ -418,25 +407,25 @@
         /// using System.Windows;
         /// using System.Windows.Controls;
         /// using System.Windows.Data;
-        /// 
+        ///
         /// public partial class MyUserControl : UserControl
         /// {
         ///     private readonly MyEntityContext context = new MyEntityContext();
-        ///     internal DataPager DataPager; 
-        ///     
+        ///     internal DataPager DataPager;
+        ///
         ///     private async void Task<PagedItemCollection<MyData>> GetMyDataAsync( PagingArguments args )
         ///     {
         ///         // build data query
         ///         var query = from data in this.context.MyDataCollection
         ///                     select data;
-        ///         
+        ///
         ///         // make the query a paged request
         ///         query = query.ApplySortDescriptions( args.SortDescriptions ).Skip( args.InitialIndex ).Take( args.PageSize );
         ///
         ///         // include the total number of items that match the query
         ///         var service = ( (DataServiceQuery<MyData>) query ).IncludeTotalCount();
         ///         IEnumerable<MyData> result = null;
-        ///         
+        ///
         ///         try
         ///         {
         ///             result = await Task<IEnumerable<MyData>>.Factory.FromAsync( service.BeginExecute, service.EndExecute );
@@ -447,11 +436,11 @@
         ///             MessageBox.Show( ex.Message ) );
         ///             return new PagedCollection<MyData>( Enumerable.Empty<MyData>(), 0L );
         ///         }
-        ///         
+        ///
         ///         var response = result as QueryOperationResponse<MyData>;
         ///         return new PagedCollection<MyData>( response.ToList(), response.TotalCount );
         ///     }
-        ///     
+        ///
         ///     public MyUserControl()
         ///     {
         ///         this.InitializeComponent();
@@ -506,7 +495,7 @@
         /// <param name="pagingArgs">The <see cref="PagingArguments"/> containing the sort descriptions to translate.</param>
         /// <param name="propertyNameTranslator">The <see cref="Func{T,TResult}"/> used to translate property names.</param>
         /// <returns>A <see cref="PagingArguments"/> object.</returns>
-        /// <remarks>This method is useful when property names in the <see cref="P:PagingArguments.SortDescriptions"/> do not have a one-to-one correlation to the
+        /// <remarks>This method is useful when property names in the <see cref="PagingArguments.SortDescriptions"/> do not have a one-to-one correlation to the
         /// properties of the objects being sorted. This most frequently occurs when with items that are adapted for presentation.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         public static PagingArguments Translate( this PagingArguments pagingArgs, Func<string, string> propertyNameTranslator )

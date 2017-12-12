@@ -5,6 +5,6 @@
     enum FileDialogAddPlace
     {
         Bottom,
-        Top
+        Top,
     }
 }

@@ -8,6 +8,7 @@
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using static global::Windows.UI.Xaml.GridUnitType;
+    using GridLength = global::Windows.UI.Xaml.GridLength;
 #else
     using System.Windows;
     using System.Windows.Controls;
@@ -15,7 +16,7 @@
 #endif
 
     /// <summary>
-    /// Represents an <see cref="ItemsControl"/> that uses a <see cref="Grid"/> for its <see cref="P:ItemsControl.ItemPanel"/> and dynamically creates
+    /// Represents an <see cref="ItemsControl"/> that uses a <see cref="Grid"/> for its <see cref="ItemsControl.ItemsPanel"/> and dynamically creates
     /// a row for each item in the control.
     /// </summary>
 #if UAP10_0
@@ -36,13 +37,13 @@
         /// <summary>
         /// Gets the height of a row that that uses star (*) or fill height behavior.
         /// </summary>
-        /// <value>A <see cref="T:GridLength"/> structure.</value>
+        /// <value>A <see cref="GridLength"/> structure.</value>
         protected static readonly GridLength StarRowHeight = new GridLength( 1d, Star );
 
         /// <summary>
         /// Gets the height of a row that that automatic height behavior.
         /// </summary>
-        /// <value>A <see cref="T:GridLength"/> structure.</value>
+        /// <value>A <see cref="GridLength"/> structure.</value>
         protected static readonly GridLength AutoRowHeight = GridLength.Auto;
 
         /// <summary>
@@ -51,17 +52,19 @@
         public GridItemsControl()
         {
             DefaultStyleKey = typeof( GridItemsControl );
+#pragma warning disable CA2214 // Do not call overridable methods in constructors
             Loaded += ( s, e ) => OnLoaded();
+#pragma warning restore CA2214 // Do not call overridable methods in constructors
         }
 
         /// <summary>
-        /// Gets the grid that is used as the <see cref="P:ItemsPanel">items panel</see>.
+        /// Gets the grid that is used as the <see cref="ItemsControl.ItemsPanel">items panel</see>.
         /// </summary>
         /// <value>A <see cref="Grid"/> object.</value>
         protected virtual Grid Grid => grid;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the last child element added resizes to fill the remaining space. 
+        /// Gets or sets a value indicating whether the last child element added resizes to fill the remaining space.
         /// </summary>
         /// <value>True if the last child element resizes to filll the remaining space; otherwise, false.  The default value is false.</value>
         public bool LastChildFill
@@ -106,7 +109,7 @@
         /// Returns the height for the specified row.
         /// </summary>
         /// <param name="row">The zero-based row to return the height for.</param>
-        /// <returns>A <see cref="T:GridLength"/> structure.</returns>
+        /// <returns>A <see cref="GridLength"/> structure.</returns>
         protected virtual GridLength GetRowHeight( int row )
         {
             Arg.GreaterThanOrEqualTo( row, 0, nameof( row ) );
@@ -125,7 +128,7 @@
         protected virtual void OnLoaded() => grid = this.GetItemsPanel<Grid>();
 
         /// <summary>
-        /// Occurs when the <see cref="P:LastChildFill"/> property has changed.
+        /// Occurs when the <see cref="LastChildFill"/> property has changed.
         /// </summary>
         protected virtual void OnLastChildFillChanged()
         {
@@ -142,7 +145,7 @@
         /// Overrides the default behavior when a container is prepared for an item.
         /// </summary>
         /// <param name="element">The <see cref="DependencyObject"/> representing the containing element.</param>
-        /// <param name="item">The <see cref="Object">item</see> to prepare.</param>
+        /// <param name="item">The <see cref="object">item</see> to prepare.</param>
         protected override void PrepareContainerForItemOverride( DependencyObject element, object item )
         {
             base.PrepareContainerForItemOverride( element, item );
@@ -160,7 +163,7 @@
         /// Overrides the default behavior when an item is cleared.
         /// </summary>
         /// <param name="element">The <see cref="DependencyObject"/> representing the containing element.</param>
-        /// <param name="item">The <see cref="Object">item</see> to clear the container for.</param>
+        /// <param name="item">The <see cref="object">item</see> to clear the container for.</param>
         protected override void ClearContainerForItemOverride( DependencyObject element, object item )
         {
             base.ClearContainerForItemOverride( element, item );

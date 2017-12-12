@@ -18,7 +18,9 @@
         DataGrid dataGrid;
         IList items;
         INotifyCollectionChanged itemEvents;
+#pragma warning disable SA1401 // Fields should be private
         internal readonly long Key;
+#pragma warning restore SA1401 // Fields should be private
 
         internal SelectedItemsMediator( DataGrid dataGrid, IList items, INotifyCollectionChanged itemEvents )
         {
@@ -120,7 +122,6 @@
             // The user can actually unselect a row in the UI by pressing CTRL+Click on a selected row, even while in
             // single selection mode.  To get around this problem, temporarily switch to multiselect mode, clear the
             // items, and then revert back to single selection mode.
-
             var singleSelect = dataGrid.SelectionMode == DataGridSelectionMode.Single;
 
             dataGrid.SelectionMode = DataGridSelectionMode.Extended;

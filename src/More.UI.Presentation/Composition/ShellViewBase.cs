@@ -1,5 +1,4 @@
-﻿
-namespace More.Composition
+﻿namespace More.Composition
 {
     using System;
     using System.ComponentModel;
@@ -17,13 +16,13 @@ namespace More.Composition
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellViewBase"/> class.
         /// </summary>
-        /// <remarks>This constructor automatically calls <see cref="M:System.Windows.Application.LoadComponent"/> for the new view.</remarks>
+        /// <remarks>This constructor automatically calls <see cref="Application.LoadComponent(object, Uri)"/> for the new view.</remarks>
         protected ShellViewBase() : this( loadComponent: true ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellViewBase"/> class.
         /// </summary>
-        /// <param name="loadComponent">Indicates whether <see cref="M:System.Windows.Application.LoadComponent"/> is invoked for the new view.</param>
+        /// <param name="loadComponent">Indicates whether <see cref="Application.LoadComponent(object, Uri)"/> is invoked for the new view.</param>
         protected ShellViewBase( bool loadComponent )
         {
             if ( loadComponent )
@@ -52,7 +51,7 @@ namespace More.Composition
         /// Occurs when a property value changes.
         /// </summary>
         /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have changed by using either
-        /// <c>null</c>or <see cref="F:String.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
+        /// <c>null</c>or <see cref="string.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

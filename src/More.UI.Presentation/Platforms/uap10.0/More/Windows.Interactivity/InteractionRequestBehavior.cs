@@ -1,5 +1,8 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.ApplicationModel;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Markup;
     using Microsoft.Xaml.Interactivity;
     using More.Windows.Input;
     using System;
@@ -7,9 +10,6 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Windows.Input;
-    using global::Windows.ApplicationModel;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Markup;
 
     /// <summary>
     /// Represents a behavior which responds to <see cref="IInteractionRequest">interaction requests</see>.
@@ -76,7 +76,7 @@
         }
 
         /// <summary>
-        /// Get a collection of actions associated with the behavior.
+        /// Gets a collection of actions associated with the behavior.
         /// </summary>
         /// <value>An <see cref="ActionCollection">action collection</see>.</value>
         public ActionCollection Actions

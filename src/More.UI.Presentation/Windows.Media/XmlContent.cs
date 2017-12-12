@@ -17,7 +17,9 @@
             Contract.Requires( stream != null );
             Contract.Ensures( Contract.Result<XDocument>() != null );
 
-            using ( var reader = XmlReader.Create( stream ) )
+            var settings = new XmlReaderSettings() { DtdProcessing = DtdProcessing.Prohibit };
+
+            using ( var reader = XmlReader.Create( stream, settings ) )
             {
                 return XDocument.Load( reader );
             }
@@ -29,6 +31,6 @@
         /// <param name="stream">The <see cref="Stream"/> containing the XML content to be read.</param>
         /// <returns>A <see cref="Task{T}">task</see> containing an object of type <see cref="XDocument"/>.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
-        protected override Task<XDocument> OnReadStreamAsync( Stream stream ) => Task.Run( () => Load( stream ) );
+        protected override Task<XDocument> OnReadStreamAsync( Stream stream ) => Task.FromResult( Load( stream ) );
     }
 }

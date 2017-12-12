@@ -14,7 +14,7 @@
         void BindToHandler( [In, MarshalAs( UnmanagedType.Interface )] IntPtr pbc, [In] ref Guid rbhid, [In] ref Guid riid, out IntPtr ppvOut );
 
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
-        void GetPropertyStore( [In] int Flags, [In] ref Guid riid, out IntPtr ppv );
+        void GetPropertyStore( [In] int flags, [In] ref Guid riid, out IntPtr ppv );
 
         [MethodImpl( MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime )]
         void GetPropertyDescriptionList( [In] ref PropertyKey keyType, [In] ref Guid riid, out IntPtr ppv );

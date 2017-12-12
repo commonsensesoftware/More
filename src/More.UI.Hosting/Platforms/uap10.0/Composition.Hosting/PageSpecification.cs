@@ -1,9 +1,9 @@
 ﻿namespace More.Composition.Hosting
 {
+    using global::Windows.UI.Xaml.Controls;
     using More.ComponentModel;
     using System;
     using System.Reflection;
-    using global::Windows.UI.Xaml.Controls;
 
     sealed class PageSpecification : SpecificationBase<Type>
     {

@@ -10,15 +10,15 @@
     using System.Windows;
 
     /// <summary>
-    /// Represents an <see cref="T:System.Windows.Interactivity.TriggerAction{T}">interactivity action</see> that can be used to show the
-    /// <see cref="T:Interaction">interaction</see> from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction{T}">interactivity action</see> that can be used to show the
+    /// <see cref="Interaction">interaction</see> from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     public class MessageDialogAction : System.Windows.Interactivity.TriggerAction<FrameworkElement>
     {
         /// <summary>
-        /// Prompts a user with an alert for the specified <see cref="T:Interaction">interaction</see> using a <see cref="MessageBox">message box</see>.
+        /// Prompts a user with an alert for the specified <see cref="Interaction">interaction</see> using a <see cref="MessageBox">message box</see>.
         /// </summary>
-        /// <param name="interaction">The <see cref="T:Interaction">interaction</see> to display.</param>
+        /// <param name="interaction">The <see cref="Interaction">interaction</see> to display.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Alert( Interaction interaction )
         {
@@ -52,9 +52,9 @@
         }
 
         /// <summary>
-        /// Prompts a user with the specified <see cref="T:Interaction">interaction</see> using a <see cref="MessageBox">message box</see>.
+        /// Prompts a user with the specified <see cref="Interaction">interaction</see> using a <see cref="MessageBox">message box</see>.
         /// </summary>
-        /// <param name="interaction">The <see cref="T:Interaction">interaction</see> to display.</param>
+        /// <param name="interaction">The <see cref="Interaction">interaction</see> to display.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual void Prompt( Interaction interaction )
         {

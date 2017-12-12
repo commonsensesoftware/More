@@ -1,5 +1,7 @@
 ﻿namespace More.ComponentModel
 {
+    using global::Windows.ApplicationModel;
+    using global::Windows.Storage;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Design;
@@ -8,8 +10,6 @@
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
-    using global::Windows.ApplicationModel;
-    using global::Windows.Storage;
 
     /// <summary>
     /// Provides runtime <see cref="Type">type</see> resolution services for Windows Runtime applications.
@@ -96,27 +96,21 @@
             switch ( types.Length )
             {
                 case 0:
+                    if ( throwOnError )
                     {
-                        if ( throwOnError )
-                        {
-                            throw ex;
-                        }
-
-                        return null;
+                        throw ex;
                     }
+
+                    return null;
                 case 1:
-                    {
-                        return types[0];
-                    }
+                    return types[0];
                 default:
+                    if ( throwOnError )
                     {
-                        if ( throwOnError )
-                        {
-                            throw new AmbiguousMatchException( ExceptionMessage.AmbiguousTypeName.FormatDefault( typeName ) );
-                        }
-
-                        return null;
+                        throw new AmbiguousMatchException( ExceptionMessage.AmbiguousTypeName.FormatDefault( typeName ) );
                     }
+
+                    return null;
             }
         }
 
@@ -251,8 +245,10 @@
 
         sealed class AssemblyEntry
         {
+#pragma warning disable SA1401 // Fields should be private
             internal readonly string Location;
             internal readonly Assembly Assembly;
+#pragma warning restore SA1401 // Fields should be private
 
             internal AssemblyEntry( string location, Assembly assembly )
             {

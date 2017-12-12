@@ -74,7 +74,7 @@
             OnExecuted( EventArgs.Empty );
         }
 
-        public void RaiseCanExecuteChanged() =>             command.RaiseCanExecuteChanged();
+        public void RaiseCanExecuteChanged() => command.RaiseCanExecuteChanged();
 
         public event EventHandler<EventArgs> Executed;
 

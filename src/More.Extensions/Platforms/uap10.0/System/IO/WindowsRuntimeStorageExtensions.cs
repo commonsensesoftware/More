@@ -1,9 +1,9 @@
 ﻿namespace System.IO
 {
+    using global::Windows.Storage;
     using More.IO;
     using System;
     using System.Diagnostics.Contracts;
-    using global::Windows.Storage;
     using NativeStorageItem = global::Windows.Storage.IStorageItem;
 
     /// <summary>

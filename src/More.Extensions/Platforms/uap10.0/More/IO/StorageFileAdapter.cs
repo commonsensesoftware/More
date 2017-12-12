@@ -1,11 +1,11 @@
 ﻿namespace More.IO
 {
+    using global::Windows.Storage;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Threading.Tasks;
-    using global::Windows.Storage;
 
     sealed class StorageFileAdapter : IFile, IPlatformStorageItem<StorageFile>
     {

@@ -1,20 +1,20 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.Foundation;
+    using global::Windows.UI.Popups;
+    using global::Windows.UI.Xaml;
     using More.Windows.Input;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows.Input;
-    using System.Threading.Tasks;    
-    using global::Windows.Foundation;
-    using global::Windows.UI.Popups;
-    using global::Windows.UI.Xaml;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to show the <see cref="Interaction">interaction</see>
-    /// from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to show the <see cref="Interaction">interaction</see>
+    /// from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     [CLSCompliant( false )]
     public class MessageDialogAction : System.Windows.Interactivity.TriggerAction

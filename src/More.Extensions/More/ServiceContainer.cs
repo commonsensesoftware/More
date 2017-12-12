@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Design;
-    using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Reflection;
@@ -13,23 +12,14 @@
     /// </summary>
     public partial class ServiceContainer : IServiceContainer, IDisposable
     {
-        sealed class ServiceEntry : Lazy<object>
-        {
-            internal ServiceEntry( object value ) : base( () => value ) { }
-
-            internal ServiceEntry( Func<object> valueFactory, bool disposable ) : base( valueFactory ) => LifetimeIsManaged = disposable;
-
-            internal bool LifetimeIsManaged { get; }
-        }
-
         static readonly TypeInfo DisposableType = typeof( IDisposable ).GetTypeInfo();
         readonly Dictionary<ServiceRegistryKey, ServiceEntry> registry = new Dictionary<ServiceRegistryKey, ServiceEntry>();
         readonly Lazy<IServiceContainer> parent;
-        private bool disposed;
+        bool disposed;
 
         /// <summary>
-        /// Releases the managed and unmanaged resources used by the <see cref="ServiceContainer"/> class.
-        /// </summary>
+        /// Finalizes an instance of the <see cref="ServiceContainer"/> class.
+        ///         /// </summary>
         ~ServiceContainer() => Dispose( false );
 
         /// <summary>
@@ -185,8 +175,6 @@
         /// <param name="promote">True to promote this request to any parent service containers; otherwise, false.</param>
         /// <exception cref="ArgumentNullException"><paramref name="serviceType"/> or <paramref name="serviceInstance"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="serviceType"/> is not assignable from <paramref name="serviceInstance"/>.</exception>
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
-        [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "Validated by a code contract." )]
         public virtual void AddService( Type serviceType, object serviceInstance, bool promote )
         {
             Arg.NotNull( serviceType, nameof( serviceType ) );
@@ -213,7 +201,7 @@
         /// </summary>
         /// <param name="serviceType">The type of service to remove.</param>
         /// <exception cref="ArgumentNullException"><paramref name="serviceType"/> is <c>null</c>.</exception>
-        public virtual void RemoveService( Type serviceType ) =>             RemoveService( serviceType, PromoteByDefault );
+        public virtual void RemoveService( Type serviceType ) => RemoveService( serviceType, PromoteByDefault );
 
         /// <summary>
         /// Removes the specified service type from the service container, and optionally promotes the service to parent service containers.
@@ -264,7 +252,6 @@
         /// Creates a child container for the current container.
         /// </summary>
         /// <returns>A new, child <see cref="IServiceContainer">service container</see>.</returns>
-        [SuppressMessage( "Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed by the caller." )]
         public virtual IServiceContainer CreateChildContainer()
         {
             Contract.Ensures( Contract.Result<IServiceContainer>() != null );
@@ -279,6 +266,18 @@
         {
             Dispose( true );
             GC.SuppressFinalize( this );
+        }
+
+        sealed class ServiceEntry : Lazy<object>
+        {
+            internal ServiceEntry( object value ) : base( () => value ) { }
+
+            internal ServiceEntry( Func<object> valueFactory, bool disposable ) : base( valueFactory )
+            {
+                LifetimeIsManaged = disposable;
+            }
+
+            internal bool LifetimeIsManaged { get; }
         }
     }
 }

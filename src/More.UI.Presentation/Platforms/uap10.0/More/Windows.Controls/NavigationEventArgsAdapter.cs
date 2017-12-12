@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Controls
 {
+    using global::Windows.UI.Xaml.Navigation;
     using System;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml.Navigation;
-    
+
     sealed class NavigationEventArgsAdapter : INavigationEventArgs
     {
         readonly object source;

@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using Microsoft.Win32;
     using Input;
+    using Microsoft.Win32;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
@@ -9,7 +9,7 @@
 
     /// <summary>
     /// Represents an <see cref="System.Windows.Interactivity.TriggerAction{T}">interactivity action</see> that can be used to save a file for the
-    /// <see cref="SaveFileInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// <see cref="SaveFileInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     public class SaveFileAction : System.Windows.Interactivity.TriggerAction<FrameworkElement>
     {
@@ -22,7 +22,7 @@
             {
                 DefaultExt = saveFile.DefaultFileExtension,
                 Filter = saveFile.FileTypeChoices.ToFileFilter(),
-                Title = saveFile.Title
+                Title = saveFile.Title,
             };
 
             if ( !string.IsNullOrEmpty( dialog.Filter ) )

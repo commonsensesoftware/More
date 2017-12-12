@@ -1,12 +1,12 @@
 ﻿namespace More.Windows.Interactivity
 {
     using Data;
+    using global::Windows.ApplicationModel.DataTransfer;
+    using global::Windows.UI.Xaml;
     using Input;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
-    using global::Windows.ApplicationModel.DataTransfer;
-    using global::Windows.UI.Xaml;
 
     /// <summary>
     /// Represents a behavior which mediates the contract with the Share contract.
@@ -23,7 +23,7 @@
     ///   <More:ShareContractBehavior ShareRequest="{Binding InteractionRequests[Share]}" ShareCommand="{Binding Commands[Share]}" />
     ///  </i:Interaction.Behaviors>
     ///  <Grid>
-    /// 
+    ///
     ///  </Grid>
     /// </Page>
     /// ]]></code></example>
@@ -84,7 +84,7 @@
         /// Gets or sets the command that is invoked when the Share flyout is shown.
         /// </summary>
         /// <value>The <see cref="ICommand">command</see> invoked when the Share flyout is shown.</value>
-        /// <remarks>The parameter passed to the command will be an <see cref="T:IDataRequest"/>.</remarks>
+        /// <remarks>The parameter passed to the command will be an <see cref="Data.IDataRequest"/>.</remarks>
         public ICommand ShareCommand
         {
             get => (ICommand) GetValue( ShareCommandProperty );

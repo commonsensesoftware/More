@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ActivityAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ActivityConfigurationT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\ActivityConfiguration{T}.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\Host.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Composition.Hosting\HostExportDescriptorProvider.cs" />

@@ -1,6 +1,10 @@
 ﻿namespace More.Composition.Hosting
 {
     using ComponentModel;
+    using global::Windows.Storage;
+    using global::Windows.UI.Popups;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
     using IO;
     using System;
     using System.Collections.Generic;
@@ -9,10 +13,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
-    using global::Windows.Storage;
-    using global::Windows.UI.Popups;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
 
     /// <content>
     /// Provides additional implementation specific to Windows Runtime applications.
@@ -33,20 +33,20 @@
         /// using global::Windows.ApplicationModel;
         /// using global::Windows.ApplicationModel.Activation;
         /// using global::Windows.UI.Xaml;
-        /// 
+        ///
         /// public class MyShellView : ShellViewBase
         /// {
         /// }
-        ///     
+        ///
         /// [Task]
         /// public class ShowShellView : ShowShellView<MyShellView>
         /// {
         /// }
-        ///     
+        ///
         /// public sealed class App : Application
         /// {
         ///     private Host host;
-        ///     
+        ///
         ///     protected override void OnLaunched( LaunchActivatedEventArgs args )
         ///     {
         ///         host = new Host();
@@ -106,8 +106,8 @@
 
         partial void AddPlatformSpecificDefaultServices()
         {
-            base.AddService( typeof( ITypeResolutionService ), ( sc, t ) => new TypeResolutionService() );
-            base.AddService( typeof( ISessionStateManager ), ( sc, t ) => new LocalSessionStateManager( sc.GetRequiredService<IFileSystem>() ) );
+            AddService( typeof( ITypeResolutionService ), ( sc, t ) => new TypeResolutionService() );
+            AddService( typeof( ISessionStateManager ), ( sc, t ) => new LocalSessionStateManager( sc.GetRequiredService<IFileSystem>() ) );
         }
 
         static partial void AddPlatformSpecificConventions( ConventionBuilder builder )

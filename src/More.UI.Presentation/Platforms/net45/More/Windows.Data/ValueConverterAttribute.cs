@@ -21,7 +21,7 @@
             Converter.Convert( value, targetType, parameter, culture );
 
         /// <summary>
-        /// Converts a previously converted state back to the specified type. 
+        /// Converts a previously converted state back to the specified type.
         /// </summary>
         /// <param name="value">The <see cref="object"/> to be converted.</param>
         /// <param name="targetType">The destination conversion <see cref="Type"/>.</param>

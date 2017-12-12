@@ -34,7 +34,7 @@
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether <see cref="P:Type.IsAbstract">abstract</see> types are allowed.
+        /// Gets or sets a value indicating whether <see cref="Type.IsAbstract">abstract</see> types are allowed.
         /// </summary>
         /// <value>True if abstract types are allowed; otherwise false.</value>
         public virtual bool AllowAbstract
@@ -44,7 +44,7 @@
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether <see cref="P:Type.IsInterface">interface</see> types are allowed.
+        /// Gets or sets a value indicating whether <see cref="Type.IsInterface">interface</see> types are allowed.
         /// </summary>
         /// <value>True if interface types are allowed; otherwise false.</value>
         public virtual bool AllowInterface
@@ -54,7 +54,7 @@
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether <see cref="P:Type.IsGenericTypeDefinition">generic definition</see> types are allowed.
+        /// Gets or sets a value indicating whether <see cref="Type.IsGenericTypeDefinition">generic definition</see> types are allowed.
         /// </summary>
         /// <value>True if generic definition types are allowed; otherwise false.</value>
         public virtual bool AllowGenericTypeDefinition
@@ -64,9 +64,9 @@
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Object">value</see> is valid. 
+        /// Determines whether the specified <see cref="object">value</see> is valid.
         /// </summary>
-        /// <param name="value">The <see cref="Object">object</see> to validate.</param>
+        /// <param name="value">The <see cref="object">object</see> to validate.</param>
         public override void Validate( object value )
         {
             var typeToValidate = value as Type;

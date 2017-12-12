@@ -1,15 +1,15 @@
 ﻿namespace More.Composition.Hosting
 {
     using ComponentModel;
+    using global::Windows.ApplicationModel;
+    using global::Windows.ApplicationModel.Activation;
+    using global::Windows.UI.Xaml;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using Windows.Data;
     using Windows.Input;
-    using global::Windows.ApplicationModel;
-    using global::Windows.ApplicationModel.Activation;
-    using global::Windows.UI.Xaml;
 
     /// <summary>
     /// Represents the base implementation for a composed <see cref="Application">application</see>.
@@ -33,7 +33,7 @@
         protected Host Host => host;
 
         /// <summary>
-        /// Raises the <see cref="E:Initialized"/> event.
+        /// Raises the <see cref="Initialized"/> event.
         /// </summary>
         /// <param name="e">The <see cref="EventArgs"/> event data.</param>
         protected virtual void OnInitialized( EventArgs e )
@@ -43,7 +43,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:ProgressChanged"/> event.
+        /// Raises the <see cref="ProgressChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="ProgressChangedEventArgs"/> event data.</param>
         protected virtual void OnProgressChanged( ProgressChangedEventArgs e )
@@ -72,7 +72,7 @@
         /// Occurs when the application is about to be suspended.
         /// </summary>
         /// <param name="args">The <see cref="SuspendingEventArgs"/> event data.</param>
-        /// <remarks>This method responds to the <see cref="E:Suspending"/> event rather than raise it. The default implementation retrieves
+        /// <remarks>This method responds to the <see cref="IApplication.Suspending"/> event rather than raise it. The default implementation retrieves
         /// an instance of the <see cref="ISessionStateManager"/> from the <see cref="Host"/> if one is registered and saves the application state.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected virtual async void OnSuspending( SuspendingEventArgs args )
@@ -86,7 +86,7 @@
 
             var deferral = args.SuspendingOperation.GetDeferral();
             sessionStateManager.TrySaveNavigationState();
-            await sessionStateManager.SaveAsync();
+            await sessionStateManager.SaveAsync().ConfigureAwait( true );
             deferral.Complete();
         }
 

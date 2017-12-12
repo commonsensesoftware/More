@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Data
 {
+    using global::Windows.UI.Xaml;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml;
 
     /// <content>
     /// Provides implementation specific to Windows Store Apps.
@@ -16,7 +16,7 @@
         /// Gets or sets the target type name.
         /// </summary>
         /// <value>The qualified target type name.</value>
-        /// <remarks>The specified type name must be resolvable using the <see cref="M:Type.GetType"/> method.</remarks>
+        /// <remarks>The specified type name must be resolvable using the <see cref="Type.GetType(string)"/> method.</remarks>
         public string TargetTypeName
         {
             get

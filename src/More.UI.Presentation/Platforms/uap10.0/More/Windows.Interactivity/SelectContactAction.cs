@@ -1,5 +1,6 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.ApplicationModel.Contacts;
     using Input;
     using System;
     using System.Collections.Generic;
@@ -7,11 +8,10 @@
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
-    using global::Windows.ApplicationModel.Contacts;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to select one or more contacts for the
-    /// <see cref="SelectContactInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to select one or more contacts for the
+    /// <see cref="SelectContactInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     [CLSCompliant( false )]
     public class SelectContactAction : System.Windows.Interactivity.TriggerAction
@@ -22,7 +22,6 @@
             // HACK: some features are not available on WPA81. handle these
             // actions gracefully. we don't ignore them as they may be available
             // in later builds such as WPA10+.
-
             try
             {
                 action();
@@ -100,7 +99,7 @@
                 return;
             }
 
-            var contacts = await SelectContactsAsync( selectContact );
+            var contacts = await SelectContactsAsync( selectContact ).ConfigureAwait( true );
             InvokeCallbackCommand( selectContact, contacts );
         }
     }

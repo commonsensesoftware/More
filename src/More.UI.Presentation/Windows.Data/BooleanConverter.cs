@@ -29,7 +29,7 @@
                 return boolean;
             }
 
-            var message = ExceptionMessage.InvalidConverterParameter.FormatDefault( typeof( bool ) );
+            var message = string.Format( culture, ExceptionMessage.InvalidConverterParameter, typeof( bool ) );
 
             if ( parameter is string @string && bool.TryParse( @string, out var negate ) )
             {
@@ -104,6 +104,7 @@
             return string.Format( culture, Format, @int );
         }
 
+#pragma warning disable SA1606 // Element documentation should have summary text
 #if UAP10_0
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx_core"]/*'/>
         public override object ConvertBack( object value, Type targetType, object parameter, string language )
@@ -111,6 +112,7 @@
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx"]/*'/>
         public override object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
 #endif
+#pragma warning restore SA1606 // Element documentation should have summary text
         {
             var supported = value == null || value is bool || value is bool?;
 

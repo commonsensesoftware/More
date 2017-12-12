@@ -12,7 +12,7 @@
         {
             var IID_IShellItem = new Guid( "43826d1e-e718-42ee-bc55-a1e261c37bfe" );
             var hr = SHCreateItemFromParsingName( path, IntPtr.Zero, ref IID_IShellItem, out var item );
-            
+
             if ( hr != 0 )
             {
                 Marshal.ThrowExceptionForHR( hr );

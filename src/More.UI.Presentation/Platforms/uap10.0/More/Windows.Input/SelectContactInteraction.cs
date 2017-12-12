@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Input
 {
+    using global::Windows.ApplicationModel.Contacts;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
-    using global::Windows.ApplicationModel.Contacts;
 
     /// <summary>
     /// Represents an interaction request to select one or more contacts.

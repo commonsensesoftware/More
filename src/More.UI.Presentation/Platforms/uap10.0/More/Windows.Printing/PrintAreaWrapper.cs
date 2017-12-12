@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Printing
 {
-    using System;
-    using System.Diagnostics.Contracts;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Printing;
+    using System;
+    using System.Diagnostics.Contracts;
 
     sealed class PrintAreaWrapper : IPrintArea
     {
@@ -19,7 +19,7 @@
 
         public PrintDocument PrintDocument => printDocument.Value;
 
-        public void Clear() =>             canvas.Children.Clear();
+        public void Clear() => canvas.Children.Clear();
 
         public void Add( object content )
         {

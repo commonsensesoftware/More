@@ -1,11 +1,11 @@
 ﻿namespace More.IO
 {
+    using global::Windows.Storage;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Threading.Tasks;
-    using global::Windows.Storage;
 
     sealed class StorageFolderAdapter : IFolder, IPlatformStorageItem<StorageFolder>
     {

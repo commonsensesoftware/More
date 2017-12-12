@@ -20,18 +20,18 @@
         /// Gets or sets the name of the standard element style.
         /// </summary>
         /// <value>The name of the standard element style.</value>
-        /// <remarks>If the <see cref="P:ResourceDictionary"/> property is null or an empty string, then this property
-        /// is assumed to be the name of a resource that only contains a <see cref="T:Style"/>; otherwise, this
-        /// property is the key for the <see cref="T:Style"/> in the corresponding <see cref="T:ResourceDictionary"/>.</remarks>
+        /// <remarks>If the <see cref="ResourceDictionary"/> property is null or an empty string, then this property
+        /// is assumed to be the name of a resource that only contains a <see cref="Style"/>; otherwise, this
+        /// property is the key for the <see cref="Style"/> in the corresponding <see cref="ResourceDictionary"/>.</remarks>
         public string ElementStyleName { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the edit element style.
         /// </summary>
         /// <value>The name of the edit element style.  This property can be null or an empty string if the column is read-only.</value>
-        /// <remarks>If the <see cref="P:ResourceDictionary"/> property is null or an empty string, then this property
-        /// is assumed to be the name of a resource that only contains a <see cref="T:Style"/>; otherwise, this
-        /// property is the key for the <see cref="T:Style"/> in the corresponding <see cref="T:ResourceDictionary"/>.</remarks>
+        /// <remarks>If the <see cref="ResourceDictionary"/> property is null or an empty string, then this property
+        /// is assumed to be the name of a resource that only contains a <see cref="Style"/>; otherwise, this
+        /// property is the key for the <see cref="Style"/> in the corresponding <see cref="ResourceDictionary"/>.</remarks>
         public string EditingElementStyleName { get; set; }
     }
 }

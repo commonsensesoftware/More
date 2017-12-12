@@ -13,11 +13,11 @@
     /// <see cref="ConfigurationValidatorBase">configuration validators</see> for a single property.
     /// </summary>
     /// <remarks>
-    /// The <see cref="ConfigurationValidatorAttribute"/> class does not support multiple 
+    /// The <see cref="ConfigurationValidatorAttribute"/> class does not support multiple
     /// <see cref="ConfigurationValidatorBase">configuration validators</see> for a single configuration property.
     /// This attribute overcomes that limitation. This attribute requires a <see cref="ConfigurationValidatorBase">configuration validator</see>
     /// <see cref="Type">type</see> and the name of a public, static method on that <see cref="Type">type</see> that will be used as a
-    /// factory method to create the <see cref="ConfigurationValidatorBase">validator instances</see>. 
+    /// factory method to create the <see cref="ConfigurationValidatorBase">validator instances</see>.
     /// The <see cref="ConfigurationValidatorBase">validator instances</see> will be supplied to a <see cref="CompositeValidator">composite validator</see>
     /// to be composed into a single <see cref="ConfigurationValidatorBase">validator</see> which the configuration system can leverage. The supplied
     /// factory method must be assignable to <see cref="Func{T}">Func&lt;IEnumerable&lt;ConfigurationValidatorBase&gt;&gt;</see>.
@@ -34,7 +34,7 @@
     ///         return (int) base["MySetting"];
     ///     }
     ///   }
-    /// 
+    ///
     ///   public static IEnumerable<ConfigurationValidatorBase> CreateMySettingValidator()
     ///   {
     ///     yield return new Validator1();
@@ -43,7 +43,6 @@
     /// }
     /// ]]></code>
     /// </example>
-    [Serializable]
     [AttributeUsage( AttributeTargets.Property )]
     public sealed class CompositeValidatorAttribute : ConfigurationValidatorAttribute
     {

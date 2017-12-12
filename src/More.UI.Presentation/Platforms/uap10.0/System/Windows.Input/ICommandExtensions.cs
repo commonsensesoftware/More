@@ -1,13 +1,13 @@
 ﻿namespace System.Windows.Input
 {
+    using global::Windows.UI.Popups;
     using More.Windows.Input;
     using System;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Popups;
 
-    /// <content>
-    /// Provides additional implementation specific to Windows Store applications.
-    /// </content>
+    /// <summary>
+    /// Provides extension methods for the <see cref="ICommand"/> interface.
+    /// </summary>
     public static class ICommandExtensions
     {
         /// <summary>

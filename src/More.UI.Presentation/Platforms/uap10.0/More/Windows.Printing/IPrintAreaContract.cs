@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Printing
 {
+    using global::Windows.UI.Xaml.Printing;
     using System;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml.Printing;
 
     /// <summary>
     /// Provides the code contract definition for the <see cref="IPrintArea"/> class.

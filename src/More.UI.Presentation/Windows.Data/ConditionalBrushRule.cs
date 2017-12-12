@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Data
 {
     using System;
-    using System.Diagnostics.Contracts; 
+    using System.Diagnostics.Contracts;
 #if UAP10_0
     using global::Windows.UI;
     using global::Windows.UI.Xaml.Media;
@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets or sets the brush associated with the rule.
         /// </summary>
-        /// <value>A <see cref="Brush">brush</see> object. The default value is a <see cref="P:Colors.Gray">gray</see>
+        /// <value>A <see cref="Brush">brush</see> object. The default value is a <see cref="Colors.Gray">gray</see>
         /// <see cref="SolidColorBrush">brush</see>.</value>
 #if UAP10_0
         [CLSCompliant( false )]
@@ -28,7 +28,7 @@
         {
             get
             {
-                Contract.Ensures( Contract.Result<Brush>() != null ); 
+                Contract.Ensures( Contract.Result<Brush>() != null );
                 return brush;
             }
             set

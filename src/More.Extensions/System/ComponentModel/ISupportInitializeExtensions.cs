@@ -53,17 +53,17 @@
         /// <typeparam name="TObject">The <see cref="Type">type</see> of <see cref="ISupportInitialize">object</see> to create an initialization scope for.</typeparam>
         /// <param name="source">The object of <typeparamref name="TObject"/> to create an initialization scope for.</param>
         /// <returns>An <see cref="IDisposable"/> object representing the initialization scope.</returns>
-        /// <remarks>When the return initialization scope is <see cref="M:IDisposable.Dispose">disposed</see>, the initialization of the object is
-        /// <see cref="M:ISupportInitialize.EndInit">committed</see>.</remarks>
+        /// <remarks>When the return initialization scope is <see cref="IDisposable.Dispose">disposed</see>, the initialization of the object is
+        /// <see cref="ISupportInitialize.EndInit">committed</see>.</remarks>
         /// <example>This example demonstrates initializing an object.
         /// <code lang="C#"><![CDATA[
         /// using System;
         /// using System.ComponentModel;
-        /// 
+        ///
         /// public static void Main()
         /// {
         ///     var obj = new MyObject();
-        ///     
+        ///
         ///     using ( obj.Initialize() )
         ///     {
         ///         // TODO: initialization work

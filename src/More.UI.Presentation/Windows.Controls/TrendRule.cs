@@ -5,7 +5,7 @@
     using System.Linq;
 
     /// <summary>
-    /// Represents a trend selection rule for the <see cref="T:TrendIndicator"/>.
+    /// Represents a trend selection rule for the <see cref="TrendIndicator"/>.
     /// </summary>
     public partial class TrendRule : NumericRule
     {

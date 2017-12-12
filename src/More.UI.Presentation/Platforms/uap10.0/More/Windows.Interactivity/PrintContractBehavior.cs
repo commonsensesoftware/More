@@ -1,5 +1,12 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.Foundation;
+    using global::Windows.Graphics.Printing;
+    using global::Windows.Graphics.Printing.OptionDetails;
+    using global::Windows.UI.ViewManagement;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Media;
     using Input;
     using Printing;
     using System;
@@ -8,13 +15,6 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using System.Windows.Interactivity;
-    using global::Windows.Foundation;
-    using global::Windows.Graphics.Printing;
-    using global::Windows.Graphics.Printing.OptionDetails;
-    using global::Windows.UI.ViewManagement;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Media;
 
     /// <summary>
     /// Represents a behavior which mediates the contract with the Print charm.

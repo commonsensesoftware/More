@@ -52,17 +52,17 @@
         /// using System.Composition;
         /// using System.Composition.Hosting;
         /// using System.Windows;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     public class MyShellView : ShellViewBase
         ///     {
         ///     }
-        ///     
+        ///
         ///     public class ShowShellViewTask : ShowShellView<MyShellView>
         ///     {
         ///     }
-        ///     
+        ///
         ///     [STAThread]
         ///     public static void Main()
         ///     {
@@ -97,17 +97,17 @@
         /// using System.Composition;
         /// using System.Composition.Hosting;
         /// using System.Windows;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     public class MyShellView : ShellViewBase
         ///     {
         ///     }
-        ///     
+        ///
         ///     public class ShowShellViewTask : ShowShellView<MyShellView>
         ///     {
         ///     }
-        ///     
+        ///
         ///     [STAThread]
         ///     public static void Main()
         ///     {
@@ -128,7 +128,6 @@
 
             // HACK: WPF doesn't set the Application.Current property until an application object has been created.  This can cause composition issues.
             // Require this method to accept an application object to ensure it's set.  This also simplifies startup code.
-
             var applicationAssembly = application.GetType().Assembly;
             var assemblies = new HashSet<Assembly>( hostedAssemblies ) { applicationAssembly }.Where( a => !Configuration.IsRegistered( a ) ).ToArray();
 

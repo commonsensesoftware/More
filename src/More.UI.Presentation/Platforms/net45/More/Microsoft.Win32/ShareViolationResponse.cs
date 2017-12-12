@@ -6,6 +6,6 @@
     {
         Default,
         Accept,
-        Refuse
+        Refuse,
     }
 }

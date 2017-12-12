@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Input
 {
+    using global::Windows.Storage.Streams;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using global::Windows.Storage.Streams;
 
     [ContractClassFor( typeof( ISearchSuggestionsRequest ) )]
     internal abstract class ISearchSuggestionsRequestContract : ISearchSuggestionsRequest
@@ -26,7 +26,7 @@
             }
         }
 
-        bool ISearchSuggestionsRequest.IsCanceled =>  default( bool );
+        bool ISearchSuggestionsRequest.IsCanceled => default( bool );
 
         uint ISearchSuggestionsRequest.QuerySuggestionCount => 0U;
 

@@ -1,12 +1,12 @@
 ﻿namespace More.Windows.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using global::Windows.ApplicationModel.DataTransfer;
     using global::Windows.Foundation;
     using global::Windows.Storage;
     using global::Windows.Storage.Streams;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Defines the behavior of a data package that contains the data a user wants to exchange with another application.
@@ -15,19 +15,19 @@
     public interface IDataPackage
     {
         /// <summary>
-        /// Allows you to get and set properties like the title of the content being shared.
+        /// Gets the data package properties that allows you to get and set properties like the title of the content being shared.
         /// </summary>
         /// <value>A <see cref="IDataPackagePropertySet">collection</see> of properties that describe the data contained in a <see cref="IDataPackage"/>.</value>
         IDataPackagePropertySet Properties { get; }
 
         /// <summary>
-        /// Specifies the data package operation (none, move, copy, or link).
+        /// Gets or sets the data package operation (none, move, copy, or link).
         /// </summary>
         /// <value>One of the <see cref="DataPackageOperation"/> values.</value>
         DataPackageOperation RequestedOperation { get; set; }
 
         /// <summary>
-        /// Maps a URI to a file. 
+        /// Gets a map of a URI to a file.
         /// </summary>
         /// <value>A <see cref="IDictionary{TKey,TValue}">dictionary</see> that specifies the an HTML path with a
         /// corresponding <see cref="IRandomAccessStreamReference">stream reference</see> object.</value>
@@ -56,7 +56,7 @@
         /// <summary>
         /// Sets the application link that a <see cref="IDataPackage"/> contains.
         /// </summary>
-        /// <param name="value">A <see cref="T:Uri">Uniform Resource Identifier (URI)</see> with a scheme that isn't HTTP or HTTPS
+        /// <param name="value">A <see cref="System.Uri">Uniform Resource Identifier (URI)</see> with a scheme that isn't HTTP or HTTPS
         /// that's handled by the source application.</param>
         void SetApplicationLink( Uri value );
 
@@ -115,7 +115,7 @@
         /// <summary>
         /// Sets the web link that a <see cref="IDataPackage"/> contains.
         /// </summary>
-        /// <param name="value">A <see cref="T:Uri">Uniform Resource Identifier (URI)</see> with an HTTP or HTTPS
+        /// <param name="value">A <see cref="System.Uri">Uniform Resource Identifier (URI)</see> with an HTTP or HTTPS
         /// scheme that corresponds to the content being displayed to the user.</param>
         void SetWebLink( Uri value );
     }

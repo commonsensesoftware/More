@@ -20,7 +20,7 @@
     /// using System.Composition.Hosting;
     /// using System.Windows;
     /// using System.Windows.Controls;
-    /// 
+    ///
     /// public class MyShell : UserControl, IShellView
     /// {
     ///     public void Show()
@@ -28,7 +28,7 @@
     ///         Application.Current.RootVisual = this;
     ///     }
     /// }
-    /// 
+    ///
     /// public class ShowShellView : ShowShellView<MyShell>
     /// {
     /// }

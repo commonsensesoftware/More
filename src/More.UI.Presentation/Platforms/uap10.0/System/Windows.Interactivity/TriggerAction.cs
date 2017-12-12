@@ -1,10 +1,9 @@
 ﻿namespace System.Windows.Interactivity
 {
+    using global::Windows.UI.Xaml;
     using More.Windows.Input;
     using System;
     using System.Threading.Tasks;
-    using System.Windows.Input;
-    using global::Windows.UI.Xaml;
     using IAction = Microsoft.Xaml.Interactivity.IAction;
 
     /// <summary>
@@ -14,14 +13,14 @@
     public abstract class TriggerAction : DependencyObject, IAction
     {
         /// <summary>
-        /// Returns the requested <see cref="T:System.Windows.Input.Interaction">interaction</see> from the specified parameter.
+        /// Returns the requested <see cref="More.Windows.Input.Interaction">interaction</see> from the specified parameter.
         /// </summary>
-        /// <typeparam name="TInteraction">The <see cref="Type">type</see> of <see cref="T:System.Windows.Input.Interaction">interaction</see> to retrieve.</typeparam>
+        /// <typeparam name="TInteraction">The <see cref="Type">type</see> of <see cref="More.Windows.Input.Interaction">interaction</see> to retrieve.</typeparam>
         /// <param name="parameter">The parameter to retrieve the interaction from.</param>
-        /// <returns>An <see cref="T:System.Windows.Input.Interaction">interaction</see> of type <typeparamref name="TInteraction"/> or
+        /// <returns>An <see cref="More.Windows.Input.Interaction">interaction</see> of type <typeparamref name="TInteraction"/> or
         /// <c>null</c> if the interaction cannot be retrieved.</returns>
-        /// <remarks>The <see cref="T:System.Windows.Input.Interaction">interaction</see> is retrieved by converting the <paramref name="parameter"/>
-        /// to <see cref="InteractionRequestedEventArgs"/> and extracting the <see cref="T:InteractionRequestedEventArgs.Interaction"/>, if possible.</remarks>
+        /// <remarks>The <see cref="More.Windows.Input.Interaction">interaction</see> is retrieved by converting the <paramref name="parameter"/>
+        /// to <see cref="InteractionRequestedEventArgs"/> and extracting the <see cref="InteractionRequestedEventArgs.Interaction"/>, if possible.</remarks>
         protected static TInteraction GetRequestedInteraction<TInteraction>( object parameter ) where TInteraction : Interaction
         {
             if ( parameter is InteractionRequestedEventArgs args )
@@ -40,7 +39,7 @@
         /// <returns>A <see cref="Task">task</see> representing the operation.</returns>
         protected virtual Task ExecuteAsync( object sender, object parameter ) => CompletedTask.Value;
 
-        async void ExecuteAsFireAndForget( object sender, object parameter ) => await ExecuteAsync( sender, parameter );
+        async void ExecuteAsFireAndForget( object sender, object parameter ) => await ExecuteAsync( sender, parameter ).ConfigureAwait( true );
 
         /// <summary>
         /// Executes the action.

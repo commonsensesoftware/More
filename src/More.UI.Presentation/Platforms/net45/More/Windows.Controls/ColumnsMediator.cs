@@ -20,7 +20,9 @@
         DataGrid dataGrid;
         ICollection<DataGridColumn> columns;
         INotifyCollectionChanged columnEvents;
+#pragma warning disable SA1401 // Fields should be private
         internal readonly long Key;
+#pragma warning restore SA1401 // Fields should be private
 
         internal ColumnsMediator( DataGrid dataGrid, IEnumerable<DataGridColumn> sequence, INotifyCollectionChanged columnEvents )
         {
@@ -93,12 +95,11 @@
                 }
                 else
                 {
-                    // HACK: yet another blunder in the DataGrid (at least for Silverlight).  I'm making an assuming this will hold true in WPF
+                    // HACK: yet another blunder in the DataGrid (at least for Silverlight).  I'm assuming this will hold true in WPF
                     // as well.  Calling Clear() on the DataGrid.Columns property does not correctly calculate it's internal indexes.  An
                     // ArgumentOutOfRangeException is thrown from an internal List<T>, but it's difficult to say what the exact problem is.
                     // Through trial and error, removing columns one at a time proved to produce reliable results; therefore, this branch of
                     // the code uses Remove() or RemoveAt() instead of Clear().
-
                     if ( columns is IList<DataGridColumn> list )
                     {
                         for ( var i = list.Count - 1; i > -1; i-- )

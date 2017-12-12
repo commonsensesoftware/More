@@ -57,7 +57,7 @@
         }
 
         /// <summary>
-        /// Determines whether the value of an object is valid. 
+        /// Determines whether the value of an object is valid.
         /// </summary>
         /// <param name="value">The object value.</param>
         public override void Validate( object value )

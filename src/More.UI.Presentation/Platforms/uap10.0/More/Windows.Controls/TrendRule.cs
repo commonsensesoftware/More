@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Controls
 {
+    using global::Windows.UI.Xaml.Markup;
     using More.Windows.Data;
     using System;
-    using global::Windows.UI.Xaml.Markup;
 
     /// <content>
     /// Provides additional implementation specific to Windows Runtime applications.

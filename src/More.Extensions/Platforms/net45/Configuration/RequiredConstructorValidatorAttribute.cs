@@ -1,7 +1,6 @@
 ﻿namespace More.Configuration
 {
     using System;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
@@ -10,12 +9,11 @@
     /// A <see cref="ConfigurationValidatorAttribute">configuration attribute</see> that is used to create
     /// <see cref="RequiredConstructorValidator">required constructor validators</see>.
     /// </summary>
-    [Serializable]
     [AttributeUsage( AttributeTargets.Property )]
     [SuppressMessage( "Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments", Justification = "This allows the attribute definition to be CLS-compliant, even though its usage is not." )]
     public sealed class RequiredConstructorValidatorAttribute : ConfigurationValidatorAttribute
     {
-        readonly List<Type> parameters = new List<Type>();
+        Type[] parameters = Type.EmptyTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredConstructorValidatorAttribute"/> class.
@@ -31,7 +29,7 @@
         {
             if ( parameters != null )
             {
-                this.parameters.AddRange( parameters );
+                this.parameters = parameters;
             }
         }
 
@@ -52,12 +50,12 @@
             get
             {
                 Contract.Ensures( parameters != null );
-                return parameters.ToArray();
+                return (Type[]) parameters.Clone();
             }
             set
             {
                 Arg.NotNull( value, nameof( value ) );
-                parameters.ReplaceAll( value );
+                parameters = (Type[]) value.Clone();
             }
         }
 

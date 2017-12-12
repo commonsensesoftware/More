@@ -48,7 +48,7 @@
         /// <summary>
         /// Evaluates the rule.
         /// </summary>
-        /// <param name="item">The <see cref="T:System.Nullable{T}">number</see> to evalute.</param>
+        /// <param name="item">The <see cref="System.Nullable{T}">number</see> to evalute.</param>
         /// <returns>True if the rule is satisified; otherwise, false.</returns>
         public virtual bool Evaluate( decimal? item ) => Rules.Any() && Rules.All( rule => rule.Evaluate( item ) );
     }

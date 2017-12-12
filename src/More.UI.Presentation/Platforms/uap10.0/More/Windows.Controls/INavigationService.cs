@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Controls
 {
+    using global::Windows.UI.Xaml.Navigation;
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using global::Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// Defines the behavior of a navigation service

@@ -26,10 +26,10 @@
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Object">value</see> is valid.
+        /// Determines whether the specified <see cref="object">value</see> is valid.
         /// </summary>
         /// <remarks>This implementation will invoke the <seealso cref="Validate"/> on each composed validator instance.</remarks>
-        /// <param name="value">The <see cref="Object">object</see> to validate.</param>
+        /// <param name="value">The <see cref="object">object</see> to validate.</param>
         public override void Validate( object value )
         {
             if ( !( value is Type typeToValidate ) )
@@ -46,9 +46,9 @@
         /// <summary>
         /// Determines whether the specified <see cref="Type">type</see> can be validated.
         /// </summary>
-        /// <remarks>This implementation will invoke the <seealso cref="M:CanValidate"/> method on each validator instance
+        /// <remarks>This implementation will invoke the <seealso cref="CanValidate"/> method on each validator instance
         /// and stops on the first failure.</remarks>
-        /// <param name="type">The <see cref="Object">value</see> type.</param>
+        /// <param name="type">The <see cref="object">value</see> type.</param>
         /// <returns>True if the <paramref name="type"/> parameter matches the expected <see cref="Type">type</see>; otherwise, false.</returns>
         public override bool CanValidate( Type type ) => validators.All( validator => validator.CanValidate( type ) );
     }

@@ -9,7 +9,7 @@
 
     /// <summary>
     /// Represents a behavior which supports <see cref="SecureString">securely</see> binding a
-    /// <see cref="P:PasswordBox.SecurePassword">password</see> to a <see cref="PasswordBox"/>.
+    /// <see cref="PasswordBox.SecurePassword">password</see> to a <see cref="PasswordBox"/>.
     /// </summary>
     [TypeConstraint( typeof( PasswordBox ) )]
     public class PasswordBindingBehavior : Behavior<PasswordBox>

@@ -1,14 +1,14 @@
 ﻿namespace More.Windows.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using global::Windows.ApplicationModel.DataTransfer;
     using global::Windows.Foundation;
     using global::Windows.Foundation.Metadata;
     using global::Windows.Storage;
     using global::Windows.Storage.Streams;
     using global::Windows.UI;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     sealed class DataPackageAdapter : IDataPackage
     {

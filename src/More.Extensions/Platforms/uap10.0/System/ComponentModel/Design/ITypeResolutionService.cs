@@ -62,7 +62,7 @@
         /// <returns>An instance of <see cref="Type">type</see> that corresponds to the specified name, or null if no type can be found.</returns>
         [SuppressMessage( "Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "GetType", Justification = "Ported from BCL." )]
         Type GetType( string name, bool throwOnError, bool ignoreCase );
-        
+
         /// <summary>
         /// Adds a reference to the specified assembly.
         /// </summary>

@@ -1,10 +1,9 @@
 ﻿namespace More.Windows.Data
 {
+    using global::Windows.ApplicationModel.DataTransfer;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using global::Windows.ApplicationModel.DataTransfer;
 
     sealed class DataRequestAdapter : IDataRequest
     {

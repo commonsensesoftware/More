@@ -12,6 +12,6 @@
         FileSystemPath = 0x80058000,                // SHGDN_FORPARSING
         Url = 0x80068000,                           // SHGDN_FORPARSING
         ParentRelativeForAddressBar = 0x8007c001,   // SHGDN_INFOLDER | SHGDN_FORPARSING | SHGDN_FORADDRESSBAR
-        ParentRelative = 0x80080001                 // SHGDN_INFOLDER
+        ParentRelative = 0x80080001,                 // SHGDN_INFOLDER
     }
 }

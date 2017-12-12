@@ -1,13 +1,13 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
     using global::Windows.System;
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
     using static global::Windows.System.VirtualKey;
     using static global::Windows.UI.Core.CoreAcceleratorKeyEventType;
 
@@ -45,12 +45,13 @@
         /// <summary>
         /// Gets or sets the navigation cache mode for pages with the applied behavior.
         /// </summary>
-        /// <value>One of the <see cref="T:NavigationCacheMode"/> values. The default value is <see cref="NavigationCacheMode.Required"/>.</value>
+        /// <value>One of the <see cref="NavigationCacheMode"/> values. The default value is <see cref="NavigationCacheMode.Required"/>.</value>
         public NavigationCacheMode NavigationCacheMode
         {
             get => (NavigationCacheMode) GetValue( NavigationCacheModeProperty );
             set => SetValue( NavigationCacheModeProperty, value );
         }
+
         void OnAcceleratorKeyActivated( CoreDispatcher sender, AcceleratorKeyEventArgs args )
         {
             Contract.Requires( args != null );
@@ -124,7 +125,7 @@
         }
 
         /// <summary>
-        /// Called after the behavior is attached to an <see cref="P:AssociatedObject"/>.
+        /// Called after the behavior is attached to an <see cref="System.Windows.Interactivity.Behavior{T}.AssociatedObject"/>.
         /// </summary>
         protected override void OnAttached()
         {
@@ -139,7 +140,7 @@
         }
 
         /// <summary>
-        /// Called when the behavior is being detached from its <see cref="P:AssociatedObject"/>, but before it has actually occurred.
+        /// Called when the behavior is being detached from its <see cref="System.Windows.Interactivity.Behavior{T}.AssociatedObject"/>, but before it has actually occurred.
         /// </summary>
         protected override void OnDetaching()
         {

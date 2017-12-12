@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Controls
 {
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Navigation;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// Represents a <see cref="INavigationService">navigation service</see> adapter for a <see cref="Frame">frame</see>.
@@ -23,10 +23,12 @@
             Arg.NotNull( frame, nameof( frame ) );
 
             this.frame = frame;
+#pragma warning disable CA2214 // Do not call overridable methods in constructors
             this.frame.Navigated += ( s, e ) => OnNavigated( new NavigationEventArgsAdapter( e ) );
             this.frame.Navigating += ( s, e ) => OnNavigating( new NavigatingCancelEventArgsAdapter( e ) );
             this.frame.NavigationFailed += ( s, e ) => OnNavigationFailed( new NavigationEventArgsAdapter( e ) );
             this.frame.NavigationStopped += ( s, e ) => OnNavigationStopped( new NavigationEventArgsAdapter( e ) );
+#pragma warning restore CA2214 // Do not call overridable methods in constructors
         }
 
         /// <summary>
@@ -43,7 +45,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Navigated"/> event.
+        /// Raises the <see cref="Navigated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -54,7 +56,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Navigating"/> event.
+        /// Raises the <see cref="Navigating"/> event.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -65,7 +67,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:NavigationFailed"/> event.
+        /// Raises the <see cref="NavigationFailed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -76,7 +78,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:NavigationStopped"/> event.
+        /// Raises the <see cref="NavigationStopped"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]

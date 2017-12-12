@@ -1,14 +1,14 @@
 ﻿namespace More.ComponentModel
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides extension methods for the <see cref="ISessionStateManager"/> interface.
     /// </summary>
-    public static class ISuspensionManagerExtensions
+    public static class ISessionStateManagerExtensions
     {
         const string NavigationStateKey = "NavigationState";
 

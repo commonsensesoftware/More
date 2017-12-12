@@ -1,10 +1,10 @@
 ﻿namespace More.Composition
 {
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
 
     /// <content>
     /// Provides additional implementation specific to Windows Store applications.
@@ -30,7 +30,7 @@
             {
                 if ( string.IsNullOrEmpty( value ) )
                 {
-                    FlowDirection = new FlowDirection();
+                    FlowDirection = default( FlowDirection );
                 }
                 else
                 {

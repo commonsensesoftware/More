@@ -59,12 +59,12 @@
         /// <summary>
         /// Converts the specified value to the target type.
         /// </summary>
-        /// <param name="value">The <see cref="Object"/> to be converted.</param>
+        /// <param name="value">The <see cref="object"/> to be converted.</param>
         /// <param name="targetType">The destination conversion <see cref="Type"/>.</param>
-        /// <param name="parameter">An <see cref="Object"/> containing custom conversion parameters.</param>
+        /// <param name="parameter">An <see cref="object"/> containing custom conversion parameters.</param>
         /// <param name="language">The language used for formatting.</param>
-        /// <returns>The converted <see cref="Object"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="String"/>.</exception>
+        /// <returns>The converted <see cref="object"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="string"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="value"/> is not type <see cref="IEnumerable"/>.</exception>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "False positive" )]
         public override object Convert( object value, Type targetType, object parameter, string language )
@@ -72,12 +72,12 @@
         /// <summary>
         /// Converts the specified value to the target type.
         /// </summary>
-        /// <param name="value">The <see cref="Object"/> to be converted.</param>
+        /// <param name="value">The <see cref="object"/> to be converted.</param>
         /// <param name="targetType">The destination conversion <see cref="Type"/>.</param>
-        /// <param name="parameter">An <see cref="Object"/> containing custom conversion parameters.</param>
+        /// <param name="parameter">An <see cref="object"/> containing custom conversion parameters.</param>
         /// <param name="culture">The <see cref="CultureInfo"/> used for formatting.</param>
-        /// <returns>The converted <see cref="Object"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="String"/>.</exception>
+        /// <returns>The converted <see cref="object"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="string"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="value"/> is not type <see cref="IEnumerable"/>.</exception>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "False positive" )]
         public override object Convert( object value, Type targetType, object parameter, CultureInfo culture )
@@ -116,22 +116,16 @@
             switch ( count )
             {
                 case 0:
-                    {
-                        return EmptyFormat;
-                    }
+                    return EmptyFormat;
                 case 1:
-                    {
-                        return FormatItem( sequence.ElementAt( 0 ), culture );
-                    }
+                    return FormatItem( sequence.ElementAt( 0 ), culture );
                 default:
+                    if ( string.IsNullOrEmpty( Format ) )
                     {
-                        if ( string.IsNullOrEmpty( Format ) )
-                        {
-                            return count.ToString( culture );
-                        }
-
-                        return string.Format( culture, Format, count );
+                        return count.ToString( culture );
                     }
+
+                    return string.Format( culture, Format, count );
             }
         }
     }

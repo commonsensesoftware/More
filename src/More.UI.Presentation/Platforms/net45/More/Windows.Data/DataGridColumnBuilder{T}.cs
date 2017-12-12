@@ -15,7 +15,6 @@
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
-    using System.Windows.Media;
     using static ColumnBuildOrders;
     using static System.String;
 
@@ -33,7 +32,7 @@
     /// using System.Windows;
     /// using System.Windows.Data;
     /// using System.Windows.Controls;
-    /// 
+    ///
     /// public class MyClass
     /// {
     ///     [DataGridColumn( DisplayIndex = 0 )]
@@ -42,14 +41,14 @@
     ///         get;
     ///         set;
     ///     }
-    /// 
+    ///
     ///     [DataGridColumn( DisplayIndex = 2, StringFormat = "C" )]
     ///     public decimal Amount
     ///     {
     ///         get;
     ///         set;
     ///     }
-    ///     
+    ///
     ///     [DataGridColumn( DisplayIndex = 1, StringFormat = "MM-dd-yyy", Header = "Created" )]
     ///     public DateTime CreatedDate
     ///     {
@@ -57,18 +56,18 @@
     ///         set;
     ///     }
     /// }
-    /// 
+    ///
     /// // build-up list of metadata-driven columns for a model
     /// var builder = new DataGridColumnBuilder<MyClass>();
     /// var columns = new List<DataGridColumn>();
     /// await builder.BuildUpAsync( columns );
-    /// 
+    ///
     /// // build-up list of metadata-driven columns for an adapted model.
     /// // assume the bound items follow the adapter pattern; for example, SelectableItem<MyClass>.
     /// // the SelectableItem<MyClass>.Value property will be the AdapterBindingPath to the model.
     /// var adaptedBuilder = new DataGridColumnBuilder<MyClass>( "Value" );
     /// await adaptedBuilder.BuildUpAsync( columns );
-    /// 
+    ///
     /// ]]></code></example>
     public partial class DataGridColumnBuilder<T> : IDataGridColumnBuilder
     {
@@ -193,7 +192,7 @@
                 return template;
             }
 
-            template = await templateFactory.FromResourceAsync( resourceUri );
+            template = await templateFactory.FromResourceAsync( resourceUri ).ConfigureAwait( true );
             templates.TryAdd( resourceUri, template );
 
             return template;
@@ -204,13 +203,12 @@
             Contract.Requires( resourceUri != null );
             Contract.Ensures( Contract.Result<Style>() != null );
 
-
             if ( styles.TryGetValue( resourceUri, out var style ) )
             {
                 return style;
             }
 
-            style = await styleFactory.FromResourceAsync( resourceUri );
+            style = await styleFactory.FromResourceAsync( resourceUri ).ConfigureAwait( true );
             styles.TryAdd( resourceUri, style );
 
             return style;
@@ -226,7 +224,7 @@
                 return resources;
             }
 
-            resources = await resourceDictionaryFactory.FromResourceAsync( resourceUri );
+            resources = await resourceDictionaryFactory.FromResourceAsync( resourceUri ).ConfigureAwait( true );
             resourceDictionaries.TryAdd( resourceUri, resources );
 
             return resources;
@@ -255,7 +253,7 @@
                 return template;
             }
 
-            var resources = await GetResourceDictionaryAsync( resourceUri );
+            var resources = await GetResourceDictionaryAsync( resourceUri ).ConfigureAwait( true );
 
             template = (DataTemplate) resources[resourceKey];
             parsedTemplates.TryAdd( key, template );
@@ -276,7 +274,7 @@
                 return style;
             }
 
-            var resources = await GetResourceDictionaryAsync( resourceUri );
+            var resources = await GetResourceDictionaryAsync( resourceUri ).ConfigureAwait( true );
 
             style = (Style) resources[resourceKey];
             parsedStyles.TryAdd( key, style );
@@ -299,12 +297,12 @@
             {
                 if ( !IsNullOrEmpty( attribute.CellTemplateName ) )
                 {
-                    column.CellTemplate = await GetDataTemplateAsync( type.CreatePackUri( attribute.CellTemplateName ) );
+                    column.CellTemplate = await GetDataTemplateAsync( type.CreatePackUri( attribute.CellTemplateName ) ).ConfigureAwait( true );
                 }
 
                 if ( !column.IsReadOnly && !IsNullOrEmpty( attribute.CellEditingTemplateName ) )
                 {
-                    column.CellEditingTemplate = await GetDataTemplateAsync( type.CreatePackUri( attribute.CellEditingTemplateName ) );
+                    column.CellEditingTemplate = await GetDataTemplateAsync( type.CreatePackUri( attribute.CellEditingTemplateName ) ).ConfigureAwait( true );
                 }
             }
             else
@@ -313,12 +311,12 @@
 
                 if ( !IsNullOrEmpty( attribute.CellTemplateName ) )
                 {
-                    column.CellTemplate = await GetDataTemplateFromResourceAsync( resourceUri, attribute.CellTemplateName );
+                    column.CellTemplate = await GetDataTemplateFromResourceAsync( resourceUri, attribute.CellTemplateName ).ConfigureAwait( true );
                 }
 
                 if ( !column.IsReadOnly && !IsNullOrEmpty( attribute.CellEditingTemplateName ) )
                 {
-                    column.CellEditingTemplate = await GetDataTemplateFromResourceAsync( resourceUri, attribute.CellEditingTemplateName );
+                    column.CellEditingTemplate = await GetDataTemplateFromResourceAsync( resourceUri, attribute.CellEditingTemplateName ).ConfigureAwait( true );
                 }
             }
         }
@@ -343,12 +341,12 @@
             {
                 if ( !IsNullOrEmpty( attribute.ElementStyleName ) )
                 {
-                    boundColumn.ElementStyle = await GetStyleAsync( type.CreatePackUri( attribute.ElementStyleName ) );
+                    boundColumn.ElementStyle = await GetStyleAsync( type.CreatePackUri( attribute.ElementStyleName ) ).ConfigureAwait( true );
                 }
 
                 if ( !boundColumn.IsReadOnly && !IsNullOrEmpty( attribute.EditingElementStyleName ) )
                 {
-                    boundColumn.EditingElementStyle = await GetStyleAsync( type.CreatePackUri( attribute.EditingElementStyleName ) );
+                    boundColumn.EditingElementStyle = await GetStyleAsync( type.CreatePackUri( attribute.EditingElementStyleName ) ).ConfigureAwait( true );
                 }
             }
             else
@@ -357,12 +355,12 @@
 
                 if ( !IsNullOrEmpty( attribute.ElementStyleName ) )
                 {
-                    boundColumn.ElementStyle = await GetStyleFromResourceAsync( resourceUri, attribute.ElementStyleName );
+                    boundColumn.ElementStyle = await GetStyleFromResourceAsync( resourceUri, attribute.ElementStyleName ).ConfigureAwait( true );
                 }
 
                 if ( !column.IsReadOnly && !IsNullOrEmpty( attribute.EditingElementStyleName ) )
                 {
-                    boundColumn.EditingElementStyle = await GetStyleFromResourceAsync( resourceUri, attribute.EditingElementStyleName );
+                    boundColumn.EditingElementStyle = await GetStyleFromResourceAsync( resourceUri, attribute.EditingElementStyleName ).ConfigureAwait( true );
                 }
             }
         }
@@ -461,7 +459,7 @@
                 FallbackValue = attribute.FallbackValue,
                 Mode = attribute.IsReadOnly ? BindingMode.OneWay : BindingMode.TwoWay,
                 StringFormat = attribute.StringFormat,
-                TargetNullValue = attribute.TargetNullValue
+                TargetNullValue = attribute.TargetNullValue,
             };
         }
 
@@ -534,7 +532,9 @@
                     var style = GetAttribute<DataGridElementStyleAttribute>( property.Item2 );
 
                     if ( style != null )
-                        await ApplyStylesAsync( type, column, style );
+                    {
+                        await ApplyStylesAsync( type, column, style ).ConfigureAwait( true );
+                    }
 
                     columns.Add( column );
                 }
@@ -548,7 +548,7 @@
                     SetTemplateDependencyProperties( column, template );
                     column.ClipboardContentBinding = binding.Clone();
 
-                    await ApplyTemplatesAsync( type, column, template );
+                    await ApplyTemplatesAsync( type, column, template ).ConfigureAwait( true );
 
                     columns.Add( column );
                 }
@@ -598,6 +598,7 @@
         /// <param name="columns">The <see cref="ICollection{T}"/> to append the columns to.</param>
         /// <param name="buildOrders">One or more of the <see cref="ColumnBuildOrders"/> values.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken">token</see> that can be used to cancel the operation.</param>
+        /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public virtual Task BuildupAsync( ICollection<DataGridColumn> columns, ColumnBuildOrders buildOrders, CancellationToken cancellationToken )
         {
@@ -612,11 +613,12 @@
         /// <param name="columns">The <see cref="ICollection{T}"/> to append the columns to.</param>
         /// <param name="buildOrders">One or more of the <see cref="ColumnBuildOrders"/> values.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken">token</see> that can be used to cancel the operation.</param>
+        /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public virtual async Task AppendToAsync( ICollection<DataGridColumn> columns, ColumnBuildOrders buildOrders, CancellationToken cancellationToken )
         {
             Arg.NotNull( columns, nameof( columns ) );
-            var columnsToAppend = await GetColumnsAsync( TargetType, AdapterBindingPath, buildOrders, cancellationToken );
+            var columnsToAppend = await GetColumnsAsync( TargetType, AdapterBindingPath, buildOrders, cancellationToken ).ConfigureAwait( true );
             columns.AddRange( columnsToAppend );
         }
     }

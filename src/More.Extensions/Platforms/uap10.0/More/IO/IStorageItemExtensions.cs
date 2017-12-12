@@ -1,9 +1,9 @@
 ﻿namespace More.IO
 {
-    using System;
-    using System.Diagnostics.Contracts;
-    using System.Diagnostics.CodeAnalysis;
     using global::Windows.Storage;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Provides extension methods to convert <see cref="IStorageItem">storage items</see> to

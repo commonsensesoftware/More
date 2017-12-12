@@ -1,13 +1,13 @@
 ﻿namespace More.Windows.Data
 {
+    using global::Windows.Foundation;
+    using global::Windows.Foundation.Collections;
+    using global::Windows.UI.Xaml.Data;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Runtime.InteropServices.WindowsRuntime;
-    using global::Windows.Foundation;
-    using global::Windows.Foundation.Collections;
-    using global::Windows.UI.Xaml.Data;
 
     [ContractClassFor( typeof( IFrozenItemCollectionView ) )]
     abstract class IFrozenItemCollectionViewContract : IFrozenItemCollectionView

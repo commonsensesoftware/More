@@ -21,7 +21,7 @@
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:Interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
     ///  xmlns:More="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.More">
-    ///  
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="Mouse over me to show a popup.">
     ///   <Interactivity:Interaction.Triggers>
@@ -37,7 +37,7 @@
     ///   <TextBlock Text="Hello world!" />
     ///  </Popup>
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
     public partial class SetPropertyAction
@@ -72,7 +72,7 @@
         /// <summary>
         /// Gets or sets the object representing the target to set the property for.
         /// </summary>
-        /// <value>The target <see cref="Object">object</see>.</value>
+        /// <value>The target <see cref="object">object</see>.</value>
         public object TargetObject
         {
             get => GetValue( TargetObjectProperty );

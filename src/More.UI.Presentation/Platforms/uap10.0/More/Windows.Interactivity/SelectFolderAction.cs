@@ -1,5 +1,8 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.Foundation;
+    using global::Windows.Storage;
+    using global::Windows.Storage.Pickers;
     using More.Windows.Input;
     using System;
     using System.Collections.Generic;
@@ -7,13 +10,10 @@
     using System.IO;
     using System.Threading.Tasks;
     using IFolder = More.IO.IFolder;
-    using global::Windows.Foundation;
-    using global::Windows.Storage;
-    using global::Windows.Storage.Pickers;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to select a folder for the
-    /// <see cref="SelectFolderInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to select a folder for the
+    /// <see cref="SelectFolderInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     [CLSCompliant( false )]
     public class SelectFolderAction : System.Windows.Interactivity.TriggerAction
@@ -33,7 +33,7 @@
         /// <summary>
         /// Gets or sets the view mode that the file open picker uses to display items.
         /// </summary>
-        /// <value>One of the <see cref="ViewMode"/> values. The default value is <see cref="F:PickerViewMode.List"/>.</value>
+        /// <value>One of the <see cref="ViewMode"/> values. The default value is <see cref="PickerViewMode.List"/>.</value>
         public PickerViewMode ViewMode { get; set; }
 
         IAsyncOperation<StorageFolder> SelectFolderAsync( SelectFolderInteraction selectFolder )
@@ -99,7 +99,7 @@
             }
 
             var storageFolder = await SelectFolderAsync( interaction );
-            var selectedFolder = storageFolder == null ? null : storageFolder.AsFolder();
+            var selectedFolder = storageFolder?.AsFolder();
             InvokeCallbackCommand( interaction, selectedFolder );
         }
     }

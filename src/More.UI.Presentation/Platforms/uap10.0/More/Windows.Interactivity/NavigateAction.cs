@@ -1,17 +1,12 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Controls;
+    using global::Windows.UI.Xaml;
     using More.Windows.Input;
     using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.Threading.Tasks;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to show the <see cref="NavigateInteraction">interaction</see>
-    /// from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to show the <see cref="NavigateInteraction">interaction</see>
+    /// from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     [CLSCompliant( false )]
     public partial class NavigateAction : System.Windows.Interactivity.TriggerAction, IActionWithAssociatedObject

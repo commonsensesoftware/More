@@ -3,8 +3,8 @@
     using System;
     using System.ComponentModel;
 #if UAP10_0
-    using System.Diagnostics.CodeAnalysis;
     using global::Windows.UI.Xaml;
+    using System.Diagnostics.CodeAnalysis;
 #else
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;

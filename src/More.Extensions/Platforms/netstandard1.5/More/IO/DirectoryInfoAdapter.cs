@@ -104,7 +104,7 @@
             var foldersTask = GetFoldersAsync();
             var filesTask = GetFilesAsync();
 
-            await Task.WhenAll( foldersTask, filesTask );
+            await Task.WhenAll( foldersTask, filesTask ).ConfigureAwait( false );
 
             var folders = foldersTask.Result;
             var files = filesTask.Result;

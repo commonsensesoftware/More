@@ -15,9 +15,9 @@
     using static System.Collections.Specialized.NotifyCollectionChangedAction;
 
     /// <summary>
-    /// Represents a content manager using a <see cref="T:Panel"/>.
+    /// Represents a content manager using a <see cref="Panel"/>.
     /// </summary>
-    /// <typeparam name="T">The <see cref="Type">type</see> of <see cref="T:Panel"/> used by the content manager.</typeparam>
+    /// <typeparam name="T">The <see cref="Type">type</see> of <see cref="Panel"/> used by the content manager.</typeparam>
 #if UAP10_0
     [CLSCompliant( false )]
 #endif
@@ -54,7 +54,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:CollectionChanged"/> event.
+        /// Raises the <see cref="CollectionChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected virtual void OnCollectionChanged( NotifyCollectionChangedEventArgs e )

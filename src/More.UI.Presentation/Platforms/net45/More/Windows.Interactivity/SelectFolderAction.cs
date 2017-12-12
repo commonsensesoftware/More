@@ -17,8 +17,8 @@
     using Expression = System.Linq.Expressions.Expression;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to select a folder for the
-    /// <see cref="SelectFolderInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to select a folder for the
+    /// <see cref="SelectFolderInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     public class SelectFolderAction : System.Windows.Interactivity.TriggerAction<FrameworkElement>
     {
@@ -32,8 +32,8 @@
         /// <summary>
         /// Gets or sets the root folder where the browsing starts from.
         /// </summary>
-        /// <value>One of the <see cref="T:System.Environment+SpecialFolder"/> values. The default value is
-        /// <see cref="F:System.Environment+SpecialFolder.Desktop"/>.</value>
+        /// <value>One of the <see cref="SpecialFolder"/> values. The default value is
+        /// <see cref="SpecialFolder.Desktop"/>.</value>
         public SpecialFolder RootFolder { get; set; }
 
         /// <summary>
@@ -86,7 +86,7 @@
             var dialog = new FolderBrowserDialog()
             {
                 Title = selectFolder.Title,
-                RootFolder = RootFolder
+                RootFolder = RootFolder,
             };
 
             if ( selectFolder.Folder != null )
@@ -135,21 +135,21 @@
              *  WindowInteropHelper helper;
              *  string selectedPath;
              *  DirectoryInfo selectedFolder;
-             * 
+             *
              *  dialog = new FolderBrowserDialog() { Description = selectFolder.Title, RootFolder = action.RootFolder };
              *  window = Window.GetWindow( action.AssociatedObject );
-             *  
+             *
              *  if ( window != null )
              *  {
              *      owner = new NativeWindow();
              *      helper = new WindowInteropHelper( window );
              *      owner.AssignHandle( helper.Handle );
              *  }
-             * 
+             *
              *  try
              *  {
              *      dialogResult = dialog.ShowDialog( owner );
-             *      
+             *
              *      if ( dialogResult = DialogResult.OK )
              *      {
              *          selectedPath = dialog.SelectedPath;
@@ -158,18 +158,18 @@
              *  finally
              *  {
              *      dialog.Dispose();
-             *      
+             *
              *      if ( owner != null )
              *      {
              *          owner.ReleaseHandle();
              *      }
              *  }
-             *  
+             *
              *  if ( !string.IsNullOrEmpty( selectedPath ) )
              *  {
              *      selectedFolder = new DirectoryInfo( selectedPath );
              *  }
-             *  
+             *
              *  return selectedFolder;
              * }
              */
@@ -191,39 +191,36 @@
             var selectedPath = Variable( typeof( string ), "selectedPath" );
             var selectedFolder = Variable( typeof( DirectoryInfo ), "selectedFolder" );
             var variables = new[] { dialog, dialogResult, owner, window, helper, selectedPath, selectedFolder };
-            var body = Block(
-                variables,
-                new Expression[]
+            var expressions = new Expression[]
                 {
                     Assign( dialog, newDialog ),
                     IfThen(
                             NotEqual( Property( selectFolder, nameof( SelectFolderInteraction.Folder ) ), Constant( default( IFolder ) ) ),
                             Assign( Property( dialog, "SelectedPath" ), Property( Property( selectFolder, nameof( SelectFolderInteraction.Folder ) ), nameof( IFolder.Name ) ) ) ),
-                    Assign( window, Call( typeof( Window ).GetMethod( nameof( Window.GetWindow ) ), Property( action, typeof( SelectFolderAction ).GetProperty( nameof( AssociatedObject ),Instance | Public | NonPublic ) ) ) ),
+                    Assign( window, Call( typeof( Window ).GetMethod( nameof( Window.GetWindow ) ), Property( action, typeof( SelectFolderAction ).GetProperty( nameof( AssociatedObject ), Instance | Public | NonPublic ) ) ) ),
                     IfThen(
                             NotEqual( window, Constant( default( Window ) ) ),
                             Block(
                                     Assign( owner, New( nativeWindowType ) ),
                                     Assign( helper, New( typeof( WindowInteropHelper ).GetConstructors().Single(), window ) ),
-                                    Call( owner, "AssignHandle", new []{ typeof( IntPtr ) }, Property( helper, nameof( WindowInteropHelper.Handle ) ) ) ) ),
+                                    Call( owner, "AssignHandle", new[] { typeof( IntPtr ) }, Property( helper, nameof( WindowInteropHelper.Handle ) ) ) ) ),
                     TryFinally(
                         Block(
                             Assign( dialogResult, Call( dialog, showDialog, owner ) ),
                             IfThen(
                                     Equal( dialogResult, Constant( Enum.Parse( Type.GetType( LegacyDialogResultTypeName ), "OK" ) ) ),
-                                    Assign( selectedPath, Property( dialog, "SelectedPath" ) ) )
-                            ),
+                                    Assign( selectedPath, Property( dialog, "SelectedPath" ) ) ) ),
                         Block(
                             Call( dialog, "Dispose", Type.EmptyTypes ),
                             IfThen(
                                     NotEqual( owner, Constant( null ) ),
-                                    Call( owner, "ReleaseHandle", Type.EmptyTypes ) )
-                            ) ),
+                                    Call( owner, "ReleaseHandle", Type.EmptyTypes ) ) ) ),
                     IfThen(
                             Not( Call( typeof( string ).GetMethod( nameof( string.IsNullOrEmpty ) ), selectedPath ) ),
-                            Assign( selectedFolder, New( typeof( DirectoryInfo ).GetConstructor( new []{ typeof( string ) } ), selectedPath ) ) ),
-                    selectedFolder
-                } );
+                            Assign( selectedFolder, New( typeof( DirectoryInfo ).GetConstructor( new[] { typeof( string ) } ), selectedPath ) ) ),
+                    selectedFolder,
+                };
+            var body = Block( variables, expressions );
             var lambda = Lambda<Func<SelectFolderAction, SelectFolderInteraction, DirectoryInfo>>( body, action, selectFolder );
 
             return lambda.Compile();

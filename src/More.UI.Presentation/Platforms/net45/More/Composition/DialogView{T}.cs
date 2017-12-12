@@ -15,19 +15,19 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="DialogView{T}"/> class.
         /// </summary>
-        /// <remarks>This constructor automatically calls <see cref="M:System.Windows.Application.LoadComponent"/> for
+        /// <remarks>This constructor automatically calls <see cref="Application.LoadComponent(object, Uri)"/> for
         /// the new <see cref="Window"/>.</remarks>
         public DialogView() : this( loadComponent: true ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DialogView{T}"/> class.
         /// </summary>
-        /// <param name="loadComponent">Indicates whether <see cref="M:System.Windows.Application.LoadComponent"/> is invoked for the new <see cref="Window"/>.</param>
+        /// <param name="loadComponent">Indicates whether <see cref="Application.LoadComponent(object, Uri)"/> is invoked for the new <see cref="Window"/>.</param>
         public DialogView( bool loadComponent )
         {
             if ( loadComponent )
             {
-                System.Windows.Application.LoadComponent( this, GetType().CreateXamlResourceUri() );
+                Application.LoadComponent( this, GetType().CreateXamlResourceUri() );
             }
         }
 
@@ -108,7 +108,7 @@
         /// Occurs when a property value has changed.
         /// </summary>
         /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have changed by using either
-        /// <c>null</c>or <see cref="F:String.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
+        /// <c>null</c>or <see cref="string.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

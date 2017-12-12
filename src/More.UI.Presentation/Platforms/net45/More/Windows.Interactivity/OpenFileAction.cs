@@ -14,7 +14,7 @@
 
     /// <summary>
     /// Represents an <see cref="System.Windows.Interactivity.TriggerAction{T}">interactivity action</see> that can be used to open a file for the
-    /// <see cref="OpenFileInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// <see cref="OpenFileInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     public class OpenFileAction : System.Windows.Interactivity.TriggerAction<FrameworkElement>
     {
@@ -27,7 +27,7 @@
             {
                 Filter = openFile.FileTypeFilter.ToFileFilter(),
                 Multiselect = openFile.Multiselect,
-                Title = openFile.Title
+                Title = openFile.Title,
             };
 
             if ( !string.IsNullOrEmpty( dialog.Filter ) )

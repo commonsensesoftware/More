@@ -1,7 +1,10 @@
 ﻿namespace More.Windows.Data
 {
-    using More.ComponentModel;
+    using global::Windows.Foundation;
+    using global::Windows.Foundation.Collections;
+    using global::Windows.UI.Xaml.Data;
     using More.Collections.Generic;
+    using More.ComponentModel;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -14,9 +17,6 @@
     using System.Runtime.InteropServices.WindowsRuntime;
     using System.Threading;
     using System.Threading.Tasks;
-    using global::Windows.Foundation;
-    using global::Windows.Foundation.Collections;
-    using global::Windows.UI.Xaml.Data;
 
     /// <summary>
     /// Represents a virtualized collection view.
@@ -85,7 +85,7 @@
         /// <summary>
         /// Gets the comparer used to evaluate the equality of items in the collection.
         /// </summary>
-        /// <value>An <see cref="IEqualityComparer{T}"/> object.  The default state is <see cref="P:EqualityComparer{T}.Default"/>.</value>
+        /// <value>An <see cref="IEqualityComparer{T}"/> object.  The default state is <see cref="EqualityComparer{T}.Default"/>.</value>
         protected virtual IEqualityComparer<T> Comparer
         {
             get
@@ -193,7 +193,7 @@
         /// <value>A read-only, <see cref="IList{T}">observable collection</see> of unfrozen
         /// <typeparamref name="T">items</typeparamref>.</value>
         /// <remarks>The default <see cref="IList{T}">list</see> implementation also implements
-        /// <see cref="INotifyCollectionChanged"/> and <see cref="T:INotifyPropertyChanged"/>.</remarks>
+        /// <see cref="INotifyCollectionChanged"/> and <see cref="System.ComponentModel.INotifyPropertyChanged"/>.</remarks>
         public IList<T> UnfrozenItems => items.UnfrozenItems;
 
         /// <summary>
@@ -271,7 +271,7 @@
         /// Initializes incremental loading from the view.
         /// </summary>
         /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the <see cref="LoadMoreItemsResult">results</see>.</returns>
-        /// <remarks>The number of items loaded is based on the <see cref="P:PageSize">page size</see>.</remarks>
+        /// <remarks>The number of items loaded is based on the <see cref="PageSize">page size</see>.</remarks>
         [CLSCompliant( false )]
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync() => LoadMoreItemsAsync( (uint) PageSize );
 
@@ -289,7 +289,9 @@
 
             if ( IsLoadDeferred )
             {
+#pragma warning disable SA1129 // Do not use default value type constructor
                 return Task.FromResult( new LoadMoreItemsResult() ).AsAsyncOperation();
+#pragma warning restore SA1129 // Do not use default value type constructor
             }
 
             var pageIndex = PageIndex;
@@ -314,7 +316,9 @@
 
         async Task<LoadMoreItemsResult> LoadPageAsync( int pageIndex )
         {
+#pragma warning disable SA1129 // Do not use default value type constructor
             var result = new LoadMoreItemsResult();
+#pragma warning restore SA1129 // Do not use default value type constructor
 
             if ( PageIndex != pageIndex )
             {
@@ -341,7 +345,7 @@
 
             var actualPageSize = Math.Max( PageSize - FrozenItems.Count, 1 );
             var arguments = new PagingArguments( pageIndex, actualPageSize );
-            var pagedItems = await pagingMethod( arguments ).ConfigureAwait( false );
+            var pagedItems = await pagingMethod( arguments ).ConfigureAwait( true );
 
             result.Count = OnLoaded( pagedItems );
             OnLoadComplete( pageIndex );
@@ -374,7 +378,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:CollectionChanged"/> event.
+        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event.
         /// </summary>
         /// <param name="args">The <see cref="NotifyCollectionChangedEventArgs"/> event data.</param>
         protected override void OnCollectionChanged( NotifyCollectionChangedEventArgs args )
@@ -384,15 +388,15 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// Raises the <see cref="System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/> event.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// Raises the <see cref="System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/> event.
         /// </summary>
-        /// <param name="args">The <see cref="T:PropertyChangedEventArgs"/> event data.</param>
+        /// <param name="args">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract." )]
         protected override void OnPropertyChanged( PropertyChangedEventArgs args )
         {
@@ -655,7 +659,7 @@
             }
 
             // note: load even if this is the same page index because external conditions may have changed
-            await LoadPageAsync( pageIndex );
+            await LoadPageAsync( pageIndex ).ConfigureAwait( true );
             return true;
         }
 
@@ -776,42 +780,36 @@
             switch ( e.Action )
             {
                 case NotifyCollectionChangedAction.Add:
+                    if ( e.NewItems == null || e.NewItems.Count == 0 || Items.Count <= PageSize )
                     {
-                        if ( e.NewItems == null || e.NewItems.Count == 0 || Items.Count <= PageSize )
-                        {
-                            return;
-                        }
-
-                        if ( PageIndex != LastPageIndex )
-                        {
-                            await LoadPageAsync( PageIndex );
-                        }
-
-                        break;
+                        return;
                     }
+
+                    if ( PageIndex != LastPageIndex )
+                    {
+                        await LoadPageAsync( PageIndex ).ConfigureAwait( true );
+                    }
+
+                    break;
                 case NotifyCollectionChangedAction.Remove:
+                    if ( e.OldItems == null || e.OldItems.Count == 0 )
                     {
-                        if ( e.OldItems == null || e.OldItems.Count == 0 )
-                        {
-                            return;
-                        }
-
-                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
-                        {
-                            await LoadPageAsync( PageIndex );
-                        }
-
-                        break;
+                        return;
                     }
+
+                    if ( Items.Count < PageSize && PageIndex != LastPageIndex )
+                    {
+                        await LoadPageAsync( PageIndex ).ConfigureAwait( true );
+                    }
+
+                    break;
                 case NotifyCollectionChangedAction.Reset:
+                    if ( Items.Count < PageSize && PageIndex != LastPageIndex )
                     {
-                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
-                        {
-                            await LoadPageAsync( PageIndex );
-                        }
-
-                        break;
+                        await LoadPageAsync( PageIndex ).ConfigureAwait( true );
                     }
+
+                    break;
             }
         }
 

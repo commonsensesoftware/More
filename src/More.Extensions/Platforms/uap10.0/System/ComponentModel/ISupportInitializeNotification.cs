@@ -13,7 +13,7 @@
         event EventHandler Initialized;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the object is initialized.
+        /// Gets a value indicating whether the object is initialized.
         /// </summary>
         /// <value>True if the object is initialized; otherwise, false.</value>
         bool IsInitialized { get; }

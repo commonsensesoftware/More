@@ -152,9 +152,9 @@
             var point = new Point( x, dataPoint );
 
             points.Add( point );
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnPropertyChanged( "Item[]" );
-            OnPropertyChanged( "Coordinates" );
+            OnPropertyChanged( nameof( Coordinates ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Add, point, Count - 1 ) );
         }
 
@@ -167,9 +167,9 @@
             var point = points[index];
 
             points.RemoveAt( index );
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnPropertyChanged( "Item[]" );
-            OnPropertyChanged( "Coordinates" );
+            OnPropertyChanged( nameof( Coordinates ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Remove, point, index ) );
         }
 
@@ -187,16 +187,16 @@
             }
 
             points.Clear();
-            OnPropertyChanged( "Count" );
+            OnPropertyChanged( nameof( Count ) );
             OnPropertyChanged( "Item[]" );
-            OnPropertyChanged( "Coordinates" );
+            OnPropertyChanged( nameof( Coordinates ) );
             OnCollectionChanged( new NotifyCollectionChangedEventArgs( NotifyCollectionChangedAction.Reset ) );
         }
 
         /// <summary>
         /// Returns the string representation of the collection.
         /// </summary>
-        /// <returns>A <see cref="String">string</see> representing the collection.</returns>
+        /// <returns>A <see cref="string">string</see> representing the collection.</returns>
         public override string ToString()
         {
             var coordinates = new StringBuilder();

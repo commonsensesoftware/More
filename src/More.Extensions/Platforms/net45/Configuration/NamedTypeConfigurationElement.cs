@@ -22,10 +22,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="NamedTypeConfigurationElement"/> class with the supplied <paramref name="name"/> and <paramref name="baseType">base type</paramref>.
         /// </summary>
-        /// <param name="name">The element <see cref="P:NamedConfigurationElement.Name">name</see>.</param>
+        /// <param name="name">The element <see cref="NamedConfigurationElement.Name">name</see>.</param>
         /// <param name="baseType">The element base <see cref="Type">type</see>.</param>
-        protected NamedTypeConfigurationElement( string name, Type baseType )
-            : base( name )
+        protected NamedTypeConfigurationElement( string name, Type baseType ) : base( name )
         {
             Arg.NotNullOrEmpty( name, nameof( name ) );
             BaseType = baseType;
@@ -37,8 +36,8 @@
         /// <value>The configured base <see cref="Type">type</see> element.</value>
         protected Type BaseType
         {
-            get => (Type) base[TypeProperty];
-            set => base[TypeProperty] = value;
+            get => (Type) this[TypeProperty];
+            set => this[TypeProperty] = value;
         }
 
         /// <summary>
@@ -61,7 +60,7 @@
         /// <summary>
         /// Override this method to perform your concrete validations.
         /// </summary>
-        /// <param name="value">The <see cref="Object">object</see> to validate.</param>
+        /// <param name="value">The <see cref="object">object</see> to validate.</param>
         protected virtual void Validate( object value ) { }
     }
 }

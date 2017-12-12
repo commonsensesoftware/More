@@ -1,8 +1,8 @@
 ﻿namespace More.Composition
 {
+    using global::Windows.UI.Xaml.Controls;
     using System;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml.Controls;
 
     /// <summary>
     /// Represents the base implemention for a <see cref="IShellView">shell view</see> with a view model using a <see cref="Frame">frame</see>.

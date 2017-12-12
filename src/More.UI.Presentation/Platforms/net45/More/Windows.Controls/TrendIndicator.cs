@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        /// Indicates that the initialization process for the control is complete. 
+        /// Indicates that the initialization process for the control is complete.
         /// </summary>
         public override void EndInit()
         {

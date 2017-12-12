@@ -30,7 +30,11 @@
         /// <param name="mutator">The <see cref="Action{T1,T2}">function</see> representing the property mutator.
         /// This parameter can be null if the property is read-only.</param>
         public ExtensionMethodToPropertyDescriptor( string propertyName, Func<TObject, TValue> accessor, Action<TObject, TValue> mutator )
+#if NET45
             : base( propertyName, new Attribute[0] )
+#else
+            : base( propertyName, Array.Empty<Attribute>() )
+#endif
         {
             Arg.NotNull( accessor, nameof( accessor ) );
 
@@ -46,7 +50,7 @@
         public override bool CanResetValue( object component ) => false;
 
         /// <summary>
-        /// Returns the type of component the property is for.
+        /// Gets the type of component the property is for.
         /// </summary>
         /// <value>The component <see cref="Type">type</see> represented by <typeparamref name="TObject"/>.</value>
         public override Type ComponentType => typeof( TObject );

@@ -1,12 +1,12 @@
 ﻿namespace More.IO
 {
+    using global::Windows.ApplicationModel;
+    using global::Windows.Storage;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using global::Windows.ApplicationModel;
-    using global::Windows.Storage;
 
     /// <summary>
     /// Represents a file system that provides access to folders and files.
@@ -15,42 +15,38 @@
     {
         static async Task<IFolder> GetFolderForProtocolAsync( Uri uri )
         {
-            var scheme = uri.Scheme.ToLowerInvariant();
+            var scheme = uri.Scheme.ToUpperInvariant();
             var segments = new Queue<string>( uri.Segments.Select( s => s.Trim( '/' ) ).Where( s => s.Length > 0 ) );
             var nativeFolder = default( StorageFolder );
 
             switch ( scheme )
             {
-                case "ms-appdata":
+                case "MS-APPDATA":
+                    if ( segments.Count == 0 )
                     {
-                        if ( segments.Count == 0 )
-                        {
-                            return null;
-                        }
-
-                        var appData = ApplicationData.Current;
-                        var name = segments.Dequeue().ToLowerInvariant();
-
-                        switch ( name )
-                        {
-                            case "local":
-                                nativeFolder = appData.LocalFolder;
-                                break;
-                            case "roaming":
-                                nativeFolder = appData.RoamingFolder;
-                                break;
-                            case "temp":
-                                nativeFolder = appData.TemporaryFolder;
-                                break;
-                        }
-
-                        break;
+                        return null;
                     }
-                case "ms-appx":
+
+                    var appData = ApplicationData.Current;
+                    var name = segments.Dequeue().ToUpperInvariant();
+
+                    switch ( name )
                     {
-                        nativeFolder = Package.Current.InstalledLocation;
-                        break;
+                        case "LOCAL":
+                            nativeFolder = appData.LocalFolder;
+                            break;
+                        case "ROAMING":
+                            nativeFolder = appData.RoamingFolder;
+                            break;
+                        case "TEMP":
+                            nativeFolder = appData.TemporaryFolder;
+                            break;
                     }
+
+                    break;
+                case "MS-APPX":
+                    nativeFolder = Package.Current.InstalledLocation;
+                    break;
                 default:
                     throw new FileNotFoundException( ExceptionMessage.PathNotFound.FormatDefault( uri.OriginalString ) );
             }
@@ -79,7 +75,7 @@
 
             if ( Uri.TryCreate( path, UriKind.Absolute, out var uri ) )
             {
-                return await GetFolderForProtocolAsync( uri );
+                return await GetFolderForProtocolAsync( uri ).ConfigureAwait( false );
             }
 
             return ( await StorageFolder.GetFolderFromPathAsync( path ) ).AsFolder();

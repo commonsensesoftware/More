@@ -1,10 +1,7 @@
 ﻿namespace More.Windows.Interactivity
 {
     using System;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics.Contracts;
     using System.Windows;
-    using System.Windows.Data;
     using System.Windows.Markup;
 
     /// <content>
@@ -13,8 +10,14 @@
     [ContentProperty( nameof( Parameters ) )]
     public partial class InvokeMethodAction : System.Windows.Interactivity.TriggerAction<DependencyObject>
     {
-        void Invoke()
+        /// <summary>
+        /// Occurs when the trigger action is invoked.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/> for the event that triggered the action.</param>
+        protected virtual void Invoke( EventArgs e )
         {
+            Arg.NotNull( e, nameof( e ) );
+
             if ( string.IsNullOrEmpty( MethodName ) )
             {
                 ReturnValue = null;
@@ -34,16 +37,6 @@
             {
                 ReturnValue = method.Invoke( target, Parameters );
             }
-        }
-
-        /// <summary>
-        /// Occurs when the trigger action is invoked.
-        /// </summary>
-        /// <param name="e">The <see cref="EventArgs"/> for the event that triggered the action.</param>
-        protected virtual void Invoke( EventArgs e )
-        {
-            Arg.NotNull( e, nameof( e ) );
-            Invoke();
         }
 
         /// <summary>

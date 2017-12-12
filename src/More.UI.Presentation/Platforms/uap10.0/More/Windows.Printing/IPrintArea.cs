@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Printing
 {
+    using global::Windows.UI.Xaml.Printing;
     using System;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml.Printing;
 
     /// <summary>
     /// Defines the behavior of a print area.

@@ -19,13 +19,13 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    ///  
+    ///
     /// <More:IsNullConverter x:Key="NullConverter" />
-    /// 
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding Name, Converter={StaticResource NullConverter}, StringFormat='Name is null = \{0\}'}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
     /// <example>This example demonstrates how to convert a null value to a Boolean and negating the result.
@@ -35,13 +35,13 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    ///  
+    ///
     /// <More:IsNullConverter x:Key="NullConverter" Negate="True" />
-    /// 
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding Name, Converter={StaticResource NullConverter}, StringFormat='Name is not null = \{0\}'}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
     public class IsNullConverter : IValueConverter

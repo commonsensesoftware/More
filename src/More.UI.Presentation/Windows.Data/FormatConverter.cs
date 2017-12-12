@@ -46,7 +46,6 @@
                 }
             }
 
-
             if ( value is IFormattable formattable )
             {
                 return formattable.ToString( Format, culture );
@@ -63,6 +62,7 @@
             return ( value ?? string.Empty ).ToString();
         }
 
+#pragma warning disable SA1606 // Element documentation should have summary text
 #if UAP10_0
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx_core"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, string language ) =>
@@ -70,6 +70,7 @@
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture ) =>
 #endif
+#pragma warning restore SA1606 // Element documentation should have summary text
             throw new NotSupportedException( ExceptionMessage.ConvertBackUnsupported );
     }
 }

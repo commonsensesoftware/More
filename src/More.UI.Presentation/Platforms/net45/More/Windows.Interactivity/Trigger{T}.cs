@@ -33,7 +33,7 @@
         readonly TriggerProxy proxy = new TriggerProxy();
 
         /// <summary>
-        /// Get a collection of actions associated with the trigger.
+        /// Gets a collection of actions associated with the trigger.
         /// </summary>
         /// <value>An <see cref="TriggerActionCollection">action collection</see>.</value>
         public System.Windows.Interactivity.TriggerActionCollection Actions

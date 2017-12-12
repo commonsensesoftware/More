@@ -18,25 +18,6 @@
     /// </summary>
     public static class DataGridColumnExtensions
     {
-        sealed class DataGridBoundColumnAdapter : IDataGridBoundColumn
-        {
-            readonly DataGridBoundColumn columm;
-
-            internal DataGridBoundColumnAdapter( DataGridBoundColumn boundColumn ) => columm = boundColumn;
-
-            public BindingBase Binding
-            {
-                get => columm.Binding;
-                set => columm.Binding = value;
-            }
-
-            public BindingBase ClipboardContentBinding
-            {
-                get => columm.ClipboardContentBinding;
-                set => columm.ClipboardContentBinding = value;
-            }
-        }
-
         static async Task<DataGridColumn> AddFromResourceAsync(
             Assembly assembly,
             ICollection<DataGridColumn> columns,
@@ -67,18 +48,18 @@
 
                 if ( !IsNullOrEmpty( templateName ) )
                 {
-                    column.CellTemplate = await xaml.FromResourceAsync( assembly.CreatePackUri( templateName ) );
+                    column.CellTemplate = await xaml.FromResourceAsync( assembly.CreatePackUri( templateName ) ).ConfigureAwait( true );
                 }
 
                 if ( !column.IsReadOnly && !IsNullOrEmpty( editTemplateName ) )
                 {
-                    column.CellEditingTemplate = await xaml.FromResourceAsync( assembly.CreatePackUri( editTemplateName ) );
+                    column.CellEditingTemplate = await xaml.FromResourceAsync( assembly.CreatePackUri( editTemplateName ) ).ConfigureAwait( true );
                 }
             }
             else
             {
                 var xaml = new XamlContent<ResourceDictionary>();
-                var resourceDictionary = await xaml.FromResourceAsync( assembly.CreatePackUri( resourceName ) );
+                var resourceDictionary = await xaml.FromResourceAsync( assembly.CreatePackUri( resourceName ) ).ConfigureAwait( true );
 
                 if ( !IsNullOrEmpty( templateName ) )
                 {
@@ -470,7 +451,7 @@
         /// <param name="column">The extended <see cref="DataGridColumn"/> object.</param>
         /// <returns>A <see cref="DataGridColumn"/> object.</returns>
         /// <remarks>If <paramref name="column"/> derives from <see cref="DataGridBoundColumn"/>, the binding mode
-        /// will be changed to <see cref="T:BindingMode.OneWay"/> if a binding is present.</remarks>
+        /// will be changed to <see cref="BindingMode.OneWay"/> if a binding is present.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn ReadOnly( this DataGridColumn column )
         {
@@ -495,7 +476,7 @@
         /// <param name="column">The extended <see cref="DataGridColumn"/> object.</param>
         /// <returns>A <see cref="DataGridColumn"/> object.</returns>
         /// <remarks>If <paramref name="column"/> derives from <see cref="DataGridBoundColumn"/>, the binding mode
-        /// will be changed to <see cref="T:BindingMode.TwoWay"/> if a binding is present.</remarks>
+        /// will be changed to <see cref="BindingMode.TwoWay"/> if a binding is present.</remarks>
         [SuppressMessage( "Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "Validated by a code contract" )]
         public static DataGridColumn ReadWrite( this DataGridColumn column )
         {
@@ -519,7 +500,7 @@
         /// </summary>
         /// <param name="column">The extended <see cref="DataGridColumn"/> object.</param>
         /// <returns>A <see cref="DataGridColumn"/> object.</returns>
-        /// <remarks>If <paramref name="column"/> implements <see cref="IOptionalDataGridColumn"/>, the <see cref="P:IOptionalDataGridColumn.IsOptional"/>
+        /// <remarks>If <paramref name="column"/> implements <see cref="IOptionalDataGridColumn"/>, the <see cref="IOptionalDataGridColumn.IsOptional"/>
         /// property will be set to false; otherwise, this method has no effect.</remarks>
         public static DataGridColumn Required( this DataGridColumn column )
         {
@@ -539,7 +520,7 @@
         /// </summary>
         /// <param name="column">The extended <see cref="DataGridColumn"/> object.</param>
         /// <returns>A <see cref="DataGridColumn"/> object.</returns>
-        /// <remarks>If <paramref name="column"/> implements <see cref="IOptionalDataGridColumn"/>, the <see cref="P:IOptionalDataGridColumn.IsOptional"/>
+        /// <remarks>If <paramref name="column"/> implements <see cref="IOptionalDataGridColumn"/>, the <see cref="IOptionalDataGridColumn.IsOptional"/>
         /// property will be set to true; otherwise, this method has no effect.</remarks>
         public static DataGridColumn Optional( this DataGridColumn column )
         {
@@ -830,7 +811,7 @@
         /// Sets the fallback value associated with column's binding.
         /// </summary>
         /// <param name="column">The extended <see cref="DataGridColumn"/> object.</param>
-        /// <param name="fallbackValue">The fallback <see cref="Object"/> assigned to the column.</param>
+        /// <param name="fallbackValue">The fallback <see cref="object"/> assigned to the column.</param>
         /// <returns>A <see cref="DataGridColumn"/> object.</returns>
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn SetFallbackValue( this DataGridColumn column, object fallbackValue )
@@ -852,7 +833,7 @@
         /// Sets the value associated with column's binding when the source value is null.
         /// </summary>
         /// <param name="column">The extended <see cref="DataGridColumn"/> object.</param>
-        /// <param name="nullValue">The <see cref="Object"/> assigned to the column when the source value is null.</param>
+        /// <param name="nullValue">The <see cref="object"/> assigned to the column when the source value is null.</param>
         /// <returns>A <see cref="DataGridColumn"/> object.</returns>
         /// <remarks>If <paramref name="column"/> does not derive from <see cref="DataGridBoundColumn"/>, this method has no effect.</remarks>
         public static DataGridColumn SetTargetNullValue( this DataGridColumn column, object nullValue )
@@ -868,6 +849,25 @@
             }
 
             return column;
+        }
+
+        sealed class DataGridBoundColumnAdapter : IDataGridBoundColumn
+        {
+            readonly DataGridBoundColumn columm;
+
+            internal DataGridBoundColumnAdapter( DataGridBoundColumn boundColumn ) => columm = boundColumn;
+
+            public BindingBase Binding
+            {
+                get => columm.Binding;
+                set => columm.Binding = value;
+            }
+
+            public BindingBase ClipboardContentBinding
+            {
+                get => columm.ClipboardContentBinding;
+                set => columm.ClipboardContentBinding = value;
+            }
         }
     }
 }

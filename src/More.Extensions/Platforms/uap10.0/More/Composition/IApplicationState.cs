@@ -1,10 +1,10 @@
 ﻿namespace More.Composition
 {
-    using System;
-    using System.Diagnostics.Contracts;
-    using System.Diagnostics.CodeAnalysis;
     using global::Windows.ApplicationModel;
     using global::Windows.ApplicationModel.Activation;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <content>
     /// Provides additional application state capabilities specific to Windows Store applications.

@@ -26,13 +26,13 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    /// 
+    ///
     /// <More:NumericDenominationConverter x:Key="NumberConverter" DefaultFormat="0.##M;(0.##)M" DefaultDenomination="1000000" />
-    ///     
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding SomeNumber, Converter={StaticResource NumberConverter}}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
     /// <example>This example demonstrates how to define declarative rules to define the conditions and formats for different numeric denominations.
@@ -43,7 +43,7 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    /// 
+    ///
     /// <More:NumericDenominationConverter x:Key="NumberConverter" DefaultFormat="C">
     ///  <More:DenominationConvertRule Denomination="1000000000" Format="$0.## b;($0.##) b">
     ///   <More:GreaterThanRule Value="1000000000">
@@ -80,11 +80,11 @@
     ///   <More:GreaterThanRule Value="-1" />
     ///  </More:DenominationConvertRule>
     /// </More:NumericDenominationConverter>
-    /// 
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding SomeNumber, Converter={StaticResource NumberConverter}}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
 #if UAP10_0
@@ -119,7 +119,7 @@
         /// Gets or sets the default number format.
         /// </summary>
         /// <value>The default number format.</value>
-        public string DefaultFormat        {            get;            set;        }
+        public string DefaultFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the default denomination associated with the converter.
@@ -226,6 +226,7 @@
             return result.ToString( format, culture );
         }
 
+#pragma warning disable SA1606 // Element documentation should have summary text
 #if UAP10_0
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx_core"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, string language )
@@ -233,6 +234,7 @@
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
 #endif
+#pragma warning restore SA1606 // Element documentation should have summary text
         {
             // must have convert back rules if there are convert rules
             if ( ConvertRules.Any() && !ConvertBackRules.Any() )
@@ -250,6 +252,7 @@
 #if UAP10_0
             var culture = Util.GetCultureFromLanguage( language );
 #endif
+
             // use matching rule or failover to default converter
             if ( ConvertBackRules.Any() )
             {

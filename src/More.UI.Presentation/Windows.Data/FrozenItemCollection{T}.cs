@@ -57,7 +57,7 @@
                 }
 
                 frozenItemPosition = value;
-                OnPropertyChanged( "FrozenItemPosition" );
+                OnPropertyChanged( nameof( FrozenItemPosition ) );
                 RebuildCollection();
             }
         }
@@ -93,7 +93,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName ) =>
@@ -126,29 +126,21 @@
             switch ( e.Action )
             {
                 case NotifyCollectionChangedAction.Add:
-                    {
-                        base.InsertItem( e.NewStartingIndex, (T) e.NewItems[0] );
-                        break;
-                    }
+                    base.InsertItem( e.NewStartingIndex, (T) e.NewItems[0] );
+                    break;
                 case NotifyCollectionChangedAction.Remove:
-                    {
-                        base.RemoveItem( e.OldStartingIndex );
-                        break;
-                    }
+                    base.RemoveItem( e.OldStartingIndex );
+                    break;
                 case NotifyCollectionChangedAction.Replace:
-                    {
-                        base.SetItem( e.NewStartingIndex, (T) e.NewItems[0] );
-                        break;
-                    }
+                    base.SetItem( e.NewStartingIndex, (T) e.NewItems[0] );
+                    break;
                 case NotifyCollectionChangedAction.Reset:
+                    while ( Count > UnfrozenItems.Count )
                     {
-                        while ( Count > UnfrozenItems.Count )
-                        {
-                            RemoveAt( 0 );
-                        }
-
-                        break;
+                        RemoveAt( 0 );
                     }
+
+                    break;
             }
         }
 
@@ -172,6 +164,7 @@
 
                         break;
                     }
+
                 case NotifyCollectionChangedAction.Remove:
                     {
                         var count = e.OldItems == null ? 0 : e.OldItems.Count;
@@ -184,6 +177,7 @@
 
                         break;
                     }
+
                 case NotifyCollectionChangedAction.Replace:
                     {
                         var count = e.NewItems == null ? 0 : e.NewItems.Count;
@@ -196,6 +190,7 @@
 
                         break;
                     }
+
                 case NotifyCollectionChangedAction.Reset:
                     {
                         while ( Count > UnfrozenItems.Count )
@@ -215,20 +210,14 @@
             switch ( FrozenItemPosition )
             {
                 case Beginning:
-                    {
-                        items = FrozenItems.Union( this.Take( Count ) ).ToList();
-                        break;
-                    }
+                    items = FrozenItems.Union( this.Take( Count ) ).ToList();
+                    break;
                 case End:
-                    {
-                        items = this.Skip( FrozenItems.Count ).Union( FrozenItems ).ToList();
-                        break;
-                    }
+                    items = this.Skip( FrozenItems.Count ).Union( FrozenItems ).ToList();
+                    break;
                 default:
-                    {
-                        items = Items.ToList();
-                        break;
-                    }
+                    items = Items.ToList();
+                    break;
             }
 
             base.ClearItems();
@@ -243,15 +232,11 @@
             switch ( FrozenItemPosition )
             {
                 case Beginning:
-                    {
-                        ProcessFrozenItemsFromBeginning( e );
-                        break;
-                    }
+                    ProcessFrozenItemsFromBeginning( e );
+                    break;
                 case End:
-                    {
-                        ProcessFrozenItemsFromEnd( e );
-                        break;
-                    }
+                    ProcessFrozenItemsFromEnd( e );
+                    break;
             }
         }
 
@@ -315,6 +300,7 @@
                 this.owner = owner;
                 this.owner.CollectionChanged += OnBubbleCollectionChanged;
             }
+
             int ToActualIndex( int index )
             {
                 // index can equal count during an insert
@@ -372,7 +358,7 @@
                     return;
                 }
 
-                OnPropertyChanged( "Count" );
+                OnPropertyChanged( nameof( Count ) );
                 OnPropertyChanged( "Item[]" );
                 var args = new NotifyCollectionChangedEventArgs( e.Action, e.NewItems, index );
                 OnCollectionChanged( args );
@@ -389,7 +375,7 @@
                     return;
                 }
 
-                OnPropertyChanged( "Count" );
+                OnPropertyChanged( nameof( Count ) );
                 OnPropertyChanged( "Item[]" );
                 var args = new NotifyCollectionChangedEventArgs( e.Action, e.OldItems, index );
                 OnCollectionChanged( args );
@@ -418,34 +404,23 @@
                 switch ( e.Action )
                 {
                     case NotifyCollectionChangedAction.Add:
-                        {
-                            OnOwnerItemsAdded( e );
-                            break;
-                        }
+                        OnOwnerItemsAdded( e );
+                        break;
                     case NotifyCollectionChangedAction.Move:
-                        {
-                            OnPropertyChanged( "Item[]" );
-                            OnCollectionChanged( e );
-                            break;
-                        }
+                        OnPropertyChanged( "Item[]" );
+                        OnCollectionChanged( e );
+                        break;
                     case NotifyCollectionChangedAction.Remove:
-                        {
-                            OnOwnerItemsRemoved( e );
-                            break;
-                        }
-
+                        OnOwnerItemsRemoved( e );
+                        break;
                     case NotifyCollectionChangedAction.Replace:
-                        {
-                            OnOwnerItemsReplaced( e );
-                            break;
-                        }
+                        OnOwnerItemsReplaced( e );
+                        break;
                     case NotifyCollectionChangedAction.Reset:
-                        {
-                            OnPropertyChanged( "Count" );
-                            OnPropertyChanged( "Item[]" );
-                            OnCollectionChanged( e );
-                            break;
-                        }
+                        OnPropertyChanged( nameof( Count ) );
+                        OnPropertyChanged( "Item[]" );
+                        OnCollectionChanged( e );
+                        break;
                 }
             }
 

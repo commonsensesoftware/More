@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Controls
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <content>
     /// Provides additional implementation specified to Windows Runtime applications.
@@ -48,7 +48,7 @@
         /// Gets or sets the default command index.
         /// </summary>
         /// <value>The default command index, which is the zero-based index of the
-        /// <see cref="P:Commands">command</see> that is invoked when the ENTER key
+        /// <see cref="global::Windows.UI.Popups.MessageDialog.Commands">command</see> that is invoked when the ENTER key
         /// is pressed. The default value is -1, which indicates there is no default
         /// command.</value>
         public override int DefaultCommandIndex
@@ -61,7 +61,7 @@
         /// Gets or sets the cancel command index.
         /// </summary>
         /// <value>The cancel command index, which is the zero-based index of the
-        /// <see cref="P:Commands">command</see> that is invoked when the ESC key
+        /// <see cref="global::Windows.UI.Popups.MessageDialog.Commands">command</see> that is invoked when the ESC key
         /// is pressed. The default value is -1, which indicates there is no cancel
         /// command.</value>
         public override int CancelCommandIndex

@@ -1,10 +1,10 @@
 ﻿namespace More.Composition
 {
+    using global::Windows.ApplicationModel;
+    using global::Windows.ApplicationModel.Activation;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using global::Windows.ApplicationModel;
-    using global::Windows.ApplicationModel.Activation;
 
     [ContractClassFor( typeof( IApplicationState ) )]
     internal abstract class IApplicationStateContract : IApplicationState

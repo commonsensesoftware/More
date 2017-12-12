@@ -21,14 +21,14 @@
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:Data="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     ///  xmlns:More="clr-namespace:System.Windows.Controls;assembly=System.Windows.More">
-    /// 
+    ///
     /// <Grid>
     ///   <Data:DataGrid ItemsSource="{Binding ItemsSource}"
     ///                  AutoGenerateColumns="False"
     ///                  More:DataGridDecorator.Columns="{Binding Columns}"
     ///                  More:DataGridDecorator.SelectedItems="{Binding SelectedItems}" />
     /// </Grid>
-    ///  
+    ///
     /// </UserControl>
     /// ]]></code></example>
     public static class DataGridDecorator

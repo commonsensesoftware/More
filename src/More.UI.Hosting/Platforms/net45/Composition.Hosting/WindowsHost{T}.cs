@@ -36,7 +36,7 @@
         /// using System.Composition;
         /// using System.Composition.Hosting;
         /// using System.Windows;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     public class MainWindow : Window, IShellView
@@ -45,13 +45,13 @@
         ///         {
         ///             this.InitializeComponent();
         ///         }
-        ///         
+        ///
         ///         public virtual new void Show()
         ///         {
         ///             Application.Current.MainWindow = this;
         ///         }
         ///     }
-        ///     
+        ///
         ///     [STAThread]
         ///     public static void Main()
         ///     {

@@ -1,22 +1,22 @@
 ﻿namespace More.Windows.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using global::Windows.ApplicationModel.DataTransfer;
     using global::Windows.Foundation;
     using global::Windows.Storage;
     using global::Windows.Storage.Streams;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// Defines the behavior of a read-only version of a <see cref="IDataPackage"/>. 
+    /// Defines the behavior of a read-only version of a <see cref="IDataPackage"/>.
     /// </summary>
     /// <remarks>Applications that receive shared content get this object when acquiring content.</remarks>
     [CLSCompliant( false )]
     public interface IDataPackageView
     {
         /// <summary>
-        /// Returns the formats the DataPackageView contains.
+        /// Gets the formats the DataPackageView contains.
         /// </summary>
         /// <value>The formats the <see cref="IDataPackageView"/> contains.</value>
         IReadOnlyList<string> AvailableFormats { get; }
@@ -45,7 +45,7 @@
         /// <summary>
         /// Gets the application link in the <see cref="IDataPackageView"/> object.
         /// </summary>
-        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the application <see cref="T:Uri">link</see>.</returns>
+        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the application <see cref="System.Uri">link</see>.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<Uri> GetApplicationLinkAsync();
 
@@ -113,7 +113,7 @@
         /// <summary>
         /// Gets the web link in the <see cref="IDataPackageView"/> object.
         /// </summary>
-        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the web <see cref="T:Uri">link</see>.</returns>
+        /// <returns>An <see cref="IAsyncOperation{T}">asynchronous operation</see> containing the web <see cref="System.Uri">link</see>.</returns>
         [SuppressMessage( "Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This is asynchronous method and not a property." )]
         IAsyncOperation<Uri> GetWebLinkAsync();
 

@@ -1,5 +1,8 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.Foundation;
+    using global::Windows.Storage;
+    using global::Windows.Storage.Pickers;
     using Input;
     using Microsoft.Xaml.Interactivity;
     using System;
@@ -8,13 +11,10 @@
     using System.IO;
     using System.Threading.Tasks;
     using IFile = IO.IFile;
-    using global::Windows.Foundation;
-    using global::Windows.Storage;
-    using global::Windows.Storage.Pickers;
 
     /// <summary>
     /// Represents an <see cref="IAction">interactivity action</see> that can be used to save a file for the
-    /// <see cref="SaveFileInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// <see cref="SaveFileInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     [CLSCompliant( false )]
     public class SaveFileAction : System.Windows.Interactivity.TriggerAction

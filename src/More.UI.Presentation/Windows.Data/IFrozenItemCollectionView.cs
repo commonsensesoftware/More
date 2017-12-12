@@ -17,7 +17,9 @@
 #endif
     [ContractClass( typeof( IFrozenItemCollectionViewContract ) )]
     [SuppressMessage( "Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This a view of a collection, not a collection itself." )]
+#pragma warning disable CA1010 // Collections should implement generic interface
     public interface IFrozenItemCollectionView : ICollectionView
+#pragma warning restore CA1010 // Collections should implement generic interface
     {
         /// <summary>
         /// Gets or sets the position of frozen items in the collection view.

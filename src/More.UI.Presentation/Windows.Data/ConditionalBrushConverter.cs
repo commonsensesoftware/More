@@ -26,7 +26,7 @@
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    ///  
+    ///
     /// <More:ConditionalBrushConverter x:Key="BrushConverter" DefaultBrush="White">
     ///   <More:ConditionalBrushRule Brush="Yellow">
     ///    <More:EqualToRule Value="{x:Null}" />
@@ -41,12 +41,12 @@
     ///    <More:LessThanRule Value="0" />
     ///   </More:ConditionalBrushRule>
     /// </More:ConditionalBrushConverter>
-    /// 
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding SomeNumber, StringFormat='\{0:N2\}'}"
     ///             Foreground="{Binding SomeNumber, Converter={StaticResource BrushConverter}}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
 #if UAP10_0
@@ -78,7 +78,7 @@
         /// <summary>
         /// Gets or sets the default brush associated with the converter.
         /// </summary>
-        /// <value>A <see cref="Brush"/> object.  The default value is <see cref="P:Brushes.Gray"/>.</value>
+        /// <value>A <see cref="Brush"/> object.  The default value is a <see cref="Colors.Gray"/> <see cref="SolidColorBrush"/>.</value>
         public Brush DefaultBrush
         {
             get

@@ -13,7 +13,7 @@
 
     /// <summary>
     /// Represents a <see cref="ISpecification{T}">specification</see> for matching <see cref="AssemblyName">assembly names</see>
-    /// according to their <see cref="M:AssemblyName.GetPublicKeyToken">public key token</see>.
+    /// according to their <see cref="AssemblyName.GetPublicKeyToken">public key token</see>.
     /// </summary>
     public class PublicKeyTokenSpecification : SpecificationBase<AssemblyName>, ISpecification<Type>
     {

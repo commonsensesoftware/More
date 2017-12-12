@@ -56,8 +56,8 @@
         /// <param name="month">An integer from 1 to 12 representing the month.</param>
         /// <param name="era">An integer representing the era.</param>
         /// <returns>The number of days in the month.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="year"/> is less than <see cref="P:MinSupportedDateTime"/><para>- or -</para>
-        /// <para><paramref name="year"/> is greater than <see cref="P:MaxSupportedDateTime"/>.</para></exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="year"/> is less than <see cref="Calendar.MinSupportedDateTime"/><para>- or -</para>
+        /// <para><paramref name="year"/> is greater than <see cref="Calendar.MaxSupportedDateTime"/>.</para></exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="month"/> is less than 1<para>- or -</para>
         /// <para><paramref name="month"/> is greater than 12.</para></exception>
         [SuppressMessage( "Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "year-1", Justification = "Validated by calendar year boundary" )]
@@ -93,8 +93,8 @@
         /// <param name="year">An integer representing the year.</param>
         /// <param name="era">An integer representing the era.</param>
         /// <returns>The number of days in the year.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="year"/> is less than <see cref="P:MinSupportedDateTime"/><para>- or -</para>
-        /// <para><paramref name="year"/> is greater than <see cref="P:MaxSupportedDateTime"/>.</para></exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="year"/> is less than <see cref="Calendar.MinSupportedDateTime"/><para>- or -</para>
+        /// <para><paramref name="year"/> is greater than <see cref="Calendar.MaxSupportedDateTime"/>.</para></exception>
         [SuppressMessage( "Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "year-1", Justification = "Validated by calendar year boundary" )]
         public override int GetDaysInYear( int year, int era )
         {
@@ -168,7 +168,6 @@
             // if the fiscal calendar spans over two years, then the if the current year starts
             // before March and is a leap year or starts after February and the next year is a
             // leap year, then the fiscal year is a leap year.
-
             var leapYear = base.IsLeapYear( year, era );
 
             if ( epochMonth < 3 )
@@ -191,8 +190,8 @@
         /// <param name="millisecond">An integer from 0 to 999 that represents the millisecond.</param>
         /// <param name="era">An integer that represents the era.  This parameter is not used.</param>
         /// <returns>A <see cref="DateTime"/> structure.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="year"/> is less than <see cref="P:MinSupportedDateTime"/><para>- or -</para>
-        /// <para><paramref name="year"/> is greater than <see cref="P:MaxSupportedDateTime"/>.</para></exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="year"/> is less than <see cref="Calendar.MinSupportedDateTime"/><para>- or -</para>
+        /// <para><paramref name="year"/> is greater than <see cref="Calendar.MaxSupportedDateTime"/>.</para></exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="month"/> is less than 1<para>- or -</para>
         /// <para><paramref name="month"/> is greater than 12.</para></exception>
         [SuppressMessage( "Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "year-1", Justification = "Validated by calendar year boundary" )]
@@ -200,7 +199,6 @@
         {
             // to convert back to a normal date time, the fiscal year must be requested by the year for the last month
             // ex: Assume FY11 starts July 1, 2010 and ends on June 30, 2010; therefore ToDateTime( 2011, 1, 1 ) = July 1, 2010
-
             if ( month < 1 || month > 12 )
             {
                 throw new ArgumentOutOfRangeException( nameof( month ) );

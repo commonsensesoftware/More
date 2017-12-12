@@ -11,8 +11,8 @@
     using System.Windows.Markup;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to show the
-    /// <see cref="T:Interaction">interaction</see> from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to show the
+    /// <see cref="Interaction">interaction</see> from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     public class PrintAction : System.Windows.Interactivity.TriggerAction<FrameworkElement>
     {
@@ -96,7 +96,7 @@
         /// Gets or sets the resource Uniform Resource Indicator (URI) of the document source.
         /// </summary>
         /// <value>The document source <see cref="Uri">URI</see>.</value>
-        /// <remarks>If a print <see cref="P:Document">document</see> has been set, then this property is ignored.</remarks>
+        /// <remarks>If a print <see cref="Document">document</see> has been set, then this property is ignored.</remarks>
         public Uri DocumentSource
         {
             get => (Uri) GetValue( DocumentSourceProperty );
@@ -179,7 +179,7 @@
                 Title = SR.PrintPreviewTitle.FormatDefault( interaction.Title ),
                 Content = viewer,
                 Owner = Window.GetWindow( AssociatedObject ),
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
             };
 
             if ( Style != null )

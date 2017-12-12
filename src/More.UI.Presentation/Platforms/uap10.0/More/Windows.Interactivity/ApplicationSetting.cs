@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.UI.Xaml;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Diagnostics.CodeAnalysis;
-    using global::Windows.UI.Xaml;
 
     /// <summary>
     /// Represents an application setting entry in the Settings contract.
@@ -42,7 +42,7 @@
         /// Gets or sets the setting identifier.
         /// </summary>
         /// <value>The setting identifier.</value>
-        /// <remarks>If the value is unset, the default value is the <see cref="P:ViewName">view name</see>.</remarks>
+        /// <remarks>If the value is unset, the default value is the <see cref="ViewTypeName">view name</see>.</remarks>
         public string Id
         {
             get => (string) GetValue( IdProperty );

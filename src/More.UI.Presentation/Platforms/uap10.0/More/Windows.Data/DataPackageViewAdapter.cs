@@ -1,14 +1,15 @@
 ﻿namespace More.Windows.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Threading.Tasks;
     using global::Windows.ApplicationModel.DataTransfer;
     using global::Windows.Foundation;
     using global::Windows.Storage;
     using global::Windows.Storage.Streams;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     sealed class DataPackageViewAdapter : IDataPackageView
     {
@@ -22,7 +23,6 @@
             properties = new Lazy<IDataPackagePropertySetView>( () => new DataPackagePropertySetViewAdapter( adapted.Properties ) );
         }
 
-
         public IReadOnlyList<string> AvailableFormats => adapted.AvailableFormats;
 
         public IDataPackagePropertySetView Properties => properties.Value;
@@ -35,8 +35,10 @@
 
         public IAsyncOperation<IRandomAccessStreamReference> GetBitmapAsync()
         {
+            var cancellationToken = CancellationToken.None;
             var options = TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion;
-            return adapted.GetBitmapAsync().AsTask().ContinueWith( t => (IRandomAccessStreamReference) t.Result, options ).AsAsyncOperation();
+            var scheduler = TaskScheduler.Current;
+            return adapted.GetBitmapAsync().AsTask().ContinueWith( t => (IRandomAccessStreamReference) t.Result, cancellationToken, options, scheduler ).AsAsyncOperation();
         }
 
         public IAsyncOperation<object> GetDataAsync( string formatId ) => adapted.GetDataAsync( formatId );
@@ -45,9 +47,11 @@
 
         public IAsyncOperation<IReadOnlyDictionary<string, IRandomAccessStreamReference>> GetResourceMapAsync()
         {
+            var cancellationToken = CancellationToken.None;
             var options = TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion;
             var task = adapted.GetResourceMapAsync().AsTask();
-            var continuation = task.ContinueWith<IReadOnlyDictionary<string, IRandomAccessStreamReference>>( t => t.Result.ToDictionary( p => p.Key, p => (IRandomAccessStreamReference) p.Value ), options );
+            var scheduler = TaskScheduler.Current;
+            var continuation = task.ContinueWith<IReadOnlyDictionary<string, IRandomAccessStreamReference>>( t => t.Result.ToDictionary( p => p.Key, p => (IRandomAccessStreamReference) p.Value ), cancellationToken, options, scheduler );
             return continuation.AsAsyncOperation();
         }
 

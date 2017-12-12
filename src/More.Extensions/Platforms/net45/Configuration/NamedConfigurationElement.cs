@@ -44,12 +44,12 @@
             get
             {
                 Contract.Ensures( !string.IsNullOrEmpty( Contract.Result<string>() ) );
-                return (string) base[NameProperty];
+                return (string) this[NameProperty];
             }
             set
             {
                 Arg.NotNullOrEmpty( value, nameof( value ) );
-                base[NameProperty] = value;
+                this[NameProperty] = value;
             }
         }
     }

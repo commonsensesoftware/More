@@ -14,13 +14,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellView{T}"/> class.
         /// </summary>
-        /// <remarks>This constructor automatically calls <see cref="M:System.Windows.Application.LoadComponent"/> for the new view.</remarks>
+        /// <remarks>This constructor automatically calls <see cref="Application.LoadComponent(object, Uri)"/> for the new view.</remarks>
         public ShellView() : base( loadComponent: true ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellView{T}"/> class.
         /// </summary>
-        /// <param name="loadComponent">Indicates whether <see cref="M:System.Windows.Application.LoadComponent"/> is invoked for view.</param>
+        /// <param name="loadComponent">Indicates whether <see cref="Application.LoadComponent(object, Uri)"/> is invoked for view.</param>
         public ShellView( bool loadComponent ) : base( loadComponent ) { }
 
         /// <summary>
@@ -37,7 +37,7 @@
         string IShellView.FlowDirection
         {
             get => FlowDirection.ToString();
-            set => FlowDirection = IsNullOrEmpty( value ) ? new FlowDirection() : (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
+            set => FlowDirection = IsNullOrEmpty( value ) ? default( FlowDirection ) : (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
         }
     }
 }

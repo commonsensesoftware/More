@@ -42,7 +42,7 @@
         /// <summary>
         /// Gets or sets the value converter parameter used in the conversion step.
         /// </summary>
-        /// <value>An <see cref="Object">object</see> representing the associated value converter parameter.</value>
+        /// <value>An <see cref="object">object</see> representing the associated value converter parameter.</value>
         public object ConverterParameter { get; set; }
 
         /// <summary>

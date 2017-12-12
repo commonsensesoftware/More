@@ -1,23 +1,21 @@
 ﻿namespace More.Windows.Controls
 {
-    using More.Windows.Data;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
 #if UAP10_0
-    using System.Windows.Data;
     using global::Windows.Foundation;
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Media;
-#else
+#endif
+    using More.Windows.Data;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+#if !UAP10_0
     using System.Windows;
-    using System.Windows.Data;
     using System.Windows.Controls;
     using System.Windows.Media;
 #endif
@@ -61,7 +59,9 @@
         public TrendIndicator()
         {
             DefaultStyleKey = typeof( TrendIndicator );
+#pragma warning disable CA2214 // Do not call overridable methods in constructors
             Loaded += ( s, e ) => EndInit();
+#pragma warning restore CA2214 // Do not call overridable methods in constructors
         }
 
         /// <summary>
@@ -136,33 +136,33 @@
                     VisualState = "Undefined",
                     Rules =
                     {
-                        new EqualToRule( null )
-                    }
+                        new EqualToRule( null ),
+                    },
                 },
                 new TrendRule()
                 {
                     VisualState = "Positive",
                     Rules =
                     {
-                        new GreaterThanRule( 0 )
-                    }
+                        new GreaterThanRule( 0 ),
+                    },
                 },
                 new TrendRule()
                 {
                     VisualState = "Flat",
                     Rules =
                     {
-                        new EqualToRule( 0 )
-                    }
+                        new EqualToRule( 0 ),
+                    },
                 },
                 new TrendRule()
                 {
                     VisualState = "Negative",
                     Rules =
                     {
-                        new LessThanRule( 0 )
-                    }
-                }
+                        new LessThanRule( 0 ),
+                    },
+                },
             };
         }
 
@@ -177,8 +177,8 @@
                     Brush = new SolidColorBrush( Colors.Transparent ),
                     Rules =
                     {
-                        new EqualToRule( null )
-                    }
+                        new EqualToRule( null ),
+                    },
                 },
                 new ConditionalBrushRule()
                 {
@@ -189,16 +189,16 @@
                          EndPoint = new Point( 0.5, 1.0 ),
                          GradientStops =
                          {
-                             new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x33, G = 0xCC, B = 0x33 }, Offset = 0.0 },
-                             new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x33, G = 0xCC, B = 0x33 }, Offset = 0.5 },
-                             new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x00, G = 0x92, B = 0x44 }, Offset = 0.5 },
-                             new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x33, G = 0xCC, B = 0x33 }, Offset = 1.0 }
-                         }
+                             new GradientStop() { Color = new Color() { A = 0xFF, R = 0x33, G = 0xCC, B = 0x33 }, Offset = 0.0 },
+                             new GradientStop() { Color = new Color() { A = 0xFF, R = 0x33, G = 0xCC, B = 0x33 }, Offset = 0.5 },
+                             new GradientStop() { Color = new Color() { A = 0xFF, R = 0x00, G = 0x92, B = 0x44 }, Offset = 0.5 },
+                             new GradientStop() { Color = new Color() { A = 0xFF, R = 0x33, G = 0xCC, B = 0x33 }, Offset = 1.0 },
+                         },
                     },
                     Rules =
                     {
-                        new GreaterThanRule( 0 )
-                    }
+                        new GreaterThanRule( 0 ),
+                    },
                 },
                 new ConditionalBrushRule()
                 {
@@ -209,16 +209,16 @@
                         EndPoint = new Point( 0.5, 1.0 ),
                         GradientStops =
                         {
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x64, G = 0x64, B = 0x64 }, Offset = 0.0 },
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x64, G = 0x64, B = 0x64 }, Offset = 0.5 },
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x19, G = 0x19, B = 0x19 }, Offset = 0.5 },
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0x64, G = 0x64, B = 0x64 }, Offset = 1.0 }
-                        }
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0x64, G = 0x64, B = 0x64 }, Offset = 0.0 },
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0x64, G = 0x64, B = 0x64 }, Offset = 0.5 },
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0x19, G = 0x19, B = 0x19 }, Offset = 0.5 },
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0x64, G = 0x64, B = 0x64 }, Offset = 1.0 },
+                        },
                     },
                     Rules =
                     {
-                        new EqualToRule( 0 )
-                    }
+                        new EqualToRule( 0 ),
+                    },
                 },
                 new ConditionalBrushRule()
                 {
@@ -229,17 +229,17 @@
                         EndPoint = new Point( 0.5, 0.0 ),
                         GradientStops =
                         {
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0xFF, G = 0x00, B = 0x00 }, Offset = 0.0 },
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0xC0, G = 0x26, B = 0x2D }, Offset = 0.5 },
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0xFF, G = 0x00, B = 0x00 }, Offset = 0.5 },
-                            new GradientStop() { Color = new Color(){ A = 0xFF, R = 0xFF, G = 0x00, B = 0x00 }, Offset = 0.1 }
-                        }
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0xFF, G = 0x00, B = 0x00 }, Offset = 0.0 },
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0xC0, G = 0x26, B = 0x2D }, Offset = 0.5 },
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0xFF, G = 0x00, B = 0x00 }, Offset = 0.5 },
+                            new GradientStop() { Color = new Color() { A = 0xFF, R = 0xFF, G = 0x00, B = 0x00 }, Offset = 0.1 },
+                        },
                     },
                     Rules =
                     {
-                        new LessThanRule( 0 )
-                    }
-                }
+                        new LessThanRule( 0 ),
+                    },
+                },
             };
         }
 

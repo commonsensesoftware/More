@@ -1,8 +1,8 @@
 ﻿namespace More.Windows.Interactivity
 {
+    using global::Windows.UI.Xaml;
     using Microsoft.Xaml.Interactivity;
     using System;
-    using global::Windows.UI.Xaml;
 
     /// <summary>
     /// Represents an <see cref="IAction">action</see> with an <see cref="DependencyObject">associated object</see>.

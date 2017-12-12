@@ -43,10 +43,12 @@
         /// Initializes a new instance of the <see cref="ValueConverterAttribute"/> class.
         /// </summary>
         /// <param name="converterType">The <see cref="Type"/> of <see cref="IValueConverter"/> to create.</param>
-        /// <param name="constructorArguments">An array of type <see cref="Object">object</see> containing the constructor arguments for the value converter.</param>
+        /// <param name="constructorArguments">An array of type <see cref="object">object</see> containing the constructor arguments for the value converter.</param>
         [CLSCompliant( false )]
-        public ValueConverterAttribute( Type converterType, params object[] constructorArguments )
-            : this( converterType ) => ctorArgs.AddRange( constructorArguments );
+        public ValueConverterAttribute( Type converterType, params object[] constructorArguments ) : this( converterType )
+        {
+            ctorArgs.AddRange( constructorArguments );
+        }
 
         /// <summary>
         /// Gets or sets the type of converter.
@@ -65,7 +67,7 @@
         /// <summary>
         /// Gets or sets the constructor arguments for the type of converter.
         /// </summary>
-        /// <value>An array of type <see cref="Object">object</see> that matches the order and type of parameters
+        /// <value>An array of type <see cref="object">object</see> that matches the order and type of parameters
         /// supplied to the target constructor.</value>
         [SuppressMessage( "Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Required to support a CLS-compliant attribute. The backing field is immutable." )]
         public object[] ConstructorArguments
@@ -91,7 +93,7 @@
         /// <code lang="C#"><![CDATA[
         /// using System.Windows.Data;
         /// using System;
-        /// 
+        ///
         /// public class MyClass
         /// {
         ///     [ValueConverter( Type = typeof( MyCurrencyConverter ), PropertyInitializers = "ThousandsFormat = '0 k', MillionsFormat = '0 m', BillionsFormat = '0 b'" )]

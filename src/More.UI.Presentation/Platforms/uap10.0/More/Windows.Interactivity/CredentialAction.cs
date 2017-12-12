@@ -1,19 +1,17 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using More.Windows.Input;
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.Runtime.InteropServices.WindowsRuntime;
-    using System.Windows.Input;
-    using System.Threading.Tasks;
     using global::Windows.Foundation;
     using global::Windows.Security.Credentials.UI;
-    using global::Windows.UI.Xaml;
+    using More.Windows.Input;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to capture a user credential
-    /// <see cref="CredentialInteraction">interaction</see> received from an <see cref="E:IInteractionRequest.Requested">interaction request</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to capture a user credential
+    /// <see cref="CredentialInteraction">interaction</see> received from an <see cref="IInteractionRequest.Requested">interaction request</see>.
     /// </summary>
     [CLSCompliant( false )]
     public class CredentialAction : System.Windows.Interactivity.TriggerAction
@@ -27,7 +25,7 @@
         /// <summary>
         /// Gets or sets the authentication protocol.
         /// </summary>
-        /// <value>One of the <see cref="AuthenticationProtocol"/> values.  The default value is <see cref="F:AuthenticationProtocol.Negotiate"/>.</value>
+        /// <value>One of the <see cref="AuthenticationProtocol"/> values.  The default value is <see cref="AuthenticationProtocol.Negotiate"/>.</value>
         public AuthenticationProtocol AuthenticationProtocol { get; set; }
 
         /// <summary>

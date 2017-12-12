@@ -106,23 +106,23 @@
         /// <summary>
         /// Converts the specified value to the target type.
         /// </summary>
-        /// <param name="value">The <see cref="Object"/> to be converted.</param>
+        /// <param name="value">The <see cref="object"/> to be converted.</param>
         /// <param name="targetType">The destination conversion <see cref="Type"/>.</param>
-        /// <param name="parameter">An <see cref="Object"/> containing custom conversion parameters.</param>
+        /// <param name="parameter">An <see cref="object"/> containing custom conversion parameters.</param>
         /// <param name="language">The language used for formatting.</param>
-        /// <returns>The converted <see cref="Object"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="String"/>.</exception>
+        /// <returns>The converted <see cref="object"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="string"/>.</exception>
         public override object Convert( object value, Type targetType, object parameter, string language )
 #else
         /// <summary>
         /// Converts the specified value to the target type.
         /// </summary>
-        /// <param name="value">The <see cref="Object"/> to be converted.</param>
+        /// <param name="value">The <see cref="object"/> to be converted.</param>
         /// <param name="targetType">The destination conversion <see cref="Type"/>.</param>
-        /// <param name="parameter">An <see cref="Object"/> containing custom conversion parameters.</param>
+        /// <param name="parameter">An <see cref="object"/> containing custom conversion parameters.</param>
         /// <param name="culture">The <see cref="CultureInfo"/> used for formatting.</param>
-        /// <returns>The converted <see cref="Object"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="String"/>.</exception>
+        /// <returns>The converted <see cref="object"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="targetType"/> is not type <see cref="string"/>.</exception>
         public override object Convert( object value, Type targetType, object parameter, CultureInfo culture )
 #endif
         {
@@ -149,6 +149,7 @@
 #if UAP10_0
             var culture = Util.GetCultureFromLanguage( language );
 #endif
+
             // handle numbers
             if ( numeric )
             {
@@ -199,25 +200,25 @@
 
 #if UAP10_0
         /// <summary>
-        /// Converts a previously converted value back to the specified type. 
+        /// Converts a previously converted value back to the specified type.
         /// </summary>
-        /// <param name="value">The <see cref="Object"/> to be converted.</param>
+        /// <param name="value">The <see cref="object"/> to be converted.</param>
         /// <param name="targetType">The destination conversion <see cref="Type"/>.</param>
-        /// <param name="parameter">An <see cref="Object"/> containing custom conversion parameters.</param>
+        /// <param name="parameter">An <see cref="object"/> containing custom conversion parameters.</param>
         /// <param name="language">The language used for formatting.</param>
-        /// <returns>The converted <see cref="Object"/>.</returns>
+        /// <returns>The converted <see cref="object"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="targetType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetType"/> is not an enumeration type.</exception>
         public override object ConvertBack( object value, Type targetType, object parameter, string language )
 #else
         /// <summary>
-        /// Converts a previously converted value back to the specified type. 
+        /// Converts a previously converted value back to the specified type.
         /// </summary>
-        /// <param name="value">The <see cref="Object"/> to be converted.</param>
+        /// <param name="value">The <see cref="object"/> to be converted.</param>
         /// <param name="targetType">The destination conversion <see cref="Type"/>.</param>
-        /// <param name="parameter">An <see cref="Object"/> containing custom conversion parameters.</param>
+        /// <param name="parameter">An <see cref="object"/> containing custom conversion parameters.</param>
         /// <param name="culture">The <see cref="CultureInfo"/> used for formatting.</param>
-        /// <returns>The converted <see cref="Object"/>.</returns>
+        /// <returns>The converted <see cref="object"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="targetType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetType"/> is not an enumeration type.</exception>
         public override object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )

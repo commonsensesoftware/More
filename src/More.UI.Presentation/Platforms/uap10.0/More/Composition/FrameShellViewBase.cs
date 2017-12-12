@@ -1,6 +1,10 @@
 ﻿namespace More.Composition
 {
     using ComponentModel;
+    using global::Windows.ApplicationModel.Activation;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Navigation;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -9,10 +13,6 @@
     using System.Threading.Tasks;
     using Windows;
     using Windows.Controls;
-    using global::Windows.ApplicationModel.Activation;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// Represents the base implemention for a <see cref="IShellView">shell view</see> using a <see cref="Frame">frame</see>.
@@ -37,10 +37,12 @@
             Arg.NotNull( serviceProvider, nameof( serviceProvider ) );
 
             this.serviceProvider = serviceProvider;
+#pragma warning disable CA2214 // Do not call overridable methods in constructors
             shellFrame.Navigated += ( s, e ) => OnNavigated( new NavigationEventArgsAdapter( e ) );
             shellFrame.Navigating += ( s, e ) => OnNavigating( new NavigatingCancelEventArgsAdapter( e ) );
             shellFrame.NavigationFailed += ( s, e ) => OnNavigationFailed( new NavigationEventArgsAdapter( e ) );
             shellFrame.NavigationStopped += ( s, e ) => OnNavigationStopped( new NavigationEventArgsAdapter( e ) );
+#pragma warning restore CA2214 // Do not call overridable methods in constructors
             SelfRegisterAsNavigationService();
         }
 
@@ -109,7 +111,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Navigating"/> event.
+        /// Raises the <see cref="Navigating"/> event.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -120,7 +122,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:NavigationFailed"/> event.
+        /// Raises the <see cref="NavigationFailed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -131,7 +133,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:NavigationStopped"/> event.
+        /// Raises the <see cref="NavigationStopped"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -158,7 +160,7 @@
                 return;
             }
 
-            await sessionStateManager.RestoreAsync( Frame.Name );
+            await sessionStateManager.RestoreAsync( Frame.Name ).ConfigureAwait( true );
             sessionStateManager.RestoreNavigationState( Frame );
         }
 
@@ -227,7 +229,7 @@
         /// Occurs when the application is navigating to the initial start page.
         /// </summary>
         /// <param name="applicationState">The <see cref="IApplicationState">application state</see> information used to navigate to the initial start page.</param>
-        /// <remarks>If the <see cref="P:StartPage">start page</see> is null, the base implementation will not perform any action.</remarks>
+        /// <remarks>If the <see cref="StartPage">start page</see> is null, the base implementation will not perform any action.</remarks>
         protected virtual void OnNavigateToStartPage( IApplicationState applicationState )
         {
             Arg.NotNull( applicationState, nameof( applicationState ) );
@@ -273,7 +275,7 @@
                     // load state from previously suspended application
                     if ( state.Activation.PreviousExecutionState == ApplicationExecutionState.Terminated )
                     {
-                        await OnLoadStateAsync( state );
+                        await OnLoadStateAsync( state ).ConfigureAwait( true );
                     }
                 }
 

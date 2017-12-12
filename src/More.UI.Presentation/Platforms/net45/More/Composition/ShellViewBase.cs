@@ -27,7 +27,7 @@
         string IShellView.FlowDirection
         {
             get => FlowDirection.ToString();
-            set => FlowDirection = IsNullOrEmpty( value ) ? new FlowDirection() : (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
+            set => FlowDirection = IsNullOrEmpty( value ) ? default( FlowDirection ) : (FlowDirection) Enum.Parse( typeof( FlowDirection ), value, false );
         }
     }
 }

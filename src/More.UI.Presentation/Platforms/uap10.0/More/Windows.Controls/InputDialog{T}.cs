@@ -1,15 +1,5 @@
 ﻿namespace More.Windows.Controls
 {
-    using Input;
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Runtime.InteropServices.WindowsRuntime;
-    using System.Windows.Input;
-    using System.Threading;
-    using System.Threading.Tasks;
     using global::Windows.Foundation;
     using global::Windows.UI;
     using global::Windows.UI.Core;
@@ -18,6 +8,16 @@
     using global::Windows.UI.Xaml.Controls.Primitives;
     using global::Windows.UI.Xaml.Media;
     using global::Windows.UI.Xaml.Shapes;
+    using Input;
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
     using Key = global::Windows.System.VirtualKey;
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
 
@@ -59,7 +59,7 @@
         /// Gets or sets the default command index.
         /// </summary>
         /// <value>The default command index, which is the zero-based index of the
-        /// <see cref="P:Commands">command</see> that is invoked when the ENTER key
+        /// <see cref="Commands">command</see> that is invoked when the ENTER key
         /// is pressed. The default value is -1, which indicates there is no default
         /// command.</value>
         public virtual int DefaultCommandIndex { get; set; }
@@ -68,7 +68,7 @@
         /// Gets or sets the cancel command index.
         /// </summary>
         /// <value>The cancel command index, which is the zero-based index of the
-        /// <see cref="P:Commands">command</see> that is invoked when the ESC key
+        /// <see cref="Commands">command</see> that is invoked when the ESC key
         /// is pressed. The default value is -1, which indicates there is no cancel
         /// command.</value>
         public virtual int CancelCommandIndex { get; set; }
@@ -218,17 +218,13 @@
             switch ( e.Key )
             {
                 case Key.Enter:
-                    {
-                        e.Handled = true;
-                        ExecuteCommand( DefaultCommandIndex );
-                        break;
-                    }
+                    e.Handled = true;
+                    ExecuteCommand( DefaultCommandIndex );
+                    break;
                 case Key.Escape:
-                    {
-                        e.Handled = true;
-                        ExecuteCommand( CancelCommandIndex );
-                        break;
-                    }
+                    e.Handled = true;
+                    ExecuteCommand( CancelCommandIndex );
+                    break;
             }
 
             base.OnKeyUp( e );

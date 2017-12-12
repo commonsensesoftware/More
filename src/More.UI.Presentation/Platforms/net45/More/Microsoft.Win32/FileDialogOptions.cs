@@ -24,6 +24,6 @@
         NoDereferenceLinks = 0x00100000U,
         DontAddToRecent = 0x02000000U,
         ForceShowHidden = 0x10000000U,
-        DefaultNoMiniMode = 0x20000000U
+        DefaultNoMiniMode = 0x20000000U,
     }
 }

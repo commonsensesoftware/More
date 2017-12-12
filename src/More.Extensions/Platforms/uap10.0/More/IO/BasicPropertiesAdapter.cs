@@ -1,10 +1,10 @@
 ﻿namespace More.IO
 {
+    using global::Windows.Storage.FileProperties;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Threading.Tasks;
-    using global::Windows.Storage.FileProperties;
 
     sealed class BasicPropertiesAdapter : IBasicProperties
     {

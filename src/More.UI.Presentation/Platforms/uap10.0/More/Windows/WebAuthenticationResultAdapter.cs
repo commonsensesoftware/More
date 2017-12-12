@@ -1,8 +1,8 @@
 ﻿namespace More.Windows
 {
-    using System;
-    using Input;
     using global::Windows.Security.Authentication.Web;
+    using Input;
+    using System;
 
     sealed class WebAuthenticationResultAdapter : IWebAuthenticationResult
     {

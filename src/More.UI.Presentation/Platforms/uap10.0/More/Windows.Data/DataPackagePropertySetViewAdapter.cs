@@ -1,19 +1,17 @@
 ﻿namespace More.Windows.Data
 {
+    using global::Windows.ApplicationModel.DataTransfer;
+    using global::Windows.Storage.Streams;
+    using global::Windows.UI;
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;    
-    using global::Windows.ApplicationModel.DataTransfer;
-    using global::Windows.Foundation.Metadata;
-    using global::Windows.Storage.Streams;
-    using global::Windows.UI;
 
     sealed class DataPackagePropertySetViewAdapter : IDataPackagePropertySetView
     {
         readonly DataPackagePropertySetView adapted;
 
-        internal DataPackagePropertySetViewAdapter( DataPackagePropertySetView propertySetView ) =>            adapted = propertySetView;
+        internal DataPackagePropertySetViewAdapter( DataPackagePropertySetView propertySetView ) => adapted = propertySetView;
 
         public Uri ApplicationListingUri => adapted.ApplicationListingUri;
 

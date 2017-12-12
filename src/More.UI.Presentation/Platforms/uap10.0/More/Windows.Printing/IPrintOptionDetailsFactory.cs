@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Printing
 {
+    using global::Windows.Graphics.Printing;
+    using global::Windows.Graphics.Printing.OptionDetails;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using global::Windows.Graphics.Printing;
-    using global::Windows.Graphics.Printing.OptionDetails;
 
     /// <summary>
     /// Defines the behavior of a print option details factory.

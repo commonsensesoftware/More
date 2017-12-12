@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Data
 {
     using Data;
-    using System;
     using global::Windows.ApplicationModel.Activation;
     using global::Windows.ApplicationModel.DataTransfer.ShareTarget;
+    using System;
 
     /// <summary>
     /// Represents the arguments for a share event.

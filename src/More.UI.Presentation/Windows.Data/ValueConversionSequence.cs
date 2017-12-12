@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Data
 {
-    using System.Collections.Generic;
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
@@ -21,14 +21,14 @@
     /// Represents a value conversion sequence, which is a composite of other value converters.
     /// </summary>
     /// <example>This example demonstrates how to create a value converter that represents a sequence of multiple conversions, which
-    /// converts a <see cref="String"/> to a <see cref="Boolean"/> and a <see cref="Boolean"/> to <see cref="Visibility"/>.
+    /// converts a <see cref="string"/> to a <see cref="bool"/> and a <see cref="bool"/> to <see cref="Visibility"/>.
     /// <code lang="Xaml"><![CDATA[
     /// <UserControl
     ///  x:Class="MyUserControl"
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    /// 
+    ///
     /// <More:ValueConversionSequence x:Key="TextToVisibilityConverter">
     ///  <More:ValueConversionStep TargetType="System.Boolean">
     ///   <More:ValueConversionStep.Converter>
@@ -41,11 +41,11 @@
     ///   </More:ValueConversionStep.Converter>
     ///  </More:ValueConversionStep>
     /// </More:ValueConversionSequence>
-    /// 
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding Name}" Visibility="{Binding Name, Converter={StaticResource TextToVisibilityConverter}}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
 #if UAP10_0
@@ -102,6 +102,7 @@
             return value;
         }
 
+#pragma warning disable SA1606 // Element documentation should have summary text
 #if UAP10_0
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx_core"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, string language )
@@ -109,6 +110,7 @@
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx"]/*'/>
         public virtual object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
 #endif
+#pragma warning restore SA1606 // Element documentation should have summary text
         {
             if ( !Steps.Any() )
             {

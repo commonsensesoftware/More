@@ -16,7 +16,7 @@
         /// <summary>
         /// Creates an automation peer for the this control.
         /// </summary>
-        /// <returns>A <see cref="T:AutomationPeer"/> object.</returns>
+        /// <returns>A <see cref="AutomationPeer"/> object.</returns>
         protected override AutomationPeer OnCreateAutomationPeer() => new TextInputDialogAutomationPeer( this );
 
         /// <summary>

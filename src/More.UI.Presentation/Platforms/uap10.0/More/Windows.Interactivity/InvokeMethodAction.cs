@@ -1,15 +1,14 @@
 ﻿namespace More.Windows.Interactivity
 {
-    using System;
-    using System.Windows.Interactivity;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Markup;
+    using System;
 
     /// <content>
     /// Provides additional implementation for Windows Runtime applications.
     /// </content>
     [CLSCompliant( false )]
-    [ContentProperty( Name = "Parameters" )]
+    [ContentProperty( Name = nameof( Parameters ) )]
     public partial class InvokeMethodAction : System.Windows.Interactivity.TriggerAction
     {
         /// <summary>
@@ -22,7 +21,7 @@
         {
             if ( string.IsNullOrEmpty( MethodName ) )
             {
-                return ( ReturnValue = null );
+                return ReturnValue = null;
             }
 
             EnsureDataBinding( sender );
@@ -31,17 +30,17 @@
 
             if ( target == null )
             {
-                return ( ReturnValue = null );
+                return ReturnValue = null;
             }
 
             var method = GetOrResolveMethod( target.GetType() );
 
             if ( method == null )
             {
-                return ( ReturnValue = null );
+                return ReturnValue = null;
             }
 
-            return ( ReturnValue = method.Invoke( target, Parameters ) );
+            return ReturnValue = method.Invoke( target, Parameters );
         }
     }
 }

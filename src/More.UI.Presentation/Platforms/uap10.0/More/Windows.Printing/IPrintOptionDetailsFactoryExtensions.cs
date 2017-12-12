@@ -1,11 +1,11 @@
 ﻿namespace More.Windows.Printing
 {
+    using global::Windows.Graphics.Printing;
+    using global::Windows.Graphics.Printing.OptionDetails;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using global::Windows.Graphics.Printing;
-    using global::Windows.Graphics.Printing.OptionDetails;
 
     /// <summary>
     /// Provides extension methods for the <see cref="IPrintOptionDetailsFactory"/> interface.

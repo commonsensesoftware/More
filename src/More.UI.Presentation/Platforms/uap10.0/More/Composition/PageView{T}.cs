@@ -1,15 +1,11 @@
 ﻿namespace More.Composition
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Windows;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Windows;
 
     /// <summary>
     /// Represents a page view.
@@ -21,14 +17,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="PageView{T}"/> class.
         /// </summary>
-        /// <remarks>This constructor automatically calls <see cref="M:System.Windows.Application.LoadComponent"/> for
+        /// <remarks>This constructor automatically calls <see cref="Application.LoadComponent(object, Uri)"/> for
         /// the new <see cref="UserControl"/>.</remarks>
         public PageView() : this( true ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PageView{T}"/> class.
         /// </summary>
-        /// <param name="loadComponent">Indicates whether <see cref="M:System.Windows.Application.LoadComponent"/> is invoked for
+        /// <param name="loadComponent">Indicates whether <see cref="Application.LoadComponent(object, Uri)"/> is invoked for
         /// the new <see cref="UserControl"/>.</param>
         public PageView( bool loadComponent )
         {
@@ -92,7 +88,7 @@
         /// Occurs when a property value changes.
         /// </summary>
         /// <remarks>The <seealso cref="PropertyChanged"/> event can indicate all properties on the object have changed by using either
-        /// <c>null</c>or <see cref="F:String.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
+        /// <c>null</c>or <see cref="string.Empty"/> as the property name in the <see cref="PropertyChangedEventArgs"/>.</remarks>
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

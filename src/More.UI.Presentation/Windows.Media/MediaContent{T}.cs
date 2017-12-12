@@ -54,7 +54,7 @@
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = true,
-                UseDefaultCredentials = true
+                UseDefaultCredentials = true,
             };
 
             using ( var client = new HttpClient( handler, true ) )

@@ -99,7 +99,7 @@
         /// <summary>
         /// Gets the comparer used to evaluate the equality of items in the collection.
         /// </summary>
-        /// <value>An <see cref="IEqualityComparer{T}"/> object.  The default state is <see cref="P:EqualityComparer{T}.Default"/>.</value>
+        /// <value>An <see cref="IEqualityComparer{T}"/> object.  The default state is <see cref="EqualityComparer{T}.Default"/>.</value>
         protected virtual IEqualityComparer<T> Comparer
         {
             get
@@ -227,7 +227,7 @@
 
             var actualPageSize = Math.Max( PageSize - FrozenItems.Count, 1 );
             var arguments = new PagingArguments( pageIndex, actualPageSize, SortDescriptions );
-            var pagedItems = await pagingMethod( arguments );
+            var pagedItems = await pagingMethod( arguments ).ConfigureAwait( true );
 
             OnRefreshed( pagedItems );
             OnRefreshComplete( pageIndex );
@@ -258,7 +258,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged( string propertyName ) => OnPropertyChanged( new PropertyChangedEventArgs( propertyName ) );
@@ -389,42 +389,36 @@
             switch ( e.Action )
             {
                 case Add:
+                    if ( e.NewItems == null || e.NewItems.Count == 0 || Items.Count <= PageSize )
                     {
-                        if ( e.NewItems == null || e.NewItems.Count == 0 || Items.Count <= PageSize )
-                        {
-                            return;
-                        }
-
-                        if ( PageIndex != LastPageIndex )
-                        {
-                            RefreshPageIndex( PageIndex );
-                        }
-
-                        break;
+                        return;
                     }
+
+                    if ( PageIndex != LastPageIndex )
+                    {
+                        RefreshPageIndex( PageIndex );
+                    }
+
+                    break;
                 case Remove:
+                    if ( e.OldItems == null || e.OldItems.Count == 0 )
                     {
-                        if ( e.OldItems == null || e.OldItems.Count == 0 )
-                        {
-                            return;
-                        }
-
-                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
-                        {
-                            RefreshPageIndex( PageIndex );
-                        }
-
-                        break;
+                        return;
                     }
+
+                    if ( Items.Count < PageSize && PageIndex != LastPageIndex )
+                    {
+                        RefreshPageIndex( PageIndex );
+                    }
+
+                    break;
                 case Reset:
+                    if ( Items.Count < PageSize && PageIndex != LastPageIndex )
                     {
-                        if ( Items.Count < PageSize && PageIndex != LastPageIndex )
-                        {
-                            RefreshPageIndex( PageIndex );
-                        }
-
-                        break;
+                        RefreshPageIndex( PageIndex );
                     }
+
+                    break;
             }
         }
 
@@ -434,28 +428,24 @@
             {
                 case Add:
                 case Replace:
+                    if ( HasRefreshed )
                     {
-                        if ( HasRefreshed )
-                        {
-                            MoveToFirstPage();
-                        }
-
-                        break;
+                        MoveToFirstPage();
                     }
+
+                    break;
                 case Remove:
+                    if ( SortDescriptions.Count > 0 && HasRefreshed )
                     {
-                        if ( SortDescriptions.Count > 0 && HasRefreshed )
-                        {
-                            MoveToFirstPage();
-                        }
-
-                        break;
+                        MoveToFirstPage();
                     }
+
+                    break;
             }
         }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event.
+        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
         /// </summary>
         /// <param name="args">The <see cref="PropertyChangedEventArgs"/> event data.</param>
         protected override void OnPropertyChanged( PropertyChangedEventArgs args )
@@ -467,10 +457,8 @@
             switch ( args.PropertyName )
             {
                 case nameof( Count ):
-                    {
-                        OnPropertyChanged( nameof( IsEmpty ) );
-                        break;
-                    }
+                    OnPropertyChanged( nameof( IsEmpty ) );
+                    break;
             }
         }
 

@@ -20,11 +20,11 @@
     /// using System;
     /// using System.Windows;
     /// using System.Windows.Input;
-    /// 
+    ///
     /// public class MyViewModel
     /// {
     ///     private readonly InteractionRequest<Interaction> confirm = new InteractionRequest<Interaction>();
-    ///     
+    ///
     ///     public IInteractionRequest ConfirmInteraction
     ///     {
     ///         get
@@ -32,7 +32,7 @@
     ///             return this.confirm;
     ///         }
     ///     }
-    ///     
+    ///
     ///     public void PromptUser()
     ///     {
     ///         var interaction = new Interaction( "Confirm", "Are you sure you want to continue?" )
@@ -43,14 +43,14 @@
     ///                 new MessageBoxCommand<object>( MessageBoxResult.No, this.OnClickedNo )
     ///             }
     ///         };
-    ///         
+    ///
     ///         this.confirm.Request( interaction );
     ///     }
-    ///     
+    ///
     ///     private void OnClickedYes( object parameter )
     ///     {
     ///     }
-    ///     
+    ///
     ///     private void OnClickedNo( object parameter )
     ///     {
     ///     }
@@ -99,7 +99,7 @@
         /// <summary>
         /// Gets the message box button the command represents.
         /// </summary>
-        /// <value>One of the <see cref="MessageBoxResult"/> values, except <see cref="F:MessageBoxResult.None"/>.</value>
+        /// <value>One of the <see cref="MessageBoxResult"/> values, except <see cref="MessageBoxResult.None"/>.</value>
         public MessageBoxResult Button => button;
 
         [SuppressMessage( "Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "The name must map to a message box button. Hiding this member avoids common 'magic string' mapping errors." )]

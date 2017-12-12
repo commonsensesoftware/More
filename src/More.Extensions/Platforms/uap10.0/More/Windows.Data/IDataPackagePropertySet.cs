@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Data
 {
+    using global::Windows.Storage.Streams;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using global::Windows.Storage.Streams;
-    using global::Windows.UI;
+    using Color = global::Windows.UI.Color;
 
     /// <summary>
     /// Defines the behavior of a set of properties to use with an <see cref="IDataPackage"/>.
@@ -32,7 +32,7 @@
         Uri ContentSourceApplicationLink { get; set; }
 
         /// <summary>
-        /// Provides a web link to shared content that's currently displayed in the application.
+        /// Gets or sets a web link to shared content that's currently displayed in the application.
         /// </summary>
         /// <value>The <see cref="Uri">Uniform Resource Identifier (URI)</see> of the web link to shared content.</value>
         Uri ContentSourceWebLink { get; set; }
@@ -44,7 +44,7 @@
         string Description { get; set; }
 
         /// <summary>
-        /// Specifies a vector object that contains the types of files stored in the <see cref="IDataPackage"/>.
+        /// Gets a vector object that contains the types of files stored in the <see cref="IDataPackage"/>.
         /// </summary>
         /// <value>A <see cref="IList{T}"/> of the types of files stored in the data package.</value>
         IList<string> FileTypes { get; }
@@ -52,7 +52,7 @@
         /// <summary>
         /// Gets or sets a background color for the sharing applications's logo.
         /// </summary>
-        /// <value>The <see cref="T:Color">color</see> of the <see cref="P:Square30x30Logo">logo's</see> background.</value>
+        /// <value>The <see cref="Color">color</see> of the <see cref="Square30x30Logo">logo's</see> background.</value>
         Color LogoBackgroundColor { get; set; }
 
         /// <summary>

@@ -1,10 +1,10 @@
 ﻿namespace More.Composition.Hosting
 {
+    using global::Windows.UI.Popups;
     using System;
     using System.ComponentModel.Design;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Popups;
 
     /// <content>
     /// Provides additional implementation specific to Windows Runtime applications.

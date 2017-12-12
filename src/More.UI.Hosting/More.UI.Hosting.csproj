@@ -10,7 +10,7 @@
   <PackageTags>More;Patterns;Practices;UI;User Interfaces;Model;View;MVVM;MVC;MVP</PackageTags>
   <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
  </PropertyGroup>
- 
+
  <ItemGroup>
   <ReleaseNotes Include="Updated TFM to .NET Standard" />
   <ReleaseNotes Include="Dropped support for Windows 8.1" />
@@ -42,6 +42,11 @@
   <Reference Include="System.Xml" />
   <Reference Include="System.Xml.Linq" />
   <Reference Include="WindowsBase" />
+ </ItemGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+  <PackageReference Include="System.Diagnostics.Contracts" Version="4.0.1" NoWarn="NU1608" />
+  <PackageReference Include="System.Runtime" Version="4.1.0" NoWarn="NU1608" />
  </ItemGroup>
 
  <ItemGroup>

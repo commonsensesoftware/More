@@ -1,9 +1,9 @@
 ﻿namespace More.Windows.Controls
 {
+    using global::Windows.UI.Xaml.Navigation;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
-    using global::Windows.UI.Xaml.Navigation;
 
     sealed class NavigatingCancelEventArgsAdapter : INavigationStartingEventArgs
     {

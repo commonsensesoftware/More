@@ -25,7 +25,7 @@
         /// <summary>
         /// Gets or sets the string format associated with the number style.
         /// </summary>
-        /// <value>A <see cref="String">string</see> representing the number format to apply.  This property can be null.</value>
+        /// <value>A <see cref="string">string</see> representing the number format to apply.  This property can be null.</value>
         public string Format { get; set; }
 
         /// <summary>

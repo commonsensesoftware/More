@@ -45,7 +45,8 @@
         /// </summary>
         /// <typeparam name="TViewModel">The <see cref="Type">type</see> of view model associated with the view.</typeparam>
         /// <param name="view">The <see cref="IDialogView{T}">view</see> to show.</param>
-        /// <param name="owner">An <see cref="Object">object</see> representing the owner of the dialog.</param>
+        /// <param name="owner">An <see cref="object">object</see> representing the owner of the dialog.</param>
+        /// <returns>A <see cref="Task">task</see> representing the asynchronous operation.</returns>
         /// <remarks>If the specified <paramref name="view"/> is a <see cref="Window">window</see> and the <paramref name="owner"/> is
         /// either a <see cref="Window">window</see> or <see cref="IWin32Window">Win32 window</see>, then the <paramref name="owner"/>
         /// will be set as the owning window before the <paramref name="view"/> is shown.</remarks>
@@ -71,8 +72,8 @@
         /// </summary>
         /// <typeparam name="TViewModel">The <see cref="Type">type</see> of view model associated with the view.</typeparam>
         /// <param name="view">The <see cref="IDialogView{T}">view</see> to show.</param>
-        /// <param name="owner">An <see cref="Object">object</see> representing the owner of the dialog.</param>
-        /// <returns>A <see cref="Task{T}">task</see> containing a <see cref="Nullable{T}"/> value of type <see cref="Boolean"/> that signifies how a view was closed by the user.</returns>
+        /// <param name="owner">An <see cref="object">object</see> representing the owner of the dialog.</param>
+        /// <returns>A <see cref="Task{T}">task</see> containing a <see cref="Nullable{T}"/> value of type <see cref="bool"/> that signifies how a view was closed by the user.</returns>
         /// <remarks>If the specified <paramref name="view"/> is a <see cref="Window">window</see> and the <paramref name="owner"/> is
         /// either a <see cref="Window">window</see> or <see cref="IWin32Window">Win32 window</see>, then the <paramref name="owner"/>
         /// will be set as the owning window before the <paramref name="view"/> is shown.</remarks>

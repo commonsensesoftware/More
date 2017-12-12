@@ -44,8 +44,8 @@
         /// <summary>
         /// Gets or sets the root folder where the browsing starts from.
         /// </summary>
-        /// <value>One of the <see cref="T:System.Environment.SpecialFolder" /> values. The default is <see cref="T:System.Environment.SpecialFolder.Desktop" />.</value>
-        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="T:System.Environment.SpecialFolder" /> values. </exception>
+        /// <value>One of the <see cref="System.Environment.SpecialFolder" /> values. The default is <see cref="System.Environment.SpecialFolder.Desktop" />.</value>
+        /// <exception cref="System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="System.Environment.SpecialFolder" /> values. </exception>
         [Browsable( true )]
         [Localizable( false )]
         [DefaultValue( 0 )]
@@ -148,7 +148,7 @@
         /// <summary>
         /// Determines whether sufficient permissions for displaying a dialog exist.
         /// </summary>
-        /// <remarks>The base implementation demands the <see cref="T:FileIOPermissionAccess.PathDiscovery">path discovery</see>
+        /// <remarks>The base implementation demands the <see cref="FileIOPermissionAccess.PathDiscovery">path discovery</see>
         /// <see cref="FileIOPermission">permission</see>.</remarks>
         protected override void CheckPermissionsToShowDialog()
         {

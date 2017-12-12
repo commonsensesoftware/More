@@ -10,6 +10,7 @@
     using global::Windows.UI.Xaml.Data;
     using global::Windows.UI.Xaml.Markup;
     using global::Windows.UI.Xaml.Media;
+    using Color = global::Windows.UI.Color;
 #else
     using System.Windows.Data;
     using System.Windows.Markup;
@@ -19,14 +20,14 @@
     /// <summary>
     /// Represents a conditional color value converter.
     /// </summary>
-    /// <example>This example demonstrates how define a declarative to select a <see cref="T:Color"/> object.
+    /// <example>This example demonstrates how define a declarative to select a <see cref="Color"/> object.
     /// <code lang="Xaml"><![CDATA[
     /// <UserControl
     ///  x:Class="MyUserControl"
     ///  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:More="clr-namespace:System.Windows.Data;assembly=System.Windows.More">
-    ///  
+    ///
     /// <More:ConditionalColorConverter x:Key="ColorConverter" DefaultColor="White">
     ///   <More:ConditionalColorRule Color="Yellow">
     ///    <More:EqualToRule Value="{x:Null}" />
@@ -41,12 +42,12 @@
     ///    <More:LessThanRule Value="0" />
     ///   </More:ConditionalColorRule>
     /// </More:ConditionalColorConverter>
-    /// 
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <TextBlock Text="{Binding SomeNumber, StringFormat='\{0:N2\}'}"
     ///             Foreground="{Binding SomeNumber, Converter={StaticResource ColorConverter}}" />
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
 #if UAP10_0
@@ -66,13 +67,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ConditionalColorConverter"/> class.
         /// </summary>
-        /// <param name="defaultColor">The default <see cref="T:Color">color</see> for the converter.</param>
+        /// <param name="defaultColor">The default <see cref="Color">color</see> for the converter.</param>
         public ConditionalColorConverter( Color defaultColor ) => DefaultColor = defaultColor;
 
         /// <summary>
         /// Gets or sets the default color associated with the converter.
         /// </summary>
-        /// <value>A <see cref="T:Color"/> structure.  The default value is <see cref="P:Colors.Black">black</see>.</value>
+        /// <value>A <see cref="Color"/> structure.  The default value is <see cref="Colors.Black">black</see>.</value>
         public Color DefaultColor { get; set; }
 
         /// <summary>

@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Printing
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;    
     using global::Windows.Graphics.Printing;
     using global::Windows.Graphics.Printing.OptionDetails;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     sealed class PrintTaskOptionDetailsWrapper : IPrintOptionDetailsFactory, IDisposable
     {
@@ -13,7 +13,7 @@
         bool disposed;
         PrintTaskOptionDetails details;
 
-        ~PrintTaskOptionDetailsWrapper() =>             Dispose( false );
+        ~PrintTaskOptionDetailsWrapper() => Dispose( false );
 
         internal PrintTaskOptionDetailsWrapper( PrintTaskOptionDetails details )
         {

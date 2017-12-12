@@ -1,10 +1,10 @@
 ﻿namespace More.Windows.Controls
 {
-    using System;
-    using System.ComponentModel;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Media;
+    using System;
+    using System.ComponentModel;
 
     /// <content>
     /// Provides additional implementation specific to Windows Runtime applications.
@@ -31,12 +31,12 @@
         protected bool IsInitialized { get; set; }
 
         /// <summary>
-        /// Starts the initialization process for the control. 
+        /// Starts the initialization process for the control.
         /// </summary>
         public virtual void BeginInit() { }
 
         /// <summary>
-        /// Indicates that the initialization process for the control is complete. 
+        /// Indicates that the initialization process for the control is complete.
         /// </summary>
         public virtual void EndInit()
         {

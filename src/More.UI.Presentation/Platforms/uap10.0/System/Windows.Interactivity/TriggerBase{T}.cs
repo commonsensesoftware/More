@@ -1,12 +1,12 @@
 ﻿namespace System.Windows.Interactivity
 {
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Markup;
     using Microsoft.Xaml.Interactivity;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.Contracts;    
+    using System.Diagnostics.Contracts;
     using System.Linq;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Markup;
 
     /// <summary>
     /// Represents a behavior triggered by a pre-defined event.
@@ -19,7 +19,7 @@
         readonly Lazy<ActionCollection> actions = new Lazy<ActionCollection>( () => new ActionCollection() );
 
         /// <summary>
-        /// Get a collection of actions associated with the trigger.
+        /// Gets a collection of actions associated with the trigger.
         /// </summary>
         /// <value>An <see cref="ActionCollection">action collection</see>.</value>
         public ActionCollection Actions

@@ -1,8 +1,8 @@
 ﻿namespace More.Composition.Hosting
 {
-    using System;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
+    using System;
 
     /// <summary>
     /// Represents an application composition host where the shell view is a page frame.
@@ -38,18 +38,18 @@
         /// using global::Windows.ApplicationModel;
         /// using global::Windows.ApplicationModel.Activation;
         /// using global::Windows.UI.Xaml;
-        /// 
+        ///
         /// public class MainPage : Page
         /// {
         /// }
-        ///     
+        ///
         /// public sealed class App : Application
         /// {
         ///     public App()
         ///     {
         ///         this.InitializeComponent();
         ///         var host = new FrameHost<MainPage>();
-        ///         host.Run( this, "en-US", "LeftToRight" ); 
+        ///         host.Run( this, "en-US", "LeftToRight" );
         ///     }
         /// }
         /// ]]></code>

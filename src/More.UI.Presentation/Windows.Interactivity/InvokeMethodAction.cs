@@ -28,7 +28,7 @@
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:Interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
     ///  xmlns:More="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.More">
-    ///  
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <Button Content="Save" Height="25" Width="75">
     ///   <Interactivity:Interaction.Triggers>
@@ -38,7 +38,7 @@
     ///   </Interactivity:Interaction.Triggers>
     ///  </Button>
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
     /// <example>This example demonstrates how to define an action to invoke an object method with parameters.
@@ -49,7 +49,7 @@
     ///  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     ///  xmlns:Interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
     ///  xmlns:More="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.More">
-    ///  
+    ///
     /// <Grid x:Name="LayoutRoot">
     ///  <Grid.RowDefinitions>
     ///   <RowDefinition />
@@ -69,7 +69,7 @@
     ///   </Interactivity:Interaction.Triggers>
     ///  </Button>
     /// </Grid>
-    /// 
+    ///
     /// </UserControl>
     /// ]]></code></example>
     public partial class InvokeMethodAction
@@ -98,15 +98,15 @@
         public static readonly DependencyProperty ReturnValueProperty =
             DependencyProperty.Register( nameof( ReturnValue ), typeof( object ), typeof( InvokeMethodAction ), new PropertyMetadata( (object) null ) );
 
-        private readonly Lazy<Collection<MethodParameter>> parameters = new Lazy<Collection<MethodParameter>>( () => new Collection<MethodParameter>() );
-        private bool setBinding = true;
-        private MethodInfo targetMethod;
-        private ISpecification<Tuple<Type, InvokeMethodAction>> specification;
+        readonly Lazy<Collection<MethodParameter>> parameters = new Lazy<Collection<MethodParameter>>( () => new Collection<MethodParameter>() );
+        bool setBinding = true;
+        MethodInfo targetMethod;
+        ISpecification<Tuple<Type, InvokeMethodAction>> specification;
 
         /// <summary>
         /// Gets or sets the object representing the target object to invoke the method on.
         /// </summary>
-        /// <value>The target <see cref="Object">object</see>.</value>
+        /// <value>The target <see cref="object">object</see>.</value>
         public object TargetObject
         {
             get => GetValue( TargetObjectProperty );
@@ -169,18 +169,15 @@
         {
             Contract.Requires( targetType != null );
 
-            // non-null after first pass
             if ( specification != null )
             {
                 var item = Tuple.Create( targetType, this );
 
-                // if specification is met, use resolved method
                 if ( specification.IsSatisfiedBy( item ) )
                 {
                     return targetMethod;
                 }
 
-                // a new method will be resolved, so trigger binding update
                 setBinding = true;
             }
 

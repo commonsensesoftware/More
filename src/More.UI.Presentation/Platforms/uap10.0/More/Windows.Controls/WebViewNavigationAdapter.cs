@@ -1,12 +1,12 @@
 ﻿namespace More.Windows.Controls
 {
+    using global::Windows.UI.Xaml.Controls;
+    using global::Windows.UI.Xaml.Navigation;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using global::Windows.UI.Xaml.Controls;
-    using global::Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// Represents a <see cref="INavigationService">navigation service</see> adapter for a <see cref="WebView">web view</see>.
@@ -26,7 +26,7 @@
 
             this.webView = webView;
             this.webView.NavigationCompleted += OnWebViewNavigationCompleted;
-            this.webView.NavigationStarting += ( s, e ) => OnNavigating( new WebViewNavigationStartingEventArgsAdapter( e ) );
+            this.webView.NavigationStarting += OnSourceNavigationStarting;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Navigated"/> event.
+        /// Raises the <see cref="Navigated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -70,7 +70,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:Navigating"/> event.
+        /// Raises the <see cref="Navigating"/> event.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingCancelEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -81,7 +81,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:NavigationFailed"/> event.
+        /// Raises the <see cref="NavigationFailed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -92,7 +92,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:NavigationStopped"/> event.
+        /// Raises the <see cref="NavigationStopped"/> event.
         /// </summary>
         /// <param name="e">The <see cref="INavigationEventArgs"/> event data.</param>
         [SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "This is the standard raise event signature." )]
@@ -168,6 +168,8 @@
         /// Occurs when a new navigation is requested while a current navigation is in progress.
         /// </summary>
         public event EventHandler<INavigationEventArgs> NavigationStopped;
+
+        void OnSourceNavigationStarting( WebView sender, WebViewNavigationStartingEventArgs args ) => OnNavigating( new WebViewNavigationStartingEventArgsAdapter( args ) );
 
         sealed class WebViewNavigationCompletedEventArgsAdapter : INavigationEventArgs
         {

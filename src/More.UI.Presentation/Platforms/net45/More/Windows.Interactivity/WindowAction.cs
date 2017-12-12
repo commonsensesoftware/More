@@ -10,8 +10,8 @@
     using System.Windows;
 
     /// <summary>
-    /// Represents an <see cref="T:Interactivity.TriggerAction">interactivity action</see> that can be used to show the <see cref="Interaction">interaction</see>
-    /// from an <see cref="E:IInteractionRequest.Requested">interaction request</see> in a <see cref="Window">view</see>.
+    /// Represents an <see cref="System.Windows.Interactivity.TriggerAction">interactivity action</see> that can be used to show the <see cref="Interaction">interaction</see>
+    /// from an <see cref="IInteractionRequest.Requested">interaction request</see> in a <see cref="Window">view</see>.
     /// </summary>
     public partial class WindowAction : System.Windows.Interactivity.TriggerAction<FrameworkElement>
     {
@@ -55,15 +55,15 @@
         /// <summary>
         /// Gets or sets a value indicating whether the provided cancel command is bound to the window close button.
         /// </summary>
-        /// <value>True if the provided <see cref="P:Interaction.CancelCommand">cancel command</see> is
+        /// <value>True if the provided <see cref="Interaction.CancelCommand">cancel command</see> is
         /// bound to the window close button. The default value is <c>false</c>.</value>
-        /// <remarks>The associated <see cref="T:Window">window</see> is usually closed after any command is executed. If an action is
-        /// conditional or should be cancelled, the command should not raise the <see cref="E:INotifyCommandChanged.Executed"/> event.
+        /// <remarks>The associated <see cref="Window">window</see> is usually closed after any command is executed. If an action is
+        /// conditional or should be cancelled, the command should not raise the <see cref="INotifyCommandChanged.Executed"/> event.
         /// In the scenario where a user clicks the standard window close button, no command is executed by default. To handle that
         /// scenario, set this property to <c>true</c> in order to automatically bind the
-        /// <see cref="P:Interaction.CancelCommand">cancel command</see> to the
-        /// <see cref="P:WindowCloseBehavior.CloseCommand"/> which will be applied to the underlying <see cref="T:Window">window</see>
-        /// <see cref="T:System.Windows.Interactivity.BehaviorCollection">behaviors</see>.</remarks>
+        /// <see cref="Interaction.CancelCommand">cancel command</see> to the
+        /// <see cref="WindowCloseBehavior.CloseCommand"/> which will be applied to the underlying <see cref="Window">window</see>
+        /// <see cref="System.Windows.Interactivity.BehaviorCollection">behaviors</see>.</remarks>
         public bool BindCancelToClose { get; set; }
 
         /// <summary>
@@ -122,11 +122,11 @@
         /// <summary>
         /// Creates the window used by the action.
         /// </summary>
-        /// <returns>A new <see cref="Window"/> object or null if <see cref="P:ViewType"/> is null.</returns>
-        /// <remarks>If the <see cref="Window">window</see> specified by the <see cref="P:ViewType">window type</see>
+        /// <returns>A new <see cref="Window"/> object or null if <see cref="ViewType"/> is null.</returns>
+        /// <remarks>If the <see cref="Window">window</see> specified by the <see cref="ViewType">window type</see>
         /// is a composed <see cref="Window">window</see>, the default implementation will first use the
-        /// <see cref="P:ServiceProvider.Currrent">service provider</see> to retrieve it.  If the view is not found,
-        /// then the fallback method will be <see cref="M:Activator.CreateInstance(Type)"/>.</remarks>
+        /// <see cref="ServiceProvider.Current">service provider</see> to retrieve it.  If the view is not found,
+        /// then the fallback method will be <see cref="Activator.CreateInstance(Type)"/>.</remarks>
         protected virtual Window CreateWindow()
         {
             Contract.Ensures( Contract.Result<Window>() != null );

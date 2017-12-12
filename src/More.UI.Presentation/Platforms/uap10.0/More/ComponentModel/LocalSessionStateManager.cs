@@ -13,14 +13,14 @@
     public class LocalSessionStateManager : ISessionStateManager
     {
         readonly IFileSystem fileSystem;
-        IDictionary<string, object> sessionState = new Dictionary<string, object>();
         readonly List<Type> knownTypes = new List<Type>();
+        IDictionary<string, object> sessionState = new Dictionary<string, object>();
         string fileName = "SessionState.xml";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalSessionStateManager"/> class.
         /// </summary>
-        /// <param name="fileSystem"></param>
+        /// <param name="fileSystem">The <see cref="IFileSystem">file system</see> used to read and write session state.</param>
         public LocalSessionStateManager( IFileSystem fileSystem )
         {
             Arg.NotNull( fileSystem, nameof( fileSystem ) );
@@ -100,7 +100,7 @@
             }
 
             var serializer = new DataContractSerializer( typeof( Dictionary<string, object> ), knownTypes );
-            IDictionary<string, object> restoredState;
+            var restoredState = default( IDictionary<string, object> );
 
             using ( var stream = await file.OpenReadAsync().ConfigureAwait( false ) )
             {

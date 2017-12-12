@@ -1,5 +1,8 @@
 ﻿namespace System.Windows.Interactivity
 {
+    using global::Windows.UI.Core;
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Media;
     using Microsoft.Xaml.Interactivity;
     using More;
     using System;
@@ -7,9 +10,6 @@
     using System.Globalization;
     using System.Reflection;
     using System.Runtime.CompilerServices;
-    using global::Windows.UI.Core;
-    using global::Windows.UI.Xaml;
-    using global::Windows.UI.Xaml.Media;
 
     /// <summary>
     /// Encapsulates state information and zero or more ICommands into an attachable object.
@@ -40,8 +40,8 @@
         /// Attaches to the specified object.
         /// </summary>
         /// <param name="associatedObject">The object to attach to.</param>
-        /// <exception cref="T:System.InvalidOperationException">The Behavior is already hosted on a different element.</exception>
-        /// <exception cref="T:System.InvalidOperationException">dependencyObject does not satisfy the Behavior type constraint.</exception>
+        /// <exception cref="System.InvalidOperationException">The Behavior is already hosted on a different element.</exception>
+        /// <exception cref="System.InvalidOperationException">dependencyObject does not satisfy the Behavior type constraint.</exception>
         public void Attach( T associatedObject )
         {
             if ( associatedObject == AssociatedObject )
@@ -65,7 +65,7 @@
         {
             if ( associatedObject != null && !typeof( T ).GetTypeInfo().IsAssignableFrom( associatedObject.GetType().GetTypeInfo() ) )
             {
-                throw new InvalidOperationException( ExceptionMessage.TypeConstraintViolatedExceptionMessage.FormatDefault( new object[] { base.GetType().Name, associatedObject.GetType().Name, typeof( T ).Name } ) );
+                throw new InvalidOperationException( ExceptionMessage.TypeConstraintViolatedExceptionMessage.FormatDefault( new object[] { GetType().Name, associatedObject.GetType().Name, typeof( T ).Name } ) );
             }
 
             Attach( (T) associatedObject );

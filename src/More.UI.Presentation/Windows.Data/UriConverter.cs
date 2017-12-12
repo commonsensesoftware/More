@@ -16,7 +16,7 @@
         /// <summary>
         /// Gets or sets the kind of URI the converter handles.
         /// </summary>
-        /// <value>One of the <see cref="UriKind"/> values. The default value is <see cref="T:UriKind.Absolute"/>.</value>
+        /// <value>One of the <see cref="UriKind"/> values. The default value is <see cref="UriKind.Absolute"/>.</value>
         public UriKind UriKind { get; set; }
 
 #if UAP10_0
@@ -60,6 +60,7 @@
             return new Uri( value.ToString(), UriKind );
         }
 
+#pragma warning disable SA1606 // Element documentation should have summary text
 #if UAP10_0
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx_core"]/*'/>
         public override object ConvertBack( object value, Type targetType, object parameter, string language )
@@ -67,6 +68,7 @@
         /// <include file='IValueConverter.xml' path='//member[@name="ConvertBack" and @platform="netfx"]/*'/>
         public override object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
 #endif
+#pragma warning restore SA1606 // Element documentation should have summary text
         {
             var supported = typeof( object ).Equals( targetType ) || typeof( string ).Equals( targetType );
 

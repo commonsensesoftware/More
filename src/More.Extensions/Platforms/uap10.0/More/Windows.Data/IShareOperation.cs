@@ -1,7 +1,7 @@
 ﻿namespace More.Windows.Data
 {
-    using System;
     using global::Windows.ApplicationModel.DataTransfer.ShareTarget;
+    using System;
 
     /// <summary>
     /// Defines the behavior of a share operation.

@@ -15,7 +15,9 @@
         {
             // use type converter if defined
             if ( attribute == null || string.IsNullOrEmpty( attribute.ConverterTypeName ) )
+            {
                 return null;
+            }
 
             var converterType = Type.GetType( attribute.ConverterTypeName, true );
             var converter = (TypeConverter) Activator.CreateInstance( converterType, true );
@@ -34,19 +36,25 @@
             var converter = GetTypeConverter( attribute );
 
             if ( converter != null && converter.CanConvertTo( null, destinationType ) )
+            {
                 return ( c, v ) => converter.ConvertTo( null, c, v, destType );
+            }
 
             // try to get type converter from source type (needs to support conversion to destination)
             converter = TypeDescriptor.GetConverter( sourceType );
 
             if ( converter != null && converter.CanConvertTo( null, destType ) )
+            {
                 return ( c, v ) => converter.ConvertTo( null, c, v, destType );
+            }
 
             // try to get type converter from destination type (needs to support conversion from source)
             converter = TypeDescriptor.GetConverter( destinationType );
 
             if ( converter != null && converter.CanConvertFrom( null, sourceType ) )
+            {
                 return ( c, v ) => converter.ConvertFrom( null, c, v );
+            }
 
             return null;
         }
@@ -57,20 +65,26 @@
             Contract.Requires( destinationType != null );
 
             if ( value == null )
+            {
                 return null;
+            }
 
             var sourceType = value.GetType();
 
             // ensure a conversion is required
             if ( destinationType.Equals( sourceType ) || destinationType.IsAssignableFrom( sourceType ) )
+            {
                 return value;
+            }
 
             var convert = GetTypeConverter( attribute, sourceType, destinationType );
             var culture = CultureInfo.CurrentCulture;
 
             // if the type converter supports the conversion, let it do it's magic
             if ( convert != null )
+            {
                 return convert( culture, value );
+            }
 
             var typeCode = Type.GetTypeCode( destinationType );
 

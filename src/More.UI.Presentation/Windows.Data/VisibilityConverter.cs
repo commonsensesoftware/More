@@ -11,7 +11,7 @@
 #endif
 
     /// <summary>
-    /// Provides conversions between <see cref="Boolean"/> and <see cref="Visibility"/>.
+    /// Provides conversions between <see cref="bool"/> and <see cref="Visibility"/>.
     /// </summary>
     public class VisibilityConverter : IValueConverter
     {

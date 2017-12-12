@@ -17,14 +17,14 @@
     /// using System.ComponentModel;
     /// using System.Composition;
     /// using System.Composition.Hosting;
-    /// 
+    ///
     /// public class Program
     /// {
     ///     [STAThread]
     ///     public static void Main()
     ///     {
     ///         var configRoot = new Uri( "myconfig.xml", UriKind.Relative );
-    ///         
+    ///
     ///         using ( var host = new Host() )
     ///         {
     ///             // register and configure fluently
@@ -51,14 +51,14 @@
         /// using System.Composition;
         /// using System.Composition.Hosting;
         /// using System;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     [STAThread]
         ///     public static void Main()
         ///     {
         ///         var configRoot = new Uri( "myconfig.xml", UriKind.Relative );
-        ///         
+        ///
         ///         using ( var host = new Host() )
         ///         {
         ///             // register and configure fluently
@@ -89,12 +89,12 @@
         /// using System.ComponentModel;
         /// using System.Composition;
         /// using System.Composition.Hosting;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     [STAThread]
         ///     public static void Main()
-        ///     {   
+        ///     {
         ///         using ( var host = new Host() )
         ///         {
         ///             // register and configure fluently
@@ -126,12 +126,12 @@
         /// using System.ComponentModel;
         /// using System.Composition;
         /// using System.Composition.Hosting;
-        /// 
+        ///
         /// public class Program
         /// {
         ///     [STAThread]
         ///     public static void Main()
-        ///     {   
+        ///     {
         ///         using ( var host = new Host() )
         ///         {
         ///             // register and configure fluently
