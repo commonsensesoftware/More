@@ -42,7 +42,7 @@
             var assemblyName = type.Assembly.FullName;
             var typeName = type.FullName;
             var appDomain = CreateAppDomain();
-            Proxy proxy;
+            var proxy = default( Proxy );
 
             try
             {
@@ -63,7 +63,6 @@
             }
             finally
             {
-                // note: this is effectively a callback to close the specified window
                 progress.Report( window );
             }
 
@@ -83,7 +82,7 @@
             var appDomain = info.Item1;
             var proxy = info.Item2;
             var ownerHandler = owner == null ? IntPtr.Zero : new WindowInteropHelper( owner ).Handle;
-            var result = (bool?) null;
+            var result = default( bool? );
 
             try
             {
@@ -136,8 +135,8 @@
         /// Gets a list of restricted base type names.
         /// </summary>
         /// <value>A <see cref="IList{T}">list</see> of base type names.</value>
-        /// <remarks>The specified type names can be the type <see cref="P:Type.FullName">full name</see>
-        /// or <see cref="P:Type.Name">simple name</see>.</remarks>
+        /// <remarks>The specified type names can be the type <see cref="Type.FullName">full name</see>
+        /// or <see cref="Type.Name">simple name</see>.</remarks>
         public IList<string> RestrictedBaseTypeNames
         {
             get

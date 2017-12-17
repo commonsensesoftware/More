@@ -45,10 +45,7 @@
             // crafty reflection hacks.  this is a more straight forward alternative.
             foreach ( var entry in packageVersions )
             {
-                var packageVersion = new Dictionary<string, string>()
-                {
-                    { entry.Key, entry.Value }
-                };
+                var packageVersion = new Dictionary<string, string>() { [entry.Key] = entry.Value };
 
                 DesignTimeEnvironment.StatusBar.Text = SR.PackageInstallStatus.FormatDefault( entry.Key, entry.Value );
                 installer.InstallPackagesFromVSExtensionRepository( extensionId, unzipped, skipAssemblyReferences, ignoreDependencies, Project, packageVersion );
@@ -61,27 +58,22 @@
             Contract.Requires( nuget != null );
             Contract.Requires( wizardData != null );
 
-            if ( nuget.IsPackageInstalled( Project, "EntityFramework" ) )
-            {
-                return;
-            }
-
+            var selectedKey = GetString( "_SelectedEFVersion" );
             var packages = wizardData.Value;
-            var selectedId = GetString( "_SelectedEFVersion" );
-            var packageVersion = ( from element in packages.Elements( "package" )
-                                   let id = (string) element.Attribute( "id" )
-                                   where id == selectedId
-                                   select (string) element.Attribute( "version" ) ).FirstOrDefault();
+            var package = ( from element in packages.Elements( "package" )
+                            where selectedKey == (string) element.Attribute( "key" )
+                            select new
+                            {
+                                Id = (string) element.Attribute( "id" ),
+                                Version = (string) element.Attribute( "version" )
+                            } ).FirstOrDefault();
 
-            if ( string.IsNullOrEmpty( packageVersion ) )
+            if ( package == null || nuget.IsPackageInstalled( Project, package.Id ) )
             {
                 return;
             }
 
-            var packageVersions = new Dictionary<string, string>()
-            {
-                { "EntityFramework", packageVersion }
-            };
+            var packageVersions = new Dictionary<string, string>() { [package.Id] = package.Version };
 
             InstallPackages( services, packages, packageVersions );
         }

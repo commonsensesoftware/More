@@ -315,11 +315,11 @@
   <data name="ImplementIUnitOfWorkTDesc" xml:space="preserve">
     <value>The DbContext supports write-only semantics.</value>
   </data>
-  <data name="EF6" xml:space="preserve">
-    <value>Entity Framework 6</value>
+  <data name="EF" xml:space="preserve">
+    <value>Entity Framework</value>
   </data>
-  <data name="EF7" xml:space="preserve">
-    <value>Entity Framework 7</value>
+  <data name="EFCore" xml:space="preserve">
+    <value>Entity Framework Core</value>
   </data>
   <data name="ExistingModelTitle" xml:space="preserve">
     <value>Select an Existing Model</value>

@@ -272,7 +272,7 @@
         /// Gets or sets the name of the generated view model.
         /// </summary>
         /// <value>The name of the generated view model.</value>
-        /// <remarks>The value of this property will depend on the <see cref="P:ViewModelOption"/>.  This property
+        /// <remarks>The value of this property will depend on the <see cref="ViewModelOption"/>.  This property
         /// is only used in code generation when a new view model is created.  In all other scenarios, the value
         /// of this property is for information purposes.</remarks>
         [CustomValidation( typeof( ViewItemTemplateWizardViewModel ), nameof( ValidateViewModelName ) )]
@@ -292,7 +292,7 @@
         /// Gets or sets the type of view model to use.
         /// </summary>
         /// <value>The <see cref="Type">type</see> of view model to use.</value>
-        /// <remarks>The value of this property will depend on the <see cref="P:ViewModelOption"/>.  This property
+        /// <remarks>The value of this property will depend on the <see cref="ViewModelOption"/>.  This property
         /// is only used in code generation when an existing view model is used.</remarks>
         public Type ViewModelType
         {

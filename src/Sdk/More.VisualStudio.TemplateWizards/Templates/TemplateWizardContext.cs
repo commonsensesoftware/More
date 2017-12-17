@@ -168,7 +168,7 @@
         /// Returns an object that represents a non-interactive scope entered by the current context.
         /// </summary>
         /// <returns>A <see cref="IDisposable">disposable</see> object representing the scope.</returns>
-        /// <remarks>The scope is exited when the returned object is <see cref="M:IDisposable.Dispose">disposed</see>.</remarks>
+        /// <remarks>The scope is exited when the returned object is <see cref="IDisposable.Dispose">disposed</see>.</remarks>
         public IDisposable EnterNonInteractiveScope() => new NonInteractiveScope( this, ( @this, value ) => @this.IsInteractive = value );
 
         /// <summary>

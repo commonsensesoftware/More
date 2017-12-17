@@ -127,7 +127,7 @@
         /// Gets a collection of references used by the local assembly.
         /// </summary>
         /// <value>A <see cref="ObservableCollection{T}">collection</see> of <see cref="AssemblyName">assembly references</see>
-        /// used by the <see cref="P:LocalAssembly">local assembly</see>.</value>
+        /// used by the <see cref="LocalAssembly">local assembly</see>.</value>
         public ObservableCollection<AssemblyName> LocalAssemblyReferences
         {
             get
@@ -162,7 +162,7 @@
         /// Gets or sets the name used to filter types by convention.
         /// </summary>
         /// <value>The name of types to be filtered by convention.</value>
-        /// <remarks>If the <see cref="P:FilterByConvention"/> is <c>false</c>, then the value of this property is ignored.</remarks>
+        /// <remarks>If the <see cref="FilterByConvention"/> is <c>false</c>, then the value of this property is ignored.</remarks>
         public string NameConvention
         {
             get => nameConvention;
@@ -202,7 +202,7 @@
         /// </summary>
         /// <value>A <see cref="ISpecification{T}">specification</see> representing the type filter.</value>
         /// <remarks>The default <see cref="ISpecification{T}">specification</see> is based on the values
-        /// of the <see cref="P:FilterByConvention"/> and <see cref="P:NameConvention"/> properties.</remarks>
+        /// of the <see cref="FilterByConvention"/> and <see cref="NameConvention"/> properties.</remarks>
         public ISpecification<Type> TypeFilter
         {
             get
@@ -231,8 +231,8 @@
         /// Gets a collection of restricted base type names.
         /// </summary>
         /// <value>A <see cref="ICollection{T}">collection</see> of base type names.</value>
-        /// <remarks>The specified type names can be the type <see cref="P:Type.FullName">full name</see>
-        /// or <see cref="P:Type.Name">simple name</see>.</remarks>
+        /// <remarks>The specified type names can be the type <see cref="Type.FullName">full name</see>
+        /// or <see cref="Type.Name">simple name</see>.</remarks>
         public ICollection<string> RestrictedBaseTypeNames
         {
             get

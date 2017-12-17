@@ -26,7 +26,7 @@
         /// Gets a collection of references used by the local assembly.
         /// </summary>
         /// <value>A <see cref="IReadOnlyList{T}">read-only list</see> of <see cref="AssemblyName">assembly references</see>
-        /// used by the <see cref="P:LocalAssembly">local assembly</see>.</value>
+        /// used by the <see cref="LocalAssembly">local assembly</see>.</value>
         IReadOnlyList<AssemblyName> LocalAssemblyReferences { get; }
     }
 }

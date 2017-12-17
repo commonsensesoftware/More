@@ -1,4 +1,11 @@
-﻿Version 1.2.3 Release Notes
+﻿Version 1.3.0 Release Notes
+-----------------------------------------------------------------------------------------------------------------------
+• Dropped support for Windows Phone Silverlight
+• Dropped support for Windows Phone 8.1
+• Dropped support for Windows 8/8.1
+• Added support the Universal Windows Platform
+
+Version 1.2.3 Release Notes
 -----------------------------------------------------------------------------------------------------------------------
 • Updated WinRT template wizard references; incremented from 12.0 to 14.0 in latest Visual Studio update
 • Updated pre-packaged NuGet packages for project and item templates

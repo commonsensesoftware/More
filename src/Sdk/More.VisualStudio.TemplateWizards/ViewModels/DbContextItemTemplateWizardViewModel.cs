@@ -266,7 +266,7 @@
         /// <summary>
         /// Gets or sets a value indicating whether the selected data source is saved to the configuration file.
         /// </summary>
-        /// <value>True if the <see cref="P:SelectedDataSource">selected data source</see> is saved to the configuration file; otherwise, false.</value>
+        /// <value>True if the <see cref="SelectedDataSource">selected data source</see> is saved to the configuration file; otherwise, false.</value>
         public bool SaveToConfigurationFile
         {
             get => saveToConfigurationFile;
@@ -303,7 +303,7 @@
         /// <summary>
         /// Gets or sets the name associated with the connection string for the selected data source.
         /// </summary>
-        /// <value>The name of the connection string associated with the <see cref="P:SelectedDataSource">selected data source</see>.</value>
+        /// <value>The name of the connection string associated with the <see cref="SelectedDataSource">selected data source</see>.</value>
         [CustomValidation( typeof( DbContextItemTemplateWizardViewModel ), nameof( ValidateConnectionStringName ) )]
         public string ConnectionStringName
         {

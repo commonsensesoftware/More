@@ -187,20 +187,20 @@ namespace More.VisualStudio {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entity Framework 6.
+        ///   Looks up a localized string similar to Entity Framework.
         /// </summary>
-        internal static string EF6 {
+        internal static string EF {
             get {
-                return ResourceManager.GetString("EF6", resourceCulture);
+                return ResourceManager.GetString("EF", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entity Framework 7.
+        ///   Looks up a localized string similar to Entity Framework Core.
         /// </summary>
-        internal static string EF7 {
+        internal static string EFCore {
             get {
-                return ResourceManager.GetString("EF7", resourceCulture);
+                return ResourceManager.GetString("EFCore", resourceCulture);
             }
         }
         

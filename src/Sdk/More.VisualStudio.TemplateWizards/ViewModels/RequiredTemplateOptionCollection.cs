@@ -101,7 +101,7 @@
         }
 
         /// <summary>
-        /// Raises the <see cref="E:ErrorsChanged"/> event.
+        /// Raises the <see cref="ErrorsChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="DataErrorsChangedEventArgs"/> event data.</param>
         protected virtual void OnErrorsChanged( DataErrorsChangedEventArgs e )

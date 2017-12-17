@@ -52,6 +52,7 @@
             this.dataConnectionManagerFactory = dataConnectionManagerFactory;
 
             BindAsReadOnly( "_EFVersions", ReadEntityFrameworkVersions );
+            BindAsWriteOnly( "_SelectedEFVersion", m => m.SelectedEntityFrameworkVersion?.Id );
             Bind( "$showTips$", ( m, s ) => m.ShowTips = GetBoolean( s, true ), m => m.ShowTips.ToString().ToLowerInvariant() );
             Bind( "$addConnectionString$", ( m, s ) => m.AddConnectionStringParameter = GetBoolean( s ), m => m.AddConnectionStringParameter.ToString().ToLowerInvariant() );
             BindAsWriteOnly( "$implementedInterfaces$", BuildImplementedInterfaces );

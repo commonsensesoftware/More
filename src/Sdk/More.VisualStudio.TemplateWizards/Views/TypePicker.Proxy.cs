@@ -32,8 +32,6 @@
 
             public bool? ShowDialog( IntPtr owner )
             {
-                // create view model based on picker properties, then
-                // create and show the view
                 var model = new TypeBrowserViewModel()
                 {
                     NameConvention = NameConvention,
@@ -51,7 +49,6 @@
                         Owner = owner
                     };
 
-                    // change title from default value only if an alternate title is provided
                     if ( !string.IsNullOrEmpty( Title ) )
                     {
                         model.Title = Title;
@@ -59,8 +56,6 @@
 
                     var result = view.ShowDialog();
 
-                    // if a type is selected, set it. wrap the type so that it is
-                    // serialized across appdomain boundaries
                     if ( ( result ?? false ) )
                     {
                         SelectedType = new SimpleType( model.SelectedType );
@@ -93,7 +88,6 @@
 
                 try
                 {
-                    // try creating a dynamic assembly by compiling the source project with roslyn into memory
                     var result = await CreateDynamicAssemblyAsync( SourceProject, localAssemblyName.ContentType );
 
                     if ( ( localAssembly = result.Item1 ) != null )
@@ -107,10 +101,9 @@
                     Debug.WriteLine( "Dynamic assembly generation failed." );
                 }
 
-                // if that fails, try loading the output assembly of the source project from the last build
                 if ( ( localAssembly = LoadLocalAssemblyFromExistingBuild( SourceProject ) ) == null )
                 {
-                    localAssemblyReferences = new AssemblyName[0];
+                    localAssemblyReferences = Array.Empty<AssemblyName>();
                 }
                 else
                 {
@@ -122,15 +115,15 @@
             {
                 Contract.Ensures( Contract.Result<Task<Tuple<Assembly, IReadOnlyList<AssemblyName>>>>() != null );
 
+                var rawAssembly = default( byte[] );
+                var referencedAssemblies = default( IReadOnlyList<AssemblyName> );
+
                 if ( projectInfo == null )
                 {
-                    return new Tuple<Assembly, IReadOnlyList<AssemblyName>>( null, new AssemblyName[0] );
+                    referencedAssemblies = Array.Empty<AssemblyName>();
+                    return Tuple.Create( default( Assembly ), referencedAssemblies );
                 }
 
-                byte[] rawAssembly;
-                IReadOnlyList<AssemblyName> referencedAssemblies;
-
-                // create a msbuild workspace and get the compilation unit for the current project
                 using ( var workspace = MSBuildWorkspace.Create() )
                 {
                     var project = await workspace.OpenProjectAsync( projectInfo.ProjectPath ).ConfigureAwait( false );
@@ -138,13 +131,12 @@
 
                     using ( var stream = new MemoryStream() )
                     {
-                        // compile into an in-memory assembly
                         var result = compilation.Emit( stream );
 
-                        // handled failed compilation gracefully
                         if ( !result.Success )
                         {
-                            return new Tuple<Assembly, IReadOnlyList<AssemblyName>>( null, new AssemblyName[0] );
+                            referencedAssemblies = Array.Empty<AssemblyName>();
+                            return Tuple.Create( default( Assembly ), referencedAssemblies );
                         }
 
                         rawAssembly = stream.ToArray();
@@ -155,7 +147,6 @@
                     referencedAssemblies = project.MetadataReferences.Select( mr => AssemblyName.GetAssemblyName( mr.Display ) ).ToArray();
                 }
 
-                // we only need the type name so we use a reflection-only load
                 var assembly = Assembly.ReflectionOnlyLoad( rawAssembly );
 
                 return Tuple.Create( assembly, referencedAssemblies );
@@ -175,7 +166,7 @@
                     return null;
                 }
 
-                Debug.WriteLine( "Attempting to load existing assembly from {0}.", new object[] { assemblyFile } );
+                Debug.WriteLine( $"Attempting to load existing assembly from {assemblyFile}." );
                 return Assembly.ReflectionOnlyLoadFrom( assemblyFile );
             }
 

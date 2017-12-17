@@ -26,7 +26,7 @@
   </References>
   <ProjectItem ReplaceParameters="true">DbContext.cs</ProjectItem>
   <CustomParameters>
-   <CustomParameter Name="_EFVersions" Value="EF6" />
+   <CustomParameter Name="_EFVersions" Value="EF,EFCore" />
    <CustomParameter Name="_SelectedEFVersion" Value="" />
    <CustomParameter Name="$showTips$" Value="true" />
    <CustomParameter Name="$addConnectionString$" Value="true" />
@@ -38,7 +38,7 @@
    <CustomParameter Name="$providerName$" Value="" />
    <!-- this set of packages is not used by directly by the nuget services, but is instead used by the custom wizard
         to add the packages dynamically based on selected options. the package ids are not necessarily mapped to nuget. -->
-   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa'&gt;&lt;package id='EF6' version='6.1.3' /&gt;&lt;/packages&gt;" />
+   <CustomParameter Name="$packagedata$" Value="&lt;packages repositoryId='More.38c8640e-a495-41ce-bc0a-341ccc7f3bfa'&gt;&lt;package key='EF' id='EntityFramework' version='6.2.0' /&gt;&lt;package key='EFCore' id='Microsoft.EntityFrameworkCore' version='2.0.0' /&gt;&lt;/packages&gt;" />
   </CustomParameters>
  </TemplateContent>
  <WizardExtension>
