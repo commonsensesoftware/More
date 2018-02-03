@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <ImportGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' ">
+  <ImportGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' " Label="Code">
     <Import Project="..\build\common.props" />
   </ImportGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' ">
+    <None Include="$(MSBuildThisFileDirectory)xunit.runner.json" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Label="NuGet">
     <PackageReference Include="FluentAssertions" Version="4.19.4" />
-    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="Moq" Version="4.8.1" />
     <PackageReference Include="more.xunit" Version="2.3.1" />
     <PackageReference Include="more.xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>

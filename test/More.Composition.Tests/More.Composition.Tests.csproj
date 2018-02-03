@@ -2,7 +2,6 @@
 
  <PropertyGroup Label="Configuration">
   <TargetFramework>net452</TargetFramework>
-  <RootNamespace>More.Composition</RootNamespace>
  </PropertyGroup>
 
  <ItemGroup>

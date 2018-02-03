@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Condition=" '$(MSBuildProjectExtension)' != '.shproj' " Label="Code">
+    <RootNamespace Condition=" '$(ProjectName)' == '$(RootNamespace)' AND $([System.IO.Path]::GetExtension('$(ProjectName)')) == '.Tests' ">$([System.IO.Path]::GetFileNameWithoutExtension('$(ProjectName)'))</RootNamespace>
+  </PropertyGroup>
+
+</Project>
