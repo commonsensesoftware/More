@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{76E2D18B-6442-4925-87BE-C2DB655DDC06}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4FAC2991-D
 	ProjectSection(SolutionItems) = preProject
 		test\.editorconfig = test\.editorconfig
 		test\directory.build.props = test\directory.build.props
+		test\directory.build.targets = test\directory.build.targets
+		test\xunit.runner.json = test\xunit.runner.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{1B9FB9F3-3499-4374-A507-37777CB2C334}"
@@ -52,7 +54,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{55B1D082
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{119BE16B-0AAF-4EED-B024-2B346BCF9AE1}"
 	ProjectSection(SolutionItems) = preProject
-		tools\add-nuspec-xaml-content.csx = tools\add-nuspec-xaml-content.csx
 		tools\code-analysis.ruleset = tools\code-analysis.ruleset
 		tools\custom-dictionary.xml = tools\custom-dictionary.xml
 		tools\fix-xaml-type-info.csx = tools\fix-xaml-type-info.csx
