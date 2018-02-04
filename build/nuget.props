@@ -4,7 +4,7 @@
  <PropertyGroup Label="NuGet">
   <RepositoryType>git</RepositoryType>
   <RepositoryUrl>https://github.com/commonsensesoftware/more</RepositoryUrl>
-  <PackageIconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/src/More.png</PackageIconUrl>
+  <PackageIconUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/More.png</PackageIconUrl>
   <PackageLicenseUrl>https://raw.githubusercontent.com/commonsensesoftware/More/master/LICENSE</PackageLicenseUrl>
   <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   <IncludeSymbols>true</IncludeSymbols>
