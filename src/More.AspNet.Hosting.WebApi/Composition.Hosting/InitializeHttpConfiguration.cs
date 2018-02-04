@@ -17,7 +17,7 @@
         public HttpConfiguration Configuration { get; set; }
 
         /// <summary>
-        /// Get or sets the HTTP configuration callback.
+        /// Gets or sets the HTTP configuration callback.
         /// </summary>
         /// <value>The <see cref="Action{T}">action</see> representing the configuration callback.</value>
         public Action<HttpConfiguration> Callback { get; set; }

@@ -230,7 +230,7 @@
             return resources;
         }
 
-        string NewUniqueResourceKey( Uri resourceUri, string resourceKey )
+        static string NewUniqueResourceKey( Uri resourceUri, string resourceKey )
         {
             Contract.Requires( resourceUri != null );
             Contract.Requires( !IsNullOrEmpty( resourceKey ) );

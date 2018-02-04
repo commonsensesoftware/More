@@ -8,7 +8,7 @@
     /// Defines the behavior of a decorator factory.
     /// </summary>
     /// <typeparam name="T">The <see cref="Type">type</see> of object to decorate.</typeparam>
-    [ContractClass( typeof( IDecoratorFactoryTContract<> ) )]
+    [ContractClass( typeof( IDecoratorFactoryContract<> ) )]
     public interface IDecoratorFactory<T> where T : class
     {
         /// <summary>

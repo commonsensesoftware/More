@@ -2,7 +2,7 @@
 {
     using More.Web.Mvc;
     using System;
-    using Diagnostics.CodeAnalysis;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Provides extension methods for the <see cref="Controller"/> class.

@@ -14,7 +14,7 @@
         bool disposed;
 
         /// <summary>
-        /// Releases the managed and unmanaged resources used by the <see cref="WebApiDependencyScope"/> class.
+        /// Finalizes an instance of the <see cref="WebApiDependencyScope"/> class.
         /// </summary>
         ~WebApiDependencyScope() => Dispose( false );
 

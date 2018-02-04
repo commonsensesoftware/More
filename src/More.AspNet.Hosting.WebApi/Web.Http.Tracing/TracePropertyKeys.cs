@@ -7,8 +7,9 @@
     /// <summary>
     /// Represents the well-known trace property keys for <see cref="TraceRecord">trace records</see>.
     /// </summary>
-    [SuppressMessage( "Microsoft.Design", "CA1053:StaticHolderTypesShouldNotHaveConstructors", Justification = "Intentional so the type can be extended via inheritance for convenience." )]
+#pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
     public class TracePropertyKeys
+#pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
     {
         /// <summary>
         /// Gets the key for the duration trace record property.

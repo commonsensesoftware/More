@@ -32,7 +32,7 @@
             }
         }
 
-        async Task<IList<Contact>> SelectContactsAsync( SelectContactInteraction selectContact )
+        static async Task<IList<Contact>> SelectContactsAsync( SelectContactInteraction selectContact )
         {
             Contract.Requires( selectContact != null );
             Contract.Ensures( Contract.Result<Task<IList<Contact>>>() != null );

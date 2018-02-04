@@ -5,7 +5,7 @@
     using System.Web;
 
     [ContractClassFor( typeof( IDecoratorFactory<> ) )]
-    abstract class IDecoratorFactoryTContract<T> : IDecoratorFactory<T> where T : class
+    abstract class IDecoratorFactoryContract<T> : IDecoratorFactory<T> where T : class
     {
         T IDecoratorFactory<T>.CreatePerRequestDecorator( T instance, HttpRequestBase request )
         {
