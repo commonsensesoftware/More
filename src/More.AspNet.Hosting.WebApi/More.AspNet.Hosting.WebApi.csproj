@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
  <PropertyGroup Label="Configuration">
-  <VersionPrefix>1.2.0</VersionPrefix>
+  <VersionPrefix>1.2.1</VersionPrefix>
   <AssemblyVersion>1.2.0.0</AssemblyVersion>
   <TargetFramework>net45</TargetFramework>
   <AssemblyTitle>More - ASP.NET Web API Hosting</AssemblyTitle>

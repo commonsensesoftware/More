@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
  <PropertyGroup Label="Configuration">
-  <VersionPrefix>1.2.0</VersionPrefix>
+  <VersionPrefix>1.2.1</VersionPrefix>
   <AssemblyVersion>1.2.0.0</AssemblyVersion>
   <TargetFramework>net45</TargetFramework>
   <AssemblyTitle>More - ASP.NET Hosting</AssemblyTitle>
@@ -22,7 +22,7 @@
 
  <ItemGroup>
   <ProjectReference Include="..\More.Composition\More.Composition.csproj" />
-  <ProjectReference Include="..\More.UI.Presentation\More.UI.Presentation.csproj" />
+  <ProjectReference Include="..\More.Extensions\More.Extensions.csproj" />
  </ItemGroup>
 
  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
