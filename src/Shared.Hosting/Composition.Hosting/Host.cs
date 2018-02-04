@@ -120,7 +120,7 @@
             var config = Configuration;
             var part = new PartSpecification();
             var core = typeof( ServiceProvider ).GetTypeInfo().Assembly;
-#if !WEB
+#if !ASPNET
             var ui = typeof( IShellView ).GetTypeInfo().Assembly;
             var presentation = typeof( ShellViewBase ).GetTypeInfo().Assembly;
             var presentationTypes = presentation.ExportedTypes.Where( part.IsSatisfiedBy );
@@ -129,7 +129,7 @@
             var hostTypes = host.ExportedTypes.Where( part.IsSatisfiedBy );
 
             config.WithAssembly( core, conventions );
-#if !WEB
+#if !ASPNET
             config.WithAssembly( ui, conventions );
             config.WithParts( presentationTypes, conventions );
 #endif
@@ -289,7 +289,7 @@
             var builder = new SettingsConventionBuilder();
 
             builder.ForTypesDerivedFrom<IActivity>().Export( b => b.AddMetadata( "ExportedType", t => t ) ).Export<IActivity>();
-#if WEB
+#if ASPNET
             builder.ForTypesMatching<IUnitOfWorkFactory>( unitOfWorkFactory.IsSatisfiedBy ).Export<IUnitOfWorkFactory>().Shared( Boundary.PerRequest );
             builder.ForTypesMatching( dataAccess.IsSatisfiedBy ).ExportInterfaces( assembly.IsSatisfiedBy ).Shared( Boundary.PerRequest );
 #else
