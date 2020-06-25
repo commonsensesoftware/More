@@ -5,7 +5,16 @@
   <TargetFrameworks>net46</TargetFrameworks>
   <AssemblyTitle>More - Visual Studio Editors</AssemblyTitle>
   <Description>The editors and code generators for the "More" framework used by Microsoft Visual Studio.</Description>
- </PropertyGroup>
+ 
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
  <ItemGroup>
   <PackageReference Include="EnvDTE" Version="8.0.0" />

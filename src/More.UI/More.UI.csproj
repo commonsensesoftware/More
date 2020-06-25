@@ -8,7 +8,16 @@
   <Description>The user interface foundation library for the "More" framework.</Description>
   <RootNamespace>More</RootNamespace>
   <PackageTags>More;Patterns;Practices;UI;User Interfaces;Model;View;MVVM;MVC;MVP</PackageTags>
- </PropertyGroup>
+ 
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
  <ItemGroup>
   <ReleaseNotes Include="Updated TFM to .NET Standard" />
