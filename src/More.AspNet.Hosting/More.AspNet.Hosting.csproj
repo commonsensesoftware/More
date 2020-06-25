@@ -9,7 +9,16 @@
   <RootNamespace>More</RootNamespace>
   <PackageTags>More;Patterns;Practices;aspnet;Web;Hosting;User Interface;UI</PackageTags>
   <DefineConstants>$(DefineConstants);ASPNET</DefineConstants>
- </PropertyGroup>
+ 
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
  <ItemGroup>
   <ReleaseNotes Include="Host now resolves settings by key and type" />
